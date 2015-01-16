@@ -11,54 +11,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Data.SQL", "Vanrise
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Caching", "Vanrise.Caching\Vanrise.Caching.csproj", "{C00D0633-B945-4EDB-8348-5C91AAAC19C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Entities", "Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj", "{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Data", "Vanrise.BusinessProcess.Data\Vanrise.BusinessProcess.Data.csproj", "{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Data.SQL", "Vanrise.BusinessProcess.Data.SQL\Vanrise.BusinessProcess.Data.SQL.csproj", "{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess", "Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj", "{A5EE3349-B642-4CC7-B575-7C338821D63D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.WFActivities", "Vanrise.BusinessProcess.WFActivities\Vanrise.BusinessProcess.WFActivities.csproj", "{5C28C004-F7BE-4F09-832F-CE8594B3231F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{1E5344D3-558E-445F-8329-FC78455EB715}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Resources\\Resources.csproj
 		SccProjectName1 = Resources
 		SccLocalPath1 = Resources
-		SccProjectUniqueName2 = Vanrise.BusinessProcess.Data.SQL\\Vanrise.BusinessProcess.Data.SQL.csproj
-		SccProjectName2 = Vanrise.BusinessProcess.Data.SQL
-		SccLocalPath2 = Vanrise.BusinessProcess.Data.SQL
-		SccProjectUniqueName3 = Vanrise.BusinessProcess.Data\\Vanrise.BusinessProcess.Data.csproj
-		SccProjectName3 = Vanrise.BusinessProcess.Data
-		SccLocalPath3 = Vanrise.BusinessProcess.Data
-		SccProjectUniqueName4 = Vanrise.BusinessProcess.Entities\\Vanrise.BusinessProcess.Entities.csproj
-		SccProjectName4 = Vanrise.BusinessProcess.Entities
-		SccLocalPath4 = Vanrise.BusinessProcess.Entities
-		SccProjectUniqueName5 = Vanrise.BusinessProcess.WFActivities\\Vanrise.BusinessProcess.WFActivities.csproj
-		SccProjectName5 = Vanrise.BusinessProcess.WFActivities
-		SccLocalPath5 = Vanrise.BusinessProcess.WFActivities
-		SccProjectUniqueName6 = Vanrise.BusinessProcess\\Vanrise.BusinessProcess.csproj
-		SccProjectName6 = Vanrise.BusinessProcess
-		SccLocalPath6 = Vanrise.BusinessProcess
-		SccProjectUniqueName7 = Vanrise.Caching\\Vanrise.Caching.csproj
-		SccProjectName7 = Vanrise.Caching
-		SccLocalPath7 = Vanrise.Caching
-		SccProjectUniqueName8 = Vanrise.Common\\Vanrise.Common.csproj
-		SccProjectName8 = Vanrise.Common
-		SccLocalPath8 = Vanrise.Common
-		SccProjectUniqueName9 = Vanrise.Data.SQL\\Vanrise.Data.SQL.csproj
-		SccProjectName9 = Vanrise.Data.SQL
-		SccLocalPath9 = Vanrise.Data.SQL
-		SccProjectUniqueName10 = Vanrise.Data\\Vanrise.Data.csproj
-		SccProjectName10 = Vanrise.Data
-		SccLocalPath10 = Vanrise.Data
+		SccProjectUniqueName2 = Vanrise.Caching\\Vanrise.Caching.csproj
+		SccProjectName2 = Vanrise.Caching
+		SccLocalPath2 = Vanrise.Caching
+		SccProjectUniqueName3 = Vanrise.Common\\Vanrise.Common.csproj
+		SccProjectName3 = Vanrise.Common
+		SccLocalPath3 = Vanrise.Common
+		SccProjectUniqueName4 = Vanrise.Data.SQL\\Vanrise.Data.SQL.csproj
+		SccProjectName4 = Vanrise.Data.SQL
+		SccLocalPath4 = Vanrise.Data.SQL
+		SccProjectUniqueName5 = Vanrise.Data\\Vanrise.Data.csproj
+		SccProjectName5 = Vanrise.Data
+		SccLocalPath5 = Vanrise.Data
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,36 +66,6 @@ Global
 		{C00D0633-B945-4EDB-8348-5C91AAAC19C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C00D0633-B945-4EDB-8348-5C91AAAC19C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C00D0633-B945-4EDB-8348-5C91AAAC19C7}.Release|x86.ActiveCfg = Release|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Release|x86.ActiveCfg = Release|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Release|x86.ActiveCfg = Release|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Release|x86.ActiveCfg = Release|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Release|x86.ActiveCfg = Release|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E5344D3-558E-445F-8329-FC78455EB715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E5344D3-558E-445F-8329-FC78455EB715}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E5344D3-558E-445F-8329-FC78455EB715}.Debug|x86.ActiveCfg = Debug|x86
