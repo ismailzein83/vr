@@ -1,0 +1,188 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.UpdateCodeZoneMatchProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.LCRProcess"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(local:UpdateCodeZoneMatchProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.UpdateCodeZoneMatchProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>NHibernate.Classic</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities.Debugger</x:String>
+      <x:String>System.Activities.Debugger.Symbol</x:String>
+      <x:String>System.Collections.Concurrent</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TABS</x:String>
+      <x:String>TOne.Caching</x:String>
+      <x:String>TABS.Components</x:String>
+      <x:String>TOne.Entities</x:String>
+      <x:String>TOne.LCRProcess.Activities</x:String>
+      <x:String>Vanrise.BusinessProcess.WFActivities</x:String>
+      <x:String>Vanrise.Common</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>TOne.LCRProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:DateTime" Name="start">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="s:Int32[]" Name="lstFirstDigits">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:Int32[]">new int[9] {1, 2, 3, 4, 5, 6, 7, 8, 9}</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Update {1} Code/Zone Match Process Started", DateTime.Now, Input.IsFuture? "Future": "Current")</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <tla:CreateCodeMatchTempTable FirstDigit="1" sap2010:WorkflowViewState.IdRef="CreateCodeMatchTempTable_1">
+        <tla:CreateCodeMatchTempTable.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:CreateCodeMatchTempTable.IsFuture>
+      </tla:CreateCodeMatchTempTable>
+      <tla:CreateZoneMatchTempTable sap2010:WorkflowViewState.IdRef="CreateZoneMatchTempTable_1">
+        <tla:CreateZoneMatchTempTable.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:CreateZoneMatchTempTable.IsFuture>
+      </tla:CreateZoneMatchTempTable>
+    </Parallel>
+    <local:FillCodeZoneMatchTempTables FirstDigit="1" sap2010:WorkflowViewState.IdRef="FillCodeZoneMatchTempTables_1">
+      <local:FillCodeZoneMatchTempTables.CodeEffectiveOn>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.CodeEffectiveOn</mca:CSharpValue>
+        </InArgument>
+      </local:FillCodeZoneMatchTempTables.CodeEffectiveOn>
+      <local:FillCodeZoneMatchTempTables.GetChangedCodeGroupsOnly>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.GetChangedCodeGroupsOnly</mca:CSharpValue>
+        </InArgument>
+      </local:FillCodeZoneMatchTempTables.GetChangedCodeGroupsOnly>
+      <local:FillCodeZoneMatchTempTables.IsFuture>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+        </InArgument>
+      </local:FillCodeZoneMatchTempTables.IsFuture>
+    </local:FillCodeZoneMatchTempTables>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+      <tla:CreateIndexesOnCodeMatchTable FirstDigit="1" sap2010:WorkflowViewState.IdRef="CreateIndexesOnCodeMatchTable_1">
+        <tla:CreateIndexesOnCodeMatchTable.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:CreateIndexesOnCodeMatchTable.IsFuture>
+      </tla:CreateIndexesOnCodeMatchTable>
+      <tla:CreateIndexesOnZoneMatchTable sap2010:WorkflowViewState.IdRef="CreateIndexesOnZoneMatchTable_1">
+        <tla:CreateIndexesOnZoneMatchTable.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:CreateIndexesOnZoneMatchTable.IsFuture>
+      </tla:CreateIndexesOnZoneMatchTable>
+    </Parallel>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
+      <tla:SwapCodeMatchTableWithTemp FirstDigit="1" sap2010:WorkflowViewState.IdRef="SwapCodeMatchTableWithTemp_1">
+        <tla:SwapCodeMatchTableWithTemp.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:SwapCodeMatchTableWithTemp.IsFuture>
+      </tla:SwapCodeMatchTableWithTemp>
+      <tla:SwapZoneMatchTableWithTemp sap2010:WorkflowViewState.IdRef="SwapZoneMatchTableWithTemp_1">
+        <tla:SwapZoneMatchTableWithTemp.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla:SwapZoneMatchTableWithTemp.IsFuture>
+      </tla:SwapZoneMatchTableWithTemp>
+    </Parallel>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - start))</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <sads:DebugSymbol.Symbol>d0dDOlxURlNcVE9uZVxDb2RlXFRPbmVWMlxUT25lLkxDUlByb2Nlc3NcVXBkYXRlQ29kZVpvbmVNYXRjaFByb2Nlc3MueGFtbB5KA6MBDgIBAU4LTlcCAQZTC1NwAgECVwVbEQIBQVwFaxACATVsBXwpAgEnfQWMARACARuNAQWcARACAQ+dAQWhARECAQpZCVm6AQIBQl0HYyYCATtkB2omAgE2dAt0aAIBMWwzbDYCATBvC29gAgEseQt5WAIBKH4HhAErAgEhhQEHiwErAgEcjgEHlAEoAgEVlQEHmwEoAgEQnwEJnwGWAQIBC10wXTMCAUBgDWBaAgE8Zw1nWgIBN341fjgCASaBAQ2BAVoCASKIAQ2IAVoCAR2OATKOATUCARqRAQ2RAVoCARaYAQ2YAVoCARE=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="CreateCodeMatchTempTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateZoneMatchTempTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="FillCodeZoneMatchTempTables_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CreateIndexesOnCodeMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateIndexesOnZoneMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="SwapCodeMatchTableWithTemp_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="SwapZoneMatchTableWithTemp_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,728">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.LCRProcess.UpdateCodeZoneMatchProcess_1" sap:VirtualizedContainerService.HintSize="616,808" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

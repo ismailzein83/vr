@@ -1,0 +1,175 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.UpdateZoneRateProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.UpdateZoneRateProcess_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.LCRProcess"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:t="clr-namespace:TABS;assembly=TABS"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>NHibernate.Classic</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities.Debugger</x:String>
+      <x:String>System.Activities.Debugger.Symbol</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TABS</x:String>
+      <x:String>TABS.Components</x:String>
+      <x:String>TOne.LCRProcess.Activities</x:String>
+      <x:String>Vanrise.Common</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>TOne.LCRProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="local:ZoneRateProcessLastRunInfo" Name="lastRunInfo" />
+      <Variable x:TypeArguments="s:Byte[]" Name="newRateLastTimestamp" />
+      <Variable x:TypeArguments="s:DateTime" Name="start">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: ZoneRate Process Started", DateTime.Now)</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="local:ZoneRateProcessLastRunInfo">
+          <mca:CSharpReference x:TypeArguments="local:ZoneRateProcessLastRunInfo">lastRunInfo</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="local:ZoneRateProcessLastRunInfo">
+          <mca:CSharpValue x:TypeArguments="local:ZoneRateProcessLastRunInfo">String.IsNullOrWhiteSpace(TABS.SystemParameter.BP_LCR_ZoneRateProcessLastRunInfo.LongTextValue) ? new ZoneRateProcessLastRunInfo() : Vanrise.Common.Serializer.Deserialize&lt;ZoneRateProcessLastRunInfo&gt;(TABS.SystemParameter.BP_LCR_ZoneRateProcessLastRunInfo.LongTextValue)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <tla:GetRateLastTimestamp sap2010:WorkflowViewState.IdRef="GetRateLastTimestamp_1">
+      <tla:GetRateLastTimestamp.LastTimestamp>
+        <OutArgument x:TypeArguments="s:Byte[]">
+          <mca:CSharpReference x:TypeArguments="s:Byte[]">newRateLastTimestamp</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetRateLastTimestamp.LastTimestamp>
+    </tla:GetRateLastTimestamp>
+    <tla:UpdateZoneRateFromNewRates sap2010:WorkflowViewState.IdRef="UpdateZoneRateFromNewRates_1">
+      <tla:UpdateZoneRateFromNewRates.RatesUpdatedAfter>
+        <InArgument x:TypeArguments="s:Byte[]">
+          <mca:CSharpValue x:TypeArguments="s:Byte[]">lastRunInfo.RateLastTimestamp</mca:CSharpValue>
+        </InArgument>
+      </tla:UpdateZoneRateFromNewRates.RatesUpdatedAfter>
+    </tla:UpdateZoneRateFromNewRates>
+    <tla:UpdateZoneRateFromChangedRates sap2010:WorkflowViewState.IdRef="UpdateZoneRateFromChangedRates_1">
+      <tla:UpdateZoneRateFromChangedRates.RatesUpdatedAfter>
+        <InArgument x:TypeArguments="s:Byte[]">
+          <mca:CSharpValue x:TypeArguments="s:Byte[]">lastRunInfo.RateLastTimestamp</mca:CSharpValue>
+        </InArgument>
+      </tla:UpdateZoneRateFromChangedRates.RatesUpdatedAfter>
+    </tla:UpdateZoneRateFromChangedRates>
+    <tla:ApplyEffectiveRatesToZoneRate sap2010:WorkflowViewState.IdRef="ApplyEffectiveRatesToZoneRate_1" />
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:Byte[]">
+          <mca:CSharpReference x:TypeArguments="s:Byte[]">lastRunInfo.RateLastTimestamp</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:Byte[]">
+          <mca:CSharpValue x:TypeArguments="s:Byte[]">newRateLastTimestamp</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Object">
+          <mca:CSharpReference x:TypeArguments="x:Object">TABS.SystemParameter.BP_LCR_ZoneRateProcessLastRunInfo.Value</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Object">
+          <mca:CSharpValue x:TypeArguments="x:Object">Vanrise.Common.Serializer.Serialize(lastRunInfo)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <tla:UpdateSystemParameter sap2010:WorkflowViewState.IdRef="UpdateSystemParameter_1">
+      <tla:UpdateSystemParameter.Parameter>
+        <InArgument x:TypeArguments="t:SystemParameter">
+          <mca:CSharpValue x:TypeArguments="t:SystemParameter">TABS.SystemParameter.BP_LCR_ZoneRateProcessLastRunInfo</mca:CSharpValue>
+        </InArgument>
+      </tla:UpdateSystemParameter.Parameter>
+    </tla:UpdateSystemParameter>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - start))</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <sads:DebugSymbol.Symbol>d0JDOlxURlNcVE9uZVxDb2RlXFRPbmVWMlxUT25lLkxDUlByb2Nlc3NcVXBkYXRlWm9uZVJhdGVQcm9jZXNzLnhhbWwYQgOYAQ4CAQFIC0hXAgECTAVQEQIBO1EFXA4CATJdBWMgAgEtZAVqJgIBKGsFcSoCASNyBXJsAgEicwV+DgIBGX8FigEOAgEQiwEFkQEhAgELkgEFlgERAgEGTglOgwECATxZC1nzAgIBN1QLVHQCATNgC2BlAgEuZwtnZgIBKW4LbmYCASR7C3tdAgEedgt2bgIBGocBC4cBeQIBFYIBC4IBjQECARGOAQuOAYgBAgEMlAEJlAGWAQIBBw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="GetRateLastTimestamp_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="UpdateZoneRateFromNewRates_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="UpdateZoneRateFromChangedRates_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ApplyEffectiveRatesToZoneRate_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="UpdateSystemParameter_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,904">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.LCRProcess.UpdateZoneRateProcess_1" sap:VirtualizedContainerService.HintSize="304,984" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

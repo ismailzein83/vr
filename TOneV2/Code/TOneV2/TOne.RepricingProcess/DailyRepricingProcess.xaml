@@ -1,0 +1,130 @@
+﻿<Activity mc:Ignorable="sads sap" x:Class="TOne.RepricingProcess.DailyRepricingProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.RepricingProcess"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mv="clr-namespace:Microsoft.VisualBasic;assembly=System"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:nc="clr-namespace:NHibernate.Classic;assembly=NHibernate"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:s1="clr-namespace:System;assembly=System"
+ xmlns:s2="clr-namespace:System;assembly=System.Xml"
+ xmlns:s3="clr-namespace:System;assembly=System.Core"
+ xmlns:s4="clr-namespace:System;assembly=System.ServiceModel"
+ xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities"
+ xmlns:sad="clr-namespace:System.Activities.Debugger;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System"
+ xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.ServiceModel"
+ xmlns:scg2="clr-namespace:System.Collections.Generic;assembly=System.Core"
+ xmlns:scg3="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
+ xmlns:sl="clr-namespace:System.Linq;assembly=System.Core"
+ xmlns:st="clr-namespace:System.Text;assembly=mscorlib"
+ xmlns:t="clr-namespace:TABS;assembly=TABS"
+ xmlns:tc="clr-namespace:TABS.Components;assembly=TABS"
+ xmlns:tc1="clr-namespace:TOne.Caching;assembly=TOne.Caching"
+ xmlns:tra="clr-namespace:TOne.RepricingProcess.Activities;assembly=TOne.RepricingProcess.Activities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(local:DailyRepricingProcessInput)" />
+  </x:Members>
+  <sap:VirtualizedContainerService.HintSize>603,1702</sap:VirtualizedContainerService.HintSize>
+  <mva:VisualBasic.Settings>Assembly references and imported namespaces for internal implementation</mva:VisualBasic.Settings>
+  <Sequence sad:XamlDebuggerXmlReader.FileName="D:\Vanrise\TOne.RepricingProcess\DailyRepricingProcess.xaml" sap:VirtualizedContainerService.HintSize="563,1662">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg3:List(tra:TimeRange)" Name="TimeRanges" />
+      <Variable x:TypeArguments="s:DateTime" Name="start" />
+      <Variable x:TypeArguments="s:Guid" Name="cacheManagerId" />
+      <Variable x:TypeArguments="x:Boolean" Name="isAnyTimeRangeProcessFailed" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg3:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Assign sap:VirtualizedContainerService.HintSize="541,60">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[start]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[DateTime.Now]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" sap:VirtualizedContainerService.HintSize="541,22" Message="[String.Format(&quot;Process Started for Repricing Date {0:dd-MMM-yyyy}&quot;, Input.RepricingDay)]" />
+    <vbw:CreateCacheManager x:TypeArguments="tc1:TOneCacheManager" CacheManagerId="[cacheManagerId]" sap:VirtualizedContainerService.HintSize="541,22" />
+    <tra:DivideDayIntoTimeRanges Day="[Input.RepricingDay]" sap:VirtualizedContainerService.HintSize="541,22" Interval="[New TimeSpan(0, CType((60 / TABS.SystemParameter.TrafficStatsSamplesPerHour.NumericValue.Value), Integer), 0)]" Ranges="[TimeRanges]" />
+    <ParallelForEach x:TypeArguments="tra:TimeRange" DisplayName="ParallelForEach&lt;TimeRange&gt;" sap:VirtualizedContainerService.HintSize="541,648" Values="[TimeRanges]">
+      <ActivityAction x:TypeArguments="tra:TimeRange">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="tra:TimeRange" Name="timeRange" />
+        </ActivityAction.Argument>
+        <Sequence sap:VirtualizedContainerService.HintSize="511,540">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="processCompletedEventPayload" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg3:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <vbw:RunProcess x:TypeArguments="local:TimeRangeRepricingProcess" ProcessInstanceId="{x:Null}" sap:VirtualizedContainerService.HintSize="489,22" Input="[New TimeRangeRepricingProcessInput With&#xA;{.Range = timeRange,&#xA; .CacheManagerID = cacheManagerId&#xA; }]" ProcessCompletedEventPayload="[processCompletedEventPayload]" WaitProcessCompleted="True" />
+          <If Condition="[processCompletedEventPayload.ProcessStatus = BPInstanceStatus.Completed]" sap:VirtualizedContainerService.HintSize="489,354">
+            <If.Then>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap:VirtualizedContainerService.HintSize="200,22" Message="[String.Format(&quot;Processing Succeeded in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}. {3} CDRs in {4}&quot;, timeRange.From, timeRange.To, Input.RepricingDay, CType(processCompletedEventPayload.ProcessOutput, TimeRangeRepricingProcessOutput).CDRCount, CType(processCompletedEventPayload.ProcessOutput, TimeRangeRepricingProcessOutput).SpentTime)]" />
+            </If.Then>
+            <If.Else>
+              <Sequence sap:VirtualizedContainerService.HintSize="264,246">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg3:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign sap:VirtualizedContainerService.HintSize="242,60">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[isAnyTimeRangeProcessFailed]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <vbw:WriteTrackingMessage sap:VirtualizedContainerService.HintSize="242,22" Message="[String.Format(&quot;Processing Failed in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}&quot;, timeRange.From, timeRange.To, Input.RepricingDay)]" Severity="[BPTrackingSeverity.Error]" />
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <If Condition="[Not isAnyTimeRangeProcessFailed]" sap:VirtualizedContainerService.HintSize="541,564">
+      <If.Then>
+        <Sequence sap:VirtualizedContainerService.HintSize="222,456">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg3:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <tra:UpdateDailyTrafficStatistics CacheManagerID="[cacheManagerId]" Day="[Input.RepricingDay]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <tra:UpdateBillingStatistics Day="[Input.RepricingDay]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <tra:UpdateDailyPrepaidAmounts Day="[Input.RepricingDay]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <tra:UpdateDailyPostpaidAmounts Day="[Input.RepricingDay]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <vbw:RemoveCacheManager CacheManagerId="[cacheManagerId]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap:VirtualizedContainerService.HintSize="200,22" Message="[String.Format(&quot;Process ({0:dd-MMM-yyyy}) done in {1}&quot;, Input.RepricingDay, (DateTime.Now - start))]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap:VirtualizedContainerService.HintSize="222,208">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg3:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <vbw:RemoveCacheManager CacheManagerId="[cacheManagerId]" sap:VirtualizedContainerService.HintSize="200,22" />
+          <TerminateWorkflow sap:VirtualizedContainerService.HintSize="200,22" Reason="At least one of Time Range sub processes failed to execute" />
+        </Sequence>
+      </If.Else>
+    </If>
+  </Sequence>
+</Activity>
