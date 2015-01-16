@@ -65,6 +65,7 @@
     <Compile Include="CreateProcessInput.cs" />
     <Compile Include="CreateProcessOutput.cs" />
     <Compile Include="Base Classes\IBPWorkflow.cs" />
+    <Compile Include="ProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

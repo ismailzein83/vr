@@ -53,23 +53,32 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 {
                     while (reader.Read())
                     {
-                        BPInstance instance = new BPInstance
-                        {
-                            ProcessInstanceID = (Guid)reader["ID"],
-                            Title = reader["Title"] as string,
-                            ParentProcessID = GetReaderValue<Guid?>(reader, "ParentID"),
-                            DefinitionID = (int)reader["DefinitionID"],
-                            WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
-                            Status = (BPInstanceStatus)reader["ExecutionStatus"],
-                            RetryCount = GetReaderValue<int>(reader, "RetryCount"),
-                            LastMessage = reader["LastMessage"] as string
-                        };
-                        string inputArg = reader["InputArgument"] as string;
-                        if (!String.IsNullOrWhiteSpace(inputArg))
-                            instance.InputArgument = Serializer.Deserialize(inputArg);
+                        BPInstance instance = BPInstanceMapper(reader, true);
                         onInstanceLoaded(instance);
                     }
                 });
+        }
+
+        private BPInstance BPInstanceMapper(IDataReader reader, bool withInputArguments = false)
+        {
+            BPInstance instance = new BPInstance
+            {
+                ProcessInstanceID = (Guid)reader["ID"],
+                Title = reader["Title"] as string,
+                ParentProcessID = GetReaderValue<Guid?>(reader, "ParentID"),
+                DefinitionID = (int)reader["DefinitionID"],
+                WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
+                Status = (BPInstanceStatus)reader["ExecutionStatus"],
+                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
+                LastMessage = reader["LastMessage"] as string
+            };
+            if (withInputArguments)
+            {
+                string inputArg = reader["InputArgument"] as string;
+                if (!String.IsNullOrWhiteSpace(inputArg))
+                    instance.InputArgument = Serializer.Deserialize(inputArg);
+            }
+            return instance;
         }
 
         public int InsertEvent(Guid processInstanceId, string bookmarkName, object eventData)
