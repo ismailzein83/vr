@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Data", "Vanrise.BusinessProcess.Data\Vanrise.BusinessProcess.Data.csproj", "{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Data.SQL", "Vanrise.BusinessProcess.Data.SQL\Vanrise.BusinessProcess.Data.SQL.csproj", "{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Entities", "Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj", "{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess", "Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj", "{A5EE3349-B642-4CC7-B575-7C338821D63D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.WFActivities", "Vanrise.BusinessProcess.WFActivities\Vanrise.BusinessProcess.WFActivities.csproj", "{5C28C004-F7BE-4F09-832F-CE8594B3231F}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Vanrise.BusinessProcess.SQLTransactionDatabase", "Vanrise.BusinessProcess.SQLTransactionDatabase\Vanrise.BusinessProcess.SQLTransactionDatabase.sqlproj", "{6386587A-5272-42B3-A156-7FAA8116F3A8}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Vanrise.BusinessProcess.SQLTrackingDatabase", "Vanrise.BusinessProcess.SQLTrackingDatabase\Vanrise.BusinessProcess.SQLTrackingDatabase.sqlproj", "{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccProjectUniqueName0 = Vanrise.BusinessProcess.Data\\Vanrise.BusinessProcess.Data.csproj
+		SccProjectName0 = Vanrise.BusinessProcess.Data
+		SccLocalPath0 = Vanrise.BusinessProcess.Data
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = Vanrise.BusinessProcess.Data.SQL\\Vanrise.BusinessProcess.Data.SQL.csproj
+		SccProjectName2 = Vanrise.BusinessProcess.Data.SQL
+		SccLocalPath2 = Vanrise.BusinessProcess.Data.SQL
+		SccProjectUniqueName3 = Vanrise.BusinessProcess.Entities\\Vanrise.BusinessProcess.Entities.csproj
+		SccProjectName3 = Vanrise.BusinessProcess.Entities
+		SccLocalPath3 = Vanrise.BusinessProcess.Entities
+		SccProjectUniqueName4 = Vanrise.BusinessProcess\\Vanrise.BusinessProcess.csproj
+		SccProjectName4 = Vanrise.BusinessProcess
+		SccLocalPath4 = Vanrise.BusinessProcess
+		SccProjectUniqueName5 = Vanrise.BusinessProcess.WFActivities\\Vanrise.BusinessProcess.WFActivities.csproj
+		SccProjectName5 = Vanrise.BusinessProcess.WFActivities
+		SccLocalPath5 = Vanrise.BusinessProcess.WFActivities
+		SccProjectUniqueName6 = Vanrise.BusinessProcess.SQLTransactionDatabase\\Vanrise.BusinessProcess.SQLTransactionDatabase.sqlproj
+		SccProjectName6 = Vanrise.BusinessProcess.SQLTransactionDatabase
+		SccLocalPath6 = Vanrise.BusinessProcess.SQLTransactionDatabase
+		SccProjectUniqueName7 = Vanrise.BusinessProcess.SQLTrackingDatabase\\Vanrise.BusinessProcess.SQLTrackingDatabase.sqlproj
+		SccProjectName7 = Vanrise.BusinessProcess.SQLTrackingDatabase
+		SccLocalPath7 = Vanrise.BusinessProcess.SQLTrackingDatabase
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EE3349-B642-4CC7-B575-7C338821D63D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C28C004-F7BE-4F09-832F-CE8594B3231F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6386587A-5272-42B3-A156-7FAA8116F3A8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
