@@ -19,37 +19,37 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPDefinition> GetDefinitions()
         {
-            return GetItems("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
+            return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
 
         public int InsertInstance(Guid processInstanceId, string processTitle, Guid? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
         {
-            return ExecuteNonQuery("bp.sp_BPInstance_Insert", processInstanceId, processTitle, parentId, definitionID, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus);
+            return ExecuteNonQuerySP("bp.sp_BPInstance_Insert", processInstanceId, processTitle, parentId, definitionID, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus);
         }
 
         public int UpdateInstanceStatus(Guid processInstanceId, BPInstanceStatus status, string message, int retryCount)
         {
-            return ExecuteNonQuery("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, ToDBNullIfDefault(retryCount));
+            return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, ToDBNullIfDefault(retryCount));
         }
 
         public int UpdateWorkflowInstanceID(Guid processInstanceId, Guid workflowInstanceId)
         {
-            return ExecuteNonQuery("bp.sp_BPInstance_UpdateWorkflowInstanceID", processInstanceId, workflowInstanceId);
+            return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateWorkflowInstanceID", processInstanceId, workflowInstanceId);
         }
 
         public int UpdateLoadedFlag(Guid processInstanceId, bool loaded)
         {
-            return ExecuteNonQuery("bp.sp_BPInstance_UpdateLoadedFlag", processInstanceId, loaded);
+            return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateLoadedFlag", processInstanceId, loaded);
         }
 
         public int ClearLoadedFlag()
         {
-            return ExecuteNonQuery("bp.sp_BPInstance_ClearLoadedFlag");
+            return ExecuteNonQuerySP("bp.sp_BPInstance_ClearLoadedFlag");
         }
 
         public void LoadPendingProcesses(Action<BPInstance> onInstanceLoaded)
         {
-            ExecuteReader("bp.sp_BPInstance_GetPendings", (reader) =>
+            ExecuteReaderSP("bp.sp_BPInstance_GetPendings", (reader) =>
                 {
                     while (reader.Read())
                     {
@@ -59,41 +59,19 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 });
         }
 
-        private BPInstance BPInstanceMapper(IDataReader reader, bool withInputArguments = false)
-        {
-            BPInstance instance = new BPInstance
-            {
-                ProcessInstanceID = (Guid)reader["ID"],
-                Title = reader["Title"] as string,
-                ParentProcessID = GetReaderValue<Guid?>(reader, "ParentID"),
-                DefinitionID = (int)reader["DefinitionID"],
-                WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
-                Status = (BPInstanceStatus)reader["ExecutionStatus"],
-                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
-                LastMessage = reader["LastMessage"] as string
-            };
-            if (withInputArguments)
-            {
-                string inputArg = reader["InputArgument"] as string;
-                if (!String.IsNullOrWhiteSpace(inputArg))
-                    instance.InputArgument = Serializer.Deserialize(inputArg);
-            }
-            return instance;
-        }
-
         public int InsertEvent(Guid processInstanceId, string bookmarkName, object eventData)
         {
-            return ExecuteNonQuery("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
+            return ExecuteNonQuerySP("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
         }
 
         public int DeleteEvent(long eventId)
         {
-            return ExecuteNonQuery("bp.sp_BPEvent_Delete", eventId);
+            return ExecuteNonQuerySP("bp.sp_BPEvent_Delete", eventId);
         }
 
         public void LoadPendingEvents(Action<BPEvent> onEventLoaded)
         {
-            ExecuteReader("bp.sp_BPEvent_GetPendings", (reader) =>
+            ExecuteReaderSP("bp.sp_BPEvent_GetPendings", (reader) =>
             {
                 while (reader.Read())
                 {
@@ -125,6 +103,28 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (!String.IsNullOrWhiteSpace(config))
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);
             return bpDefinition;
+        }
+
+        private BPInstance BPInstanceMapper(IDataReader reader, bool withInputArguments = false)
+        {
+            BPInstance instance = new BPInstance
+            {
+                ProcessInstanceID = (Guid)reader["ID"],
+                Title = reader["Title"] as string,
+                ParentProcessID = GetReaderValue<Guid?>(reader, "ParentID"),
+                DefinitionID = (int)reader["DefinitionID"],
+                WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
+                Status = (BPInstanceStatus)reader["ExecutionStatus"],
+                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
+                LastMessage = reader["LastMessage"] as string
+            };
+            if (withInputArguments)
+            {
+                string inputArg = reader["InputArgument"] as string;
+                if (!String.IsNullOrWhiteSpace(inputArg))
+                    instance.InputArgument = Serializer.Deserialize(inputArg);
+            }
+            return instance;
         }
 
         #endregion
