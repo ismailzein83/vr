@@ -25,11 +25,12 @@
  xmlns:t="clr-namespace:TABS;assembly=TABS"
  xmlns:tr="clr-namespace:TOne.RepricingProcess;assembly=TOne.RepricingProcess.Activities"
  xmlns:tra="clr-namespace:TOne.RepricingProcess.Activities;assembly=TOne.RepricingProcess.Activities"
+ xmlns:trarg="clr-namespace:TOne.RepricingProcess.Arguments;assembly=TOne.RepricingProcess.Arguments"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(local:TimeRangeRepricingProcessInput)" />
-    <x:Property Name="Output" Type="OutArgument(local:TimeRangeRepricingProcessOutput)" />
+    <x:Property Name="Input" Type="InArgument(trarg:TimeRangeRepricingProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(trarg:TimeRangeRepricingProcessOutput)" />
   </x:Members>
   <sap:VirtualizedContainerService.HintSize>984,722</sap:VirtualizedContainerService.HintSize>
   <mva:VisualBasic.Settings>Assembly references and imported namespaces for internal implementation</mva:VisualBasic.Settings>
@@ -94,10 +95,10 @@
     </Parallel>
     <Assign sap:VirtualizedContainerService.HintSize="922,64">
       <Assign.To>
-        <OutArgument x:TypeArguments="local:TimeRangeRepricingProcessOutput">[Output]</OutArgument>
+        <OutArgument x:TypeArguments="trarg:TimeRangeRepricingProcessOutput">[Output]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="local:TimeRangeRepricingProcessOutput" xml:space="preserve">[New TimeRangeRepricingProcessOutput With
+        <InArgument x:TypeArguments="trarg:TimeRangeRepricingProcessOutput" xml:space="preserve">[New TimeRangeRepricingProcessOutput With
 {
     .CDRCount = cdrCount,
     .SpentTime = (DateTime.Now - start)

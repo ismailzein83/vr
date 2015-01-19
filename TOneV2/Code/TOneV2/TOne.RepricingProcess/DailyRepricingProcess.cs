@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess;
 using System.Activities;
+using Vanrise.BusinessProcess.Entities;
+using TOne.RepricingProcess.Arguments;
 
 namespace TOne.RepricingProcess
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TABS;
+using TOne.RepricingProcess.Arguments;
 
 namespace TOne.RepricingProcess.Activities
 {
@@ -34,11 +35,5 @@ namespace TOne.RepricingProcess.Activities
             }
             this.Ranges.Set(context, ranges);
         }
-    }
-
-    public class TimeRange
-    {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-    }
+    }    
 }

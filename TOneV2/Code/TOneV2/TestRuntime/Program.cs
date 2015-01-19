@@ -93,19 +93,20 @@ namespace TestRuntime
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
 
-            //System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            //    {
-            //        for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-            //        {
-            //            TriggerProcess(d);
-            //            System.Threading.Thread.Sleep(30000);
-            //        }
-            //    });
-            //t.Start();
-
-            BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput
+            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
+                {
+                    for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
+                    {
+                        TriggerProcess(d);
+                        System.Threading.Thread.Sleep(30000);
+                    }
+                });
+            t.Start();
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(new CreateProcessInput
             {
-                InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput
+                ProcessName = "UpdateCodeZoneMatchProcess",
+                InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
                 {
                     IsFuture = false,
                     CodeEffectiveOn = DateTime.Today,
@@ -114,7 +115,10 @@ namespace TestRuntime
             });
             //BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });
 
-            //BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateZoneRateProcess>(new CreateProcessInput());
+            processManager.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "UpdateZoneRateProcess"
+            });
 
             //TriggerProcess(DateTime.Parse("10/15/2013"));
             //TriggerProcess(DateTime.Parse("09/16/2014"));
@@ -240,9 +244,14 @@ namespace TestRuntime
 
         private static void TriggerProcess(DateTime date)
         {
-            TOne.RepricingProcess.DailyRepricingProcessInput inputArguments = new TOne.RepricingProcess.DailyRepricingProcessInput { RepricingDay = date };
-            CreateProcessInput input = new CreateProcessInput { InputArguments = inputArguments };
-            BusinessProcessRuntime.Current.CreateNewProcess<TOne.RepricingProcess.DailyRepricingProcess>(input);
+            TOne.RepricingProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.RepricingProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "DailyRepricingProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

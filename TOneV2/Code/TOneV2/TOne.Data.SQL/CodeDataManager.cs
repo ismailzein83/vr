@@ -14,7 +14,7 @@ namespace TOne.Data.SQL
         {
             List<string> updatedSuppliers = new List<string>();
             byte[] newLastTimestamp_Local = null;
-            ExecuteReader("LCR.sp_Code_GetUpdatedSuppliers", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetUpdatedSuppliers", (reader) =>
                 {
                     if (reader.Read())
                         newLastTimestamp_Local = reader["LastTimestamp"] as byte[];
@@ -28,7 +28,7 @@ namespace TOne.Data.SQL
 
         public List<String> GetDistinctCodes(bool isFuture)
         {
-            return GetItems("LCR.sp_Code_GetDistinctCodes", (reader) =>
+            return GetItemsSP("LCR.sp_Code_GetDistinctCodes", (reader) =>
             {
                 return reader["Code"] as string;
             }, isFuture);
@@ -36,7 +36,7 @@ namespace TOne.Data.SQL
 
         public List<String> GetDistinctCodes(bool isFuture, char firstDigit)
         {
-            return GetItems("LCR.sp_Code_GetDistinctCodesByFirstDigit", (reader) =>
+            return GetItemsSP("LCR.sp_Code_GetDistinctCodesByFirstDigit", (reader) =>
             {
                 return reader["Code"] as string;
             }, isFuture, firstDigit);
@@ -44,7 +44,7 @@ namespace TOne.Data.SQL
 
         public List<String> GetDistinctCodes(bool isFuture, string codeGroup)
         {
-            return GetItems("LCR.sp_Code_GetDistinctCodesByCodeGroup", (reader) =>
+            return GetItemsSP("LCR.sp_Code_GetDistinctCodesByCodeGroup", (reader) =>
             {
                 return reader["Code"] as string;
             }, isFuture, codeGroup);
@@ -52,7 +52,7 @@ namespace TOne.Data.SQL
 
         public List<String> GetDistinctCodes(bool isFuture, DateTime effectiveOn, bool getChangedGroupsOnly)
         {
-            return GetItems("LCR.sp_Code_GetDistinctCodesForChangedGroups", (reader) =>
+            return GetItemsSP("LCR.sp_Code_GetDistinctCodesForChangedGroups", (reader) =>
             {
                 return reader["Code"] as string;
             }, isFuture, effectiveOn, getChangedGroupsOnly);
@@ -60,12 +60,12 @@ namespace TOne.Data.SQL
 
         public List<LCRCode> GetSupplierCodes(string supplierId, DateTime effectiveOn)
         {
-            return GetItems("LCR.sp_Code_GetBySupplier", LCRCodeMapper, supplierId, effectiveOn);
+            return GetItemsSP("LCR.sp_Code_GetBySupplier", LCRCodeMapper, supplierId, effectiveOn);
         }
 
         public void LoadCodesByUpdatedSuppliers(byte[] codeUpdatedAfter, DateTime effectiveOn, Action<string, List<LCRCode>> onSupplierCodesReady)
         {
-            ExecuteReader("LCR.sp_Code_GetByUpdatedSuppliers", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetByUpdatedSuppliers", (reader) =>
                 {
                     string currentSupplierId = null;
                     List<LCRCode> supplierCodes = null;
@@ -89,7 +89,7 @@ namespace TOne.Data.SQL
 
         public void LoadCodesForActiveSuppliers(bool isFuture, Action<string, List<LCRCode>> onSupplierCodesReady)
         {
-            ExecuteReader("LCR.sp_Code_GetForActiveSuppliers", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetForActiveSuppliers", (reader) =>
             {
                 string currentSupplierId = null;
                 List<LCRCode> supplierCodes = null;
@@ -112,7 +112,7 @@ namespace TOne.Data.SQL
 
         public void LoadCodesForActiveSuppliers(bool isFuture, char firstDigit, Action<string, List<LCRCode>> onSupplierCodesReady)
         {
-            ExecuteReader("LCR.sp_Code_GetForActiveSuppliersByFirstDigit", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetForActiveSuppliersByFirstDigit", (reader) =>
             {
                 string currentSupplierId = null;
                 List<LCRCode> supplierCodes = null;
@@ -135,7 +135,7 @@ namespace TOne.Data.SQL
 
         public void LoadCodesForActiveSuppliers(bool isFuture, string codeGroup, Action<string, List<LCRCode>> onSupplierCodesReady)
         {
-            ExecuteReader("LCR.sp_Code_GetForActiveSuppliersByCodeGroup", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetForActiveSuppliersByCodeGroup", (reader) =>
             {
                 string currentSupplierId = null;
                 List<LCRCode> supplierCodes = null;
@@ -158,7 +158,7 @@ namespace TOne.Data.SQL
 
         public void LoadCodesForActiveSuppliers(bool isFuture, DateTime effectiveOn, bool getChangedGroupsOnly, Action<string, List<LCRCode>> onSupplierCodesReady)
         {
-            ExecuteReader("LCR.sp_Code_GetForActiveSuppliersAndChangedCodeGroups", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetForActiveSuppliersAndChangedCodeGroups", (reader) =>
             {
                 string currentSupplierId = null;
                 List<LCRCode> supplierCodes = null;
@@ -182,7 +182,7 @@ namespace TOne.Data.SQL
         public Dictionary<string, Dictionary<string, LCRCode>> GetOrderedCodesForActiveSuppliers(bool isFuture)
         {
             Dictionary<string, Dictionary<string, LCRCode>> suppliersOrderedCodes = new Dictionary<string, Dictionary<string, LCRCode>>();
-            ExecuteReader("LCR.sp_Code_GetOrderedForActiveSuppliers", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetOrderedForActiveSuppliers", (reader) =>
             {
                 string currentSupplierId = null;
                 Dictionary<string, LCRCode> supplierCodes = null;
@@ -214,7 +214,7 @@ namespace TOne.Data.SQL
         public Dictionary<string, List<LCRCode>> GetOrderedCodesForActiveSuppliers2(bool isFuture)
         {
             Dictionary<string, List<LCRCode>> allCodes = new Dictionary<string, List<LCRCode>>();
-            ExecuteReader("LCR.sp_Code_GetOrderedForActiveSuppliers", (reader) =>
+            ExecuteReaderSP("LCR.sp_Code_GetOrderedForActiveSuppliers", (reader) =>
             {
                 string currentCode = null;
                 List<LCRCode> subCodes = null;
@@ -260,7 +260,7 @@ namespace TOne.Data.SQL
                           JOIN Zone z with (nolock) on c.ZoneID = z.ZoneID
                           WHERE c.IsEffective = 'Y' 
                           ORDER by CodeNumber desc, z.SupplierID";
-            return GetItemsCmdText(query, LCRCodeMapper, null);
+            return GetItemsText(query, LCRCodeMapper, null);
         }
 
         #region Mappers

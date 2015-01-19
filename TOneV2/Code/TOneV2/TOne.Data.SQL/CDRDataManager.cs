@@ -9,7 +9,7 @@ namespace TOne.Data.SQL
     {
         public void LoadCDRRange(DateTime from, DateTime to, int? batchSize, Action<List<TABS.CDR>> onBatchReady)
         {
-            ExecuteReaderCmdText(query_GetCDRRange, (reader) =>
+            ExecuteReaderText(query_GetCDRRange, (reader) =>
                 {
                     List<TABS.CDR> cdrBatch = new List<TABS.CDR>();
 

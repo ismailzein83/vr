@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using TOne.Business;
 using System.Threading.Tasks;
+using TOne.RepricingProcess.Arguments;
 namespace TOne.RepricingProcess.Activities
 {
 

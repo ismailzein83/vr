@@ -29,51 +29,92 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.LCRProcess.Activities"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServiceHost", "TestServiceHost\TestServiceHost.csproj", "{1DA2E44B-1983-44B7-B2AB-200E09EFEA25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.LCRProcess.Arguments", "TOne.LCRProcess.Arguments\TOne.LCRProcess.Arguments.csproj", "{E875395B-F198-4C06-9C10-1FED1450C7D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business Processes", "Business Processes", "{08311550-40ED-48E6-A8FA-0D2DABA9A79F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LCR Process", "LCR Process", "{7A234E16-3469-487A-B440-4EFB0FB5CEBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.RepricingProcess.Arguments", "TOne.RepricingProcess.Arguments\TOne.RepricingProcess.Arguments.csproj", "{B267FB08-EA52-47FB-9EBE-D773D65E3E75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repricing Process", "Repricing Process", "{A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access Layer", "Data Access Layer", "{D6E3C765-FDD6-47BA-90A6-6C1158965A86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{C67A7308-819E-4530-A5C0-3C6770BF0C52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{A0ED4D4A-B888-4E39-9011-0BAC781A5C53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entities", "Entities", "{BB1E2C58-8D87-42F6-B4F2-8BCB9984D0AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{FF0FAC91-E262-491A-BFFD-A3DA5DFBD19E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TABS.Plugins.Framework\\TABS.Plugins.Framework.csproj
+		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
 		SccProjectName1 = TABS.Plugins.Framework
 		SccLocalPath1 = TABS.Plugins.Framework
 		SccProjectUniqueName2 = TABS\\TABS.csproj
+		SccProjectTopLevelParentUniqueName2 = TOneV2.sln
 		SccProjectName2 = TABS
 		SccLocalPath2 = TABS
 		SccProjectUniqueName3 = TestRuntime\\TestRuntime.csproj
+		SccProjectTopLevelParentUniqueName3 = TOneV2.sln
 		SccProjectName3 = TestRuntime
 		SccLocalPath3 = TestRuntime
 		SccProjectUniqueName4 = TestServiceHost\\TestServiceHost.csproj
+		SccProjectTopLevelParentUniqueName4 = TOneV2.sln
 		SccProjectName4 = TestServiceHost
 		SccLocalPath4 = TestServiceHost
 		SccProjectUniqueName5 = TOne.Business\\TOne.Business.csproj
+		SccProjectTopLevelParentUniqueName5 = TOneV2.sln
 		SccProjectName5 = TOne.Business
 		SccLocalPath5 = TOne.Business
 		SccProjectUniqueName6 = TOne.Caching\\TOne.Caching.csproj
+		SccProjectTopLevelParentUniqueName6 = TOneV2.sln
 		SccProjectName6 = TOne.Caching
 		SccLocalPath6 = TOne.Caching
 		SccProjectUniqueName7 = TOne.Data.SQL\\TOne.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName7 = TOneV2.sln
 		SccProjectName7 = TOne.Data.SQL
 		SccLocalPath7 = TOne.Data.SQL
 		SccProjectUniqueName8 = TOne.Data\\TOne.Data.csproj
+		SccProjectTopLevelParentUniqueName8 = TOneV2.sln
 		SccProjectName8 = TOne.Data
 		SccLocalPath8 = TOne.Data
 		SccProjectUniqueName9 = TOne.Entities\\TOne.Entities.csproj
+		SccProjectTopLevelParentUniqueName9 = TOneV2.sln
 		SccProjectName9 = TOne.Entities
 		SccLocalPath9 = TOne.Entities
 		SccProjectUniqueName10 = TOne.LCRProcess.Activities\\TOne.LCRProcess.Activities.csproj
+		SccProjectTopLevelParentUniqueName10 = TOneV2.sln
 		SccProjectName10 = TOne.LCRProcess.Activities
 		SccLocalPath10 = TOne.LCRProcess.Activities
 		SccProjectUniqueName11 = TOne.LCRProcess\\TOne.LCRProcess.csproj
+		SccProjectTopLevelParentUniqueName11 = TOneV2.sln
 		SccProjectName11 = TOne.LCRProcess
 		SccLocalPath11 = TOne.LCRProcess
 		SccProjectUniqueName12 = TOne.RepricingProcess.Activities\\TOne.RepricingProcess.Activities.csproj
+		SccProjectTopLevelParentUniqueName12 = TOneV2.sln
 		SccProjectName12 = TOne.RepricingProcess.Activities
 		SccLocalPath12 = TOne.RepricingProcess.Activities
 		SccProjectUniqueName13 = TOne.RepricingProcess\\TOne.RepricingProcess.csproj
+		SccProjectTopLevelParentUniqueName13 = TOneV2.sln
 		SccProjectName13 = TOne.RepricingProcess
 		SccLocalPath13 = TOne.RepricingProcess
+		SccProjectUniqueName14 = TOne.LCRProcess.Arguments\\TOne.LCRProcess.Arguments.csproj
+		SccProjectTopLevelParentUniqueName14 = TOneV2.sln
+		SccProjectName14 = TOne.LCRProcess.Arguments
+		SccLocalPath14 = TOne.LCRProcess.Arguments
+		SccProjectUniqueName15 = TOne.RepricingProcess.Arguments\\TOne.RepricingProcess.Arguments.csproj
+		SccProjectTopLevelParentUniqueName15 = TOneV2.sln
+		SccProjectName15 = TOne.RepricingProcess.Arguments
+		SccLocalPath15 = TOne.RepricingProcess.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -334,8 +375,63 @@ Global
 		{1DA2E44B-1983-44B7-B2AB-200E09EFEA25}.Release|x64.ActiveCfg = Release|x86
 		{1DA2E44B-1983-44B7-B2AB-200E09EFEA25}.Release|x86.ActiveCfg = Release|x86
 		{1DA2E44B-1983-44B7-B2AB-200E09EFEA25}.Release|x86.Build.0 = Release|x86
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|x64.ActiveCfg = Release|Any CPU
+		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|x86.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|x64.ActiveCfg = Release|Any CPU
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A234E16-3469-487A-B440-4EFB0FB5CEBA} = {08311550-40ED-48E6-A8FA-0D2DABA9A79F}
+		{A73D948C-FEE5-4E22-9C98-C8F40F4BF12E} = {08311550-40ED-48E6-A8FA-0D2DABA9A79F}
+		{E875395B-F198-4C06-9C10-1FED1450C7D7} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
+		{244516F9-E7B8-47D0-B3AF-EC24631BA485} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
+		{8E765860-8D8C-4296-9EE4-7749E861B629} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
+		{A1CF6006-65FA-4920-82C0-B23FAE62D40F} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
+		{FEE0A16A-2C42-4012-BAF2-23666E4831E1} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
+		{B267FB08-EA52-47FB-9EBE-D773D65E3E75} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
+		{AC26C25E-A2BF-4F95-9070-8A910FDA5989} = {D6E3C765-FDD6-47BA-90A6-6C1158965A86}
+		{F0BCBE72-F000-46AE-85A4-79155751C767} = {D6E3C765-FDD6-47BA-90A6-6C1158965A86}
+		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0} = {C67A7308-819E-4530-A5C0-3C6770BF0C52}
+		{1DA2E44B-1983-44B7-B2AB-200E09EFEA25} = {C67A7308-819E-4530-A5C0-3C6770BF0C52}
+		{CAB55227-6FDA-4012-8A59-168AD30F96D2} = {A0ED4D4A-B888-4E39-9011-0BAC781A5C53}
+		{60DA66BD-017D-43A2-82DC-ED7DB8751D23} = {BB1E2C58-8D87-42F6-B4F2-8BCB9984D0AF}
+		{53916714-C501-4613-907F-D5F33B78C3F0} = {FF0FAC91-E262-491A-BFFD-A3DA5DFBD19E}
+		{234ABDF0-DAE3-4979-8BF4-57F3EED90268} = {FF0FAC91-E262-491A-BFFD-A3DA5DFBD19E}
+		{1950B29A-5C7B-47A3-8113-FC9211D27CFD} = {FF0FAC91-E262-491A-BFFD-A3DA5DFBD19E}
 	EndGlobalSection
 EndGlobal

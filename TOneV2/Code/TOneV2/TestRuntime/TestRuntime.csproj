@@ -89,20 +89,25 @@
     <Reference Include="TABS.Plugins.VoipSwitch">
       <HintPath>..\Dependencies\TABS.Plugins.VoipSwitch.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -115,6 +120,9 @@
     </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="WebHelperLibrary">
+      <HintPath>..\Dependencies\WebHelperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +142,21 @@
       <Project>{8E765860-8D8C-4296-9EE4-7749E861B629}</Project>
       <Name>TOne.LCRProcess.Activities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.LCRProcess.Arguments\TOne.LCRProcess.Arguments.csproj">
+      <Project>{e875395b-f198-4c06-9c10-1fed1450c7d7}</Project>
+      <Name>TOne.LCRProcess.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCRProcess\TOne.LCRProcess.csproj">
       <Project>{244516F9-E7B8-47D0-B3AF-EC24631BA485}</Project>
       <Name>TOne.LCRProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.RepricingProcess.Activities\TOne.RepricingProcess.Activities.csproj">
+      <Project>{fee0a16a-2c42-4012-baf2-23666e4831e1}</Project>
+      <Name>TOne.RepricingProcess.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.RepricingProcess.Arguments\TOne.RepricingProcess.Arguments.csproj">
+      <Project>{b267fb08-ea52-47fb-9ebe-d773d65e3e75}</Project>
+      <Name>TOne.RepricingProcess.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.RepricingProcess\TOne.RepricingProcess.csproj">
       <Project>{A1CF6006-65FA-4920-82C0-B23FAE62D40F}</Project>

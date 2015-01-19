@@ -9,17 +9,17 @@ namespace TOne.Data.SQL
     {
         public void UpdateFromNewRates(byte[] ratesUpdatedAfter)
         {
-            int rowsAffected = ExecuteNonQuery("LCR.sp_ZoneRate_UpdateFromNewRates", ratesUpdatedAfter);
+            int rowsAffected = ExecuteNonQuerySP("LCR.sp_ZoneRate_UpdateFromNewRates", ratesUpdatedAfter);
         }
 
         public void UpdateFromChangedRates(byte[] ratesUpdatedAfter)
         {
-            int rowsAffected = ExecuteNonQuery("LCR.sp_ZoneRate_UpdateFromChangedRates", ratesUpdatedAfter);
+            int rowsAffected = ExecuteNonQuerySP("LCR.sp_ZoneRate_UpdateFromChangedRates", ratesUpdatedAfter);
         }
 
         public void ApplyEffectiveRates()
         {
-            ExecuteNonQuery("LCR.sp_ZoneRate_ApplyEffectiveRates");
+            ExecuteNonQuerySP("LCR.sp_ZoneRate_ApplyEffectiveRates");
         }
     }
 }

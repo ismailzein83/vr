@@ -10,7 +10,7 @@ namespace TOne.Data.SQL
     {
         public void LoadUpdatedCodes(byte[] timestamp, Action<List<LCRCode>> onCodeGroupListReady)
         {
-            ExecuteReaderCmdText(GET_UPDATEDCodes, (reader) =>
+            ExecuteReaderText(GET_UPDATEDCodes, (reader) =>
                 {
                     List<LCRCode> codeGroupList = new List<LCRCode>();
                     string currentCodeGroup = null;

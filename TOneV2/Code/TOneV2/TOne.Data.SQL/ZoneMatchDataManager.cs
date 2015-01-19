@@ -9,27 +9,27 @@ namespace TOne.Data.SQL
     {
         public int UpdateAll(bool isFuture)
         {
-            return ExecuteNonQuery("LCR.sp_ZoneMatch_UpdateAll", isFuture);
+            return ExecuteNonQuerySP("LCR.sp_ZoneMatch_UpdateAll", isFuture);
         }
 
         public int UpdateByCodeDigit(bool isFuture, char firstDigit)
         {
-            return ExecuteNonQueryCmdText(String.Format(query_UpdateByCodeDigit, isFuture ? "Future" : "Current", firstDigit), null);
+            return ExecuteNonQueryText(String.Format(query_UpdateByCodeDigit, isFuture ? "Future" : "Current", firstDigit), null);
         }
 
         public void CreateTempTable(bool isFuture)
         {
-            ExecuteNonQuery("LCR.sp_ZoneMatch_CreateTempTable", isFuture);
+            ExecuteNonQuerySP("LCR.sp_ZoneMatch_CreateTempTable", isFuture);
         }
 
         public void SwapTableWithTemp(bool isFuture)
         {
-            ExecuteNonQueryCmdText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", null), null);
+            ExecuteNonQueryText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", null), null);
         }
 
         public void CreateIndexesOnTable(bool isFuture)
         {
-            ExecuteNonQuery("LCR.sp_ZoneMatch_CreateIndexesOnTempTable", isFuture);
+            ExecuteNonQuerySP("LCR.sp_ZoneMatch_CreateIndexesOnTempTable", isFuture);
         }
 
         #region Queries

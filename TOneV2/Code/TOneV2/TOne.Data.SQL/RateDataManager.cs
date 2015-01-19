@@ -9,7 +9,7 @@ namespace TOne.Data.SQL
     {
         public byte[] GetRateLastTimestamp()
         {
-            object lastTimestamp = ExecuteScalar("LCR.sp_Rate_GetLastTimeStamp");
+            object lastTimestamp = ExecuteScalarSP("LCR.sp_Rate_GetLastTimeStamp");
             return lastTimestamp != null ? (byte[])lastTimestamp : new byte[0];
         }
     }

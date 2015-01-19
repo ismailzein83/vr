@@ -150,34 +150,34 @@ namespace TOne.Data.SQL
 
         public void CreateTempTable(bool isFuture)
         {
-            ExecuteNonQueryCmdText(String.Format(query_CreateTempTable, isFuture ? "Future" : "Current", null), null);
+            ExecuteNonQueryText(String.Format(query_CreateTempTable, isFuture ? "Future" : "Current", null), null);
             //ExecuteNonQueryCmdText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", null), null);
         }
 
         public void CreateTempTable(bool isFuture, string codeGroup)
         {
-            ExecuteNonQueryCmdText(String.Format(query_CreateTempTable, isFuture ? "Future" : "Current", codeGroup), null);
+            ExecuteNonQueryText(String.Format(query_CreateTempTable, isFuture ? "Future" : "Current", codeGroup), null);
             //ExecuteNonQueryCmdText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", codeGroup), null);
         }
 
         public void SwapTableWithTemp(bool isFuture)
         {
-            ExecuteNonQueryCmdText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", null), null);
+            ExecuteNonQueryText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", null), null);
         }
 
         public void SwapTableWithTemp(bool isFuture, string codeGroup)
         {
-            ExecuteNonQueryCmdText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", codeGroup), null);
+            ExecuteNonQueryText(String.Format(query_SwapTableWithTemp, isFuture ? "Future" : "Current", codeGroup), null);
         }
 
         public void CreateIndexesOnTable(bool isFuture)
         {
-            ExecuteNonQueryCmdText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", null), null);
+            ExecuteNonQueryText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", null), null);
         }
 
         public void CreateIndexesOnTable(bool isFuture, string codeGroup)
         {
-            ExecuteNonQueryCmdText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", codeGroup), null);
+            ExecuteNonQueryText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current", codeGroup), null);
         }
 
         #region Private Methods

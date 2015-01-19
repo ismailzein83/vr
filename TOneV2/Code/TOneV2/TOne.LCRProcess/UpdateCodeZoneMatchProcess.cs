@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Entities;
+using TOne.LCRProcess.Arguments;
 
 namespace TOne.LCRProcess
 {

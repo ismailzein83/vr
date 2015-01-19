@@ -15,20 +15,20 @@ namespace TOne.Data.SQL
         public long GetMinCDRMainID()
         {
             string sql = @"SELECT Min(ID) FROM Billing_CDR_Main WITH(NOLOCK)";
-            object idAsObj = ExecuteScalarCmdText(sql, null);
+            object idAsObj = ExecuteScalarText(sql, null);
             return idAsObj != DBNull.Value ? (long)idAsObj : 0;
         }
 
         public long GetMinCDRInvalidID()
         {
             string sql = @"SELECT Min(ID) FROM Billing_CDR_Invalid WITH(NOLOCK)";
-            object idAsObj = ExecuteScalarCmdText(sql, null);
+            object idAsObj = ExecuteScalarText(sql, null);
             return idAsObj != DBNull.Value ? (long)idAsObj : 0;
         }
 
         public void DeleteCDRMain(DateTime from, DateTime to)
         {
-            ExecuteNonQueryCmdText(String.Format(query_DeleteTemplate, "Billing_CDR_Main", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Main_Attempt"),
+            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Main", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Main_Attempt"),
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
@@ -38,7 +38,7 @@ namespace TOne.Data.SQL
 
         public void DeleteCDRInvalid(DateTime from, DateTime to)
         {
-            ExecuteNonQueryCmdText(String.Format(query_DeleteTemplate, "Billing_CDR_Invalid", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Invalid_Attempt"),
+            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Invalid", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Invalid_Attempt"),
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
@@ -48,7 +48,7 @@ namespace TOne.Data.SQL
 
         public void DeleteCDRSale(DateTime from, DateTime to)
         {
-            ExecuteNonQueryCmdText(String.Format(query_DeleteTemplate, "Billing_CDR_Sale", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Sale_Attempt"),
+            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Sale", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Sale_Attempt"),
                (cmd) =>
                {
                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
@@ -58,7 +58,7 @@ namespace TOne.Data.SQL
 
         public void DeleteCDRCost(DateTime from, DateTime to)
         {
-            ExecuteNonQueryCmdText(String.Format(query_DeleteTemplate, "Billing_CDR_Cost", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Cost_Attempt"),
+            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "Billing_CDR_Cost", "Attempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_Billing_CDR_Cost_Attempt"),
                (cmd) =>
                {
                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
@@ -69,7 +69,7 @@ namespace TOne.Data.SQL
 
         public void DeleteTrafficStats(DateTime from, DateTime to)
         {
-            ExecuteNonQueryCmdText(String.Format(query_DeleteTemplate, "TrafficStats", "FirstCDRAttempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_TrafficStats_DateTimeFirst"),
+            ExecuteNonQueryText(String.Format(query_DeleteTemplate, "TrafficStats", "FirstCDRAttempt", Guid.NewGuid().ToString().Replace("-", ""), "IX_TrafficStats_DateTimeFirst"),
                (cmd) =>
                {
                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@From", from));
@@ -79,7 +79,7 @@ namespace TOne.Data.SQL
 
         public void DeleteDailyTrafficStats(DateTime date)
         {
-            ExecuteNonQueryCmdText("DELETE TrafficStatsDaily FROM TrafficStatsDaily WITH(NOLOCK, INDEX(IX_TrafficStatsDaily_DateTimeFirst)) WHERE  calldate = @Date",
+            ExecuteNonQueryText("DELETE TrafficStatsDaily FROM TrafficStatsDaily WITH(NOLOCK, INDEX(IX_TrafficStatsDaily_DateTimeFirst)) WHERE  calldate = @Date",
                (cmd) =>
                {
                    cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Date", date));
@@ -88,7 +88,7 @@ namespace TOne.Data.SQL
 
         public void UpdateDailyPostpaid(DateTime date)
         {
-            ExecuteNonQueryCmdText("EXEC bp_PostpaidDailyTotalUpdate @FromCallDate = @date, @ToCallDate = @date",
+            ExecuteNonQueryText("EXEC bp_PostpaidDailyTotalUpdate @FromCallDate = @date, @ToCallDate = @date",
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@date", date));
@@ -97,7 +97,7 @@ namespace TOne.Data.SQL
 
         public void UpdateDailyPrepaid(DateTime date)
         {
-            ExecuteNonQueryCmdText("EXEC bp_PrepaidDailyTotalUpdate @FromCallDate = @date, @ToCallDate = @date",
+            ExecuteNonQueryText("EXEC bp_PrepaidDailyTotalUpdate @FromCallDate = @date, @ToCallDate = @date",
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@date", date));
@@ -106,7 +106,7 @@ namespace TOne.Data.SQL
 
         public void UpdateDailyBillingStatistics(DateTime date)
         {
-            ExecuteNonQueryCmdText("EXEC bp_BuildBillingStats @Day = @date, @CustomerID = NULL",
+            ExecuteNonQueryText("EXEC bp_BuildBillingStats @Day = @date, @CustomerID = NULL",
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@date", date));

@@ -103,6 +103,10 @@
       <Project>{60DA66BD-017D-43A2-82DC-ED7DB8751D23}</Project>
       <Name>TOne.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.RepricingProcess.Arguments\TOne.RepricingProcess.Arguments.csproj">
+      <Project>{b267fb08-ea52-47fb-9ebe-d773d65e3e75}</Project>
+      <Name>TOne.RepricingProcess.Arguments</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
