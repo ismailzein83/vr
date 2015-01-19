@@ -244,7 +244,7 @@ namespace TestRuntime
 
         private static void TriggerProcess(DateTime date)
         {
-            TOne.RepricingProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.RepricingProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
+            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
             CreateProcessInput input = new CreateProcessInput
             {
                 ProcessName = "DailyRepricingProcess",

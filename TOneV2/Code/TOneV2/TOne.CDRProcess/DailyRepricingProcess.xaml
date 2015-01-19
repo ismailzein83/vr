@@ -1,0 +1,205 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.DailyRepricingProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tc="clr-namespace:TOne.Caching;assembly=TOne.Caching"
+ xmlns:tra="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
+ xmlns:tra1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tra:DailyRepricingProcessInput)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.DailyRepricingProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>NHibernate.Classic</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities.Debugger</x:String>
+      <x:String>System.Activities.Debugger.Symbol</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TABS</x:String>
+      <x:String>TABS.Components</x:String>
+      <x:String>TOne.Caching</x:String>
+      <x:String>TOne.CDRProcess.Activities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess.WFActivities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>TOne.CDRProcess</x:String>
+      <x:String>TOne.CDRProcess.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(tra:TimeRange)" Name="TimeRanges" />
+      <Variable x:TypeArguments="s:DateTime" Name="start" />
+      <Variable x:TypeArguments="s:Guid" Name="cacheManagerId" />
+      <Variable x:TypeArguments="x:Boolean" Name="isAnyTimeRangeProcessFailed" />
+    </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[start]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[DateTime.Now]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="[String.Format(&quot;Process Started for Repricing Date {0:dd-MMM-yyyy}&quot;, Input.RepricingDay)]" />
+    <vbw:CreateCacheManager x:TypeArguments="tc:TOneCacheManager" CacheManagerId="[cacheManagerId]" sap2010:WorkflowViewState.IdRef="CreateCacheManager`1_1" />
+    <tra1:DivideDayIntoTimeRanges Day="[Input.RepricingDay]" sap2010:WorkflowViewState.IdRef="DivideDayIntoTimeRanges_1" Interval="[New TimeSpan(0, CType((60 / TABS.SystemParameter.TrafficStatsSamplesPerHour.NumericValue.Value), Integer), 0)]" Ranges="[TimeRanges]" />
+    <ParallelForEach x:TypeArguments="tra:TimeRange" DisplayName="ParallelForEach&lt;TimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1" Values="[TimeRanges]">
+      <ActivityAction x:TypeArguments="tra:TimeRange">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="tra:TimeRange" Name="timeRange" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="processCompletedEventPayload" />
+          </Sequence.Variables>
+          <vbw:RunProcess ProcessInstanceId="{x:Null}" DisplayName="Run Time Range Process" sap2010:WorkflowViewState.IdRef="RunProcess_1" Input="[New TimeRangeRepricingProcessInput With&#xA;{.Range = timeRange,&#xA; .CacheManagerID = cacheManagerId&#xA; }]" ProcessCompletedEventPayload="[processCompletedEventPayload]" ProcessName="TimeRangeRepricingProcess" WaitProcessCompleted="True" />
+          <If Condition="[processCompletedEventPayload.ProcessStatus = BPInstanceStatus.Completed]" sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Then>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="[String.Format(&quot;Processing Succeeded in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}. {3} CDRs in {4}&quot;, timeRange.From, timeRange.To, Input.RepricingDay, CType(processCompletedEventPayload.ProcessOutput, TimeRangeRepricingProcessOutput).CDRCount, CType(processCompletedEventPayload.ProcessOutput, TimeRangeRepricingProcessOutput).SpentTime)]" />
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[isAnyTimeRangeProcessFailed]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="[String.Format(&quot;Processing Failed in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}&quot;, timeRange.From, timeRange.To, Input.RepricingDay)]" Severity="[BPTrackingSeverity.Error]" />
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </ActivityAction>
+    </ParallelForEach>
+    <If Condition="[Not isAnyTimeRangeProcessFailed]" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <tra1:UpdateDailyTrafficStatistics CacheManagerID="[cacheManagerId]" Day="[Input.RepricingDay]" sap2010:WorkflowViewState.IdRef="UpdateDailyTrafficStatistics_1" />
+          <tra1:UpdateBillingStatistics Day="[Input.RepricingDay]" sap2010:WorkflowViewState.IdRef="UpdateBillingStatistics_1" />
+          <tra1:UpdateDailyPrepaidAmounts Day="[Input.RepricingDay]" sap2010:WorkflowViewState.IdRef="UpdateDailyPrepaidAmounts_1" />
+          <tra1:UpdateDailyPostpaidAmounts Day="[Input.RepricingDay]" sap2010:WorkflowViewState.IdRef="UpdateDailyPostpaidAmounts_1" />
+          <vbw:RemoveCacheManager CacheManagerId="[cacheManagerId]" sap2010:WorkflowViewState.IdRef="RemoveCacheManager_1" />
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="[String.Format(&quot;Process ({0:dd-MMM-yyyy}) done in {1}&quot;, Input.RepricingDay, (DateTime.Now - start))]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <vbw:RemoveCacheManager CacheManagerId="[cacheManagerId]" sap2010:WorkflowViewState.IdRef="RemoveCacheManager_2" />
+          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="At least one of Time Range sub processes failed to execute" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuUmVwcmljaW5nUHJvY2Vzc1xEYWlseVJlcHJpY2luZ1Byb2Nlc3MueGFtbDRNA5EBDgIBAVQFWw4CATlcBVzcAQIBN10FXaABAgE0XgVejQICATBfBX0XAgEbfgWPAQoCAQJZMllAAgE8VjNWOgIBOlx0XNkBAgE4XVJdZAIBNV6DAV70AQIBM178AV6KAgIBMl4nXj0CATFfogFfsAECAS9kCXsUAgEcfhN+NgIBA4ABCYcBFAIBC4oBCY0BFAIBBWgLaIgDAgEpaQt6EAIBHYEBC4EBrgECAReCAQuCAYIBAgEVgwELgwGGAQIBE4QBC4QBiAECARGFAQuFAX4CAQ6GAQuGAe0BAgEMiwELiwF+AgEIjAELjAGaAQIBBmiSAWiDAgIBLmihAmjBAgIBLGjOAmjpAgIBK2j/AmiFAwIBKmkZaWQCAR5rD2vxAwIBJ24PeBoCAR+BAVSBAWoCARqBAT2BAU8CARiCAS2CAUMCARaDAS+DAUUCARSEATCEAUYCARKFATKFAUQCAQ+GAXqGAeoBAgENiwEyiwFEAgEJjAFbjAGXAQIBB2t+a+4DAgEobxF2GgIBI3cRd7YCAgEgdD10QQIBJnE+cVsCASR3lwJ3swICASJ3bHeNAgIBIQ==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="541,60" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="CreateCacheManager`1_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="DivideDayIntoTimeRanges_1" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,246">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,394" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,580">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,728" />
+      <sap2010:ViewStateData Id="UpdateDailyTrafficStatistics_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateBillingStatistics_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateDailyPrepaidAmounts_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateDailyPostpaidAmounts_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="RemoveCacheManager_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,456">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="RemoveCacheManager_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="541,604" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="563,1782">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.CDRProcess.DailyRepricingProcess_1" sap:VirtualizedContainerService.HintSize="603,1862" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

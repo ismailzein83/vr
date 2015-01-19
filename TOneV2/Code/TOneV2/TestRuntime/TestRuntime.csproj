@@ -41,6 +41,27 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.xlsgen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Resources\DLLs\Interop.xlsgen.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -49,8 +70,83 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NGenerics, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\NGenerics.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=2.0.11.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ftp, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SecureSocket, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.SecureSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SshShell, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Net.SshShell.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Telnet">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security, Version=1.5.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Rebex.TerminalEmulation.dll</HintPath>
+    </Reference>
+    <Reference Include="SecurityEssentials, Version=1.0.5336.24383, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\SecurityEssentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.1.2.20125, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
@@ -62,32 +158,45 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TABS.Addons.AlcatelSwitchLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.AlcatelSwitchLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.AlcatelSwitchLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.AlcatelSwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary, Version=1.0.5445.31658, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.MvtsProSwitchLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.MvtsProSwitchLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.MvtsProSwitchLibrary, Version=1.0.5346.21305, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProSwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.MvtsProSwitchLibraryMultipleQueue">
-      <HintPath>..\Dependencies\TABS.Addons.MvtsProSwitchLibraryMultipleQueue.dll</HintPath>
+    <Reference Include="TABS.Addons.MvtsProSwitchLibraryMultipleQueue, Version=1.0.5445.31918, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProSwitchLibraryMultipleQueue.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.NextPointSwitchLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.NextPointSwitchLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.NextPointSwitchLibrary, Version=1.0.5175.25915, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.NextPointSwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.NortelDMS300SwitchLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.NortelDMS300SwitchLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.NortelDMS300SwitchLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.NortelDMS300SwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.TelesSwitchLibrary">
-      <HintPath>..\Dependencies\TABS.Addons.TelesSwitchLibrary.dll</HintPath>
+    <Reference Include="TABS.Addons.TelesSwitchLibrary, Version=1.0.5337.20335, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.TelesSwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.UtilitiesMultipleQueue">
-      <HintPath>..\Dependencies\TABS.Addons.UtilitiesMultipleQueue.dll</HintPath>
+    <Reference Include="TABS.Addons.Utilities, Version=1.0.5445.31653, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Plugins.VoipSwitch">
-      <HintPath>..\Dependencies\TABS.Plugins.VoipSwitch.dll</HintPath>
+    <Reference Include="TABS.Addons.UtilitiesMultipleQueue, Version=1.0.5445.31656, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Addons.UtilitiesMultipleQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Plugins.VoipSwitch, Version=1.0.5346.21331, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Plugins.VoipSwitch.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -121,8 +230,9 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
-    <Reference Include="WebHelperLibrary">
-      <HintPath>..\Dependencies\WebHelperLibrary.dll</HintPath>
+    <Reference Include="WebHelperLibrary, Version=1.0.5238.26274, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\WebHelperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +240,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.CDRProcess.Activities\TOne.CDRProcess.Activities.csproj">
+      <Project>{85d05a41-8510-40ce-a2aa-e0cd39099eac}</Project>
+      <Name>TOne.CDRProcess.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess.Arguments\TOne.CDRProcess.Arguments.csproj">
+      <Project>{34c38ef3-c2d1-41d7-ab7c-e375f030b5f3}</Project>
+      <Name>TOne.CDRProcess.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess\TOne.CDRProcess.csproj">
+      <Project>{dfbaf471-2f49-40cd-b42a-574fefe5fffd}</Project>
+      <Name>TOne.CDRProcess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
       <Project>{F0BCBE72-F000-46AE-85A4-79155751C767}</Project>
       <Name>TOne.Data.SQL</Name>
@@ -149,18 +271,6 @@
     <ProjectReference Include="..\TOne.LCRProcess\TOne.LCRProcess.csproj">
       <Project>{244516F9-E7B8-47D0-B3AF-EC24631BA485}</Project>
       <Name>TOne.LCRProcess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.RepricingProcess.Activities\TOne.RepricingProcess.Activities.csproj">
-      <Project>{fee0a16a-2c42-4012-baf2-23666e4831e1}</Project>
-      <Name>TOne.RepricingProcess.Activities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.RepricingProcess.Arguments\TOne.RepricingProcess.Arguments.csproj">
-      <Project>{b267fb08-ea52-47fb-9ebe-d773d65e3e75}</Project>
-      <Name>TOne.RepricingProcess.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.RepricingProcess\TOne.RepricingProcess.csproj">
-      <Project>{A1CF6006-65FA-4920-82C0-B23FAE62D40F}</Project>
-      <Name>TOne.RepricingProcess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

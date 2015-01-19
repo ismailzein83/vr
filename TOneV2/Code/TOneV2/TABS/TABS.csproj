@@ -100,37 +100,30 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Castle.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\Resources\DLLs\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.xlsgen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Interop.xlsgen.dll</HintPath>
+    <Reference Include="Interop.xlsgen">
+      <HintPath>..\Resources\DLLs\Interop.xlsgen.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\Resources\DLLs\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NGenerics, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\NGenerics.dll</HintPath>
+    <Reference Include="NGenerics">
+      <HintPath>..\Resources\DLLs\NGenerics.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=1.2.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="SecurityEssentials, Version=1.0.5336.24383, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\SecurityEssentials.dll</HintPath>
+    <Reference Include="SecurityEssentials">
+      <HintPath>..\Resources\DLLs\SecurityEssentials.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Core, Version=1.1.2.20125, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Spring.Core.dll</HintPath>
+    <Reference Include="Spring.Core">
+      <HintPath>..\Resources\DLLs\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -154,21 +147,17 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TABS.Addons.Utilities, Version=1.0.5199.22804, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\TABS.Addons.Utilities.dll</HintPath>
+    <Reference Include="TABS.Addons.Utilities">
+      <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Reporting, Version=3.1.9.701, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Telerik.Reporting.dll</HintPath>
+    <Reference Include="Telerik.Reporting">
+      <HintPath>..\Resources\DLLs\Telerik.Reporting.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Components.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Vanrise.Components.Security.dll</HintPath>
+    <Reference Include="Vanrise.Components.Security">
+      <HintPath>..\Resources\DLLs\Vanrise.Components.Security.dll</HintPath>
     </Reference>
-    <Reference Include="WebHelperLibrary, Version=1.0.5199.22805, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\WebHelperLibrary.dll</HintPath>
+    <Reference Include="WebHelperLibrary">
+      <HintPath>..\Resources\DLLs\WebHelperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
