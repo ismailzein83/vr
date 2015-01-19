@@ -12,6 +12,8 @@ namespace Vanrise.Data.SQL
 {
     public class BaseSQLDataManager : BaseDataManager
     {
+        #region ctor
+
         public BaseSQLDataManager()
             : base()
         {
@@ -21,7 +23,11 @@ namespace Vanrise.Data.SQL
         {            
         }
 
-        protected int ExecuteNonQuery(string spName, params object[] parameters)
+        #endregion
+
+        #region ExecuteNonQuery
+
+        protected int ExecuteNonQuerySP(string spName, params object[] parameters)
         {
             SqlDatabase db = CreateDatabase();
             int rowsAffected = 0;
@@ -33,20 +39,7 @@ namespace Vanrise.Data.SQL
             return rowsAffected;
         }
 
-        protected int ExecuteNonQueryWithCmd(string spName, Action<DbCommand> prepareCommand)
-        {
-            SqlDatabase db = CreateDatabase();
-            int rowsAffected = 0;
-            using (var cmd = CreateCommandFromSP(db, spName))
-            {
-                if (prepareCommand != null)
-                    prepareCommand(cmd);
-                rowsAffected = db.ExecuteNonQuery(cmd);
-            }
-            return rowsAffected;
-        }
-
-        protected int ExecuteNonQuery(string spName, out object outputPrm, params object[] parameters)
+        protected int ExecuteNonQuerySP(string spName, out object outputPrm, params object[] parameters)
         {
             int rowsAffected = 0;
             SqlDatabase db = CreateDatabase();
@@ -62,7 +55,20 @@ namespace Vanrise.Data.SQL
             return rowsAffected;
         }
 
-        protected int ExecuteNonQueryCmdText(string cmdText, Action<DbCommand> prepareCommand)
+        protected int ExecuteNonQuerySPCmd(string spName, Action<DbCommand> prepareCommand)
+        {
+            SqlDatabase db = CreateDatabase();
+            int rowsAffected = 0;
+            using (var cmd = CreateCommandFromSP(db, spName))
+            {
+                if (prepareCommand != null)
+                    prepareCommand(cmd);
+                rowsAffected = db.ExecuteNonQuery(cmd);
+            }
+            return rowsAffected;
+        }
+
+        protected int ExecuteNonQueryText(string cmdText, Action<DbCommand> prepareCommand)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommand(db, cmdText))
@@ -74,13 +80,23 @@ namespace Vanrise.Data.SQL
             }
         }
 
-        protected object ExecuteScalar(string spName, params object[] parameters)
+        #endregion
+
+        #region ExecuteScalar
+
+        protected object ExecuteScalarSP(string spName, params object[] parameters)
         {
             SqlDatabase db = CreateDatabase();
-            return db.ExecuteScalar(spName, parameters);
+            object val = null;
+            using (var cmd = CreateCommandFromSP(db, spName))
+            {
+                db.AssignParameters(cmd, parameters.ToArray());
+                val = db.ExecuteScalar(cmd);
+            }
+            return val;
         }
 
-        protected object ExecuteScalarCmdText(string cmdText, Action<DbCommand> prepareCommand)
+        protected object ExecuteScalarText(string cmdText, Action<DbCommand> prepareCommand)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommand(db, cmdText))
@@ -92,7 +108,11 @@ namespace Vanrise.Data.SQL
             }
         }
 
-        protected void ExecuteReaderCmdText(string cmdText, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
+        #endregion
+
+        #region ExecuteReader
+
+        protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommand(db, cmdText))
@@ -108,7 +128,7 @@ namespace Vanrise.Data.SQL
             }
         }
 
-        protected void ExecuteReader(string spName, Action<IDataReader> onReaderReady, params object[] parameters)
+        protected void ExecuteReaderSP(string spName, Action<IDataReader> onReaderReady, params object[] parameters)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommandFromSP(db, spName))
@@ -123,7 +143,7 @@ namespace Vanrise.Data.SQL
             
         }
 
-        protected void ExecuteReaderWithCmd(string spName, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
+        protected void ExecuteReaderSPCmd(string spName, Action<DbCommand> prepareCommand, Action<IDataReader> onReaderReady)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommandFromSP(db, spName))
@@ -139,10 +159,14 @@ namespace Vanrise.Data.SQL
             }
         }
 
-        protected T GetItemCmdText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        #endregion
+
+        #region GetItem(s)
+
+        protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
         {
             T obj = default(T);
-            ExecuteReaderCmdText(cmdText, (reader) =>
+            ExecuteReaderText(cmdText, (reader) =>
             {
                 if (reader.Read())
                 {
@@ -153,10 +177,10 @@ namespace Vanrise.Data.SQL
             return obj;
         }
 
-        protected T GetItem<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
+        protected T GetItemSP<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
         {
             T obj = default(T);
-            ExecuteReader(spName, (reader) =>
+            ExecuteReaderSP(spName, (reader) =>
             {
                 if (reader.Read())
                 {
@@ -167,10 +191,10 @@ namespace Vanrise.Data.SQL
             return obj;
         }
 
-        protected List<T> GetItems<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
+        protected List<T> GetItemsSP<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
         {
             List<T> lst = new List<T>();
-            ExecuteReader(spName, (reader) =>
+            ExecuteReaderSP(spName, (reader) =>
             {
                 while (reader.Read())
                 {
@@ -183,10 +207,10 @@ namespace Vanrise.Data.SQL
             return lst;
         }
 
-        protected List<T> GetItemsCmdText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        protected List<T> GetItemsText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
         {
             List<T> lst = new List<T>();
-            ExecuteReaderCmdText(cmdText, (reader) =>
+            ExecuteReaderText(cmdText, (reader) =>
             {
                 while (reader.Read())
                 {
@@ -198,6 +222,10 @@ namespace Vanrise.Data.SQL
                 prepareCommand);
             return lst;
         }
+
+        #endregion
+
+        #region DataTable
 
         protected void WriteDataTableToDB(DataTable table, SqlBulkCopyOptions options, bool withBatchSize = true)
         {
@@ -218,6 +246,10 @@ namespace Vanrise.Data.SQL
             }
             table.Dispose();
         }
+
+        #endregion
+
+        #region Private Methods
 
         SqlConnection GetOpenConnection()
         {
@@ -260,5 +292,7 @@ namespace Vanrise.Data.SQL
             cmd.CommandTimeout = 600;
             return cmd;
         }
+
+        #endregion
     }
 }
