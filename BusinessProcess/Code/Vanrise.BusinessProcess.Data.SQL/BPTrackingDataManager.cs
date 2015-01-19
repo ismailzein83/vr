@@ -28,8 +28,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             s_trackingMessagesSchemaTable = new DataTable();
             s_trackingMessagesSchemaTable.TableName = "bp.BPTracking";
-            s_trackingMessagesSchemaTable.Columns.Add("ProcessInstanceID", typeof(Guid));
-            s_trackingMessagesSchemaTable.Columns.Add("ParentProcessID", typeof(Guid));
+            s_trackingMessagesSchemaTable.Columns.Add("ProcessInstanceID", typeof(long));
+            s_trackingMessagesSchemaTable.Columns.Add("ParentProcessID", typeof(long));
             s_trackingMessagesSchemaTable.Columns.Add("TrackingMessage", typeof(string));
             s_trackingMessagesSchemaTable.Columns.Add("Severity", typeof(int));
             s_trackingMessagesSchemaTable.Columns.Add("EventTime", typeof(DateTime));

@@ -22,22 +22,26 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
 
-        public int InsertInstance(Guid processInstanceId, string processTitle, Guid? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
+        public long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
         {
-            return ExecuteNonQuerySP("bp.sp_BPInstance_Insert", processInstanceId, processTitle, parentId, definitionID, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus);
+            object processInstanceId;
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionID, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus) > 0)
+                return (long)processInstanceId;
+            else
+                return 0;
         }
 
-        public int UpdateInstanceStatus(Guid processInstanceId, BPInstanceStatus status, string message, int retryCount)
+        public int UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount)
         {
             return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, ToDBNullIfDefault(retryCount));
         }
 
-        public int UpdateWorkflowInstanceID(Guid processInstanceId, Guid workflowInstanceId)
+        public int UpdateWorkflowInstanceID(long processInstanceId, Guid workflowInstanceId)
         {
             return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateWorkflowInstanceID", processInstanceId, workflowInstanceId);
         }
 
-        public int UpdateLoadedFlag(Guid processInstanceId, bool loaded)
+        public int UpdateLoadedFlag(long processInstanceId, bool loaded)
         {
             return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateLoadedFlag", processInstanceId, loaded);
         }
@@ -59,7 +63,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 });
         }
 
-        public int InsertEvent(Guid processInstanceId, string bookmarkName, object eventData)
+        public int InsertEvent(long processInstanceId, string bookmarkName, object eventData)
         {
             return ExecuteNonQuerySP("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
         }
@@ -78,7 +82,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     BPEvent instance = new BPEvent
                     {
                         BPEventID = (long)reader["ID"],
-                        ProcessInstanceID = (Guid)reader["ProcessInstanceID"],
+                        ProcessInstanceID = (long)reader["ProcessInstanceID"],
                          ProcessDefinitionID = (int)reader["DefinitionID"],
                           Bookmark = reader["Bookmark"] as string
                     };
@@ -97,6 +101,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
             var bpDefinition = new BPDefinition
             {
                 BPDefinitionID = (int)reader["ID"],
+                Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
                 WorkflowType = Type.GetType(reader["FQTN"] as string)
             };
             string config = reader["Config"] as string;
@@ -109,9 +115,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             BPInstance instance = new BPInstance
             {
-                ProcessInstanceID = (Guid)reader["ID"],
+                ProcessInstanceID = (long)reader["ID"],
                 Title = reader["Title"] as string,
-                ParentProcessID = GetReaderValue<Guid?>(reader, "ParentID"),
+                ParentProcessID = GetReaderValue<long?>(reader, "ParentID"),
                 DefinitionID = (int)reader["DefinitionID"],
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],

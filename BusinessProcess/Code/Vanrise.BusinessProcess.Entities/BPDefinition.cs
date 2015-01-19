@@ -8,6 +8,11 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPDefinition
     {
         public int BPDefinitionID { get; set; }
+
+        public string Name { get; set; }
+
+        public string Title { get; set; }
+
         public Type WorkflowType { get; set; } // Type should inherit System.Activities.Activity
         public BPConfiguration Configuration { get; set; }
     }

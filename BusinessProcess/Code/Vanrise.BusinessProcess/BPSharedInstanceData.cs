@@ -8,7 +8,7 @@ namespace Vanrise.BusinessProcess
 {
     public class BPSharedInstanceData : PersistenceParticipant
     {
-        public Guid ProcessInstanceID { get; set; }
-        public Guid? ParentProcessID { get; set; }
+        public long ProcessInstanceID { get; set; }
+        public long? ParentProcessID { get; set; }
     }
 }

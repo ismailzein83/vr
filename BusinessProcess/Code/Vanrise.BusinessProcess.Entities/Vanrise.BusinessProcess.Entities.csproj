@@ -49,7 +49,12 @@
     <Compile Include="BPInstance.cs" />
     <Compile Include="BPInstanceStatus.cs" />
     <Compile Include="BPTrackingMessage.cs" />
+    <Compile Include="CreateProcessInput.cs" />
+    <Compile Include="CreateProcessOutput.cs" />
+    <Compile Include="ProcessCompletedEventPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TriggerProcessEventInput.cs" />
+    <Compile Include="TriggerProcessEventOutput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

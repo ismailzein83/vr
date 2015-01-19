@@ -19,6 +19,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.DurableInstancing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -56,14 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
+    <Compile Include="Internals\BPService.cs" />
+    <Compile Include="Internals\IBPService.cs" />
     <Compile Include="ProcessCompletedEventPayload.cs" />
     <Compile Include="Internals\BPRunningInstance.cs" />
     <Compile Include="Internals\BPDefinitionInitiator.cs" />
     <Compile Include="BPSharedInstanceData.cs" />
     <Compile Include="BPTrackingChannel.cs" />
     <Compile Include="BusinessProcessRuntime.cs" />
-    <Compile Include="CreateProcessInput.cs" />
-    <Compile Include="CreateProcessOutput.cs" />
     <Compile Include="Base Classes\IBPWorkflow.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,7 +81,6 @@
       <Name>Vanrise.BusinessProcess.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

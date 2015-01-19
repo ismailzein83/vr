@@ -39,21 +39,22 @@ namespace Vanrise.BusinessProcess
 
         IBPDataManager _dataManager;
         
-        Dictionary<Type, BPDefinitionInitiator> _processDefinitionInitiators;
+        Dictionary<string, BPDefinitionInitiator> _processDefinitionInitiators;
 
         #endregion
 
-        public CreateProcessOutput CreateNewProcess<T>(CreateProcessInput input) where T : Activity, IBPWorkflow
+        #region Internal Methods
+        internal CreateProcessOutput CreateNewProcess(CreateProcessInput input)
         {
 
             InitializeIfNotInitialized();
 
             BPDefinitionInitiator processInitiator;
-            if (!_processDefinitionInitiators.TryGetValue(typeof(T), out processInitiator))
-                throw new ArgumentException(String.Format("'{0}' not found in Process Definitions list", typeof(T)));
-            Guid processInstanceId = Guid.NewGuid();
+            if (!_processDefinitionInitiators.TryGetValue(input.ProcessName, out processInitiator))
+                throw new ArgumentException(String.Format("'{0}' not found in Process Definitions list", input.ProcessName));
+            
             string processTitle = processInitiator.WorkflowDefinition.GetTitle(input);
-            _dataManager.InsertInstance(processInstanceId, processTitle, input.ParentProcessID, processInitiator.Definition.BPDefinitionID, input.InputArguments, BPInstanceStatus.New);
+            long processInstanceId = _dataManager.InsertInstance(processTitle, input.ParentProcessID, processInitiator.Definition.BPDefinitionID, input.InputArguments, BPInstanceStatus.New);
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
                 ProcessInstanceId = processInstanceId,
@@ -65,15 +66,22 @@ namespace Vanrise.BusinessProcess
             CreateProcessOutput output = new CreateProcessOutput
                 {
                     ProcessInstanceId = processInstanceId,
-                    IsCreated = true
+                    Result = CreateProcessResult.Succeeded
                 };
             return output;
         }
 
-        public void TriggerProcessEvent(Guid processInstanceId, string bookmarkName, object eventData)
-        {            
-            _dataManager.InsertEvent(processInstanceId, bookmarkName, eventData);
+        internal TriggerProcessEventOutput TriggerProcessEvent(TriggerProcessEventInput input)
+        {
+            TriggerProcessEventOutput output = new TriggerProcessEventOutput();
+            if (_dataManager.InsertEvent(input.ProcessInstanceId, input.BookmarkName, input.EventData) > 0)
+                output.Result = TriggerProcessEventResult.Succeeded;
+            else
+                output.Result = TriggerProcessEventResult.ProcessInstanceNotExists;
+            return output;
         }
+
+        #endregion
 
         public void TerminatePendingProcesses()
         {
@@ -114,14 +122,15 @@ namespace Vanrise.BusinessProcess
 
                 _dataManager.ClearLoadedFlag();
 
-                _processDefinitionInitiators = new Dictionary<Type, BPDefinitionInitiator>();
+                _processDefinitionInitiators = new Dictionary<string, BPDefinitionInitiator>();
                 var definitions = _dataManager.GetDefinitions();
                 foreach (var bpDefinition in definitions)
                 {
-                    _processDefinitionInitiators.Add(bpDefinition.WorkflowType, new BPDefinitionInitiator(bpDefinition));
+                    _processDefinitionInitiators.Add(bpDefinition.Name, new BPDefinitionInitiator(bpDefinition));
                 }
 
                 _isInitialized = true;
+                BPService.Start();
             }
         }
 

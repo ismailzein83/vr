@@ -4,16 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
 
-    public sealed class RunProcess<T> : NativeActivity where T : Activity, IBPWorkflow
+    public sealed class RunProcess : NativeActivity
     {
         // Define an activity input argument of type string
+
+        [RequiredArgument]
+        public InArgument<string> ProcessName { get; set; }
+
         public InArgument<object> Input { get; set; }
         public InArgument<bool> WaitProcessCompleted { get; set; }
-        public OutArgument<Guid> ProcessInstanceId { get; set; }
+        public OutArgument<long> ProcessInstanceId { get; set; }
         public OutArgument<ProcessCompletedEventPayload> ProcessCompletedEventPayload { get; set; }
 
         protected override bool CanInduceIdle
@@ -32,10 +37,12 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             var input = new CreateProcessInput
             {
+                ProcessName = this.ProcessName.Get(context),
                 InputArguments = this.Input.Get(context),
                 ParentProcessID = sharedData.ProcessInstanceID
             };
-            var output = BusinessProcessRuntime.Current.CreateNewProcess<T>(input);
+            ProcessManager processManager = new ProcessManager();
+            var output = processManager.CreateNewProcess(input);
             this.ProcessInstanceId.Set(context, output.ProcessInstanceId);
 
             if (this.WaitProcessCompleted.Get(context))

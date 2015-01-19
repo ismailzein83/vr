@@ -23,8 +23,13 @@ namespace Vanrise.BusinessProcess.WFActivities
             BPSharedInstanceData sharedInstanceData = context.GetExtension<BPSharedInstanceData>();
             if (sharedInstanceData == null)
                 throw new ArgumentNullException("BPSharedInstanceData");
-
-            BusinessProcessRuntime.Current.TriggerProcessEvent(sharedInstanceData.ParentProcessID.Value, this.BookmarkName.Get(context), this.EventPayload.Get(context));
+            ProcessManager processManager = new ProcessManager();
+            processManager.TriggerProcessEvent(new Entities.TriggerProcessEventInput
+            {
+                ProcessInstanceId = sharedInstanceData.ParentProcessID.Value,
+                BookmarkName = this.BookmarkName.Get(context),
+                EventData = this.EventPayload.Get(context)
+            });
         }
     }
 }

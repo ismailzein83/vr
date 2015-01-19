@@ -7,12 +7,12 @@ namespace Vanrise.BusinessProcess.Data
         int ClearLoadedFlag();
         int DeleteEvent(long eventId);
         System.Collections.Generic.List<BPDefinition> GetDefinitions();
-        int InsertEvent(Guid processInstanceId, string bookmarkName, object eventData);
-        int InsertInstance(Guid processInstanceId, string processTitle, Guid? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus);
+        int InsertEvent(long processInstanceId, string bookmarkName, object eventData);
+        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus);
         void LoadPendingEvents(Action<BPEvent> onEventLoaded);
         void LoadPendingProcesses(Action<BPInstance> onInstanceLoaded);
-        int UpdateInstanceStatus(Guid processInstanceId, BPInstanceStatus status, string message, int retryCount);
-        int UpdateLoadedFlag(Guid processInstanceId, bool loaded);
-        int UpdateWorkflowInstanceID(Guid processInstanceId, Guid workflowInstanceId);
+        int UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount);
+        int UpdateLoadedFlag(long processInstanceId, bool loaded);
+        int UpdateWorkflowInstanceID(long processInstanceId, Guid workflowInstanceId);
     }
 }

@@ -42,7 +42,7 @@ namespace Vanrise.BusinessProcess
         int? _nbOfThreads;
         static SqlWorkflowInstanceStore s_InstanceStore = new SqlWorkflowInstanceStore(ConfigurationManager.ConnectionStrings["WFPersistence"].ConnectionString);
 
-        private ConcurrentDictionary<Guid, BPRunningInstance> _runningInstances = new ConcurrentDictionary<Guid, BPRunningInstance>();
+        private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
         ConcurrentQueue<BPInstance> _qPendingInstances = new ConcurrentQueue<BPInstance>();
 
         public BPDefinitionInitiator(BPDefinition definition)
@@ -80,7 +80,7 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        internal void TriggerWFEvent(Guid processInstanceId, string bookmarkName, object eventData)
+        internal void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)
         {
             BPRunningInstance runningInstance ;
             if (_runningInstances.TryGetValue(processInstanceId, out runningInstance))
@@ -193,14 +193,18 @@ namespace Vanrise.BusinessProcess
                 object processOutput = null;
                 if (e.Outputs != null)
                     e.Outputs.TryGetValue("Output", out processOutput);
-                BusinessProcessRuntime.Current.TriggerProcessEvent(bpInstance.ParentProcessID.Value,
-                    bpInstance.ProcessInstanceID.ToString(),
-                    new ProcessCompletedEventPayload
+                TriggerProcessEventInput triggerProcessEventInput = new TriggerProcessEventInput
+                {
+                    ProcessInstanceId = bpInstance.ParentProcessID.Value,
+                    BookmarkName = bpInstance.ProcessInstanceID.ToString(),
+                     EventData = new ProcessCompletedEventPayload
                     {
                         ProcessStatus = bpInstance.Status,
                         LastProcessMessage = bpInstance.LastMessage,
                         ProcessOutput = processOutput
-                    });
+                    }
+                };
+                BusinessProcessRuntime.Current.TriggerProcessEvent(triggerProcessEventInput);
             }
 
             _dataManager.UpdateLoadedFlag(bpInstance.ProcessInstanceID, false);
