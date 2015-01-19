@@ -17,10 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Data.SQL", "TOne.Data.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Entities", "TOne.Entities\TOne.Entities.csproj", "{60DA66BD-017D-43A2-82DC-ED7DB8751D23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.RepricingProcess", "TOne.RepricingProcess\TOne.RepricingProcess.csproj", "{A1CF6006-65FA-4920-82C0-B23FAE62D40F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.RepricingProcess.Activities", "TOne.RepricingProcess.Activities\TOne.RepricingProcess.Activities.csproj", "{FEE0A16A-2C42-4012-BAF2-23666E4831E1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRuntime", "TestRuntime\TestRuntime.csproj", "{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.LCRProcess", "TOne.LCRProcess\TOne.LCRProcess.csproj", "{244516F9-E7B8-47D0-B3AF-EC24631BA485}"
@@ -34,10 +30,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business Processes", "Business Processes", "{08311550-40ED-48E6-A8FA-0D2DABA9A79F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LCR Process", "LCR Process", "{7A234E16-3469-487A-B440-4EFB0FB5CEBA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.RepricingProcess.Arguments", "TOne.RepricingProcess.Arguments\TOne.RepricingProcess.Arguments.csproj", "{B267FB08-EA52-47FB-9EBE-D773D65E3E75}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repricing Process", "Repricing Process", "{A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access Layer", "Data Access Layer", "{D6E3C765-FDD6-47BA-90A6-6C1158965A86}"
 EndProject
@@ -61,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.CDRProcess", "TOne.CDR
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -109,38 +101,26 @@ Global
 		SccProjectTopLevelParentUniqueName11 = TOneV2.sln
 		SccProjectName11 = TOne.LCRProcess
 		SccLocalPath11 = TOne.LCRProcess
-		SccProjectUniqueName12 = TOne.RepricingProcess.Activities\\TOne.RepricingProcess.Activities.csproj
+		SccProjectUniqueName12 = TOne.LCRProcess.Arguments\\TOne.LCRProcess.Arguments.csproj
 		SccProjectTopLevelParentUniqueName12 = TOneV2.sln
-		SccProjectName12 = TOne.RepricingProcess.Activities
-		SccLocalPath12 = TOne.RepricingProcess.Activities
-		SccProjectUniqueName13 = TOne.RepricingProcess\\TOne.RepricingProcess.csproj
+		SccProjectName12 = TOne.LCRProcess.Arguments
+		SccLocalPath12 = TOne.LCRProcess.Arguments
+		SccProjectUniqueName13 = Resources\\Resources.csproj
 		SccProjectTopLevelParentUniqueName13 = TOneV2.sln
-		SccProjectName13 = TOne.RepricingProcess
-		SccLocalPath13 = TOne.RepricingProcess
-		SccProjectUniqueName14 = TOne.LCRProcess.Arguments\\TOne.LCRProcess.Arguments.csproj
+		SccProjectName13 = Resources
+		SccLocalPath13 = Resources
+		SccProjectUniqueName14 = TOne.CDRProcess.Arguments\\TOne.CDRProcess.Arguments.csproj
 		SccProjectTopLevelParentUniqueName14 = TOneV2.sln
-		SccProjectName14 = TOne.LCRProcess.Arguments
-		SccLocalPath14 = TOne.LCRProcess.Arguments
-		SccProjectUniqueName15 = TOne.RepricingProcess.Arguments\\TOne.RepricingProcess.Arguments.csproj
+		SccProjectName14 = TOne.CDRProcess.Arguments
+		SccLocalPath14 = TOne.CDRProcess.Arguments
+		SccProjectUniqueName15 = TOne.CDRProcess.Activities\\TOne.CDRProcess.Activities.csproj
 		SccProjectTopLevelParentUniqueName15 = TOneV2.sln
-		SccProjectName15 = TOne.RepricingProcess.Arguments
-		SccLocalPath15 = TOne.RepricingProcess.Arguments
-		SccProjectUniqueName16 = Resources\\Resources.csproj
+		SccProjectName15 = TOne.CDRProcess.Activities
+		SccLocalPath15 = TOne.CDRProcess.Activities
+		SccProjectUniqueName16 = TOne.CDRProcess\\TOne.CDRProcess.csproj
 		SccProjectTopLevelParentUniqueName16 = TOneV2.sln
-		SccProjectName16 = Resources
-		SccLocalPath16 = Resources
-		SccProjectUniqueName17 = TOne.CDRProcess.Arguments\\TOne.CDRProcess.Arguments.csproj
-		SccProjectTopLevelParentUniqueName17 = TOneV2.sln
-		SccProjectName17 = TOne.CDRProcess.Arguments
-		SccLocalPath17 = TOne.CDRProcess.Arguments
-		SccProjectUniqueName18 = TOne.CDRProcess.Activities\\TOne.CDRProcess.Activities.csproj
-		SccProjectTopLevelParentUniqueName18 = TOneV2.sln
-		SccProjectName18 = TOne.CDRProcess.Activities
-		SccLocalPath18 = TOne.CDRProcess.Activities
-		SccProjectUniqueName19 = TOne.CDRProcess\\TOne.CDRProcess.csproj
-		SccProjectTopLevelParentUniqueName19 = TOneV2.sln
-		SccProjectName19 = TOne.CDRProcess
-		SccLocalPath19 = TOne.CDRProcess
+		SccProjectName16 = TOne.CDRProcess
+		SccLocalPath16 = TOne.CDRProcess
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -292,42 +272,6 @@ Global
 		{60DA66BD-017D-43A2-82DC-ED7DB8751D23}.Release|x64.ActiveCfg = Release|x86
 		{60DA66BD-017D-43A2-82DC-ED7DB8751D23}.Release|x86.ActiveCfg = Release|x86
 		{60DA66BD-017D-43A2-82DC-ED7DB8751D23}.Release|x86.Build.0 = Release|x86
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|Any CPU.Build.0 = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|x64.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Optimized|x86.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|x64.ActiveCfg = Release|Any CPU
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F}.Release|x86.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|Any CPU.Build.0 = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|x64.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Optimized|x86.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|x64.ActiveCfg = Release|Any CPU
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1}.Release|x86.ActiveCfg = Release|Any CPU
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Debug|Any CPU.Build.0 = Debug|x86
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
@@ -419,24 +363,6 @@ Global
 		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|x64.ActiveCfg = Release|Any CPU
 		{E875395B-F198-4C06-9C10-1FED1450C7D7}.Release|x86.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Any CPU.Build.0 = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|x64.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Optimized|x86.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|x64.ActiveCfg = Release|Any CPU
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE9E71D3-2E54-41B0-B1A0-CB50E051CBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE9E71D3-2E54-41B0-B1A0-CB50E051CBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE9E71D3-2E54-41B0-B1A0-CB50E051CBBA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -522,12 +448,8 @@ Global
 		{F0BCBE72-F000-46AE-85A4-79155751C767} = {D6E3C765-FDD6-47BA-90A6-6C1158965A86}
 		{AC26C25E-A2BF-4F95-9070-8A910FDA5989} = {D6E3C765-FDD6-47BA-90A6-6C1158965A86}
 		{60DA66BD-017D-43A2-82DC-ED7DB8751D23} = {BB1E2C58-8D87-42F6-B4F2-8BCB9984D0AF}
-		{A73D948C-FEE5-4E22-9C98-C8F40F4BF12E} = {08311550-40ED-48E6-A8FA-0D2DABA9A79F}
 		{7A234E16-3469-487A-B440-4EFB0FB5CEBA} = {08311550-40ED-48E6-A8FA-0D2DABA9A79F}
 		{DA73FD29-0EEF-42A1-8CBA-09520051C308} = {08311550-40ED-48E6-A8FA-0D2DABA9A79F}
-		{A1CF6006-65FA-4920-82C0-B23FAE62D40F} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
-		{B267FB08-EA52-47FB-9EBE-D773D65E3E75} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
-		{FEE0A16A-2C42-4012-BAF2-23666E4831E1} = {A73D948C-FEE5-4E22-9C98-C8F40F4BF12E}
 		{1DA2E44B-1983-44B7-B2AB-200E09EFEA25} = {C67A7308-819E-4530-A5C0-3C6770BF0C52}
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0} = {C67A7308-819E-4530-A5C0-3C6770BF0C52}
 		{8E765860-8D8C-4296-9EE4-7749E861B629} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
