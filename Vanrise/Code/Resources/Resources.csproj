@@ -99,6 +99,9 @@
     <Content Include="Databases\TransactionDB\Schema.sql" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
+    <Content Include="DLLs\Microsoft.Practices.ServiceLocation.dll" />
+    <Content Include="DLLs\Microsoft.Practices.Unity.dll" />
+    <Content Include="DLLs\Microsoft.Practices.Unity.Interception.dll" />
     <Content Include="DLLs\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
