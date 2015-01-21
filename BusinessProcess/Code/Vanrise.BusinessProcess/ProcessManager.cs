@@ -60,5 +60,10 @@ namespace Vanrise.BusinessProcess
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             return dataManager.GetDefinitions();
         }
+        public List<BPInstance> FilterInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
+        {
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            return dataManager.GetInstancesByCriteria( definitionID,  datefrom, dateto);
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace Vanrise.BusinessProcess.Entities
         public int RetryCount { get; set; }
         public object InputArgument { get; set; }
         public string LastMessage { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

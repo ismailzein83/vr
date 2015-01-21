@@ -21,6 +21,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
+        public List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
+        {
+            
+            return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, datefrom , dateto);
+
+           
+        }
 
         public long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
         {
@@ -83,8 +90,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     {
                         BPEventID = (long)reader["ID"],
                         ProcessInstanceID = (long)reader["ProcessInstanceID"],
-                         ProcessDefinitionID = (int)reader["DefinitionID"],
-                          Bookmark = reader["Bookmark"] as string
+                        ProcessDefinitionID = (int)reader["DefinitionID"],
+                        Bookmark = reader["Bookmark"] as string
                     };
                     string payload = reader["Payload"] as string;
                     if (!String.IsNullOrWhiteSpace(payload))
@@ -111,7 +118,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpDefinition;
         }
 
-        private BPInstance BPInstanceMapper(IDataReader reader, bool withInputArguments = false)
+
+        private BPInstance BPInstanceMapper(IDataReader reader)
+        {
+            return BPInstanceMapper(reader, false);
+        }
+        private BPInstance BPInstanceMapper(IDataReader reader, bool withInputArguments)
         {
             BPInstance instance = new BPInstance
             {
@@ -122,7 +134,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
                 RetryCount = GetReaderValue<int>(reader, "RetryCount"),
-                LastMessage = reader["LastMessage"] as string
+                LastMessage = reader["LastMessage"] as string,
+                CreatedTime =  (DateTime)reader["CreatedTime"]
             };
             if (withInputArguments)
             {
