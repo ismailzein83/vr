@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
 using Vanrise.BusinessProcess;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -40,7 +40,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(CreateIndexesOnCodeMatchTableInput inputArgument)
         {
             DateTime start = DateTime.Now;
-            ICodeMatchDataManager dataManager = DataManagerFactory.GetDataManager<ICodeMatchDataManager>();            
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();            
             dataManager.CreateIndexesOnTable(inputArgument.IsFuture);
             Console.WriteLine("{0}: CreateIndexesOnCodeMatchTable is done in {1}", DateTime.Now, (DateTime.Now - start));
         }

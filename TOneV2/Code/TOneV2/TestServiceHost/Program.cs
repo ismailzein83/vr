@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ServiceModel;
-using TOne.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
+using TOne.LCR.Entities;
 
 namespace TestServiceHost
 {
@@ -20,7 +20,7 @@ namespace TestServiceHost
             //////serviceHost.Opened += new EventHandler(serviceHost_Opened);
             //////serviceHost.Open();
 
-            TOne.Entities.LCRCode code = new LCRCode
+            LCRCode code = new LCRCode
             {
                 ID = 43,
                 CodeGroup = "435235",

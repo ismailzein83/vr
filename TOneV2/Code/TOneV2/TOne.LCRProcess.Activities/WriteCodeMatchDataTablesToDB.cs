@@ -6,10 +6,10 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using System.Collections.Concurrent;
 using System.Data;
-using TOne.Entities;
-using TOne.Data;
 using System.Threading;
 using System.ServiceModel;
+using TOne.LCR.Data;
+using TOne.Entities;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -43,7 +43,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override void DoWork(WriteCodeMatchDataTablesToDBInput inputArgument)
         {
-            ICodeMatchDataManager dataManager = DataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
             while (!inputArgument.PreviousTaskStatus.IsComplete || inputArgument.QueueCodeMatchTables.Count > 0)
             {

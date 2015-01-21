@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -14,7 +14,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IRateDataManager dataManager = DataManagerFactory.GetDataManager<IRateDataManager>();
+            IRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRateDataManager>();
             this.LastTimestamp.Set(context, dataManager.GetRateLastTimestamp());
         }
     }

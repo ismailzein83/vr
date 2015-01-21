@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -19,7 +19,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             byte[] updatedAfter = this.UpdatedAfter.Get(context);
             if (updatedAfter == null)
                 updatedAfter = new byte[0];

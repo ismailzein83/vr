@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.Entities;
-namespace TOne.Data
+using TOne.LCR.Entities;
+namespace TOne.LCR.Data
 {
-    public interface ICodeDataManager
+    public interface ICodeDataManager : IDataManager
     {
         List<string> GetUpdatedCodesSuppliers(byte[] updatedAfter, out byte[] newLastTimestamp);
         List<String> GetDistinctCodes(bool isFuture);

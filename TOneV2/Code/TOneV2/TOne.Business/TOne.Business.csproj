@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TOne.Business</RootNamespace>
     <AssemblyName>TOne.Business</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -46,6 +46,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,6 +56,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +66,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -73,6 +76,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -103,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkManager.cs" />
-    <Compile Include="CDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtCodeMap.cs" />
     <Compile Include="ProtPricingGenerator.cs" />
@@ -124,6 +127,14 @@
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60DA66BD-017D-43A2-82DC-ED7DB8751D23}</Project>
       <Name>TOne.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data\TOne.LCR.Data.csproj">
+      <Project>{1c4e2326-4dd4-4bf4-8b8c-aa1c6fa0c4fc}</Project>
+      <Name>TOne.LCR.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

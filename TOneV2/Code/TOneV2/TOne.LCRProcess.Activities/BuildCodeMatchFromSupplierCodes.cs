@@ -8,7 +8,8 @@ using TOne.Entities;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Data;
-using TOne.Data;
+using TOne.LCR.Data;
+using TOne.LCR.Entities;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -67,7 +68,7 @@ namespace TOne.LCRProcess.Activities
         static object s_lockObj = new object();
         protected override void DoWork(BuildCodeMatchFromSupplierCodesInput inputArgument)
         {
-            ICodeMatchDataManager dataManager = DataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
             System.Threading.Tasks.Parallel.For(0, 3, (i) =>
                 {
@@ -102,7 +103,7 @@ namespace TOne.LCRProcess.Activities
         private static void BuildAndAddCodeMatchesToTable(DataTable dtCodeMatches, List<string> distinctCodes, Tuple<string, List<LCRCode>> supplierCodes)
         {            
             DateTime start = DateTime.Now;
-            ICodeMatchDataManager dataManager = DataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             
             Dictionary<string, LCRCode> dicSupplierCodes = new Dictionary<string, LCRCode>();
             foreach (var supplierCode in supplierCodes.Item2)

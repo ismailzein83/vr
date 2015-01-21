@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
-using TOne.Entities;
+using TOne.LCR.Entities;
 using System.Data;
+using TOne.Data.SQL;
 
-namespace TOne.Data.SQL
+namespace TOne.LCR.Data.SQL
 {
     public class CodeMatchDataManager : BaseTOneDataManager, ICodeMatchDataManager
     {

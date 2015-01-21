@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TOne.Data
+namespace TOne.LCR.Data
 {
-    public interface IZoneRateDataManager
+    public interface IZoneRateDataManager : IDataManager
     {
         void UpdateFromNewRates(byte[] ratesUpdatedAfter);
         void UpdateFromChangedRates(byte[] ratesUpdatedAfter);

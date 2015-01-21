@@ -1,10 +1,10 @@
 ﻿using System;
-using TOne.Entities;
+using TOne.LCR.Entities;
 using System.Collections.Generic;
 using System.Data;
-namespace TOne.Data
+namespace TOne.LCR.Data
 {
-    public interface ICodeMatchDataManager
+    public interface ICodeMatchDataManager : IDataManager
     {
         //void UpdateSupplierCodeMatches(List<CodeMatch> codeMatches);
         DataTable BuildCodeMatchSchemaTable(bool isFuture);

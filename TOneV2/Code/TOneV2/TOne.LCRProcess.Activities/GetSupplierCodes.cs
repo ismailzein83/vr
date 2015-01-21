@@ -6,7 +6,8 @@ using System.Activities;
 using TOne.Entities;
 using TABS;
 using Vanrise.BusinessProcess;
-using TOne.Data;
+using TOne.LCR.Entities;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -58,7 +59,7 @@ namespace TOne.LCRProcess.Activities
                 var noticeDays = (double)TABS.SystemConfiguration.KnownParameters[KnownSystemParameter.sys_BeginEffectiveRateDays].NumericValue.Value;
                 effectiveOn = DateTime.Today.AddDays(noticeDays);
             }
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             List<LCRCode> supplierCodes = dataManager.GetSupplierCodes(inputArgument.SupplierID, effectiveOn);
             return new GetSupplierCodesOutput
             {

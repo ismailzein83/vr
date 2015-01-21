@@ -6,8 +6,9 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using TOne.Entities;
 using System.Collections.Concurrent;
-using TOne.Data;
 using TABS;
+using TOne.LCR.Entities;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -56,7 +57,7 @@ namespace TOne.LCRProcess.Activities
         }
         protected override void DoWork(LoadCodesForActiveSuppliersInput inputArgument)
         {
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             DateTime start = DateTime.Now;
             dataManager.LoadCodesForActiveSuppliers(inputArgument.IsFuture, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly, (supplierId, supplierCodes) =>
                 {

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
 using Vanrise.Caching;
 using TOne.Caching;
 using TABS;
 using TOne.Entities;
 using Vanrise.BusinessProcess;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -63,7 +63,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override GetDistinctCodesOutput DoWork(GetDistinctCodesInput inputArgument)
         {
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             var distinctCodes = new CodeTree(dataManager.GetDistinctCodes(inputArgument.IsFuture, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly));
             return new GetDistinctCodesOutput
             {

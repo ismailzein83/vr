@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOne.Data;
-using TOne.Entities;
+using TOne.CDR.Data;
 
-namespace TOne.Business
+namespace TOne.CDRProcess.Activities
 {
     public class CDRManager
     {
         public void LoadCDRRange(DateTime from, DateTime to, int? batchSize, Action<List<TABS.CDR>> onBatchReady)
         {
-            ICDRDataManager dataManager = DataManagerFactory.GetDataManager<ICDRDataManager>();
+            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
             dataManager.LoadCDRRange(from, to, batchSize, onBatchReady);
         }
 
@@ -20,7 +19,7 @@ namespace TOne.Business
         public long ReserveRePricingMainCDRIDs(int nbOfRecords)
         {
             long id;
-            lock(s_RepricingMainCDRIDLockObj)
+            lock (s_RepricingMainCDRIDLockObj)
             {
                 if (_lastMainCDRId < 0)
                 {
@@ -28,7 +27,7 @@ namespace TOne.Business
                 }
                 else
                 {
-                    ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+                    ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
                     id = dataManager.GetMinCDRMainID() - 1;
                 }
                 if (id > 0)
@@ -51,7 +50,7 @@ namespace TOne.Business
                 }
                 else
                 {
-                    ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+                    ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
                     id = dataManager.GetMinCDRInvalidID() - 1;
                 }
                 if (id > 0)
@@ -66,9 +65,9 @@ namespace TOne.Business
             //BulkManager.ExecuteActionWithTableLock(BulkManager.MAIN_TABLE_NAME,
             //    () =>
             //    {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    dataManager.DeleteCDRMain(from, to);
-                //});
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            dataManager.DeleteCDRMain(from, to);
+            //});
         }
 
         public void DeleteCDRInvalid(DateTime from, DateTime to)
@@ -76,9 +75,9 @@ namespace TOne.Business
             //BulkManager.ExecuteActionWithTableLock(BulkManager.INVALID_TABLE_NAME,
             //    () =>
             //    {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    dataManager.DeleteCDRInvalid(from, to);
-                //});
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            dataManager.DeleteCDRInvalid(from, to);
+            //});
         }
 
         public void DeleteCDRSale(DateTime from, DateTime to)
@@ -86,9 +85,9 @@ namespace TOne.Business
             //BulkManager.ExecuteActionWithTableLock(BulkManager.SALE_TABLE_NAME,
             //    () =>
             //    {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    dataManager.DeleteCDRSale(from, to);
-                //});
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            dataManager.DeleteCDRSale(from, to);
+            //});
         }
 
         public void DeleteCDRCost(DateTime from, DateTime to)
@@ -96,9 +95,9 @@ namespace TOne.Business
             //BulkManager.ExecuteActionWithTableLock(BulkManager.COST_TABLE_NAME,
             //    () =>
             //    {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    dataManager.DeleteCDRCost(from, to);
-                //});
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            dataManager.DeleteCDRCost(from, to);
+            //});
         }
 
         public void DeleteTrafficStats(DateTime from, DateTime to)
@@ -106,9 +105,9 @@ namespace TOne.Business
             //BulkManager.ExecuteActionWithTableLock(BulkManager.TRAFFICSTATS_TABLE_NAME,
             //    () =>
             //    {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    dataManager.DeleteTrafficStats(from, to);
-                //});
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            dataManager.DeleteTrafficStats(from, to);
+            //});
         }
 
         //public void DeleteDailyTrafficStats(DateTime from, DateTime to)

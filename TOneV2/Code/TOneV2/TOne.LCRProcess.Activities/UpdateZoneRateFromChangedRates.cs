@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -19,7 +19,7 @@ namespace TOne.LCRProcess.Activities
             if (ratesUpdatedAfter == null)
                 ratesUpdatedAfter = new byte[0];
 
-            IZoneRateDataManager dataManager = DataManagerFactory.GetDataManager<IZoneRateDataManager>();
+            IZoneRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneRateDataManager>();
             dataManager.UpdateFromChangedRates(ratesUpdatedAfter);
         }
     }

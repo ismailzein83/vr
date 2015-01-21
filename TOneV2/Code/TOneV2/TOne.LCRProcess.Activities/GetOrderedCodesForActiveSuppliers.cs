@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
-using TOne.Entities;
-using TOne.Data;
+using TOne.LCR.Data;
+using TOne.LCR.Entities;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -46,7 +46,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override GetOrderedCodesForActiveSuppliersOutput DoWork(GetOrderedCodesForActiveSuppliersInput inputArgument)
         {
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             var suppliersOrderedCodes = dataManager.GetOrderedCodesForActiveSuppliers(inputArgument.IsFuture);
             return new GetOrderedCodesForActiveSuppliersOutput
             {

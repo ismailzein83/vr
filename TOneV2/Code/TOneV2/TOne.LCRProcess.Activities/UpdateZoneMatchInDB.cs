@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
 using Vanrise.BusinessProcess;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -37,7 +37,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(UpdateZoneMatchInDBInput inputArgument)
         {
             DateTime start = DateTime.Now;
-            IZoneMatchDataManager dataManager = DataManagerFactory.GetDataManager<IZoneMatchDataManager>();
+            IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();
             dataManager.UpdateAll(inputArgument.IsFuture);
             Console.WriteLine("{0}: UpdateZoneMatchInDB is done in {1}", DateTime.Now, (DateTime.Now - start));
         }

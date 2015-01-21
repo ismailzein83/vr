@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\CDRManager.cs" />
     <Compile Include="ClearTimeRangeBillingRecords.cs" />
     <Compile Include="CreateBillingAndStatsTables.cs" />
     <Compile Include="DivideDayIntoTimeRanges.cs" />
@@ -94,13 +95,17 @@
       <Project>{1950b29a-5c7b-47a3-8113-fc9211d27cfd}</Project>
       <Name>TOne.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Data\TOne.CDR.Data.csproj">
+      <Project>{9d556d54-f769-41af-843d-dff72384df32}</Project>
+      <Name>TOne.CDR.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
+      <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
+      <Name>TOne.CDR.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.CDRProcess.Arguments\TOne.CDRProcess.Arguments.csproj">
       <Project>{34c38ef3-c2d1-41d7-ab7c-e375f030b5f3}</Project>
       <Name>TOne.CDRProcess.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.Data\TOne.Data.csproj">
-      <Project>{ac26c25e-a2bf-4f95-9070-8a910fda5989}</Project>
-      <Name>TOne.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>

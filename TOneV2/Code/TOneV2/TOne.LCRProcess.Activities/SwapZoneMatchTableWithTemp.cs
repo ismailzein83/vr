@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -15,7 +15,7 @@ namespace TOne.LCRProcess.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
-            IZoneMatchDataManager dataManager = DataManagerFactory.GetDataManager<IZoneMatchDataManager>();
+            IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();
             dataManager.SwapTableWithTemp(this.IsFuture.Get(context));
         }
     }

@@ -98,8 +98,6 @@
     <Compile Include="CodeNode.cs" />
     <Compile Include="CodeTree.cs" />
     <Compile Include="IBulkTableService.cs" />
-    <Compile Include="LCRCode.cs" />
-    <Compile Include="SupplierCodeMatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

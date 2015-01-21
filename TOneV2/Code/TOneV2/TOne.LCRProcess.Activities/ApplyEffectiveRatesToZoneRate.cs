@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -12,7 +12,7 @@ namespace TOne.LCRProcess.Activities
     {        
         protected override void Execute(CodeActivityContext context)
         {
-            IZoneRateDataManager dataManager = DataManagerFactory.GetDataManager<IZoneRateDataManager>();
+            IZoneRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneRateDataManager>();
             dataManager.ApplyEffectiveRates();
         }
     }

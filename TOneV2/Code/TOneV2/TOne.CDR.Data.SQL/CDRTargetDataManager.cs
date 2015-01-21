@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TOne.Data.SQL;
 
-namespace TOne.Data.SQL
+namespace TOne.CDR.Data.SQL
 {
     public class CDRTargetDataManager : BaseTOneDataManager, ICDRTargetDataManager
     {

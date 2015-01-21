@@ -240,6 +240,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.CDR.Data.SQL\TOne.CDR.Data.SQL.csproj">
+      <Project>{a8389de1-6f10-470d-8364-cba3a3f14286}</Project>
+      <Name>TOne.CDR.Data.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.CDRProcess.Activities\TOne.CDRProcess.Activities.csproj">
       <Project>{85d05a41-8510-40ce-a2aa-e0cd39099eac}</Project>
       <Name>TOne.CDRProcess.Activities</Name>
@@ -259,6 +263,14 @@
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data.SQL\TOne.LCR.Data.SQL.csproj">
+      <Project>{acc3f0e9-3a0c-4b90-afe7-d9cdaa858c0b}</Project>
+      <Name>TOne.LCR.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.LCRProcess.Activities\TOne.LCRProcess.Activities.csproj">
       <Project>{8E765860-8D8C-4296-9EE4-7749E861B629}</Project>

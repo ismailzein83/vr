@@ -1,7 +1,7 @@
 ﻿using System;
-namespace TOne.Data
+namespace TOne.CDR.Data
 {
-    public interface ICDRTargetDataManager
+    public interface ICDRTargetDataManager : IDataManager
     {
         void DeleteCDRCost(DateTime from, DateTime to);
         void DeleteCDRInvalid(DateTime from, DateTime to);

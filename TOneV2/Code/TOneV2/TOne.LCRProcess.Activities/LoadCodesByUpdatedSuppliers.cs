@@ -6,8 +6,9 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using TOne.Entities;
 using System.Collections.Concurrent;
-using TOne.Data;
+using TOne.LCR.Entities;
 using TABS;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -55,7 +56,7 @@ namespace TOne.LCRProcess.Activities
             byte[] updatedAfter = inputArgument.CodeUpdatedAfter;
             if (updatedAfter == null)
                 updatedAfter = new byte[0];
-            ICodeDataManager dataManager = DataManagerFactory.GetDataManager<ICodeDataManager>();
+            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             dataManager.LoadCodesByUpdatedSuppliers(updatedAfter, effectiveOn, (supplierId, supplierCodes) =>
                 {
                     Console.WriteLine("{0}: {1} codes loaded for supplier {2}", DateTime.Now, supplierCodes.Count, supplierId);

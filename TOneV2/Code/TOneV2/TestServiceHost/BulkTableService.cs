@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using TOne.Data;
 using TOne.Entities;
+using TOne.LCR.Data;
 
 namespace TestServiceHost
 {
@@ -16,7 +16,7 @@ namespace TestServiceHost
 
         public void WriteCodeMatchTable(System.Data.DataTable dt)
         {
-            ICodeMatchDataManager dataManager = DataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             dataManager.WriteCodeMatchTableToDB(dt);
         }
 

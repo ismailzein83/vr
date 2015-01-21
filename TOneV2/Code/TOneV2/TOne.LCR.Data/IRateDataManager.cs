@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TOne.Data
+namespace TOne.LCR.Data
 {
-    public interface IRateDataManager
+    public interface IRateDataManager : IDataManager
     {
         byte[] GetRateLastTimestamp();
     }

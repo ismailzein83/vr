@@ -100,6 +100,10 @@
       <Project>{60DA66BD-017D-43A2-82DC-ED7DB8751D23}</Project>
       <Name>TOne.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCRProcess.Activities\TOne.LCRProcess.Activities.csproj">
       <Project>{8E765860-8D8C-4296-9EE4-7749E861B629}</Project>
       <Name>TOne.LCRProcess.Activities</Name>

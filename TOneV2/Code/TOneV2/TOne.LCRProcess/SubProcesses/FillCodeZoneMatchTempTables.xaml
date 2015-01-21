@@ -12,6 +12,7 @@
  xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
  xmlns:te="clr-namespace:TOne.Entities;assembly=TOne.Entities"
  xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
@@ -50,6 +51,8 @@
       <AssemblyReference>TOne.Caching</AssemblyReference>
       <AssemblyReference>TOne.Entities</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.LCR.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess</AssemblyReference>
     </sco:Collection>
@@ -57,7 +60,7 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
     <Sequence.Variables>
       <Variable x:TypeArguments="te:CodeTree" Name="distinctCodes" />
-      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:Dictionary(x:String, te:LCRCode))" Name="suppliersOrderedCodes" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, scg:Dictionary(x:String, tle:LCRCode))" Name="suppliersOrderedCodes" />
     </Sequence.Variables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <tla:GetDistinctCodes sap2010:WorkflowViewState.IdRef="GetDistinctCodes_1">
@@ -90,9 +93,9 @@
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
-        <Variable x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))" Name="queueLoadedSuppliersCodes">
+        <Variable x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))" Name="queueLoadedSuppliersCodes">
           <Variable.Default>
-            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))">new System.Collections.Concurrent.ConcurrentQueue&lt;System.Tuple&lt;string,System.Collections.Generic.List&lt;Entities.LCRCode&gt;&gt;&gt;()</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))">new System.Collections.Concurrent.ConcurrentQueue&lt;Tuple&lt;string,System.Collections.Generic.List&lt;LCR.Entities.LCRCode&gt;&gt;&gt;()</mca:CSharpValue>
           </Variable.Default>
         </Variable>
         <Variable x:TypeArguments="te:AsyncActivityStatus" Name="loadCodesTaskStatus">
@@ -134,8 +137,8 @@
             </InArgument>
           </tla:LoadCodesForActiveSuppliers.IsFuture>
           <tla:LoadCodesForActiveSuppliers.QueueLoadedCodes>
-            <InArgument x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))">
-              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))">queueLoadedSuppliersCodes</mca:CSharpValue>
+            <InArgument x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))">queueLoadedSuppliersCodes</mca:CSharpValue>
             </InArgument>
           </tla:LoadCodesForActiveSuppliers.QueueLoadedCodes>
         </tla:LoadCodesForActiveSuppliers>
@@ -178,8 +181,8 @@
             </InArgument>
           </tla:BuildCodeMatchFromSupplierCodes.QueueReadyCodeMatchTables>
           <tla:BuildCodeMatchFromSupplierCodes.QueueReadySuppliersCodes>
-            <InArgument x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))">
-              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(te:LCRCode)))">queueLoadedSuppliersCodes</mca:CSharpValue>
+            <InArgument x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(s:Tuple(x:String, scg:List(tle:LCRCode)))">queueLoadedSuppliersCodes</mca:CSharpValue>
             </InArgument>
           </tla:BuildCodeMatchFromSupplierCodes.QueueReadySuppliersCodes>
         </tla:BuildCodeMatchFromSupplierCodes>
@@ -219,7 +222,7 @@
         </InArgument>
       </tla:UpdateZoneMatchInDB.IsFuture>
     </tla:UpdateZoneMatchInDB>
-    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcRmlsbENvZGVab25lTWF0Y2hUZW1wVGFibGVzLnhhbWwoOQPfAQ4CAQE+BVoQAwHsAVsF0QEQAgER0gEF3QEfAgECPwdZHgMB7QFfDV+MAgIBM2QNZHsCAShpDWl7AgEdbg1utAECARJyB5gBEgMBpgGZAQfEARICAVXFAQfQASoCAT7VAQvVAVECAQraAQvaAVICAQNMDUxTAwGKAkcNR1wDAYMCQg1CYwMB/AFRDVFkAwH1AVYNVlQDAe4BcwmNASsDAbQBjgEJlwESAwGnAZoBCbkBLwIBY7oBCcMBEgIBVsgBDcgBcwIBSs0BDc0BfAIBP3sPe1UDAeEBdg92XgMB1gGKAQ+KAZoBAwHLAYABD4ABZgMBwAGFAQ+FAVYDAbUBlQE1lQE5AwGzAZEBD5EBdAMBqAGsAQ+sAW4DAZsBsQEPsQF+AwGQAaIBD6IBVQMBhQGdAQ+dAV0CAXq2AQ+2AZoBAgFvpwEPpwFWAgFkwQE1wQE5AgFivQEPvQF7AgFX</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcRmlsbENvZGVab25lTWF0Y2hUZW1wVGFibGVzLnhhbWwoPAPiAQ4CAQFBBV0QAwHsAV4F1AEQAgER1QEF4AEfAgECQgdcHgMB7QFiDWKKAgIBM2cNZ3sCAShsDWx7AgEdcQ1xtAECARJ1B5sBEgMBpgGcAQfHARICAVXIAQfTASoCAT7YAQvYAVECAQrdAQvdAVICAQNPDU9TAwGKAkoNSlwDAYMCRQ1FYwMB/AFUDVRkAwH1AVkNWVQDAe4BdgmQASsDAbQBkQEJmgESAwGnAZ0BCbwBLwIBY70BCcYBEgIBVssBDcsBcwIBStABDdABfAIBP34PflUDAeEBeQ95XgMB1gGNAQ+NAZsBAwHLAYMBD4MBZgMBwAGIAQ+IAVYDAbUBmAE1mAE5AwGzAZQBD5QBdAMBqAGvAQ+vAW4DAZsBtAEPtAF+AwGQAaUBD6UBVQMBhQGgAQ+gAV0CAXq5AQ+5AZsBAgFvqgEPqgFWAgFkxAE1xAE5AgFiwAEPwAF7AgFX</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
-using TOne.Data;
 using System.Data;
 using TABS;
 using TOne.Entities;
 using TOne.Business;
 using TOne.Caching;
 using Vanrise.Caching;
+using TOne.CDR.Data;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -24,7 +24,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            ICDRTargetDataManager dataManager = DataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
             dataManager.DeleteDailyTrafficStats(this.Day.Get(context));
             TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(this.CacheManagerID.Get(context));
             Dictionary<string, TrafficStats> dailyTrafficStatistics = cacheManager.GetOrCreateObject("DailyStatistics", CacheObjectType.TempObjects,

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOne.Entities;
+using TOne.LCR.Entities;
 using System.Data;
 using System.Data.SqlClient;
+using TOne.Data.SQL;
 
-namespace TOne.Data.SQL
+namespace TOne.LCR.Data.SQL
 {
     public class CodeDataManager : BaseTOneDataManager, ICodeDataManager
     {        

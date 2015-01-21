@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TestServiceHost</RootNamespace>
     <AssemblyName>TestServiceHost</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,6 +38,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -80,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkTableService.cs" />
+    <Compile Include="ICodeMatchDataManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,6 +101,14 @@
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60DA66BD-017D-43A2-82DC-ED7DB8751D23}</Project>
       <Name>TOne.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data\TOne.LCR.Data.csproj">
+      <Project>{1c4e2326-4dd4-4bf4-8b8c-aa1c6fa0c4fc}</Project>
+      <Name>TOne.LCR.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,7 +6,6 @@ using System.Data;
 using TABS;
 using System.Collections.Concurrent;
 using TOne.Business;
-using TOne.Entities;
 
 namespace TOne.CDRProcess.Activities
 {    
