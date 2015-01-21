@@ -39,7 +39,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             {
                 ProcessName = this.ProcessName.Get(context),
                 InputArguments = this.Input.Get(context),
-                ParentProcessID = sharedData.ProcessInstanceID
+                ParentProcessID = sharedData.ProcessInstanceId
             };
             ProcessManager processManager = new ProcessManager();
             var output = processManager.CreateNewProcess(input);

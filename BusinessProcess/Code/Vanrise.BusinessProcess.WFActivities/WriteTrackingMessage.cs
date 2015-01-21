@@ -25,8 +25,8 @@ namespace Vanrise.BusinessProcess.WFActivities
             BPTrackingSeverity severity = this.Severity.Get(context) ?? BPTrackingSeverity.Information;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
-                ProcessInstanceId = sharedData.ProcessInstanceID,
-                ParentProcessId = sharedData.ParentProcessID,
+                ProcessInstanceId = sharedData.ProcessInstanceId,
+                ParentProcessId = sharedData.ParentProcessId,
                 Message = this.Message.Get(context),
                 Severity = severity,
                 EventTime = DateTime.Now

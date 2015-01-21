@@ -11,6 +11,8 @@ BEGIN
 	SET NOCOUNT ON;
 
    SELECT [ID]
+	  ,Name
+	  ,Title
       ,[FQTN]
       ,[Config]
   FROM [bp].[BPDefinition] WITH(NOLOCK)

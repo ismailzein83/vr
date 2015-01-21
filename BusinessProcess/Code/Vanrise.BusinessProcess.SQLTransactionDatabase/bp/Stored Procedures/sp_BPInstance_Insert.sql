@@ -4,29 +4,28 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
-	@ID uniqueidentifier,
 	@Title nvarchar(1000),
-	@ParentID uniqueidentifier,
+	@ParentID bigint,
 	@DefinitionID int,
 	@InputArguments nvarchar(max),
-	@ExecutionStatus int
+	@ExecutionStatus int,
+	@ID bigint out
 	
 AS
 BEGIN
 	INSERT INTO [bp].[BPInstance]
-           ([ID]
-           ,[Title]
+           ([Title]
            ,[ParentID]
            ,[DefinitionID]
            ,[InputArgument]
            ,[ExecutionStatus]
            ,[StatusUpdatedTime])
      VALUES
-           (@ID
-           ,@Title
+           (@Title
            ,@ParentID
            ,@DefinitionID
            ,@InputArguments
            ,@ExecutionStatus
            ,GETDATE())
+     SET @ID = @@identity
 END

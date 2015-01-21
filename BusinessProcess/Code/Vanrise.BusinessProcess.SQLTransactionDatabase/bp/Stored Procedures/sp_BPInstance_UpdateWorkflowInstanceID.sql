@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [bp].[sp_BPInstance_UpdateWorkflowInstanceID]	
-	@ID uniqueidentifier,
+	@ID bigint,
 	@WorkflowInstanceID uniqueidentifier
 	
 AS

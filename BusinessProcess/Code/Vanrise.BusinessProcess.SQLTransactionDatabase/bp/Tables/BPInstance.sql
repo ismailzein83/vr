@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [bp].[BPInstance] (
-    [ID]                 UNIQUEIDENTIFIER NOT NULL,
+    [ID]                 BIGINT           IDENTITY (1, 1) NOT NULL,
     [Title]              NVARCHAR (1000)  NULL,
-    [ParentID]           UNIQUEIDENTIFIER NULL,
+    [ParentID]           BIGINT           NULL,
     [DefinitionID]       INT              NOT NULL,
     [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
     [InputArgument]      NVARCHAR (MAX)   NULL,
@@ -11,14 +11,15 @@
     [RetryCount]         INT              NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
-    CONSTRAINT [PK_BPInstance] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID])
 );
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_BPInstance_ParentID]
-    ON [bp].[BPInstance]([ParentID] ASC);
+
 
 
 GO

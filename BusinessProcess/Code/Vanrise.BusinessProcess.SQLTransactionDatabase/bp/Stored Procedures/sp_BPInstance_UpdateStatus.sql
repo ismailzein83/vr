@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [bp].[sp_BPInstance_UpdateStatus]	
-	@ID uniqueidentifier,
+	@ID bigint,
 	@ExecutionStatus int,
 	@Message nvarchar(max),
 	@RetryCount int

@@ -21,6 +21,29 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
+
+        public T GetDefinitionObjectState<T>(int definitionId, string objectKey)
+        {
+            if (objectKey == null)
+                objectKey = String.Empty;
+            string objectVal = ExecuteScalarSP("bp.sp_BPDefinitionState_GetByKey", definitionId, objectKey) as string;
+            return objectVal != null ? Serializer.Deserialize<T>(objectVal) : Activator.CreateInstance<T>();
+        }
+
+        public int InsertDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        {
+            if(objectKey == null)
+                objectKey = String.Empty;
+            return ExecuteNonQuerySP("bp.sp_BPDefinitionState_Insert", definitionId, objectKey, objectKey != null ? Serializer.Serialize(objectValue) : null);
+        }
+
+        public int UpdateDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        {
+            if (objectKey == null)
+                objectKey = String.Empty;
+            return ExecuteNonQuerySP("bp.sp_BPDefinitionState_Update", definitionId, objectKey, objectKey != null ? Serializer.Serialize(objectValue) : null);
+        }
+
         public List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
         {
             

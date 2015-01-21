@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [bp].[sp_BPEvent_Insert]
-	@ProcessInstanceID uniqueidentifier,
+	@ProcessInstanceID bigint,
 	@Bookmark varchar(1000),
 	@Payload nvarchar(max)
 	
