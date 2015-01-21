@@ -1,109 +1,268 @@
-﻿<Activity mc:Ignorable="sads sap" x:Class="TOne.CDRProcess.TimeRangeRepricingProcess"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.TimeRangeRepricingProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
- xmlns:local="clr-namespace:TOne.CDRProcess"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:mv="clr-namespace:Microsoft.VisualBasic;assembly=System"
- xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
- xmlns:s1="clr-namespace:System;assembly=System"
- xmlns:s2="clr-namespace:System;assembly=System.Xml"
- xmlns:s3="clr-namespace:System;assembly=System.Core"
- xmlns:s4="clr-namespace:System;assembly=System.ServiceModel"
- xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities"
- xmlns:sad="clr-namespace:System.Activities.Debugger;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scc="clr-namespace:System.Collections.Concurrent;assembly=mscorlib"
- xmlns:scc1="clr-namespace:System.Collections.Concurrent;assembly=System"
- xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System"
- xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.ServiceModel"
- xmlns:scg2="clr-namespace:System.Collections.Generic;assembly=System.Core"
- xmlns:scg3="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
- xmlns:sl="clr-namespace:System.Linq;assembly=System.Core"
- xmlns:st="clr-namespace:System.Text;assembly=mscorlib"
- xmlns:t="clr-namespace:TABS;assembly=TABS"
- xmlns:tr="clr-namespace:TOne.CDRProcess;assembly=TOne.CDRProcess.Activities"
- xmlns:tra="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
- xmlns:trarg="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
- xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
+ xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(trarg:TimeRangeRepricingProcessInput)" />
-    <x:Property Name="Output" Type="OutArgument(trarg:TimeRangeRepricingProcessOutput)" />
+    <x:Property Name="Input" Type="InArgument(tca:TimeRangeRepricingProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(tca:TimeRangeRepricingProcessOutput)" />
   </x:Members>
-  <sap:VirtualizedContainerService.HintSize>984,722</sap:VirtualizedContainerService.HintSize>
-  <mva:VisualBasic.Settings>Assembly references and imported namespaces for internal implementation</mva:VisualBasic.Settings>
-  <Sequence sad:XamlDebuggerXmlReader.FileName="C:\TFS\TOne\Code\TOneV2\TOne.CDRProcess\TimeRangeRepricingProcess.xaml" sap:VirtualizedContainerService.HintSize="944,682">
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.TimeRangeRepricingProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities.Debugger</x:String>
+      <x:String>System.Activities.Debugger.Symbol</x:String>
+      <x:String>System.Collections.Concurrent</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TABS</x:String>
+      <x:String>TOne.CDRProcess</x:String>
+      <x:String>TOne.CDRProcess.Activities</x:String>
+      <x:String>TOne.CDRProcess.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess.WFActivities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>log4net</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Int32" Name="cdrCount" />
       <Variable x:TypeArguments="s:DateTime" Name="start" />
     </Sequence.Variables>
-    <sap:WorkflowViewStateService.ViewState>
-      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
-        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-      </scg3:Dictionary>
-    </sap:WorkflowViewStateService.ViewState>
-    <Assign sap:VirtualizedContainerService.HintSize="922,60">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
-        <OutArgument x:TypeArguments="s:DateTime">[start]</OutArgument>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">start</mca:CSharpReference>
+        </OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="s:DateTime">[DateTime.Now]</InArgument>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </InArgument>
       </Assign.Value>
     </Assign>
-    <tra:ClearTimeRangeBillingRecords sap:VirtualizedContainerService.HintSize="922,22" TimeRange="[Input.Range]" />
-    <Parallel sap:VirtualizedContainerService.HintSize="922,292">
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: repricing for {1} - {2} started", DateTime.Now, Input.Range.From, Input.Range.To)</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <tca1:ClearTimeRangeBillingRecords sap2010:WorkflowViewState.IdRef="ClearTimeRangeBillingRecords_1">
+      <tca1:ClearTimeRangeBillingRecords.TimeRange>
+        <InArgument x:TypeArguments="tca:TimeRange">
+          <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
+        </InArgument>
+      </tca1:ClearTimeRangeBillingRecords.TimeRange>
+    </tca1:ClearTimeRangeBillingRecords>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="scc:ConcurrentQueue(tra:CDRBatch)" Default="[New ConcurrentQueue(Of CDRBatch)]" Name="queueLoadedCDRs" />
-        <Variable x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)" Default="[New ConcurrentQueue(Of DataTable)]" Name="queueDataTables" />
-        <Variable x:TypeArguments="tra:CDRProcessingTasksStatus" Default="[New CDRProcessingTasksStatus()]" Name="tasksStatus" />
+        <Variable x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)" Name="queueLoadedCDRs">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">new ConcurrentQueue&lt;CDRBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)" Name="queueDataTables">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">new ConcurrentQueue&lt;DataTable&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="tca1:CDRProcessingTasksStatus" Name="tasksStatus">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">new CDRProcessingTasksStatus()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
       </Parallel.Variables>
-      <Sequence sap:VirtualizedContainerService.HintSize="264,246">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg3:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg3:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-        <tra:LoadCDRs From="[Input.Range.From]" sap:VirtualizedContainerService.HintSize="242,22" QueueLoadedCDRs="[queueLoadedCDRs]" Result="[cdrCount]" To="[Input.Range.To]" />
-        <Assign sap:VirtualizedContainerService.HintSize="242,60">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+        <tca1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+          <tca1:LoadCDRs.From>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
+            </InArgument>
+          </tca1:LoadCDRs.From>
+          <tca1:LoadCDRs.QueueLoadedCDRs>
+            <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
+            </InArgument>
+          </tca1:LoadCDRs.QueueLoadedCDRs>
+          <tca1:LoadCDRs.Result>
+            <OutArgument x:TypeArguments="x:Int32">
+              <mca:CSharpReference x:TypeArguments="x:Int32">cdrCount</mca:CSharpReference>
+            </OutArgument>
+          </tca1:LoadCDRs.Result>
+          <tca1:LoadCDRs.To>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
+            </InArgument>
+          </tca1:LoadCDRs.To>
+        </tca1:LoadCDRs>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
           <Assign.To>
-            <OutArgument x:TypeArguments="x:Boolean">[tasksStatus.CDRLoadingComplete]</OutArgument>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">tasksStatus.CDRLoadingComplete</mca:CSharpReference>
+            </OutArgument>
           </Assign.To>
           <Assign.Value>
             <InArgument x:TypeArguments="x:Boolean">True</InArgument>
           </Assign.Value>
         </Assign>
       </Sequence>
-      <Sequence sap:VirtualizedContainerService.HintSize="264,246">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg3:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg3:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-        <tra:CreateBillingAndStatsTables CacheManagerId="[Input.CacheManagerID]" From="[Input.Range.From]" sap:VirtualizedContainerService.HintSize="242,22" QueueLoadedCDRs="[queueLoadedCDRs]" QueueReadyTables="[queueDataTables]" TasksStatus="[tasksStatus]" To="[Input.Range.To]" />
-        <Assign sap:VirtualizedContainerService.HintSize="242,60">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <tca1:CreateBillingAndStatsTables sap2010:WorkflowViewState.IdRef="CreateBillingAndStatsTables_1">
+          <tca1:CreateBillingAndStatsTables.CacheManagerId>
+            <InArgument x:TypeArguments="s:Guid">
+              <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerID</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.CacheManagerId>
+          <tca1:CreateBillingAndStatsTables.From>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.From>
+          <tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
+            <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
+          <tca1:CreateBillingAndStatsTables.QueueReadyTables>
+            <InArgument x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">queueDataTables</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.QueueReadyTables>
+          <tca1:CreateBillingAndStatsTables.TasksStatus>
+            <InArgument x:TypeArguments="tca1:CDRProcessingTasksStatus">
+              <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">tasksStatus</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.TasksStatus>
+          <tca1:CreateBillingAndStatsTables.To>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
+            </InArgument>
+          </tca1:CreateBillingAndStatsTables.To>
+        </tca1:CreateBillingAndStatsTables>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
           <Assign.To>
-            <OutArgument x:TypeArguments="x:Boolean">[tasksStatus.CreatingDataTableComplete]</OutArgument>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">tasksStatus.CreatingDataTableComplete</mca:CSharpReference>
+            </OutArgument>
           </Assign.To>
           <Assign.Value>
             <InArgument x:TypeArguments="x:Boolean">True</InArgument>
           </Assign.Value>
         </Assign>
       </Sequence>
-      <tra:WriteReadyTableToDB sap:VirtualizedContainerService.HintSize="200,246" QueueReadyTables="[queueDataTables]" TasksStatus="[tasksStatus]" />
+      <tca1:WriteReadyTableToDB sap2010:WorkflowViewState.IdRef="WriteReadyTableToDB_1">
+        <tca1:WriteReadyTableToDB.QueueReadyTables>
+          <InArgument x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">queueDataTables</mca:CSharpValue>
+          </InArgument>
+        </tca1:WriteReadyTableToDB.QueueReadyTables>
+        <tca1:WriteReadyTableToDB.TasksStatus>
+          <InArgument x:TypeArguments="tca1:CDRProcessingTasksStatus">
+            <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">tasksStatus</mca:CSharpValue>
+          </InArgument>
+        </tca1:WriteReadyTableToDB.TasksStatus>
+      </tca1:WriteReadyTableToDB>
     </Parallel>
-    <Assign sap:VirtualizedContainerService.HintSize="922,64">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
       <Assign.To>
-        <OutArgument x:TypeArguments="trarg:TimeRangeRepricingProcessOutput">[Output]</OutArgument>
+        <OutArgument x:TypeArguments="tca:TimeRangeRepricingProcessOutput">
+          <mca:CSharpReference x:TypeArguments="tca:TimeRangeRepricingProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="trarg:TimeRangeRepricingProcessOutput" xml:space="preserve">[New TimeRangeRepricingProcessOutput With
+        <InArgument x:TypeArguments="tca:TimeRangeRepricingProcessOutput">
+          <mca:CSharpValue x:TypeArguments="tca:TimeRangeRepricingProcessOutput" xml:space="preserve">new TimeRangeRepricingProcessOutput
 {
-    .CDRCount = cdrCount,
-    .SpentTime = (DateTime.Now - start)
-}]</InArgument>
+    CDRCount = cdrCount,
+    SpentTime = (DateTime.Now - start)
+}</mca:CSharpValue>
+        </InArgument>
       </Assign.Value>
     </Assign>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xUaW1lUmFuZ2VSZXByaWNpbmdQcm9jZXNzLnhhbWwmTAPnAQ4CAQFRBVwOAwGrAV0FYREDAaUBYgVoKQMBnwFpBdUBEAIBDdYBBeUBDgIBAlkLWVcDAbEBVAtUWAMBrAFfCV+sAQMBpgFlC2VZAwGgAW0NbYoBAgEecg1yigECARZ3DXd+AgEOewecARICAXOdAQfIARICATfJAQfUASICASbeAQviARQCAQjZAQvZAXICAQN8CZEBGQIBfpIBCZsBEgIBdJ4BCb0BLAIBQr4BCccBEgIBONEBDdEBawIBL8wBDcwBcwIBJ44BD44BXQMBlwF/D39fAwGPAYkBD4kBXAMBhwGEAQ+EAXYCAX+ZATWZATkCAX2VAQ+VAXQCAXW6AQ+6AV0CAWu1AQ+1AW0CAWOmAQ+mAV8CAVuhAQ+hAV8CAVOrAQ+rAXYCAUuwAQ+wAXUCAUPFATXFATkCAUHBAQ/BAXsCATk=</sads:DebugSymbol.Symbol>
   </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="922,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="922,62" />
+      <sap2010:ViewStateData Id="ClearTimeRangeBillingRecords_1" sap:VirtualizedContainerService.HintSize="922,22" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,248">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CreateBillingAndStatsTables_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteReadyTableToDB_1" sap:VirtualizedContainerService.HintSize="200,248" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="922,294" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="922,62" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="944,786">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.CDRProcess.TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="984,866" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

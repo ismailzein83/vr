@@ -102,23 +102,24 @@ namespace TestRuntime
                     }
                 });
             t.Start();
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "UpdateCodeZoneMatchProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-                {
-                    IsFuture = false,
-                    CodeEffectiveOn = DateTime.Today,
-                    GetChangedCodeGroupsOnly = false
-                }
-            });
-            //BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });
 
-            processManager.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "UpdateZoneRateProcess"
-            });
+            ProcessManager processManager = new ProcessManager();
+            ////////processManager.CreateNewProcess(new CreateProcessInput
+            ////////{
+            ////////    ProcessName = "UpdateCodeZoneMatchProcess",
+            ////////    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
+            ////////    {
+            ////////        IsFuture = false,
+            ////////        CodeEffectiveOn = DateTime.Today,
+            ////////        GetChangedCodeGroupsOnly = false
+            ////////    }
+            ////////});
+            //////////BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });
+
+            //processManager.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "UpdateZoneRateProcess"
+            //});
 
             //TriggerProcess(DateTime.Parse("10/15/2013"));
             //TriggerProcess(DateTime.Parse("09/16/2014"));
