@@ -854,10 +854,7 @@ namespace TABS
         ApprovalRequest_TimeOut,
         ApprovalRequest_TimeOutAction,
         ApprovalRequest_TimeOutActionHours,
-        ApprovalRequest_SendTimeOutNoification,
-        BP_LCR_CodeZoneMatchProcessLastRunInfo,
-        BP_LCR_FutureCodeZoneMatchProcessLastRunInfo,
-        BP_LCR_ZoneRateProcessLastRunInfo
+        ApprovalRequest_SendTimeOutNoification
 
     }
 

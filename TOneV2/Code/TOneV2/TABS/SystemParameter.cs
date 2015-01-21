@@ -722,21 +722,5 @@ namespace TABS
         //    set { SystemConfiguration.KnownParameters[KnownSystemParameter.CommandtimeOut].Value = value; }
 
         //}
-
-        public static SystemParameter BP_LCR_CodeZoneMatchProcessLastRunInfo
-        {
-            get { return SystemConfiguration.KnownParameters[KnownSystemParameter.BP_LCR_CodeZoneMatchProcessLastRunInfo]; }
-        }
-
-        public static SystemParameter BP_LCR_FutureCodeZoneMatchProcessLastRunInfo
-        {
-            get { return SystemConfiguration.KnownParameters[KnownSystemParameter.BP_LCR_FutureCodeZoneMatchProcessLastRunInfo]; }
-        }
-
-        public static SystemParameter BP_LCR_ZoneRateProcessLastRunInfo
-        {
-            get { return SystemConfiguration.KnownParameters[KnownSystemParameter.BP_LCR_ZoneRateProcessLastRunInfo]; }
-        }
-
     }
 }

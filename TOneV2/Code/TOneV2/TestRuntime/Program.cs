@@ -93,15 +93,15 @@ namespace TestRuntime
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
 
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-                {
-                    for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-                    {
-                        TriggerProcess(d);
-                        System.Threading.Thread.Sleep(30000);
-                    }
-                });
-            t.Start();
+            //System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
+            //    {
+            //        for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
+            //        {
+            //            TriggerProcess(d);
+            //            System.Threading.Thread.Sleep(30000);
+            //        }
+            //    });
+            //t.Start();
 
             ProcessManager processManager = new ProcessManager();
             ////////processManager.CreateNewProcess(new CreateProcessInput
@@ -116,10 +116,10 @@ namespace TestRuntime
             ////////});
             //////////BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });
 
-            //processManager.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "UpdateZoneRateProcess"
-            //});
+            processManager.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "UpdateZoneRateProcess"
+            });
 
             //TriggerProcess(DateTime.Parse("10/15/2013"));
             //TriggerProcess(DateTime.Parse("09/16/2014"));
