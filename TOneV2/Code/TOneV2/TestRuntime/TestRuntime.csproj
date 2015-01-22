@@ -237,6 +237,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HaSSanTask.cs" />
     <Compile Include="IsmailTask.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
