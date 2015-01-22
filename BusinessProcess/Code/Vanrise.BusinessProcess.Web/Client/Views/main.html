@@ -1,0 +1,21 @@
+﻿
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <select class="form-control" id="defnitionId" ng-options="obj.Title for obj in defnitions track by obj.BPDefinitionID" ng-model="filter.definitionID"></select>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+        <quick-datepicker ng-model='filter.FromDate' time-format="hh:mm:ss a"  icon-class='fa fa-calendar'></quick-datepicker>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+        <quick-datepicker ng-model='filter.ToDate' time-format="hh:mm:ss a" icon-class='fa fa-calendar'></quick-datepicker>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+        <button class="btn btn-default"   ng-click='onlickSearch()'>Search</button>
+    </div>   
+</div>
+<div class="row" style="padding-top:10px">
+    <div class="gridStyle" ng-grid="gridOptions">
+    </div>
+</div>

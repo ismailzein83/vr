@@ -15,11 +15,11 @@ namespace Vanrise.BusinessProcess
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             string serializedInput = Vanrise.Common.Serializer.Serialize(createProcessInput);
-            CreateProcessOutput output = null;            
+            CreateProcessOutput output = null;
             CreateServiceClient((client) =>
-                {
-                    output = client.CreateNewProcess(serializedInput);
-                });
+            {
+                output = client.CreateNewProcess(serializedInput);
+            });
             return output;
         }
 
@@ -57,10 +57,10 @@ namespace Vanrise.BusinessProcess
                 dataManager.InsertDefinitionObjectState(definitionId, objectKey, objectValue);
         }
 
-        public List<BPInstance> FilterInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
+        public List<BPInstance> GetFilteredInstances(int definitionID, DateTime datefrom, DateTime dateto)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetInstancesByCriteria( definitionID,  datefrom, dateto);
+            return dataManager.GetInstancesByCriteria(definitionID, datefrom, dateto);
         }
 
         #endregion

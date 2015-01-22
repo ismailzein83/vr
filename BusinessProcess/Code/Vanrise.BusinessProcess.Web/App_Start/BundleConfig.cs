@@ -20,8 +20,22 @@ namespace Vanrise.BusinessProcess.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                      "~/Scripts/angular.js",
+                      "~/Scripts/angular-route.js",
+                      "~/Scripts/ng-quick-date.js",
+                      "~/Scripts/ng-grid.debug.js",
+                      "~/Client/Javascript/share.js",
+                      "~/Client/Javascript/app.js"
+                      ).IncludeDirectory(
+                      "~/Client/Javascript/Controllers" ,
+                      "*.js",
+                      true));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                       "~/Content/ng-quick-date.css",
+                        "~/Content/ng-grid.css",
                       "~/Content/site.css"));
         }
     }
