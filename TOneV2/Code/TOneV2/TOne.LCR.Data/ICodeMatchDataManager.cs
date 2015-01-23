@@ -15,6 +15,12 @@ namespace TOne.LCR.Data
 
         void WriteCodeMatchTableToDB(DataTable dtCodeMatches);
 
+        void WriteCodeMatchesDB(List<CodeMatch> codeMatches, bool isFuture);
+
+        Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches, bool isFuture);
+
+        void ApplyCodeMatchesToDB(Object preparedCodeMatches);
+
         void CreateTempTable(bool isFuture);
         //void CreateTempTable(bool isFuture, string codeGroup);
 

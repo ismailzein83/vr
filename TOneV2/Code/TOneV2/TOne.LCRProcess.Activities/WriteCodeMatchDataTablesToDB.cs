@@ -41,7 +41,7 @@ namespace TOne.LCRProcess.Activities
             };
         }
 
-        protected override void DoWork(WriteCodeMatchDataTablesToDBInput inputArgument)
+        protected override void DoWork(WriteCodeMatchDataTablesToDBInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);

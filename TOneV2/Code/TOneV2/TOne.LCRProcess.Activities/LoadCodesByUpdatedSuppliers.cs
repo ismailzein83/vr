@@ -45,7 +45,7 @@ namespace TOne.LCRProcess.Activities
                 QueueLoadedCodes = this.QueueLoadedCodes.Get(context)
             };
         }
-        protected override void DoWork(LoadCodesByUpdatedSuppliersInput inputArgument)
+        protected override void DoWork(LoadCodesByUpdatedSuppliersInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime effectiveOn = DateTime.Today;
             if (inputArgument.IsFuture)

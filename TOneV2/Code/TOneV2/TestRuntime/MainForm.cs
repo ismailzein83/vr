@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,6 +21,9 @@ namespace TestRuntime
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            string filePath = String.Format(@"{0}\selectedTask", Directory.GetCurrentDirectory());
+            
+
             foreach(var t in Assembly.GetExecutingAssembly().GetTypes())
             {
                 if(t != typeof(ITask) && typeof(ITask).IsAssignableFrom(t))
@@ -27,16 +31,26 @@ namespace TestRuntime
                     cmbTask.Items.Add(t);
                 }
             }
-            
+            try
+            {
+                if (File.Exists(filePath))
+                    cmbTask.SelectedItem = Type.GetType(File.ReadAllText(filePath));
+            }
+            catch
+            {
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             Type selectedTaskType = cmbTask.SelectedItem as Type;
+            string filePath = String.Format(@"{0}\selectedTask", Directory.GetCurrentDirectory());
+            File.WriteAllText(filePath, selectedTaskType.FullName);
             ITask task = Activator.CreateInstance(selectedTaskType) as ITask;
             Task t = new Task(() => task.Execute());
             t.Start();
             this.Close();
+
         }
     }
 }

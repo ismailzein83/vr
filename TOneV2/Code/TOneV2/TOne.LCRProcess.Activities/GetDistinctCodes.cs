@@ -61,10 +61,10 @@ namespace TOne.LCRProcess.Activities
             this.DistinctCodes.Set(context, result.DistinctCodes);
         }
 
-        protected override GetDistinctCodesOutput DoWork(GetDistinctCodesInput inputArgument)
+        protected override GetDistinctCodesOutput DoWorkWithResult(GetDistinctCodesInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
-            var distinctCodes = new CodeTree(dataManager.GetDistinctCodes(inputArgument.IsFuture, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly));
+            var distinctCodes = new CodeTree(dataManager.GetDistinctCodes(inputArgument.IsFuture));//, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly));
             return new GetDistinctCodesOutput
             {
                 DistinctCodes = distinctCodes

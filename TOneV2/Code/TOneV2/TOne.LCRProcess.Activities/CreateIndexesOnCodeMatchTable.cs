@@ -36,8 +36,8 @@ namespace TOne.LCRProcess.Activities
                 FirstDigit = this.FirstDigit.Get(context)
             };
         }
-        
-        protected override void DoWork(CreateIndexesOnCodeMatchTableInput inputArgument)
+
+        protected override void DoWork(CreateIndexesOnCodeMatchTableInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();            

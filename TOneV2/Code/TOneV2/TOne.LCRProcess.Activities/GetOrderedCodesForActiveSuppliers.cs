@@ -44,7 +44,7 @@ namespace TOne.LCRProcess.Activities
             this.SuppliersOrderedCodes.Set(context, result.SuppliersOrderedCodes);
         }
 
-        protected override GetOrderedCodesForActiveSuppliersOutput DoWork(GetOrderedCodesForActiveSuppliersInput inputArgument)
+        protected override GetOrderedCodesForActiveSuppliersOutput DoWorkWithResult(GetOrderedCodesForActiveSuppliersInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             var suppliersOrderedCodes = dataManager.GetOrderedCodesForActiveSuppliers(inputArgument.IsFuture);

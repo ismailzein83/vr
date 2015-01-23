@@ -30,7 +30,7 @@ namespace TOne.LCRProcess.Activities
             };
         }
 
-        protected override void DoWork(CreateIndexesOnZoneMatchTableInput inputArgument)
+        protected override void DoWork(CreateIndexesOnZoneMatchTableInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
             IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();

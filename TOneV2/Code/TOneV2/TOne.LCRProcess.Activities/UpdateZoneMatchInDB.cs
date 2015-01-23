@@ -34,7 +34,7 @@ namespace TOne.LCRProcess.Activities
                 FirstDigit = this.FirstDigit.Get(context)
             };
         }
-        protected override void DoWork(UpdateZoneMatchInDBInput inputArgument)
+        protected override void DoWork(UpdateZoneMatchInDBInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
             IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();

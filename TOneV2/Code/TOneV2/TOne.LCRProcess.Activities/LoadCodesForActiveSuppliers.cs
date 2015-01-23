@@ -22,7 +22,7 @@ namespace TOne.LCRProcess.Activities
         public DateTime EffectiveOn { get; set; }
         public bool GetChangedGroupsOnly { get; set; }
 
-        public ConcurrentQueue<Tuple<string, List<LCRCode>>> QueueLoadedCodes { get; set; }
+        public ConcurrentQueue<Tuple<string, List<LCRCode>>> OutputQueue { get; set; }
     }
 
     #endregion
@@ -42,7 +42,14 @@ namespace TOne.LCRProcess.Activities
         public InArgument<bool> GetChangedGroupsOnly { get; set; }
 
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<Tuple<string, List<LCRCode>>>> QueueLoadedCodes { get; set; }
+        public InOutArgument<ConcurrentQueue<Tuple<string, List<LCRCode>>>> OutputQueue { get; set; }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new ConcurrentQueue<Tuple<string, List<LCRCode>>>());
+            base.OnBeforeExecute(context, handle);
+        }
 
         protected override LoadCodesForActiveSuppliersInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -52,17 +59,18 @@ namespace TOne.LCRProcess.Activities
                 FirstDigit = this.FirstDigit.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 GetChangedGroupsOnly = this.GetChangedGroupsOnly.Get(context),
-                QueueLoadedCodes = this.QueueLoadedCodes.Get(context)
+                OutputQueue = this.OutputQueue.Get(context)
             };
         }
-        protected override void DoWork(LoadCodesForActiveSuppliersInput inputArgument)
+        protected override void DoWork(LoadCodesForActiveSuppliersInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
             DateTime start = DateTime.Now;
-            dataManager.LoadCodesForActiveSuppliers(inputArgument.IsFuture, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly, (supplierId, supplierCodes) =>
+            dataManager.LoadCodesForActiveSuppliers(inputArgument.IsFuture, //inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly, 
+                (supplierId, supplierCodes) =>
                 {
                     //Console.WriteLine("{0}: {1} codes loaded for supplier {2}", DateTime.Now, supplierCodes.Count, supplierId);
-                    inputArgument.QueueLoadedCodes.Enqueue(new Tuple<string, List<LCRCode>>(supplierId, supplierCodes));
+                    inputArgument.OutputQueue.Enqueue(new Tuple<string, List<LCRCode>>(supplierId, supplierCodes));
                 });
             Console.WriteLine("{0}: LoadCodesForActiveSuppliers is done in {1}", DateTime.Now, (DateTime.Now - start));
         }

@@ -72,6 +72,7 @@
     <Compile Include="GetOrderedCodesForActiveSuppliers.cs" />
     <Compile Include="LoadCodesForActiveSuppliers.cs" />
     <Compile Include="LoadCodesByUpdatedSuppliers.cs" />
+    <Compile Include="PrepareCodeMatchesForDBApply.cs" />
     <Compile Include="SwapCodeMatchTableWithTemp.cs" />
     <Compile Include="SwapZoneMatchTableWithTemp.cs" />
     <Compile Include="UpdateZoneRateFromChangedRates.cs" />
@@ -85,6 +86,8 @@
     <Compile Include="UpdateZoneMatchInDB.cs" />
     <Compile Include="UpdateZoneRateFromNewRates.cs" />
     <Compile Include="WriteCodeMatchDataTablesToDB.cs" />
+    <Compile Include="ApplyCodeMatchesToDB.cs" />
+    <Compile Include="WriteCodeMatchesToDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">

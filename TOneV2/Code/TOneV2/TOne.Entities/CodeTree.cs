@@ -7,9 +7,21 @@ namespace TOne.Entities
 {
     public class CodeTree
     {
+        public Dictionary<string, List<string>> CodesWithPossibleMatches = new Dictionary<string, List<string>>();
         public CodeTree(List<string> distinctCodes)
             : this(distinctCodes, 0)
         {
+            foreach (string distinctCode in distinctCodes)
+            {
+                List<string> possibleMatches = new List<string>();
+                string match = distinctCode;
+                while (match.Length > 0)
+                {
+                    possibleMatches.Add(match);
+                    match = match.Substring(0, match.Length - 1);
+                }
+                CodesWithPossibleMatches.Add(distinctCode, possibleMatches);
+            }
         }
 
         public CodeTree(List<string> distinctCodes, int comparePosition)

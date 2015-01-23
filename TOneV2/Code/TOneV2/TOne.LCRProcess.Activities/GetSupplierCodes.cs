@@ -51,7 +51,7 @@ namespace TOne.LCRProcess.Activities
             this.SupplierCodes.Set(context, result.SupplierCodes);
         }
 
-        protected override GetSupplierCodesOutput DoWork(GetSupplierCodesInput inputArgument)
+        protected override GetSupplierCodesOutput DoWorkWithResult(GetSupplierCodesInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime effectiveOn = DateTime.Today;
             if (inputArgument.IsFuture)

@@ -18,6 +18,7 @@ namespace TestRuntime
             MainForm f = new MainForm();
             f.ShowDialog();
             Console.ReadKey();
+            return;
             
 
             var config = new BPConfiguration { MaxConcurrentWorkflows = 20 };

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using TOne.LCR.Entities;
 using System.Data;
 using TOne.Data.SQL;
+using Vanrise.Data.SQL;
 
 namespace TOne.LCR.Data.SQL
 {
@@ -143,6 +144,69 @@ namespace TOne.LCR.Data.SQL
             WriteDataTableToDB(dtCodeMatches, SqlBulkCopyOptions.TableLock, false);
         }
 
+        public Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches, bool isFuture)
+        {
+            //StringBuilder strBuilder = new StringBuilder();
+            //foreach (var cm in codeMatches)
+            //{
+            //    strBuilder.AppendLine(String.Format("{0},{1},{2},{3},{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+            //}
+            //string filePath = CreateFileForBulkInsert(strBuilder.ToString());
+            string filePath = GetFilePathForBulkInsert();
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            {
+                foreach (var cm in codeMatches)
+                {
+                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+                }
+                wr.Close();
+            }
+            string tableName = String.Format("LCR.CodeMatch{0}_temp", isFuture ? "Future" : "Current");
+            return new BulkInsertInfo
+            {
+                TableName = String.Format("LCR.CodeMatch{0}_temp", isFuture ? "Future" : "Current"),
+                DataFilePath = filePath,
+                TabLock = true,
+                FieldSeparator = ','
+            };
+        }
+
+        public void ApplyCodeMatchesToDB(Object preparedCodeMatches)
+        {
+            InsertBulkToTable(preparedCodeMatches as BulkInsertInfo);
+        }
+
+        public void WriteCodeMatchesDB(List<CodeMatch> codeMatches, bool isFuture)
+        {
+            string filePath = String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
+            string errorFilePath = String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
+            
+            StringBuilder strBuilder = new StringBuilder();
+            foreach (var cm in codeMatches)
+            {
+                strBuilder.AppendLine(String.Format("{0},{1},{2},{3},{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+            }
+            System.IO.File.WriteAllText(filePath, strBuilder.ToString());
+            //using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            //{
+            //    foreach (var cm in codeMatches)
+            //    {
+            //        wr.WriteLine(String.Format("{0},{1},{2},{3},{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+            //    }
+            //    wr.Close();
+            //}
+            System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
+            string tableName = String.Format("LCR.CodeMatch{0}_temp", isFuture ? "Future" : "Current");
+            string bulkCopyArgs = String.Format("{0} in {1} -e {2} -c -d ToneSpactronNew -S 192.168.110.180\\redundant  -U sa -P development@cce$$ -F2 -t , -b 100000 -h TABLOCK", tableName, filePath, errorFilePath);
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo("bcp", bulkCopyArgs);
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+            processBulkCopy.StartInfo = procStartInfo;
+            processBulkCopy.Start();
+            processBulkCopy.WaitForExit();
+        }
+
         //public void UpdateSupplierCodeMatches(List<CodeMatch> codeMatches)
         //{
         //    DataTable dt = BuildDataTableFromList(codeMatches);
@@ -232,7 +296,7 @@ namespace TOne.LCR.Data.SQL
 			                                                [Code] ASC,
 			                                                [SupplierID] ASC
 		                                                )
-		                                                CREATE NONCLUSTERED INDEX [IX_CodeMatch_Code] ON [LCR].[CodeMatch{0}{1}_temp] 
+		                                               /* CREATE NONCLUSTERED INDEX [IX_CodeMatch_Code] ON [LCR].[CodeMatch{0}{1}_temp] 
 		                                                (
 			                                                [Code] ASC
 		                                                )
@@ -243,7 +307,8 @@ namespace TOne.LCR.Data.SQL
 		                                                CREATE NONCLUSTERED INDEX [IX_CodeMatch_SZoneID] ON [LCR].[CodeMatch{0}{1}_temp] 
 		                                                (
 			                                                [SupplierZoneID] ASC
-		                                                )";
+		                                                )*/
+";
         #endregion
     }
 }

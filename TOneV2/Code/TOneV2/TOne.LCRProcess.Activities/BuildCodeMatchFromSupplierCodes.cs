@@ -23,16 +23,14 @@ namespace TOne.LCRProcess.Activities
 
         public char FirstDigit { get; set; }
 
-        public ConcurrentQueue<Tuple<string, List<LCRCode>>> QueueReadySuppliersCodes { get; set; }
+        public ConcurrentQueue<Tuple<string, List<LCRCode>>> InputQueue { get; set; }
 
-        public ConcurrentQueue<DataTable> QueueReadyCodeMatchTables { get; set; }
-
-        public AsyncActivityStatus PreviousTaskStatus { get; set; }
+        public ConcurrentQueue<List<CodeMatch>> OutputQueue { get; set; }
     }
 
     #endregion
 
-    public sealed class BuildCodeMatchFromSupplierCodes : BaseAsyncActivity<BuildCodeMatchFromSupplierCodesInput>
+    public sealed class BuildCodeMatchFromSupplierCodes : DependentAsyncActivity<BuildCodeMatchFromSupplierCodesInput>
     {
         [RequiredArgument]
         public InArgument<CodeTree> DistinctCodes { get; set; }
@@ -44,86 +42,127 @@ namespace TOne.LCRProcess.Activities
         public InArgument<char> FirstDigit { get; set; }
 
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<Tuple<string, List<LCRCode>>>> QueueReadySuppliersCodes { get; set; }
+        public InArgument<ConcurrentQueue<Tuple<string, List<LCRCode>>>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<DataTable>> QueueReadyCodeMatchTables { get; set; }
+        public InOutArgument<ConcurrentQueue<List<CodeMatch>>> OutputQueue { get; set; }
 
-        [RequiredArgument]
-        public InArgument<AsyncActivityStatus> PreviousTaskStatus { get; set; }
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new ConcurrentQueue<List<CodeMatch>>());
+            base.OnBeforeExecute(context, handle);
+        }
 
-        protected override BuildCodeMatchFromSupplierCodesInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override BuildCodeMatchFromSupplierCodesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new BuildCodeMatchFromSupplierCodesInput
             {
                  DistinctCodes = this.DistinctCodes.Get(context),
                  IsFuture = this.IsFuture.Get(context),
                  FirstDigit = this.FirstDigit.Get(context),
-                 QueueReadySuppliersCodes = this.QueueReadySuppliersCodes.Get(context),
-                 QueueReadyCodeMatchTables = this.QueueReadyCodeMatchTables.Get(context),
-                 PreviousTaskStatus = this.PreviousTaskStatus.Get(context)
+                 InputQueue = this.InputQueue.Get(context),
+                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
 
         static object s_lockObj = new object();
-        protected override void DoWork(BuildCodeMatchFromSupplierCodesInput inputArgument)
+        protected override void DoWork(DependentAsyncActivityInputArg<BuildCodeMatchFromSupplierCodesInput> inputArgument, AsyncActivityHandle handle)
         {
-            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            foreach (var fileInfo in System.IO.Directory.GetFiles(@"C:\CodeMatch"))
+            {
+                System.IO.File.Delete(fileInfo);
+            }
+            //ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
-            System.Threading.Tasks.Parallel.For(0, 3, (i) =>
+            //System.Threading.Tasks.Parallel.For(0, 2, (i) =>
+            //    {
+            //DataTable dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
+            //string fileName = Guid.NewGuid().ToString();
+
+            List<CodeMatch> codeMatches = new List<CodeMatch>();
+            DoWhilePreviousRunning(inputArgument, handle, () =>
+            {
+                Tuple<string, List<LCRCode>> supplierCodes;
+                while (!ShouldStop(handle) && inputArgument.Input.InputQueue.TryDequeue(out supplierCodes))
                 {
-                    DataTable dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
-                    while (!inputArgument.PreviousTaskStatus.IsComplete || inputArgument.QueueReadySuppliersCodes.Count > 0)
+                    //while (inputArgument.QueueReadyCodeMatches.Count > 4)
+                    //    Thread.Sleep(1000);
+                    DateTime start = DateTime.Now;
+                    BuildAndAddCodeMatchesToTable(codeMatches, inputArgument.Input.DistinctCodes.CodesWithPossibleMatches, supplierCodes);
+                    lock (s_lockObj)
+                        totalTime += (DateTime.Now - start);
+                    if (codeMatches.Count > 50000)
                     {
-                        Tuple<string, List<LCRCode>> supplierCodes;
-                        while (inputArgument.QueueReadySuppliersCodes.TryDequeue(out supplierCodes))
-                        {
-                            while (inputArgument.QueueReadyCodeMatchTables.Count > 2)
-                                Thread.Sleep(1000);
-                            DateTime start = DateTime.Now;
-                            BuildAndAddCodeMatchesToTable(dtCodeMatches, inputArgument.DistinctCodes.MatchCodes, supplierCodes);
-                            lock (s_lockObj)
-                                totalTime += (DateTime.Now - start);
-                            if (dtCodeMatches.Rows.Count > 500000)
-                            {
-                                inputArgument.QueueReadyCodeMatchTables.Enqueue(dtCodeMatches);
-                                dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
-                            }
-                        }
-                        Thread.Sleep(1000);
+                        inputArgument.Input.OutputQueue.Enqueue(codeMatches);
+                        codeMatches = new List<CodeMatch>();
+                        //dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
                     }
-                    if (dtCodeMatches.Rows.Count > 0)
-                    {
-                        inputArgument.QueueReadyCodeMatchTables.Enqueue(dtCodeMatches);
-                    }
-                });
+                }
+            });
+            if (codeMatches.Count > 0)
+            {
+                inputArgument.Input.OutputQueue.Enqueue(codeMatches);
+            }
+            //});
             Console.WriteLine("{0}: BuildCodeMatchFromSupplierCodes is done in {1} ", DateTime.Now, totalTime);
         }
 
-        private static void BuildAndAddCodeMatchesToTable(DataTable dtCodeMatches, List<string> distinctCodes, Tuple<string, List<LCRCode>> supplierCodes)
+        private void BuildAndAddCodeMatchesToTable(List<CodeMatch> readyCodeMatches, Dictionary<string, List<string>> distinctCodesWithPossibleMatches, Tuple<string, List<LCRCode>> supplierCodes)
         {            
             DateTime start = DateTime.Now;
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+
+            //System.Collections.Hashtable tableSupplierCodes = new System.Collections.Hashtable();
             
             Dictionary<string, LCRCode> dicSupplierCodes = new Dictionary<string, LCRCode>();
+            //HashSet<string> supplierCodesSet = new HashSet<string>();
             foreach (var supplierCode in supplierCodes.Item2)
             {
                 if (!dicSupplierCodes.ContainsKey(supplierCode.Value))
-                    dicSupplierCodes.Add(supplierCode.Value, supplierCode);
-            }
-            CodeTree treeSupplierCodes = new CodeTree(dicSupplierCodes.Keys.ToList());
-            int count = 0;
-            foreach (var distinctCode in distinctCodes)
-            {
-                string longestMatchCode = treeSupplierCodes.GetLongestMatch(distinctCode);
-                if (!String.IsNullOrEmpty(longestMatchCode))
                 {
-                    LCRCode longestMatchSupplierCode = dicSupplierCodes[longestMatchCode];
-                    dataManager.AddCodeMatchRowToTable(dtCodeMatches, distinctCode, supplierCodes.Item1, longestMatchSupplierCode.Value, longestMatchSupplierCode.ID, longestMatchSupplierCode.ZoneId);
-                    count++;
+                    dicSupplierCodes.Add(supplierCode.Value, supplierCode);
+                    //supplierCodesSet.Add(supplierCode.Value);
                 }
             }
-
+            //CodeTree treeSupplierCodes = new CodeTree(dicSupplierCodes.Keys.ToList());
+            int count = 0;
+            //string filePath = String.Format(@"C:\CodeMatch\{0}.txt", fileName);
+            //using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath, true))
+            //{
+                foreach (var distinctCode in distinctCodesWithPossibleMatches)
+                {
+                    foreach (var possibleMatch in distinctCode.Value)
+                    {
+                        LCRCode longestMatchSupplierCode;
+                        if (dicSupplierCodes.TryGetValue(possibleMatch, out longestMatchSupplierCode))
+                        {
+                            //LCRCode longestMatchSupplierCode = dicSupplierCodes[possibleMatch];
+                            //wr.WriteLine(String.Format("{0},{1},{2},{3},{4}", distinctCode.Key, supplierCodes.Item1, longestMatchSupplierCode.Value, longestMatchSupplierCode.ID, longestMatchSupplierCode.ZoneId));
+                            //dataManager.AddCodeMatchRowToTable(dtCodeMatches, distinctCode.Key, supplierCodes.Item1, longestMatchSupplierCode.Value, longestMatchSupplierCode.ID, longestMatchSupplierCode.ZoneId);
+                            readyCodeMatches.Add(new CodeMatch
+                                {
+                                    Code = distinctCode.Key,
+                                    SupplierId = longestMatchSupplierCode.SupplierId,
+                                    SupplierCode = longestMatchSupplierCode.Value,
+                                    SupplierCodeId = longestMatchSupplierCode.ID,
+                                    SupplierZoneId = longestMatchSupplierCode.ZoneId
+                                });
+                            count++;
+                            break;
+                        }
+                    }
+                    ////string longestMatchCode = treeSupplierCodes.GetLongestMatch(distinctCode);
+                    //int codeIndex = supplierCodes.Item2.BinarySearch(new LCRCode { Value = distinctCode }, comparer);
+                    //if (codeIndex > -1)// (!String.IsNullOrEmpty(longestMatchCode))
+                    //{
+                    //    LCRCode longestMatchSupplierCode = supplierCodes.Item2[codeIndex];
+                    //    //dataManager.AddCodeMatchRowToTable(dtCodeMatches, distinctCode, supplierCodes.Item1, longestMatchSupplierCode.Value, longestMatchSupplierCode.ID, longestMatchSupplierCode.ZoneId);
+                    //    count++;
+                    //}
+                }
+            //    wr.Close();
+            //}
 
             //foreach (var supplierCode in supplierCodes.Item2)
             //{
@@ -159,11 +198,19 @@ namespace TOne.LCRProcess.Activities
             //    }
             //}
             //inputArgument.QueueSuppliersCodeMatches.Enqueue(finalCodeMatchList);
-            
-            //Console.WriteLine("{0}: {1} code Match ready for supplier {2} in {3}", DateTime.Now, count, supplierCodes.Item1, (DateTime.Now - start));
+
+            Console.WriteLine("{0}: {1} code Match ready for supplier {2} in {3}", DateTime.Now, count, supplierCodes.Item1, (DateTime.Now - start));
         }
 
-        
+        private class CodeMatchComparer : IComparer<LCRCode>
+        {
+            public int Compare(LCRCode x, LCRCode y)
+            {
+                if (y.Value.StartsWith(x.Value))
+                    return 0;
+                else return -1;
+            }
+        }
 
     }
 }
