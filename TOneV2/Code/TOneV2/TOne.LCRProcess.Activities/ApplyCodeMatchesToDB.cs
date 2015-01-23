@@ -34,15 +34,15 @@ namespace TOne.LCRProcess.Activities
                 InputQueue = this.InputQueue.Get(context)
             };
         }
-        
-        protected override void DoWork(DependentAsyncActivityInputArg<ApplyCodeMatchesToDBInput> inputArgument, AsyncActivityHandle handle)
+
+        protected override void DoWork(ApplyCodeMatchesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
-            DoWhilePreviousRunning(inputArgument, handle, () =>
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
                     Object preparedCodeMatches;
-                    while (!ShouldStop(handle) && inputArgument.Input.InputQueue.TryDequeue(out preparedCodeMatches))
+                    while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out preparedCodeMatches))
                     {
                         //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
                         DateTime start = DateTime.Now;

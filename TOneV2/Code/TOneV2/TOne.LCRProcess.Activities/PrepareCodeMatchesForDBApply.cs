@@ -52,19 +52,19 @@ namespace TOne.LCRProcess.Activities
             };
         }
 
-        protected override void DoWork(DependentAsyncActivityInputArg<PrepareCodeMatchesForDBApplyInput> inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareCodeMatchesForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
-            DoWhilePreviousRunning(inputArgument, handle, () =>
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 List<CodeMatch> codeMatches;
-                while (!ShouldStop(handle) && inputArgument.Input.InputQueue.TryDequeue(out codeMatches))
+                while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out codeMatches))
                 {
                     //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
                     DateTime start = DateTime.Now;
-                    Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.Input.IsFuture);
-                    inputArgument.Input.OutputQueue.Enqueue(preparedCodeMatches);
+                    Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.IsFuture);
+                    inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
                     totalTime += (DateTime.Now - start);
                     Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
                 }

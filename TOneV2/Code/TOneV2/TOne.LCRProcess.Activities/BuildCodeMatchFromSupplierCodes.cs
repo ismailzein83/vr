@@ -67,7 +67,7 @@ namespace TOne.LCRProcess.Activities
         }
 
         static object s_lockObj = new object();
-        protected override void DoWork(DependentAsyncActivityInputArg<BuildCodeMatchFromSupplierCodesInput> inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(BuildCodeMatchFromSupplierCodesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             foreach (var fileInfo in System.IO.Directory.GetFiles(@"C:\CodeMatch"))
             {
@@ -81,20 +81,20 @@ namespace TOne.LCRProcess.Activities
             //string fileName = Guid.NewGuid().ToString();
 
             List<CodeMatch> codeMatches = new List<CodeMatch>();
-            DoWhilePreviousRunning(inputArgument, handle, () =>
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 Tuple<string, List<LCRCode>> supplierCodes;
-                while (!ShouldStop(handle) && inputArgument.Input.InputQueue.TryDequeue(out supplierCodes))
+                while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out supplierCodes))
                 {
                     //while (inputArgument.QueueReadyCodeMatches.Count > 4)
                     //    Thread.Sleep(1000);
                     DateTime start = DateTime.Now;
-                    BuildAndAddCodeMatchesToTable(codeMatches, inputArgument.Input.DistinctCodes.CodesWithPossibleMatches, supplierCodes);
+                    BuildAndAddCodeMatchesToTable(codeMatches, inputArgument.DistinctCodes.CodesWithPossibleMatches, supplierCodes);
                     lock (s_lockObj)
                         totalTime += (DateTime.Now - start);
                     if (codeMatches.Count > 50000)
                     {
-                        inputArgument.Input.OutputQueue.Enqueue(codeMatches);
+                        inputArgument.OutputQueue.Enqueue(codeMatches);
                         codeMatches = new List<CodeMatch>();
                         //dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
                     }
@@ -102,7 +102,7 @@ namespace TOne.LCRProcess.Activities
             });
             if (codeMatches.Count > 0)
             {
-                inputArgument.Input.OutputQueue.Enqueue(codeMatches);
+                inputArgument.OutputQueue.Enqueue(codeMatches);
             }
             //});
             Console.WriteLine("{0}: BuildCodeMatchFromSupplierCodes is done in {1} ", DateTime.Now, totalTime);
