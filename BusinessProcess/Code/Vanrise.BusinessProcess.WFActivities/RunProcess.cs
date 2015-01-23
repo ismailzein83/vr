@@ -31,15 +31,13 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         protected override void Execute(NativeActivityContext context)
         {
-            var sharedData = context.GetExtension<BPSharedInstanceData>();
-            if (sharedData == null)
-                throw new NullReferenceException("BPSharedInstanceData");
+            var sharedData = context.GetSharedInstanceData();
 
             var input = new CreateProcessInput
             {
                 ProcessName = this.ProcessName.Get(context),
                 InputArguments = this.Input.Get(context),
-                ParentProcessID = sharedData.ProcessInstanceId
+                ParentProcessID = sharedData.InstanceInfo.ProcessInstanceID
             };
             ProcessManager processManager = new ProcessManager();
             var output = processManager.CreateNewProcess(input);

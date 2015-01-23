@@ -17,16 +17,14 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         protected override void Execute(CodeActivityContext context)
         {
-            var sharedData = context.GetExtension<BPSharedInstanceData>();
-            if (sharedData == null)
-                throw new NullReferenceException("BPSharedInstanceData");
+            var sharedData = context.GetSharedInstanceData();
 
             Console.WriteLine("{0}: {1}", DateTime.Now, this.Message.Get(context));
             BPTrackingSeverity severity = this.Severity.Get(context) ?? BPTrackingSeverity.Information;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
-                ProcessInstanceId = sharedData.ProcessInstanceId,
-                ParentProcessId = sharedData.ParentProcessId,
+                ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
+                ParentProcessId = sharedData.InstanceInfo.ParentProcessID,
                 Message = this.Message.Get(context),
                 Severity = severity,
                 EventTime = DateTime.Now

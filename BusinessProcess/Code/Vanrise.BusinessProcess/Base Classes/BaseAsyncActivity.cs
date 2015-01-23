@@ -6,50 +6,61 @@ using System.Activities;
 
 namespace Vanrise.BusinessProcess
 {
-    public abstract class BaseAsyncActivity : AsyncCodeActivity
+    public abstract class BaseAsyncActivity<T, Q> : AsyncCodeActivity
     {
-    }
+        public OutArgument<AsyncActivityStatus> Status { get; set; }
 
-    public abstract class BaseAsyncActivity<T> : BaseAsyncActivity
-    {
         protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
         {
-            Action<T> executeAction = new Action<T>(DoWork);
+            this.Status.Set(context, new AsyncActivityStatus());
+            Func<T, AsyncActivityHandle, Q> executeAction = new Func<T, AsyncActivityHandle, Q>(DoWorkWithResult);
             context.UserState = executeAction;
-            return executeAction.BeginInvoke(GetInputArgument(context), callback, state);
+            AsyncActivityHandle handle = new AsyncActivityHandle
+                {
+                    SharedInstanceData = context.GetSharedInstanceData()
+                };
+            OnBeforeExecute(context, handle);
+            return executeAction.BeginInvoke(GetInputArgument(context), handle, callback, state);
         }
 
         protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
         {
-            Action<T> executeAction = (Action<T>)context.UserState;
-            executeAction.EndInvoke(result);
-        }
-
-        protected abstract T GetInputArgument(AsyncCodeActivityContext context);
-
-        protected abstract void DoWork(T inputArgument);
-    }
-
-    public abstract class BaseAsyncActivity<T, Q> : BaseAsyncActivity
-    {
-        protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
-        {
-            Func<T, Q> executeAction = new Func<T, Q>(DoWork);
-            context.UserState = executeAction;
-            return executeAction.BeginInvoke(GetInputArgument(context), callback, state);
-        }
-
-        protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
-        {
-            Func<T, Q> executeAction = (Func<T, Q>)context.UserState;
+            Func<T, AsyncActivityHandle, Q> executeAction = (Func<T, AsyncActivityHandle, Q>)context.UserState;
             Q workResult = executeAction.EndInvoke(result);
             OnWorkComplete(context, workResult);
+            this.Status.Get(context).IsComplete = true;
         }
 
         protected abstract T GetInputArgument(AsyncCodeActivityContext context);
 
-        protected abstract Q DoWork(T inputArgument);
+        protected abstract Q DoWorkWithResult(T inputArgument, AsyncActivityHandle handle);
 
         protected abstract void OnWorkComplete(AsyncCodeActivityContext context, Q result);
+
+        protected virtual void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+
+        }
+
+        protected bool ShouldStop(AsyncActivityHandle handle)
+        {
+            return handle.SharedInstanceData.InstanceInfo.Status != Entities.BPInstanceStatus.Running;
+        }
+    }
+
+    public abstract class BaseAsyncActivity<T> : BaseAsyncActivity<T, Object>
+    {
+        protected override object DoWorkWithResult(T inputArgument, AsyncActivityHandle handle)
+        {
+            DoWork(inputArgument, handle);
+            return null;
+        }
+
+        protected abstract void DoWork(T inputArgument, AsyncActivityHandle handle);
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, object result)
+        {
+
+        }
     }
 }

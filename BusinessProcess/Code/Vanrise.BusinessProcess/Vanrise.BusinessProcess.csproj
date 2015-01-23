@@ -50,6 +50,7 @@
     <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -58,7 +59,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base Classes\AsyncActivityStatus.cs" />
+    <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
+    <Compile Include="Base Classes\DependentAsyncActivity.cs" />
+    <Compile Include="ContextExtensions.cs" />
     <Compile Include="Internals\BPService.cs" />
     <Compile Include="Internals\IBPService.cs" />
     <Compile Include="ProcessCompletedEventPayload.cs" />

@@ -16,11 +16,9 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         protected override void Execute(CodeActivityContext context)
         {
-            var sharedData = context.GetExtension<BPSharedInstanceData>();
-            if (sharedData == null)
-                throw new NullReferenceException("BPSharedInstanceData");
+            var sharedData = context.GetSharedInstanceData();
             ProcessManager processManager = new ProcessManager();
-            processManager.SaveDefinitionObjectState(sharedData.ProcessDefinitionId, this.ObjectKey.Get(context), this.ObjectValue.Get(context));
+            processManager.SaveDefinitionObjectState(sharedData.InstanceInfo.DefinitionID, this.ObjectKey.Get(context), this.ObjectValue.Get(context));
         }
     }
 }

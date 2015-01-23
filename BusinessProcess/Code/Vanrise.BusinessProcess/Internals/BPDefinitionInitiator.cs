@@ -147,9 +147,7 @@ namespace Vanrise.BusinessProcess
 
             var sharedInstanceData = new BPSharedInstanceData()
             {
-                ProcessDefinitionId = this.Definition.BPDefinitionID,
-                ProcessInstanceId = bpInstance.ProcessInstanceID,
-                ParentProcessId = bpInstance.ParentProcessID
+                InstanceInfo = bpInstance
             };
             wfApp.Extensions.Add(sharedInstanceData);
 

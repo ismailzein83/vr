@@ -19,14 +19,13 @@ namespace Vanrise.BusinessProcess.WFActivities
         // If your activity returns a value, derive from CodeActivity<TResult>
         // and return the value from the Execute method.
         protected override void Execute(CodeActivityContext context)
-        {            
-            BPSharedInstanceData sharedInstanceData = context.GetExtension<BPSharedInstanceData>();
-            if (sharedInstanceData == null)
-                throw new ArgumentNullException("BPSharedInstanceData");
+        {
+            BPSharedInstanceData sharedInstanceData = context.GetSharedInstanceData();
+
             ProcessManager processManager = new ProcessManager();
             processManager.TriggerProcessEvent(new Entities.TriggerProcessEventInput
             {
-                ProcessInstanceId = sharedInstanceData.ParentProcessId.Value,
+                ProcessInstanceId = sharedInstanceData.InstanceInfo.ParentProcessID.Value,
                 BookmarkName = this.BookmarkName.Get(context),
                 EventData = this.EventPayload.Get(context)
             });
