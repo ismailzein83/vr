@@ -7,6 +7,7 @@ using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using System.Data.Common;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace Vanrise.Data.SQL
 {
@@ -245,6 +246,51 @@ namespace Vanrise.Data.SQL
                 conn.Close();
             }
             table.Dispose();
+        }
+
+        protected string GetFilePathForBulkInsert()
+        {
+            return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
+        }
+
+        protected void InsertBulkToTable(BulkInsertInfo bulkInsertInfo)
+        {
+            if (bulkInsertInfo == null)
+                throw new ArgumentNullException("bulkInsertInfo");
+            if (String.IsNullOrEmpty(bulkInsertInfo.DataFilePath))
+                throw new ArgumentNullException("bulkInsertInfo.DataFilePath");
+            if (String.IsNullOrEmpty(bulkInsertInfo.TableName))
+                throw new ArgumentNullException("bulkInsertInfo.TableName");
+            if(bulkInsertInfo.FieldSeparator == default(char))
+                throw new ArgumentNullException("bulkInsertInfo.FieldSeparator");
+
+            string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
+            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(base._connectionString);
+            StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000 -F2", bulkInsertInfo.TableName, bulkInsertInfo.DataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
+            
+            if (connStringBuilder.IntegratedSecurity)
+                args.Append(" -T");
+            else
+                args.Append(String.Format(" -U {0} -P {1}", connStringBuilder.UserID, connStringBuilder.Password));
+            
+            if (bulkInsertInfo.TabLock)
+                args.Append(" -h TABLOCK");
+            if (bulkInsertInfo.KeepIdentity)
+                args.Append(" -E");
+            
+            System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo("bcp", args.ToString());
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+            processBulkCopy.StartInfo = procStartInfo;
+            processBulkCopy.Start();
+            processBulkCopy.WaitForExit();
+            File.Delete(bulkInsertInfo.DataFilePath);
+            string errorMessage = File.ReadAllText(errorFilePath);
+            File.Delete(errorFilePath);
+            if (!String.IsNullOrWhiteSpace(errorMessage))
+                throw new Exception(errorMessage);
         }
 
         #endregion
