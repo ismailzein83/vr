@@ -15,6 +15,7 @@ namespace TestRuntime
     {
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             MainForm f = new MainForm();
             f.ShowDialog();
             Console.ReadKey();
@@ -23,7 +24,7 @@ namespace TestRuntime
 
             var config = new BPConfiguration { MaxConcurrentWorkflows = 20 };
             var ser = Vanrise.Common.Serializer.Serialize(config);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+           
           
             Console.WriteLine("Host Started");
             BusinessProcessRuntime.Current.TerminatePendingProcesses();
