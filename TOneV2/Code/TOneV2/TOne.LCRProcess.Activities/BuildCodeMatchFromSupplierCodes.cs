@@ -69,10 +69,10 @@ namespace TOne.LCRProcess.Activities
         static object s_lockObj = new object();
         protected override void DoWork(BuildCodeMatchFromSupplierCodesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            foreach (var fileInfo in System.IO.Directory.GetFiles(@"C:\CodeMatch"))
-            {
-                System.IO.File.Delete(fileInfo);
-            }
+            //foreach (var fileInfo in System.IO.Directory.GetFiles(@"C:\CodeMatch"))
+            //{
+            //    System.IO.File.Delete(fileInfo);
+            //}
             //ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             TimeSpan totalTime = default(TimeSpan);
             //System.Threading.Tasks.Parallel.For(0, 2, (i) =>
