@@ -8,31 +8,19 @@ using System.Threading;
 
 namespace Vanrise.BusinessProcess
 {
-    public class DependentAsyncActivityInputArg<T>
-    {
-        public T Input { get; set; }
-
-        public AsyncActivityStatus PreviousActivityStatus { get; set; }
-    }
-
-    public abstract class DependentAsyncActivity<T, Q> : BaseAsyncActivity<DependentAsyncActivityInputArg<T>, Q>
+    public abstract class DependentAsyncActivity<T, Q> : BaseAsyncActivity<Tuple<T, AsyncActivityStatus>, Q>
     {
         [RequiredArgument]
         public InArgument<AsyncActivityStatus> PreviousActivityStatus { get; set; }
 
 
-        protected override DependentAsyncActivityInputArg<T> GetInputArgument(AsyncCodeActivityContext context)
+        protected override Tuple<T, AsyncActivityStatus> GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new DependentAsyncActivityInputArg<T>
-            {
-                Input = GetInputArgument2(context),
-                PreviousActivityStatus = this.PreviousActivityStatus.Get(context)
-            };
+            return new Tuple<T, AsyncActivityStatus>(GetInputArgument2(context), this.PreviousActivityStatus.Get(context));
         }
 
-        protected void DoWhilePreviousRunning(DependentAsyncActivityInputArg<T> inputArgument, AsyncActivityHandle handle, Action actionToDo)
+        protected void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, Action actionToDo)
         {
-            AsyncActivityStatus previousActivityStatus = inputArgument.PreviousActivityStatus;
             while (!previousActivityStatus.IsComplete && !ShouldStop(handle))
             {
                 actionToDo();
@@ -41,19 +29,25 @@ namespace Vanrise.BusinessProcess
             actionToDo();
         }
 
+        protected override Q DoWorkWithResult(Tuple<T, AsyncActivityStatus> inputArgument, AsyncActivityHandle handle)
+        {
+            return DoWorkWithResult(inputArgument.Item1, inputArgument.Item2, handle);
+        }
+
         protected abstract T GetInputArgument2(AsyncCodeActivityContext context);
+
+        protected abstract Q DoWorkWithResult(T inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle);
     }
 
     public abstract class DependentAsyncActivity<T> : DependentAsyncActivity<T, Object>
     {
-
-        protected override object DoWorkWithResult(DependentAsyncActivityInputArg<T> inputArgument, AsyncActivityHandle handle)
+        protected override object DoWorkWithResult(T inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            DoWork(inputArgument, handle);
+            DoWork(inputArgument, previousActivityStatus, handle);
             return null;
         }
 
-        protected abstract void DoWork(DependentAsyncActivityInputArg<T> inputArgument, AsyncActivityHandle handle);
+        protected abstract void DoWork(T inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle);
         protected override void OnWorkComplete(AsyncCodeActivityContext context, object result)
         {
         }
