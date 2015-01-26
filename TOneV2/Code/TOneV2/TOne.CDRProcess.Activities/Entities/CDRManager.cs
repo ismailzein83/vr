@@ -15,10 +15,10 @@ namespace TOne.CDRProcess.Activities
         }
 
 
-        public List<TABS.CDR> GetCDRsPerSwitch(int SwitchID)
+        public CDRBatch GetCDRsPerSwitch(int SwitchID)
         {
             List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
-
+            CDRBatch BatchCdrs = new CDRBatch();
 
             TABS.Switch CurrentSwitch = null;
             if (TABS.Switch.All.ContainsKey(SwitchID))
@@ -33,7 +33,8 @@ namespace TOne.CDRProcess.Activities
                 foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
                     ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
             }
-            return ToneCdrs;
+            BatchCdrs.CDRs = ToneCdrs;
+            return BatchCdrs;
         }
 
         static object s_RepricingMainCDRIDLockObj = new object();
