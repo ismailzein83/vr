@@ -39,6 +39,13 @@ namespace TOne.LCRProcess.Activities
         [RequiredArgument]
         public InOutArgument<TOneQueue<List<CodeMatch>>> OutputQueue { get; set; }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new TOneQueue<List<CodeMatch>>());
+            base.OnBeforeExecute(context, handle);
+        }
+
         protected override BuildCodeMatchFromDistinctCodesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new BuildCodeMatchFromDistinctCodesInput

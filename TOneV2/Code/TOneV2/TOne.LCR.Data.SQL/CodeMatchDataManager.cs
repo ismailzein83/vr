@@ -333,7 +333,10 @@ namespace TOne.LCR.Data.SQL
                 FROM [LCR].[CodeMatch{0}] cm
                 JOIN @ActiveSuppliersCodeInfo sup on cm.SupplierID = sup.SupplierID	";
 
-        const string query_CopyCodeMatchTableWithValidItems = @"SELECT * INTO LCR.CodeMatch{0}_Temp 
+        const string query_CopyCodeMatchTableWithValidItems = @"IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[LCR].[CodeMatch{0}_Temp]') AND type in (N'U'))
+		                                                        DROP TABLE [LCR].[CodeMatch{0}_Temp]
+
+                                                                SELECT cm.* INTO LCR.CodeMatch{0}_Temp 
                                                                 FROM LCR.CodeMatch{0} cm
                                                                 JOIN @DistinctCodes distinctCodes ON cm.Code = distinctCodes.DistinctCode
                                                                 JOIN @ActiveSuppliersCodeInfo sup on cm.SupplierID = sup.SupplierID
@@ -363,7 +366,7 @@ namespace TOne.LCR.Data.SQL
 
             DataTable dtSuppliersCodeInfo = CodeDataManager.BuildSuppliersCodeInfoTable(suppliersCodeInfo);
 
-            ExecuteNonQueryText(String.Format(query_GetDistinctCodes, isFuture ? "Future" : "Current"),
+            ExecuteNonQueryText(String.Format(query_CopyCodeMatchTableWithValidItems, isFuture ? "Future" : "Current"),
                 (cmd) =>
                 {
                     var dtPrm = new SqlParameter("@DistinctCodes", SqlDbType.Structured);
