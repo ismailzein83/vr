@@ -54,7 +54,7 @@ namespace TOne.CDRProcess.Activities
         protected override void DoWork(GetCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             CDRManager manager = new CDRManager();
-            inputArgument.OutputQueue.Enqueue(manager.GetCDRsPerSwitch(inputArgument.SwitchID));
+            inputArgument.OutputQueue.Enqueue(manager.GetCDRs(inputArgument.SwitchID));
         }
     }
 
