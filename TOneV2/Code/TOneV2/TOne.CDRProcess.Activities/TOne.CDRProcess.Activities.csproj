@@ -78,6 +78,7 @@
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRsToQueue.cs" />
+    <Compile Include="SaveCDRToDB.cs" />
     <Compile Include="UpdateBillingStatistics.cs" />
     <Compile Include="UpdateDailyPostpaidAmounts.cs" />
     <Compile Include="UpdateDailyPrepaidAmounts.cs" />

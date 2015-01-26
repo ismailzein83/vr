@@ -15,6 +15,17 @@ namespace TOne.CDRProcess.Activities
         }
 
 
+        public void SaveCDRstoDB(CDRBatch cdrs)
+        {
+            log4net.ILog log = log4net.LogManager.GetLogger("TOne.CDRProcess.Activities.CDRManager");
+            using (TABS.Components.BulkManager BulkManager = new TABS.Components.BulkManager(log))
+            {
+                BulkManager.Write(cdrs.CDRs);
+            }
+
+        }
+
+
         public CDRBatch GetCDRsPerSwitch(int SwitchID)
         {
             List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
