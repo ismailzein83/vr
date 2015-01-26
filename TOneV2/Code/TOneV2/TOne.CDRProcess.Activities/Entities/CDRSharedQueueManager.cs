@@ -10,12 +10,12 @@ using Vanrise.Caching;
 namespace TOne.CDRProcess.Activities
 {
     public class CDRSharedQueueManager : TOne.Business.SharedQueueManager
-    {       
+    {
 
-        public TOneQueue<TABS.CDR> GetCDRQueue(int switchId)
+        public TOneQueue<List<TABS.CDR>> GetCDRQueue(int switchId)
         {
             string cacheKey = String.Format("CDRQueue_{0}", switchId);
-            return GetQueue<TABS.CDR>(cacheKey);
+            return GetQueue<List<TABS.CDR>>(cacheKey);
         }
 
         public TOneQueue<TABS.Billing_CDR_Base> GetCDRQueueForStatistics(int switchId)
