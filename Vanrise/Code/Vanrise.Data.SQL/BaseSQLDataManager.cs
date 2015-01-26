@@ -144,7 +144,7 @@ namespace Vanrise.Data.SQL
             
         }
 
-        protected void ExecuteReaderSPCmd(string spName, Action<DbCommand> prepareCommand, Action<IDataReader> onReaderReady)
+        protected void ExecuteReaderSPCmd(string spName, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
         {
             var db = CreateDatabase();
             using (var cmd = CreateCommandFromSP(db, spName))
@@ -164,20 +164,6 @@ namespace Vanrise.Data.SQL
 
         #region GetItem(s)
 
-        protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
-        {
-            T obj = default(T);
-            ExecuteReaderText(cmdText, (reader) =>
-            {
-                if (reader.Read())
-                {
-                    obj = objectBuilder(reader);
-                }
-            },
-                prepareCommand);
-            return obj;
-        }
-
         protected T GetItemSP<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
         {
             T obj = default(T);
@@ -189,6 +175,36 @@ namespace Vanrise.Data.SQL
                 }
             },
                 parameters);
+            return obj;
+        }
+
+        protected T GetItemSPCmd<T>(string spName, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        {
+            T obj = default(T);
+            ExecuteReaderSPCmd(spName,
+                (reader) =>
+                {
+                    if (reader.Read())
+                    {
+                        obj = objectBuilder(reader);
+                    }
+                },
+                prepareCommand);
+            return obj;
+        }
+
+
+        protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        {
+            T obj = default(T);
+            ExecuteReaderText(cmdText, (reader) =>
+            {
+                if (reader.Read())
+                {
+                    obj = objectBuilder(reader);
+                }
+            },
+                prepareCommand);
             return obj;
         }
 
@@ -205,6 +221,23 @@ namespace Vanrise.Data.SQL
                 }
             },
                 parameters);
+            return lst;
+        }
+
+        protected List<T> GetItemsSPCmd<T>(string spName, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
+        {
+            List<T> lst = new List<T>();
+            ExecuteReaderSPCmd(spName,
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        T obj = objectBuilder(reader);
+                        if (obj != null)
+                            lst.Add(obj);
+                    }
+                },
+                prepareCommand);
             return lst;
         }
 
