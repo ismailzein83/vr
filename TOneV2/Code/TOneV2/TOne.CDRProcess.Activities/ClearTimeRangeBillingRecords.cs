@@ -5,38 +5,34 @@ using System.Text;
 using System.Activities;
 using System.Threading.Tasks;
 using TOne.CDRProcess.Arguments;
+using Vanrise.BusinessProcess;
+
 namespace TOne.CDRProcess.Activities
 {
 
-    public sealed class ClearTimeRangeBillingRecords : AsyncCodeActivity
+    #region Arguments Classes
+
+    public class ClearTimeRangeBillingRecordsInput
+    {
+        public TimeRange TimeRange { get; set; }
+
+    }
+
+    #endregion
+
+    public sealed class ClearTimeRangeBillingRecords : BaseAsyncActivity<ClearTimeRangeBillingRecordsInput>
     {
         
         [RequiredArgument]
         public InArgument<TimeRange> TimeRange { get; set; }
 
-       
         
-
-        protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
+        protected override void DoWork(ClearTimeRangeBillingRecordsInput inputArgument, AsyncActivityHandle handle)
         {
-            Action<TimeRange> executeAction = new Action<TimeRange>(DoWork);
-            context.UserState = executeAction;
-
-            return executeAction.BeginInvoke(this.TimeRange.Get(context), callback, state);
-        }
-
-        protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
-        {
-            Action<TimeRange> executeAction = (Action<TimeRange>)context.UserState;
-            executeAction.EndInvoke(result);
-        }
-
-        void DoWork(TimeRange timeRange)
-        {            
             CDRManager cdrManager = new CDRManager();
             DateTime deletionStart = DateTime.Now;
-            DateTime from = timeRange.From;
-            DateTime to = timeRange.To;
+            DateTime from = inputArgument.TimeRange.From;
+            DateTime to = inputArgument.TimeRange.To;
             Action[] deleteActions = new Action[]
                 {
                     ()=> cdrManager.DeleteCDRMain(from,to),
@@ -51,8 +47,14 @@ namespace TOne.CDRProcess.Activities
             {
                 action();
             });
+        }
 
-            //Console.WriteLine("{0}: {1} to delete records in interval {2: HH:mm} - {3: HH:mm}", DateTime.Now, (DateTime.Now - deletionStart), from, to);
+        protected override ClearTimeRangeBillingRecordsInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ClearTimeRangeBillingRecordsInput
+            {
+                TimeRange = this.TimeRange.Get(context)
+            };
         }
     }
 }

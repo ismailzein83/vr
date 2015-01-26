@@ -10,14 +10,33 @@ using TABS;
 using TOne.Entities;
 using TOne.Caching;
 using Vanrise.Caching;
+using Vanrise.BusinessProcess;
 using TOne.Business;
 
 namespace TOne.CDRProcess.Activities
 {
 
-    public sealed class CreateBillingAndStatsTables : AsyncCodeActivity
+    #region Argument Classes
+    public class CreateBillingAndStatsTablesInput
     {
         
+        public DateTime From { get; set; }
+
+        public DateTime To { get; set; }
+
+        public ConcurrentQueue<CDRBatch> QueueLoadedCDRs { get; set; }
+
+        public Guid CacheManagerId { get; set; }
+
+        public ConcurrentQueue<DataTable> QueueReadyTables { get; set; }
+    }
+
+    #endregion
+
+    public sealed class CreateBillingAndStatsTables : DependentAsyncActivity<CreateBillingAndStatsTablesInput>
+    {
+        #region Arguments
+
         [RequiredArgument]
         public InArgument<DateTime> From { get; set; }
 
@@ -33,78 +52,11 @@ namespace TOne.CDRProcess.Activities
         [RequiredArgument]
         public InArgument<ConcurrentQueue<DataTable>> QueueReadyTables { get; set; }
 
-        [RequiredArgument]
-        public InArgument<CDRProcessingTasksStatus> TasksStatus { get; set; }
+        
 
-        protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
-        {
-            Action<DateTime, DateTime, ConcurrentQueue<CDRBatch>, Guid, ConcurrentQueue<DataTable>, CDRProcessingTasksStatus> executeAction 
-                = new Action<DateTime, DateTime, ConcurrentQueue<CDRBatch>, Guid, ConcurrentQueue<DataTable>, CDRProcessingTasksStatus>(DoWork);
-            context.UserState = executeAction;
+        #endregion
 
-            return executeAction.BeginInvoke(this.From.Get(context), this.To.Get(context), this.QueueLoadedCDRs.Get(context), this.CacheManagerId.Get(context), this.QueueReadyTables.Get(context), this.TasksStatus.Get(context), callback, state);
-        }
-
-        protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
-        {
-            Action<DateTime, DateTime, ConcurrentQueue<CDRBatch>, Guid, ConcurrentQueue<DataTable>, CDRProcessingTasksStatus> executeAction 
-                = (Action<DateTime, DateTime, ConcurrentQueue<CDRBatch>, Guid, ConcurrentQueue<DataTable>, CDRProcessingTasksStatus>)context.UserState;
-            executeAction.EndInvoke(result);
-        }
-
-        void DoWork(DateTime from, DateTime to, ConcurrentQueue<CDRBatch> queueCDRs, Guid cacheManagerId, ConcurrentQueue<DataTable> queueDataTables, CDRProcessingTasksStatus tasksStatus)
-        {
-            log4net.ILog logger = log4net.LogManager.GetLogger(TABS.Components.Engine.RepricingLoggerName);
-            TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(cacheManagerId);
-
-            ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
-
-            ProtPricingGenerator generator;
-            using (NHibernate.ISession session = DataConfiguration.OpenSession())
-            {
-                generator = new ProtPricingGenerator(cacheManager, session);
-                session.Flush();
-                session.Close();
-            }
-
-            int sampleMinute = (int)(to - from).TotalMinutes;
-
-            Dictionary<string, TrafficStats> trafficStatistics = new Dictionary<string, TrafficStats>();
-            Dictionary<string, TrafficStats> dailyTrafficStatistics = cacheManager.GetOrCreateObject("DailyStatistics", CacheObjectType.TempObjects,
-                () =>
-                {
-                    return new Dictionary<string, TrafficStats>();
-                });
-            List<System.Threading.Tasks.Task> asyncTasks = new List<System.Threading.Tasks.Task>();
-
-            while (!tasksStatus.CDRLoadingComplete || queueCDRs.Count > 0)
-            {
-                CDRBatch cdrBatch;
-
-                while (queueCDRs.TryDequeue(out cdrBatch))
-                {
-                    CDRBatchProcessor cdrBatchProcessor = new CDRBatchProcessor(queueDataTables, logger, codeMap, generator, sampleMinute, trafficStatistics, dailyTrafficStatistics, cdrBatch);
-                    var t = cdrBatchProcessor.ExecuteAsync();
-                    asyncTasks.Add(t);
-                }                
-                Thread.Sleep(1000);
-            }
-
-            //while (asyncTasks.Count > 0)
-            //{
-            //    Thread.Sleep(1000);
-            //}
-
-            System.Threading.Tasks.Task.WaitAll(asyncTasks.ToArray());
-            if (trafficStatistics.Count > 0)
-            {
-                DataTable dtTrafficStatistics = GetTrafficStatsTable(trafficStatistics.Values, BulkManager.TRAFFICSTATS_TABLE_NAME);
-                queueDataTables.Enqueue(dtTrafficStatistics);
-            }
-        }
-                
-
-
+        
         #region Private Methods
 
         static object s_DataTableMappingsLock = new object();
@@ -190,6 +142,64 @@ namespace TOne.CDRProcess.Activities
 
         #endregion
 
-        
+        protected override void DoWork(CreateBillingAndStatsTablesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            log4net.ILog logger = log4net.LogManager.GetLogger(TABS.Components.Engine.RepricingLoggerName);
+            TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
+
+            ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
+
+            ProtPricingGenerator generator;
+            using (NHibernate.ISession session = DataConfiguration.OpenSession())
+            {
+                generator = new ProtPricingGenerator(cacheManager, session);
+                session.Flush();
+                session.Close();
+            }
+
+            int sampleMinute = (int)(inputArgument.To - inputArgument.From).TotalMinutes;
+
+            Dictionary<string, TrafficStats> trafficStatistics = new Dictionary<string, TrafficStats>();
+            Dictionary<string, TrafficStats> dailyTrafficStatistics = cacheManager.GetOrCreateObject("DailyStatistics", CacheObjectType.TempObjects,
+                () =>
+                {
+                    return new Dictionary<string, TrafficStats>();
+                });
+            List<System.Threading.Tasks.Task> asyncTasks = new List<System.Threading.Tasks.Task>();
+
+
+
+            while (! previousActivityStatus.IsComplete || inputArgument.QueueLoadedCDRs.Count > 0)
+            {
+                CDRBatch cdrBatch;
+
+                while (inputArgument.QueueLoadedCDRs.TryDequeue(out cdrBatch))
+                {
+                    CDRBatchProcessor cdrBatchProcessor = new CDRBatchProcessor(inputArgument.QueueReadyTables, logger, codeMap, generator, sampleMinute, trafficStatistics, dailyTrafficStatistics, cdrBatch);
+                    var t = cdrBatchProcessor.ExecuteAsync();
+                    asyncTasks.Add(t);
+                }
+                Thread.Sleep(1000);
+            }
+
+            System.Threading.Tasks.Task.WaitAll(asyncTasks.ToArray());
+            if (trafficStatistics.Count > 0)
+            {
+                DataTable dtTrafficStatistics = GetTrafficStatsTable(trafficStatistics.Values, BulkManager.TRAFFICSTATS_TABLE_NAME);
+                inputArgument.QueueReadyTables.Enqueue(dtTrafficStatistics);
+            }
+        }
+
+        protected override CreateBillingAndStatsTablesInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new CreateBillingAndStatsTablesInput
+            {
+                From = this.From.Get(context),
+                To = this.To.Get(context),
+                QueueLoadedCDRs = this.QueueLoadedCDRs.Get(context),
+                CacheManagerId = this.CacheManagerId.Get(context),
+                QueueReadyTables = this.QueueReadyTables.Get(context)
+            };
+        }
     }
 }

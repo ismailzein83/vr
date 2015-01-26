@@ -12,6 +12,7 @@
  xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
  xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
  xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(tca:TimeRangeRepricingProcessInput)" />
@@ -40,6 +41,7 @@
       <x:String>TOne.CDRProcess.Arguments</x:String>
       <x:String>Vanrise.BusinessProcess.WFActivities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -95,7 +97,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: repricing for {1} - {2} started", DateTime.Now, Input.Range.From, Input.Range.To)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <tca1:ClearTimeRangeBillingRecords sap2010:WorkflowViewState.IdRef="ClearTimeRangeBillingRecords_1">
+    <tca1:ClearTimeRangeBillingRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ClearTimeRangeBillingRecords_1">
       <tca1:ClearTimeRangeBillingRecords.TimeRange>
         <InArgument x:TypeArguments="tca:TimeRange">
           <mca:CSharpValue x:TypeArguments="tca:TimeRange">Input.Range</mca:CSharpValue>
@@ -114,101 +116,75 @@
             <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">new ConcurrentQueue&lt;DataTable&gt;()</mca:CSharpValue>
           </Variable.Default>
         </Variable>
-        <Variable x:TypeArguments="tca1:CDRProcessingTasksStatus" Name="tasksStatus">
-          <Variable.Default>
-            <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">new CDRProcessingTasksStatus()</mca:CSharpValue>
-          </Variable.Default>
-        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="LoadCDRsTaskStatus" />
+        <Variable x:TypeArguments="x:String" Name="variable1" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="CreateBillingAndStatsTablesTaskStatus" />
       </Parallel.Variables>
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-        <tca1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
-          <tca1:LoadCDRs.From>
-            <InArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
-            </InArgument>
-          </tca1:LoadCDRs.From>
-          <tca1:LoadCDRs.QueueLoadedCDRs>
-            <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
-              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
-            </InArgument>
-          </tca1:LoadCDRs.QueueLoadedCDRs>
-          <tca1:LoadCDRs.Result>
-            <OutArgument x:TypeArguments="x:Int32">
-              <mca:CSharpReference x:TypeArguments="x:Int32">cdrCount</mca:CSharpReference>
-            </OutArgument>
-          </tca1:LoadCDRs.Result>
-          <tca1:LoadCDRs.To>
-            <InArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
-            </InArgument>
-          </tca1:LoadCDRs.To>
-        </tca1:LoadCDRs>
-        <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
-          <Assign.To>
-            <OutArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpReference x:TypeArguments="x:Boolean">tasksStatus.CDRLoadingComplete</mca:CSharpReference>
-            </OutArgument>
-          </Assign.To>
-          <Assign.Value>
-            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-          </Assign.Value>
-        </Assign>
-      </Sequence>
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-        <tca1:CreateBillingAndStatsTables sap2010:WorkflowViewState.IdRef="CreateBillingAndStatsTables_1">
-          <tca1:CreateBillingAndStatsTables.CacheManagerId>
-            <InArgument x:TypeArguments="s:Guid">
-              <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerID</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.CacheManagerId>
-          <tca1:CreateBillingAndStatsTables.From>
-            <InArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.From>
-          <tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
-            <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
-              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
-          <tca1:CreateBillingAndStatsTables.QueueReadyTables>
-            <InArgument x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">
-              <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">queueDataTables</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.QueueReadyTables>
-          <tca1:CreateBillingAndStatsTables.TasksStatus>
-            <InArgument x:TypeArguments="tca1:CDRProcessingTasksStatus">
-              <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">tasksStatus</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.TasksStatus>
-          <tca1:CreateBillingAndStatsTables.To>
-            <InArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
-            </InArgument>
-          </tca1:CreateBillingAndStatsTables.To>
-        </tca1:CreateBillingAndStatsTables>
-        <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-          <Assign.To>
-            <OutArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpReference x:TypeArguments="x:Boolean">tasksStatus.CreatingDataTableComplete</mca:CSharpReference>
-            </OutArgument>
-          </Assign.To>
-          <Assign.Value>
-            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-          </Assign.Value>
-        </Assign>
-      </Sequence>
-      <tca1:WriteReadyTableToDB sap2010:WorkflowViewState.IdRef="WriteReadyTableToDB_1">
+      <tca1:LoadCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+        <tca1:LoadCDRs.From>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
+          </InArgument>
+        </tca1:LoadCDRs.From>
+        <tca1:LoadCDRs.QueueLoadedCDRs>
+          <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
+          </InArgument>
+        </tca1:LoadCDRs.QueueLoadedCDRs>
+        <tca1:LoadCDRs.Result>
+          <OutArgument x:TypeArguments="x:Int32">
+            <mca:CSharpReference x:TypeArguments="x:Int32">cdrCount</mca:CSharpReference>
+          </OutArgument>
+        </tca1:LoadCDRs.Result>
+        <tca1:LoadCDRs.To>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
+          </InArgument>
+        </tca1:LoadCDRs.To>
+      </tca1:LoadCDRs>
+      <tca1:CreateBillingAndStatsTables Status="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateBillingAndStatsTables_1">
+        <tca1:CreateBillingAndStatsTables.CacheManagerId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerID</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.CacheManagerId>
+        <tca1:CreateBillingAndStatsTables.From>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.From</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.From>
+        <tca1:CreateBillingAndStatsTables.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">LoadCDRsTaskStatus</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.PreviousActivityStatus>
+        <tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
+          <InArgument x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(tca1:CDRBatch)">queueLoadedCDRs</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.QueueLoadedCDRs>
+        <tca1:CreateBillingAndStatsTables.QueueReadyTables>
+          <InArgument x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">
+            <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">queueDataTables</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.QueueReadyTables>
+        <tca1:CreateBillingAndStatsTables.To>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.Range.To</mca:CSharpValue>
+          </InArgument>
+        </tca1:CreateBillingAndStatsTables.To>
+      </tca1:CreateBillingAndStatsTables>
+      <tca1:WriteReadyTableToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteReadyTableToDB_1">
+        <tca1:WriteReadyTableToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CreateBillingAndStatsTablesTaskStatus</mca:CSharpValue>
+          </InArgument>
+        </tca1:WriteReadyTableToDB.PreviousActivityStatus>
         <tca1:WriteReadyTableToDB.QueueReadyTables>
           <InArgument x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">
             <mca:CSharpValue x:TypeArguments="scc:ConcurrentQueue(sd:DataTable)">queueDataTables</mca:CSharpValue>
           </InArgument>
         </tca1:WriteReadyTableToDB.QueueReadyTables>
-        <tca1:WriteReadyTableToDB.TasksStatus>
-          <InArgument x:TypeArguments="tca1:CDRProcessingTasksStatus">
-            <mca:CSharpValue x:TypeArguments="tca1:CDRProcessingTasksStatus">tasksStatus</mca:CSharpValue>
-          </InArgument>
-        </tca1:WriteReadyTableToDB.TasksStatus>
       </tca1:WriteReadyTableToDB>
     </Parallel>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
@@ -227,42 +203,26 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xUaW1lUmFuZ2VSZXByaWNpbmdQcm9jZXNzLnhhbWwmTAPnAQ4CAQFRBVwOAwGrAV0FYREDAaUBYgVoKQMBnwFpBdUBEAIBDdYBBeUBDgIBAlkLWVcDAbEBVAtUWAMBrAFfCV+sAQMBpgFlC2VZAwGgAW0NbYoBAgEecg1yigECARZ3DXd+AgEOewecARICAXOdAQfIARICATfJAQfUASICASbeAQviARQCAQjZAQvZAXICAQN8CZEBGQIBfpIBCZsBEgIBdJ4BCb0BLAIBQr4BCccBEgIBONEBDdEBawIBL8wBDcwBcwIBJ44BD44BXQMBlwF/D39fAwGPAYkBD4kBXAMBhwGEAQ+EAXYCAX+ZATWZATkCAX2VAQ+VAXQCAXW6AQ+6AV0CAWu1AQ+1AW0CAWOmAQ+mAV8CAVuhAQ+hAV8CAVOrAQ+rAXYCAUuwAQ+wAXUCAUPFATXFATkCAUHBAQ/BAXsCATk=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xUaW1lUmFuZ2VSZXByaWNpbmdQcm9jZXNzLnhhbWwdTgPPAQ4CAQFTBV4OAwGpAV8FYxEDAaMBZAVqKQMBnQFrBb0BEAIBDb4BBc0BDgIBAlsLW1cDAa8BVgtWWAMBqgFhCWGsAQMBpAFnC2dZAwGeAW8Nb4oBAgEYdA10igECAQ57B5ABFwIBdJEBB7ABKgIBN7EBB7wBIgIBIsYBC8oBFAIBCMEBC8EBcgIBA40BDY0BWwMBkwF+DX5dAwGJAYgBDYgBWgIBf4MBDYMBdAIBda0BDa0BWwIBap4BDZ4BawIBYJkBDZkBXQIBVpQBDZQBXQIBTKMBDaMBdAIBQqgBDagBcwIBOLQBDbQBfgIBLbkBDbkBcwIBIw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="922,62" />
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="922,62" />
-      <sap2010:ViewStateData Id="ClearTimeRangeBillingRecords_1" sap:VirtualizedContainerService.HintSize="922,22" />
-      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,248">
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="ClearTimeRangeBillingRecords_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CreateBillingAndStatsTables_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="WriteReadyTableToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="816,578">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CreateBillingAndStatsTables_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteReadyTableToDB_1" sap:VirtualizedContainerService.HintSize="200,248" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="922,294" />
-      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="922,62" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="944,786">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="984,866" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="856,658" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

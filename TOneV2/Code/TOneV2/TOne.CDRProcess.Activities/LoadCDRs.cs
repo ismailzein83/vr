@@ -4,11 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using System.Collections.Concurrent;
+using Vanrise.BusinessProcess;
 
 namespace TOne.CDRProcess.Activities
 {
 
-    public sealed class LoadCDRs : AsyncCodeActivity<int>
+    #region Arguments Classes
+
+    public class LoadCDRsInput
+    {
+        public DateTime From { get; set; }
+   
+        public DateTime To { get; set; }
+
+        public ConcurrentQueue<CDRBatch> QueueLoadedCDRs { get; set; }
+    }
+
+    public class LoadCDRsOutput
+    {
+        public int Result { get; set; }
+    }
+
+    #endregion
+
+    public sealed class LoadCDRs : BaseAsyncActivity<LoadCDRsInput, LoadCDRsOutput>
     {
         [RequiredArgument]
         public InArgument<DateTime> From { get; set; }
@@ -19,31 +38,38 @@ namespace TOne.CDRProcess.Activities
         [RequiredArgument]
         public InArgument<ConcurrentQueue<CDRBatch>> QueueLoadedCDRs { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<int> Result { get; set; }
 
-        protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
+        protected override LoadCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            Func<DateTime, DateTime, ConcurrentQueue<CDRBatch>, int> executeAction = new Func<DateTime, DateTime, ConcurrentQueue<CDRBatch>, int>(DoWork);
-            context.UserState = executeAction;
-            
-            return executeAction.BeginInvoke(this.From.Get(context), this.To.Get(context),this.QueueLoadedCDRs.Get(context), callback, state);
+            return new LoadCDRsInput
+            {
+                From = this.From.Get(context),
+                To = this.To.Get(context),
+                QueueLoadedCDRs = this.QueueLoadedCDRs.Get(context),
+            };
         }
 
-        protected override int EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCDRsOutput result)
         {
-            Func<DateTime, DateTime, ConcurrentQueue<CDRBatch>, int> executeAction = (Func<DateTime, DateTime, ConcurrentQueue<CDRBatch>, int>)context.UserState;
-            return executeAction.EndInvoke(result);
+            this.Result.Set(context, result.Result);
         }
 
-        int DoWork(DateTime from, DateTime to, ConcurrentQueue<CDRBatch> queue)
+        protected override LoadCDRsOutput DoWorkWithResult(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             int cdrCount = 0;
             CDRManager manager = new CDRManager();
-            manager.LoadCDRRange(from, to, 10000, (cdrs) =>
-                {
-                    cdrCount += cdrs.Count;
-                    queue.Enqueue(new CDRBatch { CDRs = cdrs });                    
-                });
-            return cdrCount;
+            manager.LoadCDRRange(inputArgument.From, inputArgument.To, 10000, (cdrs) =>
+            {
+                cdrCount += cdrs.Count;
+                inputArgument.QueueLoadedCDRs.Enqueue(new CDRBatch { CDRs = cdrs });
+            });
+
+            return new LoadCDRsOutput
+            {
+                Result = cdrCount
+            };
         }
     }
 }

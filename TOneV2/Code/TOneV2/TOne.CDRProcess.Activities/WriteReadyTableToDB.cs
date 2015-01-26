@@ -7,52 +7,23 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Threading;
 using TOne.Business;
+using Vanrise.BusinessProcess;
 
 namespace TOne.CDRProcess.Activities
 {
+    #region Argument Classes
+    public class WriteReadyTableToDBInput
+    {
+        public ConcurrentQueue<DataTable> QueueReadyTables { get; set; }
 
-    public sealed class WriteReadyTableToDB : AsyncCodeActivity
+    }
+
+    #endregion
+
+    public sealed class WriteReadyTableToDB : DependentAsyncActivity<WriteReadyTableToDBInput>
     {
         [RequiredArgument]
         public InArgument<ConcurrentQueue<DataTable>> QueueReadyTables { get; set; }
-
-        [RequiredArgument]
-        public InArgument<CDRProcessingTasksStatus> TasksStatus { get; set; }
-               
-        protected override IAsyncResult BeginExecute(AsyncCodeActivityContext context, AsyncCallback callback, object state)
-        {
-            Action<ConcurrentQueue<DataTable>, CDRProcessingTasksStatus> executeAction = new Action<ConcurrentQueue<DataTable>, CDRProcessingTasksStatus>(DoWork);
-            context.UserState = executeAction;
-
-            return executeAction.BeginInvoke(this.QueueReadyTables.Get(context), this.TasksStatus.Get(context), callback, state);
-        }
-
-        protected override void EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
-        {
-            Action<ConcurrentQueue<DataTable>, CDRProcessingTasksStatus> executeAction = (Action<ConcurrentQueue<DataTable>, CDRProcessingTasksStatus>)context.UserState;
-            executeAction.EndInvoke(result);
-        }
-
-        void DoWork(ConcurrentQueue<DataTable> queueTables, CDRProcessingTasksStatus tasksStatus)
-        {
-            while (!tasksStatus.CreatingDataTableComplete || queueTables.Count > 0)
-            {
-                if (queueTables.Count > 0)
-                {
-                    ParallelIfNeeded(queueTables.Count, () =>
-                    {
-                        DataTable table;
-
-                        while (queueTables.TryDequeue(out table))
-                        {
-                            BulkManager.Instance.Write(table.TableName, table);
-                        }
-                    });
-                   
-                }
-                Thread.Sleep(1000);
-            }
-        }
 
         void ParallelIfNeeded(int nbOfAction, Action action)
         {
@@ -63,6 +34,35 @@ namespace TOne.CDRProcess.Activities
                 {
                     action();
                 });
+        }
+
+        protected override void DoWork(WriteReadyTableToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            while (! previousActivityStatus.IsComplete || inputArgument.QueueReadyTables.Count > 0)
+            {
+                if (inputArgument.QueueReadyTables.Count > 0)
+                {
+                    ParallelIfNeeded(inputArgument.QueueReadyTables.Count, () =>
+                    {
+                        DataTable table;
+
+                        while (inputArgument.QueueReadyTables.TryDequeue(out table))
+                        {
+                            BulkManager.Instance.Write(table.TableName, table);
+                        }
+                    });
+
+                }
+                Thread.Sleep(1000);
+            }
+        }
+
+        protected override WriteReadyTableToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new WriteReadyTableToDBInput
+            {
+                QueueReadyTables = this.QueueReadyTables.Get(context)
+            };
         }
     }
 }
