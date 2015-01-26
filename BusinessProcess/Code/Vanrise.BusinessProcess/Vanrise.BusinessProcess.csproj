@@ -63,6 +63,7 @@
     <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
+    <Compile Include="Internals\ConsoleTracking.cs" />
     <Compile Include="ContextExtensions.cs" />
     <Compile Include="Internals\BPService.cs" />
     <Compile Include="Internals\IBPService.cs" />

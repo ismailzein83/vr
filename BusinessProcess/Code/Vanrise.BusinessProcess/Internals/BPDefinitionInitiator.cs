@@ -151,6 +151,8 @@ namespace Vanrise.BusinessProcess
             };
             wfApp.Extensions.Add(sharedInstanceData);
 
+            //wfApp.Extensions.Add(ConsoleTracking.Instance);
+
             wfApp.Completed = (e) =>
                 {
                     OnWorkflowCompleted(bpInstance, e);
@@ -196,12 +198,12 @@ namespace Vanrise.BusinessProcess
                 {
                     ProcessInstanceId = bpInstance.ParentProcessID.Value,
                     BookmarkName = bpInstance.ProcessInstanceID.ToString(),
-                     EventData = new ProcessCompletedEventPayload
-                    {
-                        ProcessStatus = bpInstance.Status,
-                        LastProcessMessage = bpInstance.LastMessage,
-                        ProcessOutput = processOutput
-                    }
+                    EventData = new ProcessCompletedEventPayload
+                   {
+                       ProcessStatus = bpInstance.Status,
+                       LastProcessMessage = bpInstance.LastMessage,
+                       ProcessOutput = processOutput
+                   }
                 };
                 BusinessProcessRuntime.Current.TriggerProcessEvent(triggerProcessEventInput);
             }
