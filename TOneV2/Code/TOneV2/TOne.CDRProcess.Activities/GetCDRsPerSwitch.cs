@@ -27,14 +27,13 @@ namespace TOne.CDRProcess.Activities
 
     #endregion
 
-    public sealed class LoadCodesForActiveSuppliers : BaseAsyncActivity<GetCDRsPerSwitchInput>
+    public sealed class GetCDRsPerSwitch : BaseAsyncActivity<GetCDRsPerSwitchInput>
     {
         [RequiredArgument]
         public InArgument<int> SwitchID { get; set; }
 
         [RequiredArgument]
         public InOutArgument<TOneQueue<List<TABS.CDR>>> OutputQueue { get; set; }
-
 
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -44,13 +43,6 @@ namespace TOne.CDRProcess.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-
-        protected override void DoWork(GetCDRsPerSwitchInput inputArgument)
-        {
-            CDRManager manager = new CDRManager();
-            inputArgument.OutputQueue.Enqueue(manager.GetCDRsPerSwitch(inputArgument.SwitchID));
-        }
-
         protected override GetCDRsPerSwitchInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetCDRsPerSwitchInput
@@ -58,6 +50,12 @@ namespace TOne.CDRProcess.Activities
                 SwitchID = this.SwitchID.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
+        }
+
+        protected override void DoWork(GetCDRsPerSwitchInput inputArgument, AsyncActivityHandle handle)
+        {
+            CDRManager manager = new CDRManager();
+            inputArgument.OutputQueue.Enqueue(manager.GetCDRsPerSwitch(inputArgument.SwitchID));
         }
     }
 
