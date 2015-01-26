@@ -48,6 +48,7 @@
     <Compile Include="TimeRange.cs" />
     <Compile Include="TimeRangeRepricingProcessInput.cs" />
     <Compile Include="TimeRangeRepricingProcessOutput.cs" />
+    <Compile Include="CDRProcessInput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,6 +14,28 @@ namespace TOne.CDRProcess.Activities
             dataManager.LoadCDRRange(from, to, batchSize, onBatchReady);
         }
 
+
+        public List<TABS.CDR> GetCDRsPerSwitch(int SwitchID)
+        {
+            List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
+
+
+            TABS.Switch CurrentSwitch = null;
+            if (TABS.Switch.All.ContainsKey(SwitchID))
+                CurrentSwitch = TABS.Switch.All[SwitchID];
+
+
+            if (CurrentSwitch != null)
+            {
+                var rawCDRs = CurrentSwitch.SwitchManager.GetCDR(CurrentSwitch);
+
+                // create CDRs from Standard CDRs
+                foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
+                    ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
+            }
+            return ToneCdrs;
+        }
+
         static object s_RepricingMainCDRIDLockObj = new object();
         static long _lastMainCDRId;
         public long ReserveRePricingMainCDRIDs(int nbOfRecords)
