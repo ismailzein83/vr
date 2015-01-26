@@ -35,9 +35,18 @@ namespace TOne.CDRProcess.Activities
 
         //TOne.Business.SharedQueueManager.GetManager<CDRSharedQueueManager>().GetCDRQueue(inputArgument.SwitchID);
 
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.CDRs.Get(context) == null)
+                this.OutputQueue.Set(context, new TOneQueue<List<CDRBatch>>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+
         protected override void DoWork(SaveCDRsToQueueInput inputArgument, AsyncActivityHandle handle)
         {
-            CDRSharedQueueManager queue = new CDRSharedQueueManager();
+            //CDRSharedQueueManager queue = new CDRSharedQueueManager();
             inputArgument.OutputQueue.Enqueue(inputArgument.CDRs);
         }
 
