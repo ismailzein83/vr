@@ -16,7 +16,7 @@ namespace TOne.LCRProcess.Activities
 
     public class ApplyCodeMatchesToDBInput
     {
-        public ConcurrentQueue<Object> InputQueue { get; set; }
+        public TOneQueue<Object> InputQueue { get; set; }
     }
 
     #endregion
@@ -24,7 +24,7 @@ namespace TOne.LCRProcess.Activities
     public sealed class ApplyCodeMatchesToDB : DependentAsyncActivity<ApplyCodeMatchesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<Object>> InputQueue { get; set; }
+        public InArgument<TOneQueue<Object>> InputQueue { get; set; }
                
 
         protected override ApplyCodeMatchesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -41,15 +41,19 @@ namespace TOne.LCRProcess.Activities
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
-                    Object preparedCodeMatches;
-                    while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out preparedCodeMatches))
+                    while (!ShouldStop(handle))
                     {
-                        //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
-                        DateTime start = DateTime.Now;
-                        dataManager.ApplyCodeMatchesToDB(preparedCodeMatches);
-                        totalTime += (DateTime.Now - start);
-                        Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
+                        if (!inputArgument.InputQueue.TryDequeue(
+                            (preparedCodeMatches) =>
+                            {
+                                //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
+                                DateTime start = DateTime.Now;
+                                dataManager.ApplyCodeMatchesToDB(preparedCodeMatches);
+                                totalTime += (DateTime.Now - start);
+                                Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
 
+                            }))
+                            break;
                     }
                 });
             Console.WriteLine("{0}: ApplyCodeMatchesToDB is done in {1}", DateTime.Now, totalTime);

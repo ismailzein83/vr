@@ -2,6 +2,7 @@
 using TOne.LCR.Entities;
 using System.Collections.Generic;
 using System.Data;
+using TOne.Entities;
 namespace TOne.LCR.Data
 {
     public interface ICodeMatchDataManager : IDataManager
@@ -29,5 +30,11 @@ namespace TOne.LCR.Data
 
         void CreateIndexesOnTable(bool isFuture);
         //void CreateIndexesOnTable(bool isFuture, string codeGroup);
+
+        List<string> GetDistinctCodes(bool isFuture, List<SupplierCodeInfo> suppliersCodeInfo);
+
+        void CopyCodeMatchTableWithValidItems(bool isFuture, CodeList distinctCodes, List<SupplierCodeInfo> suppliersCodeInfo);
+
+        
     }
 }

@@ -63,12 +63,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyEffectiveRatesToZoneRate.cs" />
+    <Compile Include="BuildCodeMatchFromDistinctCodes.cs" />
     <Compile Include="BuildCodeMatchFromSupplierCodes.cs" />
     <Compile Include="BuildCodeMatchFromOrderedSupplierCodes.cs" />
+    <Compile Include="CopyCodeMatchTableWithValidItems.cs" />
+    <Compile Include="ExtractAddedDistinctCodes.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateCodeMatchTempTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="CreateZoneMatchTempTable.cs" />
+    <Compile Include="GetActiveSuppliersCodeInfo.cs" />
+    <Compile Include="GetDistinctCodesFromCodeMatch.cs" />
     <Compile Include="GetOrderedCodesForActiveSuppliers.cs" />
     <Compile Include="LoadCodesForActiveSuppliers.cs" />
     <Compile Include="LoadCodesByUpdatedSuppliers.cs" />

@@ -13,8 +13,6 @@ namespace TOne.LCRProcess.Activities
     public class CreateIndexesOnCodeMatchTableInput
     {
         public bool IsFuture { get; set; }
-
-        public char FirstDigit { get; set; }
     }
 
     #endregion
@@ -23,17 +21,13 @@ namespace TOne.LCRProcess.Activities
     {
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
-
-        [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }
         
        
         protected override CreateIndexesOnCodeMatchTableInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new CreateIndexesOnCodeMatchTableInput
             {
-                IsFuture = this.IsFuture.Get(context),
-                FirstDigit = this.FirstDigit.Get(context)
+                IsFuture = this.IsFuture.Get(context)
             };
         }
 

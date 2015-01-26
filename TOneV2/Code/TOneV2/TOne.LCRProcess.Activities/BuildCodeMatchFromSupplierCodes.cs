@@ -17,15 +17,11 @@ namespace TOne.LCRProcess.Activities
 
     public class BuildCodeMatchFromSupplierCodesInput
     {
-        public CodeTree DistinctCodes { get; set; }
+        public CodeList DistinctCodes { get; set; }
 
-        public bool IsFuture { get; set; }
+        public TOneQueue<Tuple<string, List<LCRCode>>> InputQueue { get; set; }
 
-        public char FirstDigit { get; set; }
-
-        public ConcurrentQueue<Tuple<string, List<LCRCode>>> InputQueue { get; set; }
-
-        public ConcurrentQueue<List<CodeMatch>> OutputQueue { get; set; }
+        public TOneQueue<List<CodeMatch>> OutputQueue { get; set; }
     }
 
     #endregion
@@ -33,24 +29,18 @@ namespace TOne.LCRProcess.Activities
     public sealed class BuildCodeMatchFromSupplierCodes : DependentAsyncActivity<BuildCodeMatchFromSupplierCodesInput>
     {
         [RequiredArgument]
-        public InArgument<CodeTree> DistinctCodes { get; set; }
+        public InArgument<CodeList> DistinctCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
+        public InArgument<TOneQueue<Tuple<string, List<LCRCode>>>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }
-
-        [RequiredArgument]
-        public InArgument<ConcurrentQueue<Tuple<string, List<LCRCode>>>> InputQueue { get; set; }
-
-        [RequiredArgument]
-        public InOutArgument<ConcurrentQueue<List<CodeMatch>>> OutputQueue { get; set; }
+        public InOutArgument<TOneQueue<List<CodeMatch>>> OutputQueue { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new ConcurrentQueue<List<CodeMatch>>());
+                this.OutputQueue.Set(context, new TOneQueue<List<CodeMatch>>());
             base.OnBeforeExecute(context, handle);
         }
 
@@ -59,14 +49,10 @@ namespace TOne.LCRProcess.Activities
             return new BuildCodeMatchFromSupplierCodesInput
             {
                  DistinctCodes = this.DistinctCodes.Get(context),
-                 IsFuture = this.IsFuture.Get(context),
-                 FirstDigit = this.FirstDigit.Get(context),
                  InputQueue = this.InputQueue.Get(context),
                  OutputQueue = this.OutputQueue.Get(context)
             };
         }
-
-        static object s_lockObj = new object();
         protected override void DoWork(BuildCodeMatchFromSupplierCodesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             //foreach (var fileInfo in System.IO.Directory.GetFiles(@"C:\CodeMatch"))
@@ -83,21 +69,24 @@ namespace TOne.LCRProcess.Activities
             List<CodeMatch> codeMatches = new List<CodeMatch>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-                Tuple<string, List<LCRCode>> supplierCodes;
-                while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out supplierCodes))
+                while (!ShouldStop(handle))
                 {
-                    //while (inputArgument.QueueReadyCodeMatches.Count > 4)
-                    //    Thread.Sleep(1000);
-                    DateTime start = DateTime.Now;
-                    BuildAndAddCodeMatchesToTable(codeMatches, inputArgument.DistinctCodes.CodesWithPossibleMatches, supplierCodes);
-                    lock (s_lockObj)
-                        totalTime += (DateTime.Now - start);
-                    if (codeMatches.Count > 50000)
-                    {
-                        inputArgument.OutputQueue.Enqueue(codeMatches);
-                        codeMatches = new List<CodeMatch>();
-                        //dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
-                    }
+                    if (!inputArgument.InputQueue.TryDequeue(
+                        (supplierCodes) =>
+                        {
+                            //while (inputArgument.QueueReadyCodeMatches.Count > 4)
+                            //    Thread.Sleep(1000);
+                            DateTime start = DateTime.Now;
+                            BuildAndAddCodeMatchesToTable(codeMatches, inputArgument.DistinctCodes.CodesWithPossibleMatches, supplierCodes);
+                            totalTime += (DateTime.Now - start);
+                            if (codeMatches.Count > 50000)
+                            {
+                                inputArgument.OutputQueue.Enqueue(codeMatches);
+                                codeMatches = new List<CodeMatch>();
+                                //dtCodeMatches = dataManager.BuildCodeMatchSchemaTable(inputArgument.IsFuture);
+                            }
+                        }))
+                        break;
                 }
             });
             if (codeMatches.Count > 0)
@@ -200,16 +189,6 @@ namespace TOne.LCRProcess.Activities
             //inputArgument.QueueSuppliersCodeMatches.Enqueue(finalCodeMatchList);
 
             Console.WriteLine("{0}: {1} code Match ready for supplier {2} in {3}", DateTime.Now, count, supplierCodes.Item1, (DateTime.Now - start));
-        }
-
-        private class CodeMatchComparer : IComparer<LCRCode>
-        {
-            public int Compare(LCRCode x, LCRCode y)
-            {
-                if (y.Value.StartsWith(x.Value))
-                    return 0;
-                else return -1;
-            }
         }
 
     }

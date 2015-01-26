@@ -56,6 +56,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
       <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
       <Name>TOne.LCR.Entities</Name>

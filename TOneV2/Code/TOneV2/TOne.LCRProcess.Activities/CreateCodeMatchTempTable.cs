@@ -12,9 +12,6 @@ namespace TOne.LCRProcess.Activities
     {
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
-
-        [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }
         
         protected override void Execute(CodeActivityContext context)
         {

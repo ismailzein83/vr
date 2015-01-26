@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using TOne.Business;
+using TOne.Entities;
+using TOne.LCR.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 
@@ -14,6 +16,14 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            ////TOne.LCR.Data.SQL.CodeDataManager codeDataManager = new TOne.LCR.Data.SQL.CodeDataManager();
+            ////TOne.LCR.Data.SQL.CodeMatchDataManager codeMatchDataManager = new TOne.LCR.Data.SQL.CodeMatchDataManager();
+            ////List<SupplierCodeInfo> suppliersCodeInfo = codeDataManager.GetActiveSupplierCodeInfo(DateTime.Today, DateTime.Today);
+            ////List<string> distinctCodes = codeDataManager.GetDistinctCodes(false);
+            ////codeMatchDataManager.FillCodeMatchesFromCodes(new CodeList(distinctCodes), suppliersCodeInfo, DateTime.Today);
+            ////Console.ReadKey();
+            ////return;
+
             Console.WriteLine("Host Started");
             BusinessProcessRuntime.Current.TerminatePendingProcesses();
             Timer timer = new Timer(1000);

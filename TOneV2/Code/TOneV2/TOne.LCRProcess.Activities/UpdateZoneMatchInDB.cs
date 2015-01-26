@@ -23,15 +23,11 @@ namespace TOne.LCRProcess.Activities
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
 
-        [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }
-
         protected override UpdateZoneMatchInDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new UpdateZoneMatchInDBInput
             {
-                IsFuture = this.IsFuture.Get(context),
-                FirstDigit = this.FirstDigit.Get(context)
+                IsFuture = this.IsFuture.Get(context)
             };
         }
         protected override void DoWork(UpdateZoneMatchInDBInput inputArgument, AsyncActivityHandle handle)

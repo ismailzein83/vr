@@ -247,23 +247,28 @@ namespace TOne.LCR.Data.SQL
 
         #region Private Methods
 
-        private static DataTable BuildDataTableFromList(List<CodeMatch> codeMatches)
+        public void FillCodeMatchesFromCodes(TOne.Entities.CodeList distinctCodes, List<SupplierCodeInfo> suppliersCodeInfo, DateTime effectiveOn)
         {
-            DataTable dt = s_codeMatchSchemaTable.Clone();
-            dt.BeginLoadData();
-            foreach (var cm in codeMatches)
-            {
-                DataRow row = dt.NewRow();
-                row["Code"] = cm.Code;
-                row["SupplierID"] = cm.SupplierId;
-                row["SupplierCode"] = cm.SupplierCode;
-                row["SupplierCodeID"] = cm.SupplierCodeId;
-                row["SupplierZoneID"] = cm.SupplierZoneId;
-                row["IsFuture"] = cm.IsFuture;
-                dt.Rows.Add(row);
-            }
-            dt.EndLoadData();
-            return dt;
+            DateTime start = DateTime.Now;
+            Console.WriteLine("{0}: Code Match Creation started", DateTime.Now);
+            DataTable dtDistinctCodesWithPossibleMatches = CodeDataManager.BuildDistinctCodesWithPossibleValuesTable(distinctCodes);
+
+            DataTable dtSuppliersCodeInfo = CodeDataManager.BuildSuppliersCodeInfoTable(suppliersCodeInfo);
+
+            ExecuteNonQueryText(query_FillCodeMatchesFromCodes, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                    var dtPrm = new SqlParameter("@DistinctCodesWithPossibleMatches", SqlDbType.Structured);
+                    dtPrm.Value = dtDistinctCodesWithPossibleMatches;
+                    dtPrm.TypeName = "LCR.DistinctCodeWithPossibleMatchTable";
+                    cmd.Parameters.Add(dtPrm);
+
+                    dtPrm = new SqlParameter("@ActiveSuppliersCodeInfo", SqlDbType.Structured);
+                    dtPrm.Value = dtSuppliersCodeInfo;
+                    dtPrm.TypeName = "LCR.SuppliersCodeInfoType";
+                    cmd.Parameters.Add(dtPrm);
+                });
+            Console.WriteLine("{0}: Code Match Creation done in {1}", DateTime.Now, (DateTime.Now - start));
         }
 
         #endregion
@@ -307,8 +312,108 @@ namespace TOne.LCR.Data.SQL
 		                                                CREATE NONCLUSTERED INDEX [IX_CodeMatch_SZoneID] ON [LCR].[CodeMatch{0}{1}_temp] 
 		                                                (
 			                                                [SupplierZoneID] ASC
-		                                                )*/
-";
+		                                                )*/ ";
+
+        const string query_FillCodeMatchesFromCodes = @"
+	WITH AllCodeMatches AS
+	(
+		SELECT  distinctCodes.DistinctCode, Z.SupplierID, c.Code SupplierCode, c.ID SupplierCodeID, C.ZoneID SupplierZoneID
+		, ROW_NUMBER() OVER (PARTITION BY Z.SupplierID, distinctCodes.DistinctCode ORDER BY distinctCodes.PossibleMatch DESC) RowNumber
+		FROM @DistinctCodesWithPossibleMatches distinctCodes 
+		JOIN Code c WITH (NOLOCK) on distinctCodes.PossibleMatch = c.Code
+		JOIN Zone z WITH (NOLOCK) on c.ZoneID = z.ZoneID
+		JOIN @ActiveSuppliersCodeInfo sup on z.SupplierID = sup.SupplierID
+		WHERE c.BeginEffectiveDate <= @EffectiveOn
+			AND (c.EndEffectiveDate IS NULL OR c.EndEffectiveDate > @EffectiveOn)
+	)
+	SELECT * INTO LCR.CodeMatchCurrentTest2 FROM AllCodeMatches WHERE RowNumber = 1";
+
+        const string query_GetDistinctCodes = @"	
+		        SELECT distinct Code 
+                FROM [LCR].[CodeMatch{0}] cm
+                JOIN @ActiveSuppliersCodeInfo sup on cm.SupplierID = sup.SupplierID	";
+
+        const string query_CopyCodeMatchTableWithValidItems = @"SELECT * INTO LCR.CodeMatch{0}_Temp 
+                                                                FROM LCR.CodeMatch{0} cm
+                                                                JOIN @DistinctCodes distinctCodes ON cm.Code = distinctCodes.DistinctCode
+                                                                JOIN @ActiveSuppliersCodeInfo sup on cm.SupplierID = sup.SupplierID
+                                                                WHERE sup.HasUpdatedCodes = 0";
+
         #endregion
+
+
+        public List<string> GetDistinctCodes(bool isFuture, List<SupplierCodeInfo> suppliersCodeInfo)
+        {
+            DataTable dtSuppliersCodeInfo = CodeDataManager.BuildSuppliersCodeInfoTable(suppliersCodeInfo);
+
+            return GetItemsText(String.Format(query_GetDistinctCodes, isFuture ? "Future" : "Current"), 
+                (reader) => reader["Code"] as string,
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ActiveSuppliersCodeInfo", SqlDbType.Structured);
+                    dtPrm.Value = dtSuppliersCodeInfo;
+                    dtPrm.TypeName = "LCR.SuppliersCodeInfoType";
+                    cmd.Parameters.Add(dtPrm);
+                });
+        }
+
+        public void CopyCodeMatchTableWithValidItems(bool isFuture, TOne.Entities.CodeList distinctCodes, List<SupplierCodeInfo> suppliersCodeInfo)
+        {
+            DataTable dtDistinctCodes = CodeDataManager.BuildDistinctCodesTable(distinctCodes);
+
+            DataTable dtSuppliersCodeInfo = CodeDataManager.BuildSuppliersCodeInfoTable(suppliersCodeInfo);
+
+            ExecuteNonQueryText(String.Format(query_GetDistinctCodes, isFuture ? "Future" : "Current"),
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@DistinctCodes", SqlDbType.Structured);
+                    dtPrm.Value = dtDistinctCodes;
+                    dtPrm.TypeName = "LCR.DistinctCodesType";
+                    cmd.Parameters.Add(dtPrm);
+
+                    dtPrm = new SqlParameter("@ActiveSuppliersCodeInfo", SqlDbType.Structured);
+                    dtPrm.Value = dtSuppliersCodeInfo;
+                    dtPrm.TypeName = "LCR.SuppliersCodeInfoType";
+                    cmd.Parameters.Add(dtPrm);
+                });
+        }
+        
+
+        #region Private Methods
+
+        internal static CodeMatch CodeMatchMapper(IDataReader reader)
+        {
+            return new CodeMatch
+            {
+                Code = reader["Code"] as string,
+                SupplierCode = reader["SupplierCode"] as string,
+                SupplierId = reader["SupplierID"] as string,
+                SupplierCodeId = (long)reader["SupplierCodeId"],
+                SupplierZoneId = (int)reader["SupplierZoneId"]
+            };
+        }       
+        
+        private DataTable BuildDataTableFromList(List<CodeMatch> codeMatches)
+        {
+            DataTable dt = s_codeMatchSchemaTable.Clone();
+            dt.BeginLoadData();
+            foreach (var cm in codeMatches)
+            {
+                DataRow row = dt.NewRow();
+                row["Code"] = cm.Code;
+                row["SupplierID"] = cm.SupplierId;
+                row["SupplierCode"] = cm.SupplierCode;
+                row["SupplierCodeID"] = cm.SupplierCodeId;
+                row["SupplierZoneID"] = cm.SupplierZoneId;
+                row["IsFuture"] = cm.IsFuture;
+                dt.Rows.Add(row);
+            }
+            dt.EndLoadData();
+            return dt;
+        }
+
+
+        #endregion
+
     }
 }

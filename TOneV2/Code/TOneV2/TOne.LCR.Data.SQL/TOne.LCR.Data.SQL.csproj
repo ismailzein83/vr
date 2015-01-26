@@ -61,6 +61,10 @@
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
       <Name>TOne.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCR.Data\TOne.LCR.Data.csproj">
       <Project>{1c4e2326-4dd4-4bf4-8b8c-aa1c6fa0c4fc}</Project>
       <Name>TOne.LCR.Data</Name>

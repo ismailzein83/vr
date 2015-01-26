@@ -17,17 +17,17 @@ namespace TOne.Entities
         }
 
         T _lastItem;
-        public virtual bool TryDequeue(out T result)
+        public virtual bool TryDequeue(Action<T> processItem)
         {
-            if (_lastItem == null || _lastItem.Equals(default(T)))
-                _queue.TryDequeue(out _lastItem);
-            result = _lastItem;
-            return _lastItem != null && !_lastItem.Equals(default(T));
-        }
-
-        public virtual void GoNext()
-        {
-            _lastItem = default(T);
+            T item;
+            if (_queue.TryPeek(out item))
+            {
+                processItem(item);
+                _queue.TryDequeue(out item);
+                return true;
+            }
+            else
+                return false;
         }
     }
 }

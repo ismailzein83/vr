@@ -9,6 +9,7 @@ using TABS;
 using TOne.Entities;
 using Vanrise.BusinessProcess;
 using TOne.LCR.Data;
+using TOne.LCR.Entities;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -16,15 +17,14 @@ namespace TOne.LCRProcess.Activities
 
     public class GetDistinctCodesInput
     {
-        public bool IsFuture { get; set; }
-        public char FirstDigit { get; set; }
-        public DateTime EffectiveOn { get; set; }
-        public bool GetChangedGroupsOnly { get; set; }
+        public DateTime CodeEffectiveOn { get; set; }
+
+        public List<SupplierCodeInfo> SuppliersCodeInfo { get; set; }
     }
 
     public class GetDistinctCodesOutput
     {
-        public CodeTree DistinctCodes { get; set; }
+        public CodeList DistinctCodes { get; set; }
     }
 
     #endregion
@@ -32,27 +32,19 @@ namespace TOne.LCRProcess.Activities
     public sealed class GetDistinctCodes : BaseAsyncActivity<GetDistinctCodesInput, GetDistinctCodesOutput>
     {
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
+        public InArgument<DateTime> CodeEffectiveOn { get; set; }
 
         [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }
+        public InArgument<List<SupplierCodeInfo>> SuppliersCodeInfo { get; set; }
 
-        [RequiredArgument]
-        public InArgument<DateTime> EffectiveOn { get; set; }
-
-        [RequiredArgument]
-        public InArgument<bool> GetChangedGroupsOnly { get; set; }
-
-        public OutArgument<CodeTree> DistinctCodes { get; set; }
+        public OutArgument<CodeList> DistinctCodes { get; set; }
 
         protected override GetDistinctCodesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetDistinctCodesInput
             {
-                IsFuture = this.IsFuture.Get(context),
-                FirstDigit = this.FirstDigit.Get(context),
-                EffectiveOn = this.EffectiveOn.Get(context),
-                GetChangedGroupsOnly = this.GetChangedGroupsOnly.Get(context)
+                CodeEffectiveOn = this.CodeEffectiveOn.Get(context),
+                SuppliersCodeInfo = this.SuppliersCodeInfo.Get(context)
             };
         }
 
@@ -64,7 +56,7 @@ namespace TOne.LCRProcess.Activities
         protected override GetDistinctCodesOutput DoWorkWithResult(GetDistinctCodesInput inputArgument, AsyncActivityHandle handle)
         {
             ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
-            var distinctCodes = new CodeTree(dataManager.GetDistinctCodes(inputArgument.IsFuture));//, inputArgument.EffectiveOn, inputArgument.GetChangedGroupsOnly));
+            var distinctCodes = new CodeList(dataManager.GetDistinctCodes(inputArgument.SuppliersCodeInfo, inputArgument.CodeEffectiveOn));
             return new GetDistinctCodesOutput
             {
                 DistinctCodes = distinctCodes

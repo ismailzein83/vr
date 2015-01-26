@@ -11,10 +11,7 @@ namespace TOne.LCRProcess.Activities
     public sealed class SwapCodeMatchTableWithTemp : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
-
-        [RequiredArgument]
-        public InArgument<char> FirstDigit { get; set; }        
+        public InArgument<bool> IsFuture { get; set; }      
               
         protected override void Execute(CodeActivityContext context)
         {

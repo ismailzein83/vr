@@ -15,11 +15,11 @@ namespace TOne.LCRProcess.Activities
     #region Argument Classes
     public class PrepareCodeMatchesForDBApplyInput
     {
-        public ConcurrentQueue<List<CodeMatch>> InputQueue { get; set; }
+        public TOneQueue<List<CodeMatch>> InputQueue { get; set; }
 
         public bool IsFuture { get; set; }
 
-        public ConcurrentQueue<Object> OutputQueue { get; set; }
+        public TOneQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
@@ -27,18 +27,18 @@ namespace TOne.LCRProcess.Activities
     public sealed class PrepareCodeMatchesForDBApply : DependentAsyncActivity<PrepareCodeMatchesForDBApplyInput>
     {
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<List<CodeMatch>>> InputQueue { get; set; }
+        public InArgument<TOneQueue<List<CodeMatch>>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<ConcurrentQueue<Object>> OutputQueue { get; set; }
+        public InOutArgument<TOneQueue<Object>> OutputQueue { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new ConcurrentQueue<object>());
+                this.OutputQueue.Set(context, new TOneQueue<object>());
             base.OnBeforeExecute(context, handle);
         }
         
@@ -58,15 +58,19 @@ namespace TOne.LCRProcess.Activities
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-                List<CodeMatch> codeMatches;
-                while (!ShouldStop(handle) && inputArgument.InputQueue.TryDequeue(out codeMatches))
+                while (!ShouldStop(handle))
                 {
-                    //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
-                    DateTime start = DateTime.Now;
-                    Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.IsFuture);
-                    inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
-                    totalTime += (DateTime.Now - start);
-                    Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
+                    if (!inputArgument.InputQueue.TryDequeue(
+                        (codeMatches) =>
+                        {
+                            //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
+                            DateTime start = DateTime.Now;
+                            Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.IsFuture);
+                            inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
+                            totalTime += (DateTime.Now - start);
+                            Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
+                        }))
+                        break;
                 }
             });
             Console.WriteLine("{0}: PrepareCodeMatchesForDBApply is done in {1}", DateTime.Now, totalTime);
