@@ -47,8 +47,7 @@ namespace TestRuntime
                 InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
                 {
                     IsFuture = false,
-                    CodeEffectiveOn = DateTime.Today,
-                    GetChangedCodeGroupsOnly = false
+                    CodeEffectiveOn = DateTime.Now
                 }
             });
 

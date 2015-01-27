@@ -13,10 +13,6 @@ namespace TOne.LCR.Data.SQL
             return ExecuteNonQueryText(String.Format(query_UpdateAll, isFuture ? "Future" : "Current"), null);
         }
 
-        public int UpdateByCodeDigit(bool isFuture, char firstDigit)
-        {
-            return ExecuteNonQueryText(String.Format(query_UpdateByCodeDigit, isFuture ? "Future" : "Current", firstDigit), null);
-        }
 
         public void CreateTempTable(bool isFuture)
         {
@@ -34,23 +30,6 @@ namespace TOne.LCR.Data.SQL
 
         #region Queries
 
-        const string query_UpdateByCodeDigit = @"WITH newZoneMatch AS (SELECT DISTINCT OC.SupplierZoneID OurZoneID, SC.SupplierZoneID SupplierZoneID, SC.SupplierID
-							                      FROM LCR.CodeMatch{0}{1}_temp OC WITH(NOLOCK), LCR.CodeMatch{0}{1}_temp SC WITH(NOLOCK)
-							                      WHERE 
-									                    OC.Code = SC.Code 
-									                    AND OC.SupplierID = 'SYS'
-									                    AND SC.SupplierID <> 'SYS'
-							                     )
-		
-		                                        INSERT INTO LCR.ZoneMatch{0}_temp
-			                                           ([OurZoneID]
-			                                           ,[SupplierZoneID]
-			                                           ,[SupplierID])
-		                                        SELECT [OurZoneID]
-			                                           ,[SupplierZoneID]
-			                                           ,[SupplierID]
-		                                        FROM newZoneMatch ";
-
         const string query_UpdateAll = @"WITH newZoneMatch AS (SELECT DISTINCT OC.SupplierZoneID OurZoneID, SC.SupplierZoneID SupplierZoneID, SC.SupplierID
 							                                  FROM LCR.CodeMatch{0}_temp OC WITH(NOLOCK), LCR.CodeMatch{0}_temp SC WITH(NOLOCK)
 							                                  WHERE 
@@ -59,7 +38,7 @@ namespace TOne.LCR.Data.SQL
 									                                AND SC.SupplierID <> 'SYS'
 							                                 )
 		
-		                                INSERT INTO LCR.ZoneMatch{0}_temp
+		                                INSERT INTO LCR.ZoneMatch{0}_temp WITH (TABLOCK)
 			                                   ([OurZoneID]
 			                                   ,[SupplierZoneID]
 			                                   ,[SupplierID])

@@ -12,6 +12,5 @@ namespace TOne.LCR.Entities
         public string SupplierCode { get; set; }
         public long SupplierCodeId { get; set; }
         public int SupplierZoneId { get; set; }
-        public bool IsFuture { get; set; }
     }
 }

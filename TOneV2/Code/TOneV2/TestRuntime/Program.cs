@@ -50,8 +50,7 @@ namespace TestRuntime
                 InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
                 {
                     IsFuture = false,
-                    CodeEffectiveOn = DateTime.Today,
-                    GetChangedCodeGroupsOnly = false
+                    CodeEffectiveOn = DateTime.Today
                 }
             });
             //////////BusinessProcessRuntime.Current.CreateNewProcess<TOne.LCRProcess.UpdateCodeZoneMatchProcess>(new CreateProcessInput { InputArguments = new TOne.LCRProcess.UpdateCodeZoneMatchProcessInput { IsFuture = true } });

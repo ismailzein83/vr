@@ -9,6 +9,5 @@ namespace TOne.LCRProcess.Arguments
     {
         public bool IsFuture { get; set; }
         public DateTime CodeEffectiveOn { get; set; }
-        public bool GetChangedCodeGroupsOnly { get; set; }
     }
 }

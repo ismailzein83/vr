@@ -58,9 +58,10 @@ namespace TOne.LCRProcess.Activities
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-                while (!ShouldStop(handle))
+                bool hasItem = false;
+                do
                 {
-                    if (!inputArgument.InputQueue.TryDequeue(
+                    hasItem = inputArgument.InputQueue.TryDequeue(
                         (codeMatches) =>
                         {
                             //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
@@ -69,9 +70,9 @@ namespace TOne.LCRProcess.Activities
                             inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
                             totalTime += (DateTime.Now - start);
                             Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
-                        }))
-                        break;
+                        });
                 }
+                while (!ShouldStop(handle) && hasItem);
             });
             Console.WriteLine("{0}: PrepareCodeMatchesForDBApply is done in {1}", DateTime.Now, totalTime);
         }
