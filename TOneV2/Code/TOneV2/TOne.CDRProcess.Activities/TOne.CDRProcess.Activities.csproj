@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CDRBase.cs" />
+    <Compile Include="Entities\CDRInvalid.cs" />
+    <Compile Include="Entities\CDRMain.cs" />
     <Compile Include="Entities\CDRManager.cs" />
     <Compile Include="ClearTimeRangeBillingRecords.cs" />
     <Compile Include="CreateBillingAndStatsTables.cs" />
@@ -78,9 +80,12 @@
     <Compile Include="GetCDRs.cs" />
     <Compile Include="InitializeObjects.cs" />
     <Compile Include="LoadCDRs.cs" />
+    <Compile Include="ProcessBillingCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRsToQueue.cs" />
-    <Compile Include="SaveCDRToDB.cs" />
+    <Compile Include="SaveCDRsToDB.cs" />
+    <Compile Include="SaveInvalidCDRsToDB.cs" />
+    <Compile Include="SaveMainCDRsToDB.cs" />
     <Compile Include="UpdateBillingStatistics.cs" />
     <Compile Include="UpdateDailyPostpaidAmounts.cs" />
     <Compile Include="UpdateDailyPrepaidAmounts.cs" />

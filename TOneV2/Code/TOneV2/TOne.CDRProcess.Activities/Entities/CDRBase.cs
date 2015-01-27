@@ -9,5 +9,11 @@ namespace TOne.CDRProcess.Activities
   public  class CDRBase
     {
       public List<TABS.Billing_CDR_Base> CDRs { get; set; }
+
+      public CDRBase()
+      {
+          CDRs = new List<TABS.Billing_CDR_Base>();
+      }
+
     }
 }
