@@ -58,7 +58,7 @@ namespace TOne.CDRProcess.Activities
 
             foreach (TABS.CDR cdr in cdrBatch.CDRs)
             {
-                Billing_CDR_Base billingCDR = GenerateBillingCdr(codeMap, cdr, log);
+                Billing_CDR_Base billingCDR = GenerateBillingCdr(codeMap, cdr);
                 billingCDRs.Add(billingCDR);
             }
             CdrBillingGenerated.CDRs = billingCDRs;
@@ -68,7 +68,7 @@ namespace TOne.CDRProcess.Activities
 
 
         static System.Text.RegularExpressions.Regex InvalidCGPNDigits = new System.Text.RegularExpressions.Regex("[^0-9]", System.Text.RegularExpressions.RegexOptions.Compiled);
-        public Billing_CDR_Base GenerateBillingCdr(TOne.Business.ProtCodeMap codeMap, TABS.CDR cdr, log4net.ILog log)
+        public Billing_CDR_Base GenerateBillingCdr(TOne.Business.ProtCodeMap codeMap, TABS.CDR cdr)
         {
             Billing_CDR_Base billingCDR = null;
             try
