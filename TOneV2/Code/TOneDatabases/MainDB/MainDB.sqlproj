@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{c464b868-7206-479f-8374-91354a061c0d}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -674,33 +674,10 @@
     <Build Include="dbo\Stored Procedures\bp_BlockedCodeSuppliers.sql" />
     <Build Include="dbo\Stored Procedures\bp_AddSwitchHistory.sql" />
     <Build Include="dbo\Stored Procedures\billingconsistancycheck.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetSuppliersMatchCodes.sql" />
     <Build Include="LCR\Stored Procedures\sp_Code_GetCodeMatchesByDistinctCodes.sql" />
     <Build Include="LCR\Stored Procedures\sp_Code_GetActiveSuppliersInfo.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetBySupplier.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetByUpdatedSuppliers.sql" />
     <Build Include="LCR\Stored Procedures\sp_Code_GetDistinctCodes.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetDistinctCodesByCodeGroup.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetDistinctCodesByFirstDigit.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetDistinctCodesForChangedGroups.sql" />
     <Build Include="LCR\Stored Procedures\sp_Code_GetForActiveSuppliers.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetForActiveSuppliersAndChangedCodeGroups.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetForActiveSuppliersByCodeGroup.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetForActiveSuppliersByFirstDigit.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetOrderedForActiveSuppliers.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Code_GetUpdatedSuppliers.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneRate_UpdateFromNewRates.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneRate_ApplyEffectiveRates.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneRate_UpdateFromChangedRates.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneMatch_UpdateAll.sql" />
-    <Build Include="LCR\Stored Procedures\sp_Rate_GetLastTimeStamp.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneMatch_CreateIndexesOnTempTable.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneMatch_CreateTempTable.sql" />
-    <Build Include="LCR\Stored Procedures\sp_ZoneMatch_SwapTableWithTemp.sql" />
-    <Build Include="LCR\Stored Procedures\sp_CodeMatch_GetBySupplier.sql" />
-    <Build Include="LCR\Stored Procedures\sp_CodeMatch_CreateIndexesOnTempTable.sql" />
-    <Build Include="LCR\Stored Procedures\sp_CodeMatch_CreateTempTable.sql" />
-    <Build Include="LCR\Stored Procedures\sp_CodeMatch_SwapTableWithTemp.sql" />
     <Build Include="LCR\User Defined Types\DistinctCodeWithPossibleMatchType.sql" />
     <Build Include="LCR\User Defined Types\SuppliersCodeInfoType.sql" />
     <Build Include="LCR\User Defined Types\DistinctCodesType.sql" />
