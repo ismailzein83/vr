@@ -14,13 +14,13 @@ using Vanrise.Caching;
 namespace TOne.CDRProcess.Activities
 {
 
-
     #region Arguments Classes
 
     public class GetCDRsInput
     {
         public int SwitchID { get; set; }
-        public TOneQueue<CDRBatch> OutputQueue { get; set; }
+
+        public CDRBatch CDRs { get; set; }
     }
 
 
@@ -32,29 +32,22 @@ namespace TOne.CDRProcess.Activities
         public InArgument<int> SwitchID { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<TOneQueue<CDRBatch>> OutputQueue { get; set; }
+        public InOutArgument<CDRBatch> CDRs { get; set; }
 
-
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new TOneQueue<List<TABS.CDR>>());
-            base.OnBeforeExecute(context, handle);
-        }
 
         protected override GetCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new GetCDRsInput
             {
                 SwitchID = this.SwitchID.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                CDRs = this.CDRs.Get(context)
             };
         }
 
         protected override void DoWork(GetCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             CDRManager manager = new CDRManager();
-            inputArgument.OutputQueue.Enqueue(manager.GetCDRs(inputArgument.SwitchID));
+            inputArgument.CDRs = manager.GetCDRs(inputArgument.SwitchID);
         }
     }
 

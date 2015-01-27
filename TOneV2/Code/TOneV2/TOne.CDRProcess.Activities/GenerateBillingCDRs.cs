@@ -17,7 +17,7 @@ namespace TOne.CDRProcess.Activities
     {
         public int SwitchID { get; set; }
 
-        public CDRBatch CDRs { get; set; }
+        public TOneQueue<CDRBatch> InputQueue { get; set; }
 
         public List<TOneQueue<CDRBase>> OutputQueues { get; set; }
 
@@ -27,14 +27,14 @@ namespace TOne.CDRProcess.Activities
     }
 
     #endregion
-    public sealed class GenerateBillingCDRs : Vanrise.BusinessProcess.BaseAsyncActivity<GenerateBillingCDRsInput>
+    public sealed class GenerateBillingCDRs : Vanrise.BusinessProcess.DependentAsyncActivity<GenerateBillingCDRsInput>
     {
 
         [RequiredArgument]
         public InArgument<Guid> CacheManagerId { get; set; }
 
         [RequiredArgument]
-        public InArgument<CDRBatch> CDRs { get; set; }
+        public InOutArgument<TOneQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<int> SwitchID { get; set; }
@@ -47,27 +47,56 @@ namespace TOne.CDRProcess.Activities
         {
             if (this.OutputQueues.Get(context) == null)
                 this.OutputQueues.Set(context, new List<TOneQueue<CDRBase>>());
+
+            if (this.InputQueue.Get(context) == null)
+                this.InputQueue.Set(context, new TOneQueue<CDRBase>());
             base.OnBeforeExecute(context, handle);
         }
 
-        protected override void DoWork(GenerateBillingCDRsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+
+        protected override void DoWork(GenerateBillingCDRsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityStatus previousActivityStatus, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
             CDRManager manager = new CDRManager();
-            CDRBase cdrs = manager.GenerateBillingCdrs(inputArgument.CDRs, codeMap);
-            inputArgument.OutputQueues[0].Enqueue(cdrs);
-            inputArgument.OutputQueues[1].Enqueue(cdrs);
+
+            bool hasItem = false;
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((cdrBatch) =>
+                    {
+                        CDRBase CdrBillingGenerated = new CDRBase();
+
+                        foreach (TABS.CDR cdr in cdrBatch.CDRs)
+                        {
+                            CdrBillingGenerated.CDRs.Add(manager.GenerateBillingCdr(codeMap, cdr));
+                        }
+
+                        //CDRBase cdrs = manager.GenerateBillingCdrs(cdrBatch, codeMap);
+
+                        foreach (TOneQueue<CDRBase> outputQueue in inputArgument.OutputQueues)
+                            outputQueue.Enqueue(CdrBillingGenerated);
+
+
+                    });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
         }
 
-        protected override GenerateBillingCDRsInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
+
+
+
+        protected override GenerateBillingCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new GenerateBillingCDRsInput
             {
-                CDRs = this.CDRs.Get(context),
+                InputQueue = this.InputQueue.Get(context),
                 CacheManagerId = this.CacheManagerId.Get(context),
                 SwitchID = this.SwitchID.Get(context),
-                OutputQueues = this.OutputQueues.Get(context),
+                OutputQueues = this.OutputQueues.Get(context)
             };
         }
     }

@@ -18,7 +18,7 @@ namespace TOne.CDRProcess.Activities
     }
 
     #endregion
-    public sealed class SaveCDRToDB : Vanrise.BusinessProcess.BaseAsyncActivity<SaveCDRsToDBInput>
+    public sealed class SaveCDRsToDB : Vanrise.BusinessProcess.BaseAsyncActivity<SaveCDRsToDBInput>
     {
 
         [RequiredArgument]
@@ -26,8 +26,6 @@ namespace TOne.CDRProcess.Activities
 
         [RequiredArgument]
         public InArgument<int> SwitchID { get; set; }
-
-
 
 
         protected override void DoWork(SaveCDRsToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)

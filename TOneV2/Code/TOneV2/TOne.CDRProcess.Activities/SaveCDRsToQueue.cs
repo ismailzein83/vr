@@ -13,11 +13,10 @@ namespace TOne.CDRProcess.Activities
 
     public class SaveCDRsToQueueInput
     {
-        public int SwitchID { get; set; }
+       
+        public CDRBatch CDRs { get; set; }
 
-        public List<CDRBatch> CDRs { get; set; }
-
-        public TOneQueue<List<CDRBatch>> OutputQueue { get; set; }
+        public TOneQueue<CDRBatch> OutputQueue { get; set; }
     }
 
     #endregion
@@ -25,28 +24,23 @@ namespace TOne.CDRProcess.Activities
     public sealed class SaveCDRsToQueue : BaseAsyncActivity<SaveCDRsToQueueInput>
     {
         [RequiredArgument]
-        public InArgument<List<CDRBatch>> CDRs { get; set; }
+        public InArgument<CDRBatch> CDRs { get; set; }
 
+        
         [RequiredArgument]
-        public InArgument<int> SwitchID { get; set; }
-
-        [RequiredArgument]
-        public InOutArgument<TOneQueue<List<CDRBatch>>> OutputQueue { get; set; }
+        public InOutArgument<TOneQueue<CDRBatch>> OutputQueue { get; set; }
 
         //TOne.Business.SharedQueueManager.GetManager<CDRSharedQueueManager>().GetCDRQueue(inputArgument.SwitchID);
-
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.CDRs.Get(context) == null)
-                this.OutputQueue.Set(context, new TOneQueue<List<CDRBatch>>());
+                this.OutputQueue.Set(context, new TOneQueue<CDRBatch>());
             base.OnBeforeExecute(context, handle);
         }
 
-
         protected override void DoWork(SaveCDRsToQueueInput inputArgument, AsyncActivityHandle handle)
         {
-            //CDRSharedQueueManager queue = new CDRSharedQueueManager();
             inputArgument.OutputQueue.Enqueue(inputArgument.CDRs);
         }
 
@@ -55,7 +49,6 @@ namespace TOne.CDRProcess.Activities
             return new SaveCDRsToQueueInput
             {
                 CDRs = this.CDRs.Get(context),
-                SwitchID = this.SwitchID.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
             };
         }
