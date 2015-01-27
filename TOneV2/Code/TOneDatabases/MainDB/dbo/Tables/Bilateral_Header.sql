@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[Bilateral_Header] (
+    [ID]               INT             IDENTITY (1, 1) NOT NULL,
+    [Description]      NVARCHAR (250)  NULL,
+    [StopReason]       VARCHAR (50)    CONSTRAINT [DF_Bilateral_Header_StopReason_1] DEFAULT ('') NULL,
+    [CarrierID]        VARCHAR (5)     NOT NULL,
+    [BeginDate]        DATETIME        NOT NULL,
+    [EndDate]          DATETIME        NOT NULL,
+    [GracePeroid]      DATETIME        NULL,
+    [StopDate]         DATETIME        CONSTRAINT [DF_Bilateral_Header_StopDate_1] DEFAULT (NULL) NULL,
+    [StopActionDate]   DATETIME        CONSTRAINT [DF_Bilateral_Header_StopActionDate_1] DEFAULT (getdate()) NULL,
+    [IsActive]         CHAR (1)        NULL,
+    [IsWhole]          CHAR (1)        NULL,
+    [IncludeInBilling] CHAR (1)        CONSTRAINT [DF_Bilateral_Header_IncludeInBilling_1] DEFAULT ('N') NULL,
+    [DealType]         INT             CONSTRAINT [DF_Bilateral_Header_DealType_1] DEFAULT ((0)) NULL,
+    [DealContract]     INT             CONSTRAINT [DF_Bilateral_Header_DealContract_1] DEFAULT ((0)) NULL,
+    [UserID]           INT             NULL,
+    [TotalAmount]      DECIMAL (18)    NULL,
+    [TotalDuration]    DECIMAL (18)    NULL,
+    [Threshold]        DECIMAL (18, 2) CONSTRAINT [DF_Bilateral_Header_Threshold_1] DEFAULT ((0.0)) NULL,
+    [ASR]              DECIMAL (18, 8) NULL,
+    [ACD]              DECIMAL (18, 8) NULL,
+    [Rate]             DECIMAL (18, 8) NULL,
+    [NER]              DECIMAL (18, 8) NULL,
+    CONSTRAINT [PK_Bilateral_Header] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
