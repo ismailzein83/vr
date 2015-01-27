@@ -14,7 +14,15 @@ namespace Vanrise.BusinessProcess
             ActivityStateRecord activityStateRecord = record as ActivityStateRecord;
             if (activityStateRecord != null)
             {
-                Console.WriteLine("{0}: {1} - {2}", activityStateRecord.EventTime, activityStateRecord.Activity.Name, activityStateRecord.State);
+                Console.WriteLine("{0}: {1} - {2}", activityStateRecord.EventTime.ToLocalTime(), activityStateRecord.Activity.Name, activityStateRecord.State);
+                return;
+            }
+
+            WorkflowInstanceRecord workflowInstanceRecord = record as WorkflowInstanceRecord;
+            if (workflowInstanceRecord != null)
+            {
+                Console.WriteLine("{0}: Workflow - {1}", workflowInstanceRecord.EventTime.ToLocalTime(), workflowInstanceRecord.State);
+                return;
             }
         }
     }

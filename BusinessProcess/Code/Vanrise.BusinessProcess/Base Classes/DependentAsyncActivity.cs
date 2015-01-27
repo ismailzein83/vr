@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess
 {
     public abstract class DependentAsyncActivity<T, Q> : BaseAsyncActivity<Tuple<T, AsyncActivityStatus>, Q>
     {
-        [RequiredArgument]
+        //[RequiredArgument]
         public InArgument<AsyncActivityStatus> PreviousActivityStatus { get; set; }
 
 
@@ -21,12 +21,13 @@ namespace Vanrise.BusinessProcess
 
         protected void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle, Action actionToDo)
         {
-            while (!previousActivityStatus.IsComplete && !ShouldStop(handle))
+            while (previousActivityStatus != null && !previousActivityStatus.IsComplete && !ShouldStop(handle))
             {
                 actionToDo();
                 Thread.Sleep(1000);
             }
-            actionToDo();
+            if (!ShouldStop(handle))
+                actionToDo();
         }
 
         protected override Q DoWorkWithResult(Tuple<T, AsyncActivityStatus> inputArgument, AsyncActivityHandle handle)
