@@ -150,7 +150,7 @@ namespace TOne.LCR.Data.SQL
 
         const string query_SwapTableWithTemp = @"BEGIN TRANSACTION
                                                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[LCR].[CodeMatch{0}]') AND type in (N'U'))
-                                                EXEC sp_rename 'LCR.CodeMatch{0}', 'CodeMatch{0}_Old'
+                                                    EXEC sp_rename 'LCR.CodeMatch{0}', 'CodeMatch{0}_Old'
 		                                        EXEC sp_rename 'LCR.CodeMatch{0}_Temp', 'CodeMatch{0}'
                                                 COMMIT TRANSACTION";
 

@@ -8,10 +8,6 @@ namespace TOne.LCR.Data.SQL
 {
     public class RateDataManager : BaseTOneDataManager, IRateDataManager
     {
-        public byte[] GetRateLastTimestamp()
-        {
-            object lastTimestamp = ExecuteScalarSP("LCR.sp_Rate_GetLastTimeStamp");
-            return lastTimestamp != null ? (byte[])lastTimestamp : new byte[0];
-        }
+        
     }
 }

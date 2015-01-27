@@ -7,6 +7,5 @@ namespace TOne.LCR.Data
 {
     public interface IRateDataManager : IDataManager
     {
-        byte[] GetRateLastTimestamp();
     }
 }

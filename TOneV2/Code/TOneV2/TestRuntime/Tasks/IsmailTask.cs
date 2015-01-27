@@ -41,20 +41,25 @@ namespace TestRuntime
             //////t.Start();
 
             ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "UpdateCodeZoneMatchProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-                {
-                    IsFuture = false,
-                    CodeEffectiveOn = DateTime.Now
-                }
-            });
-
             //processManager.CreateNewProcess(new CreateProcessInput
             //{
-            //    ProcessName = "UpdateZoneRateProcess"
+            //    ProcessName = "UpdateCodeZoneMatchProcess",
+            //    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
+            //    {
+            //        IsFuture = false,
+            //        CodeEffectiveOn = DateTime.Now
+            //    }
             //});
+
+            processManager.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "UpdateZoneRateProcess",
+                InputArguments = new TOne.LCRProcess.Arguments.UpdateZoneRateProcessInput
+                {
+                    IsFuture = false,
+                    RateEffectiveOn = DateTime.Now
+                }
+            });
         }
 
         static bool _isRunning;

@@ -8,12 +8,15 @@ using TOne.LCR.Data;
 namespace TOne.LCRProcess.Activities
 {
 
-    public sealed class ApplyEffectiveRatesToZoneRate : CodeActivity
-    {        
+    public sealed class SwapZoneRateTableWithTemp : CodeActivity
+    {
+        [RequiredArgument]
+        public InArgument<bool> IsFuture { get; set; }
+        
         protected override void Execute(CodeActivityContext context)
         {
             IZoneRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneRateDataManager>();
-            dataManager.ApplyEffectiveRates();
+            dataManager.SwapTableWithTemp(this.IsFuture.Get(context));
         }
     }
 }

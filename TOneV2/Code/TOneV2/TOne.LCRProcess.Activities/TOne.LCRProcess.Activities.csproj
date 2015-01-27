@@ -62,10 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyEffectiveRatesToZoneRate.cs" />
     <Compile Include="BuildCodeMatchFromDistinctCodes.cs" />
     <Compile Include="BuildCodeMatchFromSupplierCodes.cs" />
     <Compile Include="CopyCodeMatchTableWithValidItems.cs" />
+    <Compile Include="CreateAndFillZoneRateTable.cs" />
     <Compile Include="ExtractAddedDistinctCodes.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateCodeMatchTempTable.cs" />
@@ -76,15 +76,13 @@
     <Compile Include="LoadCodesForActiveSuppliers.cs" />
     <Compile Include="PrepareCodeMatchesForDBApply.cs" />
     <Compile Include="SwapCodeMatchTableWithTemp.cs" />
+    <Compile Include="SwapZoneRateTableWithTemp.cs" />
     <Compile Include="SwapZoneMatchTableWithTemp.cs" />
-    <Compile Include="UpdateZoneRateFromChangedRates.cs" />
     <Compile Include="GetDistinctCodes.cs" />
-    <Compile Include="GetRateLastTimestamp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateSupplierCodeMatchInDB.cs" />
     <Compile Include="UpdateSystemParameter.cs" />
     <Compile Include="UpdateZoneMatchInDB.cs" />
-    <Compile Include="UpdateZoneRateFromNewRates.cs" />
     <Compile Include="ApplyCodeMatchesToDB.cs" />
   </ItemGroup>
   <ItemGroup>

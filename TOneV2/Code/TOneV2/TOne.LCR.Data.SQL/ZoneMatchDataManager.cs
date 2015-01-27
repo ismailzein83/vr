@@ -26,6 +26,7 @@ namespace TOne.LCR.Data.SQL
 
         public void CreateIndexesOnTable(bool isFuture)
         {
+            ExecuteNonQueryText(String.Format(query_CreateIndexesOnTempTable, isFuture ? "Future" : "Current"), null);
         }
 
         #region Queries
@@ -57,16 +58,17 @@ namespace TOne.LCR.Data.SQL
 			                                        [OurZoneID] [int] NOT NULL,
 			                                        [SupplierZoneID] [int] NOT NULL,
 			                                        [SupplierID] [varchar](5) NOT NULL
-			                                        PRIMARY KEY CLUSTERED 
-			                                        (
-				                                        [OurZoneID] ASC,
-				                                        [SupplierZoneID] ASC
-			                                        )
 		                                        ) ON [PRIMARY]";
+
+        const string query_CreateIndexesOnTempTable = @"ALTER TABLE [LCR].[ZoneMatch{0}_temp] ADD PRIMARY KEY CLUSTERED 
+                                                        (
+	                                                        [OurZoneID] ASC,
+	                                                        [SupplierZoneID] ASC
+                                                        )";
 
         const string query_SwapTableWithTemp = @"BEGIN TRANSACTION
                                                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[LCR].[ZoneMatch{0}]') AND type in (N'U'))
-                                                EXEC sp_rename 'LCR.ZoneMatch{0}', 'ZoneMatch{0}_Old'
+                                                    EXEC sp_rename 'LCR.ZoneMatch{0}', 'ZoneMatch{0}_Old'
 		                                        EXEC sp_rename 'LCR.ZoneMatch{0}_Temp', 'ZoneMatch{0}'
                                                 COMMIT TRANSACTION";
 
