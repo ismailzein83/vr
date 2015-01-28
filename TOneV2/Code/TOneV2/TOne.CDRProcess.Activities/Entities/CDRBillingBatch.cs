@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess.Activities
 {
-  public  class CDRBase
+  public  class CDRBillingBatch
     {
       public List<TABS.Billing_CDR_Base> CDRs { get; set; }
 
-      public CDRBase()
+      public CDRBillingBatch()
       {
           CDRs = new List<TABS.Billing_CDR_Base>();
       }

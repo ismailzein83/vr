@@ -31,7 +31,7 @@ namespace TOne.CDRProcess.Activities
         protected override void DoWork(SaveCDRsToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             CDRManager manager = new CDRManager();
-            manager.SaveCDRstoDB(inputArgument.CDRs);
+            SaveCDRstoDB(inputArgument.CDRs);
         }
 
         protected override SaveCDRsToDBInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
@@ -42,5 +42,19 @@ namespace TOne.CDRProcess.Activities
                 SwitchID = this.SwitchID.Get(context),
             };
         }
+
+        #region Functionality
+
+        log4net.ILog log = log4net.LogManager.GetLogger("TOne.CDRProcess.Activities.SaveCDRsToDB");
+        public void SaveCDRstoDB(CDRBatch cdrs)
+        {
+
+            using (TABS.Components.BulkManager BulkManager = new TABS.Components.BulkManager(log))
+            {
+                BulkManager.Write(cdrs.CDRs);
+            }
+        }
+
+        #endregion
     }
 }

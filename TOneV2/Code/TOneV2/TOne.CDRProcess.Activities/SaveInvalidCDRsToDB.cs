@@ -13,7 +13,7 @@ namespace TOne.CDRProcess.Activities
 
     public class SaveInvalidCDRsToDBInput
     {
-        public TOneQueue<CDRInvalid> InputQueue { get; set; }
+        public TOneQueue<CDRInvalidBatch> InputQueue { get; set; }
     }
 
     #endregion
@@ -21,7 +21,7 @@ namespace TOne.CDRProcess.Activities
     public sealed class SaveInvalidCDRsToDB : DependentAsyncActivity<SaveInvalidCDRsToDBInput>
     {
         [RequiredArgument]
-        public InArgument<TOneQueue<CDRInvalid>> InputQueue { get; set; }
+        public InArgument<TOneQueue<CDRInvalidBatch>> InputQueue { get; set; }
 
         
         protected override void DoWork(SaveInvalidCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)

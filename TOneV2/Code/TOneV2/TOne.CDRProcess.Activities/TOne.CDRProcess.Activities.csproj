@@ -65,9 +65,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\CDRBase.cs" />
-    <Compile Include="Entities\CDRInvalid.cs" />
-    <Compile Include="Entities\CDRMain.cs" />
+    <Compile Include="Entities\CDRBillingBatch.cs" />
+    <Compile Include="Entities\CDRInvalidBatch.cs" />
+    <Compile Include="Entities\CDRMainBatch.cs" />
     <Compile Include="Entities\CDRManager.cs" />
     <Compile Include="ClearTimeRangeBillingRecords.cs" />
     <Compile Include="CreateBillingAndStatsTables.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="Entities\CDRBatchProcessor.cs" />
     <Compile Include="Entities\CDRProcessingTasksStatus.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
-    <Compile Include="GenerateBillingCDRs.cs" />
+    <Compile Include="ProcessCDRs.cs" />
     <Compile Include="GetCDRs.cs" />
     <Compile Include="InitializeObjects.cs" />
     <Compile Include="LoadCDRs.cs" />

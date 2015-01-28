@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess.Activities
 {
-    public class CDRMain
+    public class CDRInvalidBatch
     {
-        List<TABS.Billing_CDR_Main> mainCDRs { get; set; }
+      public  List<TABS.Billing_CDR_Invalid> InvalidCDRs { get; set; }
 
-        public CDRMain()
+        public CDRInvalidBatch()
         {
-            mainCDRs = new List<TABS.Billing_CDR_Main>();
+            InvalidCDRs = new List<TABS.Billing_CDR_Invalid>();
         }
     }
 }
