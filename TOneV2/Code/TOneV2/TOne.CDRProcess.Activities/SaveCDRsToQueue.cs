@@ -13,7 +13,6 @@ namespace TOne.CDRProcess.Activities
 
     public class SaveCDRsToQueueInput
     {
-       
         public CDRBatch CDRs { get; set; }
 
         public TOneQueue<CDRBatch> OutputQueue { get; set; }
@@ -23,12 +22,16 @@ namespace TOne.CDRProcess.Activities
 
     public sealed class SaveCDRsToQueue : BaseAsyncActivity<SaveCDRsToQueueInput>
     {
+        #region Arguments
+
         [RequiredArgument]
         public InArgument<CDRBatch> CDRs { get; set; }
 
         
         [RequiredArgument]
         public InOutArgument<TOneQueue<CDRBatch>> OutputQueue { get; set; }
+
+        #endregion
 
         //TOne.Business.SharedQueueManager.GetManager<CDRSharedQueueManager>().GetCDRQueue(inputArgument.SwitchID);
 

@@ -28,12 +28,40 @@ namespace TOne.CDRProcess.Activities
 
     public sealed class GetCDRs : BaseAsyncActivity<GetCDRsInput>
     {
+        #region Arguments
+
         [RequiredArgument]
         public InArgument<int> SwitchID { get; set; }
 
         [RequiredArgument]
         public InOutArgument<CDRBatch> CDRs { get; set; }
 
+        #endregion
+
+        #region Private Methods
+
+        private CDRBatch GetCDRs(int SwitchID)
+        {
+            List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
+            CDRBatch BatchCdrs = new CDRBatch();
+
+            TABS.Switch CurrentSwitch = null;
+            if (TABS.Switch.All.ContainsKey(SwitchID))
+                CurrentSwitch = TABS.Switch.All[SwitchID];
+
+            if (CurrentSwitch != null)
+            {
+                var rawCDRs = CurrentSwitch.SwitchManager.GetCDR(CurrentSwitch);
+
+                // create CDRs from Standard CDRs
+                foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
+                    ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
+            }
+            BatchCdrs.CDRs = ToneCdrs;
+            return BatchCdrs;
+        }
+
+        #endregion
 
         protected override GetCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -46,8 +74,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(GetCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            CDRManager manager = new CDRManager();
-            inputArgument.CDRs = manager.GetCDRs(inputArgument.SwitchID);
+            inputArgument.CDRs = GetCDRs(inputArgument.SwitchID);
         }
     }
 
