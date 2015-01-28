@@ -12,11 +12,14 @@ namespace TOne.LCRProcess.Activities
     {
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> ForSupplier { get; set; }
         
         protected override void Execute(CodeActivityContext context)
         {
             IZoneRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneRateDataManager>();
-            dataManager.SwapTableWithTemp(this.IsFuture.Get(context));
+            dataManager.SwapTableWithTemp(this.IsFuture.Get(context), this.ForSupplier.Get(context));
         }
     }
 }

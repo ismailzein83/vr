@@ -7,8 +7,8 @@ namespace TOne.LCR.Data
 {
     public interface IZoneRateDataManager : IDataManager
     {
-        void CreateAndFillTable(bool isFuture, DateTime effectiveOn);
+        void CreateAndFillTable(bool isFuture, bool forSupplier, DateTime effectiveOn);
 
-        void SwapTableWithTemp(bool isFuture);
+        void SwapTableWithTemp(bool isFuture, bool forSupplier);
     }
 }

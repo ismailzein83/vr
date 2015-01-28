@@ -14,6 +14,8 @@ namespace TOne.LCRProcess.Activities
     {
         public bool IsFuture { get; set; }
 
+        public bool ForSupplier { get; set; }
+
         public DateTime EffectiveOn { get; set; }
     }
 
@@ -25,6 +27,9 @@ namespace TOne.LCRProcess.Activities
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> ForSupplier { get; set; }
+
+        [RequiredArgument]
         public InArgument<DateTime> EffectiveOn { get; set; }
 
         protected override CreateAndFillZoneRateTableInput GetInputArgument(AsyncCodeActivityContext context)
@@ -32,6 +37,7 @@ namespace TOne.LCRProcess.Activities
             return new CreateAndFillZoneRateTableInput
             {
                 IsFuture = this.IsFuture.Get(context),
+                ForSupplier = this.ForSupplier.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context)
             };
         }
@@ -39,7 +45,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(CreateAndFillZoneRateTableInput inputArgument, AsyncActivityHandle handle)
         {
             IZoneRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneRateDataManager>();
-            dataManager.CreateAndFillTable(inputArgument.IsFuture, inputArgument.EffectiveOn);
+            dataManager.CreateAndFillTable(inputArgument.IsFuture, inputArgument.ForSupplier, inputArgument.EffectiveOn);
         }
     }
 }

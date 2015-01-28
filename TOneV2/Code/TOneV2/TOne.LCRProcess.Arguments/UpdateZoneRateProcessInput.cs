@@ -9,6 +9,8 @@ namespace TOne.LCRProcess.Arguments
     public class UpdateZoneRateProcessInput
     {
         public bool IsFuture { get; set; }
+       
+        public bool ForSupplier { get; set; }
         public DateTime RateEffectiveOn { get; set; }
     }
 }

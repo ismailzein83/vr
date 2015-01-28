@@ -89,6 +89,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.RateEffectiveOn</mca:CSharpValue>
         </InArgument>
       </tla1:CreateAndFillZoneRateTable.EffectiveOn>
+      <tla1:CreateAndFillZoneRateTable.ForSupplier>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.ForSupplier</mca:CSharpValue>
+        </InArgument>
+      </tla1:CreateAndFillZoneRateTable.ForSupplier>
       <tla1:CreateAndFillZoneRateTable.IsFuture>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
@@ -96,6 +101,11 @@
       </tla1:CreateAndFillZoneRateTable.IsFuture>
     </tla1:CreateAndFillZoneRateTable>
     <tla1:SwapZoneRateTableWithTemp sap2010:WorkflowViewState.IdRef="SwapZoneRateTableWithTemp_1">
+      <tla1:SwapZoneRateTableWithTemp.ForSupplier>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.ForSupplier</mca:CSharpValue>
+        </InArgument>
+      </tla1:SwapZoneRateTableWithTemp.ForSupplier>
       <tla1:SwapZoneRateTableWithTemp.IsFuture>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
@@ -107,7 +117,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - start))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xVcGRhdGVab25lUmF0ZVByb2Nlc3MueGFtbAtJA28OAgEBTQtNVwIBAlEFVRECARRWBWEnAgENYgVoJgIBCWkFbRECAQVTCVODAQIBFVkLWWACARFeC15YAgEOZQtlWAIBCmsJa5YBAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xVcGRhdGVab25lUmF0ZVByb2Nlc3MueGFtbA1JA3kOAgEBTQtNVwIBAlEFVRECARpWBWYnAgEQZwVyJgIBCXMFdxECAQVTCVODAQIBG1kLWWACARdeC15bAgEUYwtjWAIBEWoLalsCAQ1vC29YAgEKdQl1lgECAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

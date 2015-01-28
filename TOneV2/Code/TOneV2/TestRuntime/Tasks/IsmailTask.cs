@@ -57,6 +57,7 @@ namespace TestRuntime
                 InputArguments = new TOne.LCRProcess.Arguments.UpdateZoneRateProcessInput
                 {
                     IsFuture = false,
+                    ForSupplier = true,
                     RateEffectiveOn = DateTime.Now
                 }
             });
