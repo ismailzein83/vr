@@ -34,7 +34,7 @@ namespace TOne.CDRProcess.Activities
         public InArgument<Guid> CacheManagerId { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<TOneQueue<CDRBatch>> InputQueue { get; set; }
+        public InArgument<TOneQueue<CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<int> SwitchID { get; set; }
@@ -48,8 +48,6 @@ namespace TOne.CDRProcess.Activities
             if (this.OutputQueues.Get(context) == null)
                 this.OutputQueues.Set(context, new List<TOneQueue<CDRBase>>());
 
-            if (this.InputQueue.Get(context) == null)
-                this.InputQueue.Set(context, new TOneQueue<CDRBase>());
             base.OnBeforeExecute(context, handle);
         }
 

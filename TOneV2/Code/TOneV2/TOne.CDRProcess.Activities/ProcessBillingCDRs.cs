@@ -33,7 +33,7 @@ namespace TOne.CDRProcess.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<TOneQueue<CDRBase>> InputQueue { get; set; }
+        public InArgument<TOneQueue<CDRBase>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<TOneQueue<CDRMain>> OutputMainCDRQueue { get; set; }
@@ -76,8 +76,6 @@ namespace TOne.CDRProcess.Activities
             if (this.OutputInvalidCDRQueue.Get(context) == null)
                 this.OutputInvalidCDRQueue.Set(context, new TOneQueue<CDRBase>());
 
-            if (this.InputQueue.Get(context) == null)
-                this.InputQueue.Set(context, new TOneQueue<CDRBase>());
             base.OnBeforeExecute(context, handle);
         }
 

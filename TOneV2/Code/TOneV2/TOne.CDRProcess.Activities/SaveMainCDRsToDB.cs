@@ -22,14 +22,7 @@ namespace TOne.CDRProcess.Activities
     public sealed class SaveMainCDRsToDB : DependentAsyncActivity<SaveMainCDRsToDBInput>
     {
         [RequiredArgument]
-        public InOutArgument<TOneQueue<CDRMain>> InputQueue { get; set; }
-
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-        {
-            if (this.InputQueue.Get(context) == null)
-                this.InputQueue.Set(context, new TOneQueue<CDRBase>());
-            base.OnBeforeExecute(context, handle);
-        }
+        public InArgument <TOneQueue<CDRMain>> InputQueue { get; set; }
 
         protected override void DoWork(SaveMainCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
