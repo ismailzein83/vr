@@ -19,14 +19,17 @@ namespace TOne.CDRProcess.Activities
     public class GetCDRsInput
     {
         public int SwitchID { get; set; }
+    }
 
+    public class GetCDRsOutput
+    {
         public CDRBatch CDRs { get; set; }
     }
 
 
     #endregion
 
-    public sealed class GetCDRs : BaseAsyncActivity<GetCDRsInput>
+    public sealed class GetCDRs : BaseAsyncActivity<GetCDRsInput, GetCDRsOutput>
     {
         #region Arguments
 
@@ -34,13 +37,13 @@ namespace TOne.CDRProcess.Activities
         public InArgument<int> SwitchID { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<CDRBatch> CDRs { get; set; }
+        public OutArgument<CDRBatch> CDRs { get; set; }
 
         #endregion
 
         #region Private Methods
 
-        private CDRBatch GetCDRs(int SwitchID)
+        private CDRBatch GetCDRsBySwitchId(int SwitchID)
         {
             List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
             CDRBatch BatchCdrs = new CDRBatch();
@@ -67,14 +70,20 @@ namespace TOne.CDRProcess.Activities
         {
             return new GetCDRsInput
             {
-                SwitchID = this.SwitchID.Get(context),
-                CDRs = this.CDRs.Get(context)
+                SwitchID = this.SwitchID.Get(context)
             };
         }
 
-        protected override void DoWork(GetCDRsInput inputArgument, AsyncActivityHandle handle)
+        protected override GetCDRsOutput DoWorkWithResult(GetCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            inputArgument.CDRs = GetCDRs(inputArgument.SwitchID);
+            GetCDRsOutput output = new GetCDRsOutput();
+            output.CDRs = GetCDRsBySwitchId(inputArgument.SwitchID);
+            return output;
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, GetCDRsOutput result)
+        {
+            this.CDRs.Set(context, result.CDRs);
         }
     }
 
