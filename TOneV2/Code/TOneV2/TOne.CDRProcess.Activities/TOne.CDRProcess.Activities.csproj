@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyInvalidCDRsToDB.cs" />
     <Compile Include="ApplyMainCDRsToDB.cs" />
     <Compile Include="Entities\CDRBillingBatch.cs" />
     <Compile Include="Entities\CDRInvalidBatch.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Entities\CDRBatch.cs" />
     <Compile Include="Entities\CDRBatchProcessor.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
+    <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
     <Compile Include="PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessCDRs.cs" />
     <Compile Include="GetCDRs.cs" />
