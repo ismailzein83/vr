@@ -1,0 +1,136 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.CDRImportProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
+ xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:te="clr-namespace:TOne.Entities;assembly=TOne.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tca:CDRImportProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.CDRImportProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.CDRProcess.Activities</x:String>
+      <x:String>TOne.CDRProcess.Arguments</x:String>
+      <x:String>TOne.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>log4net</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="tca1:CDRBatch" Name="CDRs" />
+      <Variable x:TypeArguments="te:TOneQueue(tca1:CDRBatch)" Name="outputQueue" />
+    </Sequence.Variables>
+    <tca1:GetCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCDRs_1">
+      <tca1:GetCDRs.CDRs>
+        <OutArgument x:TypeArguments="tca1:CDRBatch">
+          <mca:CSharpReference x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpReference>
+        </OutArgument>
+      </tca1:GetCDRs.CDRs>
+      <tca1:GetCDRs.SwitchID>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SwitchID</mca:CSharpValue>
+        </InArgument>
+      </tca1:GetCDRs.SwitchID>
+    </tca1:GetCDRs>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+          <mca:CSharpReference x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">outputQueue</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+          <mca:CSharpValue x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">TOne.Business.SharedQueueManager.GetManager&lt;CDRSharedQueueManager&gt;().GetCDRQueue(Input.SwitchID)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <tca1:SaveCDRsToQueue Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToQueue_1">
+        <tca1:SaveCDRsToQueue.CDRs>
+          <InArgument x:TypeArguments="tca1:CDRBatch">
+            <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
+          </InArgument>
+        </tca1:SaveCDRsToQueue.CDRs>
+        <tca1:SaveCDRsToQueue.OutputQueue>
+          <InOutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">outputQueue</mca:CSharpReference>
+          </InOutArgument>
+        </tca1:SaveCDRsToQueue.OutputQueue>
+      </tca1:SaveCDRsToQueue>
+      <tca1:SaveCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToDB_1">
+        <tca1:SaveCDRsToDB.CDRs>
+          <InArgument x:TypeArguments="tca1:CDRBatch">
+            <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
+          </InArgument>
+        </tca1:SaveCDRsToDB.CDRs>
+        <tca1:SaveCDRsToDB.SwitchID>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SwitchID</mca:CSharpValue>
+          </InArgument>
+        </tca1:SaveCDRsToDB.SwitchID>
+      </tca1:SaveCDRsToDB>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRQcm9jZXNzLnhhbWwOPgN2DgIBAUMFThQCAR5PBVoOAgEVWwV0EAIBAksLS1YCASNGC0ZaAgEfVwtXwgECARpSC1JvAgEWXAdnHgIBDGgHcxsCAQNfDV9UAgERZA1kcQIBDXANcFgCAQhrDWtUAgEE</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetCDRs_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="SaveCDRsToQueue_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="SaveCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,374">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImportProcess_1" sap:VirtualizedContainerService.HintSize="616,454" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
