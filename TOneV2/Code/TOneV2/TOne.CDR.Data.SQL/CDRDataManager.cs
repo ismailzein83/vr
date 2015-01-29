@@ -103,12 +103,12 @@ namespace TOne.CDR.Data.SQL
                 InsertBulkToTable(item);
         }
 
-        public void ApplyInvalidToDB(Object preparedInvalidCDRs)
+        public void ApplyInvalidCDRsToDB(Object preparedInvalidCDRs)
         {
             InsertBulkToTable(preparedInvalidCDRs as BulkInsertInfo);
         }
 
-        private Object PrepareInvalidCDRsForDBApply(List<TABS.Billing_CDR_Invalid> cdrs)
+        public Object PrepareInvalidCDRsForDBApply(List<TABS.Billing_CDR_Invalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
