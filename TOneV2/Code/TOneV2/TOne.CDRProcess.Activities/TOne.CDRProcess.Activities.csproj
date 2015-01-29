@@ -74,8 +74,8 @@
     <Compile Include="DivideDayIntoTimeRanges.cs" />
     <Compile Include="Entities\CDRBatch.cs" />
     <Compile Include="Entities\CDRBatchProcessor.cs" />
-    <Compile Include="Entities\CDRProcessingTasksStatus.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
+    <Compile Include="PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessCDRs.cs" />
     <Compile Include="GetCDRs.cs" />
     <Compile Include="InitializeObjects.cs" />

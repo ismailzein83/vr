@@ -25,7 +25,6 @@ namespace TOne.CDRProcess.Activities
         [RequiredArgument]
         public InArgument<TOneQueue<CDRMainBatch>> InputQueue { get; set; }
 
-        
         [RequiredArgument]
         public InOutArgument<TOneQueue<Object>> OutputQueue { get; set; }
 
@@ -45,9 +44,9 @@ namespace TOne.CDRProcess.Activities
                 do
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue(
-                        (cdrMainBatch) =>
-                        {
-                            Object preparedMainCDRs = dataManager.PrepareMainCDRsForDBApply(cdrMainBatch.mainCDRs);
+                        (billingCDR) =>
+                        { 
+                            Object preparedMainCDRs = dataManager.PrepareMainCDRsForDBApply(billingCDR.mainCDRs);
                             inputArgument.OutputQueue.Enqueue(preparedMainCDRs);
                         });
                 }
