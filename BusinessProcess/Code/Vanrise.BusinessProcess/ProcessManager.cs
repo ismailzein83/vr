@@ -63,6 +63,13 @@ namespace Vanrise.BusinessProcess
             return dataManager.GetInstancesByCriteria(definitionID, datefrom, dateto);
         }
 
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID)
+        {
+            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            return dataManager.GetTrackingsByInstanceId(processInstanceID);
+        }
+
+
         #endregion
 
         #region Private Methods

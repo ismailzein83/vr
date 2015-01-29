@@ -60,6 +60,26 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID)
+        {
+
+            return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, ProcessInstanceID);
+
+        }
+        BPTrackingMessage BPTrackingMapper(IDataReader reader)
+        {
+            var bpTrackingMessage = new BPTrackingMessage
+            {
+                ProcessInstanceId = (long)reader["ProcessInstanceID"],
+                ParentProcessId = (long)reader["ParentProcessId"],
+                Message = reader["TrackingMessage"] as string,
+                Severity = (BPTrackingSeverity)reader["Severity"],
+                EventTime = (DateTime)reader["EventTime"]
+            };
+
+            return bpTrackingMessage;
+        }
+
         #endregion
     }
 }

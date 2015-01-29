@@ -26,6 +26,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             ProcessManager manager = new ProcessManager();
             return manager.GetFilteredInstances( definitionID,  dateFrom,  dateTo);
         }
+
+        [HttpGet]
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID)
+        {
+            ProcessManager manager = new ProcessManager();
+            return manager.GetTrackingsByInstanceId(ProcessInstanceID);
+        }
          
         // GET api/<controller>
         public IEnumerable<string> Get()

@@ -51,7 +51,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
            
         }
-
+       
         public long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
         {
             object processInstanceId;
@@ -140,8 +140,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);
             return bpDefinition;
         }
-
-
         private BPInstance BPInstanceMapper(IDataReader reader)
         {
             return BPInstanceMapper(reader, false);
