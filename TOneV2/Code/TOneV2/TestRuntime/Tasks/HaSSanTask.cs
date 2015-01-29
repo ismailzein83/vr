@@ -14,11 +14,11 @@ namespace TestRuntime
     {
         public void Execute()
         {
-           
+
             var config = new BPConfiguration { MaxConcurrentWorkflows = 20 };
             var ser = Vanrise.Common.Serializer.Serialize(config);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-           
+
 
             Console.WriteLine("Host Started");
             BusinessProcessRuntime.Current.TerminatePendingProcesses();
@@ -26,32 +26,29 @@ namespace TestRuntime
             Timer timer = new Timer(1000);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
-
+            int switchID = 73;
             System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
             {
-                for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-                {
-                    TriggerProcess(d);
-                    System.Threading.Thread.Sleep(30000);
-                }
+                TriggerProcess(switchID);
+                // System.Threading.Thread.Sleep(30000);
             });
             t.Start();
 
-         
+
             Console.ReadKey();
         }
 
 
-       
 
 
-        
-        private static void TriggerProcess(DateTime date)
+
+
+        private static void TriggerProcess(int SwitchID)
         {
-            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
+            TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "DailyRepricingProcess",
+                ProcessName = "CDRImportProcess",
                 InputArguments = inputArguments
             };
             ProcessManager processManager = new ProcessManager();
@@ -99,9 +96,9 @@ namespace TestRuntime
 
 
 
-       
-
-       
 
 
-        
+
+
+
+
