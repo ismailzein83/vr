@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess.Arguments
 {
-    public class CDRImportInput
+    public class CDRImportProcessInput
     {
-        public long SwitchID { get; set; }
+        public int SwitchID { get; set; }
     }
 }
