@@ -37,6 +37,7 @@ namespace TOne.CDRProcess.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            
             if (this.CDRs.Get(context) == null)
                 this.OutputQueue.Set(context, new TOneQueue<CDRBatch>());
             base.OnBeforeExecute(context, handle);
