@@ -59,10 +59,9 @@
       <AssemblyReference>TOne.CDRProcess</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="MainCDRImportSequence" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="tca1:CDRBatch" Name="CDRs" />
-      <Variable x:TypeArguments="te:TOneQueue(tca1:CDRBatch)" Name="outputQueue" />
     </Sequence.Variables>
     <tca1:GetCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCDRs_1">
       <tca1:GetCDRs.CDRs>
@@ -76,61 +75,74 @@
         </InArgument>
       </tca1:GetCDRs.SwitchID>
     </tca1:GetCDRs>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
-          <mca:CSharpReference x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">outputQueue</mca:CSharpReference>
-        </OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
-          <mca:CSharpValue x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">TOne.Business.SharedQueueManager.GetManager&lt;CDRSharedQueueManager&gt;().GetCDRQueue(Input.SwitchID)</mca:CSharpValue>
-        </InArgument>
-      </Assign.Value>
-    </Assign>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <tca1:SaveCDRsToQueue Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToQueue_1">
-        <tca1:SaveCDRsToQueue.CDRs>
-          <InArgument x:TypeArguments="tca1:CDRBatch">
-            <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
-          </InArgument>
-        </tca1:SaveCDRsToQueue.CDRs>
-        <tca1:SaveCDRsToQueue.OutputQueue>
-          <InOutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+    <Sequence DisplayName="ApplyCDRImportSequence">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="te:TOneQueue(tca1:CDRBatch)" Name="outputQueue" />
+      </Sequence.Variables>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+        <Assign.To>
+          <OutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">outputQueue</mca:CSharpReference>
-          </InOutArgument>
-        </tca1:SaveCDRsToQueue.OutputQueue>
-      </tca1:SaveCDRsToQueue>
-      <tca1:SaveCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToDB_1">
-        <tca1:SaveCDRsToDB.CDRs>
-          <InArgument x:TypeArguments="tca1:CDRBatch">
-            <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
+          </OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+            <mca:CSharpValue x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">TOne.Business.SharedQueueManager.GetManager&lt;CDRSharedQueueManager&gt;().GetCDRQueue(Input.SwitchID)</mca:CSharpValue>
           </InArgument>
-        </tca1:SaveCDRsToDB.CDRs>
-        <tca1:SaveCDRsToDB.SwitchID>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SwitchID</mca:CSharpValue>
-          </InArgument>
-        </tca1:SaveCDRsToDB.SwitchID>
-      </tca1:SaveCDRsToDB>
-    </Parallel>
-    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRQcm9jZXNzLnhhbWwOPgN2DgIBAUMFThQCAR5PBVoOAgEVWwV0EAIBAksLS1YCASNGC0ZaAgEfVwtXwgECARpSC1JvAgEWXAdnHgIBDGgHcxsCAQNfDV9UAgERZA1kcQIBDXANcFgCAQhrDWtUAgEE</sads:DebugSymbol.Symbol>
+        </Assign.Value>
+      </Assign>
+      <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+        <tca1:SaveCDRsToQueue Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToQueue_1">
+          <tca1:SaveCDRsToQueue.CDRs>
+            <InArgument x:TypeArguments="tca1:CDRBatch">
+              <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
+            </InArgument>
+          </tca1:SaveCDRsToQueue.CDRs>
+          <tca1:SaveCDRsToQueue.OutputQueue>
+            <InOutArgument x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">
+              <mca:CSharpReference x:TypeArguments="te:TOneQueue(tca1:CDRBatch)">outputQueue</mca:CSharpReference>
+            </InOutArgument>
+          </tca1:SaveCDRsToQueue.OutputQueue>
+        </tca1:SaveCDRsToQueue>
+        <tca1:SaveCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveCDRsToDB_1">
+          <tca1:SaveCDRsToDB.CDRs>
+            <InArgument x:TypeArguments="tca1:CDRBatch">
+              <mca:CSharpValue x:TypeArguments="tca1:CDRBatch">CDRs</mca:CSharpValue>
+            </InArgument>
+          </tca1:SaveCDRsToDB.CDRs>
+          <tca1:SaveCDRsToDB.SwitchID>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.SwitchID</mca:CSharpValue>
+            </InArgument>
+          </tca1:SaveCDRsToDB.SwitchID>
+        </tca1:SaveCDRsToDB>
+      </Parallel>
+      <sap2010:WorkflowViewState.IdRef>Sequence_2</sap2010:WorkflowViewState.IdRef>
+    </Sequence>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRQcm9jZXNzLnhhbWwPPgN7DgIBAUIFTRQCAR9OBXkQAgECSgtKVgIBI0ULRVoCASBSB10QAgEWXgd3EgIBA1oNWsQBAgEbVQ1VcQIBF18JaiACAQ1rCXYdAgEEYg9iVgIBEmcPZ3MCAQ5zD3NaAgEJbg9uVgIBBQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetCDRs_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="GetCDRs_1" sap:VirtualizedContainerService.HintSize="576,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
       <sap2010:ViewStateData Id="SaveCDRsToQueue_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="SaveCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,374">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="576,312">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImportProcess_1" sap:VirtualizedContainerService.HintSize="616,454" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="598,498">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImportProcess_1" sap:VirtualizedContainerService.HintSize="638,578" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
