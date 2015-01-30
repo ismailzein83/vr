@@ -167,6 +167,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -218,6 +219,22 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
+      <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
+      <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data\TOne.Data.csproj">
+      <Project>{ac26c25e-a2bf-4f95-9070-8a910fda5989}</Project>
+      <Name>TOne.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCR.Data.SQL\TOne.LCR.Data.SQL.csproj">
       <Project>{acc3f0e9-3a0c-4b90-afe7-d9cdaa858c0b}</Project>
       <Name>TOne.LCR.Data.SQL</Name>
