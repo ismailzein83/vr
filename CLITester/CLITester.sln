@@ -1,0 +1,128 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorLibrary", "CallGeneratorLibrary\CallGeneratorLibrary.csproj", "{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFServiceMonty", "WCFServiceMonty\WCFServiceMonty.csproj", "{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfServiceTestMonty", "WcfServiceTestMonty\WcfServiceTestMonty.csproj", "{C673E5F6-387E-4E0F-A9AD-67C661CF6293}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CLITesterSite", "http://localhost:5248", "{D8F1FBB7-0D75-4D91-A58E-B2518DECD83D}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{ed9e2ece-db3a-41ee-8ebc-efae2175a8c3}|CallGeneratorLibrary.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_5248"
+		Debug.AspNetCompiler.PhysicalPath = "CLITesterSite\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_5248\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_5248"
+		Release.AspNetCompiler.PhysicalPath = "CLITesterSite\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_5248\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "CLITesterSite\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidApplicationService", "AndroidApplicationService\AndroidApplicationService.csproj", "{F8D389F3-0DD8-4F45-BD98-558152C2844E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewCallGenService", "NewCallGenService\NewCallGenService.csproj", "{44AD5042-FD59-436A-862D-4BEC767A9544}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestartNewCallGenService", "RestartNewCallGenService\RestartNewCallGenService.csproj", "{30166483-4ED2-4B60-A388-0F0B068DA99F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorServiceCLI", "CallGeneratorServiceCLI\CallGeneratorServiceCLI.csproj", "{54942B56-328F-4021-AE56-6AD6C7C1F9A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorTestApp", "CallGeneratorTestApp\CallGeneratorTestApp.csproj", "{F0D950B3-37F7-4500-A260-4ED1AE42D98E}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AndroidApplicationService\\AndroidApplicationService.csproj
+		SccProjectName1 = AndroidApplicationService
+		SccLocalPath1 = AndroidApplicationService
+		SccProjectUniqueName2 = CallGeneratorLibrary\\CallGeneratorLibrary.csproj
+		SccProjectName2 = CallGeneratorLibrary
+		SccLocalPath2 = CallGeneratorLibrary
+		SccProjectUniqueName3 = CallGeneratorServiceCLI\\CallGeneratorServiceCLI.csproj
+		SccProjectName3 = CallGeneratorServiceCLI
+		SccLocalPath3 = CallGeneratorServiceCLI
+		SccProjectUniqueName4 = CallGeneratorTestApp\\CallGeneratorTestApp.csproj
+		SccProjectName4 = CallGeneratorTestApp
+		SccLocalPath4 = CallGeneratorTestApp
+		SccWebProject5 = true
+		SccProjectUniqueName5 = http://localhost:5248
+		SccProjectName5 = CLITesterSite
+		SccLocalPath5 = CLITesterSite
+		SccProjectEnlistmentChoice5 = 2
+		SccProjectUniqueName6 = NewCallGenService\\NewCallGenService.csproj
+		SccProjectName6 = NewCallGenService
+		SccLocalPath6 = NewCallGenService
+		SccProjectUniqueName7 = RestartNewCallGenService\\RestartNewCallGenService.csproj
+		SccProjectName7 = RestartNewCallGenService
+		SccLocalPath7 = RestartNewCallGenService
+		SccProjectUniqueName8 = WCFServiceMonty\\WCFServiceMonty.csproj
+		SccProjectName8 = WCFServiceMonty
+		SccLocalPath8 = WCFServiceMonty
+		SccProjectUniqueName9 = WcfServiceTestMonty\\WcfServiceTestMonty.csproj
+		SccProjectName9 = WcfServiceTestMonty
+		SccLocalPath9 = WcfServiceTestMonty
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C673E5F6-387E-4E0F-A9AD-67C661CF6293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C673E5F6-387E-4E0F-A9AD-67C661CF6293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C673E5F6-387E-4E0F-A9AD-67C661CF6293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C673E5F6-387E-4E0F-A9AD-67C661CF6293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F1FBB7-0D75-4D91-A58E-B2518DECD83D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F1FBB7-0D75-4D91-A58E-B2518DECD83D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F1FBB7-0D75-4D91-A58E-B2518DECD83D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F1FBB7-0D75-4D91-A58E-B2518DECD83D}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{F8D389F3-0DD8-4F45-BD98-558152C2844E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D389F3-0DD8-4F45-BD98-558152C2844E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D389F3-0DD8-4F45-BD98-558152C2844E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D389F3-0DD8-4F45-BD98-558152C2844E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44AD5042-FD59-436A-862D-4BEC767A9544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44AD5042-FD59-436A-862D-4BEC767A9544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44AD5042-FD59-436A-862D-4BEC767A9544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44AD5042-FD59-436A-862D-4BEC767A9544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30166483-4ED2-4B60-A388-0F0B068DA99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30166483-4ED2-4B60-A388-0F0B068DA99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30166483-4ED2-4B60-A388-0F0B068DA99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30166483-4ED2-4B60-A388-0F0B068DA99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54942B56-328F-4021-AE56-6AD6C7C1F9A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54942B56-328F-4021-AE56-6AD6C7C1F9A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54942B56-328F-4021-AE56-6AD6C7C1F9A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54942B56-328F-4021-AE56-6AD6C7C1F9A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0D950B3-37F7-4500-A260-4ED1AE42D98E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0D950B3-37F7-4500-A260-4ED1AE42D98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0D950B3-37F7-4500-A260-4ED1AE42D98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0D950B3-37F7-4500-A260-4ED1AE42D98E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
