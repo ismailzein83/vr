@@ -9,8 +9,7 @@ namespace TOne.Data.SQL
     {
         public List<Entities.CarrierInfo> GetCarriers()
         {
-
-            return GetItemsSP("Main.sp_Carriers_GetCarriers", (reader) =>
+            return GetItemsSP("BEntity.sp_Carriers_GetCarriers", (reader) =>
                 {
                     return new Entities.CarrierInfo
                     {
@@ -18,8 +17,6 @@ namespace TOne.Data.SQL
                         Name = reader["Name"] as string
                     };
                 });
-
-            //   throw new NotImplementedException();
         }
     }
 }
