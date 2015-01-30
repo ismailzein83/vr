@@ -51,8 +51,7 @@ namespace TOne.CDRProcess.Activities
             TABS.Switch CurrentSwitch = null;
             if (TABS.Switch.All.ContainsKey(SwitchID))
                 CurrentSwitch = TABS.Switch.All[SwitchID];
-
-            if (CurrentSwitch != null)
+            if (CurrentSwitch != null && CurrentSwitch.Enable_CDR_Import && CurrentSwitch.SwitchManager != null)
             {
                 var rawCDRs = CurrentSwitch.SwitchManager.GetCDR(CurrentSwitch);
 
