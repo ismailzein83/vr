@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="AsyncActivityStatus.cs" />
     <Compile Include="CacheObjectType.cs" />
+    <Compile Include="CarrierInfo.cs" />
     <Compile Include="CodeList.cs" />
     <Compile Include="CodeNode.cs" />
     <Compile Include="CodeTree.cs" />
