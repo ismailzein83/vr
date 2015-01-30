@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorService", "CallGeneratorService\CallGeneratorService.csproj", "{8AD8403F-F194-4CD4-80AA-75B5CAF2C62C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorLibrary", "CallGeneratorLibrary\CallGeneratorLibrary.csproj", "{4DFAB414-42BE-4A40-B105-CE4CF184248F}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CallGeneratorSite", "http://localhost:13397", "{7256BDFC-2A85-4424-8796-87AC4C381C05}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{4dfab414-42be-4a40-b105-ce4cf184248f}|CallGeneratorLibrary.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_13397"
+		Debug.AspNetCompiler.PhysicalPath = "CallGeneratorSite\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_13397\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_13397"
+		Release.AspNetCompiler.PhysicalPath = "CallGeneratorSite\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_13397\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "CallGeneratorSite\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CallGeneratorLibrary\\CallGeneratorLibrary.csproj
+		SccProjectName1 = CallGeneratorLibrary
+		SccLocalPath1 = CallGeneratorLibrary
+		SccProjectUniqueName2 = CallGeneratorService\\CallGeneratorService.csproj
+		SccProjectName2 = CallGeneratorService
+		SccLocalPath2 = CallGeneratorService
+		SccWebProject3 = true
+		SccProjectUniqueName3 = http://localhost:13397
+		SccProjectName3 = CallGeneratorSite
+		SccLocalPath3 = CallGeneratorSite
+		SccProjectEnlistmentChoice3 = 2
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AD8403F-F194-4CD4-80AA-75B5CAF2C62C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD8403F-F194-4CD4-80AA-75B5CAF2C62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD8403F-F194-4CD4-80AA-75B5CAF2C62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD8403F-F194-4CD4-80AA-75B5CAF2C62C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DFAB414-42BE-4A40-B105-CE4CF184248F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DFAB414-42BE-4A40-B105-CE4CF184248F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DFAB414-42BE-4A40-B105-CE4CF184248F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DFAB414-42BE-4A40-B105-CE4CF184248F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7256BDFC-2A85-4424-8796-87AC4C381C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7256BDFC-2A85-4424-8796-87AC4C381C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7256BDFC-2A85-4424-8796-87AC4C381C05}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7256BDFC-2A85-4424-8796-87AC4C381C05}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
