@@ -366,7 +366,7 @@
     </div>
     <!------------------------------------------------------  details          ----------------------------------->
     <asp:HiddenField ID="hfReportID" runat="server" />
-
+    <asp:HiddenField ID="hfReportDetailID" runat="server" />
 
 
 </asp:Content>

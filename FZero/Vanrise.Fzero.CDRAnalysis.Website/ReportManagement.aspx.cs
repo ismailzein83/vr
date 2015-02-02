@@ -19,9 +19,7 @@ public partial class ReportManagement : BasePage
 {
     #region Properties
 
-    int id { get { return (int)ViewState["Id"]; } set { ViewState["Id"] = value; } }
-
-
+   
     private void FillControls()
     {
         List<Suspection_Level> suspection_Levels = new List<Suspection_Level>();
@@ -93,9 +91,13 @@ public partial class ReportManagement : BasePage
                     break;
 
                 case "Export":
-                    ExportReportToExcel(id.ToString() + ".xls");
+                     if (e.CommandArgument == null)
+                         return;
 
-                    string path = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], id.ToString() + ".xls");
+                    hfReportID.Value = e.CommandArgument.ToString();
+                    ExportReportToExcel(hfReportID.Value + ".xls", hfReportID.Value.ToInt());
+
+                    string path = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], hfReportID.Value + ".xls");
                     WebClient req = new WebClient();
                     HttpResponse response = HttpContext.Current.Response;
                     response.Clear();
@@ -112,9 +114,13 @@ public partial class ReportManagement : BasePage
 
 
                 case "Send":
-                    Vanrise.Fzero.CDRAnalysis.Report report = Vanrise.Fzero.CDRAnalysis.Report.Load(id);
+                    if (e.CommandArgument == null)
+                         return;
+
+                    hfReportID.Value = e.CommandArgument.ToString();
+                    Vanrise.Fzero.CDRAnalysis.Report report = Vanrise.Fzero.CDRAnalysis.Report.Load(hfReportID.Value.ToString());
                     string ReportID = "CA" + report.ReportNumber + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + DateTime.Now.Hour.ToString("D2") + DateTime.Now.Minute.ToString("D2");
-                    EmailManager.SendReporttoITPC(ExportReportToExcel(id.ToString() + ".xls"), ReportID, "FMS_Profile");
+                    EmailManager.SendReporttoITPC(ExportReportToExcel(hfReportID.Value.ToString() + ".xls", hfReportID.Value.ToInt()), ReportID, "FMS_Profile");
                     report.SentDate = DateTime.Now;
                     report.SentBy = CurrentUser.User.ID;
                     report.ReportingStatusID = (int)Enums.ReportingStatuses.Sent;
@@ -211,7 +217,7 @@ public partial class ReportManagement : BasePage
         txtDetailsReportNumber.Text = report.ReportNumber.ToString();
         txtDetailsCreationDate.Text = report.ReportDate.ToString();
        
-        List<ReportDetail> reportDetails = ReportDetail.GetList(id);
+        List<ReportDetail> reportDetails = ReportDetail.GetList(reportId);
         gvDetails.DataSource = reportDetails;
         gvDetails.DataBind();
 
@@ -221,14 +227,17 @@ public partial class ReportManagement : BasePage
         if (e.CommandArgument == null)
             return;
 
-        id = int.Parse(e.CommandArgument.ToString());
+        hfReportDetailID.Value = e.CommandArgument.ToString();
+
+        
+
         if (e.CommandArgument != null)
         {
             switch (e.CommandName)
             {
                 case "Remove":
 
-                    if (ReportDetail.Delete(id))
+                    if (ReportDetail.Delete(hfReportDetailID.Value.ToInt()))
                     {
                         List<ReportDetail> reportDetails = ReportDetail.GetList(hfReportID.Value.ToInt());
                         gvDetails.DataSource = reportDetails;
@@ -263,16 +272,16 @@ public partial class ReportManagement : BasePage
     {
         ClearDetails();
     }
-    private string ExportReportToExcel(string reportName)
+    private string ExportReportToExcel(string reportName, int ReportID)
     {
         ReportViewer rvToOperator = new ReportViewer();
 
         rvToOperator.LocalReport.ReportPath = Path.Combine(string.Empty, @"Reports\rptReportedNumbers.rdlc");
 
-        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportedNumbers", vw_ReportedNumber.GetList(id));
+        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportedNumbers", vw_ReportedNumber.GetList(ReportID));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
-        ReportDataSource rptDataSourceReportedNumberNormalCDRs = new ReportDataSource("DSReportedNumberNormalCDR", vw_ReportedNumberNormalCDR.GetList(id));
+        ReportDataSource rptDataSourceReportedNumberNormalCDRs = new ReportDataSource("DSReportedNumberNormalCDR", vw_ReportedNumberNormalCDR.GetList(ReportID));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourceReportedNumberNormalCDRs);
 
         rvToOperator.LocalReport.Refresh();
