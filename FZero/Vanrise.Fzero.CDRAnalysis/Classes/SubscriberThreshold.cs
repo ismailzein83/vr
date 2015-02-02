@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SubscriberThreshold> subscriberThresholds = new List<SubscriberThreshold>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     subscriberThresholds = context.SubscriberThresholds
                         .Include(s => s.Suspection_Level)

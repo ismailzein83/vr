@@ -152,7 +152,7 @@
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\CallsStatistics.cs" />
-    <Compile Include="CallsNormalizationEntities.cs" />
+    <Compile Include="Entities.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="NormalizationModel.Context.cs">
       <AutoGen>True</AutoGen>

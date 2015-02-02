@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.CDRAnalysis
            List<NumberProfile> numberProfiles = new List<NumberProfile>();
            try
            {
-               using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+               using (Entities context = new Entities())
                {
                    numberProfiles = context.NumberProfiles
                       .Where(s =>
@@ -39,7 +39,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<NumberProfile> numberProfiles = new List<NumberProfile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     numberProfiles = context.NumberProfiles
                        .Where(s =>
@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             IEnumerable<NumberProfile> numberProfiles = new List<NumberProfile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     numberProfiles = context.NumberProfiles
                        .Where(s =>

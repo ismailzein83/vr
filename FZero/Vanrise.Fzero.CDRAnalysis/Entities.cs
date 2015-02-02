@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.CDRAnalysis
 {
-    public partial class CallsNormalizationEntities
+    public partial class Entities
     {
-        public CallsNormalizationEntities(string connectionString)
+        public Entities(string connectionString)
             : this()
         {
             if (!string.IsNullOrWhiteSpace(connectionString))

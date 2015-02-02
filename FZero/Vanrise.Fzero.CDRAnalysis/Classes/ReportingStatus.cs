@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<ReportingStatu> ListReportingStatus = new List<ReportingStatu>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     ListReportingStatus = context.ReportingStatus
                        .ToList();

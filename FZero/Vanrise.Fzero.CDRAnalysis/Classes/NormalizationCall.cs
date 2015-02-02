@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             rowsCount = 0;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     var query = context.NormalizationRules
                         .Include(r=>r.SwitchTrunck.Trunck)
@@ -102,7 +102,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using(CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using(Entities context = new Entities())
                 {
                     if (rule.Id == 0)
                     {
@@ -134,7 +134,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(rule).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
@@ -152,7 +152,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             NormalizationRule rule = new NormalizationRule();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     rule = context.NormalizationRules
                         .Where(r => r.Id == id)
@@ -172,7 +172,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             try
             {
                 
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     Count = context.NormalizationRules
                         .Where(r => r.Party == rule.Party).Where(r => r.SwitchId == rule.SwitchId).Where(r => r.In_TrunckId == rule.In_TrunckId).Where(r => r.CallLength == rule.CallLength).Where(r => r.Prefix == rule.Prefix).Where(r => (r.In_TrunckId.HasValue || r.In_TrunckId == r.In_TrunckId)).Where(r => r.Id != rule.Id)

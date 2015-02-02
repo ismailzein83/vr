@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Strategy strategy = new Strategy();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     strategy = context.Strategies
@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy> strategies = new List<Strategy>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategies = context.Strategies
                         //.Include(s => s.Switch_DatabaseConnection)
@@ -72,7 +72,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy> strategies = new List<Strategy>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategies = context.Strategies
                        .ToList(); 
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     Strategy st = Strategy.Load(strategy.Id);
@@ -125,7 +125,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool isUsed = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     isUsed = context.Strategies
                         .Where(p => p.Name == strategy.Name
@@ -146,7 +146,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     if (strategy.Id == 0)
                     {

@@ -16,10 +16,10 @@ namespace Vanrise.Fzero.CDRAnalysis
     using System.Data.Objects.DataClasses;
     using System.Linq;
     
-    public partial class CallsNormalizationEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public CallsNormalizationEntities()
-            : base("name=CallsNormalizationEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     

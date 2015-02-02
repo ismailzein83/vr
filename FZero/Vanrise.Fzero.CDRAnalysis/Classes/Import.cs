@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Import CurrentImport = new Import();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     context.Imports.Add(Import);
                     context.SaveChanges();

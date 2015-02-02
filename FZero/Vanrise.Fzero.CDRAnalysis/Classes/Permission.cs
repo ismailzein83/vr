@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Permission> permissions = new List<Permission>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     permissions = context.Permissions
                         .Include(p => p.Permissions1)//Children

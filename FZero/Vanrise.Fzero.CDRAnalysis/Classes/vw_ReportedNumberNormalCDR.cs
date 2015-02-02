@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.CDRAnalysis
                 var _ReportID = new SqlParameter("@ReportID", ReportID);
 
 
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vw_ReportedNumberNormalCDR>("db_GetReportedNumberNormalCDR @ReportID", _ReportID).ToList();
 

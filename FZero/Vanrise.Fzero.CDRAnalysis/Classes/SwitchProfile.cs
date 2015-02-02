@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             SwitchProfile switchProfile = new SwitchProfile();
             try 
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     switchProfile = context.SwitchProfiles
                         .Include(s => s.Switch_DatabaseConnections)
@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SwitchProfile> switches = new List<SwitchProfile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     switches = context.SwitchProfiles
                         .Include(s => s.Switch_DatabaseConnections)
@@ -67,7 +67,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SwitchProfile> switches = new List<SwitchProfile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                      //switches = context.SwitchProfiles
@@ -119,7 +119,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool isUsed = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     isUsed = context.SwitchProfiles
                         .Where(p => p.FullName == switchProfile.FullName 
@@ -139,7 +139,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     if (switchProfile.Id == 0)
                     {
@@ -172,7 +172,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     SwitchProfile sp = SwitchProfile.Load(switchProfile.Id);
@@ -199,7 +199,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             SwitchProfile switchProfile = new SwitchProfile();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     switchProfile = context.SwitchProfiles
                         .Where(s => s.Name == Name)

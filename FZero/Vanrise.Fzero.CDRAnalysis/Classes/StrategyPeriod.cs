@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             StrategyPeriod strategyPeriod = new StrategyPeriod();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategyPeriod = context.StrategyPeriods
                         .Include(s => s.Strategy)
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<StrategyPeriod> strategyThresholds = new List<StrategyPeriod>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategyThresholds = context.StrategyPeriods
                            .Include(s => s.Strategy)
@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     if (strategyPeriod.Id == 0)
                     {

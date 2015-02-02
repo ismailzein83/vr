@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<vw_ReportedNumber> list_ReportedNumbers = new List<vw_ReportedNumber>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     list_ReportedNumbers = context.vw_ReportedNumber.ToList();
                 }

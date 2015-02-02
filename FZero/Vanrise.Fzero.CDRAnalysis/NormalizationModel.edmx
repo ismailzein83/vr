@@ -1690,7 +1690,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CallsNormalizationModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="CallsNormalizationEntities" p1:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" p1:LazyLoadingEnabled="true">
           <FunctionImport Name="FindSuspectionOccurance" ReturnType="Collection(CallsNormalizationModel.FindSuspectionOccurance_Result)">
             <Parameter Name="fromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
@@ -3318,7 +3318,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CallsNormalizationModelStoreContainer" CdmEntityContainer="CallsNormalizationEntities">
+        <EntityContainerMapping StorageEntityContainer="CallsNormalizationModelStoreContainer" CdmEntityContainer="Entities">
           <FunctionImportMapping FunctionImportName="GetReportVariables" FunctionName="CallsNormalizationModel.Store.db_GetReportVariables">
             <ResultMapping>
               <ComplexTypeMapping TypeName="CallsNormalizationModel.db_GetReportVariables_Result">
