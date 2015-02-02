@@ -1,0 +1,298 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.ServiceProcess;
+using System.Timers;
+using Vanrise.Fzero.Bypass;
+using Microsoft.Reporting.WebForms;
+using Vanrise.CommonLibrary;
+
+
+
+namespace Vanrise.Fzero.Services.ClientReport
+{
+    public partial class ClientReportService : ServiceBase
+    {
+        private static System.Timers.Timer aTimer;
+
+        public ClientReportService()
+	    {
+		    InitializeComponent();
+	    }
+
+        private void ErrorLog(string message)
+        {
+            string cs = "Client Report Service";
+            EventLog elog = new EventLog();
+            if (!EventLog.SourceExists(cs))
+            {
+                EventLog.CreateEventSource(cs, cs);
+            }
+            elog.Source = cs;
+            elog.EnableRaisingEvents = true;
+            elog.WriteEntry(message);
+        }
+
+        protected override void OnStart(string[] args)
+        {
+            base.RequestAdditionalTime(15000); // 10 minutes timeout for startup
+            //Debugger.Launch(); // launch and attach debugger
+
+            // Create a timer with a ten second interval.
+            aTimer = new System.Timers.Timer(7200000);// 2 hours
+            // Hook up the Elapsed event for the timer.
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+
+            aTimer.Interval = 7200000;// 2 hours
+            aTimer.Enabled = true;
+
+            GC.KeepAlive(aTimer);
+            OnTimedEvent(null, null);
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            try
+            {
+                if (HttpHelper.CheckInternetConnection("mail.vanrise.com", 26))
+                {
+
+                    foreach (Client i in Client.GetAllClients())
+                    {
+                        if (i.ClientReport.Value)
+                        {
+                            List<string> DistinctCLIs = new List<string>();
+                            List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetClientFraudCases(i.ID);
+                            List<int> listDistinctFraudCases = new List<int>();
+                            List<int> listRepeatedFraudCases = new List<int>();
+                            foreach (ViewGeneratedCall v in listFraudCases)
+                            {
+                                if (!DistinctCLIs.Contains(v.CLI))
+                                {
+                                    DistinctCLIs.Add(v.CLI);
+                                    listDistinctFraudCases.Add(v.ID);
+                                }
+                                else
+                                {
+                                    listRepeatedFraudCases.Add(v.ID);
+                                }
+                            }
+
+
+                            if (listRepeatedFraudCases.Count > 0)
+                            {
+                                GeneratedCall.UpdateReportStatus(listRepeatedFraudCases, (int)Enums.ReportingStatuses.Ignored, null);
+                            }
+
+
+                            if (listDistinctFraudCases.Count > 0)
+                            {
+                                GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
+                                SendReport(listDistinctFraudCases, i.Name, (int)Enums.Statuses.Fraud,  i.ClientEmail, i.ID, (i.GMT.Value - SysParameter.Global_GMT));
+                            }
+
+
+                        }
+                    }
+
+
+                }
+            }
+            catch(Exception ex)
+            {
+                ErrorLog("OnTimedEvent: " + ex.Message);
+                ErrorLog("OnTimedEvent: " + ex.InnerException);
+                ErrorLog("OnTimedEvent: " + ex.ToString());
+            }
+
+
+          
+        }
+
+        private void SendReport(List<int> ListIds, string ClientName, int StatusID, string EmailAddress, int ClientID, int DifferenceInGMT)
+        {
+            ReportViewer rvToOperator = new ReportViewer();
+            Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
+
+
+            report.SentDateTime = DateTime.Now;
+
+            if (ClientID == 3)
+            {
+                report.RecommendedAction = "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
+                report.ApplicationUserID = 8;
+            }
+            else
+            {
+                report.RecommendedAction = "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.";
+                report.ApplicationUserID = 3;
+            }
+
+
+
+            string ReportID;
+
+            string ReportIDBeforeCounter = "FZ" + ClientName.Substring(0, 1) + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
+            Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
+
+            if (LastReport == null)
+            {
+                ReportID = ReportIDBeforeCounter + "0001";
+            }
+            else
+            {
+                ReportID = ReportIDBeforeCounter + ( int.Parse(LastReport.ReportID.Substring(9)) + 1).ToString("D4");
+            }
+
+
+            report.ReportID = ReportID;
+
+
+
+            if (StatusID == (int)Enums.Statuses.Suspect)
+            {
+                report.RecommendedActionID = (int)Enums.RecommendedAction.Investigate;
+            }
+            else if (StatusID == (int)Enums.Statuses.Fraud)
+            {
+                report.RecommendedActionID = (int)Enums.RecommendedAction.Block;
+
+            }
+
+
+            GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
+            ReportParameter[] parameters = new ReportParameter[2];
+            parameters[0] = new ReportParameter("ReportID", report.ReportID);
+
+
+
+            if (ClientID == 3)
+            {
+                parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.");
+            }
+            else
+            {
+                parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.");
+            }
+
+
+
+            string exeFolder = Path.GetDirectoryName(@"C:\FMS\ClientReportLibrary\");
+            string reportPath =string.Empty;
+
+
+
+            if (ClientID == (int)Enums.Clients.ST)//-- Syrian Telecom
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptToSyrianOperator.rdlc");
+            }
+            else if (ClientID == (int)Enums.Clients.Zain)//-- Zain
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptToZainOperator.rdlc");
+            }
+            else if (ClientID == (int)Enums.Clients.ITPC)//-- ITPC
+            {
+                reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+            }
+
+
+
+
+
+            rvToOperator.LocalReport.ReportPath = reportPath;
+            
+            rvToOperator.LocalReport.SetParameters(parameters);
+
+            
+
+
+
+            ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(1)).User.Signature);
+            rvToOperator.LocalReport.DataSources.Add(SignatureDataset);
+
+
+            ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
+            rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
+
+            ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
+            rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+            rvToOperator.LocalReport.Refresh();
+
+            string CCs = EmailCC.GetClientEmailCCs(ClientID);
+          
+
+            if (ClientID == 3)
+            {
+                ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+                EmailManager.SendReporttoMobileSyrianOperator(ExportReportToExcel(report.ReportID + ".xls", rvToOperator), EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
+
+            }
+            else
+            {
+                EmailManager.SendReporttoMobileOperator(ExportReportToPDF(report.ReportID + ".pdf", rvToOperator), EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+
+            }
+
+        }
+
+        private string ExportReportToPDF(string reportName, ReportViewer rvToOperator)
+        {
+            Warning[] warnings;
+            string[] streamids;
+            string mimeType;
+            string encoding;
+            string filenameExtension;
+            byte[] bytes = rvToOperator.LocalReport.Render(
+               "PDF", null, out mimeType, out encoding, out filenameExtension,
+                out streamids, out warnings);
+
+            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
+            using (var fs = new FileStream(filename, FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Close();
+            }
+
+            return filename;
+        }
+
+        private string ExportReportToExcel(string reportName, ReportViewer rvToOperator)
+        {
+            Warning[] warnings;
+            string[] streamids;
+            string mimeType;
+            string encoding;
+            string filenameExtension;
+            byte[] bytes = rvToOperator.LocalReport.Render(
+               "Excel", null, out mimeType, out encoding, out filenameExtension,
+                out streamids, out warnings);
+
+            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
+            using (var fs = new FileStream(filename, FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Close();
+            }
+
+            return filename;
+        }
+
+        private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
+        {
+
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+

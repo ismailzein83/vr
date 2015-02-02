@@ -1,0 +1,330 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Vanrise.Fzero.CDRAnalysis;
+using Vanrise.Fzero.CDRAnalysis.Providers;
+using Vanrise.CommonLibrary;
+using System.Data;
+using Microsoft.Reporting.WebForms;
+using System.Configuration;
+using System.IO;
+using System.Net;
+using Telerik.Web.UI;
+
+
+public partial class ReportManagement : BasePage
+{
+    #region Properties
+
+    int id { get { return (int)ViewState["Id"]; } set { ViewState["Id"] = value; } }
+
+
+    private void FillControls()
+    {
+        List<Suspection_Level> suspection_Levels = new List<Suspection_Level>();
+        suspection_Levels = Suspection_Level.GetAll();
+        int StartegyId;
+        int.TryParse(Request.QueryString["Strategyid"], out StartegyId);
+    }
+
+    #endregion
+
+    #region Events
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!CurrentUser.IsAuthenticated)
+            RedirectToAuthenticationPage();
+
+        if (!IsPostBack)
+        {
+            SetCaptions();
+            FillCombos();
+            SetPermissions();
+            SetDetailsVisible("Main");
+            FillControls();
+
+            if (Request.QueryString["ReportNumber"] != null )
+            {
+                txtReportNumber.Text = Request.QueryString["ReportNumber"];
+            }
+
+
+            gvData.Rebind();
+        }
+    }
+
+    private void SetCaptions()
+    {
+        ((MasterPage)this.Master).PageHeaderTitle = "Report Management";
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        gvData.Rebind();
+    }
+
+
+    protected void gvData_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
+    {
+        string reportNumber = txtReportNumber.Text;
+        DateTime? fromDate = dtpFromDate.SelectedDate;
+        DateTime? toDate = dtpToDate.SelectedDate;
+        string SubscriberNumber = txtSubscriberNumber.Text;
+
+        gvData.DataSource = Vanrise.Fzero.CDRAnalysis.Report.GetList(reportNumber, SubscriberNumber, fromDate, toDate);
+    }
+
+    protected void gvData_ItemCommand(object sender, GridCommandEventArgs e)
+    {
+      
+        if (e.CommandArgument != null)
+        {
+            switch (e.CommandName)
+            {
+                case "Details":
+                    if (e.CommandArgument == null)
+                         return;
+
+                    hfReportID.Value = e.CommandArgument.ToString();
+                    FillDetails(hfReportID.Value.ToInt());
+                    break;
+
+                case "Export":
+                    ExportReportToExcel(id.ToString() + ".xls");
+
+                    string path = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], id.ToString() + ".xls");
+                    WebClient req = new WebClient();
+                    HttpResponse response = HttpContext.Current.Response;
+                    response.Clear();
+                    response.ClearContent();
+                    response.ClearHeaders();
+                    response.Buffer = true;
+                    response.AddHeader("Content-Disposition", "attachment;filename=\"" + path + "\"");
+                    byte[] data = req.DownloadData(path);
+                    response.BinaryWrite(data);
+                    response.End();
+
+
+                    break;
+
+
+                case "Send":
+                    Vanrise.Fzero.CDRAnalysis.Report report = Vanrise.Fzero.CDRAnalysis.Report.Load(id);
+                    string ReportID = "CA" + report.ReportNumber + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + DateTime.Now.Hour.ToString("D2") + DateTime.Now.Minute.ToString("D2");
+                    EmailManager.SendReporttoITPC(ExportReportToExcel(id.ToString() + ".xls"), ReportID, "FMS_Profile");
+                    report.SentDate = DateTime.Now;
+                    report.SentBy = CurrentUser.User.ID;
+                    report.ReportingStatusID = (int)Enums.ReportingStatuses.Sent;
+                    report.ReportID = ReportID;
+                    Vanrise.Fzero.CDRAnalysis.Report.Save(report);
+                    gvData.Rebind();
+                    ShowAlert("Report sent successfully");
+                    break;
+
+
+
+                case "Remove":
+                    if (e.CommandArgument == null)
+                         return;
+
+                    hfReportID.Value = e.CommandArgument.ToString();
+
+                    if (Vanrise.Fzero.CDRAnalysis.Report.Delete(hfReportID.Value.ToInt()))
+                    {
+                        gvData.Rebind();
+                    }
+                    else
+                    {
+                        ShowError("Unable to Delete!.");
+                    }
+                    break;
+
+
+            }
+        }
+    }
+
+    #endregion
+
+    #region Methods
+   
+    private void FillCombos()
+    {
+        Manager.BindCombo(ddlReportingStatus,Vanrise.Fzero.CDRAnalysis.ReportingStatu.GetAll(), "Name", "Id", "Choose Status ...", "");
+    }
+    private void SetPermissions()
+    {
+        if (!CurrentUser.HasPermission(Enums.SystemPermissions.ReportManagement))
+            RedirectToAuthenticationPage();
+
+        btnAdd.Visible = CurrentUser.HasPermission(Enums.SystemPermissions.ManageReport);
+        gvData.Columns[gvData.Columns.Count - 1].Visible = CurrentUser.HasPermission(Enums.SystemPermissions.ManageReport);
+    }
+    private bool IsValidData()
+    {
+        return true;
+    }
+    private void SetDetailsVisible(string flag)
+    {
+        
+        if (flag == "Main")
+        {
+            divFilter.Visible = true;
+            divData.Visible = true;
+            divDetails.Visible = false;
+            divAddtion.Visible = false;
+        }
+        else if (flag == "Details")  
+        {
+            divFilter.Visible = false;
+            divData.Visible = false;
+            divDetails.Visible = true;
+            divAddtion.Visible = false;
+        }
+        else if (flag == "Addition")
+        {
+            divFilter.Visible = false;
+            divData.Visible = false;
+            divDetails.Visible = false;
+            divAddtion.Visible = true;
+        }
+
+    }
+    private void ClearFiltrationFields()
+    {
+        txtReportNumber.Text = "";
+        ddlReportingStatus.SelectedIndex = -1;
+        txtSubscriberNumber.Text = "";
+        dtpFromDate.Clear();
+        dtpToDate.Clear();
+    }
+    private void FillDetails(int reportId)
+    {
+        ClearDetails();
+        SetDetailsVisible("Details");
+
+        Vanrise.Fzero.CDRAnalysis.Report report = Vanrise.Fzero.CDRAnalysis.Report.Load(reportId);
+        txtDetailsReportStatus.Text = report.ReportingStatu.Name;
+        txtDetailsReportNumber.Text = report.ReportNumber.ToString();
+        txtDetailsCreationDate.Text = report.ReportDate.ToString();
+       
+        List<ReportDetail> reportDetails = ReportDetail.GetList(id);
+        gvDetails.DataSource = reportDetails;
+        gvDetails.DataBind();
+
+    }
+    protected void gvDetails_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandArgument == null)
+            return;
+
+        id = int.Parse(e.CommandArgument.ToString());
+        if (e.CommandArgument != null)
+        {
+            switch (e.CommandName)
+            {
+                case "Remove":
+
+                    if (ReportDetail.Delete(id))
+                    {
+                        List<ReportDetail> reportDetails = ReportDetail.GetList(hfReportID.Value.ToInt());
+                        gvDetails.DataSource = reportDetails;
+                        gvDetails.DataBind();
+                    }
+                    else
+                    {
+                        ShowError( "Unable to Delete!.");
+                    }
+                    break;
+
+
+            }
+        }
+    }
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        ClearDetails();
+        SetDetailsVisible("Main");
+    }
+    protected void btnReturn_Click(object sender, EventArgs e)
+    {
+        ClearDetails();
+        SetDetailsVisible("Main");
+    }
+    protected void ClearDetails()
+    {
+
+
+    }
+    protected void lnkSearchNumber_Click(object sender, EventArgs e)
+    {
+        ClearDetails();
+    }
+    private string ExportReportToExcel(string reportName)
+    {
+        ReportViewer rvToOperator = new ReportViewer();
+
+        rvToOperator.LocalReport.ReportPath = Path.Combine(string.Empty, @"Reports\rptReportedNumbers.rdlc");
+
+        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportedNumbers", vw_ReportedNumber.GetList(id));
+        rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+
+        ReportDataSource rptDataSourceReportedNumberNormalCDRs = new ReportDataSource("DSReportedNumberNormalCDR", vw_ReportedNumberNormalCDR.GetList(id));
+        rvToOperator.LocalReport.DataSources.Add(rptDataSourceReportedNumberNormalCDRs);
+
+        rvToOperator.LocalReport.Refresh();
+
+        Warning[] warnings;
+        string[] streamids;
+        string mimeType;
+        string encoding;
+        string filenameExtension;
+        byte[] bytes = rvToOperator.LocalReport.Render(
+           "Excel", null, out mimeType, out encoding, out filenameExtension,
+            out streamids, out warnings);
+
+        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
+        using (var fs = new FileStream(filename, FileMode.Create))
+        {
+            fs.Write(bytes, 0, bytes.Length);
+            fs.Close();
+        }
+
+        return filename;
+    }
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+        ClearFiltrationFields();
+        gvData.Rebind();
+    }
+    protected void btnAdd_Click(object sender, EventArgs e)
+    {
+        SetDetailsVisible("Addition");
+
+    }
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        Vanrise.Fzero.CDRAnalysis.Report rt = new Vanrise.Fzero.CDRAnalysis.Report();
+        rt.Description = txtDescription.Text;
+        rt.UserId = CurrentUser.User.ID;
+        rt.ReportingStatusID = (int)Enums.ReportingStatuses.ToBeSent;
+        Vanrise.Fzero.CDRAnalysis.Report.SetReportVariables(rt);
+
+        if (!Vanrise.Fzero.CDRAnalysis.Report.Save(rt))
+        {
+            ShowError( "An error occured when trying to save data, kindly try to save later.");
+            return;
+        }
+
+        SetDetailsVisible("Main");
+        gvData.Rebind();
+
+    }
+
+    #endregion
+
+  
+}

@@ -1,0 +1,192 @@
+﻿using System;
+using Vanrise.CommonLibrary;
+using Vanrise.Fzero.Bypass;
+using Telerik.Web.UI;
+
+public partial class SourceMappings : BasePage
+{
+    #region Properties
+
+    public SourceMapping currentObject
+    {
+        get
+        {
+            if (Session["SourceMapping.currentObject"] is SourceMapping)
+                return (SourceMapping)Session["SourceMapping.currentObject"];
+            return new SourceMapping();
+        }
+        set
+        {
+            Session["SourceMapping.currentObject"] = value;
+        }
+    }
+
+
+
+    #endregion
+
+    #region Methods
+
+    private void SetPermissions()
+    {
+        if (!CurrentUser.HasPermission(Enums.SystemPermissions.SourcesMapping))
+            PreviousPageRedirect();
+    }
+
+    private void ClearForm()
+    {
+        hdnId.Value = "0";
+        txtColumnName.Text = string.Empty;
+        ddlMappedtoColumnNumber.SelectedIndex = 0;
+        chkIncludeInCompare.Checked = false;
+        
+        currentObject = null;
+    }
+
+    private void FillCombos()
+    {
+        Manager.BindCombo(ddlSource, Vanrise.Fzero.Bypass.Source.GetAllSources(), "Name", "Id", Resources.Resources.PleaseSelect, "0");
+        Manager.BindCombo(ddlMappedtoColumnNumber, Vanrise.Fzero.Bypass.PredefinedColumn.GetPredefinedColumns(), "Name", "Id", null,null);
+    }
+
+    private void SetCaptions()
+    {
+        ((MasterPage)Master).PageHeaderTitle = Resources.Resources.SourceMappingTemplates;
+    }
+
+    public void FillData(SourceMapping SourceMapping)
+    {
+        hdnId.Value=SourceMapping.ID.ToString();
+        txtColumnName.Text=SourceMapping.ColumnName;
+        ddlMappedtoColumnNumber.SelectedValue = SourceMapping.MappedtoColumnNumber.ToString();
+        chkIncludeInCompare.Checked=SourceMapping.IncludeInCompare;
+        currentObject = SourceMapping;
+    }
+
+    public void SetData()
+    {
+        SourceMapping SourceMapping = new SourceMapping();
+        SourceMapping.ID = Manager.GetInteger(hdnId.Value);
+        SourceMapping.ColumnName = txtColumnName.Text;
+        SourceMapping.MappedtoColumnNumber = ddlMappedtoColumnNumber.SelectedValue.ToInt();
+        SourceMapping.IncludeInCompare = chkIncludeInCompare.Checked;
+        SourceMapping.SourceID = ddlSource.SelectedValue.ToInt();
+
+        if (SourceMapping.ID != 0)
+        {
+            SourceMapping.LastUpdatedBy = CurrentUser.ApplicationUserID;
+            SourceMapping.LastUpdateDate = DateTime.Now;
+        }
+        else
+        {
+            SourceMapping.CreatedBy = CurrentUser.ApplicationUserID;
+            SourceMapping.CreationDate = DateTime.Now;
+        }
+        
+
+        currentObject = SourceMapping;
+    }
+
+    private bool Save()
+    {
+        SetData();
+        if (!SourceMapping.CheckIfExists(currentObject))
+        {
+            SourceMapping.Save(currentObject);
+            RadMultiPageMain.SelectedIndex = 0;
+            lvColumns.Rebind();
+            ClearForm();
+            LoggedAction.AddLoggedAction((int)Enums.ActionTypes.Updatedsourcemapping, CurrentUser.User.ID);
+            return true;
+        }
+        ShowError(Resources.Resources.AlreadyExists);
+       return false;
+    }
+
+    #endregion
+
+    #region Events
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!CurrentUser.IsAuthenticated)
+            RedirectToAuthenticationPage();
+
+        if (CurrentUser.portalType != 2)//Admin
+            RedirectToAuthenticationPage();
+
+        if (!IsPostBack)
+        {
+            SetCaptions();
+            FillCombos();
+            SetPermissions();
+        }
+    }
+
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        Save();
+    }
+
+    protected void lvColumns_NeedDataSource(object sender, RadListViewNeedDataSourceEventArgs e)
+    {
+        if (ddlSource.SelectedValue !=string.Empty)
+            lvColumns.DataSource = SourceMapping.GetSourceMappings(ddlSource.SelectedValue.ToInt());
+    }
+
+    protected void ddlSource_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
+    {
+        lvColumns.Enabled = ddlSource.SelectedValue != "0" ? true : false;
+        lvColumns.Rebind();
+    }
+
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        ClearForm();
+        RadMultiPageMain.SelectedIndex = 0;
+    }
+
+    protected void lvColumns_ItemCommand(object sender, RadListViewCommandEventArgs e)
+    {
+        if (e.CommandArgument == null)
+            return;
+
+        int ID = 0;
+        ID = e.CommandArgument.ToString().ToInt();
+
+
+        switch (e.CommandName)
+        {
+            case "Delete":
+                if (SourceMapping.Delete(ID))
+                {
+                    lvColumns.Rebind();
+                }
+                else
+                    ShowError(Resources.Resources.UnabletoDelete);
+                break;
+
+            case "Modify":
+                currentObject = SourceMapping.Load(ID);
+                FillData(currentObject);
+                RadMultiPageMain.SelectedIndex = 1;
+                break;
+
+            case "Insert":
+                ClearForm();
+                RadMultiPageMain.SelectedIndex = 1;
+                break;
+
+
+            case "Cancel":
+                RadMultiPageMain.SelectedIndex = 0;
+                break;
+
+
+
+        }
+    }
+
+    #endregion
+        
+}

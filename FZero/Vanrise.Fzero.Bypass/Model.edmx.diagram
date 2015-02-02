@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="05c52f6c890c45e4a9b8a1dd780df1e9" Name="Diagram1" ZoomLevel="66">
+        <EntityTypeShape EntityType="Model.ActionType" Width="1.5" PointX="10.413916970795913" PointY="13.93280742221177" />
+        <EntityTypeShape EntityType="Model.ApplicationUser" Width="1.5" PointX="2.0679461257848635" PointY="1.1381809716756366" />
+        <EntityTypeShape EntityType="Model.AppType" Width="1.5" PointX="1.9377890778415785" PointY="28.277129484469597" />
+        <EntityTypeShape EntityType="Model.Carrier" Width="1.5" PointX="9.3311803645133882" PointY="12.059901690138458" />
+        <EntityTypeShape EntityType="Model.CasesLog" Width="1.5" PointX="1.45293104902512" PointY="1.4139515764144954" />
+        <EntityTypeShape EntityType="Model.ChangeType" Width="1.5" PointX="1.1657136702750408" PointY="25.835118380298429" />
+        <EntityTypeShape EntityType="Model.Client" Width="1.5" PointX="0.921232268643208" PointY="29.998157157561813" />
+        <EntityTypeShape EntityType="Model.EmailCC" Width="1.5" PointX="6.6111652099579414" PointY="27.047057358104297" />
+        <EntityTypeShape EntityType="Model.Email" Width="1.5" PointX="7.3556496274451026" PointY="24.291274752603506" />
+        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="7.1316931318173609" PointY="25.474719834269358" />
+        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="5.7723817665932611" PointY="23.597834374568347" />
+        <EntityTypeShape EntityType="Model.GeneratedCall" Width="1.5" PointX="11.530192225952721" PointY="4.6863511673576905" />
+        <EntityTypeShape EntityType="Model.GMT" Width="1.5" PointX="10.36643475776838" PointY="25.44245998256023" />
+        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="2.298784666833833" PointY="16.966065459403239" />
+        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="8.7650887355045839" PointY="7.3498484228504113" />
+        <EntityTypeShape EntityType="Model.LoggedAction" Width="1.5" PointX="4.0998346619772885" PointY="0.95213924392691773" />
+        <EntityTypeShape EntityType="Model.MobileOperatorFeedback" Width="1.5" PointX="8.0846227575487557" PointY="22.071940551545442" />
+        <EntityTypeShape EntityType="Model.MobileOperator" Width="1.5" PointX="5.0304629770249418" PointY="23.9800650291052" />
+        <EntityTypeShape EntityType="Model.OriginationNetwork" Width="1.5" PointX="11.137104039609946" PointY="1.8640823372938122" />
+        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="7.6647496072876962" PointY="30.455754338975883" />
+        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="9.6472628440928" PointY="22.455632384147325" />
+        <EntityTypeShape EntityType="Model.PredefinedColumnsforRelatedNumber" Width="1.5" PointX="3.4476723258605566" PointY="26.400648218766158" />
+        <EntityTypeShape EntityType="Model.Priority" Width="1.5" PointX="3.7779778166571529" PointY="13.203471011111267" />
+        <EntityTypeShape EntityType="Model.RecievedCall" Width="1.5" PointX="5.8498133355052273" PointY="16.184755705383026" />
+        <EntityTypeShape EntityType="Model.RecievedEmail" Width="1.5" PointX="4.068982647764023" PointY="15.848289363015578" />
+        <EntityTypeShape EntityType="Model.RecommendedAction" Width="1.5" PointX="2.6358581197615054" PointY="3.9798603374417221" />
+        <EntityTypeShape EntityType="Model.RelatedNumberMapping" Width="1.5" PointX="10.50073578511399" PointY="17.82460706765978" />
+        <EntityTypeShape EntityType="Model.RelatedNumber" Width="1.5" PointX="3.6889392955642837" PointY="4.1726108808874205" />
+        <EntityTypeShape EntityType="Model.ReportingStatus" Width="1.5" PointX="5.6946105573766914" PointY="0.82817183473527978" />
+        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="2.0603831066099847" PointY="11.724977558350647" />
+        <EntityTypeShape EntityType="Model.SourceKind" Width="1.5" PointX="8.3051388898422651" PointY="7.9170821792991282" />
+        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="7.7573743982973387" PointY="28.524634374549908" />
+        <EntityTypeShape EntityType="Model.Source" Width="1.5" PointX="8.4303971791781471" PointY="2.1564305434731907" />
+        <EntityTypeShape EntityType="Model.SourceType" Width="1.5" PointX="1.6035466350631542" PointY="12.384678831503111" />
+        <EntityTypeShape EntityType="Model.Status" Width="1.5" PointX="6.2188459570607382" PointY="25.649708864115976" />
+        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="11.005542469679165" PointY="17.750983335893128" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="1.4444784249386182" PointY="20.562094012537084" />
+        <EntityTypeShape EntityType="Model.SysParameter" Width="1.5" PointX="11.90575709375821" PointY="24.937385660101373" />
+        <EntityTypeShape EntityType="Model.ToneFeedback" Width="1.5" PointX="5.4015155646025743" PointY="4.3465310504411026" />
+        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="9.97940387110198" PointY="14.44035500960441" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="3.6911091579548589" PointY="21.945336739507194" />
+        <EntityTypeShape EntityType="Model.ValueType" Width="1.5" PointX="2.2932918995121918" PointY="7.5252805983299762" />
+        <EntityTypeShape EntityType="Model.WebsiteMenu" Width="1.5" PointX="0.12033503880739913" PointY="6.953032094497714" />
+        <EntityTypeShape EntityType="Model.delete_View_AllCasesofMobileOperator" Width="1.5" PointX="1.8563164313586038" PointY="3.7343869524702371" />
+        <EntityTypeShape EntityType="Model.delete_View_Carrier" Width="1.5" PointX="4.5880384112652566" PointY="9.24195705784576" />
+        <EntityTypeShape EntityType="Model.delete_View_CaseStatuses" Width="1.5" PointX="3.2979138285377596" PointY="28.870772270891244" />
+        <EntityTypeShape EntityType="Model.delete_View_Comparisons" Width="1.5" PointX="10.638647769875195" PointY="8.7143547277498783" />
+        <EntityTypeShape EntityType="Model.delete_View_FraudCasesofMobileOperator" Width="1.5" PointX="3.1157689872736896" PointY="17.808952071615007" />
+        <EntityTypeShape EntityType="Model.delete_View_Imports" Width="1.5" PointX="0.66348774575790748" PointY="12.669158494411576" />
+        <EntityTypeShape EntityType="Model.delete_View_ReportedCLIs" Width="1.5" PointX="1.4698459028591615" PointY="7.91817696761255" />
+        <EntityTypeShape EntityType="Model.delete_View_Reports" Width="1.5" PointX="3.3477549941035707" PointY="3.2148233965108282" />
+        <EntityTypeShape EntityType="Model.delete_View_SourceGenerates" Width="1.5" PointX="11.850437432457897" PointY="17.20091152992142" />
+        <EntityTypeShape EntityType="Model.delete_View_SourceGeneratesRecieves" Width="1.5" PointX="6.9375660414516762" PointY="21.277971650137552" />
+        <EntityTypeShape EntityType="Model.delete_View_SourceRecieves" Width="1.5" PointX="0.047969201602027382" PointY="7.439868081100224" />
+        <EntityTypeShape EntityType="Model.delete_View_TimeActiveonNetwork" Width="1.5" PointX="6.7784705566142076" PointY="16.899785794736719" />
+        <EntityTypeShape EntityType="Model.delete_View_ToReportedCLIs" Width="1.5" PointX="8.16321351573021" PointY="10.839097102563407" />
+        <EntityTypeShape EntityType="Model.delete_ViewCaseStatuses" Width="1.5" PointX="2.331160566923749" PointY="23.053999941355549" />
+        <EntityTypeShape EntityType="Model.delete_ViewClientCase" Width="1.5" PointX="0.70575742642663308" PointY="0.20170030007218026" />
+        <EntityTypeShape EntityType="Model.delete_ViewComparisons" Width="1.5" PointX="0.67561391772498092" PointY="13.161051130462928" />
+        <EntityTypeShape EntityType="Model.delete_ViewDistinctGeneratedCalls" Width="1.5" PointX="10.576402851648817" PointY="15.528027049977345" />
+        <EntityTypeShape EntityType="Model.delete_ViewImports" Width="1.5" PointX="10.952345022443843" PointY="0.54173740769817369" />
+        <EntityTypeShape EntityType="Model.delete_ViewLastImports" Width="1.5" PointX="0.056216150548409741" PointY="7.3416321609828774" />
+        <EntityTypeShape EntityType="Model.delete_ViewReportedCalls" Width="1.5" PointX="6.3207269955057308" PointY="0.47734098158652938" />
+        <EntityTypeShape EntityType="Model.delete_ViewReportedClientCalls" Width="1.5" PointX="8.0179709810847282" PointY="27.137587738753105" />
+        <EntityTypeShape EntityType="Model.delete_ViewReports" Width="1.5" PointX="4.5950162674277166" PointY="13.939733511740219" />
+        <EntityTypeShape EntityType="Model.delete_ViewResultedCases" Width="1.5" PointX="8.6880318767801068" PointY="1.7348830111952884" />
+        <EntityTypeShape EntityType="Model.delete_ViewResultedCases_All" Width="1.5" PointX="0.16010324105625193" PointY="18.6935666886594" />
+        <EntityTypeShape EntityType="Model.delete_ViewResultedCases_CLINotReported" Width="1.5" PointX="2.0673781344980831" PointY="6.6281343580354628" />
+        <EntityTypeShape EntityType="Model.delete_ViewResultedCases_CLIReported" Width="1.5" PointX="8.3790638448573009" PointY="20.914533535444427" />
+        <EntityTypeShape EntityType="Model.delete_ViewSourceGenerates" Width="1.5" PointX="7.8844141829220638" PointY="11.042921786682179" />
+        <EntityTypeShape EntityType="Model.delete_ViewSourceGeneratesRecieves" Width="1.5" PointX="2.5594178338346154" PointY="29.510309069189386" />
+        <EntityTypeShape EntityType="Model.delete_ViewSourceRecieves" Width="1.5" PointX="6.62192455056213" PointY="27.334983301970635" />
+        <EntityTypeShape EntityType="Model.delete_ViewSummaryClient" Width="1.5" PointX="7.3025203809619512" PointY="29.955339773537283" />
+        <EntityTypeShape EntityType="Model.delete_ViewToBeReportedCalls" Width="1.5" PointX="8.4953790346604663" PointY="5.3157274449783039" />
+        <EntityTypeShape EntityType="Model.delete_vwCarrier" Width="1.5" PointX="2.5621255964795711" PointY="8.1070169993243262" />
+        <EntityTypeShape EntityType="Model.delete_vwOrigination" Width="1.5" PointX="6.0027431091306465" PointY="20.608249524891491" />
+        <EntityTypeShape EntityType="Model.deleted_ViewToBeReportedCalls" Width="1.5" PointX="6.1745315837555239" PointY="20.391562024313753" />
+        <EntityTypeShape EntityType="Model.View_Origination" Width="1.5" PointX="4.0169713404108638" PointY="8.3856092432446818" />
+        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.5" PointX="1.1493426231431507" PointY="24.259534325571515" />
+        <EntityTypeShape EntityType="Model.ViewSummary" Width="1.5" PointX="0.1296148282148013" PointY="18.022835128951275" />
+        <EntityTypeShape EntityType="Model.vwAllCase" Width="1.5" PointX="11.961268387716853" PointY="4.990330132185635" />
+        <EntityTypeShape EntityType="Model.vwCLI" Width="1.5" PointX="10.194934262984868" PointY="4.136187972564338" />
+        <EntityTypeShape EntityType="Model.vwCount" Width="1.5" PointX="9.6493877962461614" PointY="20.033686364085266" />
+        <EntityTypeShape EntityType="Model.vwFraudCase" Width="1.5" PointX="3.904558172405026" PointY="19.52286148980393" />
+        <EntityTypeShape EntityType="Model.vwRepeatedCase" Width="1.5" PointX="6.5778718435102483" PointY="27.253885445768891" />
+        <AssociationConnector Association="Model.FK_LoggedActions_Actions" />
+        <AssociationConnector Association="Model.FK_Administrators_Users" />
+        <AssociationConnector Association="Model.FK_Imports_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_Reports_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_SourceMappings_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_SourceMappings_ApplicationUsers1" />
+        <AssociationConnector Association="Model.FK_Permissions_AppType" />
+        <AssociationConnector Association="Model.FK_CasesLogs_ChangeTypes" />
+        <AssociationConnector Association="Model.FK_CasesLogs_MobileOperatorFeedbacks" />
+        <AssociationConnector Association="Model.FK_CasesLogs_ReportingStatuses" />
+        <AssociationConnector Association="Model.FK_CasesLogs_Statuses" />
+        <AssociationConnector Association="Model.FK_EmailCCs_Clients" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Clients" />
+        <AssociationConnector Association="Model.FK_Users_Clients" />
+        <AssociationConnector Association="Model.FK_EmailCCs_MobileOperators" />
+        <AssociationConnector Association="Model.FK_Emails_EmailTemplates" />
+        <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
+        <AssociationConnector Association="Model.FK_GeneratedCalls_MobileOperators" />
+        <AssociationConnector Association="Model.FK_Imports_ImportTypes" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Imports" />
+        <AssociationConnector Association="Model.FK_LoggedActions_Users" />
+        <AssociationConnector Association="Model.FK_Customers_Users" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_MobileOperators" />
+        <AssociationConnector Association="Model.FK_RelatedNumberMappings_MobileOperators" />
+        <AssociationConnector Association="Model.FK_CustomerPermissions_Permissions" />
+        <AssociationConnector Association="Model.FK_Permissions_Permissions" />
+        <AssociationConnector Association="Model.FK_WebsiteMenus_Permissions" />
+        <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" />
+        <AssociationConnector Association="Model.FK_RelatedNumberMappings_PredefinedColumnsforRelatedNumbers" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Sources" />
+        <AssociationConnector Association="Model.FK_Reports_RecommendedActions" />
+        <AssociationConnector Association="Model.FK_RelatedNumberSourceMappings_Sources" />
+        <AssociationConnector Association="Model.FK_RelatedNumbers_Reports" />
+        <AssociationConnector Association="Model.FK_Sources_SourceKinds" />
+        <AssociationConnector Association="Model.FK_SourceMappings_Sources" />
+        <AssociationConnector Association="Model.FK_Sources_SourceTypes" />
+        <AssociationConnector Association="Model.FK_SysParameters_ValueTypes" />
+        <AssociationConnector Association="Model.FK_SystemParameters_Users" />
+        <AssociationConnector Association="Model.FK_CustomerPermissions_Customers" />
+        <AssociationConnector Association="Model.FK_UserPermissions_Users" />
+        <AssociationConnector Association="Model.FK_WebsiteMenus_WebsiteMenus" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
