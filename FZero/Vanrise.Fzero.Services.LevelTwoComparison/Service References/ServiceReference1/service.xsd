@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/FMS.DataLayer" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Bypass" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Services.WcfServiceLibrary" />
   <xs:element name="Import">
     <xs:complexType>
@@ -53,21 +53,21 @@
   <xs:element name="GetLastEmailRecievedResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/FMS.DataLayer" minOccurs="0" name="GetLastEmailRecievedResult" nillable="true" type="q1:RecievedEmail" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Bypass" minOccurs="0" name="GetLastEmailRecievedResult" nillable="true" type="q1:RecievedEmail" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveLastEmailRecieved">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/FMS.DataLayer" minOccurs="0" name="RecievedEmail" nillable="true" type="q2:RecievedEmail" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Bypass" minOccurs="0" name="RecievedEmail" nillable="true" type="q2:RecievedEmail" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveLastEmailRecievedResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/FMS.DataLayer" minOccurs="0" name="SaveLastEmailRecievedResult" nillable="true" type="q3:RecievedEmail" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Bypass" minOccurs="0" name="SaveLastEmailRecievedResult" nillable="true" type="q3:RecievedEmail" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

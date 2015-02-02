@@ -14,7 +14,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/FMS.DataLayer" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Bypass" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Vanrise.Fzero.Services.WcfServiceLibrary" />
     </xsd:schema>
   </wsdl:types>

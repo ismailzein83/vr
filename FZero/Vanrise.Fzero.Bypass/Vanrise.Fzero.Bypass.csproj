@@ -7,8 +7,8 @@
     <ProjectGuid>{1CA1B8A4-C6AC-499D-A763-8276A68C415E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FMS.DataLayer</RootNamespace>
-    <AssemblyName>FMS.DataLayer</AssemblyName>
+    <RootNamespace>Vanrise.Fzero.Bypass</RootNamespace>
+    <AssemblyName>Vanrise.Fzero.Bypass</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

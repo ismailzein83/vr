@@ -7,8 +7,8 @@
     <ProjectGuid>{AA133B7E-6501-4A0D-AE8D-847B35008044}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FMS.TOne.DataLayer</RootNamespace>
-    <AssemblyName>FMS.TOne.DataLayer</AssemblyName>
+    <RootNamespace>Vanrise.Fzero.Bypass.TOne</RootNamespace>
+    <AssemblyName>Vanrise.Fzero.Bypass.TOne</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

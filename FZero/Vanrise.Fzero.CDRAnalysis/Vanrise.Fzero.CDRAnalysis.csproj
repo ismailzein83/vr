@@ -7,8 +7,8 @@
     <ProjectGuid>{ED95B0F7-CB6B-4296-A71F-EE0F6DC98B93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CallsNormalization_DataLayer</RootNamespace>
-    <AssemblyName>CallsNormalization_DataLayer</AssemblyName>
+    <RootNamespace>Vanrise.Fzero.CDRAnalysis</RootNamespace>
+    <AssemblyName>Vanrise.Fzero.CDRAnalysis</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
