@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Source Source = new Source();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     Source = context.Sources
                        .Where(u => u.Name == Name)
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Source Source = new Source();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     Source = context.Sources
                        .Where(u => u.ID == ID)
@@ -53,7 +53,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     SourcesList = context.Sources
                                             .OrderByDescending(u => u.Name)
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Source CurrentSource = new Source();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     context.Sources.Attach(Source);
                     context.Entry(Source).State = System.Data.EntityState.Modified;
@@ -93,7 +93,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         Source Source = new Source();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     Source = context.Sources
                        .Where(u => u.Email == Email)

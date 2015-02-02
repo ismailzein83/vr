@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     SourceMappingsList = context.SourceMappings.Where(x=>x.SourceID == SourceID).Include(u => u.PredefinedColumn)
                                             .OrderByDescending(u => u.ID)
@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             SourceMapping SourceMapping = new SourceMapping();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     SourceMapping = context.SourceMappings
                      .Where(u => u.ID == ID)
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     SourceMapping sourceMapping = SourceMapping.Load(ID);
                     context.Entry(sourceMapping).State = System.Data.EntityState.Deleted;
@@ -80,7 +80,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             SourceMapping CurrentSourceMapping = new SourceMapping();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (SourceMapping.ID == 0)
                     {
@@ -105,7 +105,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         {
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     int Count;
                     if (SourceMapping.SourceID == 0)

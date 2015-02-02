@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     foreach (UserPermission userPermission in context.UserPermissions.Where(x => x.UserID == userID).ToList())
                     {
@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.CDRAnalysis
               bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     foreach (UserPermission rolePermission in permissions)
                     {

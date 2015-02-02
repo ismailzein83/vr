@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Trunck trunck = new Trunck();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {            
                     trunck = context.Truncks
                         .Include("SwitchTruncks")
@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (trunck.Id == 0)
                     {
@@ -81,7 +81,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     context.Entry(trunck).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

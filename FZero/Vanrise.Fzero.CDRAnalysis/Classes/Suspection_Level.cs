@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Suspection_Level suspection_level = new Suspection_Level();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     suspection_level = context.Suspection_Level
                         .Where(s => s.Id == id)
@@ -42,7 +42,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Suspection_Level> suspection_levels = new List<Suspection_Level>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     suspection_levels = context.Suspection_Level
                        .ToList();
@@ -61,7 +61,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (suspection_level.Id == 0)
                     {

@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Direction> directions = new List<Direction>();
             try 
             {
-                using(Entities context = new Entities())
+                using(CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     directions = context.Directions.ToList();
                 }

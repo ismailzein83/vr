@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.CDRAnalysis
          
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
 

@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             int Count = 0;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     Count = context.Reports
                         .Count();
@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Report report = new Report();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     report = context.Reports
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Report report = new Report();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     report = context.Reports
@@ -81,7 +81,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<ReportDetail> reportDetails = new List<ReportDetail>();
             try
             {
-               using (Entities context = new Entities())
+               using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     reports = context.Reports
@@ -112,7 +112,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Report> reports = new List<Report>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     reports = context.Reports
                        .Include(s => s.ReportDetails)
@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Report> reports = new List<Report>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     reports = context.Reports
                        .Include(s => s.ReportDetails)
@@ -158,7 +158,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (report.Id == 0)
                     {
@@ -186,7 +186,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         {
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     var result = (from c in context.GetReportVariables() select c).FirstOrDefault();
 
@@ -210,7 +210,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         //    List<Report> reports = new List<Report>();
         //    try
         //    {
-        //        using (Entities context = new Entities())
+        //        using (CallsNormalizationEntities context = new CallsNormalizationEntities())
         //        {
                     
         //            reports = from rt in context.Reports
@@ -255,7 +255,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     context.Entry(report).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

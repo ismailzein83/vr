@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     EmailTokensList = context.EmailTokens
                         .OrderBy(x => x.Token) .ToList();

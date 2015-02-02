@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.CDRAnalysis
                 var _Database = new SqlParameter("@Database", database);
 
 
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (party == Constants.CGPN)
                     {

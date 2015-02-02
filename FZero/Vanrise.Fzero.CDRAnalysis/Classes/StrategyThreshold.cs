@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             StrategyThreshold strategyThreshold = new StrategyThreshold();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     strategyThreshold = context.StrategyThresholds
                         .Include(s => s.Strategy)
@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<StrategyThreshold> strategyThresholds = new List<StrategyThreshold>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     if (strategyId != 0 && criteriaID == 0)
@@ -102,7 +102,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<StrategyThreshold> strategyThresholds = new List<StrategyThreshold>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     strategyThresholds = context.StrategyThresholds
                         .Include(s => s.Strategy.StrategyPeriods)
@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     StrategyThreshold st = StrategyThreshold.Load(strategyThreshold.Id);
@@ -162,7 +162,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (strategyThreshold.Id == 0)
                     {

@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<NormalCDR> normalCDRs = new List<NormalCDR>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     normalCDRs = context.NormalCDRs
                        .Where(s =>
@@ -62,7 +62,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     relatedList = (from  c in context.NormalCDRs

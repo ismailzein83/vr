@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Period period = new Period();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     period = context.Periods
                         .Where(s => s.Id == id)
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Period> periods = new List<Period>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     periods = context.Periods
                        .ToList();
@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (period.Id == 0)
                     {

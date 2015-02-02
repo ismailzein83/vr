@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Switch_DatabaseConnections SwitchConnection = new Switch_DatabaseConnections();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     SwitchConnection = context.Switch_DatabaseConnections.Where(u=>u.Id==id).ToList().FirstOrDefault();
                 }

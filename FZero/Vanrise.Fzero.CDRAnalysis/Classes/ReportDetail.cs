@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             ReportDetail reportDetail = new ReportDetail();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     reportDetail = context.ReportDetails
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool existed = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     if (context.ReportDetails.Where(s => s.SubscriberNumber == subscriberNumber && s.ReportId == reportId).ToList().Count() > 0)
@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<ReportDetail> reportDetails = new List<ReportDetail>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     reportDetails = context.ReportDetails
@@ -94,7 +94,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<ReportDetail> reportDetails = new List<ReportDetail>();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     reportDetails = context.ReportDetails
@@ -116,7 +116,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             int reportId = 0;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     if (reportDetail.Id == 0)
                     {
@@ -145,7 +145,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     foreach (ReportDetail rd in reportDetails)
@@ -187,7 +187,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     context.Entry(reportDetail).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

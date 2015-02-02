@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.CDRAnalysis.Providers
             StrategyProperty strategyProperty = new StrategyProperty();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
 
                     if (strategyId != 0 && criteriaId == 0)
@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.CDRAnalysis.Providers
             StrategyProperty strategyProperty = new StrategyProperty();
             try
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     var data = from st in context.Strategies
                                join th in context.StrategyThresholds on st.Id equals th.StrategyId

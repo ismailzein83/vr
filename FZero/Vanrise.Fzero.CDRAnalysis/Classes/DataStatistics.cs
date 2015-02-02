@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             DataStatistics dataStatistics = new DataStatistics();
             try 
             {
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     dataStatistics.ReportDetails = context.ReportDetails.Count();
                     dataStatistics.ReportsCount = context.Reports.Count();
@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             {
                 var _Database = new SqlParameter("@Database", database);
 
-                using (Entities context = new Entities())
+                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
                     dashboard = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vw_Dashboard>("db_Dashboard @Database", _Database).ToList().FirstOrDefault();
