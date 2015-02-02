@@ -164,10 +164,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="NormalizationModel.Designer.cs">
+    <Compile Include="Model.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>NormalizationModel.edmx</DependentUpon>
+      <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Classes\vw_ReportedNumberNormalCDR.cs" />
     <Compile Include="Classes\vw_ReportedNumber.cs" />
@@ -288,24 +288,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="NormalizationModel.edmx">
+    <EntityDeploy Include="Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>NormalizationModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
     <None Include="NormalizationModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>NormalizationModel.edmx</DependentUpon>
+      <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>NormalizationModel.Context.cs</LastGenOutput>
     </None>
-    <None Include="NormalizationModel.edmx.diagram">
-      <DependentUpon>NormalizationModel.edmx</DependentUpon>
+    <None Include="Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
     </None>
     <None Include="NormalizationModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>NormalizationModel.edmx</DependentUpon>
+      <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>NormalizationModel.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
