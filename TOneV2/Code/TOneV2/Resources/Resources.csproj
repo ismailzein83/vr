@@ -68,6 +68,9 @@
     <Content Include="DLLs\SecurityEssentials.dll" />
     <Content Include="DLLs\Spring.Core.dll" />
     <Content Include="DLLs\TABS.Addons.AlcatelSwitchLibrary.dll" />
+    <Content Include="DLLs\TABS.Addons.EricssonEIN3_1ProxyLibrary.dll" />
+    <Content Include="DLLs\TABS.Addons.EricssonSwitchLibrary.dll" />
+    <Content Include="DLLs\TABS.Addons.EricssonSwitchLibrary.pdb" />
     <Content Include="DLLs\TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary.dll" />
     <Content Include="DLLs\TABS.Addons.MvtsProSwitchLibrary.dll" />
     <Content Include="DLLs\TABS.Addons.MvtsProSwitchLibraryMultipleQueue.dll" />
