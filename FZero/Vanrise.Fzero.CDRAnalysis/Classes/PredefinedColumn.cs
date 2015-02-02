@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     PredefinedColumnsList = context.PredefinedColumns
                                             .OrderByDescending(u => u.Name)

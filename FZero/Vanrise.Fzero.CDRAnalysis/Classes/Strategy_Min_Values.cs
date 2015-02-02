@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Strategy_Min_Values strategy_Min_Values = new Strategy_Min_Values();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategy_Min_Values = context.Strategy_Min_Values
                         .Include(s => s.Strategy)
@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy_Min_Values> strategy_Min_Values = new List<Strategy_Min_Values>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (strategyId != 0 && criteriaId == 0)
@@ -104,7 +104,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy_Min_Values> strategy_Min_Values = new List<Strategy_Min_Values>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategy_Min_Values = context.Strategy_Min_Values
                         .Include(s => s.Strategy)
@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(strategy_Min_Values).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
@@ -151,7 +151,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (strategy_Min_Values.Id == 0)

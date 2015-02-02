@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Criteria_Profile criteria_profile = new Criteria_Profile();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
 
                     criteria_profile = context.Criteria_Profile
@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Criteria_Profile> criteria_profiles = new List<Criteria_Profile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     criteria_profiles = context.Criteria_Profile
                         //.Include(s => s.Switch_DatabaseConnection)
@@ -71,7 +71,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Criteria_Profile> criteria_profiles = new List<Criteria_Profile>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     criteria_profiles = context.Criteria_Profile
                        .ToList();

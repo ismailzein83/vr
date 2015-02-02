@@ -50,12 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AN_Profiling.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Classes\SourceKind.cs" />
     <Compile Include="Classes\EmailReceiverType.cs" />
     <Compile Include="Classes\CDR.cs" />
@@ -73,102 +67,8 @@
     <Compile Include="Classes\SourceMapping.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserPermission.cs" />
-    <Compile Include="Criteria_Profile.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="db_findSuspectionOccuranceOld_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="db_GetReportedNumberNormalCDR_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="db_GetReportVariables_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Direction.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EmailReceiver.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EmailReceiverType.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EmailTemplate.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EmailToken.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EnumDirection.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FindSuspectionOccurance_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Import.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ImportType.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MobileCDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalCDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalCDRtest.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalizationRule.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalizationRulesBackup.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NumberProfile.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Peak_Hoursold.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Peak_Time.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Period.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Permission.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PredefinedColumn.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="prGetEmails_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="profiletest.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Classes\CallsStatistics.cs" />
-    <Compile Include="CallsNormalizationEntities.cs" />
     <Compile Include="Classes\Constants.cs" />
-    <Compile Include="NormalizationModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NormalizationModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalizationModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Classes\vw_ReportedNumberNormalCDR.cs" />
     <Compile Include="Classes\vw_ReportedNumber.cs" />
     <Compile Include="Classes\Criteria_profile.cs" />
@@ -196,118 +96,9 @@
     <Compile Include="Classes\StrategyProperty.cs" />
     <Compile Include="Classes\Trunck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Related_Criteria.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Report.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ReportDetail.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ReportingStatu.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Source.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SourceKind.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SourceMapping.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Strategy.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="StrategyPeriod.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="StrategyThreshold.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Strategy_Min_Values.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Strategy_Suspection_Level.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SubscriberThreshold.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Subscriber_Values.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Suspection_Level.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchProfile.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchTrunck.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchTruncksold.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Switch_DatabaseConnections.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="To_be_deleted_CookedCDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Trunck.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserPermission.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vwSuspectionAnalysi.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_Dashboard.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_ReportedNumber.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_ReportedNumberNormalCDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Model.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="NormalizationModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>NormalizationModel.Context.cs</LastGenOutput>
-    </None>
-    <None Include="Model.edmx.diagram">
-      <DependentUpon>Model.edmx</DependentUpon>
-    </None>
-    <None Include="NormalizationModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>NormalizationModel.cs</LastGenOutput>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

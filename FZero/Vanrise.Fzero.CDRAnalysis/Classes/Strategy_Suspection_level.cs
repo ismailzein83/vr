@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             Strategy_Suspection_Level strategy_Suspection_level = new Strategy_Suspection_Level();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategy_Suspection_level = context.Strategy_Suspection_Level
                         .Include(s => s.Strategy)
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy_Suspection_Level> strategy_Suspection_level = new List<Strategy_Suspection_Level>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategy_Suspection_level = context.Strategy_Suspection_Level
                         .Where(s =>
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<Strategy_Suspection_Level> strategy_Suspection_level = new List<Strategy_Suspection_Level>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     strategy_Suspection_level = context.Strategy_Suspection_Level
                         .Include(s => s.Strategy)
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     if (strategy_Suspection_level.Id == 0)
                     {
@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool success = false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(strategy_Suspection_Level).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

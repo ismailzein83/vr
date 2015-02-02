@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     SourceKindsList = context.SourceKinds
                                             .OrderByDescending(u => u.Name)

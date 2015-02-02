@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SwitchTrunck> truncks = new List<SwitchTrunck>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     truncks = context.SwitchTruncks
                         .Include(t => t.SwitchProfile)
@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SwitchTrunck> truncks = new List<SwitchTrunck>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     truncks = context.SwitchTruncks
                         .Include(t => t.SwitchProfile)
@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             List<SwitchTrunck> truncks = new List<SwitchTrunck>();
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     truncks = context.SwitchTruncks
                         .Where(t => t.SwitchId == switchId)
@@ -87,7 +87,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             bool isUsed =false;
             try
             {
-                using (CallsNormalizationEntities context = new CallsNormalizationEntities())
+                using (Entities context = new Entities())
                 {
                     if (switchTrunck.Name != "Unknown")
                         isUsed = context.SwitchTruncks
