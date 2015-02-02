@@ -74,6 +74,7 @@
     <Compile Include="DailyRepricingProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeRangeRepricingProcess.cs" />
+    <Compile Include="UpdateBillingPricingProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
@@ -119,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRImportProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="UpdateBillingPricingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
