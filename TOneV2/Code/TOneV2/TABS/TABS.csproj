@@ -94,11 +94,11 @@
   <ItemGroup>
     <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\antlr.runtime.dll</HintPath>
+      <HintPath>..\Resources\DLLs\antlr.runtime.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\Resources\DLLs\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>

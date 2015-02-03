@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLLs\antlr.runtime.dll" />
+    <Content Include="DLLs\Castle.DynamicProxy.dll" />
     <Content Include="DLLs\ICSharpCode.SharpZipLib.dll" />
     <Content Include="DLLs\Iesi.Collections.dll" />
     <Content Include="DLLs\Interop.xlsgen.dll" />
