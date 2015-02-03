@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRGenerationProcess.cs" />
     <Compile Include="CDRImportProcess.cs" />
     <Compile Include="DailyRepricingProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +108,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <XamlAppDef Include="CDRImportProcess.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </XamlAppDef>
     <XamlAppDef Include="DailyRepricingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,13 +124,13 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="CDRImportProcess.xaml">
+    <XamlAppDef Include="UpdateBillingPricingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="UpdateBillingPricingProcess.xaml">
+    <XamlAppDef Include="CDRGenerationProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

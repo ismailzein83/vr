@@ -47,7 +47,7 @@ namespace TOne.CDRProcess.Activities
         {
             List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
             CDRBatch BatchCdrs = new CDRBatch();
-
+            DateTime start = DateTime.Now;
             TABS.Switch CurrentSwitch = null;
             if (TABS.Switch.All.ContainsKey(SwitchID))
                 CurrentSwitch = TABS.Switch.All[SwitchID];
@@ -60,6 +60,7 @@ namespace TOne.CDRProcess.Activities
                     ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
             }
             BatchCdrs.CDRs = ToneCdrs;
+            Console.WriteLine("{0}: GetCDRs is done in {1}", DateTime.Now, (DateTime.Now - start));
             return BatchCdrs;
         }
 

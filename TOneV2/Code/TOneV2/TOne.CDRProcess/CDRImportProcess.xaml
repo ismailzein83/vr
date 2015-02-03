@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -62,12 +63,16 @@
   <Sequence DisplayName="MainCDRImportSequence" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="tca1:CDRBatch" Name="CDRs" />
+      <Variable x:TypeArguments="s:DateTime" Name="Start">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
-    <WriteLine>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("CDR Import Process stared getting CDRS for switch :{0} @ {1}",Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_1</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
     <tca1:GetCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCDRs_1">
       <tca1:GetCDRs.CDRs>
@@ -85,11 +90,10 @@
       <Sequence.Variables>
         <Variable x:TypeArguments="te:TOneQueue(tca1:CDRBatch)" Name="outputQueue" />
       </Sequence.Variables>
-      <WriteLine>
+      <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">string.Format("Applying CDRs started for {0} @{1}",CDRs.CDRs.Count,DateTime.Now)</mca:CSharpValue>
         </InArgument>
-        <sap2010:WorkflowViewState.IdRef>WriteLine_2</sap2010:WorkflowViewState.IdRef>
       </WriteLine>
       <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
         <Assign.To>
@@ -130,13 +134,12 @@
         </tca1:SaveCDRsToDB>
       </Parallel>
     </Sequence>
-    <WriteLine>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_3">
       <InArgument x:TypeArguments="x:String">
-        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Applying CDRs finshed for switch{0} finished @{1}",Input.SwitchID,DateTime.Now)</mca:CSharpValue>
+        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Applying CDRs for switch: {0} finished @ {1},takes:{2}",Input.SwitchID,DateTime.Now,DateTime.Now.Subtract(Start))</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_3</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRQcm9jZXNzLnhhbWwVPgOMAQ4CAQFCBUcRAgEvSAVTFAIBKFQFhAEQAgEGhQEFigERAgECRAlEsQECATBQC1BWAgEsSwtLWgIBKVgHXRMCASNeB2kQAgEaageDARICAQeHAQmHAaUBAgEDWgtamQECASRmDWbEAQIBH2ENYXECARtrCXYgAgERdwmCAR0CAQhuD25WAgEWcw9zcwIBEn8Pf1oCAQ16D3pWAgEJ</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRQcm9jZXNzLnhhbWwWPwOPAQ4CAQFEC0RXAgECSAVMEQIBPU0FWBQCATRZBYgBEAIBC4kBBY0BEQIBBkoJSrEBAgE+VQtVVgIBOVALUFoCATVdB2ETAgEuYgdtEAIBI24HhwESAgEMiwEJiwHHAQIBB18LX5kBAgEvag1qxAECASllDWVxAgEkbwl6IAIBGHsJhgEdAgENcg9yVgIBHncPd3MCARmDAQ+DAVoCARN+D35WAgEO</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -154,15 +157,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="576,61" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="598,803">
+      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="576,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="598,804">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImportProcess_1" sap:VirtualizedContainerService.HintSize="638,883" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImportProcess_1" sap:VirtualizedContainerService.HintSize="638,884" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

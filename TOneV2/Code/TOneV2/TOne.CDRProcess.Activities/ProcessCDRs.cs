@@ -31,7 +31,7 @@ namespace TOne.CDRProcess.Activities
     public sealed class ProcessCDRs : Vanrise.BusinessProcess.DependentAsyncActivity<ProcessCDRsInput>
     {
 
-        [RequiredArgument]
+        //[RequiredArgument]
         public InArgument<Guid> CacheManagerId { get; set; }
 
         [RequiredArgument]

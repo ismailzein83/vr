@@ -26,7 +26,7 @@ namespace TestRuntime
             Timer timer = new Timer(1000);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
-            int switchID = 73;
+            int switchID = 66;
             System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
             {
                 TriggerProcess(switchID);
@@ -53,6 +53,15 @@ namespace TestRuntime
             };
             ProcessManager processManager = new ProcessManager();
             processManager.CreateNewProcess(input);
+
+            TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
+            CreateProcessInput inputCDRProcess = new CreateProcessInput
+            {
+                ProcessName = "CDRGenerationProcess",
+                InputArguments = CDRProcessInputArguments
+            };
+            ProcessManager processManager1 = new ProcessManager();
+            processManager1.CreateNewProcess(inputCDRProcess);
         }
 
 
