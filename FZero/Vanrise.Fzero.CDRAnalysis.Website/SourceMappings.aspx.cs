@@ -44,7 +44,7 @@ public partial class SourceMappings : BasePage
 
     private void FillCombos()
     {
-        Manager.BindCombo(ddlSource, Vanrise.Fzero.CDRAnalysis.Source.GetAllSources(), "Name", "Id", Resources.Resources.PleaseSelect, "0");
+        Manager.BindCombo(ddlSwitch, Vanrise.Fzero.CDRAnalysis.SwitchProfile.GetAll(), "Name", "Id", Resources.Resources.PleaseSelect, "0");
         Manager.BindCombo(ddlMappedtoColumnNumber, Vanrise.Fzero.CDRAnalysis.PredefinedColumn.GetPredefinedColumns(), "Name", "Id", null, null);
     }
 
@@ -67,7 +67,7 @@ public partial class SourceMappings : BasePage
         SourceMapping.ID = Manager.GetInteger(hdnId.Value);
         SourceMapping.ColumnName = txtColumnName.Text;
         SourceMapping.MappedtoColumnNumber = ddlMappedtoColumnNumber.SelectedValue.ToInt();
-        SourceMapping.SourceID = ddlSource.SelectedValue.ToInt();
+        SourceMapping.SwitchID = ddlSwitch.SelectedValue.ToInt();
 
         if (SourceMapping.ID != 0)
         {
@@ -123,14 +123,13 @@ public partial class SourceMappings : BasePage
 
     protected void lvColumns_NeedDataSource(object sender, RadListViewNeedDataSourceEventArgs e)
     {
-        if (ddlSource.SelectedValue !=string.Empty)
-            lvColumns.DataSource = SourceMapping.GetSourceMappings(ddlSource.SelectedValue.ToInt());
+        if (ddlSwitch.SelectedValue != string.Empty)
+            lvColumns.DataSource = SourceMapping.GetSwitchMappings(ddlSwitch.SelectedValue.ToInt());
     }
 
     protected void ddlSource_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {
-        lvColumns.Enabled = ddlSource.SelectedValue != "0" ? true : false;
-        lvColumns.Rebind();
+       
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -180,6 +179,12 @@ public partial class SourceMappings : BasePage
         }
     }
 
+    protected void ddlSwitch_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
+    {
+        lvColumns.Enabled = ddlSwitch.SelectedValue != "0" ? true : false;
+        lvColumns.Rebind();
+    }
+
     #endregion
-        
+
 }

@@ -27,8 +27,6 @@ namespace Vanrise.Fzero.CDRAnalysis
                 {
                     switchProfile = context.SwitchProfiles
                         .Include(s => s.Switch_DatabaseConnections)
-                        .Include(s => s.NormalizationRules)
-                        .Include(s=>s.SwitchTruncks)
                         .Where(s => s.Id == id)
                         .FirstOrDefault();
                 }

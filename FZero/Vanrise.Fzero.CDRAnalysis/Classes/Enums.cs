@@ -33,8 +33,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             SentEmails= 26,
             DeleteSentEmails =27, 
             ManualImport=28,
-            EditSources=29,
-            SourcesMapping=30
+            SourcesMapping = 29
         }
 
         public enum ReportingStatuses : int
@@ -60,6 +59,13 @@ namespace Vanrise.Fzero.CDRAnalysis
         public enum ImportTypes : int
         {
             CDRs = 1
+        }
+
+
+        public enum SourceKinds : int
+        {
+            Database = 1, 
+            File = 2
         }
         
     }

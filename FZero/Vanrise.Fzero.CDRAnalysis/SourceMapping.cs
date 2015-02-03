@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.CDRAnalysis
     public partial class SourceMapping
     {
         public int ID { get; set; }
-        public int SourceID { get; set; }
+        public int SwitchID { get; set; }
         public string ColumnName { get; set; }
         public int MappedtoColumnNumber { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
@@ -24,6 +24,6 @@ namespace Vanrise.Fzero.CDRAnalysis
         public Nullable<int> LastUpdatedBy { get; set; }
     
         public virtual PredefinedColumn PredefinedColumn { get; set; }
-        public virtual Source Source { get; set; }
+        public virtual SwitchProfile SwitchProfile { get; set; }
     }
 }

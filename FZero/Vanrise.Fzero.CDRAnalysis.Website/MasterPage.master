@@ -108,7 +108,6 @@
                                     <li id="btnEmailTemplates" runat="server"><a href="EmailTemplates.aspx"><i class="icon-picture"></i> &nbsp; Email Templates</a></li>
                                     <li id="btnEmailReceivers" runat="server"><a href="EmailReceivers.aspx"><i class="icon-share"></i> &nbsp; Email Receivers</a></li>
                                     <li id="btnSentEmails" runat="server"><a href="SentEmails.aspx"><i class="icon-hdd"></i> &nbsp; Sent Emails</a></li>
-                                     <li id="btnSources" runat="server" ><a href="Sources.aspx"><i class="icon-archive"></i> &nbsp; Sources</a></li>
                                     <li id="btnSourcesMappings" runat="server" ><a href="SourceMappings.aspx"><i class="icon-bookmark"></i> &nbsp; Sources Mappings</a></li>
                                     <li id="btnManualImport" runat="server"><a href="ManualImport.aspx"><i class="icon-bitbucket"></i> &nbsp; Manual Import</a></li>
 

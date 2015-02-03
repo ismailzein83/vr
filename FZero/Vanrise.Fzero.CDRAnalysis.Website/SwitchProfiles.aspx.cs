@@ -166,6 +166,7 @@ public partial class SwitchProfiles : BasePage
         currentObject.Switch_DatabaseConnections.UserId = txtUserId.Text.Trim();
         currentObject.Switch_DatabaseConnections.UserPassword = txtUserPassword.Text.Trim();
         currentObject.Switch_DatabaseConnections.DatabaseName = txtDatabaseName.Text.Trim();
+        currentObject.AllowAutoImport = chkAutoImport.Checked;
         return currentObject;
     }
 
@@ -182,6 +183,7 @@ public partial class SwitchProfiles : BasePage
         txtFullName.Text = currentObject.FullName;
         txtAreaCode.Text = currentObject.AreaCode;
         txtType.Text = currentObject.SwitchType;
+        chkAutoImport.Checked = currentObject.AllowAutoImport;
 
         txtServerName.Text = currentObject.Switch_DatabaseConnections.ServerName;
         txtUserId.Text = currentObject.Switch_DatabaseConnections.UserId;

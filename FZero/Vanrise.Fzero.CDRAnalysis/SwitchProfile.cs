@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         public SwitchProfile()
         {
             this.NormalizationRules = new HashSet<NormalizationRule>();
-            this.Sources = new HashSet<Source>();
+            this.SourceMappings = new HashSet<SourceMapping>();
             this.SwitchTruncks = new HashSet<SwitchTrunck>();
         }
     
@@ -26,9 +26,10 @@ namespace Vanrise.Fzero.CDRAnalysis
         public string FullName { get; set; }
         public string AreaCode { get; set; }
         public string SwitchType { get; set; }
+        public bool AllowAutoImport { get; set; }
     
         public virtual ICollection<NormalizationRule> NormalizationRules { get; set; }
-        public virtual ICollection<Source> Sources { get; set; }
+        public virtual ICollection<SourceMapping> SourceMappings { get; set; }
         public virtual Switch_DatabaseConnections Switch_DatabaseConnections { get; set; }
         public virtual ICollection<SwitchTrunck> SwitchTruncks { get; set; }
     }

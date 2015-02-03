@@ -10,18 +10,14 @@
 namespace Vanrise.Fzero.CDRAnalysis
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class SourceKind
+    public partial class prImportfromSwitches_Result
     {
-        public SourceKind()
-        {
-            this.Sources = new HashSet<Source>();
-        }
-    
-        public int ID { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<Source> Sources { get; set; }
+        public Nullable<int> ErrorNumber { get; set; }
+        public Nullable<int> ErrorSeverity { get; set; }
+        public Nullable<int> ErrorState { get; set; }
+        public string ErrorProcedure { get; set; }
+        public Nullable<int> ErrorLine { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

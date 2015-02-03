@@ -139,6 +139,15 @@
                                                         ControlToValidate="txtAreaCode" ErrorMessage="Area Code should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
+
+                                             <tr>
+                                                <td class="caption required">Allow Auto Import</td>
+                                                <td class="inputData">
+                                                    <asp:CheckBox ID="chkAutoImport" runat="server"></asp:CheckBox>
+                                                    <br />
+                                                   
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

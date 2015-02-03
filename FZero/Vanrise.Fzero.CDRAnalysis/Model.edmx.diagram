@@ -5,58 +5,55 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a6f19c23b1054da1a278437d8b89b821" Name="Diagram1" ZoomLevel="83">
-        <EntityTypeShape EntityType="CallsModel.AN_Profiling" Width="1.5" PointX="3.1976145558048108" PointY="2.6848271650657183" />
-        <EntityTypeShape EntityType="CallsModel.CDR" Width="1.5" PointX="0.94272749728650207" PointY="31.84630772464271" />
-        <EntityTypeShape EntityType="CallsModel.Criteria_Profile" Width="1.5" PointX="8.87727473717056" PointY="24.955123480854148" />
-        <EntityTypeShape EntityType="CallsModel.Direction" Width="1.5" PointX="4.3411667311290119" PointY="5.9920911816843283" />
-        <EntityTypeShape EntityType="CallsModel.EmailReceiver" Width="1.5" PointX="8.5984487219706409" PointY="28.827281250072307" />
-        <EntityTypeShape EntityType="CallsModel.EmailReceiverType" Width="1.5" PointX="10.963092511036942" PointY="26.091361132492946" />
-        <EntityTypeShape EntityType="CallsModel.EmailTemplate" Width="1.5" PointX="3.9627236015921108" PointY="28.360214559529076" />
-        <EntityTypeShape EntityType="CallsModel.EmailToken" Width="1.5" PointX="9.3350424158084415" PointY="8.0858299918872447" />
-        <EntityTypeShape EntityType="CallsModel.Import" Width="1.5" PointX="7.754938589294877" PointY="6.5809951008209007" />
-        <EntityTypeShape EntityType="CallsModel.ImportType" Width="1.5" PointX="3.7823122217237541" PointY="6.2436805694567417" />
-        <EntityTypeShape EntityType="CallsModel.MobileCDR" Width="1.5" PointX="11.92583399262551" PointY="5.9317091134990143" />
-        <EntityTypeShape EntityType="CallsModel.NormalCDR" Width="1.5" PointX="7.7578107322369743" PointY="19.375150168023609" />
-        <EntityTypeShape EntityType="CallsModel.NormalCDRtest" Width="1.5" PointX="3.5399657131824478" PointY="16.63029997825171" />
-        <EntityTypeShape EntityType="CallsModel.NormalizationRule" Width="1.5" PointX="7.5281094031073668" PointY="31.154058813654846" />
-        <EntityTypeShape EntityType="CallsModel.NormalizationRulesBackup" Width="1.5" PointX="10.296552975800147" PointY="29.26716454199849" />
-        <EntityTypeShape EntityType="CallsModel.NumberProfile" Width="1.5" PointX="1.9034897656661878" PointY="0.18504597255263755" />
-        <EntityTypeShape EntityType="CallsModel.Peak_Hoursold" Width="1.5" PointX="5.5746910262735048" PointY="18.871973478641348" />
-        <EntityTypeShape EntityType="CallsModel.Peak_Time" Width="1.5" PointX="5.1512013474252081" PointY="17.840796657763793" />
-        <EntityTypeShape EntityType="CallsModel.Period" Width="1.5" PointX="1.9233800889567378" PointY="9.27112573816959" />
-        <EntityTypeShape EntityType="CallsModel.Permission" Width="1.5" PointX="9.8038736757840361" PointY="26.893687871700937" />
-        <EntityTypeShape EntityType="CallsModel.PredefinedColumn" Width="1.5" PointX="4.29651626027027" PointY="6.6788199128018784" />
-        <EntityTypeShape EntityType="CallsModel.profiletest" Width="1.5" PointX="5.9404753306603411" PointY="20.093898395120117" />
-        <EntityTypeShape EntityType="CallsModel.Related_Criteria" Width="1.5" PointX="10.08164450436907" PointY="25.490678530880565" />
-        <EntityTypeShape EntityType="CallsModel.Report" Width="1.5" PointX="3.2617415130425904" PointY="11.401157876197788" />
-        <EntityTypeShape EntityType="CallsModel.ReportDetail" Width="1.5" PointX="8.1001427676995021" PointY="1.9333050260009732" />
-        <EntityTypeShape EntityType="CallsModel.ReportingStatu" Width="1.5" PointX="8.932340918542975" PointY="10.647557412575724" />
-        <EntityTypeShape EntityType="CallsModel.SourceKind" Width="1.5" PointX="2.0153532316979734" PointY="19.8839822951164" />
-        <EntityTypeShape EntityType="CallsModel.SourceMapping" Width="1.5" PointX="9.0171439857301969" PointY="2.5952630353138146" />
-        <EntityTypeShape EntityType="CallsModel.Source" Width="1.5" PointX="5.24899945466267" PointY="15.138789824740398" />
-        <EntityTypeShape EntityType="CallsModel.Strategy" Width="1.5" PointX="8.4023996835585688" PointY="7.0424326542031173" />
-        <EntityTypeShape EntityType="CallsModel.Strategy_Min_Values" Width="1.5" PointX="1.8300619022129392" PointY="12.422385802689188" />
-        <EntityTypeShape EntityType="CallsModel.Strategy_Suspection_Level" Width="1.5" PointX="3.9504812173314772" PointY="25.662032049923219" />
-        <EntityTypeShape EntityType="CallsModel.StrategyPeriod" Width="1.5" PointX="8.9067407031109287" PointY="29.04986739021254" />
-        <EntityTypeShape EntityType="CallsModel.StrategyThreshold" Width="1.5" PointX="4.2095693984113485" PointY="23.695289458937612" />
-        <EntityTypeShape EntityType="CallsModel.Subscriber_Values" Width="1.5" PointX="5.4838791123981956" PointY="7.0526497843920488" />
-        <EntityTypeShape EntityType="CallsModel.SubscriberThreshold" Width="1.5" PointX="1.1088061580009787" PointY="11.408710499950084" />
-        <EntityTypeShape EntityType="CallsModel.Suspection_Level" Width="1.5" PointX="4.6639994870238" PointY="15.192478052895739" />
-        <EntityTypeShape EntityType="CallsModel.Switch_DatabaseConnections" Width="1.5" PointX="10.044863953276007" PointY="25.123404067532814" />
-        <EntityTypeShape EntityType="CallsModel.SwitchProfile" Width="1.5" PointX="8.283915586901788" PointY="0.59359689084514833" />
-        <EntityTypeShape EntityType="CallsModel.SwitchTrunck" Width="1.5" PointX="9.1840368086397817" PointY="15.949230037605963" />
-        <EntityTypeShape EntityType="CallsModel.SwitchTruncksold" Width="1.5" PointX="2.9746209788018003" PointY="8.6738005320885225" />
-        <EntityTypeShape EntityType="CallsModel.sysdiagram" Width="1.5" PointX="3.5826292874210646" PointY="25.524169576132749" />
-        <EntityTypeShape EntityType="CallsModel.To_be_deleted_CookedCDR" Width="1.5" PointX="2.0428457847064574" PointY="26.428415295867442" />
-        <EntityTypeShape EntityType="CallsModel.Trunck" Width="1.5" PointX="10.054039008009266" PointY="26.981860441612945" />
-        <EntityTypeShape EntityType="CallsModel.UserPermission" Width="1.5" PointX="10.059846068760308" PointY="11.141273891153407" />
-        <EntityTypeShape EntityType="CallsModel.User" Width="1.5" PointX="1.4412992919987531" PointY="21.990223745810905" />
-        <EntityTypeShape EntityType="CallsModel.vw_Dashboard" Width="1.5" PointX="7.0742724682550282" PointY="19.101230481220981" />
-        <EntityTypeShape EntityType="CallsModel.vw_ReportedNumber" Width="1.5" PointX="8.2550710496749122" PointY="31.034990891364863" />
-        <EntityTypeShape EntityType="CallsModel.vw_ReportedNumberNormalCDR" Width="1.5" PointX="10.554076249969228" PointY="22.179235498504358" />
-        <EntityTypeShape EntityType="CallsModel.vwSuspectionAnalysi" Width="1.5" PointX="10.628471195059117" PointY="29.834517954771648" />
+        <EntityTypeShape EntityType="CallsModel.CDR" Width="1.5" PointX="24.25" PointY="16.75" />
+        <EntityTypeShape EntityType="CallsModel.Criteria_Profile" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="CallsModel.Direction" Width="1.5" PointX="11.75" PointY="3.5" />
+        <EntityTypeShape EntityType="CallsModel.EmailReceiver" Width="1.5" PointX="21.25" PointY="26.5" />
+        <EntityTypeShape EntityType="CallsModel.EmailReceiverType" Width="1.5" PointX="19" PointY="23.75" />
+        <EntityTypeShape EntityType="CallsModel.EmailTemplate" Width="1.5" PointX="19" PointY="26.25" />
+        <EntityTypeShape EntityType="CallsModel.EmailToken" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.Import" Width="1.5" PointX="22" PointY="17.875" />
+        <EntityTypeShape EntityType="CallsModel.ImportType" Width="1.5" PointX="19.75" PointY="15.25" />
+        <EntityTypeShape EntityType="CallsModel.MobileCDR" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.NormalCDR" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.NormalizationRule" Width="1.5" PointX="17" PointY="6.875" />
+        <EntityTypeShape EntityType="CallsModel.NumberProfile" Width="1.5" PointX="13.75" PointY="11.75" />
+        <EntityTypeShape EntityType="CallsModel.Peak_Hoursold" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.Peak_Time" Width="1.5" PointX="3" PointY="36.25" />
+        <EntityTypeShape EntityType="CallsModel.Period" Width="1.5" PointX="0.75" PointY="17.5" />
+        <EntityTypeShape EntityType="CallsModel.Permission" Width="1.5" PointX="16.75" PointY="13.75" />
+        <EntityTypeShape EntityType="CallsModel.PredefinedColumn" Width="1.5" PointX="11.75" PointY="12.625" />
+        <EntityTypeShape EntityType="CallsModel.Related_Criteria" Width="1.5" PointX="6" PointY="13.125" />
+        <EntityTypeShape EntityType="CallsModel.Report" Width="1.5" PointX="3.75" PointY="4.75" />
+        <EntityTypeShape EntityType="CallsModel.ReportDetail" Width="1.5" PointX="6" PointY="10.25" />
+        <EntityTypeShape EntityType="CallsModel.ReportingStatu" Width="1.5" PointX="1.5" PointY="5.5" />
+        <EntityTypeShape EntityType="CallsModel.SourceMapping" Width="1.5" PointX="14" PointY="7.875" />
+        <EntityTypeShape EntityType="CallsModel.Strategy" Width="1.5" PointX="0.75" PointY="12.5" />
+        <EntityTypeShape EntityType="CallsModel.Strategy_Min_Values" Width="1.5" PointX="3" PointY="17.125" />
+        <EntityTypeShape EntityType="CallsModel.Strategy_Suspection_Level" Width="1.5" PointX="9" PointY="12.75" />
+        <EntityTypeShape EntityType="CallsModel.StrategyPeriod" Width="1.5" PointX="3" PointY="13" />
+        <EntityTypeShape EntityType="CallsModel.StrategyThreshold" Width="1.5" PointX="6" PointY="16.25" />
+        <EntityTypeShape EntityType="CallsModel.Subscriber_Values" Width="1.5" PointX="3" PointY="9" />
+        <EntityTypeShape EntityType="CallsModel.SubscriberThreshold" Width="1.5" PointX="9" PointY="6.625" />
+        <EntityTypeShape EntityType="CallsModel.Suspection_Level" Width="1.5" PointX="6.75" PointY="7.375" />
+        <EntityTypeShape EntityType="CallsModel.Switch_DatabaseConnections" Width="1.5" PointX="14" PointY="21.625" />
+        <EntityTypeShape EntityType="CallsModel.SwitchProfile" Width="1.5" PointX="11.75" PointY="7.875" />
+        <EntityTypeShape EntityType="CallsModel.SwitchTrunck" Width="1.5" PointX="14" PointY="3.875" />
+        <EntityTypeShape EntityType="CallsModel.SwitchTruncksold" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.sysdiagram" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.Trunck" Width="1.5" PointX="11.75" PointY="0.875" />
+        <EntityTypeShape EntityType="CallsModel.UserPermission" Width="1.5" PointX="19" PointY="17.875" />
+        <EntityTypeShape EntityType="CallsModel.User" Width="1.5" PointX="16.75" PointY="17.125" />
+        <EntityTypeShape EntityType="CallsModel.AN_Profiling" Width="1.5" PointX="8.75" PointY="16.75" />
+        <EntityTypeShape EntityType="CallsModel.NormalCDRtest" Width="1.5" PointX="10.75" PointY="16.75" />
+        <EntityTypeShape EntityType="CallsModel.NormalizationRulesBackup" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.profiletest" Width="1.5" PointX="19.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CallsModel.To_be_deleted_CookedCDR" Width="1.5" PointX="5.75" PointY="19.75" />
+        <EntityTypeShape EntityType="CallsModel.vw_Dashboard" Width="1.5" PointX="12.75" PointY="17.75" />
+        <EntityTypeShape EntityType="CallsModel.vw_ReportedNumber" Width="1.5" PointX="19.75" PointY="6.75" />
+        <EntityTypeShape EntityType="CallsModel.vw_ReportedNumberNormalCDR" Width="1.5" PointX="19.75" PointY="10.75" />
+        <EntityTypeShape EntityType="CallsModel.vwSuspectionAnalysi" Width="1.5" PointX="0.75" PointY="20.75" />
         <AssociationConnector Association="CallsModel.FK_CDR_Imports" />
-        <AssociationConnector Association="CallsModel.FK_CDR_Sources" />
         <AssociationConnector Association="CallsModel.FK_Related_Criteria_criteria_profile" />
         <AssociationConnector Association="CallsModel.FK_Related_Criteria_criteria_profile1" />
         <AssociationConnector Association="CallsModel.FK_Strategy_Min_Values_criteria_profile" />
@@ -81,9 +78,7 @@
         <AssociationConnector Association="CallsModel.FK_Report_ReportingStatus" />
         <AssociationConnector Association="CallsModel.FK_ReportDetails_Report" />
         <AssociationConnector Association="CallsModel.FK_ReportDetails_Strategy" />
-        <AssociationConnector Association="CallsModel.FK_Sources_SourceKinds" />
-        <AssociationConnector Association="CallsModel.FK_SourceMappings_Sources" />
-        <AssociationConnector Association="CallsModel.FK_Sources_SwitchProfiles" />
+        <AssociationConnector Association="CallsModel.FK_SourceMappings_SwitchProfiles" />
         <AssociationConnector Association="CallsModel.FK_Strategy_Min_Values_Strategy" />
         <AssociationConnector Association="CallsModel.FK_Strategy_suspection_level_Strategy" />
         <AssociationConnector Association="CallsModel.FK_StrategyPeriods_Strategy" />

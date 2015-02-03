@@ -34,6 +34,5 @@ namespace Vanrise.Fzero.CDRAnalysis
         public Nullable<int> ImportID { get; set; }
     
         public virtual Import Import { get; set; }
-        public virtual Source Source { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.CDRAnalysis
         {
 
             List<int> listIDs = new List<int>();
-            Source source = Source.Load(SourceID);
             Import import = new Import();
             import.ImportDate = DateTime.Now;
             import.ImportedBy = ImportedBy;
@@ -133,7 +132,7 @@ namespace Vanrise.Fzero.CDRAnalysis
            
         }
 
-        public static DataTable GetDataFromExcel(string filePath, int SourceId)
+        public static DataTable GetDataFromExcel(string filePath, int SwitchId)
         {
             string strConn;
             if (filePath.Substring(filePath.LastIndexOf('.')).ToLower() == ".xlsx")
@@ -174,7 +173,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
 
             DataTable dtxls = ds.Tables[0];
-            List<SourceMapping> listSourceMappingxls = SourceMapping.GetSourceMappings(SourceId);
+            List<SourceMapping> listSourceMappingxls = SourceMapping.GetSwitchMappings(SwitchId);
 
             int colNumberxls = 0;
 
@@ -194,9 +193,9 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             return dtxls;
 
-        } 
+        }
 
-        public static DataTable GetDataFromXml(string filePath, int SourceId)
+        public static DataTable GetDataFromXml(string filePath, int SwitchId)
         {
 
             try
@@ -206,7 +205,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
                 DataTable dtXml = ds.Tables[0];
 
-                List<SourceMapping> listSourceMappingXml = SourceMapping.GetSourceMappings(SourceId);
+                List<SourceMapping> listSourceMappingXml = SourceMapping.GetSwitchMappings(SwitchId);
 
                 int colNumberXml = 0;
 

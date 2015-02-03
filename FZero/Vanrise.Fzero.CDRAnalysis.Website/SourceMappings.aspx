@@ -26,11 +26,11 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <%=Resources.Resources.Source %>
+                                            Switch
                                         </td>
                                         <td></td>
                                         <td>
-                                            <telerik:RadComboBox ID="ddlSource" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSource_SelectedIndexChanged"></telerik:RadComboBox>
+                                            <telerik:RadComboBox ID="ddlSwitch" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSwitch_SelectedIndexChanged"></telerik:RadComboBox>
                                         </td>
                                     </tr>
 

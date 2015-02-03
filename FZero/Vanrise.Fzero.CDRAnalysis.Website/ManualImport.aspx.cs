@@ -27,7 +27,7 @@ public partial class ManualImports : BasePage
 
     private void FillCombos()
     {
-        Manager.BindCombo(ddlSources, Vanrise.Fzero.CDRAnalysis.Source.GetAllSources(), "Name", "Id", null, null);
+        Manager.BindCombo(ddlSources, Vanrise.Fzero.CDRAnalysis.SwitchProfile.GetAll(), "Name", "Id", null, null);
     }
 
     #endregion

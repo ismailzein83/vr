@@ -36,9 +36,9 @@ width="100%" GridLines="None" AutoGenerateColumns="false" AllowPaging="false">
 </asp:GridView>
 
 
-<Telerik:RadDatePicker   Skin="Metro" Width="212px"  Height="30" runat="server"></Telerik:RadDatePicker>
+<Telerik:RadDatePicker   Skin="Metro" Width="212px"  Height="30" runat="server"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px"  ></Telerik:RadDatePicker>
 
-<Telerik:RadTextBox   Skin="Metro" Width="212px"  Height="30" runat="server"></Telerik:RadTextBox>
+<Telerik:RadTextBox   Skin="Metro" Width="212px"  Height="30" runat="server"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px" ></Telerik:RadTextBox>
 
 <Telerik:RadComboBox runat="server"  EnableTextSelection ="true" Skin="Metro" Width="212px"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px"   Filter="Contains"  ></Telerik:RadComboBox>
 

@@ -28,7 +28,6 @@ namespace Vanrise.Fzero.CDRAnalysis
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<AN_Profiling> AN_Profiling { get; set; }
         public DbSet<CDR> CDRs { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
         public DbSet<Direction> Directions { get; set; }
@@ -40,23 +39,18 @@ namespace Vanrise.Fzero.CDRAnalysis
         public DbSet<ImportType> ImportTypes { get; set; }
         public DbSet<MobileCDR> MobileCDRs { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
-        public DbSet<NormalCDRtest> NormalCDRtests { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
-        public DbSet<NormalizationRulesBackup> NormalizationRulesBackups { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
         public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PredefinedColumn> PredefinedColumns { get; set; }
-        public DbSet<profiletest> profiletests { get; set; }
         public DbSet<Related_Criteria> Related_Criteria { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportDetail> ReportDetails { get; set; }
         public DbSet<ReportingStatu> ReportingStatus { get; set; }
-        public DbSet<SourceKind> SourceKinds { get; set; }
         public DbSet<SourceMapping> SourceMappings { get; set; }
-        public DbSet<Source> Sources { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<Strategy_Min_Values> Strategy_Min_Values { get; set; }
         public DbSet<Strategy_Suspection_Level> Strategy_Suspection_Level { get; set; }
@@ -70,10 +64,14 @@ namespace Vanrise.Fzero.CDRAnalysis
         public DbSet<SwitchTrunck> SwitchTruncks { get; set; }
         public DbSet<SwitchTruncksold> SwitchTruncksolds { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
-        public DbSet<To_be_deleted_CookedCDR> To_be_deleted_CookedCDR { get; set; }
         public DbSet<Trunck> Truncks { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<AN_Profiling> AN_Profiling { get; set; }
+        public DbSet<NormalCDRtest> NormalCDRtests { get; set; }
+        public DbSet<NormalizationRulesBackup> NormalizationRulesBackups { get; set; }
+        public DbSet<profiletest> profiletests { get; set; }
+        public DbSet<To_be_deleted_CookedCDR> To_be_deleted_CookedCDR { get; set; }
         public DbSet<vw_Dashboard> vw_Dashboard { get; set; }
         public DbSet<vw_ReportedNumber> vw_ReportedNumber { get; set; }
         public DbSet<vw_ReportedNumberNormalCDR> vw_ReportedNumberNormalCDR { get; set; }
@@ -591,6 +589,28 @@ namespace Vanrise.Fzero.CDRAnalysis
                 new ObjectParameter("MinimumOccurance", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_findSuspectionOccurance", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
+        }
+    
+        public virtual int prImportfromSwitch(Nullable<int> switchID, string dBName, Nullable<int> reference)
+        {
+            var switchIDParameter = switchID.HasValue ?
+                new ObjectParameter("SwitchID", switchID) :
+                new ObjectParameter("SwitchID", typeof(int));
+    
+            var dBNameParameter = dBName != null ?
+                new ObjectParameter("DBName", dBName) :
+                new ObjectParameter("DBName", typeof(string));
+    
+            var referenceParameter = reference.HasValue ?
+                new ObjectParameter("Reference", reference) :
+                new ObjectParameter("Reference", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prImportfromSwitch", switchIDParameter, dBNameParameter, referenceParameter);
+        }
+    
+        public virtual ObjectResult<prImportfromSwitches_Result> prImportfromSwitches()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prImportfromSwitches_Result>("prImportfromSwitches");
         }
     }
 }

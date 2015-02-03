@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 {
     public partial class SourceMapping
     {
-        public static List<SourceMapping> GetSourceMappings(int SourceID)
+        public static List<SourceMapping> GetSwitchMappings(int SwitchID)
            
         {
             List<SourceMapping> SourceMappingsList = new List<SourceMapping>();
@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             {
                 using (Entities context = new Entities())
                 {
-                    SourceMappingsList = context.SourceMappings.Where(x=>x.SourceID == SourceID).Include(u => u.PredefinedColumn)
+                    SourceMappingsList = context.SourceMappings.Where(x => x.SwitchID == SwitchID).Include(u => u.PredefinedColumn)
                                             .OrderByDescending(u => u.ID)
                                             .ToList();
 
@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.Bypass.SourceMapping.GetSourceMappings()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.SourceMapping.GetSwitchMappings()", err);
             }
 
             return SourceMappingsList;
@@ -108,10 +108,10 @@ namespace Vanrise.Fzero.CDRAnalysis
                 using (Entities context = new Entities())
                 {
                     int Count;
-                    if (SourceMapping.SourceID == 0)
+                    if (SourceMapping.SwitchID == 0)
                     {
                         Count = context.SourceMappings
-                           .Where(u => u.SourceID == SourceMapping.SourceID && (u.ColumnName == SourceMapping.ColumnName 
+                           .Where(u => u.SwitchID == SourceMapping.SwitchID && (u.ColumnName == SourceMapping.ColumnName 
                                || u.MappedtoColumnNumber == SourceMapping.MappedtoColumnNumber))
                            .Count();
                         if (Count == 0)
@@ -122,7 +122,7 @@ namespace Vanrise.Fzero.CDRAnalysis
                     else
                     {
                         Count = context.SourceMappings
-                           .Where(u => u.SourceID == SourceMapping.SourceID && u.ID != SourceMapping.ID && (u.ColumnName == SourceMapping.ColumnName 
+                           .Where(u => u.SwitchID == SourceMapping.SwitchID && u.ID != SourceMapping.ID && (u.ColumnName == SourceMapping.ColumnName 
                                || u.MappedtoColumnNumber == SourceMapping.MappedtoColumnNumber))
                            .Count();
                         if (Count == 0)
@@ -136,7 +136,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.Bypass.SourceMapping.CheckIfExists(" + SourceMapping.SourceID.ToString() + ", " + SourceMapping.ColumnName.ToString() + ", " + SourceMapping.MappedtoColumnNumber.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.SourceMapping.CheckIfExists(" + SourceMapping.SwitchID.ToString() + ", " + SourceMapping.ColumnName.ToString() + ", " + SourceMapping.MappedtoColumnNumber.ToString() + ")", err);
             }
             return true;
         }
