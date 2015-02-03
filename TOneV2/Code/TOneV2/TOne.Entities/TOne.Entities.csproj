@@ -75,6 +75,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NHibernate">
+      <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="SecurityEssentials">
+      <HintPath>..\Resources\DLLs\SecurityEssentials.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -103,7 +109,6 @@
     <Compile Include="IBulkTableService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TOneQueue.cs" />
-    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

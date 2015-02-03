@@ -26,8 +26,10 @@ namespace TOne.Web.Online.Controllers
             {
                 SecurityToken userInfo = new SecurityToken
                 {
-                    UserId = output.User.UserId,
-                    Username = output.User.Username
+                    UserId = output.User.ID,
+                    Username = output.User.Login,
+                    UserDisplayName = output.User.Name,
+                    ExpiresAt = DateTime.Now.AddMinutes(15)
                 };
                 string encrypted = EncryptionHelper.Encrypt(Serializer.Serialize(userInfo));
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(encrypted) };

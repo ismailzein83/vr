@@ -22,11 +22,20 @@ namespace TOne.Web.Online.Security
                 string encryptedToken = request.Headers.GetValues(TOKEN_NAME).First();
                 try
                 {
-                    SecurityToken userInfo = Serializer.Deserialize<SecurityToken>(EncryptionHelper.Decrypt( encryptedToken));
-                    if (userInfo == null || userInfo.UserId <= 0)
+                    SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(EncryptionHelper.Decrypt( encryptedToken));
+                    if (securityToken == null || securityToken.UserId <= 0)
                     {
                         HttpResponseMessage reply = request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid indentity");
                         return Task.FromResult(reply);
+                    }
+                    else if (securityToken.ExpiresAt < DateTime.Now)
+                    {
+                        HttpResponseMessage reply = request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Token is expired");
+                        return Task.FromResult(reply);
+                    }
+                    else
+                    {
+                        SecurityToken.Current = securityToken;
                     }
                 }
                 catch (Exception ex)

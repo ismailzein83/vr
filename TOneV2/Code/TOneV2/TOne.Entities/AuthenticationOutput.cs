@@ -10,6 +10,6 @@ namespace TOne.Entities
     {
         public AuthenticationResult Result { get; set; }
         
-        public User User { get; set; }
+        public SecurityEssentials.User User { get; set; }
     }
 }
