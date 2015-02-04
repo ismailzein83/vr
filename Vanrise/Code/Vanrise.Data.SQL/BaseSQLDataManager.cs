@@ -21,7 +21,7 @@ namespace Vanrise.Data.SQL
         static string s_bcpDirectory;
         private static void AddBCPIfNotAdded()
         {
-            s_bcpDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BCPRoot");
+            s_bcpDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(BaseSQLDataManager)).Location), "BCPRoot");
             if (!Directory.Exists(s_bcpDirectory))
                 Directory.CreateDirectory(s_bcpDirectory);
             File.WriteAllBytes(Path.Combine(s_bcpDirectory, "v_bcp.exe"), Resource.v_bcp);
