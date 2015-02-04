@@ -13,6 +13,20 @@ namespace Vanrise.Data.SQL
 {
     public class BaseSQLDataManager : BaseDataManager
     {
+        static BaseSQLDataManager()
+        {
+            AddBCPIfNotAdded();
+        }
+
+        static string s_bcpDirectory;
+        private static void AddBCPIfNotAdded()
+        {
+            s_bcpDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BCPRoot");
+            if (!Directory.Exists(s_bcpDirectory))
+                Directory.CreateDirectory(s_bcpDirectory);
+            File.WriteAllBytes(Path.Combine(s_bcpDirectory, "v_bcp.exe"), Resource.v_bcp);
+            File.WriteAllBytes(Path.Combine(s_bcpDirectory, "bcp.rll"), Resource.bcp);
+        }
         #region ctor
 
         public BaseSQLDataManager()
@@ -297,6 +311,8 @@ namespace Vanrise.Data.SQL
             if(bulkInsertInfo.FieldSeparator == default(char))
                 throw new ArgumentNullException("bulkInsertInfo.FieldSeparator");
 
+
+
             string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(base._connectionString);
             StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000 -F2", bulkInsertInfo.TableName, bulkInsertInfo.DataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
@@ -313,7 +329,7 @@ namespace Vanrise.Data.SQL
             
             System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
 
-            var procStartInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "v_bcp"), args.ToString());
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(s_bcpDirectory, "v_bcp"), args.ToString());
             
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
