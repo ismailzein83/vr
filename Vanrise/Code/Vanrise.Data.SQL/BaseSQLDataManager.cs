@@ -312,7 +312,9 @@ namespace Vanrise.Data.SQL
                 args.Append(" -E");
             
             System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
-            var procStartInfo = new System.Diagnostics.ProcessStartInfo("v_bcp", args.ToString());
+
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "v_bcp"), args.ToString());
+            
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
             procStartInfo.CreateNoWindow = true;
