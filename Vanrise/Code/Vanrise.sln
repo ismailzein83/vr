@@ -15,30 +15,66 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Reso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.HelperTools", "Vanrise.HelperTools\Vanrise.HelperTools.csproj", "{6C17E07B-0735-4795-862C-82DCD8BCCC35}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime", "Vanrise.Runtime\Vanrise.Runtime.csproj", "{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Entities", "Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj", "{07B66E74-BD84-4023-B839-5BB522B7A98C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Data", "Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj", "{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{62511FE5-AFF2-4322-8963-47E6DCAAFAD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{C314EDE4-0CF4-4E30-BF4D-D08798AB0543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Data.SQL", "Vanrise.Runtime.Data.SQL\Vanrise.Runtime.Data.SQL.csproj", "{32A30290-186B-4F63-8411-42710DC3620B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Resources\\Resources.csproj
+		SccProjectTopLevelParentUniqueName1 = Vanrise.sln
 		SccProjectName1 = Resources
 		SccLocalPath1 = Resources
 		SccProjectUniqueName2 = Vanrise.Caching\\Vanrise.Caching.csproj
+		SccProjectTopLevelParentUniqueName2 = Vanrise.sln
 		SccProjectName2 = Vanrise.Caching
 		SccLocalPath2 = Vanrise.Caching
 		SccProjectUniqueName3 = Vanrise.Common\\Vanrise.Common.csproj
+		SccProjectTopLevelParentUniqueName3 = Vanrise.sln
 		SccProjectName3 = Vanrise.Common
 		SccLocalPath3 = Vanrise.Common
 		SccProjectUniqueName4 = Vanrise.Data.SQL\\Vanrise.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName4 = Vanrise.sln
 		SccProjectName4 = Vanrise.Data.SQL
 		SccLocalPath4 = Vanrise.Data.SQL
 		SccProjectUniqueName5 = Vanrise.Data\\Vanrise.Data.csproj
+		SccProjectTopLevelParentUniqueName5 = Vanrise.sln
 		SccProjectName5 = Vanrise.Data
 		SccLocalPath5 = Vanrise.Data
 		SccProjectUniqueName6 = Vanrise.HelperTools\\Vanrise.HelperTools.csproj
+		SccProjectTopLevelParentUniqueName6 = Vanrise.sln
 		SccProjectName6 = Vanrise.HelperTools
 		SccLocalPath6 = Vanrise.HelperTools
+		SccProjectUniqueName7 = Vanrise.Runtime\\Vanrise.Runtime.csproj
+		SccProjectTopLevelParentUniqueName7 = Vanrise.sln
+		SccProjectName7 = Vanrise.Runtime
+		SccLocalPath7 = Vanrise.Runtime
+		SccProjectUniqueName8 = Vanrise.Runtime.Entities\\Vanrise.Runtime.Entities.csproj
+		SccProjectTopLevelParentUniqueName8 = Vanrise.sln
+		SccProjectName8 = Vanrise.Runtime.Entities
+		SccLocalPath8 = Vanrise.Runtime.Entities
+		SccProjectUniqueName9 = Vanrise.Runtime.Data\\Vanrise.Runtime.Data.csproj
+		SccProjectTopLevelParentUniqueName9 = Vanrise.sln
+		SccProjectName9 = Vanrise.Runtime.Data
+		SccLocalPath9 = Vanrise.Runtime.Data
+		SccProjectUniqueName10 = Vanrise.Runtime.Data.SQL\\Vanrise.Runtime.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName10 = Vanrise.sln
+		SccProjectName10 = Vanrise.Runtime.Data.SQL
+		SccLocalPath10 = Vanrise.Runtime.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,8 +147,52 @@ Global
 		{6C17E07B-0735-4795-862C-82DCD8BCCC35}.Release|x64.ActiveCfg = Release|x64
 		{6C17E07B-0735-4795-862C-82DCD8BCCC35}.Release|x64.Build.0 = Release|x64
 		{6C17E07B-0735-4795-862C-82DCD8BCCC35}.Release|x86.ActiveCfg = Release|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Release|x64.ActiveCfg = Release|Any CPU
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96}.Release|x86.ActiveCfg = Release|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Release|x64.ActiveCfg = Release|Any CPU
+		{07B66E74-BD84-4023-B839-5BB522B7A98C}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489}.Release|x86.ActiveCfg = Release|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Release|x64.ActiveCfg = Release|Any CPU
+		{32A30290-186B-4F63-8411-42710DC3620B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{C00D0633-B945-4EDB-8348-5C91AAAC19C7} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{1E5344D3-558E-445F-8329-FC78455EB715} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{6C17E07B-0735-4795-862C-82DCD8BCCC35} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{107DC891-2169-409F-9617-6D52723D05CE} = {62511FE5-AFF2-4322-8963-47E6DCAAFAD1}
+		{4AB70E59-2C65-4167-8D5F-897702CF161B} = {62511FE5-AFF2-4322-8963-47E6DCAAFAD1}
+		{2CDDDF60-45B6-4CE6-AC2B-4470BB9BFE96} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{07B66E74-BD84-4023-B839-5BB522B7A98C} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{32A30290-186B-4F63-8411-42710DC3620B} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 	EndGlobalSection
 EndGlobal
