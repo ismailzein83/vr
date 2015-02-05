@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 namespace Vanrise.BusinessProcess.Data
 {
-    public interface IBPTrackingDataManager
+    public interface IBPTrackingDataManager : IDataManager
     {
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 

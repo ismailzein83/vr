@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Vanrise.Common;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Common;
 
-namespace Vanrise.BusinessProcess.Data
+namespace Vanrise.Queueing.Data
 {
-    public static class BPDataManagerFactory
+    public class QDataManagerFactory
     {
         static ObjectFactory s_objectFactory;
-        static BPDataManagerFactory()
+        static QDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.BusinessProcess.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Queueing.Data.SQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager

@@ -2,7 +2,7 @@
 using Vanrise.BusinessProcess.Entities;
 namespace Vanrise.BusinessProcess.Data
 {
-    public interface IBPDataManager
+    public interface IBPDataManager : IDataManager
     {
         int ClearLoadedFlag();
         int DeleteEvent(long eventId);

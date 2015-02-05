@@ -25,9 +25,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.WFActivities.Test", "Vanrise.Business.WFActivities.Test\Vanrise.BusinessProcess.WFActivities.Test.csproj", "{5FCBDC4A-D94E-4883-A41D-C2579D21602D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing", "Vanrise.Queueing\Vanrise.Queueing.csproj", "{28EB3790-0E19-43AB-8ECB-6137EB0E588A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Queueing", "Queueing", "{AA77692E-2A11-4668-8E05-3A50564EC28E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business Process", "Business Process", "{6DE7EC63-A773-4991-A8AE-3633C788DAD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Data", "Vanrise.Queueing.Data\Vanrise.Queueing.Data.csproj", "{7A7BE8A2-3C37-42D6-A2E0-B2422661427F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Entities", "Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj", "{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Data.SQL", "Vanrise.Queueing.Data.SQL\Vanrise.Queueing.Data.SQL.csproj", "{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -40,12 +52,15 @@ Global
 		SccProjectName2 = Vanrise.BusinessProcess.Data.SQL
 		SccLocalPath2 = Vanrise.BusinessProcess.Data.SQL
 		SccProjectUniqueName3 = Vanrise.BusinessProcess.Entities\\Vanrise.BusinessProcess.Entities.csproj
+		SccProjectTopLevelParentUniqueName3 = Vanrise.BusinessProcess.sln
 		SccProjectName3 = Vanrise.BusinessProcess.Entities
 		SccLocalPath3 = Vanrise.BusinessProcess.Entities
 		SccProjectUniqueName4 = Vanrise.BusinessProcess\\Vanrise.BusinessProcess.csproj
+		SccProjectTopLevelParentUniqueName4 = Vanrise.BusinessProcess.sln
 		SccProjectName4 = Vanrise.BusinessProcess
 		SccLocalPath4 = Vanrise.BusinessProcess
 		SccProjectUniqueName5 = Vanrise.BusinessProcess.WFActivities\\Vanrise.BusinessProcess.WFActivities.csproj
+		SccProjectTopLevelParentUniqueName5 = Vanrise.BusinessProcess.sln
 		SccProjectName5 = Vanrise.BusinessProcess.WFActivities
 		SccLocalPath5 = Vanrise.BusinessProcess.WFActivities
 		SccProjectUniqueName6 = Vanrise.BusinessProcess.SQLTransactionDatabase\\Vanrise.BusinessProcess.SQLTransactionDatabase.sqlproj
@@ -57,11 +72,29 @@ Global
 		SccProjectName7 = Vanrise.BusinessProcess.SQLTrackingDatabase
 		SccLocalPath7 = Vanrise.BusinessProcess.SQLTrackingDatabase
 		SccProjectUniqueName8 = Vanrise.BusinessProcess.Web\\Vanrise.BusinessProcess.Web.csproj
+		SccProjectTopLevelParentUniqueName8 = Vanrise.BusinessProcess.sln
 		SccProjectName8 = Vanrise.BusinessProcess.Web
 		SccLocalPath8 = Vanrise.BusinessProcess.Web
 		SccProjectUniqueName9 = Vanrise.Business.WFActivities.Test\\Vanrise.BusinessProcess.WFActivities.Test.csproj
+		SccProjectTopLevelParentUniqueName9 = Vanrise.BusinessProcess.sln
 		SccProjectName9 = Vanrise.Business.WFActivities.Test
 		SccLocalPath9 = Vanrise.Business.WFActivities.Test
+		SccProjectUniqueName10 = Vanrise.Queueing\\Vanrise.Queueing.csproj
+		SccProjectTopLevelParentUniqueName10 = Vanrise.BusinessProcess.sln
+		SccProjectName10 = Vanrise.Queueing
+		SccLocalPath10 = Vanrise.Queueing
+		SccProjectUniqueName11 = Vanrise.Queueing.Data\\Vanrise.Queueing.Data.csproj
+		SccProjectTopLevelParentUniqueName11 = Vanrise.BusinessProcess.sln
+		SccProjectName11 = Vanrise.Queueing.Data
+		SccLocalPath11 = Vanrise.Queueing.Data
+		SccProjectUniqueName12 = Vanrise.Queueing.Entities\\Vanrise.Queueing.Entities.csproj
+		SccProjectTopLevelParentUniqueName12 = Vanrise.BusinessProcess.sln
+		SccProjectName12 = Vanrise.Queueing.Entities
+		SccLocalPath12 = Vanrise.Queueing.Entities
+		SccProjectUniqueName13 = Vanrise.Queueing.Data.SQL\\Vanrise.Queueing.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName13 = Vanrise.BusinessProcess.sln
+		SccProjectName13 = Vanrise.Queueing.Data.SQL
+		SccLocalPath13 = Vanrise.Queueing.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +141,22 @@ Global
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28EB3790-0E19-43AB-8ECB-6137EB0E588A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28EB3790-0E19-43AB-8ECB-6137EB0E588A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28EB3790-0E19-43AB-8ECB-6137EB0E588A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28EB3790-0E19-43AB-8ECB-6137EB0E588A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +166,16 @@ Global
 		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
 		{6386587A-5272-42B3-A156-7FAA8116F3A8} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
+		{28EB3790-0E19-43AB-8ECB-6137EB0E588A} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{519AC3E3-8FFA-4AF6-90E9-123BB54837F5} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{A5EE3349-B642-4CC7-B575-7C338821D63D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{601CDC2A-F409-446B-9E51-71FBCA868E6F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{5C28C004-F7BE-4F09-832F-CE8594B3231F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{5FCBDC4A-D94E-4883-A41D-C2579D21602D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 	EndGlobalSection
 EndGlobal
