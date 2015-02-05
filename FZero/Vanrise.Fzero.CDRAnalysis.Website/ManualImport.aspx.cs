@@ -116,7 +116,7 @@ public partial class ManualImports : BasePage
             CDR.Confirm(ddlSources.SelectedValue.ToInt(), (DataTable)Session["ImportedCalls"], CurrentUser.User.ID);
             gvImportedCalls.DataSource = new List<CDR>();
             gvImportedCalls.DataBind();
-            ShowAlert("Generated Calls have been saved to database");
+            ShowAlert("CDRs have been saved to database");
         }
         else
         {

@@ -33,11 +33,11 @@ namespace Vanrise.Fzero.CDRAnalysis
                     {
                         CDR gc = new CDR();
                         float DurationInSeconds = 0;
-                        if (i.Table.Columns.Contains("Duration In Seconds"))
+                        if (i.Table.Columns.Contains("DurationInSeconds"))
                         {
-                            if (i["Duration In Seconds"].ToString() != string.Empty)
+                            if (i["DurationInSeconds"].ToString() != string.Empty)
                             {
-                                float.TryParse(i["Duration In Seconds"].ToString(), out DurationInSeconds);
+                                float.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
                             }
                         }
 
@@ -75,7 +75,7 @@ namespace Vanrise.Fzero.CDRAnalysis
                         {
                             CDPN = i["CDPN"].ToString();
                         }
-                        gc.Reference = CDPN;
+                        gc.CDPN = CDPN;
 
 
 
@@ -93,11 +93,11 @@ namespace Vanrise.Fzero.CDRAnalysis
 
 
                         DateTime ConnectDateTime = new DateTime();
-                        if (i.Table.Columns.Contains("Connect"))
+                        if (i.Table.Columns.Contains("ConnectDateTime"))
                         {
-                            if (i["Connect"].ToString() != string.Empty)
+                            if (i["ConnectDateTime"].ToString() != string.Empty)
                             {
-                                DateTime.TryParse(i["Connect"].ToString(), out ConnectDateTime);
+                                DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
                             }
                         }
                         gc.ConnectDateTime = ConnectDateTime;
@@ -105,11 +105,11 @@ namespace Vanrise.Fzero.CDRAnalysis
 
 
                         DateTime DisconnectDateTime = new DateTime();
-                        if (i.Table.Columns.Contains("Disconnect"))
+                        if (i.Table.Columns.Contains("DisconnectDateTime"))
                         {
-                            if (i["Disconnect"].ToString() != string.Empty)
+                            if (i["DisconnectDateTime"].ToString() != string.Empty)
                             {
-                                DateTime.TryParse(i["Disconnect"].ToString(), out DisconnectDateTime);
+                                DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
                             }
                         }
                         gc.DisconnectDateTime = DisconnectDateTime;
@@ -128,7 +128,7 @@ namespace Vanrise.Fzero.CDRAnalysis
 
 
                     }
-                    CDR.SaveBulk("CDRs", listCDRs);
+                    CDR.SaveBulk("CDR", listCDRs);
            
         }
 

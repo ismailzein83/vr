@@ -13,13 +13,22 @@
     <form id="form1" runat="server">
         <div>
 
-            <div class="btn-group">
-                <button class="btn">Action</button>
-                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                </ul>
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <br />
+                        <h1>advinadv.co.uk</h1>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                <li class="active"><a href="index.html">Home</a> </li>
+                                <li class=""><a href="#sectionID2">About Us</a> </li>
+                                <li class=""><a href="#sectionID3">Services</a> </li>
+                                <li class=""><a href="#sectionID4">Portfolio</a> </li>
+                                <li class=""><a href="contact.html">Contact</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

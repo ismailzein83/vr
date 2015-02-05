@@ -9,7 +9,7 @@
         <div class="metro-nav metro-fix-view">
             <div class="span3">
                 <div class="space40"></div>
-                <div class="metro-nav-block nav-light-brown" style="margin-right: 10px;">
+                <div class="metro-nav-block nav-light-brown " style="margin-right: 10px;">
                     <a href="TrunckSwitches.aspx" data-original-title="" id="aTrunkscount"  runat="server" >
                         <i class="icon-link"></i>
                         <div class="info" id="divTruncksCount" runat="server"></div>
