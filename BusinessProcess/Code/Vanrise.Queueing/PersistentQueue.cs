@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -14,70 +13,25 @@ namespace Vanrise.Queueing
 {
     public class PersistentQueue<T> : BaseQueue<T> where T : PersistentQueueItem
     {
-        #region static
-
-        static System.Timers.Timer s_TimerUpdateProcessHeartBeat;
-        static List<RunningProcessInfo> s_runningProcesses;
-
-        static PersistentQueue()
-        {
-           
-            s_TimerUpdateProcessHeartBeat = new System.Timers.Timer();
-            s_TimerUpdateProcessHeartBeat.Elapsed += s_TimerUpdateProcessHeartBeat_Elapsed;
-        }
-
-        static bool s_isRunning;
-        static void s_TimerUpdateProcessHeartBeat_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (s_isRunning)
-                return;
-            lock (s_lockObj) 
-            s_isRunning = true;
-
-            
-
-            lock (s_lockObj)
-                s_isRunning = false;
-        }
-
-        static object s_lockObj = new object();
-        static int s_numberOfProcessingItems;
-        static void IncrementProcessing(int queueId)
-        {
-            lock(s_lockObj)
-            {
-                s_numberOfProcessingItems++;
-                if (!s_TimerUpdateProcessHeartBeat.Enabled)
-                    s_TimerUpdateProcessHeartBeat.Enabled = true;
-            }
-        }
-
-        static void DecrementProcessing(int queueId)
-        {
-            lock (s_lockObj)
-            {
-                s_numberOfProcessingItems--;
-                if (s_numberOfProcessingItems == 0)
-                    s_TimerUpdateProcessHeartBeat.Enabled = false;
-            }
-        }
-
-        #endregion
-
         #region ctor/Fields
 
-        IQueueDataManager _dataManager;
-        IQueueItemHeaderDataManager _itemHeaderDataManager;
+        IQueueDataManager _dataManagerQueue;
+        IQueueItemDataManager _dataManagerQueueItem;
+
         RunningProcessManager _runningProcessManager;
         int _queueId;
+        QueueSettings _queueSettings;
+        List<int> _subscribedQueueIds;
         T _emptyObject;
-        internal PersistentQueue(string queueName)
+
+        internal PersistentQueue(int queueId, QueueSettings settings)
         {
-            _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            _itemHeaderDataManager = QDataManagerFactory.GetDataManager<IQueueItemHeaderDataManager>();
+            _dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+            _dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
             _runningProcessManager = new RunningProcessManager();
             _emptyObject = Activator.CreateInstance<T>();
-            _queueId = _dataManager.GetQueue(queueName);
+            _queueId = queueId;
+            _queueSettings = settings;
         }
 
         #endregion
@@ -89,18 +43,29 @@ namespace Vanrise.Queueing
         #endregion
 
         #region Public Methods
-
+       
         public override void Enqueue(T item)
         {
+            UpdateSubscribedQueueIdsIfNeeded();
             item.Description = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
-            Guid itemId = Guid.NewGuid();
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, new TransactionOptions() { IsolationLevel = IsolationLevel.ReadCommitted }))
+
+            long itemId = _dataManagerQueueItem.GenerateItemID(_queueId);
+            if (_subscribedQueueIds == null || _subscribedQueueIds.Count == 0)
             {
-                _dataManager.EnqueueItem(_queueId, itemId, compressed);
-                _itemHeaderDataManager.Insert(itemId, _queueId, item.Description, QueueItemStatus.New);
-                scope.Complete();
+                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, compressed, item.Description, QueueItemStatus.New);
+            }
+            else
+            {
+                Dictionary<int, long> targetQueuesItemsIds = new Dictionary<int, long>();
+                targetQueuesItemsIds.Add(_queueId, itemId);
+                if (_subscribedQueueIds != null)
+                {
+                    foreach (int queueId in _subscribedQueueIds)
+                        targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID(queueId));
+                }
+                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, compressed, item.Description, QueueItemStatus.New);
             }
         }
 
@@ -170,23 +135,23 @@ namespace Vanrise.Queueing
         private bool TryDequeuePrivate(Action<T> onItemReady, bool rethrowOnError)
         {
             int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 1, 0)).Select(itm => itm.ProcessId);
-            QueueItem queueItem = _dataManager.DequeueItem(_queueId, currentProcessId, runningProcessesIds);
+            IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
+            QueueItem queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.SingleConcurrentReader);
             if (queueItem != null)
             {
-                _itemHeaderDataManager.UpdateStatus(queueItem.ItemId, QueueItemStatus.Processing);
+                _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processing);
                 byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
                 T deserialized = _emptyObject.Deserialize<T>(decompressed);
                 try
                 {
                     onItemReady(deserialized);
-                    _dataManager.DeleteItem(_queueId, queueItem.ItemId);
-                    _itemHeaderDataManager.UpdateStatus(queueItem.ItemId, QueueItemStatus.Processed);
+                    _dataManagerQueueItem.DeleteItem(_queueId, queueItem.ItemId);
+                    _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processed);
                 }
                 catch(Exception ex)
                 {
-                    QueueItemHeader itemHeader = _itemHeaderDataManager.Get(queueItem.ItemId);
-                    _itemHeaderDataManager.Update(queueItem.ItemId, QueueItemStatus.Failed, itemHeader.RetryCount + 1, ex.ToString());
+                    QueueItemHeader itemHeader = _dataManagerQueueItem.GetHeader(queueItem.ItemId, _queueId);
+                    _dataManagerQueueItem.UpdateHeader(queueItem.ItemId, QueueItemStatus.Failed, itemHeader.RetryCount + 1, ex.ToString());
                     if (rethrowOnError)
                         throw;
                     else
@@ -197,6 +162,46 @@ namespace Vanrise.Queueing
             else
                 return false;
         }
+
+        DateTime _subscribedQueueIdsUpdatedTime;
+        object _subscriptionsMaxTimeStamp;
+
+        private void UpdateSubscribedQueueIdsIfNeeded()
+        {
+            if ((DateTime.Now - _subscribedQueueIdsUpdatedTime).TotalSeconds > 5)
+            {
+                lock (this)
+                {
+                    if ((DateTime.Now - _subscribedQueueIdsUpdatedTime).TotalSeconds > 5)
+                    {
+                        if (_dataManagerQueue.HaveSubscriptionsChanged(_subscriptionsMaxTimeStamp))
+                        {
+                            _subscribedQueueIds = new List<int>();
+                            var subscriptions = _dataManagerQueue.GetSubscriptions();
+                            if (subscriptions != null && subscriptions.Count > 0)
+                            {
+                                FillSubscribedQueueIdsFromSubscriptions(_queueId, subscriptions);
+                            }
+                            _subscriptionsMaxTimeStamp = _dataManagerQueue.GetSubscriptionsMaxTimestamp();
+                        }
+                        _subscribedQueueIdsUpdatedTime = DateTime.Now;
+                    }
+                }
+            }
+        }
+
+        void FillSubscribedQueueIdsFromSubscriptions(int sourceQueueId, List<QueueSubscription> allSubscriptions)
+        {
+            foreach (var subscription in allSubscriptions.Where(itm => itm.QueueID == sourceQueueId))
+            {
+                if (subscription.SubsribedQueueID != _queueId && !_subscribedQueueIds.Contains(subscription.SubsribedQueueID))
+                {
+                    _subscribedQueueIds.Add(subscription.SubsribedQueueID);
+                    FillSubscribedQueueIdsFromSubscriptions(subscription.SubsribedQueueID, allSubscriptions);
+                }
+            }
+        }
+
 
         #endregion
     }

@@ -10,9 +10,13 @@ namespace Vanrise.Queueing.Entities
 
     public class QueueItemHeader
     {
-        public Guid Id { get; set; }
+        public long ItemId { get; set; }
 
         public int QueueId { get; set; }
+
+        public int SourceQueueId { get; set; }
+
+        public long SourceItemId { get; set; }
 
         public string Description { get; set; }
 

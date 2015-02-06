@@ -9,15 +9,14 @@ namespace Vanrise.Queueing.Data
 {
     public interface IQueueDataManager : IDataManager
     {
-        int GetQueue(string queueName);
+        void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds);
 
-        void EnqueueItem(int queueId, Guid itemId, byte[] item);
-        //void DequeueItem(string queueName, TimeSpan waitTime, Action<byte[]> onItemReady);
+        List<QueueSubscription> GetSubscriptions();
 
-        //QueueItem DequeueItem(int queueId, Guid processId);
+        object GetSubscriptionsMaxTimestamp();
 
-        QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds);
+        bool HaveSubscriptionsChanged(object timestampToCompare);
 
-        void DeleteItem(int queueId, Guid itemId);
+        QueueInstance GetQueueInstance(string queueName);
     }
 }

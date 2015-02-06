@@ -46,10 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PersistentQueueItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />
+    <Compile Include="QueueSettings.cs" />
+    <Compile Include="QueueSubscription.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

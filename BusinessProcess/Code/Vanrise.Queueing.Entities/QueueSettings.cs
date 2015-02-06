@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public class QueueItem
+    public class QueueSettings
     {
-        public long ItemId { get; set; }
-        
-        public byte[] Content { get; set; }
+        public bool SingleConcurrentReader { get; set; }
     }
 }

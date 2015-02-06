@@ -37,9 +37,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Entities",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Data.SQL", "Vanrise.Queueing.Data.SQL\Vanrise.Queueing.Data.SQL.csproj", "{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Vanrise.Queueing.SQLDatabase", "Vanrise.Queueing.SQLDatabase\Vanrise.Queueing.SQLDatabase.sqlproj", "{D488011A-7C15-468B-B0A3-6949B7CE3489}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 15
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -95,6 +97,10 @@ Global
 		SccProjectTopLevelParentUniqueName13 = Vanrise.BusinessProcess.sln
 		SccProjectName13 = Vanrise.Queueing.Data.SQL
 		SccLocalPath13 = Vanrise.Queueing.Data.SQL
+		SccProjectUniqueName14 = Vanrise.Queueing.SQLDatabase\\Vanrise.Queueing.SQLDatabase.sqlproj
+		SccProjectTopLevelParentUniqueName14 = Vanrise.BusinessProcess.sln
+		SccProjectName14 = Vanrise.Queueing.SQLDatabase
+		SccLocalPath14 = Vanrise.Queueing.SQLDatabase
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +163,12 @@ Global
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D488011A-7C15-468B-B0A3-6949B7CE3489}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +182,7 @@ Global
 		{7A7BE8A2-3C37-42D6-A2E0-B2422661427F} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
+		{D488011A-7C15-468B-B0A3-6949B7CE3489} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{519AC3E3-8FFA-4AF6-90E9-123BB54837F5} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{A5EE3349-B642-4CC7-B575-7C338821D63D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
