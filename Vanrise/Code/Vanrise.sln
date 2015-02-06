@@ -29,9 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{C314
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Runtime.Data.SQL", "Vanrise.Runtime.Data.SQL\Vanrise.Runtime.Data.SQL.csproj", "{32A30290-186B-4F63-8411-42710DC3620B}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Vanrise.Runtime.SQLDatabase", "Vanrise.Runtime.SQLDatabase\Vanrise.Runtime.SQLDatabase.sqlproj", "{B90EB082-6281-498C-99BA-63A75F21A66C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -75,6 +77,10 @@ Global
 		SccProjectTopLevelParentUniqueName10 = Vanrise.sln
 		SccProjectName10 = Vanrise.Runtime.Data.SQL
 		SccLocalPath10 = Vanrise.Runtime.Data.SQL
+		SccProjectUniqueName11 = Vanrise.Runtime.SQLDatabase\\Vanrise.Runtime.SQLDatabase.sqlproj
+		SccProjectTopLevelParentUniqueName11 = Vanrise.sln
+		SccProjectName11 = Vanrise.Runtime.SQLDatabase
+		SccLocalPath11 = Vanrise.Runtime.SQLDatabase
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +185,16 @@ Global
 		{32A30290-186B-4F63-8411-42710DC3620B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32A30290-186B-4F63-8411-42710DC3620B}.Release|x64.ActiveCfg = Release|Any CPU
 		{32A30290-186B-4F63-8411-42710DC3620B}.Release|x86.ActiveCfg = Release|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Release|x64.ActiveCfg = Release|Any CPU
+		{B90EB082-6281-498C-99BA-63A75F21A66C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,5 +210,6 @@ Global
 		{2B79FCCF-AFBE-43F2-9DDC-3A91F5FF2489} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{07B66E74-BD84-4023-B839-5BB522B7A98C} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{32A30290-186B-4F63-8411-42710DC3620B} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
+		{B90EB082-6281-498C-99BA-63A75F21A66C} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 	EndGlobalSection
 EndGlobal
