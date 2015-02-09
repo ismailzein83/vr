@@ -71,40 +71,6 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<User> Users { get; set; }
         public DbSet<ValueType> ValueTypes { get; set; }
         public DbSet<WebsiteMenu> WebsiteMenus { get; set; }
-        public DbSet<delete_View_AllCasesofMobileOperator> delete_View_AllCasesofMobileOperator { get; set; }
-        public DbSet<delete_View_Carrier> delete_View_Carrier { get; set; }
-        public DbSet<delete_View_CaseStatuses> delete_View_CaseStatuses { get; set; }
-        public DbSet<delete_View_Comparisons> delete_View_Comparisons { get; set; }
-        public DbSet<delete_View_FraudCasesofMobileOperator> delete_View_FraudCasesofMobileOperator { get; set; }
-        public DbSet<delete_View_Imports> delete_View_Imports { get; set; }
-        public DbSet<delete_View_ReportedCLIs> delete_View_ReportedCLIs { get; set; }
-        public DbSet<delete_View_Reports> delete_View_Reports { get; set; }
-        public DbSet<delete_View_SourceGenerates> delete_View_SourceGenerates { get; set; }
-        public DbSet<delete_View_SourceGeneratesRecieves> delete_View_SourceGeneratesRecieves { get; set; }
-        public DbSet<delete_View_SourceRecieves> delete_View_SourceRecieves { get; set; }
-        public DbSet<delete_View_TimeActiveonNetwork> delete_View_TimeActiveonNetwork { get; set; }
-        public DbSet<delete_View_ToReportedCLIs> delete_View_ToReportedCLIs { get; set; }
-        public DbSet<delete_ViewCaseStatuses> delete_ViewCaseStatuses { get; set; }
-        public DbSet<delete_ViewClientCase> delete_ViewClientCase { get; set; }
-        public DbSet<delete_ViewComparisons> delete_ViewComparisons { get; set; }
-        public DbSet<delete_ViewDistinctGeneratedCalls> delete_ViewDistinctGeneratedCalls { get; set; }
-        public DbSet<delete_ViewImports> delete_ViewImports { get; set; }
-        public DbSet<delete_ViewLastImports> delete_ViewLastImports { get; set; }
-        public DbSet<delete_ViewReportedCalls> delete_ViewReportedCalls { get; set; }
-        public DbSet<delete_ViewReportedClientCalls> delete_ViewReportedClientCalls { get; set; }
-        public DbSet<delete_ViewReports> delete_ViewReports { get; set; }
-        public DbSet<delete_ViewResultedCases> delete_ViewResultedCases { get; set; }
-        public DbSet<delete_ViewResultedCases_All> delete_ViewResultedCases_All { get; set; }
-        public DbSet<delete_ViewResultedCases_CLINotReported> delete_ViewResultedCases_CLINotReported { get; set; }
-        public DbSet<delete_ViewResultedCases_CLIReported> delete_ViewResultedCases_CLIReported { get; set; }
-        public DbSet<delete_ViewSourceGenerates> delete_ViewSourceGenerates { get; set; }
-        public DbSet<delete_ViewSourceGeneratesRecieves> delete_ViewSourceGeneratesRecieves { get; set; }
-        public DbSet<delete_ViewSourceRecieves> delete_ViewSourceRecieves { get; set; }
-        public DbSet<delete_ViewSummaryClient> delete_ViewSummaryClient { get; set; }
-        public DbSet<delete_ViewToBeReportedCalls> delete_ViewToBeReportedCalls { get; set; }
-        public DbSet<delete_vwCarrier> delete_vwCarrier { get; set; }
-        public DbSet<delete_vwOrigination> delete_vwOrigination { get; set; }
-        public DbSet<deleted_ViewToBeReportedCalls> deleted_ViewToBeReportedCalls { get; set; }
         public DbSet<View_Origination> View_Origination { get; set; }
         public DbSet<ViewGeneratedCall> ViewGeneratedCalls { get; set; }
         public DbSet<ViewSummary> ViewSummaries { get; set; }
