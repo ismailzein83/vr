@@ -11,6 +11,16 @@ namespace Vanrise.Queueing.Data
     {
         void CreateQueue(string queueName, string title, string itemFQTN, QueueSettings settings, IEnumerable<int> sourceQueueIds);
 
+        int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings );
+
+        int InsertQueueInstance(string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings);
+
+        void UpdateQueueInstanceStatus(string queueName, QueueInstanceStatus status);
+
+        bool UpdateQueueName(string queueName, QueueInstanceStatus status, string newQueueName);
+
+        void InsertSubscription(IEnumerable<int> sourceQueueIds, int susbscribedQueueId);
+
         List<QueueSubscription> GetSubscriptions();
 
         object GetSubscriptionsMaxTimestamp();

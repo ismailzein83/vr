@@ -21,7 +21,7 @@ namespace Vanrise.Queueing.Data.SQL
                                                                   query_EnqueueItemHeaderTemplate);
         }
         public QueueItemDataManager()
-            : base(ConfigurationManager.AppSettings["QueueingDBConnStringKey"] ?? "QueueingDBConnString")
+            : base(ConfigurationManager.AppSettings["QueueItemDBConnStringKey"] ?? "QueueItemDBConnString")
         {
         }
 
@@ -101,6 +101,16 @@ namespace Vanrise.Queueing.Data.SQL
         ////        scope.Complete();
         ////    }
         ////}          
+
+        public void CreateQueue(int queueId)
+        {
+            ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
+        }
+
+        public void InsertQueueItemIDGen(int queueId)
+        {
+            ExecuteNonQuerySP("queue.sp_QueueItemIDGen_Insert", queueId);
+        }
 
         public long GenerateItemID(int queueId)
         {
@@ -248,9 +258,16 @@ namespace Vanrise.Queueing.Data.SQL
 
         #region Queries
 
+        const string query_CreateQueueTable = @"CREATE TABLE [queue].[QueueItem_{0}](
+									                                                [ID] [bigint] NOT NULL,
+									                                                [Content] [varbinary](max) NOT NULL,
+									                                                [LockedByProcessID] [int] NULL,
+									                                                 CONSTRAINT [PK_QueueItem_{0}] PRIMARY KEY CLUSTERED 
+									                                                (
+										                                                [ID] ASC
+									                                                ))";
+
         static string s_query_EnqueueItemAndHeaderTemplate;
-
-
 
         const string query_EnqueueItemTemplate = @" 
                                         INSERT INTO queue.QueueItem_{0}

@@ -16,7 +16,7 @@ namespace Vanrise.Queueing.Data.SQL
     public class QueueDataManager : BaseSQLDataManager, IQueueDataManager
     {
         public QueueDataManager()
-            : base(ConfigurationManager.AppSettings["QueueingDBConnStringKey"] ?? "QueueingDBConnString")
+            : base(ConfigurationManager.AppSettings["QueueDBConnStringKey"] ?? "QueueDBConnString")
         {
         }
 
@@ -41,6 +41,41 @@ namespace Vanrise.Queueing.Data.SQL
                     prmSourceQueueIds.Value = dtSourceQueueIds;
                     cmd.Parameters.Add(prmSourceQueueIds);
                 });
+        }
+
+        public int InsertOrUpdateQueueItemType(string itemFQTN, string title, QueueSettings defaultQueueSettings )
+        {
+            object id;
+            ExecuteNonQuerySP("queue.sp_QueueItemType_InsertOrUpdate", out id, itemFQTN, title, Serializer.Serialize(defaultQueueSettings));
+            return (int)id;
+        }
+
+        public int InsertQueueInstance(string queueName, string title, QueueInstanceStatus status, int itemTypeId, QueueSettings settings)
+        {
+            object id;
+            ExecuteNonQuerySP("queue.sp_QueueInstance_Insert", out id, queueName, title, (int)status, itemTypeId, settings != null ? (object)Serializer.Serialize(settings) : DBNull.Value);
+            return (int)id;
+        }
+
+        public void UpdateQueueInstanceStatus(string queueName, QueueInstanceStatus status)
+        {
+            ExecuteNonQuerySP("queue.sp_QueueInstance_UpdateStatus", queueName, (int)status);
+        }
+
+        public bool UpdateQueueName(string queueName, QueueInstanceStatus status, string newQueueName)
+        {
+            return ExecuteNonQuerySP("queue.sp_QueueInstance_UpdateName", queueName, (int)status, newQueueName) > 0;
+        }
+
+        public void InsertSubscription(IEnumerable<int> sourceQueueIds, int susbscribedQueueId)
+        {
+            if (sourceQueueIds != null)
+            {
+                foreach (var sourceQueueId in sourceQueueIds)
+                {
+                    ExecuteNonQuerySP("queue.sp_QueueSubscription_Insert", sourceQueueId, susbscribedQueueId);
+                }
+            }
         }
 
         public QueueInstance GetQueueInstance(string queueName)
@@ -77,6 +112,8 @@ namespace Vanrise.Queueing.Data.SQL
                 QueueInstanceId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
+                Status = (QueueInstanceStatus)reader["Status"],
+                ItemTypeId = (int)reader["ItemTypeID"],
                 ItemFQTN = reader["ItemFQTN"] as string,
                 Settings = Serializer.Deserialize<QueueSettings>(reader["Settings"] as string),
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")

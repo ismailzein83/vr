@@ -47,14 +47,14 @@ namespace Vanrise.Queueing
         public override void Enqueue(T item)
         {
             UpdateSubscribedQueueIdsIfNeeded();
-            item.Description = item.GenerateDescription();
+            string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
 
             long itemId = _dataManagerQueueItem.GenerateItemID(_queueId);
             if (_subscribedQueueIds == null || _subscribedQueueIds.Count == 0)
             {
-                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, compressed, item.Description, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, compressed, itemDescription, QueueItemStatus.New);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace Vanrise.Queueing
                     foreach (int queueId in _subscribedQueueIds)
                         targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID(queueId));
                 }
-                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, compressed, item.Description, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, compressed, itemDescription, QueueItemStatus.New);
             }
         }
 

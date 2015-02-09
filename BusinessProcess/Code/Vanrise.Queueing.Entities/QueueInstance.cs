@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
+    public enum QueueInstanceStatus { New = 0, ReadyToUse = 10, Deleted = 20 }
     public class QueueInstance
     {
         public int QueueInstanceId { get; set; }
@@ -13,6 +14,10 @@ namespace Vanrise.Queueing.Entities
         public string Name { get; set; }
 
         public string Title { get; set; }
+
+        public QueueInstanceStatus Status { get; set; }
+
+        public int ItemTypeId { get; set; }
 
         public string ItemFQTN { get; set; }
 

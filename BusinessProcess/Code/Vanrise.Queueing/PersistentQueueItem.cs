@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -20,6 +21,20 @@ namespace Vanrise.Queueing
 
         public abstract string GenerateDescription();
 
-        public string Description { get; internal set; }
+        internal protected virtual string ItemTypeTitle
+        {
+            get
+            {
+                return this.GetType().Name;
+            }
+        }
+
+        internal protected virtual QueueSettings DefaultQueueSettings
+        {
+            get
+            {
+                return new QueueSettings();
+            }
+        }
     }
 }
