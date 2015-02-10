@@ -28,5 +28,7 @@ namespace Vanrise.Queueing.Data
         bool HaveSubscriptionsChanged(object timestampToCompare);
 
         QueueInstance GetQueueInstance(string queueName);
+
+        List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds);
     }
 }

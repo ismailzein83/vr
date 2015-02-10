@@ -27,7 +27,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             {
                 return true;
             }
-        }              
+        }
 
         protected override void Execute(NativeActivityContext context)
         {
@@ -39,8 +39,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                 InputArguments = this.Input.Get(context),
                 ParentProcessID = sharedData.InstanceInfo.ProcessInstanceID
             };
-            ProcessManager processManager = new ProcessManager();
-            var output = processManager.CreateNewProcess(input);
+            var output = BusinessProcessRuntime.Current.CreateNewProcess(input);
             this.ProcessInstanceId.Set(context, output.ProcessInstanceId);
 
             if (this.WaitProcessCompleted.Get(context))

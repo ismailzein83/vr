@@ -22,8 +22,7 @@ namespace Vanrise.BusinessProcess.WFActivities
         {
             BPSharedInstanceData sharedInstanceData = context.GetSharedInstanceData();
 
-            ProcessManager processManager = new ProcessManager();
-            processManager.TriggerProcessEvent(new Entities.TriggerProcessEventInput
+            BusinessProcessRuntime.Current.TriggerProcessEvent(new Entities.TriggerProcessEventInput
             {
                 ProcessInstanceId = sharedInstanceData.InstanceInfo.ParentProcessID.Value,
                 BookmarkName = this.BookmarkName.Get(context),

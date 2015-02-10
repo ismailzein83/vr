@@ -83,11 +83,13 @@ namespace Vanrise.Queueing
         {
             if (processItem == null)
                 throw new ArgumentNullException("processItem");
-            if (this.IsListening)
-                throw new InvalidOperationException("Listening is already started on this queue");
-
+            
             lock (this)
+            {
+                if (this.IsListening)
+                    throw new InvalidOperationException("Listening is already started on this queue");
                 this.IsListening = true;
+            }
 
             Task task = new Task(() =>
             {

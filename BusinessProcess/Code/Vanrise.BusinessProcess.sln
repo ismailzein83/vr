@@ -43,9 +43,13 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Vanrise.Queueing.SQLQueueIt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL Database Projects", "SQL Database Projects", "{34325F95-5BD5-4908-AF96-0BB001CAA55F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Extensions", "Vanrise.Queueing.Extensions\Vanrise.Queueing.Extensions.csproj", "{5BFF8DF2-75AF-4358-AF5E-66AF97B76177}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Client", "Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj", "{F5064A23-6E52-43DA-AFFA-71425942EBF8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -109,6 +113,14 @@ Global
 		SccProjectTopLevelParentUniqueName15 = Vanrise.BusinessProcess.sln
 		SccProjectName15 = Vanrise.Queueing.SQLQueueItemDatabase
 		SccLocalPath15 = Vanrise.Queueing.SQLQueueItemDatabase
+		SccProjectUniqueName16 = Vanrise.Queueing.Extensions\\Vanrise.Queueing.Extensions.csproj
+		SccProjectTopLevelParentUniqueName16 = Vanrise.BusinessProcess.sln
+		SccProjectName16 = Vanrise.Queueing.Extensions
+		SccLocalPath16 = Vanrise.Queueing.Extensions
+		SccProjectUniqueName17 = Vanrise.BusinessProcess.Client\\Vanrise.BusinessProcess.Client.csproj
+		SccProjectTopLevelParentUniqueName17 = Vanrise.BusinessProcess.sln
+		SccProjectName17 = Vanrise.BusinessProcess.Client
+		SccLocalPath17 = Vanrise.BusinessProcess.Client
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +195,14 @@ Global
 		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +215,7 @@ Global
 		{519AC3E3-8FFA-4AF6-90E9-123BB54837F5} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{601CDC2A-F409-446B-9E51-71FBCA868E6F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{F5064A23-6E52-43DA-AFFA-71425942EBF8} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
@@ -204,7 +225,8 @@ Global
 		{A511DCE7-1FA4-46DC-B04E-01C4CCDD7F1C} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{8C98C28A-3F14-4876-B7DD-DC95313A3BA4} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{34325F95-5BD5-4908-AF96-0BB001CAA55F} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
-		{151DCD8D-1050-493B-BC05-A34F8CA12D60} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
+		{5BFF8DF2-75AF-4358-AF5E-66AF97B76177} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
 		{B8BD1FB9-E6B0-42CC-A032-544C9FB088C3} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
+		{151DCD8D-1050-493B-BC05-A34F8CA12D60} = {34325F95-5BD5-4908-AF96-0BB001CAA55F}
 	EndGlobalSection
 EndGlobal

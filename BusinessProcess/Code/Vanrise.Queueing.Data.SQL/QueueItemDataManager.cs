@@ -16,8 +16,10 @@ namespace Vanrise.Queueing.Data.SQL
         static QueueItemDataManager()
         {
             s_query_EnqueueItemAndHeaderTemplate = String.Format(@"{0} 
-                                                                   {1}", 
-                                                                  query_EnqueueItemTemplate, 
+                                                                   {1} 
+                                                                   {2}", 
+                                                                  query_EnqueueItemTemplate,
+                                                                  query_InsertQueueActivationIfNeededTemplate, 
                                                                   query_EnqueueItemHeaderTemplate);
         }
         public QueueItemDataManager()
@@ -127,11 +129,13 @@ namespace Vanrise.Queueing.Data.SQL
             
             StringBuilder queryItemBuilder = new StringBuilder();
             StringBuilder queryItemHeaderBuilder = new StringBuilder();
+            StringBuilder queryInsertQueueActivationBuilder = new StringBuilder();
             foreach(var targetQueueItemId in targetQueuesItemsIds)
             {
                 int queueId = targetQueueItemId.Key;
                 long itemId = targetQueueItemId.Value;
                 queryItemBuilder.AppendLine(String.Format(query_EnqueueItemTemplate, queueId, itemId));
+                queryInsertQueueActivationBuilder.AppendLine(String.Format(query_InsertQueueActivationIfNeededTemplate, queueId));
                 queryItemHeaderBuilder.AppendLine(String.Format(query_EnqueueItemHeaderTemplate, 
                     queueId, 
                     itemId, 
@@ -140,8 +144,10 @@ namespace Vanrise.Queueing.Data.SQL
             }
 
             string query = String.Format(@" {0} 
-                                            {1}", 
+                                            {1} 
+                                            {2}", 
                                             queryItemBuilder, 
+                                            queryInsertQueueActivationBuilder,
                                             queryItemHeaderBuilder);
 
             ExecuteEnqueueItemQuery(query, item, description, queueItemStatus);
@@ -234,6 +240,19 @@ namespace Vanrise.Queueing.Data.SQL
         {
             ExecuteNonQuerySP("queue.sp_QueueItemHeader_Update", itemId, (int)queueItemStatus, retryCount, errorMessage);
         }
+        
+        public Dictionary<int, long> GetQueueIDsHavingNewItems(long afterQueueActivationId)
+        {
+            Dictionary<int, long> updatedQueues = new Dictionary<int, long>();
+            ExecuteReaderSP("queue.sp_QueueActivation_GetUpdatedQueueIds",
+                (reader) =>
+                {
+                    while (reader.Read())
+                        updatedQueues.Add((int)reader["QueueID"], (long)reader["MaxID"]);
+                },
+                afterQueueActivationId);
+            return updatedQueues;
+        }
 
         #region Private Methods
 
@@ -265,16 +284,20 @@ namespace Vanrise.Queueing.Data.SQL
 									                                                 CONSTRAINT [PK_QueueItem_{0}] PRIMARY KEY CLUSTERED 
 									                                                (
 										                                                [ID] ASC
-									                                                ))";
+									                                                ));";
 
         static string s_query_EnqueueItemAndHeaderTemplate;
 
-        const string query_EnqueueItemTemplate = @" 
-                                        INSERT INTO queue.QueueItem_{0}
-                                               ([ID], [Content])
-                                         VALUES
-                                               ({1}, @Content)
+        const string query_EnqueueItemTemplate = @" DECLARE @IsEmptyInitialy_{0} Bit
+                                                    IF NOT EXISTS (SELECT TOP 1 null FROM queue.QueueItem_{0})
+                                                       SET @IsEmptyInitialy_{0} = 1
+                                                    ELSE
+                                                       SET @IsEmptyInitialy_{0} = 0
 
+                                                     INSERT INTO queue.QueueItem_{0}
+                                                           ([ID], [Content])
+                                                     VALUES
+                                                           ({1}, @Content)
                                                          ";
 
         const string query_EnqueueItemHeaderTemplate = @" INSERT INTO [queue].[QueueItemHeader]
@@ -295,6 +318,13 @@ namespace Vanrise.Queueing.Data.SQL
                                                                    ,@Status
                                                                    ,GETDATE()
                                                                    ,GETDATE())";
+
+        const string query_InsertQueueActivationIfNeededTemplate = @"IF @IsEmptyInitialy_{0} = 1
+                                                                        INSERT INTO [queue].[QueueActivation]
+                                                                           ([QueueID])
+		                                                                VALUES
+                                                                           ({0})";
+
 
         const string query_Dequeue = @" 
                                         BEGIN TRAN
@@ -332,5 +362,6 @@ namespace Vanrise.Queueing.Data.SQL
         const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";     
 
         #endregion
+
     }
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 
-namespace Vanrise.BusinessProcess
+namespace Vanrise.BusinessProcess.Client
 {
-    public class ProcessManager
+    public class BPClient
     {
         #region Process Workflow Methods
 
@@ -23,22 +24,39 @@ namespace Vanrise.BusinessProcess
             return output;
         }
 
+        public TriggerProcessEventOutput TriggerProcessEvent(TriggerProcessEventInput triggerProcessEventInput)
+        {
+            string serializedInput = Vanrise.Common.Serializer.Serialize(triggerProcessEventInput);
+            TriggerProcessEventOutput output = null;
+            CreateServiceClient((client) =>
+            {
+                output = client.TriggerProcessEvent(serializedInput);
+            });
+            return output;
+        }
+
         #endregion
 
         #region BP Transaction Methods
 
-        internal T GetDefinitionObjectState<T>(int definitionId, string objectKey)
+        public List<BPDefinition> GetDefinitions()
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetDefinitionObjectState<T>(definitionId, objectKey);
+            return dataManager.GetDefinitions();
         }
 
-        internal void SaveDefinitionObjectState(int definitionId, string objectKey, object objectValue)
+        public List<BPInstance> GetFilteredInstances(int definitionID, DateTime datefrom, DateTime dateto)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            if (dataManager.UpdateDefinitionObjectState(definitionId, objectKey, objectValue) <= 0)
-                dataManager.InsertDefinitionObjectState(definitionId, objectKey, objectValue);
+            return dataManager.GetInstancesByCriteria(definitionID, datefrom, dateto);
         }
+
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID)
+        {
+            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            return dataManager.GetTrackingsByInstanceId(processInstanceID);
+        }
+
 
         #endregion
 
@@ -68,6 +86,5 @@ namespace Vanrise.BusinessProcess
         }
 
         #endregion
-
     }
 }

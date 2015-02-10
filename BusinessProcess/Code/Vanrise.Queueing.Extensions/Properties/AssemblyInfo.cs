@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Vanrise.BusinessProcess")]
+[assembly: AssemblyTitle("Vanrise.Queueing.Extensions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Vanrise.BusinessProcess")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("Vanrise.Queueing.Extensions")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,9 +19,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6ceab598-f81d-46b0-96df-dc3d7065852d")]
+[assembly: Guid("060cd0dd-db0b-4271-a595-74880d0fd710")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,4 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("Vanrise.BusinessProcess.WFActivities")]

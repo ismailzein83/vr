@@ -65,6 +65,7 @@
     <Folder Include="queue\Tables\" />
     <Folder Include="queue\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="queue\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="queue\Tables\QueueSubscription.sql" />
@@ -79,5 +80,7 @@
     <Build Include="queue\Stored Procedures\sp_QueueSubscription_GetMaxTimestamp.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueSubscription_Insert.sql" />
     <Build Include="Security\queue.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByIDs.sql" />
+    <Build Include="queue\User Defined Types\IDIntType.sql" />
   </ItemGroup>
 </Project>

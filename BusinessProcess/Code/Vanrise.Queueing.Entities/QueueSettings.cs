@@ -9,5 +9,7 @@ namespace Vanrise.Queueing.Entities
     public class QueueSettings
     {
         public bool SingleConcurrentReader { get; set; }
-    }
+
+        public QueueActivator QueueActivator { get; set; }
+    }    
 }

@@ -83,9 +83,25 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemSP("queue.sp_QueueInstance_GetByName", QueueInstanceReader, queueName);
         }
 
+        public List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds)
+        {
+            DataTable dtIds = new DataTable();
+            dtIds.Columns.Add("ID");
+            dtIds.BeginLoadData();
+            foreach (var id in queueIds)
+                dtIds.Rows.Add(id);
+            dtIds.EndLoadData();
+            return GetItemsSPCmd("queue.sp_QueueInstance_GetByIDs", QueueInstanceReader, (cmd) =>
+                {
+                    var prmIds = new SqlParameter("@IDs", SqlDbType.Structured);
+                    prmIds.Value = dtIds;
+                    cmd.Parameters.Add(prmIds);
+                });
+        }
+
         public List<QueueSubscription> GetSubscriptions()
         {
-            return GetItemsSP("queue.sp_QueueSubscription_GetAll", QueueSubscriptionMapper);
+            return GetItemsSP("queue.sp_QueueSubscription_GetAll", QueueSubscriptionMapper, (int)QueueInstanceStatus.ReadyToUse);
         }
 
         public object GetSubscriptionsMaxTimestamp()

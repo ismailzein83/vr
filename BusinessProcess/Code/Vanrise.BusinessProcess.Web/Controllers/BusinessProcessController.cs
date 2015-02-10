@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
@@ -14,7 +15,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         [HttpGet]
         public List<BPDefinition> GetDefinitions()
         {
-            ProcessManager manager = new ProcessManager();
+            BPClient manager = new BPClient();
             return manager.GetDefinitions();
         }
 
@@ -22,15 +23,15 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public List<BPInstance> GetFilteredInstances(int definitionID, string datefrom, string dateto)
         {
             DateTime dateFrom = DateTime.ParseExact(datefrom, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
-            DateTime dateTo = DateTime.ParseExact(dateto, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);          
-            ProcessManager manager = new ProcessManager();
+            DateTime dateTo = DateTime.ParseExact(dateto, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
+            BPClient manager = new BPClient();
             return manager.GetFilteredInstances( definitionID,  dateFrom,  dateTo);
         }
 
         [HttpGet]
         public List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID)
         {
-            ProcessManager manager = new ProcessManager();
+            BPClient manager = new BPClient();
             return manager.GetTrackingsByInstanceId(ProcessInstanceID);
         }
          
