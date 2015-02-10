@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33BBA8AF-E925-4354-B05C-39E623A21DA9}</ProjectGuid>
+    <ProjectGuid>{5AAC8AEC-CC1E-489A-99C0-5826B7BC0E35}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TOne.CDR.Entities</RootNamespace>
-    <AssemblyName>TOne.CDR.Entities</AssemblyName>
+    <RootNamespace>TOne.CDR.Business</RootNamespace>
+    <AssemblyName>TOne.CDR.Business</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NGenerics">
+      <HintPath>..\Resources\DLLs\NGenerics.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
     </Reference>
@@ -53,20 +56,26 @@
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CDRBatch.cs" />
-    <Compile Include="CDRBillingBatch.cs" />
-    <Compile Include="CDRInvalidBatch.cs" />
-    <Compile Include="CDRMainBatch.cs" />
+    <Compile Include="CDRQueueFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrafficStatisticsBatch.cs" />
-    <Compile Include="TrafficStatisticsDailyBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS\TABS.csproj">
       <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
       <Name>TABS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
+      <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
+      <Name>TOne.CDR.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
