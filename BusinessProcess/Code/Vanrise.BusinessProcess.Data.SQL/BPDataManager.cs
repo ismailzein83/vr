@@ -13,7 +13,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
     internal class BPDataManager : BaseSQLDataManager, IBPDataManager
     {
         public BPDataManager()
-            : base(ConfigurationManager.AppSettings["BusinessProcessDBConnStringKey"] ?? "TransactionDBConnString")
+            : base(ConfigurationManager.AppSettings["BusinessProcessDBConnStringKey"] ?? "BusinessProcessDBConnString")
         {
         }  
 
