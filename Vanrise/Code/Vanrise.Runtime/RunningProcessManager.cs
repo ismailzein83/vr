@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Vanrise.Common;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
 
@@ -25,9 +26,9 @@ namespace Vanrise.Runtime
             {
                 UpdateHeartBeat();
             }
-            catch
+            catch (Exception ex)
             {
-
+                LoggerFactory.GetLogger().LogException(ex);
             }
             lock (s_lockObj)
                 s_isRunning = false;
@@ -35,10 +36,12 @@ namespace Vanrise.Runtime
 
         private static void UpdateHeartBeat()
         {
-            if (s_isRunning)
-                return;
             lock (s_lockObj)
+            {
+                if (s_isRunning)
+                    return;
                 s_isRunning = true;
+            }
 
             if (_currentProcess == null)
                 InitializeCurrentProcessIfNotInitialized();

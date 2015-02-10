@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lblDLL = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.txtFilter = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtCurrentMeta
@@ -142,11 +143,20 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Libraries|*.dll;*.exe";
             // 
+            // txtFilter
+            // 
+            this.txtFilter.Location = new System.Drawing.Point(766, 10);
+            this.txtFilter.Name = "txtFilter";
+            this.txtFilter.Size = new System.Drawing.Size(97, 20);
+            this.txtFilter.TabIndex = 10;
+            this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
+            // 
             // GenerateProtoBufTypeMetaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(875, 471);
+            this.Controls.Add(this.txtFilter);
             this.Controls.Add(this.lblDLL);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.chkNoCurrentMeta);
@@ -177,5 +187,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblDLL;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox txtFilter;
     }
 }

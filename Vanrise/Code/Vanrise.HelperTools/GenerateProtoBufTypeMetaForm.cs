@@ -18,7 +18,7 @@ namespace Vanrise.HelperTools
         {
             InitializeComponent();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            this.FormClosed += GenerateProtoBufTypeMetaForm_FormClosed;
+            this.FormClosed += GenerateProtoBufTypeMetaForm_FormClosed;            
         }
 
         void GenerateProtoBufTypeMetaForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -100,7 +100,9 @@ namespace Vanrise.HelperTools
             if(openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 cmbTypes.SelectedItem = null;
-                cmbTypes.Items.Clear();
+                //cmbTypes.Items.Clear();
+                _allTypes.Clear();
+                _cmbSource = null;
                 txtCurrentMeta.Text = "";
                 txtNewMeta.Text = "";
                 chkNoCurrentMeta.Checked = false;
@@ -118,6 +120,9 @@ namespace Vanrise.HelperTools
             }
         }
 
+        List<Type> _allTypes = new List<Type>();
+        List<Type> _cmbSource;
+
         private void GetTypesFromDLL(string assemblyPath)
         {
             Assembly assembly = Assembly.LoadFile(assemblyPath);
@@ -126,10 +131,13 @@ namespace Vanrise.HelperTools
             {
                 if(t.IsClass)
                 {
-                    cmbTypes.Items.Add(t);
+                    //mbTypes.Items.Add(t);
+                    _allTypes.Add(t);
+                    
                 }
             }
-            
+            _cmbSource = _allTypes.Where(itm => itm.FullName.Contains(txtFilter.Text)).ToList();
+            cmbTypes.DataSource = _cmbSource;
         }
 
         private void chkNoCurrentMeta_CheckedChanged(object sender, EventArgs e)
@@ -152,6 +160,12 @@ namespace Vanrise.HelperTools
         private void cmbTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetGenerateButtonAccessibility();
+        }
+
+        private void txtFilter_TextChanged(object sender, EventArgs e)
+        {
+            _cmbSource = _allTypes.Where(itm => itm.FullName.Contains(txtFilter.Text)).ToList();
+            cmbTypes.DataSource = _cmbSource;
         }
     }
 }

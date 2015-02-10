@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compressor.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="LoggerFactory.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
