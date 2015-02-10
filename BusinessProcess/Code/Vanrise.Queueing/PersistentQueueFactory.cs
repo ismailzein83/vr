@@ -16,23 +16,21 @@ namespace Vanrise.Queueing
         {
             IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             QueueInstance queueInstance = dataManager.GetQueueInstance(queueName);
-            if (queueInstance == null)
+            if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
                 return null;
-
-            if (queueInstance.Status != QueueInstanceStatus.ReadyToUse)
-                throw new Exception(String.Format("Queue '{0}' is not ready to use", queueName));
 
             Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
             if (typeof(T) != queueItemType)
-                throw new Exception(String.Format("Queue '{0}' is not of type {1}. Expected Item Type {2}", queueName, typeof(T), queueItemType));
+                throw new Exception(String.Format("Queue '{0}' is of item type {1}. Expected Item Type {2}", queueName, queueItemType, typeof(T)));
 
             return new PersistentQueue<T>(queueInstance.QueueInstanceId, queueInstance.Settings);
         }
 
-        public static bool IsQueueExists(string queueName)
+        public static bool QueueExists(string queueName)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-            return dataManagerQueue.GetQueueInstance(queueName) != null;
+            QueueInstance queueInstance = dataManagerQueue.GetQueueInstance(queueName);
+            return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
         public static void CreateQueue<T>(string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
@@ -52,6 +50,10 @@ namespace Vanrise.Queueing
 
                     if (sourceQueue.Status != QueueInstanceStatus.ReadyToUse)
                         throw new Exception(String.Format("Source Queue '{0}' is not ready to use", sourceQueueName));
+
+                    Type sourceQueueItemType = Type.GetType(sourceQueue.ItemFQTN);
+                    if (typeof(T) != sourceQueueItemType)
+                        throw new Exception(String.Format("Source Queue '{0}' is of item type {1}. Expected Item Type {2}", sourceQueueName, sourceQueueItemType, typeof(T)));
 
                     if (!sourceQueueIds.Contains(sourceQueue.QueueInstanceId))
                         sourceQueueIds.Add(sourceQueue.QueueInstanceId);
@@ -90,6 +92,22 @@ namespace Vanrise.Queueing
         public static void CreateQueue<T>(string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {
             CreateQueue<T>(queueName, queueName, null, queueSettings);
+        }
+
+        public static void CreateQueueIfNotExists<T>(string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        {            
+            if (!QueueExists(queueName))
+            {
+                try
+                {
+                    PersistentQueueFactory.CreateQueue<T>(queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
+                }
+                catch
+                {
+                    if (!QueueExists(queueName))
+                        throw;
+                }
+            }
         }
     }
 }
