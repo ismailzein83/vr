@@ -75,5 +75,7 @@
     <Build Include="queue\Stored Procedures\sp_QueueItemIDGen_GenerateID.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemIDGen_Insert.sql" />
     <Build Include="Security\queue.sql" />
+    <Build Include="queue\Tables\QueueActivation.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueActivation_GetUpdatedQueueIds.sql" />
   </ItemGroup>
 </Project>

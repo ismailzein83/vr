@@ -1,0 +1,4 @@
+﻿CREATE TYPE [queue].[IDIntType] AS TABLE (
+    [ID] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC));
+

@@ -72,6 +72,7 @@
     <Folder Include="queue\Stored Procedures\" />
     <Folder Include="bp\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="queue\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -112,6 +113,8 @@
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueInstance_GetByIDs.sql" />
+    <Build Include="queue\User Defined Types\IDIntType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

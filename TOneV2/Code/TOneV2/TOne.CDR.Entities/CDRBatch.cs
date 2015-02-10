@@ -10,13 +10,15 @@ namespace TOne.CDR.Entities
     {
         static CDRBatch()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBatch), "CDRs");
-            //Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TABS.CDR), "CDRID", "AlertDateTime", "AttemptDateTime", "CAUSE_TO",
-            //        "CAUSE_TO_RELEASE_CODE", "CDPN", "CDPNOut", "CGPN", "ConnectDateTime", "DisconnectDateTime", "Duration",
-            //        "DurationInSeconds", "Extra_Fields", "IDonSwitch", "IN_CARRIER", "IN_CIRCUIT", "IN_IP", "IN_TRUNK",
-            //        "IsRerouted", "OUT_CARRIER", "OUT_CIRCUIT", "OUT_IP", "OUT_TRUNK", "OverridedSwitchID", "SIP",
-            //        "Tag", "Sub");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBatch), "SwitchId", "CDRs");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TABS.CDR), "CDRID", "IDonSwitch", "Tag", "AttemptDateTime", "AlertDateTime",
+            "ConnectDateTime", "DisconnectDateTime", "Duration", "DurationInSeconds", "IN_TRUNK", "IN_CIRCUIT", "IN_CARRIER",
+            "IN_IP", "OUT_TRUNK", "OUT_CIRCUIT", "OUT_CARRIER", "OUT_IP", "CGPN", "CDPN",
+            "CDPNOut", "CAUSE_FROM", "CAUSE_FROM_RELEASE_CODE", "CAUSE_TO", "CAUSE_TO_RELEASE_CODE", "Extra_Fields", "IsRerouted",
+            "SIP", "OverridedSwitchID");
         }
+
+        public int SwitchId { get; set; }
 
         public List<TABS.CDR> CDRs { get; set; }
 
