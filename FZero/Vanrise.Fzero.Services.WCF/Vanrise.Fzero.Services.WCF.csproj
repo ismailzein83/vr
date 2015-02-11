@@ -65,16 +65,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design, Version=2013.1.220.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Web.UI">
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Web.UI.Skins">
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.Skins.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ProjectInstaller.cs">
@@ -118,14 +108,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\EntityFramework.dll" />
+    <Content Include="bin\Debug\EntityFramework.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj">
+      <Project>{1ca1b8a4-c6ac-499d-a763-8276a68c415e}</Project>
+      <Name>Vanrise.Fzero.Bypass</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.Services.WcfServiceLibrary\Vanrise.Fzero.Services.WcfServiceLibrary.csproj">
       <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
       <Name>Vanrise.Fzero.Services.WcfServiceLibrary</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\EntityFramework.dll" />
-    <Content Include="bin\Debug\EntityFramework.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

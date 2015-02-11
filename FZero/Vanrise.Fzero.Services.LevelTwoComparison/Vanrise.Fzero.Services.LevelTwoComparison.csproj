@@ -73,16 +73,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design, Version=2013.1.220.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Web.UI">
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Web.UI.Skins">
-      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.Skins.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LevelTwoComparisonService.cs">
@@ -175,6 +165,10 @@
     <ProjectReference Include="..\Vanrise.Fzero.Bypass.TOne\Vanrise.Fzero.Bypass.TOne.csproj">
       <Project>{aa133b7e-6501-4a0d-ae8d-847b35008044}</Project>
       <Name>Vanrise.Fzero.Bypass.TOne</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj">
+      <Project>{1ca1b8a4-c6ac-499d-a763-8276a68c415e}</Project>
+      <Name>Vanrise.Fzero.Bypass</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -50,6 +50,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.Design, Version=2013.1.220.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q1 2013\Bin45\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enums.cs" />
@@ -102,6 +112,10 @@
     <ProjectReference Include="..\Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj">
       <Project>{a0a85889-ced2-4de6-bda9-fef2c10eb564}</Project>
       <Name>Vanrise.CommonLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj">
+      <Project>{1ca1b8a4-c6ac-499d-a763-8276a68c415e}</Project>
+      <Name>Vanrise.Fzero.Bypass</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
