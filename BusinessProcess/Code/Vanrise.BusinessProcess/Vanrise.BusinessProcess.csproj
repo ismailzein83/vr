@@ -59,12 +59,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base Classes\AsyncActivityStatus.cs" />
     <Compile Include="Base Classes\AsyncActivityHandle.cs" />
     <Compile Include="Base Classes\BaseAsyncActivity.cs" />
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
+    <Compile Include="BusinessProcessService.cs" />
     <Compile Include="Internals\ConsoleTracking.cs" />
     <Compile Include="ContextExtensions.cs" />
     <Compile Include="Internals\BPService.cs" />

@@ -29,13 +29,14 @@ namespace Vanrise.Queueing
                         {
                             try
                             {
-                                var queueActivator = queueInstance.Settings.QueueActivator;
-                                queueActivator.Run(queueInstance);
-                                queueActivator.Dispose();
+                                using (var queueActivator = queueInstance.Settings.QueueActivator)
+                                {
+                                    queueActivator.Run(queueInstance);
+                                }
                             }
                             catch (Exception ex)
                             {
-                                LoggerFactory.GetLogger().LogException(ex);
+                                LoggerFactory.GetExceptionLogger().WriteException(ex);
                             }
                         });
                         task.Start();

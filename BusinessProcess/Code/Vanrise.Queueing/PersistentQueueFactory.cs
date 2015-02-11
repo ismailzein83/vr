@@ -10,9 +10,32 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing
 {
-    public static class PersistentQueueFactory
+    public class PersistentQueueFactory
     {
-        public static PersistentQueue<T> GetQueue<T>(string queueName) where T : PersistentQueueItem
+        #region Singleton
+
+        static PersistentQueueFactory()
+        {
+            _default = new PersistentQueueFactory();
+        }
+
+
+        static PersistentQueueFactory _default;
+        public static PersistentQueueFactory Default
+        {
+            get
+            {
+                return _default;
+            }
+        }
+
+        private PersistentQueueFactory()
+        {
+
+        }
+
+        #endregion
+        public PersistentQueue<T> GetQueue<T>(string queueName) where T : PersistentQueueItem
         {
             IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             QueueInstance queueInstance = dataManager.GetQueueInstance(queueName);
@@ -26,14 +49,14 @@ namespace Vanrise.Queueing
             return new PersistentQueue<T>(queueInstance.QueueInstanceId, queueInstance.Settings);
         }
 
-        public static bool QueueExists(string queueName)
+        public bool QueueExists(string queueName)
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             QueueInstance queueInstance = dataManagerQueue.GetQueueInstance(queueName);
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
-        public static void CreateQueue<T>(string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        public void CreateQueue<T>(string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {
             IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
@@ -84,23 +107,23 @@ namespace Vanrise.Queueing
             }
         }
 
-        public static void CreateQueue<T>(string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        public void CreateQueue<T>(string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {
             CreateQueue<T>(queueName, queueTitle, null, queueSettings);
         }
 
-        public static void CreateQueue<T>(string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        public void CreateQueue<T>(string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {
             CreateQueue<T>(queueName, queueName, null, queueSettings);
         }
 
-        public static void CreateQueueIfNotExists<T>(string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
+        public void CreateQueueIfNotExists<T>(string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {            
             if (!QueueExists(queueName))
             {
                 try
                 {
-                    PersistentQueueFactory.CreateQueue<T>(queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
+                    CreateQueue<T>(queueName, queueTitle ?? queueName, sourceQueueNames, queueSettings);
                 }
                 catch
                 {

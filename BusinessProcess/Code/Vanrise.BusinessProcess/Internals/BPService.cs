@@ -19,13 +19,31 @@ namespace Vanrise.BusinessProcess
             NetNamedPipeBinding binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
             binding.MaxReceivedMessageSize = int.MaxValue;
             serviceHost.AddServiceEndpoint(typeof(IBPService), binding, "net.pipe://localhost/BPService");
+            serviceHost.Opening += serviceHost_Opening;
             serviceHost.Opened += new EventHandler(serviceHost_Opened);
+            serviceHost.Closing += serviceHost_Closing;
+            serviceHost.Closed += serviceHost_Closed;
             serviceHost.Open();
+        }
+
+        static void serviceHost_Opening(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("Business Process WCF Service (BPService) is opening..");
         }
 
         static void serviceHost_Opened(object sender, EventArgs e)
         {
-            Console.WriteLine("Service Opened");
+            LoggerFactory.GetLogger().WriteInformation("Business Process WCF Service (BPService) Opened");
+        }
+
+        static void serviceHost_Closed(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("Business Process WCF Service (BPService) Closed");
+        }
+
+        static void serviceHost_Closing(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("Business Process WCF Service (BPService) is closing..");
         }
 
         public CreateProcessOutput CreateNewProcess(string serializedInput)

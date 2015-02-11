@@ -7,6 +7,7 @@ using System.Threading;
 using System.Activities;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess
 {
@@ -38,7 +39,7 @@ namespace Vanrise.BusinessProcess
         }
 
         IBPDataManager _dataManager;
-        
+
         Dictionary<string, BPDefinitionInitiator> _processDefinitionInitiators;
 
         #endregion
@@ -52,7 +53,7 @@ namespace Vanrise.BusinessProcess
             BPDefinitionInitiator processInitiator;
             if (!_processDefinitionInitiators.TryGetValue(input.ProcessName, out processInitiator))
                 throw new ArgumentException(String.Format("'{0}' not found in Process Definitions list", input.ProcessName));
-            
+
             string processTitle = processInitiator.WorkflowDefinition.GetTitle(input);
             long processInstanceId = _dataManager.InsertInstance(processTitle, input.ParentProcessID, processInitiator.Definition.BPDefinitionID, input.InputArguments, BPInstanceStatus.New);
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
@@ -94,6 +95,32 @@ namespace Vanrise.BusinessProcess
 
         #region Process Execution
 
+        bool _isExecutePendingsRunning;
+
+        internal void ExecutePendingsIfIdleAsync()
+        {
+            lock (this)
+            {
+                if (_isExecutePendingsRunning)
+                    return;
+                _isExecutePendingsRunning = true;
+            }
+            Task task = new Task(() =>
+            {
+                try
+                {
+                    ExecutePendings();
+                }
+                finally
+                {
+                    lock (this)
+                    {
+                        _isExecutePendingsRunning = false;
+                    }
+                }
+            });
+        }
+
         public void ExecutePendings()
         {
             GC.Collect();
@@ -101,6 +128,32 @@ namespace Vanrise.BusinessProcess
             LoadAndRunPendingProcesses();
         }
 
+        bool _isTriggerPendingEventsRunning;
+
+        internal void TriggerPendingEventsIfIdleAsync()
+        {
+            lock (this)
+            {
+                if (_isTriggerPendingEventsRunning)
+                    return;
+                _isTriggerPendingEventsRunning = true;
+            }
+            Task task = new Task(() =>
+            {
+                try
+                {
+                    TriggerPendingEvents();
+                }
+                finally
+                {
+                    lock (this)
+                    {
+                        _isTriggerPendingEventsRunning = false;
+                    }
+                }
+            });
+        }
+        
         public void TriggerPendingEvents()
         {
             GC.Collect();
@@ -140,7 +193,7 @@ namespace Vanrise.BusinessProcess
             {
                 BPDefinitionInitiator processInitiator = _processDefinitionInitiators.Values.First(itm => itm.Definition.BPDefinitionID == bp.DefinitionID);
                 _dataManager.UpdateLoadedFlag(bp.ProcessInstanceID, true);
-                processInitiator.ScheduleNewProcessRun(bp);                
+                processInitiator.ScheduleNewProcessRun(bp);
                 processInitiator.RunProcessExecutionIfNeeded();
             });
         }
@@ -154,7 +207,7 @@ namespace Vanrise.BusinessProcess
                 _dataManager.DeleteEvent(evnt.BPEventID);
             });
         }
- 
+
         #endregion
     }
 }
