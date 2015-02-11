@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
 
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -32,7 +34,7 @@
             <button type="button" class="btn btn-link">Link</button>
         </div>
 
-
+        <telerik:RadTextBox ID="RadTextBox1" runat="server"></telerik:RadTextBox>
 
     </form>
 </body>
