@@ -97,11 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="bin\Debug\fmsemailsln.InstallLog" />
-    <None Include="bin\Debug\FMSEmailSln.InstallState" />
-    <None Include="bin\Debug\FMSImportSln.vshost.exe.config" />
-    <None Include="bin\Debug\FMSImportSln.vshost.exe.manifest" />
-    <None Include="bin\Debug\InstallUtil.InstallLog" />
     <None Include="Dependencies\OpenPop.dll.refresh" />
     <None Include="Service References\ServiceReference1\FMS.DataLayer.xsd">
       <SubType>Designer</SubType>
@@ -155,8 +150,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\FMSEmailSln.sln" />
-    <Content Include="bin\Debug\FMSImportSln.vshost.exe" />
     <Content Include="Dependencies\OpenPop.dll" />
     <None Include="Service References\ServiceReference1\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
@@ -165,7 +158,9 @@
     <None Include="Service References\ServiceReference1\configuration.svcinfo" />
     <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ServiceReference1\" />
   </ItemGroup>
