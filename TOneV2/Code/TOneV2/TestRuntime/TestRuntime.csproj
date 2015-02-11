@@ -245,6 +245,7 @@
   <ItemGroup>
     <Compile Include="Tasks\ABaghdadiTask.cs" />
     <Compile Include="Tasks\HaSSanTask.cs" />
+    <Compile Include="Tasks\HusseinTask.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
