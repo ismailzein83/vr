@@ -8,15 +8,28 @@ namespace Vanrise.Common
 {
     public static class LoggerFactory
     {
-        public static ILogger GetLogger()
+        public static Logger GetLogger()
         {
-            return new Logger();
+            return new ConsoleLogger();
+        }
+
+        public static ExceptionLogger GetExceptionLogger()
+        {
+            return new ConsoleExceptionLogger();
         }
     }
 
-    public class Logger : ILogger
+    public class ConsoleLogger : Logger
     {
-        public void LogException(Exception ex)
+        protected override void OnWriteEntry(LogEntryType entryType, string message)
+        {
+            Console.WriteLine("{0} - {1}: {2}", entryType, DateTime.Now, message);
+        }
+    }
+
+    public class ConsoleExceptionLogger : ExceptionLogger
+    {
+        protected override void OnWriteException(Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }

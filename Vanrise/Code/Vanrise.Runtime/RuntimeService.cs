@@ -7,12 +7,17 @@ using Vanrise.Common;
 
 namespace Vanrise.Runtime
 {
-    public abstract class RuntimeService
+    public abstract class RuntimeService : IDisposable
     {
+        Logger _logger = LoggerFactory.GetLogger();
+
         public TimeSpan Interval { get; set; }
 
-        private bool IsExecuting { get; set; }
+        public RuntimeStatus Status { get; internal set; }
 
+        public bool IsExecuting { get; private set; }
+        
+        
         DateTime _lastExecutedTime;
 
         internal void ExecuteIfIdleAndDue()
@@ -28,11 +33,14 @@ namespace Vanrise.Runtime
             {
                 try
                 {
+                    _logger.WriteVerbose("Executing {0} Runtime Service...", this.GetType().Name);
+                    DateTime start = DateTime.Now;
                     Execute();
+                    _logger.WriteVerbose("{0} Runtime Service executed in {1}", this.GetType().Name, (DateTime.Now - start));
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactory.GetLogger().LogException(ex);
+                    LoggerFactory.GetExceptionLogger().WriteException(ex);
                 }
                 lock (this)
                 {
@@ -43,5 +51,25 @@ namespace Vanrise.Runtime
         }
 
         protected abstract void Execute();
+
+        internal protected virtual void OnStarted()
+        {
+            _logger.WriteInformation("{0} Runtime Service Started", this.GetType().Name);
+        }
+
+        internal protected virtual void OnStopped()
+        {
+            _logger.WriteInformation("{0} Runtime Service Stopped", this.GetType().Name);
+        }
+
+        public void Dispose()
+        {
+            OnDisposed();
+        }
+
+        protected virtual void OnDisposed()
+        {
+
+        }
     }
 }

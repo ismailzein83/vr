@@ -28,7 +28,7 @@ namespace Vanrise.Runtime
             }
             catch (Exception ex)
             {
-                LoggerFactory.GetLogger().LogException(ex);
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
             lock (s_lockObj)
                 s_isRunning = false;
@@ -48,12 +48,28 @@ namespace Vanrise.Runtime
             else
             {
                 DateTime heartBeatTime;
-                _dataManager.UpdateHeartBeat(_currentProcess.ProcessId, out heartBeatTime);
+                if(!_dataManager.UpdateHeartBeat(_currentProcess.ProcessId, out heartBeatTime))
+                {
+                    var processInfo = _dataManager.InsertProcessInfo(System.Diagnostics.Process.GetCurrentProcess().ProcessName, Environment.MachineName);
+                    heartBeatTime = processInfo.LastHeartBeatTime;
+                    lock(s_lockObj)
+                    {
+                        if (_currentProcess == null)
+                            _currentProcess = processInfo;
+                        else
+                        {
+                            _currentProcess.ProcessId = processInfo.ProcessId;
+                            _currentProcess.StartedTime = processInfo.StartedTime;                            
+                        }
+                    }
+                }
+                _currentProcess.LastHeartBeatTime = heartBeatTime;
             }
 
+            //delete timed out processes
             if ((DateTime.Now - s_lastCleanTime).TotalMinutes > 10)
             {
-                _dataManager.DeleteTimedOutProcesses(new TimeSpan(0, 10, 0));
+                _dataManager.DeleteTimedOutProcesses(new TimeSpan(0, 2, 0));
                 s_lastCleanTime = DateTime.Now;
             }
 
@@ -92,8 +108,6 @@ namespace Vanrise.Runtime
         public List<RunningProcessInfo> GetRunningProcesses(TimeSpan? heartBeatReceivedWithin = null)
         {
             UpdateHeartBeat();
-            if (heartBeatReceivedWithin == null)
-                heartBeatReceivedWithin = new TimeSpan(0, 2, 0);
             return _dataManager.GetRunningProcesses(heartBeatReceivedWithin);
         }
 
