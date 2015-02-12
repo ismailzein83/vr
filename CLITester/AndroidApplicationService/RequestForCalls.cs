@@ -51,7 +51,7 @@ namespace AndroidApplicationService
                         string dd = DateTime.Now.Date.Year + "-" + DateTime.Now.Date.Month + "-" + DateTime.Now.Date.Day + " " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
                         resp = cc.RequestForCall(auth, "user", "idsP@ssw0rdids", op.Operator.mcc, op.Operator.mnc, dd);
                         //System.Threading.Thread.Sleep(5000);
-                        WriteToEventLog("Response: Callid " + resp.Callid.ToString() + " MobileNumber: " + resp.mobileNumber.ToString() + " Error: " + resp.ErrorStatus.ToString());
+                        //WriteToEventLog("Response: Callid " + resp.Callid.ToString() + " MobileNumber: " + resp.mobileNumber.ToString() + " Error: " + resp.ErrorStatus.ToString());
                         
                         if (resp.ErrorStatus == "1")
                         {
@@ -89,7 +89,7 @@ namespace AndroidApplicationService
                                 SipAccount sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
                                 GenCall.SipAccountId = sp.Id;
                                 GeneratedCallRepository.Save(GenCall);
-                                WriteToEventLog("GeneratedCall: " + GenCall.Id);
+                                //WriteToEventLog("GeneratedCall: " + GenCall.Id);
 
                                 GeneratedCall NewGen = GeneratedCallRepository.Load(GenCall.Id);
 
@@ -102,7 +102,7 @@ namespace AndroidApplicationService
                                 RequestId = resp.Callid;
                                 montycall.ReturnMessage = "";
                                 montycall.CallEntryId = NewGen.Id;
-                                WriteToEventLog("Monty Table: Id: " + op.Id + " CarrierPrefix: " + op.CarrierPrefix + " mobileNumber: " + resp.mobileNumber + " RequestId " + resp.Callid);
+                                //WriteToEventLog("Monty Table: Id: " + op.Id + " CarrierPrefix: " + op.CarrierPrefix + " mobileNumber: " + resp.mobileNumber + " RequestId " + resp.Callid);
                                 MontyCallRepository.Save(montycall);
                             }
                             else

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FraudTest2" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=FraudTest2;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=FraudTest2;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.SipStatus" Member="SipStatus">
     <Type Name="SipStatus">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -490,11 +490,24 @@
       <Column Name="WebsiteURL" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="IsChangedCallerId" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="ParentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Balance" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="User_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="UserId" Type="UserRole" />
       <Association Name="User_Carrier" Member="Carriers" ThisKey="Id" OtherKey="CustomerId" Type="Carrier" />
       <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
       <Association Name="User_SipAccount" Member="SipAccounts" ThisKey="Id" OtherKey="UserId" Type="SipAccount" />
       <Association Name="User_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="UserId" Type="TestOperator" />
+    </Type>
+  </Table>
+  <Table Name="" Member="TestOperatorHistories">
+    <Type Name="TestOperatorHistory">
+      <Column Name="Name" Type="System.String" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="DisplayName" Type="System.String" CanBeNull="true" />
+      <Column Name="TestCli" Type="System.String" CanBeNull="true" />
+      <Column Name="ReceivedCli" Type="System.String" CanBeNull="true" />
+      <Column Name="RowCount" Type="System.Int32" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetRolePages" Method="GetRolePages">
@@ -542,9 +555,18 @@
   </Function>
   <Function Name="dbo.GetChartTotals" Method="GetChartTotals">
     <Parameter Name="Status" Parameter="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
     <ElementType Name="GetChartTotalsResult">
       <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="TotalCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
+  </Function>
+  <Function Name="dbo.GetTestOperators" Method="GetTestOperators" IsComposable="true">
+    <Parameter Name="StartDate" Parameter="startDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="EndDate" Parameter="endDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="OperatorId" Parameter="operatorId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
+    <Return Type="object" />
   </Function>
 </Database>

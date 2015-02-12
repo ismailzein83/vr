@@ -75,9 +75,9 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    WriteToEventLogEx("ENTRY REP 1");
+                    //WriteToEventLogEx("ENTRY REP 1");
                     entry = context.CallEntries.Where(x => ((number == null || x.Number == number) && (sessionId == null || x.SessionId == sessionId))).SingleOrDefault<CallEntry>();
-                    WriteToEventLogEx("ENTRY REP 2");
+                   // WriteToEventLogEx("ENTRY REP 2");
                 }
             }
             catch (System.Exception ex)
@@ -169,7 +169,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    WriteToEventLogEx("CE REP callEntry.Id: " + callEntry.Id);
+                    //WriteToEventLogEx("CE REP callEntry.Id: " + callEntry.Id);
 
                     context.CommandTimeout = 18000;
 

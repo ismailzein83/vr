@@ -17,25 +17,22 @@ public partial class ManageTestOperators : BasePage
         if (!Current.User.IsAuthenticated)
             Response.Redirect("Login.aspx");
 
-        divSuccess.Visible = false;
-        divError.Visible = false;
-
-        if (!IsPostBack)
-        {
-            GetData();
-        }
+        //if (!IsPostBack)
+        //{
+        //    GetData();
+        //}
     }
 
     #region Methods
-    private void GetData()
-    {
-        List<TestOperator> LstTestOp = TestOperatorRepository.GetTestOperatorsByUserId(Current.User.Id).ToList();
-        Session["LstTestOpHistory"] = LstTestOp;
-        rptCarriers.DataSource = LstTestOp;
-        rptCarriers.DataBind();
+    //private void GetData()
+    //{
+    //    List<TestOperator> LstTestOp = TestOperatorRepository.GetTestOperatorsByUserId(Current.User.Id).ToList();
+    //    Session["LstTestOpHistory"] = LstTestOp;
+    //    rptCarriers.DataSource = LstTestOp;
+    //    rptCarriers.DataBind();
 
         
-    }
+    //}
    
     #endregion
 }

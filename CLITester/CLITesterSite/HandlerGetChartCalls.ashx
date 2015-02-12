@@ -6,7 +6,8 @@ using CallGeneratorLibrary.Repositories;
 using CallGeneratorLibrary;
 using System.Collections.Generic;
 
-public class HandlerGetChartCalls : IHttpHandler {
+public class HandlerGetChartCalls : IHttpHandler, System.Web.SessionState.IRequiresSessionState
+{
     
     public void ProcessRequest (HttpContext context) {
 
@@ -21,15 +22,11 @@ public class HandlerGetChartCalls : IHttpHandler {
 
         Int32.TryParse(status, out statusId);
 
-        LstChartCall = TestOperatorRepository.GetChartCalls(statusId);
+        LstChartCall = TestOperatorRepository.GetChartCalls(statusId, Current.getCurrentUser(context).Id);
         context.Response.ContentType = "application/json";
         context.Response.ContentEncoding = System.Text.Encoding.UTF8;
         context.Response.Write(jsonSerializer.Serialize(LstChartCall));
         return;
-        
-        
-        
-        
     }
  
     public bool IsReusable {
@@ -37,5 +34,4 @@ public class HandlerGetChartCalls : IHttpHandler {
             return false;
         }
     }
-
 }

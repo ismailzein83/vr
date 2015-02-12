@@ -98,7 +98,7 @@ namespace AndroidApplicationService
                                         AndroidLiveService.Call resp2 = new AndroidLiveService.Call();
                                         resp2 = Req.GetCLI(auth, "user", "idsP@ssw0rdids", m.RequestId);
 
-                                        WriteToEventLog("Response RequestId " +  m.RequestId +"  CLI : " + resp2.CLI + " status " + resp2.status);
+                                        //WriteToEventLog("Response RequestId " +  m.RequestId +"  CLI : " + resp2.CLI + " status " + resp2.status);
                                         if (resp2.status == "1")//Success
                                         {
                                             testoperators[i].EndDate = DateTime.Now;

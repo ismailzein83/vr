@@ -449,6 +449,14 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
+		public System.Data.Linq.Table<TestOperatorHistory> TestOperatorHistories
+		{
+			get
+			{
+				return this.GetTable<TestOperatorHistory>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRolePages")]
 		public ISingleResult<Page> GetRolePages([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleId", DbType="NVarChar(255)")] string roleId)
 		{
@@ -492,10 +500,16 @@ namespace CallGeneratorLibrary
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetChartTotals")]
-		public ISingleResult<GetChartTotalsResult> GetChartTotals([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Status", DbType="Int")] System.Nullable<int> status)
+		public ISingleResult<GetChartTotalsResult> GetChartTotals([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Status", DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status, userId);
 			return ((ISingleResult<GetChartTotalsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetTestOperators", IsComposable=true)]
+		public object GetTestOperators([global::System.Data.Linq.Mapping.ParameterAttribute(Name="StartDate", DbType="DateTime")] System.Nullable<System.DateTime> startDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="EndDate", DbType="DateTime")] System.Nullable<System.DateTime> endDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OperatorId", DbType="Int")] System.Nullable<int> operatorId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayStart", DbType="Int")] System.Nullable<int> displayStart, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayLength", DbType="Int")] System.Nullable<int> displayLength)
+		{
+			return ((object)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), startDate, endDate, operatorId, displayStart, displayLength).ReturnValue));
 		}
 	}
 	
@@ -10252,6 +10266,8 @@ namespace CallGeneratorLibrary
 		
 		private System.Nullable<int> _ParentId;
 		
+		private System.Nullable<int> _Balance;
+		
 		private EntitySet<UserRole> _UserRoles;
 		
 		private EntitySet<Carrier> _Carriers;
@@ -10300,6 +10316,8 @@ namespace CallGeneratorLibrary
     partial void OnIsChangedCallerIdChanged();
     partial void OnParentIdChanging(System.Nullable<int> value);
     partial void OnParentIdChanged();
+    partial void OnBalanceChanging(System.Nullable<int> value);
+    partial void OnBalanceChanged();
     #endregion
 		
 		public User()
@@ -10652,6 +10670,26 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Balance", DbType="Int")]
+		public System.Nullable<int> Balance
+		{
+			get
+			{
+				return this._Balance;
+			}
+			set
+			{
+				if ((this._Balance != value))
+				{
+					this.OnBalanceChanging(value);
+					this.SendPropertyChanging();
+					this._Balance = value;
+					this.SendPropertyChanged("Balance");
+					this.OnBalanceChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserRole", Storage="_UserRoles", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<UserRole> UserRoles
 		{
@@ -10795,6 +10833,159 @@ namespace CallGeneratorLibrary
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="")]
+	public partial class TestOperatorHistory
+	{
+		
+		private string _Name;
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private string _DisplayName;
+		
+		private string _TestCli;
+		
+		private string _ReceivedCli;
+		
+		private System.Nullable<int> _RowCount;
+		
+		private System.Nullable<int> _Status;
+		
+		public TestOperatorHistory()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this._Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this._CreationDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this._EndDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DisplayName")]
+		public string DisplayName
+		{
+			get
+			{
+				return this._DisplayName;
+			}
+			set
+			{
+				if ((this._DisplayName != value))
+				{
+					this._DisplayName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestCli")]
+		public string TestCli
+		{
+			get
+			{
+				return this._TestCli;
+			}
+			set
+			{
+				if ((this._TestCli != value))
+				{
+					this._TestCli = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReceivedCli")]
+		public string ReceivedCli
+		{
+			get
+			{
+				return this._ReceivedCli;
+			}
+			set
+			{
+				if ((this._ReceivedCli != value))
+				{
+					this._ReceivedCli = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowCount")]
+		public System.Nullable<int> RowCount
+		{
+			get
+			{
+				return this._RowCount;
+			}
+			set
+			{
+				if ((this._RowCount != value))
+				{
+					this._RowCount = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this._Status = value;
+				}
+			}
 		}
 	}
 	

@@ -79,7 +79,7 @@ namespace CallGeneratorLibrary.Utilities
                                 currentSchedule.Frequency = 0;
                                 db.ScheduleLogs.InsertOnSubmit(currentSchedule);
                                 db.SubmitChanges();
-                                
+
                                 //List<ScheduleOperator> LstShcOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(schedule.Id);
                                 //foreach (ScheduleOperator SchOp in LstShcOp)
                                 //{
@@ -170,8 +170,8 @@ namespace CallGeneratorLibrary.Utilities
                                 ScheduleLogRepository.Save(NewLog);
 
                                 //Schedule Log finished => Send Email
-                                WriteToEventLogEx("DONEE " + schedule.User.Id);
-                                SendEmail2(schedule.User, NewLog);
+                                //WriteToEventLogEx("DONEE " + schedule.User.Id);
+                                while(SendEmail2(schedule.User, NewLog) == false);
                             }
                         }
                     }
@@ -330,7 +330,7 @@ namespace CallGeneratorLibrary.Utilities
             }
         }
 
-        private static void SendEmail2(User member,ScheduleLog s)
+        private static bool SendEmail2(User member,ScheduleLog s)
         {
             try
             {
@@ -343,10 +343,19 @@ namespace CallGeneratorLibrary.Utilities
                 EmailBody.Append("<tr><td>&nbsp;</td></tr>");
                 EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Please check out last schedule log details:</td></tr>");
                 EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'><table><tr><td>Name</td><td>Schedule</td><td>Creation Date</td><td>End Date</td><td>Test Cli</td><td>Received Cli</td><td>Status</td>");
-
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'><table><tr style='font-family: Arial; font-size: 13pt; font-weight: bold'><td>Name</td><td>Schedule</td><td>Creation Date</td><td>End Date</td><td>Test Cli</td><td>Received Cli</td><td>Status</td></tr>");
+                bool trouv = false;
                 foreach (TestOperator t in LstOperators)
                 {
+                    if (t.EndDate == null)
+                    {
+                        trouv = true;
+                    }
+
+                    //WriteToEventLogEx("ID:: " + t.Id  +" t.Operator " + t.Operator + " t.Schedule.DisplayName " + t.Schedule.DisplayName
+                    //    + " t.TestCli " + t.TestCli + " t.ReceivedCli " + t.ReceivedCli + " t.CreationDate "
+                    //    + t.CreationDate + " t.EndDate " + t.EndDate + " t.Status " + t.Status);
+
                     string opname = "";
                     if (t.Operator != null)
                         opname = t.Operator.FullName;
@@ -380,11 +389,10 @@ namespace CallGeneratorLibrary.Utilities
                         ss = "CLI not delivered";
 
                    // WriteToEventLogEx("member.Email " + member.Email.ToString());
-                    EmailBody.Append("<td>Name</td><td>" + opname + "</td><td>" + scname + "</td><td>" + creadate + "</td><td>" + enddate  + "</td><td>" + tstCli + "</td><td>" + recCli + "</td><td>" + ss + "</td>");
+                    EmailBody.Append("<tr><td>" + opname + "</td><td>" + scname + "</td><td>" + creadate + "</td><td>" + enddate + "</td><td>" + tstCli + "</td><td>" + recCli + "</td><td>" + ss + "</td></tr>");
                 }
                 
-                EmailBody.Append("</tr></table></td></tr>");
-
+                EmailBody.Append("</table></td></tr>");
 
                 //EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Password = " + member.Password + "</td></tr>");
                 EmailBody.Append("<tr><td>&nbsp;</td></tr>");
@@ -395,46 +403,38 @@ namespace CallGeneratorLibrary.Utilities
                 EmailBody.Append("<tr><td><a style='font-family: Arial; font-size: 11pt' href='http://www.vanrise.com'>www.vanrise.com</a> Team</td></tr>");
                 EmailBody.Append("</table>");
 
+                if (trouv == false)
+                {
+                    MailMessage objMail = new MailMessage();
 
+                    objMail.To.Add(member.Email);
 
-                MailMessage objMail = new MailMessage();
+                    string strEmailFrom = ConfigurationSettings.AppSettings["SendingEmail"];
+                    
+                    objMail.From = new MailAddress(strEmailFrom, "CLI Tester");
+                    objMail.Subject = "CLITester - Schedule done";
+                    objMail.Body = EmailBody.ToString();
+                    objMail.IsBodyHtml = true;
+                    objMail.Priority = MailPriority.High;
 
+                    SmtpClient smtp = new SmtpClient(ConfigurationSettings.AppSettings["SmtpServer"], 587);
+                    smtp.Host = ConfigurationSettings.AppSettings["SmtpServer"];
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential(strEmailFrom, "passwordQ1");
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
 
-                WriteToEventLogEx("member.Email " + member.Email.ToString());
-
-
-
-                objMail.To.Add(member.Email);
-
-                string strEmailFrom = ConfigurationSettings.AppSettings["SendingEmail"];
-                WriteToEventLogEx("strEmailFrom " + strEmailFrom);
-
-                objMail.From = new MailAddress(strEmailFrom, "CLI Tester");
-
-                
-                objMail.Subject = "CLITester - Schedule done";
-
-                objMail.Body = EmailBody.ToString();
-                objMail.IsBodyHtml = true;
-                objMail.Priority = MailPriority.High;
-
-
-                SmtpClient smtp = new SmtpClient(ConfigurationSettings.AppSettings["SmtpServer"], 587);
-                smtp.Host = ConfigurationSettings.AppSettings["SmtpServer"];
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(strEmailFrom, "pass");
-                smtp.Port = 587;
-                smtp.EnableSsl = true;
-                smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-
-                WriteToEventLogEx("SmtpServer " + ConfigurationSettings.AppSettings["SmtpServer"]);
-                smtp.Send(objMail);
+                    smtp.Send(objMail);
+                    return true;
+                }
+                return false;
             }
             catch(System.Exception ex) {
                 WriteToEventLogEx("ex " + ex.ToString());
+                return false;
             }
         }
- 
 
         private static void WriteToEventLogEx(string message)
         {

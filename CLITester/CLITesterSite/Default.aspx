@@ -32,8 +32,8 @@
                     <div class="desc">
                         <table>
                             <tr><td>Completed: </td><td><asp:Label ID="lblTotalCalls" runat="server"/></td></tr>
-                            <tr><td>Remaining: </td><td><asp:Label ID="Label2" runat="server"/></td></tr>
-                            <tr><td>Failed: </td><td><asp:Label ID="Label1" runat="server"/></td></tr>
+                            <tr><td>Remaining: </td><td><asp:Label ID="lblRemaining" runat="server"/></td></tr>
+                            <tr><td>Failed: </td><td><asp:Label ID="lblFailed" runat="server"/></td></tr>
                         </table>
                     </div>
                 </div>

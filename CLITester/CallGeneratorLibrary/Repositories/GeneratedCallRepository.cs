@@ -32,7 +32,7 @@ namespace CallGeneratorLibrary.Repositories
             return log;
         }
 
-        public static GeneratedCall GetTopGeneratedCall()
+        public static GeneratedCall GetTopGeneratedCall(int SipAccountId)
         {
             GeneratedCall GenCall = new GeneratedCall();
             try
@@ -43,7 +43,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<GeneratedCall>(c => c.SipAccount);
                     context.LoadOptions = options;
 
-                    GenCall = context.GeneratedCalls.Where(l => (l.EndDate == null) && (l.Status == null)).FirstOrDefault<GeneratedCall>();
+                    GenCall = context.GeneratedCalls.Where(l => (l.EndDate == null) && (l.Status == null) && (l.SipAccountId == SipAccountId)).FirstOrDefault<GeneratedCall>();
 
                     if (GenCall != null)
                     {

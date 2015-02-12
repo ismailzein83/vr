@@ -169,9 +169,10 @@ namespace CallGeneratorServiceCLI
                     if ((c.idle == false) && (c.startDate == DateTime.MinValue))
                     {
                         GeneratedCall GenCall = GeneratedCallRepository.Load(NewCallGenCLI.LstChanels[i].GeneratedCallid);
-                        GenCall.Status = "2";
-                        GenCall.StartCall = DateTime.Now;
-                        GeneratedCallRepository.Save(GenCall);
+                        WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
+                        //GenCall.Status = "2";
+                        //GenCall.StartCall = DateTime.Now;
+                        //GeneratedCallRepository.Save(GenCall);
 
                         NewCallGenCLI.LstChanels[i].startDate = DateTime.Now;
                         NewCallGenCLI.LstChanels[i].startLastCall = DateTime.Now;
@@ -187,48 +188,30 @@ namespace CallGeneratorServiceCLI
 
                         lock (_syncRoot)
                         {
-                            
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.ListenPort = 5060;
-                            //NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
-                            //WriteToEventLogEx("ListenPort:: " + NewCallGenCLI.LstChanels[i].sip.phone.Config.ListenPort);
-                            //WriteToEventLogEx("ListenPort:: " + NewCallGenCLI.LstChanels[i].sip.phone.Config.ListenPort);
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Initialize();
+                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.ExSipAccount_SetDefaultIdx(0);
+
+                            //WriteToEventLogEx("GenCall.SipAccount.Id: " + GenCall.SipAccount.Id);
+
+                            //if (GenCall.SipAccount.Id == 2)
+                            //    NewCallGenCLI.LstChanels[i].sip.phone.Config.RegDomain = "91.223.215.10";
+
+                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegUser = GenCall.SipAccount.User.CallerId;
+                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegPass = GenCall.SipAccount.User.CallerId;
+                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegAuthId = GenCall.SipAccount.User.CallerId;
+                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId = GenCall.SipAccount.User.CallerId;
+
                             //System.Threading.Thread.Sleep(1000);
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId = i.ToString() +  "999";
+
                             //NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Initialize();
 
-                            //WriteToEventLogEx("CallerId:: " + NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId + " i:: " + i);
+                            //System.Threading.Thread.Sleep(1000);
 
-                            WriteToEventLogEx("GenCall.SipAccount.Id:: " + GenCall.SipAccount.Id);
-
-
-                            if (GenCall.SipAccount.Id == 1)
-                            {
-                                NewCallGenCLI.LstChanels[i].sip.phone.Config.ExSipAccount_SetDefaultIdx(0);
-                            }
-
-
-                            if (GenCall.SipAccount.Id == 2)
-                            {
-                                NewCallGenCLI.LstChanels[i].sip.phone.Config.ExSipAccount_SetDefaultIdx(1);
-                            }
-
-
-                            if (GenCall.SipAccount.Id == 3)
-                            {
-                                NewCallGenCLI.LstChanels[i].sip.phone.Config.ExSipAccount_SetDefaultIdx(2);
-                            }
-
-                            NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
-                            System.Threading.Thread.Sleep(1000);
-
-                            
                             NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
+                            //string ss = (NewCallGenCLI.LstChanels[i].id + 1).ToString();
 
                             int ConnectionId = NewCallGenCLI.LstChanels[i].sip.phone.StartCall2(NewCallGenCLI.LstChanels[i].destinationNumber);
-
-                            String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
+                            //WriteToEventLogEx("ConnectionId: " + ConnectionId);
+                            //String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                             //NewCallGenCLI.displayList(f, "threadId: " + threadId + " StartCall " + ConnectionId + " Line :" + NewCallGenCLI.LstChanels[i].id + 1 + " SIPCONFIG: " + NewCallGenCLI.LstChanels[i].sip.ConfigId + " ii " + ii);
                         }
                     }

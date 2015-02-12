@@ -9,6 +9,7 @@ using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using SIPVoipSDK;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace CallGeneratorServiceCLI
 {
@@ -43,8 +44,11 @@ namespace CallGeneratorServiceCLI
                             UserRepository.Save(user);
                         }
                     }
+                    string SipAccId = ConfigurationManager.AppSettings["SipAccId"];
+                    int SipAccountId = 0;
+                    int.TryParse(SipAccId, out SipAccountId);
 
-                    GeneratedCall GenCall = GeneratedCallRepository.GetTopGeneratedCall();
+                    GeneratedCall GenCall = GeneratedCallRepository.GetTopGeneratedCall(SipAccountId);
                     if (GenCall != null)
                     {
                         bool ClientFound = false;

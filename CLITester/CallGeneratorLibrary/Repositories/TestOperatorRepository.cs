@@ -16,7 +16,7 @@ namespace CallGeneratorLibrary.Repositories
 
     public class TestOperatorRepository
     {
-        public static List<ChartCall> GetChartCalls(int status)
+        public static List<ChartCall> GetChartCalls(int status, int userId)
         {
             List<ChartCall> LstChartCalls = new List<ChartCall>();
             List<ChartCalls> LstOp = new List<ChartCalls>();
@@ -24,7 +24,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    LstOp = context.GetChartTotals1(status).GetResult<ChartCalls>().ToList<ChartCalls>();
+                    LstOp = context.GetChartTotals1(status, userId).GetResult<ChartCalls>().ToList<ChartCalls>();
                     for (int i = 1; i <= 31; i++)
                     {
                         ChartCall c = new ChartCall();
@@ -140,6 +140,24 @@ namespace CallGeneratorLibrary.Repositories
             }
             return LstOperators;
         }
+
+        public static List<TestOperatorHistory> GetTestOperatorHistory(DateTime? StartDate, DateTime? EndDate,  int? OperatorId, int? DisplayStart, int? DisplayLength)
+        {
+            List<TestOperatorHistory> LstScheduleNumbers = new List<TestOperatorHistory>();
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    LstScheduleNumbers = context.GetTestOperators1(StartDate, EndDate, OperatorId, DisplayStart, DisplayLength).GetResult<TestOperatorHistory>().ToList<TestOperatorHistory>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+            return LstScheduleNumbers;
+        }
+
 
         public static TestOperator Load(int TestOperatorId)
         {
