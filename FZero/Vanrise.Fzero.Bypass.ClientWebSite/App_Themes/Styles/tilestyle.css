@@ -1,0 +1,198 @@
+﻿/*.tiles {
+	margin-right: -10px;
+}*/
+.tile {
+	margin: 10px 10px 10px 10px; 
+    border: 4px solid transparent; 
+    border-image: none; 
+    width: 135px !important; 
+    height: 115px; 
+    color: rgb(255, 255, 255); 
+    line-height: 20px; 
+    letter-spacing: 0.02em; 
+    overflow: hidden; 
+    font-size: 16px; 
+    font-weight: 300; 
+    text-decoration: none; 
+    float: left;
+    display: block; 
+    position: relative; 
+    cursor: pointer;
+    background-color:#CED8E6;
+  
+}
+    .tile p {
+        top: 45px;
+        position: relative;
+        text-align: center;
+    }
+/*.tile::after {
+	float: left; content: "";
+}
+.tile::before {
+	float: left; content: "";
+}*/
+.double.tile {
+	width: 280px !important;
+}
+/*.double-down.tile {
+	height: 280px !important;
+}*/
+.tile:active {
+    border-color: #5c6975 !important;
+	/*border-color: rgb(204, 204, 204) !important;*/
+}
+.selected.tile {
+    border-color: #5c6975 !important;
+    background-color:#7B1126;
+	/*border-color: rgb(204, 204, 204) !important;*/
+}
+.tile:hover {
+	border-color: #5c6975 !important;
+    background-color:#7B1126;
+        /*rgb(170, 170, 170) !important;*/
+}
+.selected.tile::after {
+	top: -3px; 
+    right: -3px; 
+    border-right-color: rgb(204, 204, 204); 
+    border-bottom-color: transparent; 
+    border-left-color: transparent; 
+    border-right-width: 40px; 
+    border-bottom-width: 40px; 
+    border-left-width: 40px; 
+    border-right-style: solid; 
+    border-bottom-style: solid; 
+    border-left-style: solid; 
+    display: inline-block; 
+    position: absolute; 
+    content: "";
+}
+.selected.tile .check {
+    top: 2px;
+    right: 2px;
+    font-family: FontAwesome;
+    font-size: 13px;
+    content: "\f00c";
+    display: inline-block;
+    position: absolute;
+    width:16px;
+    height:16px;
+    /*background-image: url('../../App_Themes/Images/check.png');
+    background-repeat:no-repeat;*/
+    z-index:2;
+}
+.tile * {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body {
+	padding: 10px; height: 100%; color: rgb(255, 255, 255); overflow: hidden; font-size: 12px; font-weight: 400; margin-bottom: 10px; vertical-align: top; position: relative;
+}
+.tile .tile-body img {
+	margin-right: 10px; float: left;
+}
+.tile .tile-body img.pull-right {
+	margin-right: 0px; margin-left: 10px; float: right !important;
+}
+.tile .tile-body .content {
+	display: inline-block;
+}
+.tile .tile-body > i {
+	text-align: center; line-height: 56px; font-size: 56px; margin-top: 17px; display: block;
+}
+.double-down.tile i {
+	margin-top: 95px;
+}
+.tile .tile-body h1 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h2 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h3 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h4 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h5 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h6 {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body p {
+	margin: 0px; padding: 0px; line-height: 14px;
+}
+.tile .tile-body h3 {
+	margin-bottom: 5px;
+}
+.tile .tile-body h4 {
+	margin-bottom: 5px;
+}
+.tile .tile-body h1:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body h2:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body h3:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body h4:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body h5:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body h6:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body p:hover {
+	color: rgb(255, 255, 255);
+}
+.tile .tile-body p {
+	color: rgb(255, 255, 255); line-height: 20px; overflow: hidden; font-size: 13px; font-weight: 400;
+}
+.tile .tile-body p:hover {
+	color: rgba(0, 0, 0, 0.8);
+}
+.tile .tile-body p:active {
+	color: rgba(0, 0, 0, 0.4);
+}
+.tile .tile-body p:hover {
+	color: rgb(255, 255, 255);
+}
+.icon.tile > .tile-body {
+	padding: 0px;
+}
+.tile .tile-object {
+	left: 0px; right: 0px; bottom: 0px; position: absolute; min-height: 30px; background-color: transparent;
+}
+.tile .tile-object::before {
+	display: table; content: "";
+}
+.tile .tile-object::after {
+	display: table; content: "";
+}
+.tile .tile-object::after {
+	clear: both;
+}
+.tile .tile-object > .name {
+	left: 0px; bottom: 0px; color: rgb(255, 255, 255); font-size: 13px; font-weight: 400; margin-right: 15px; margin-bottom: 5px; margin-left: 10px; position: absolute;
+}
+.tile .tile-object > .name > i {
+	width: 24px; height: 18px; font-size: 24px; vertical-align: middle; display: block;
+}
+.tile .tile-object > .number {
+	text-align: center; right: 0px; bottom: 0px; color: rgb(255, 255, 255); line-height: 14px; letter-spacing: 0.01em; font-size: 14px; font-weight: 600; margin-right: 10px; margin-bottom: 8px; position: absolute;
+}
+.image.tile > .tile-body {
+	padding: 0px !important;
+}
+.image.tile > .tile-body > img {
+	width: 100%; height: auto; min-height: 100%; max-width: 100%;
+}
+.image.tile .tile-body h3 {
+	display: inline-block;
+}
