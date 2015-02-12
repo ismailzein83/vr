@@ -23,7 +23,7 @@ namespace Vanrise.Queueing.Data.SQL
                                                                   query_EnqueueItemHeaderTemplate);
         }
         public QueueItemDataManager()
-            : base(ConfigurationManager.AppSettings["QueueItemDBConnStringKey"] ?? "QueueItemDBConnString")
+            : base(GetConnectionStringName("QueueItemDBConnStringKey", "QueueItemDBConnString"))
         {
         }
 

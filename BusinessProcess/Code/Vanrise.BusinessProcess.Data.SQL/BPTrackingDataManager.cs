@@ -12,7 +12,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
     internal class BPTrackingDataManager : BaseSQLDataManager, IBPTrackingDataManager
     {
         public BPTrackingDataManager()
-            : base(ConfigurationManager.AppSettings["BusinessProcessTrackingDBConnStringKey"] ?? "BusinessProcessTrackingDBConnString")
+            : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
         {
         }
 
