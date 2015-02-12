@@ -42,7 +42,7 @@ namespace TOne.CDRProcess.Activities
         [RequiredArgument]
         public InOutArgument<TOneQueue<CDRInvalidBatch>> OutputInvalidCDRQueue { get; set; }
 
-        [RequiredArgument]
+        //[RequiredArgument]
         public InArgument<Guid> CacheManagerId { get; set; }
 
         #endregion
@@ -72,10 +72,10 @@ namespace TOne.CDRProcess.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             if (this.OutputMainCDRQueue.Get(context) == null)
-                this.OutputMainCDRQueue.Set(context, new TOneQueue<CDRBillingBatch>());
+                this.OutputMainCDRQueue.Set(context, new TOneQueue<CDRMainBatch>());
 
             if (this.OutputInvalidCDRQueue.Get(context) == null)
-                this.OutputInvalidCDRQueue.Set(context, new TOneQueue<CDRBillingBatch>());
+                this.OutputInvalidCDRQueue.Set(context, new TOneQueue<CDRInvalidBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
