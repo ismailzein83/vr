@@ -12,20 +12,19 @@ namespace TOne.CDR.Entities
         static CDRBillingBatch()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDRBillingBatch), "SwitchId", "CDRs");
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TABS.Billing_CDR_Base), "IsValid", "IsRerouted", "CDPNOut", "PDDInSeconds", "OurCode", "SupplierCode",
-                "SubscriberID", "ID", "Attempt", "Alert", "Connect", "Disconnect", "DurationInSeconds",
-                "CDPN", "CGPN", "Port_OUT", "Port_IN", "ReleaseCode", "ReleaseSource", "Switch",
-                "SwitchCdrID", "Tag", "Extra_Fields", "CustomerID", "SupplierID", "Customer", "Supplier",
-                "OurZone", "SupplierZone", "OriginatingZone", "SIP", "UserTrackingEnabled", "Identifier");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(BillingCDRBase), "IsValid", "IsRerouted", "CDPNOut", "OurCode", "SupplierCode", "SubscriberID",
+                "ID", "Attempt", "Alert", "Connect", "Disconnect", "DurationInSeconds", "CDPN",
+                "CGPN", "Port_OUT", "Port_IN", "ReleaseCode", "ReleaseSource", "SwitchID", "SwitchCdrID",
+                "Tag", "Extra_Fields", "CustomerID", "SupplierID", "OurZoneID", "SupplierZoneID", "OriginatingZoneID","SIP");
         }
 
-      public int SwitchId { get; set; }
+        public int SwitchId { get; set; }
 
-      public List<TABS.Billing_CDR_Base> CDRs { get; set; }
+        public List<BillingCDRBase> CDRs { get; set; }
 
-      public override string GenerateDescription()
-      {
-          return String.Format("Batch of {0} Billing CDRs", CDRs.Count);
-      }
+        public override string GenerateDescription()
+        {
+            return String.Format("Batch of {0} Billing CDRs", CDRs.Count);
+        }
     }
 }

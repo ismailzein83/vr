@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingCDRBase.cs" />
     <Compile Include="CDRBatch.cs" />
     <Compile Include="CDRBillingBatch.cs" />
     <Compile Include="CDRInvalidBatch.cs" />
