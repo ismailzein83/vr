@@ -22,7 +22,7 @@ namespace TOne.CDRProcess.Activities
 
         public BaseQueue<TOne.CDR.Entities.CDRBatch> InputQueue { get; set; }
 
-        public List<BaseQueue<TOne.CDR.Entities.CDRBillingBatch>> OutputQueues { get; set; }
+        public BaseQueue<TOne.CDR.Entities.CDRBillingBatch> OutputQueue { get; set; }
 
         public Guid CacheManagerId { get; set; }
 
@@ -44,13 +44,13 @@ namespace TOne.CDRProcess.Activities
         public InArgument<int> SwitchID { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<List<BaseQueue<TOne.CDR.Entities.CDRBillingBatch>>> OutputQueues { get; set; }
+        public InOutArgument<BaseQueue<TOne.CDR.Entities.CDRBillingBatch>> OutputQueue { get; set; }
 
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
-            if (this.OutputQueues.Get(context) == null)
-                this.OutputQueues.Set(context, new List<BaseQueue<TOne.CDR.Entities.CDRBillingBatch>>());
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<TOne.CDR.Entities.CDRBillingBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -74,10 +74,8 @@ namespace TOne.CDRProcess.Activities
                             Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
                             CdrBillingGenerated.CDRs.Add(getBillingCDRBase(cdrBase));
                         }
-
-                        foreach (BaseQueue<TOne.CDR.Entities.CDRBillingBatch> outputQueue in inputArgument.OutputQueues)
-                            outputQueue.Enqueue(CdrBillingGenerated);
-
+                        
+                        inputArgument.OutputQueue.Enqueue(CdrBillingGenerated);
 
                     });
                 }
@@ -91,7 +89,7 @@ namespace TOne.CDRProcess.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 SwitchID = this.SwitchID.Get(context),
-                OutputQueues = this.OutputQueues.Get(context),
+                OutputQueue = this.OutputQueue.Get(context),
                 CacheManagerId = this.CacheManagerId.Get(context)
             };
         }

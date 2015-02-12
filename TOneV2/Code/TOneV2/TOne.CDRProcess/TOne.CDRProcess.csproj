@@ -78,6 +78,7 @@
     <Compile Include="DailyRepricingProcess.cs" />
     <Compile Include="ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawCDRsProcess.cs" />
     <Compile Include="StoreCDRsInDB.cs" />
     <Compile Include="TimeRangeRepricingProcess.cs" />
     <Compile Include="UpdateBillingPricingProcess.cs" />
@@ -156,6 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="StoreCDRsInDB.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="RawCDRsProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
