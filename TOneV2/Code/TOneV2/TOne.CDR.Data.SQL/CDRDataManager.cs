@@ -25,22 +25,54 @@ namespace TOne.CDR.Data.SQL
 
                 if (cdr.Billing_CDR_Cost != null)
                 {
-                    wrCost.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}", cdr.Billing_CDR_Cost.ID, 
-                            cdr.Billing_CDR_Cost.Zone.ZoneID, cdr.Billing_CDR_Cost.Net, cdr.Billing_CDR_Cost.Currency.Symbol, cdr.Billing_CDR_Cost.RateValue, cdr.Billing_CDR_Cost.Rate.ID,
-                            cdr.Billing_CDR_Cost.Discount, cdr.Billing_CDR_Cost.RateType, cdr.Billing_CDR_Cost.ToDConsideration.ToDConsiderationID, cdr.Billing_CDR_Cost.FirstPeriod,
-                            cdr.Billing_CDR_Cost.RepeatFirstperiod, cdr.Billing_CDR_Cost.FractionUnit, cdr.Billing_CDR_Cost.Tariff.TariffID, cdr.Billing_CDR_Cost.CommissionValue,
-                            cdr.Billing_CDR_Cost.Commission.CommissionID, cdr.Billing_CDR_Cost.ExtraChargeValue, cdr.Billing_CDR_Cost.ExtraCharge.CommissionID,
-                            cdr.Billing_CDR_Cost.Updated, cdr.Billing_CDR_Cost.DurationInSeconds, cdr.Billing_CDR_Cost.Code, cdr.Billing_CDR_Cost.Attempt));
+                    wrCost.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}", 
+                            cdr.Billing_CDR_Cost.ID, 
+                            cdr.Billing_CDR_Cost.Zone != null ? cdr.Billing_CDR_Cost.Zone.ZoneID.ToString() : "", 
+                            cdr.Billing_CDR_Cost.Net, 
+                            cdr.Billing_CDR_Cost.Currency != null ? cdr.Billing_CDR_Cost.Currency.Symbol.ToString() : "", 
+                            cdr.Billing_CDR_Cost.RateValue, 
+                            cdr.Billing_CDR_Cost.Rate != null ? cdr.Billing_CDR_Cost.Rate.ID.ToString() : "",
+                            cdr.Billing_CDR_Cost.Discount.HasValue ? cdr.Billing_CDR_Cost.Discount.Value.ToString() : null,
+                            Convert.ChangeType(cdr.Billing_CDR_Cost.RateType, cdr.Billing_CDR_Cost.RateType.GetTypeCode()), 
+                            cdr.Billing_CDR_Cost.ToDConsideration != null ? cdr.Billing_CDR_Cost.ToDConsideration.ToDConsiderationID.ToString() : null, 
+                            cdr.Billing_CDR_Cost.FirstPeriod.HasValue ? cdr.Billing_CDR_Cost.FirstPeriod.Value.ToString() : null ,
+                            cdr.Billing_CDR_Cost.RepeatFirstperiod.HasValue ? cdr.Billing_CDR_Cost.RepeatFirstperiod.Value.ToString() : null,
+                            cdr.Billing_CDR_Cost.FractionUnit.HasValue ? cdr.Billing_CDR_Cost.RepeatFirstperiod.Value.ToString() : null,  
+                            cdr.Billing_CDR_Cost.Tariff != null ? cdr.Billing_CDR_Cost.Tariff.TariffID.ToString() : null, 
+                            cdr.Billing_CDR_Cost.CommissionValue,
+                            cdr.Billing_CDR_Cost.Commission != null ? cdr.Billing_CDR_Cost.Commission.CommissionID.ToString() : null, 
+                            cdr.Billing_CDR_Cost.ExtraChargeValue, 
+                            cdr.Billing_CDR_Cost.ExtraCharge != null ? cdr.Billing_CDR_Cost.ExtraCharge.CommissionID.ToString() : null,
+                            cdr.Billing_CDR_Cost.Updated != null ? cdr.Billing_CDR_Cost.Updated.ToShortDateString() : DateTime.Now.ToShortDateString(),  //?
+                            cdr.Billing_CDR_Cost.DurationInSeconds, 
+                            cdr.Billing_CDR_Cost.Code, 
+                            cdr.Billing_CDR_Cost.Attempt.ToString()));
                 }
 
                 if (cdr.Billing_CDR_Sale != null)
                 {
                     wrSale.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                        cdr.Billing_CDR_Sale.ID, cdr.Billing_CDR_Sale.Zone.ZoneID, cdr.Billing_CDR_Sale.Net, cdr.Billing_CDR_Sale.Currency.Symbol, cdr.Billing_CDR_Sale.RateValue,
-                        cdr.Billing_CDR_Sale.Rate.ID, cdr.Billing_CDR_Sale.Discount, cdr.Billing_CDR_Sale.RateType, cdr.Billing_CDR_Sale.ToDConsideration.ToDConsiderationID, 
-                        cdr.Billing_CDR_Sale.FirstPeriod, cdr.Billing_CDR_Sale.RepeatFirstperiod, cdr.Billing_CDR_Sale.FractionUnit, cdr.Billing_CDR_Sale.Tariff.TariffID, 
-                        cdr.Billing_CDR_Sale.CommissionValue, cdr.Billing_CDR_Sale.Commission.CommissionID, cdr.Billing_CDR_Sale.ExtraChargeValue,
-                        cdr.Billing_CDR_Sale.ExtraCharge.CommissionID, cdr.Billing_CDR_Sale.Updated, cdr.Billing_CDR_Sale.DurationInSeconds, cdr.Billing_CDR_Sale.Code, cdr.Billing_CDR_Sale.Attempt));
+                        cdr.Billing_CDR_Sale.ID, 
+                        cdr.Billing_CDR_Sale.Zone != null ? cdr.Billing_CDR_Sale.Zone.ZoneID.ToString() : "", 
+                        cdr.Billing_CDR_Sale.Net, 
+                        cdr.Billing_CDR_Sale.Currency != null ? cdr.Billing_CDR_Sale.Currency.Symbol : "",
+                        cdr.Billing_CDR_Sale.RateValue,
+                        cdr.Billing_CDR_Sale.Rate != null ? cdr.Billing_CDR_Sale.Rate.ID.ToString() : "", 
+                        cdr.Billing_CDR_Sale.Discount.HasValue ? cdr.Billing_CDR_Sale.Discount.Value.ToString() : null ,
+                        Convert.ChangeType(cdr.Billing_CDR_Sale.RateType, cdr.Billing_CDR_Sale.RateType.GetTypeCode()),
+                        cdr.Billing_CDR_Sale.ToDConsideration != null ? cdr.Billing_CDR_Sale.ToDConsideration.ToDConsiderationID.ToString() : null,
+                        cdr.Billing_CDR_Sale.FirstPeriod.HasValue ? cdr.Billing_CDR_Sale.FirstPeriod.Value.ToString() : null,
+                        cdr.Billing_CDR_Sale.RepeatFirstperiod.HasValue ? cdr.Billing_CDR_Sale.RepeatFirstperiod.Value.ToString() : null,
+                        cdr.Billing_CDR_Sale.FractionUnit.HasValue ? cdr.Billing_CDR_Sale.FractionUnit.Value.ToString() : null,
+                        cdr.Billing_CDR_Sale.Tariff != null ? cdr.Billing_CDR_Sale.Tariff.TariffID.ToString() : null, 
+                        cdr.Billing_CDR_Sale.CommissionValue,
+                        cdr.Billing_CDR_Sale.Commission != null ? cdr.Billing_CDR_Sale.Commission.CommissionID.ToString() : null, 
+                        cdr.Billing_CDR_Sale.ExtraChargeValue,
+                        cdr.Billing_CDR_Sale.ExtraCharge != null ? cdr.Billing_CDR_Sale.ExtraCharge.CommissionID.ToString() : null,
+                        cdr.Billing_CDR_Sale.Updated != null ? cdr.Billing_CDR_Sale.Updated.ToShortDateString()  : DateTime.Now.ToShortDateString(), // ?
+                        cdr.Billing_CDR_Sale.DurationInSeconds,
+                        cdr.Billing_CDR_Sale.Code, 
+                        cdr.Billing_CDR_Sale.Attempt.ToString()));
                 }
             }
 
@@ -49,7 +81,7 @@ namespace TOne.CDR.Data.SQL
             
             BulkInsertInfo preparedCostCDRs = new BulkInsertInfo
             {
-                TableName = "Billing_CDR_Cost",
+                TableName = "[dbo].[Billing_CDR_Cost]",
                 DataFilePath = filePathCost,
                 TabLock = true,
                 FieldSeparator = ','
@@ -57,7 +89,7 @@ namespace TOne.CDR.Data.SQL
 
             BulkInsertInfo preparedSaleCDRs = new BulkInsertInfo
             {
-                TableName = "Billing_CDR_Sale",
+                TableName = "[dbo].[Billing_CDR_Sale]",
                 DataFilePath = filePathSale,
                 TabLock = true,
                 FieldSeparator = ','
@@ -79,16 +111,39 @@ namespace TOne.CDR.Data.SQL
                 foreach (var cdr in cdrs)
                 {
                     wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25}", 
-                        cdr.ID, cdr.Attempt,cdr.Alert, cdr.Connect, cdr.Disconnect, cdr.DurationInSeconds, cdr.CustomerID, cdr.OurZone.ZoneID, cdr.OriginatingZone.ZoneID,
-                        cdr.SupplierID, cdr.SupplierZone.ZoneID, cdr.CDPN, cdr.CGPN, cdr.ReleaseCode, cdr.ReleaseSource, cdr.Switch.SwitchID, cdr.SwitchCdrID, cdr.Tag, cdr.Extra_Fields, 
-                        cdr.Port_IN, cdr.Port_OUT, cdr.OurCode, cdr.SupplierCode, cdr.CDPNOut, cdr.SubscriberID, cdr.SIP));
+                        cdr.ID,
+                        cdr.Attempt.ToString(),
+                        cdr.Alert.HasValue ? cdr.Alert.Value.ToString() : "",
+                        cdr.Connect.HasValue ? cdr.Connect.Value.ToString() : "",
+                        cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "", 
+                        cdr.DurationInSeconds, 
+                        cdr.CustomerID, 
+                        cdr.OurZone != null ? cdr.OurZone.ZoneID.ToString() : "" , 
+                        cdr.OriginatingZone !=  null ? cdr.OriginatingZone.ZoneID.ToString() : "",
+                        cdr.SupplierID, 
+                        cdr.SupplierZone != null ? cdr.SupplierZone.ZoneID.ToString(): "", 
+                        cdr.CDPN, 
+                        cdr.CGPN, 
+                        cdr.ReleaseCode, 
+                        cdr.ReleaseSource, 
+                        cdr.Switch !=  null ? cdr.Switch.SwitchID.ToString() : "", 
+                        cdr.SwitchCdrID, 
+                        cdr.Tag, 
+                        cdr.Extra_Fields, 
+                        cdr.Port_IN, 
+                        cdr.Port_OUT, 
+                        cdr.OurCode, 
+                        cdr.SupplierCode, 
+                        cdr.CDPNOut, 
+                        cdr.SubscriberID,
+                        cdr.SIP ));
                 }
                 wr.Close();
             }
 
             return new BulkInsertInfo
             {
-                TableName = "Billing_CDR_Main",
+                TableName = "[dbo].[Billing_CDR_Main]",
                 DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = ','
@@ -115,10 +170,34 @@ namespace TOne.CDR.Data.SQL
             {
                 foreach (var cdr in cdrs)
                 {
-                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}", cdr.ID, 
-                        cdr.Attempt, cdr.Alert, cdr.Connect, cdr.Disconnect, cdr.DurationInSeconds, cdr.CustomerID, cdr.OurZone.ZoneID, cdr.SupplierID, cdr.SupplierZone.ZoneID, cdr.CDPN, cdr.CGPN, 
-                        cdr.ReleaseCode, cdr.ReleaseSource, cdr.Switch.SwitchID, cdr.SwitchCdrID, cdr.Tag, cdr.OriginatingZone.ZoneID , 
-                        cdr.Extra_Fields, cdr.IsRerouted, cdr.Port_IN, cdr.Port_OUT, cdr.OurCode, cdr.SupplierCode, cdr.CDPNOut, cdr.SubscriberID, cdr.SIP));
+                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}",
+                        cdr.ID, 
+                        cdr.Attempt.ToString(), 
+                        cdr.Alert.HasValue ? cdr.Alert.Value.ToString() : "",
+                        cdr.Connect.HasValue ? cdr.Connect.Value.ToString() : "" ,
+                        cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "", 
+                        cdr.DurationInSeconds, 
+                        cdr.CustomerID, 
+                        cdr.OurZone.ZoneID, 
+                        cdr.SupplierID, 
+                        cdr.SupplierZone.ZoneID, 
+                        cdr.CDPN, 
+                        cdr.CGPN, 
+                        cdr.ReleaseCode, 
+                        cdr.ReleaseSource, 
+                        cdr.Switch.SwitchID, 
+                        cdr.SwitchCdrID, 
+                        cdr.Tag, 
+                        cdr.OriginatingZone.ZoneID , 
+                        cdr.Extra_Fields, 
+                        cdr.IsRerouted, 
+                        cdr.Port_IN, 
+                        cdr.Port_OUT, 
+                        cdr.OurCode, 
+                        cdr.SupplierCode, 
+                        cdr.CDPNOut, 
+                        cdr.SubscriberID, 
+                        cdr.SIP));
                 }
                 wr.Close();
             }
