@@ -68,12 +68,17 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRGenerationProcess.cs" />
     <Compile Include="CDRImportProcess.cs" />
     <Compile Include="DailyRepricingProcess.cs" />
+    <Compile Include="ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCDRsInDB.cs" />
     <Compile Include="TimeRangeRepricingProcess.cs" />
     <Compile Include="UpdateBillingPricingProcess.cs" />
   </ItemGroup>
@@ -93,6 +98,14 @@
     <ProjectReference Include="..\TOne.Caching\TOne.Caching.csproj">
       <Project>{1950b29a-5c7b-47a3-8113-fc9211d27cfd}</Project>
       <Name>TOne.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Business\TOne.CDR.Business.csproj">
+      <Project>{5aac8aec-cc1e-489a-99c0-5826b7bc0e35}</Project>
+      <Name>TOne.CDR.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
+      <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
+      <Name>TOne.CDR.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.CDRProcess.Activities\TOne.CDRProcess.Activities.csproj">
       <Project>{85d05a41-8510-40ce-a2aa-e0cd39099eac}</Project>
@@ -131,6 +144,18 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRGenerationProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="ImportCDRProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="StoreCDRsInDB.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

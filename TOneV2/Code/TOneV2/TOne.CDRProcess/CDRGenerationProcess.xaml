@@ -25,6 +25,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.CDRProcess.Arguments</x:String>
+      <x:String>TOne.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -60,7 +61,12 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="CDRGenerationProcessSequence" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:List(te:TOneQueue(tca1:CDRBillingBatch))" Name="OutPutQueues" />
+      <Variable x:TypeArguments="scg:List(te:TOneQueue(tca1:CDRBillingBatch))" Name="OutPutQueues">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:List(te:TOneQueue(tca1:CDRBillingBatch))" xml:space="preserve">new List&lt;TOne.Entities.TOneQueue&lt;TOne.CDRProcess.Activities.CDRBillingBatch&gt;&gt;() { TOne.Business.SharedQueueManager.GetManager&lt;TOne.CDRProcess.Activities.CDRSharedQueueManager&gt;().GetCDRQueueForStatistics(Input.SwitchID),
+TOne.Business.SharedQueueManager.GetManager&lt;TOne.CDRProcess.Activities.CDRSharedQueueManager&gt;().GetCDRQueueForBilling(Input.SwitchID) }</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
       <Variable x:TypeArguments="s:DateTime" Name="Start">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
@@ -94,7 +100,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">string.Format("CDR Generation Process done and takes:{0}",DateTime.Now.Subtract(Start))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJHZW5lcmF0aW9uUHJvY2Vzcy54YW1sCj0DYg4CAQFCC0JXAgECRgVKEQIBGEsFWxgCAQtcBWARAgEGSAlIpAECARlOC07dAQIBFFgLWFYCARBTC1OBAQIBDF4JXp4BAgEH</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJHZW5lcmF0aW9uUHJvY2Vzcy54YW1sCz4DaA4CAQFCC0OgAQIBBkgLSFcCAQJMBVARAgEcUQVhGAIBD2IFZhECAQpOCU6kAQIBHVQLVN0BAgEYXgteVgIBFFkLWYEBAgEQZAlkngECAQs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
