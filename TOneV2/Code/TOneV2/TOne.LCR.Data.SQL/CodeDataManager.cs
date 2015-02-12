@@ -10,7 +10,7 @@ using TOne.Data.SQL;
 namespace TOne.LCR.Data.SQL
 {
     public class CodeDataManager : BaseTOneDataManager, ICodeDataManager
-    {        
+    {
         #region Mappers
 
         LCRCode LCRCodeMapper(IDataReader reader)
@@ -29,8 +29,8 @@ namespace TOne.LCR.Data.SQL
             return code;
         }
 
-        #endregion  
-    
+        #endregion
+
         #region Private Methods
 
         internal static DataTable BuildDistinctCodesWithPossibleValuesTable(TOne.Entities.CodeList distinctCodes)
@@ -138,7 +138,7 @@ namespace TOne.LCR.Data.SQL
         public List<string> GetDistinctCodes(List<SupplierCodeInfo> suppliersCodeInfo, DateTime effectiveOn)
         {
             DataTable dtSuppliersCodeInfo = BuildSuppliersCodeInfoTable(suppliersCodeInfo);
-            return GetItemsSPCmd("LCR.sp_Code_GetDistinctCodes", 
+            return GetItemsSPCmd("LCR.sp_Code_GetDistinctCodes",
                 (reader) => reader["Code"] as string,
                 (cmd) =>
                 {
@@ -175,5 +175,18 @@ namespace TOne.LCR.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
                 });
         }
+
+        /// <summary>
+        /// Create DistinctCodesTable, Insert Distinct Codes from CodeMatchCurrent, then Create Primary Key Index
+        /// </summary>
+        public int CreateandInsertDistinctCodesTable()
+        {
+            int maximumID;
+            object output;
+            ExecuteNonQuerySP("LCR.sp_Code_CreateAndInsertDistinctCodesTable", out output, null);
+            return int.TryParse(output.ToString(), out maximumID) ? maximumID : 0;
+        }
+
+
     }
 }

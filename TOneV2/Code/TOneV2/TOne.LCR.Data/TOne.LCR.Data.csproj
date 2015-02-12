@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IZoneRateCustomerDataManager.cs" />
     <Compile Include="LCRDataManagerFactory.cs" />
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICodeMatchDataManager.cs" />

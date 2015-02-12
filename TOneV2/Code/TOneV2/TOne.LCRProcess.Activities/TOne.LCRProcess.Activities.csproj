@@ -66,6 +66,7 @@
     <Compile Include="BuildCodeMatchFromSupplierCodes.cs" />
     <Compile Include="CopyCodeMatchTableWithValidItems.cs" />
     <Compile Include="CreateAndFillZoneRateTable.cs" />
+    <Compile Include="CreateDistinctCodesTable.cs" />
     <Compile Include="ExtractAddedDistinctCodes.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateCodeMatchTempTable.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="CreateZoneMatchTempTable.cs" />
     <Compile Include="GetActiveSuppliersCodeInfo.cs" />
     <Compile Include="GetDistinctCodesFromCodeMatch.cs" />
+    <Compile Include="GetZoneRateCustomer.cs" />
+    <Compile Include="GetZoneRates.cs" />
+    <Compile Include="GetZoneRateSupplier.cs" />
     <Compile Include="LoadCodesForActiveSuppliers.cs" />
     <Compile Include="PrepareCodeMatchesForDBApply.cs" />
     <Compile Include="SwapCodeMatchTableWithTemp.cs" />
