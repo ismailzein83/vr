@@ -111,9 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="bin\Debug\FMSImportSln.vshost.exe.config" />
-    <None Include="bin\Debug\FMSImportSln.vshost.exe.manifest" />
-    <None Include="bin\Debug\InstallUtil.InstallLog" />
     <None Include="Dependencies\OpenPop.dll.refresh" />
     <None Include="FMS.DataLayer.RecievedEmail.datasource" />
     <None Include="FMSClientReportSln_TemporaryKey.pfx" />
@@ -161,7 +158,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\FMSImportSln.vshost.exe" />
     <Content Include="Dependencies\OpenPop.dll" />
   </ItemGroup>
   <ItemGroup>
