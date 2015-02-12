@@ -46,6 +46,10 @@
     <Compile Include="LCRCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeMatch.cs" />
+    <Compile Include="RoutingRules\CodeSelectionSet.cs" />
+    <Compile Include="RoutingRules\BaseCodeSet.cs" />
+    <Compile Include="RoutingRules\RoutingRule.cs" />
+    <Compile Include="RoutingRules\ZoneSelectionSet.cs" />
     <Compile Include="SupplierCodeInfo.cs" />
     <Compile Include="ZoneRateCustomer.cs" />
     <Compile Include="ZoneRateSupplier.cs" />
