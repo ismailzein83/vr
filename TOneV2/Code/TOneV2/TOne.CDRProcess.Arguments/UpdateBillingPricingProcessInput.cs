@@ -8,5 +8,6 @@ namespace TOne.CDRProcess.Arguments
 {
     public class UpdateBillingPricingProcessInput
     {
+        public int SwitchID { get; set; }
     }
 }
