@@ -38,10 +38,15 @@ namespace Vanrise.Common
             Dictionary<T, Q> enumAttributes = new Dictionary<T, Q>();
             foreach (var member in enumType.GetFields())
             {
-                if (enumItem.Equals((T)Enum.Parse(enumType, member.Name)))
+                T memberAsEnum;
+                if (Enum.TryParse<T>(member.Name, true, out memberAsEnum) && memberAsEnum.Equals(enumItem))
+                {
                     return member.GetCustomAttributes(attributeType, true).FirstOrDefault() as Q;
+                }
+
             }
             return default(Q);
         }
+
     }
 }
