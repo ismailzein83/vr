@@ -90,6 +90,7 @@
     <Compile Include="InitializeObjects.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="ProcessBillingCDRs.cs" />
+    <Compile Include="ProcessRawCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRsToQueue.cs" />
     <Compile Include="SaveCDRsToDB.cs" />
