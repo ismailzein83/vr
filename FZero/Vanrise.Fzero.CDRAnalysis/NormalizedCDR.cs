@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.CDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class NormalCDRtest
+    public partial class NormalizedCDR
     {
         public int Id { get; set; }
         public Nullable<System.DateTime> ConnectDateTime { get; set; }
@@ -27,6 +27,6 @@ namespace Vanrise.Fzero.CDRAnalysis
         public string Switch { get; set; }
         public Nullable<int> IsRepeated { get; set; }
         public Nullable<int> SwitchId { get; set; }
-        public Nullable<int> SwitchRecordId { get; set; }
+        public Nullable<int> CDRId { get; set; }
     }
 }

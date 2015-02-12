@@ -29,6 +29,7 @@ namespace Vanrise.Fzero.CDRAnalysis
         }
     
         public DbSet<CDR> CDRs { get; set; }
+        public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
         public DbSet<Direction> Directions { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
@@ -40,7 +41,9 @@ namespace Vanrise.Fzero.CDRAnalysis
         public DbSet<MobileCDR> MobileCDRs { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
+        public DbSet<NormalizedCDR> NormalizedCDRs { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
+        public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
@@ -68,10 +71,9 @@ namespace Vanrise.Fzero.CDRAnalysis
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<AN_Profiling> AN_Profiling { get; set; }
-        public DbSet<NormalCDRtest> NormalCDRtests { get; set; }
         public DbSet<NormalizationRulesBackup> NormalizationRulesBackups { get; set; }
+        public DbSet<outgoing_t1> outgoing_t1 { get; set; }
         public DbSet<profiletest> profiletests { get; set; }
-        public DbSet<To_be_deleted_CookedCDR> To_be_deleted_CookedCDR { get; set; }
         public DbSet<vw_Dashboard> vw_Dashboard { get; set; }
         public DbSet<vw_ReportedNumber> vw_ReportedNumber { get; set; }
         public DbSet<vw_ReportedNumberNormalCDR> vw_ReportedNumberNormalCDR { get; set; }
@@ -611,6 +613,65 @@ namespace Vanrise.Fzero.CDRAnalysis
         public virtual ObjectResult<prImportfromSwitches_Result> prImportfromSwitches()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prImportfromSwitches_Result>("prImportfromSwitches");
+        }
+    
+        public virtual int prCollectNormalizedCDR()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prCollectNormalizedCDR");
+        }
+    
+        public virtual int prFillSubscriberThresholds(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillSubscriberThresholds", fromDateParameter, toDateParameter, strategyIdParameter);
+        }
+    
+        public virtual int prFillSubscriberValues(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillSubscriberValues", fromDateParameter, toDateParameter, strategyIdParameter);
+        }
+    
+        public virtual int prNormalization()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prNormalization");
+        }
+    
+        public virtual int prNumberProfiling()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prNumberProfiling");
+        }
+    
+        public virtual int prOldUpdateRepeatedCalls()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prOldUpdateRepeatedCalls");
+        }
+    
+        public virtual int prUpdateRepeatedCalls()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prUpdateRepeatedCalls");
         }
     }
 }

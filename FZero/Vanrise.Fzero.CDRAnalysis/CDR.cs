@@ -32,7 +32,5 @@ namespace Vanrise.Fzero.CDRAnalysis
         public string B_temp { get; set; }
         public Nullable<int> IsNormalized { get; set; }
         public Nullable<int> ImportID { get; set; }
-    
-        public virtual Import Import { get; set; }
     }
 }

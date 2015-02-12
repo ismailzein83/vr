@@ -12,14 +12,20 @@ namespace Vanrise.Fzero.CDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Import
+    public partial class OperationType
     {
-        public int ID { get; set; }
-        public System.DateTime ImportDate { get; set; }
-        public Nullable<int> ImportedBy { get; set; }
-        public int ImportTypeId { get; set; }
+        public OperationType()
+        {
+            this.ControlTables = new HashSet<ControlTable>();
+        }
     
-        public virtual ImportType ImportType { get; set; }
-        public virtual User User { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string SPName { get; set; }
+        public Nullable<int> StepOrder { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public string Description { get; set; }
+    
+        public virtual ICollection<ControlTable> ControlTables { get; set; }
     }
 }

@@ -71,6 +71,9 @@
     <Compile Include="Classes\SourceMapping.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserPermission.cs" />
+    <Compile Include="ControlTable.cs">
+      <DependentUpon>NormalizationModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Criteria_Profile.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
@@ -116,16 +119,22 @@
     <Compile Include="NormalCDR.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="NormalCDRtest.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="NormalizationRule.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="NormalizationRulesBackup.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="NormalizedCDR.cs">
+      <DependentUpon>NormalizationModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="NumberProfile.cs">
+      <DependentUpon>NormalizationModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperationType.cs">
+      <DependentUpon>NormalizationModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="outgoing_t1.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Peak_Hoursold.cs">
@@ -255,9 +264,6 @@
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="To_be_deleted_CookedCDR.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Trunck.cs">
