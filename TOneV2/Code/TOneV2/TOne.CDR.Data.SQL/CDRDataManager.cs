@@ -163,6 +163,11 @@ namespace TOne.CDR.Data.SQL
             InsertBulkToTable(preparedInvalidCDRs as BulkInsertInfo);
         }
 
+        public void ApplyCDRsToDB(Object preparedCDRs)
+        {
+            InsertBulkToTable(preparedCDRs as BulkInsertInfo);
+        }
+
         public Object PrepareInvalidCDRsForDBApply(List<TABS.Billing_CDR_Invalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
@@ -210,7 +215,55 @@ namespace TOne.CDR.Data.SQL
                 FieldSeparator = ','
             };
         }
-        
+
+        public Object PrepareCDRsForDBApply(List<TABS.CDR> cdrs , int switchId)
+        {
+            string filePath = GetFilePathForBulkInsert();
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            {
+                foreach (var cdr in cdrs)
+                {
+                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}", 
+                        cdr.CDRID,
+                        cdr.Switch == null ? switchId.ToString() : cdr.Switch.SwitchID.ToString(), 
+                        cdr.IDonSwitch,
+                        cdr.Tag, 
+                        cdr.AttemptDateTime, 
+                        cdr.AlertDateTime.HasValue ? cdr.AlertDateTime.Value.ToString() : "", 
+                        cdr.ConnectDateTime.HasValue ? cdr.ConnectDateTime.Value.ToString() : "", 
+                        cdr.DisconnectDateTime.HasValue ? cdr.DisconnectDateTime.Value.ToString() : "", 
+                        cdr.DurationInSeconds, 
+                        cdr.IN_TRUNK, 
+                        cdr.IN_CIRCUIT, 
+                        cdr.IN_CARRIER, 
+                        cdr.IN_IP, 
+                        cdr.OUT_TRUNK, 
+                        cdr.OUT_CIRCUIT, 
+                        cdr.OUT_CARRIER, 
+                        cdr.OUT_IP, 
+                        cdr.CGPN, 
+                        cdr.CDPN, 
+                        cdr.CAUSE_FROM_RELEASE_CODE, 
+                        cdr.CAUSE_FROM, 
+                        cdr.CAUSE_TO_RELEASE_CODE, 
+                        cdr.CAUSE_TO, 
+                        cdr.Extra_Fields, 
+                        cdr.IsRerouted ? 'Y' : 'N', 
+                        cdr.CDPNOut, 
+                        cdr.SIP));
+                }
+                wr.Close();
+            }
+
+            return new BulkInsertInfo
+            {
+                TableName = "CDR",
+                DataFilePath = filePath,
+                TabLock = true,
+                FieldSeparator = ','
+            };
+        }
+
         public void LoadCDRRange(DateTime from, DateTime to, int? batchSize, Action<List<TABS.CDR>> onBatchReady)
         {
             ExecuteReaderText(query_GetCDRRange, (reader) =>
