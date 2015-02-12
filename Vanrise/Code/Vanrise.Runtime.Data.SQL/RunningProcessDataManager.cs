@@ -13,7 +13,7 @@ namespace Vanrise.Runtime.Data.SQL
     public class RunningProcessDataManager : BaseSQLDataManager, IRunningProcessDataManager
     {
         public RunningProcessDataManager()
-            : base(ConfigurationManager.AppSettings["RuntimeConnStringKey"] ?? "RuntimeDBConnString")
+            : base(GetConnectionStringName("RuntimeConnStringKey", "RuntimeDBConnString"))
         {
         }
 

@@ -11,14 +11,45 @@ namespace Vanrise.Data
     public abstract class BaseDataManager
     {
         protected string _connectionString;
-        public BaseDataManager(string connectionStringKey)
+        public BaseDataManager(string connectionStringName): this(connectionStringName, true)
         {
-            _connectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;
+
+        }
+
+        public BaseDataManager(string connectionString, bool getFromConfigSection)
+        {
+            if (connectionString == null)
+                throw new ArgumentNullException("connectionString");
+
+            if (getFromConfigSection)
+                _connectionString = GetConnectionString(connectionString);
+            else
+                _connectionString = connectionString;
         }
 
         public BaseDataManager()
             : this("MainDBConnString")
         {
+        }
+
+        protected static string GetConnectionStringName(string appSettingWithConnectionStringName, string defaultConnectionStringName)
+        {
+            if(String.IsNullOrEmpty(appSettingWithConnectionStringName))
+                throw new ArgumentNullException("appSettingWithConnectionStringName");
+            if (String.IsNullOrEmpty(defaultConnectionStringName))
+                throw new ArgumentNullException("defaultConnectionStringName");
+
+            return ConfigurationManager.AppSettings[appSettingWithConnectionStringName] ?? defaultConnectionStringName;           
+        }
+
+        protected static string GetConnectionString(string connectionStringName)
+        {
+            if (String.IsNullOrEmpty(connectionStringName))
+                throw new ArgumentNullException("connectionStringName");
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionString == null)
+                throw new Exception(String.Format("Connection String not found. Connection String Name '{0}'", connectionStringName));
+            return connectionString.ConnectionString;
         }
 
         #region Get Reader Field
