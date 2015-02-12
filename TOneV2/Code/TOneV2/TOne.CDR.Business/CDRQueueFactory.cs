@@ -61,7 +61,7 @@ namespace TOne.CDR.Business
         {
             CreateAllSwitchQueuesIfNotExists(switchId);
             string queueName = String.Format("{0}_{1}", queueNameTemplate, switchId);
-            return PersistentQueueFactory.GetQueue<T>(queueName);
+            return PersistentQueueFactory.Default.GetQueue<T>(queueName);
         }
 
         static void CreateAllSwitchQueuesIfNotExists(int switchId)
@@ -95,7 +95,7 @@ namespace TOne.CDR.Business
             string[] sourceQueueNames = null;
             if (sourceQueueNameTemplate != null)
                 sourceQueueNames = new string[] { String.Format("{0}_{1}", sourceQueueNameTemplate, switchId) };
-            PersistentQueueFactory.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames);
+            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames);
         }
 
         static List<int> s_CreatedSwitchesQueues = new List<int>();

@@ -209,6 +209,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
@@ -236,6 +239,33 @@
     </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data.SQL">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Extensions">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
     <Reference Include="WebHelperLibrary, Version=1.0.5238.26274, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
