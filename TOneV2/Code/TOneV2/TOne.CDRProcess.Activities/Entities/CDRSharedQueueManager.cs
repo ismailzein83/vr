@@ -18,16 +18,16 @@ namespace TOne.CDRProcess.Activities
             return GetQueue<CDRBatch>(cacheKey);
         }
 
-        public TOneQueue<TABS.Billing_CDR_Base> GetCDRQueueForStatistics(int switchId)
+        public TOneQueue<CDRBillingBatch> GetCDRQueueForStatistics(int switchId)
         {
             string cacheKey = String.Format("CDRQueueForStatistics_{0}", switchId);
-            return GetQueue<TABS.Billing_CDR_Base>(cacheKey);
+            return GetQueue<CDRBillingBatch>(cacheKey);
         }
 
-        public TOneQueue<CDRMainBatch> GetCDRQueueForBilling(int switchId)
+        public TOneQueue<CDRBillingBatch> GetCDRQueueForBilling(int switchId)
         {
             string cacheKey = String.Format("CDRQueueForBilling_{0}", switchId);
-            return GetQueue<CDRMainBatch>(cacheKey);
+            return GetQueue<CDRBillingBatch>(cacheKey);
         }
     }
 }

@@ -63,10 +63,15 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyCDRsToDB.cs" />
     <Compile Include="ApplyInvalidCDRsToDB.cs" />
     <Compile Include="ApplyMainCDRsToDB.cs" />
+    <Compile Include="Entities\CDRBatch.cs" />
     <Compile Include="Entities\CDRBillingBatch.cs" />
     <Compile Include="Entities\CDRInvalidBatch.cs" />
     <Compile Include="Entities\CDRMainBatch.cs" />
@@ -74,9 +79,10 @@
     <Compile Include="ClearTimeRangeBillingRecords.cs" />
     <Compile Include="CreateBillingAndStatsTables.cs" />
     <Compile Include="DivideDayIntoTimeRanges.cs" />
-    <Compile Include="Entities\CDRBatch.cs" />
     <Compile Include="Entities\CDRBatchProcessor.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
+    <Compile Include="ImportCDRs.cs" />
+    <Compile Include="PrepareCDRsForDBApply.cs" />
     <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
     <Compile Include="PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessCDRs.cs" />
