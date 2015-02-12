@@ -48,9 +48,22 @@ namespace TestRuntime
             File.WriteAllText(filePath, selectedTaskType.FullName);
             ITask task = Activator.CreateInstance(selectedTaskType) as ITask;
             Task t = new Task(() => task.Execute());
+            t.ContinueWith((tt) => 
+                {
+                    this.CloseFormAsync();
+                });
             t.Start();
-            this.Close();
-
+            this.WindowState = FormWindowState.Minimized;
         }
+
+        void CloseFormAsync()
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new VoidDelegate(CloseFormAsync));
+            else
+                this.Close();
+        }
+
+        delegate void VoidDelegate();
     }
 }

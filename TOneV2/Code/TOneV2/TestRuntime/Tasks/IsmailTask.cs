@@ -25,17 +25,14 @@ namespace TestRuntime
             ////codeMatchDataManager.FillCodeMatchesFromCodes(new CodeList(distinctCodes), suppliersCodeInfo, DateTime.Today);
             ////Console.ReadKey();
             ////return;
-
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
             RuntimeHost host = new RuntimeHost(new List<RuntimeService> { bpService, queueActivationService });
             host.Start();
-
             Console.ReadKey();
             host.Stop();
-            Console.ReadLine();
-            Console.ReadLine();
+            Console.ReadKey();
             //BusinessProcessRuntime.Current.TerminatePendingProcesses();
             //Timer timer = new Timer(1000);
             //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
@@ -62,16 +59,16 @@ namespace TestRuntime
             //    }
             //});
 
-            processManager.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "UpdateZoneRateProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.UpdateZoneRateProcessInput
-                {
-                    IsFuture = false,
-                    ForSupplier = true,
-                    RateEffectiveOn = DateTime.Now
-                }
-            });
+            //processManager.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "UpdateZoneRateProcess",
+            //    InputArguments = new TOne.LCRProcess.Arguments.UpdateZoneRateProcessInput
+            //    {
+            //        IsFuture = false,
+            //        ForSupplier = true,
+            //        RateEffectiveOn = DateTime.Now
+            //    }
+            //});
         }
 
         //static bool _isRunning;
