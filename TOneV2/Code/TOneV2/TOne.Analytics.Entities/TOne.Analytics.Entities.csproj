@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertView.cs" />
+    <Compile Include="CarrierRateView.cs" />
     <Compile Include="CarrierSummaryView.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
