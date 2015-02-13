@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTOneDataManager.cs" />
-    <Compile Include="CarrierDataManager.cs" />
+    <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
