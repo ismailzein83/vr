@@ -9,7 +9,7 @@ namespace TOne.CDR.Entities
 {
     public class CDRInvalidBatch : PersistentQueueItem
     {
-        public List<TABS.Billing_CDR_Invalid> InvalidCDRs { get; set; }
+        public List<BillingCDRInvalid> InvalidCDRs { get; set; }
 
         public override string GenerateDescription()
         {

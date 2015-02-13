@@ -56,6 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingCDRBase.cs" />
+    <Compile Include="BillingCDRCost.cs" />
+    <Compile Include="BillingCDRInvalid.cs" />
+    <Compile Include="BillingCDRMain.cs" />
+    <Compile Include="BillingCDRPricingBase.cs" />
+    <Compile Include="BillingCDRSale.cs" />
     <Compile Include="CDRBatch.cs" />
     <Compile Include="CDRBillingBatch.cs" />
     <Compile Include="CDRInvalidBatch.cs" />
