@@ -41,7 +41,6 @@ namespace Vanrise.Fzero.CDRAnalysis
         public DbSet<MobileCDR> MobileCDRs { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
-        public DbSet<NormalizedCDR> NormalizedCDRs { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
@@ -672,6 +671,16 @@ namespace Vanrise.Fzero.CDRAnalysis
         public virtual int prUpdateRepeatedCalls()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prUpdateRepeatedCalls");
+        }
+    
+        public virtual int prFill_In_TrunkType()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFill_In_TrunkType");
+        }
+    
+        public virtual int prFill_out_trunkType()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFill_out_trunkType");
         }
     }
 }

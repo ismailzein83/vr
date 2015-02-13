@@ -267,25 +267,6 @@ warning 6002: The table/view 'CDRAnalysis.dbo.NormalizationRulesBackup' does not
           <Property Name="In_TrunckId" Type="int" />
           <Property Name="Out_TrunckId" Type="int" />
         </EntityType>
-        <EntityType Name="NormalizedCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ConnectDateTime" Type="datetime" />
-          <Property Name="DisconnectDateTime" Type="datetime" />
-          <Property Name="DurationInSeconds" Type="numeric" Precision="13" Scale="4" />
-          <Property Name="In_Trunk" Type="varchar" MaxLength="5" />
-          <Property Name="Out_Trunk" Type="varchar" MaxLength="5" />
-          <Property Name="In_Type" Type="varchar" MaxLength="20" />
-          <Property Name="Out_Type" Type="varchar" MaxLength="20" />
-          <Property Name="A_Temp" Type="varchar" MaxLength="20" />
-          <Property Name="B_Temp" Type="varchar" MaxLength="30" />
-          <Property Name="Switch" Type="varchar" MaxLength="30" />
-          <Property Name="IsRepeated" Type="int" />
-          <Property Name="SwitchId" Type="int" />
-          <Property Name="CDRId" Type="int" />
-        </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
             <PropertyRef Name="Id" />
@@ -1168,15 +1149,9 @@ warning 6002: The table/view 'CDRAnalysis.dbo.vwSuspectionAnalysis' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="db_Collect_All_Data" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_collect_data" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SwitchId" Type="int" Mode="In" />
-        </Function>
         <Function Name="db_Dashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Database" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="db_fill_In_trunkType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_fill_out_trunkType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillSwitchTrunks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
@@ -1204,9 +1179,6 @@ warning 6002: The table/view 'CDRAnalysis.dbo.vwSuspectionAnalysis' does not hav
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="Database" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="db_normalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SwitchId" Type="int" Mode="In" />
-        </Function>
         <Function Name="db_profileold" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="FindSwitchesTimeDiff" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
           <Parameter Name="SwitchId1" Type="int" Mode="In" />
@@ -1217,6 +1189,8 @@ warning 6002: The table/view 'CDRAnalysis.dbo.vwSuspectionAnalysis' does not hav
         <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Ids" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="prFill_In_TrunkType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFill_out_trunkType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prFillSubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
@@ -1303,7 +1277,6 @@ warning 6002: The table/view 'CDRAnalysis.dbo.vwSuspectionAnalysis' does not hav
           <EntitySet Name="MobileCDR" EntityType="Self.MobileCDR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NormalizationRules" EntityType="Self.NormalizationRules" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NormalizedCDR" EntityType="Self.NormalizedCDR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Peak_Hoursold" EntityType="Self.Peak_Hoursold" Schema="dbo" store:Type="Tables" />
@@ -1762,6 +1735,21 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <Parameter Name="Reference" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="prImportfromSwitches" ReturnType="Collection(CallsModel.prImportfromSwitches_Result)" />
+          <FunctionImport Name="prCollectNormalizedCDR" />
+          <FunctionImport Name="prFillSubscriberThresholds">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prFillSubscriberValues">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prNormalization" />
+          <FunctionImport Name="prNumberProfiling" />
+          <FunctionImport Name="prOldUpdateRepeatedCalls" />
+          <FunctionImport Name="prUpdateRepeatedCalls" />
           <EntitySet Name="CDRs" EntityType="CallsModel.CDR" />
           <EntitySet Name="ControlTables" EntityType="CallsModel.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="CallsModel.Criteria_Profile" />
@@ -1775,7 +1763,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="MobileCDRs" EntityType="CallsModel.MobileCDR" />
           <EntitySet Name="NormalCDRs" EntityType="CallsModel.NormalCDR" />
           <EntitySet Name="NormalizationRules" EntityType="CallsModel.NormalizationRule" />
-          <EntitySet Name="NormalizedCDRs" EntityType="CallsModel.NormalizedCDR" />
           <EntitySet Name="NumberProfiles" EntityType="CallsModel.NumberProfile" />
           <EntitySet Name="OperationTypes" EntityType="CallsModel.OperationType" />
           <EntitySet Name="Peak_Hoursold" EntityType="CallsModel.Peak_Hoursold" />
@@ -1960,21 +1947,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="prCollectNormalizedCDR" />
-          <FunctionImport Name="prFillSubscriberThresholds">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prFillSubscriberValues">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prNormalization" />
-          <FunctionImport Name="prNumberProfiling" />
-          <FunctionImport Name="prOldUpdateRepeatedCalls" />
-          <FunctionImport Name="prUpdateRepeatedCalls" />
+          <FunctionImport Name="prFill_In_TrunkType" />
+          <FunctionImport Name="prFill_out_trunkType" />
           </EntityContainer>
         <EnumType Name="EnumDirection" UnderlyingType="Byte">
           <Member Name="All" Value="0" />
@@ -2224,25 +2198,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <NavigationProperty Name="SwitchProfile" Relationship="CallsModel.FK_NormalizationRules_SwitchProfiles" FromRole="NormalizationRule" ToRole="SwitchProfile" />
           <NavigationProperty Name="SwitchTrunck" Relationship="CallsModel.FK_NormalizationRules_SwitchTruncks" FromRole="NormalizationRule" ToRole="SwitchTrunck" />
           <NavigationProperty Name="SwitchTrunck1" Relationship="CallsModel.FK_NormalizationRules_SwitchTruncks1" FromRole="NormalizationRule" ToRole="SwitchTrunck" />
-        </EntityType>
-        <EntityType Name="NormalizedCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ConnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="DisconnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="DurationInSeconds" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="In_Trunk" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Out_Trunk" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="In_Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Out_Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="A_Temp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="B_Temp" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Switch" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="IsRepeated" Type="Int32" />
-          <Property Name="SwitchId" Type="Int32" />
-          <Property Name="CDRId" Type="Int32" />
         </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
@@ -3228,10 +3183,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="db_Collect_All_Data" FunctionName="CallsModel.Store.db_Collect_All_Data" />
-          <FunctionImportMapping FunctionImportName="db_collect_data" FunctionName="CallsModel.Store.db_collect_data" />
-          <FunctionImportMapping FunctionImportName="db_fill_In_trunkType" FunctionName="CallsModel.Store.db_fill_In_trunkType" />
-          <FunctionImportMapping FunctionImportName="db_fill_out_trunkType" FunctionName="CallsModel.Store.db_fill_out_trunkType" />
           <FunctionImportMapping FunctionImportName="db_FillSwitchTrunks" FunctionName="CallsModel.Store.db_FillSwitchTrunks" />
           <FunctionImportMapping FunctionImportName="db_findSuspectionOccuranceOld" FunctionName="CallsModel.Store.db_findSuspectionOccuranceOld">
             <ResultMapping>
@@ -3245,7 +3196,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="db_GetUnNormalizedCDPN" FunctionName="CallsModel.Store.db_GetUnNormalizedCDPN" />
           <FunctionImportMapping FunctionImportName="db_GetUnNormalizedCGPN" FunctionName="CallsModel.Store.db_GetUnNormalizedCGPN" />
-          <FunctionImportMapping FunctionImportName="db_normalization" FunctionName="CallsModel.Store.db_normalization" />
           <FunctionImportMapping FunctionImportName="db_profileold" FunctionName="CallsModel.Store.db_profileold" />
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="CallsModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="CallsModel.Store.sp_creatediagram" />
@@ -3312,6 +3262,13 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR" FunctionName="CallsModel.Store.prCollectNormalizedCDR" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds" FunctionName="CallsModel.Store.prFillSubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberValues" FunctionName="CallsModel.Store.prFillSubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prNormalization" FunctionName="CallsModel.Store.prNormalization" />
+          <FunctionImportMapping FunctionImportName="prNumberProfiling" FunctionName="CallsModel.Store.prNumberProfiling" />
+          <FunctionImportMapping FunctionImportName="prOldUpdateRepeatedCalls" FunctionName="CallsModel.Store.prOldUpdateRepeatedCalls" />
+          <FunctionImportMapping FunctionImportName="prUpdateRepeatedCalls" FunctionName="CallsModel.Store.prUpdateRepeatedCalls" />
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="CallsModel.CDR">
               <MappingFragment StoreEntitySet="CDR">
@@ -3494,26 +3451,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="In_TrunckName" ColumnName="In_TrunckName" />
                 <ScalarProperty Name="CallLength" ColumnName="CallLength" />
                 <ScalarProperty Name="Prefix" ColumnName="Prefix" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NormalizedCDRs">
-            <EntityTypeMapping TypeName="CallsModel.NormalizedCDR">
-              <MappingFragment StoreEntitySet="NormalizedCDR">
-                <ScalarProperty Name="CDRId" ColumnName="CDRId" />
-                <ScalarProperty Name="SwitchId" ColumnName="SwitchId" />
-                <ScalarProperty Name="IsRepeated" ColumnName="IsRepeated" />
-                <ScalarProperty Name="Switch" ColumnName="Switch" />
-                <ScalarProperty Name="B_Temp" ColumnName="B_Temp" />
-                <ScalarProperty Name="A_Temp" ColumnName="A_Temp" />
-                <ScalarProperty Name="Out_Type" ColumnName="Out_Type" />
-                <ScalarProperty Name="In_Type" ColumnName="In_Type" />
-                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
-                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3986,13 +3923,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR" FunctionName="CallsModel.Store.prCollectNormalizedCDR" />
-          <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds" FunctionName="CallsModel.Store.prFillSubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="prFillSubscriberValues" FunctionName="CallsModel.Store.prFillSubscriberValues" />
-          <FunctionImportMapping FunctionImportName="prNormalization" FunctionName="CallsModel.Store.prNormalization" />
-          <FunctionImportMapping FunctionImportName="prNumberProfiling" FunctionName="CallsModel.Store.prNumberProfiling" />
-          <FunctionImportMapping FunctionImportName="prOldUpdateRepeatedCalls" FunctionName="CallsModel.Store.prOldUpdateRepeatedCalls" />
-          <FunctionImportMapping FunctionImportName="prUpdateRepeatedCalls" FunctionName="CallsModel.Store.prUpdateRepeatedCalls" />
+          <FunctionImportMapping FunctionImportName="prFill_In_TrunkType" FunctionName="CallsModel.Store.prFill_In_TrunkType" />
+          <FunctionImportMapping FunctionImportName="prFill_out_trunkType" FunctionName="CallsModel.Store.prFill_out_trunkType" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

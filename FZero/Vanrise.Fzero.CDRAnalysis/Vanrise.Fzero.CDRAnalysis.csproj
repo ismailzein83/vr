@@ -125,9 +125,6 @@
     <Compile Include="NormalizationRulesBackup.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="NormalizedCDR.cs">
-      <DependentUpon>NormalizationModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="NumberProfile.cs">
       <DependentUpon>NormalizationModel.tt</DependentUpon>
     </Compile>
