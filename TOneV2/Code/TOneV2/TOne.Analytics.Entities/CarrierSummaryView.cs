@@ -19,8 +19,8 @@ namespace TOne.Analytics.Entities
         public decimal ACD { get; set; }
         public decimal DeliveredASR { get; set; }
         public decimal AveragePDD { get; set; }
-        public int NumberOfCalls { get; set; }
-        public decimal PricedDuration { get; set; }
+        public int? NumberOfCalls { get; set; }
+        public decimal? PricedDuration { get; set; }
         public decimal SaleNets { get; set; }
         public decimal CostNets { get; set; }
         public decimal Profit { get; set; }
