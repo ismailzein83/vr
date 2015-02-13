@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.ProcessRawCDRsProcess"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.RawCDRsProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -17,7 +17,7 @@
     <x:Property Name="Input" Type="InArgument(tca:RawCDRsProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.ProcessRawCDRsProcess_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.RawCDRsProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -122,7 +122,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.ProcessRawCDRsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.RawCDRsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

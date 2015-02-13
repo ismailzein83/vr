@@ -68,15 +68,18 @@ namespace TOne.CDRProcess.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue((cdrBatch) =>
                     {
                         TOne.CDR.Entities.CDRBillingBatch CdrBillingGenerated = new TOne.CDR.Entities.CDRBillingBatch();
-
-                        foreach (TABS.CDR cdr in cdrBatch.CDRs)
+                        CdrBillingGenerated.CDRs = new List<BillingCDRBase>();
+                        TABS.Switch CDRSwitch;
+                        if (TABS.Switch.All.TryGetValue(inputArgument.SwitchID, out CDRSwitch))
                         {
-                            Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
-                            CdrBillingGenerated.CDRs.Add(getBillingCDRBase(cdrBase));
+                            foreach (TABS.CDR cdr in cdrBatch.CDRs)
+                            {
+                                cdr.Switch = CDRSwitch;
+                                Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
+                                CdrBillingGenerated.CDRs.Add(getBillingCDRBase(cdrBase));
+                            }
                         }
-                        
                         inputArgument.OutputQueue.Enqueue(CdrBillingGenerated);
-
                     });
                 }
                 while (!ShouldStop(handle) && hasItem);
