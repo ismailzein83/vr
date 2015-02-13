@@ -76,10 +76,29 @@ namespace TOne.Analytics.Data.SQL
                 }, carrierType, effectiveOn, codeGroup, carrierID, from, to);
         }
 
-        //public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
-        //{
+        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
+        {
+            return GetItemsSP("Analytics.SP_Traffic_CarrierSummary", (reader) =>
+                {
+                    return new Entities.CarrierSummaryView
+                    {
+                        ProfileID = groupByProfile == 'Y' && reader["ProfileID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["ProfileID"]) : null,
+                        CarrierID =  groupByProfile == 'N' ? (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string) : null,
+                        SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempts"]),
+                        DurationsInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
+                        ASR = Convert.ToDecimal(reader["ASR"]),
+                        ACD = Convert.ToDecimal(reader["ACD"]),
+                        DeliveredASR = Convert.ToDecimal(reader["DeliveredASR"]),
+                        AveragePDD = Convert.ToDecimal(reader["AveragePDD"]),
+                        NumberOfCalls = reader["NumberOfCalls"] != DBNull.Value ? (int?)Convert.ToInt32(reader["NumberOfCalls"]) : null,
+                        PricedDuration = reader["PricedDuration"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["PricedDuration"]) : null,
+                        SaleNets = Convert.ToDecimal(reader["Sale_Nets"]),
+                        CostNets = Convert.ToDecimal(reader["Cost_Nets"]),
+                        Profit = Convert.ToDecimal(reader["Profit"])
+                    };
+                }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, customerID, supplierID);
 
-        //}
+        }
 
 
 
