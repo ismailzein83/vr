@@ -7,7 +7,7 @@ using TOne.Analytics.Entities;
 
 namespace TOne.Analytics.Data
 {
-    public interface ITrafficDataManager : IDataManager
+    public interface IAnalyticsDataManager : IDataManager
     {
         List<TopNDestinationView> GetTopNDestinations(int topCount,
            DateTime fromDate,
@@ -18,6 +18,10 @@ namespace TOne.Analytics.Data
            int? switchID,
            char groupByCodeGroup,
            string codeGroup,
-           char showSupplier);
+           char showSupplier,
+            int from,
+            int to);
+
+        List<Alert> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID);
     }
 }

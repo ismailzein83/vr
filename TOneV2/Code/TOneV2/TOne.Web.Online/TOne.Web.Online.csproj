@@ -175,6 +175,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MobileAppController.cs" />
@@ -234,6 +235,22 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.Analytics.Business\TOne.Analytics.Business.csproj">
+      <Project>{1d2c62ce-4f44-474e-84ef-44579a454dea}</Project>
+      <Name>TOne.Analytics.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Analytics.Data.SQL\TOne.Analytics.Data.SQL.csproj">
+      <Project>{a8f33d21-6ccb-49df-a71c-6653eca0c45d}</Project>
+      <Name>TOne.Analytics.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Analytics.Data\TOne.Analytics.Data.csproj">
+      <Project>{c7d60145-89ba-461c-aa71-b37636dd2541}</Project>
+      <Name>TOne.Analytics.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Analytics.Entities\TOne.Analytics.Entities.csproj">
+      <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
+      <Name>TOne.Analytics.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
       <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
       <Name>TOne.Business</Name>

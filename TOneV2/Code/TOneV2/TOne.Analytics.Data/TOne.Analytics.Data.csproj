@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="AnalyticsDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="ITrafficDataManager.cs" />
+    <Compile Include="IAnalyticsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

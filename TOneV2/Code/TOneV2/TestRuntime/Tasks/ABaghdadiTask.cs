@@ -23,13 +23,13 @@ namespace TestRuntime.Tasks
             ProcessManager processManager = new ProcessManager();
             processManager.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "UpdateZoneRateProcess"
-                //InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-                //{
-                //    IsFuture = false,
-                //    CodeEffectiveOn = DateTime.Today,
-                //    GetChangedCodeGroupsOnly = false
-                //}
+                ProcessName = "UpdateCodeZoneMatchProcess",
+                InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
+                {
+                    IsFuture = false,
+                    CodeEffectiveOn = DateTime.Today,
+                    //GetChangedCodeGroupsOnly = false
+                }
             });
 
 
@@ -47,8 +47,6 @@ namespace TestRuntime.Tasks
             }
             try
             {
-                //BusinessProcessRuntime.Current.LoadAndExecutePendings();
-
                 BusinessProcessRuntime.Current.ExecutePendings();
                 BusinessProcessRuntime.Current.TriggerPendingEvents();
             }

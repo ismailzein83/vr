@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrafficDataManager.cs" />
+    <Compile Include="AnalyticsDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Analytics.Data\TOne.Analytics.Data.csproj">
