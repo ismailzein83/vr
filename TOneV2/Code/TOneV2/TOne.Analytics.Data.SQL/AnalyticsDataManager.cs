@@ -48,10 +48,41 @@ namespace TOne.Analytics.Data.SQL
             }, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
         }
 
+        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
+        {
+            return GetItemsSP("Analytics.sp_Rates_GetRates", (reader) =>
+                {
+                    return new Entities.CarrierRateView
+                    {
+                        ZoneID = Convert.ToInt32(reader["ZoneID"]),
+                        CodeGroup = reader["CodeGroup"] as string,
+                        ZoneName = reader["ZoneName"] as string,
+                        Code = reader["Code"] as string,
+                        RateID = Convert.ToInt32(reader["RateID"]),
+                        ServiceFlag = Convert.ToInt32(reader["ServicesFlag"]),
+                        Rate = reader["Rate"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["Rate"]) : null,
+                        CurrencyID = reader["CurrencyID"] as string,
+                        OffPeakRate = reader["OffPeakRate"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["OffPeakRate"]) : null,
+                        WeekendRate = reader["WeekendRate"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["WeekendRate"]) : null,
+                        ChangeID = Convert.ToInt32(reader["Change"]),
+                        RateBeginEffectiveDate = reader["RateBeginEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["RateBeginEffectiveDate"]) : null,
+                        RateEndEffectiveDate = reader["RateEndEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["RateEndEffectiveDate"]) : null,
+                        CodeBeginEffectiveDate = reader["CodeBeginEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["CodeBeginEffectiveDate"]) : null,
+                        CodeEndEffectiveDate = reader["CodeEndEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["CodeEndEffectiveDate"]) : null,
+                        PricelistID = Convert.ToInt32(reader["PricelistID"]),
+                        PricelistBeginEffectiveDate = reader["PricelistBeginEffectiveDate"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["PricelistBeginEffectiveDate"]) : null,
+                        UserName = reader["UserName"] as string
+                    };
+                }, carrierType, effectiveOn, codeGroup, carrierID, from, to);
+        }
+
         //public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
         //{
 
         //}
+
+
+
 
 
 
