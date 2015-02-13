@@ -23,5 +23,7 @@ namespace TOne.Analytics.Data
             int to);
 
         List<Alert> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID);
+
+        List<CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to);
     }
 }
