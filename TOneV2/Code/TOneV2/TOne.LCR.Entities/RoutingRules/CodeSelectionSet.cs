@@ -15,7 +15,7 @@ namespace TOne.LCR.Entities
         public List<string> ExcludedCodes { get; set; }
 
 
-        public override List<string> GetCodes()
+        public override List<MatchCode> GetMatchedCodes()
         {
             throw new NotImplementedException();
         }
