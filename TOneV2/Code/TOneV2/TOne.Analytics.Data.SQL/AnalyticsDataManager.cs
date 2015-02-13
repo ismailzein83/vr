@@ -11,7 +11,7 @@ namespace TOne.Analytics.Data.SQL
     {
         public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, int from, int to)
         {
-            return GetItemsSP("Traffic.sp_Traffic_TopNDestination", (reader) =>
+            return GetItemsSP("Analytics.sp_Traffic_TopNDestination", (reader) =>
             {
                 return new Entities.TopNDestinationView
                 {
