@@ -24,20 +24,38 @@ namespace TOne.Web.Online.Controllers
            AuthenticationOutput output = manager.Authenticate(username, password);
             if (output.Result == AuthenticationResult.Succeeded)
             {
+                int expirationPeriodInMinutes = 15;
                 SecurityToken userInfo = new SecurityToken
                 {
                     UserId = output.User.ID,
                     Username = output.User.Login,
                     UserDisplayName = output.User.Name,
-                    ExpiresAt = DateTime.Now.AddMinutes(15)
+                    ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
                 };
                 string encrypted = EncryptionHelper.Encrypt(Serializer.Serialize(userInfo));
-                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(encrypted) };
+                AuthenticationToken returnedToken = new AuthenticationToken
+                {
+                    TokenName = "X-Token",
+                    ExpirationIntervalInMinutes = expirationPeriodInMinutes,
+                    Token = encrypted
+                };
+                return this.Request.CreateResponse<AuthenticationToken>(HttpStatusCode.OK, returnedToken);
             }
             else
             {
                 throw new HttpResponseException(new HttpResponseMessage() { StatusCode = HttpStatusCode.Unauthorized, Content = new StringContent("Invalid user name or password.") });
             }
         }
+
+       private class AuthenticationToken
+       {
+           public string TokenName { get; set; }
+
+           public int ExpirationIntervalInMinutes { get; set; }
+
+           public string Token { get; set; }
+       }
     }
+
+    
 }
