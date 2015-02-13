@@ -9,11 +9,23 @@ namespace TOne.Business
 {
     public class BusinessEntityManager
     {
-        public List<TOne.Entities.CarrierInfo> GetCarriers()
+        public List<TOne.Entities.CarrierInfo> GetCarriers(string carrierType)
         {
-            ICarrierDataManager datamanager = DataManagerFactory.GetDataManager<ICarrierDataManager>();
+            IBusinessEntityDataManager datamanager = DataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
 
-            return datamanager.GetCarriers();
+            return datamanager.GetCarriers(carrierType);
+        }
+
+        public List<TOne.Entities.CodeGroupInfo> GetCodeGroups()
+        {
+            IBusinessEntityDataManager datamanager = DataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+            return datamanager.GetCodeGroups();
+        }
+
+        public List<TOne.Entities.SwitchInfo> GetSwitches()
+        {
+            IBusinessEntityDataManager datamanager = DataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+            return datamanager.GetSwitches();
         }
     }
 }
