@@ -23,6 +23,15 @@ namespace TOne.Analytics.Business
             return CreateAlertViews(alerts);
         }
 
+        public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
+        {
+            IAnalyticsDataManager datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
+            return datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
+        }
+
+
+
+        #region Private Methods
         private List<Entities.AlertView> CreateAlertViews(List<Entities.Alert> alerts)
         {
             List<Entities.AlertView> alertViews = new List<Entities.AlertView>();
@@ -33,5 +42,7 @@ namespace TOne.Analytics.Business
             }
             return alertViews;
         }
+
+        #endregion
     }
 }
