@@ -28,6 +28,8 @@ namespace TOne.Web.Online.Models
 
         public string UserDisplayName { get; set; }
 
+        public DateTime IssuedAt { get; set; }
+
         public DateTime ExpiresAt { get; set; }
     }
 }

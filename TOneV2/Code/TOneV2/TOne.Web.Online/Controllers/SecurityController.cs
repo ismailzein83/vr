@@ -30,6 +30,7 @@ namespace TOne.Web.Online.Controllers
                     UserId = output.User.ID,
                     Username = output.User.Login,
                     UserDisplayName = output.User.Name,
+                    IssuedAt = DateTime.Now,
                     ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
                 };
                 string encrypted = EncryptionHelper.Encrypt(Serializer.Serialize(userInfo));
@@ -37,6 +38,8 @@ namespace TOne.Web.Online.Controllers
                 {
                     TokenName = "X-Token",
                     ExpirationIntervalInMinutes = expirationPeriodInMinutes,
+                    Username = userInfo.Username,
+                    UserDisplayName= userInfo.UserDisplayName,
                     Token = encrypted
                 };
                 return this.Request.CreateResponse<AuthenticationToken>(HttpStatusCode.OK, returnedToken);
@@ -52,6 +55,10 @@ namespace TOne.Web.Online.Controllers
            public string TokenName { get; set; }
 
            public int ExpirationIntervalInMinutes { get; set; }
+
+           public string Username { get; set; }
+
+           public string UserDisplayName { get; set; }
 
            public string Token { get; set; }
        }
