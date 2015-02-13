@@ -107,6 +107,7 @@
     <Compile Include="AuthenticationOutput.cs" />
     <Compile Include="CacheObjectType.cs" />
     <Compile Include="CarrierInfo.cs" />
+    <Compile Include="CodeGroupInfo.cs" />
     <Compile Include="CodeList.cs" />
     <Compile Include="CodeNode.cs" />
     <Compile Include="CodeTree.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="MultipleSelection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueName.cs" />
+    <Compile Include="SwitchInfo.cs" />
     <Compile Include="TOneQueue.cs" />
   </ItemGroup>
   <ItemGroup>
