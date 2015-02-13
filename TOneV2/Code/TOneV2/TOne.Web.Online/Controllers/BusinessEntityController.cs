@@ -14,11 +14,25 @@ namespace TOne.Web.Online.Controllers
     {
         // GET api/<controller>
         [HttpGet]
-        public List<TOne.Entities.CarrierInfo> GetCarriers()
+        public List<TOne.Entities.CarrierInfo> GetCarriers(string carrierType = null)
         {
             BusinessEntityManager businessmanager = new BusinessEntityManager();
 
-            return businessmanager.GetCarriers();
+            return businessmanager.GetCarriers(carrierType);
+        }
+
+        [HttpGet]
+        public List<TOne.Entities.CodeGroupInfo> GetCodeGroups()
+        {
+            BusinessEntityManager businessmanager = new BusinessEntityManager();
+            return businessmanager.GetCodeGroups();
+        }
+
+        [HttpGet]
+        public List<TOne.Entities.SwitchInfo> GetSwitches()
+        {
+            BusinessEntityManager businessmanager = new BusinessEntityManager();
+            return businessmanager.GetSwitches();
         }
     }
 }

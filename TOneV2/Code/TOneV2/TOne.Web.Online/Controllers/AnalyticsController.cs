@@ -36,5 +36,11 @@ namespace TOne.Web.Online.Controllers
         {
             return _analyticsManager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
         }
+
+        [HttpGet]
+        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile, string customerID = null, string supplierID = null)
+        {
+            return _analyticsManager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+        }
     }
 }
