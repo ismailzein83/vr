@@ -85,6 +85,7 @@
     <Compile Include="PrepareCDRsForDBApply.cs" />
     <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
     <Compile Include="PrepareMainCDRsForDBApply.cs" />
+    <Compile Include="ProcessBillingCDR.cs" />
     <Compile Include="ProcessCDRs.cs" />
     <Compile Include="GetCDRs.cs" />
     <Compile Include="InitializeObjects.cs" />
