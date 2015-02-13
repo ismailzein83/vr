@@ -36,7 +36,7 @@ namespace TOne.Web.Online.Controllers
                 string encrypted = EncryptionHelper.Encrypt(Serializer.Serialize(userInfo));
                 AuthenticationToken returnedToken = new AuthenticationToken
                 {
-                    TokenName = "X-Token",
+                    TokenName = AuthenticationHandler.TOKEN_NAME,
                     ExpirationIntervalInMinutes = expirationPeriodInMinutes,
                     Username = userInfo.Username,
                     UserDisplayName= userInfo.UserDisplayName,

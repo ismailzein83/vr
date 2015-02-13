@@ -13,10 +13,10 @@ namespace TOne.Web.Online.Security
 {
     public class AuthenticationHandler : DelegatingHandler
     {
+        internal const string TOKEN_NAME = "Auth-Token";
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            const string TOKEN_NAME = "X-Token";
-
             if (request.Headers.Contains(TOKEN_NAME))
             {
                 string encryptedToken = request.Headers.GetValues(TOKEN_NAME).First();
