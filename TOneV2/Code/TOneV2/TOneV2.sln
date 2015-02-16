@@ -85,11 +85,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Analytics.Entities", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Analytics.Business", "TOne.Analytics.Business\TOne.Analytics.Business.csproj", "{1D2C62CE-4F44-474E-84EF-44579A454DEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.LCR.Business", "TOne.LCR.Business\TOne.LCR.Business.csproj", "{5E726053-E223-49CE-9BF6-61271153A94D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 32
+		SccNumberOfProjects = 33
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TABS.Plugins.Framework\\TABS.Plugins.Framework.csproj
 		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
@@ -215,6 +217,10 @@ Global
 		SccProjectTopLevelParentUniqueName31 = TOneV2.sln
 		SccProjectName31 = TOne.Analytics.Business
 		SccLocalPath31 = TOne.Analytics.Business
+		SccProjectUniqueName32 = TOne.LCR.Business\\TOne.LCR.Business.csproj
+		SccProjectTopLevelParentUniqueName32 = TOneV2.sln
+		SccProjectName32 = TOne.LCR.Business
+		SccLocalPath32 = TOne.LCR.Business
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -817,6 +823,24 @@ Global
 		{1D2C62CE-4F44-474E-84EF-44579A454DEA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1D2C62CE-4F44-474E-84EF-44579A454DEA}.Release|x64.ActiveCfg = Release|Any CPU
 		{1D2C62CE-4F44-474E-84EF-44579A454DEA}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|x64.ActiveCfg = Release|Any CPU
+		{5E726053-E223-49CE-9BF6-61271153A94D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -841,6 +865,7 @@ Global
 		{AEE31608-D6E1-4005-9773-B1B970AFD323} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
 		{1C4E2326-4DD4-4BF4-8B8C-AA1C6FA0C4FC} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
 		{ACC3F0E9-3A0C-4B90-AFE7-D9CDAA858C0B} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
+		{5E726053-E223-49CE-9BF6-61271153A94D} = {7A234E16-3469-487A-B440-4EFB0FB5CEBA}
 		{234ABDF0-DAE3-4979-8BF4-57F3EED90268} = {B205222E-157D-4D76-B61E-6AB88C510C39}
 		{53916714-C501-4613-907F-D5F33B78C3F0} = {B205222E-157D-4D76-B61E-6AB88C510C39}
 		{34C38EF3-C2D1-41D7-AB7C-E375F030B5F3} = {DA73FD29-0EEF-42A1-8CBA-09520051C308}

@@ -20,6 +20,6 @@ namespace TOne.LCR.Entities
     {
         public string SupplierId { get; set; }
 
-        public Int16 Percentage { get; set; }
+        public Int16? Percentage { get; set; }
     }
 }
