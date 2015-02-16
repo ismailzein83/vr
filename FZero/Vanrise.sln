@@ -138,6 +138,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WcfS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WeeklyReport", "Vanrise.Fzero.Services.WeeklyReport\Vanrise.Fzero.Services.WeeklyReport.csproj", "{990E2C6C-70A1-47EE-AA39-6A6A875FA031}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis", "Vanrise.Fzero.MobileCDRAnalysis\Vanrise.Fzero.MobileCDRAnalysis.csproj", "{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 21
@@ -298,6 +300,10 @@ Global
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
