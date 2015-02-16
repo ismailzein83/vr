@@ -138,9 +138,34 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WcfS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WeeklyReport", "Vanrise.Fzero.Services.WeeklyReport\Vanrise.Fzero.Services.WeeklyReport.csproj", "{990E2C6C-70A1-47EE-AA39-6A6A875FA031}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.CDRAnalysis.Mobile.Website", "http://localhost:34811", "{E11CA61C-A50C-4FBC-9E4D-2A4A05C816CA}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_34811"
+		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.CDRAnalysis.Mobile.Website\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_34811\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_34811"
+		Release.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.CDRAnalysis.Mobile.Website\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_34811\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "Vanrise.Fzero.CDRAnalysis.Mobile.Website\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 21
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -212,6 +237,11 @@ Global
 		SccProjectUniqueName20 = Vanrise.Fzero.Services.WeeklyReport\\Vanrise.Fzero.Services.WeeklyReport.csproj
 		SccProjectName20 = Vanrise.Fzero.Services.WeeklyReport
 		SccLocalPath20 = Vanrise.Fzero.Services.WeeklyReport
+		SccWebProject21 = true
+		SccProjectUniqueName21 = http://localhost:34811
+		SccProjectName21 = Vanrise.Fzero.CDRAnalysis.Mobile.Website
+		SccLocalPath21 = Vanrise.Fzero.CDRAnalysis.Mobile.Website
+		SccProjectEnlistmentChoice21 = 2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -298,6 +328,10 @@ Global
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E11CA61C-A50C-4FBC-9E4D-2A4A05C816CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11CA61C-A50C-4FBC-9E4D-2A4A05C816CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E11CA61C-A50C-4FBC-9E4D-2A4A05C816CA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11CA61C-A50C-4FBC-9E4D-2A4A05C816CA}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
