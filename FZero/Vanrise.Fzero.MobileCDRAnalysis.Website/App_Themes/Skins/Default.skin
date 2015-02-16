@@ -1,0 +1,55 @@
+﻿<%--
+Default skin template. The following skins are provided as examples only.
+
+1. Named control skin. The SkinId should be uniquely defined because
+   duplicate SkinId's per control type are not allowed in the same theme.
+
+<asp:GridView runat="server" SkinId="gridviewSkin" BackColor="White" >
+   <AlternatingRowStyle BackColor="Blue" />
+</asp:GridView>
+
+2. Default skin. The SkinId is not defined. Only one default 
+   control skin per control type is allowed in the same theme.
+
+<asp:Image runat="server" ImageUrl="~/images/image1.jpg" />
+--%>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="Telerik" %>
+
+<asp:GridView SkinID="GridDefault" runat="server" CssClass="table" CellPadding="2" CellSpacing="1"
+width="100%" GridLines="None" AutoGenerateColumns="false" AllowPaging="false">
+<HeaderStyle CssClass="GVHeader" />
+<RowStyle CssClass="GVRow" />
+    <AlternatingRowStyle CssClass="GVAltRow" />
+</asp:GridView>
+<asp:GridView SkinID="GridPaged" runat="server" CssClass="GV" CellPadding="2" CellSpacing="1"
+    GridLines="None" Width="100%" AutoGenerateColumns="false" AllowPaging="true" PageSize="10">
+    <HeaderStyle CssClass="GVHeader" />
+    <RowStyle CssClass="GVRow" />
+    <AlternatingRowStyle CssClass="GVAltRow" />
+    <PagerSettings Mode="Numeric" />
+    <PagerStyle HorizontalAlign="Center" />
+    <EmptyDataRowStyle CssClass="text" />
+    <EmptyDataTemplate>
+        No Data
+    </EmptyDataTemplate>
+</asp:GridView>
+
+
+<Telerik:RadDatePicker   Skin="Metro" Width="212px"  Height="30" runat="server"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px"  ></Telerik:RadDatePicker>
+
+<Telerik:RadTextBox   Skin="Metro" Width="212px"  Height="30" runat="server"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px" ></Telerik:RadTextBox>
+
+<Telerik:RadComboBox runat="server"  EnableTextSelection ="true" Skin="Metro" Width="212px"  BorderColor="LightGray" BorderStyle="Solid" BorderWidth="1px"   Filter="Contains"  ></Telerik:RadComboBox>
+
+<Telerik:RadGrid BorderColor="LightGray" Skin="Metro" AllowSorting="true" runat="server" CellSpacing="0"   ClientSettings-Scrolling-AllowScroll="true" AllowMultiRowSelection="true"
+                        AutoGenerateColumns="False" > 
+
+                        <ClientSettings>
+                            <Selecting AllowRowSelect="true" />
+                        </ClientSettings>
+
+
+</Telerik:RadGrid>
+
+                       
