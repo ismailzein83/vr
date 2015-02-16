@@ -22,7 +22,7 @@ namespace TOne.CDRProcess.Activities
 
     public class ImportCDRs : BaseAsyncActivity<ImportCDRsInput>
     {
-        
+
         #region Arguments
 
         [RequiredArgument]
@@ -52,6 +52,7 @@ namespace TOne.CDRProcess.Activities
                 foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
                     ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
             }
+            BatchCdrs.SwitchId = CurrentSwitch.SwitchID;
             BatchCdrs.CDRs = ToneCdrs;
             Console.WriteLine("{0}: GetCDRs is done in {1}", DateTime.Now, (DateTime.Now - start));
             return BatchCdrs;

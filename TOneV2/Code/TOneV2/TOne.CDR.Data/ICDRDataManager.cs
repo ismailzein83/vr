@@ -13,7 +13,7 @@ namespace TOne.CDR.Data
 
         void ApplyInvalidCDRsToDB(Object preparedInvalidCDRs);
 
-        Object PrepareCDRsForDBApply(System.Collections.Generic.List<TABS.CDR> cdrs, int switchId);
+        Object PrepareCDRsForDBApply(System.Collections.Generic.List<TABS.CDR> cdrs,int SwitchID);
 
         void ApplyCDRsToDB(Object preparedCDRs);
 

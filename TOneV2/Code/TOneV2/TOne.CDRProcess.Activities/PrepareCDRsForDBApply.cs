@@ -45,7 +45,7 @@ namespace TOne.CDRProcess.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (CDR) =>
                         {
-                            Object preparedMainCDRs = dataManager.PrepareCDRsForDBApply(CDR.CDRs , inputArgument.SwitchId);
+                            Object preparedMainCDRs = dataManager.PrepareCDRsForDBApply(CDR.CDRs,CDR.SwitchId);
                             inputArgument.OutputQueue.Enqueue(preparedMainCDRs);
                         });
                 }
