@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     using System;
     using System.Collections.Generic;
