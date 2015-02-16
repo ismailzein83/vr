@@ -240,14 +240,14 @@ Global
 		SccProjectUniqueName20 = Vanrise.Fzero.Services.WeeklyReport\\Vanrise.Fzero.Services.WeeklyReport.csproj
 		SccProjectName20 = Vanrise.Fzero.Services.WeeklyReport
 		SccLocalPath20 = Vanrise.Fzero.Services.WeeklyReport
-		SccWebProject21 = true
-		SccProjectUniqueName21 = http://localhost:39680
-		SccProjectName21 = Vanrise.Fzero.MobileCDRAnalysis.Website
-		SccLocalPath21 = Vanrise.Fzero.MobileCDRAnalysis.Website
-		SccProjectEnlistmentChoice21 = 2
-		SccProjectUniqueName22 = Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
-		SccProjectName22 = Vanrise.Fzero.MobileCDRAnalysis
-		SccLocalPath22 = Vanrise.Fzero.MobileCDRAnalysis
+		SccProjectUniqueName21 = Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
+		SccProjectName21 = Vanrise.Fzero.MobileCDRAnalysis
+		SccLocalPath21 = Vanrise.Fzero.MobileCDRAnalysis
+		SccWebProject22 = true
+		SccProjectUniqueName22 = http://localhost:39680
+		SccProjectName22 = Vanrise.Fzero.MobileCDRAnalysis.Website
+		SccLocalPath22 = Vanrise.Fzero.MobileCDRAnalysis.Website
+		SccProjectEnlistmentChoice22 = 2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
