@@ -168,7 +168,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -245,6 +245,9 @@ Global
 		SccProjectName21 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccLocalPath21 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccProjectEnlistmentChoice21 = 2
+		SccProjectUniqueName22 = Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
+		SccProjectName22 = Vanrise.Fzero.MobileCDRAnalysis
+		SccLocalPath22 = Vanrise.Fzero.MobileCDRAnalysis
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
