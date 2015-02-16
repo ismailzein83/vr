@@ -9,7 +9,7 @@ namespace TOne.Analytics.Data.SQL
 {
     public class AnalyticsDataManager : BaseTOneDataManager, IAnalyticsDataManager
     {
-        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, int from, int to)
+        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to)
         {
             return GetItemsSP("Analytics.sp_Traffic_TopNDestination", (reader) =>
             {
@@ -27,9 +27,8 @@ namespace TOne.Analytics.Data.SQL
                     CodeGroup = reader["CodeGroupName"] as string
                 };
             },
-                topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, from, to, "TopNDestinationTemp");
+                topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, "TopNDestinationTemp");
         }
-
 
         public List<Entities.Alert> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID)
         {
@@ -100,8 +99,63 @@ namespace TOne.Analytics.Data.SQL
 
         }
 
+        public List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return GetItemsSP("Analytics.SP_Traffic_TopCustomers", (reader) =>
+                {
+                    return new Entities.TopCarriersView
+                    {
+                        CarrierID = reader["CarrierAccountID"] as string,
+                        CarrierName = string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty),
+                        DurationInSeconds = Convert.ToDecimal(reader["DurationsInMinutes"]),
+                        NumberOfCalls = Convert.ToInt32(reader["Attempts"])
+                    };
+                }, fromDate, toDate, topCount);
+        }
+
+        public List<Entities.TopCarriersView> GetTopSupplier(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return GetItemsSP("Analytics.SP_Traffic_TopSuppliers", (reader) =>
+            {
+                return new Entities.TopCarriersView
+                {
+                    CarrierID = reader["CarrierAccountID"] as string,
+                    CarrierName = string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty),
+                    DurationInSeconds = Convert.ToDecimal(reader["DurationsInMinutes"]),
+                    NumberOfCalls = Convert.ToInt32(reader["Attempts"])
+                };
+            }, fromDate, toDate, topCount);
+        }
+
+        public List<Entities.ProfitByDay> GetLastWeeksProfit(DateTime from, DateTime to)
+        {
+            return GetItemsSP("Analytics.SP_Traffic_DailyProfitSummary", (reader) =>
+                {
+                    return new Entities.ProfitByDay
+                    {
+                        Day = Convert.ToDateTime(reader["day"]),
+                        DayOfWeek = reader["WeekDay"] as string,
+                        DayNumber = Convert.ToInt32(reader["DayNumber"]),
+                        Profit = Convert.ToDecimal(reader["Profit"])
+                    };
+                }, from, to);
+        }
 
 
+        public List<Entities.TrafficSummaryView> GetSummary(DateTime fromDate, DateTime toDate)
+        {
+            return GetItemsSP("Analytics.SP_Traffic_Summary", (reader) =>
+                {
+                    return new Entities.TrafficSummaryView
+                    {
+                        Sales = Convert.ToDecimal(reader["Sales"]),
+                        Purchases = Convert.ToDecimal(reader["Purchases"]),
+                        Profit = Convert.ToDecimal(reader["Profit"]),
+                        DurationInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
+                        NumberOfCalls = Convert.ToInt32(reader["Attempts"])
+                    };
+                }, fromDate, toDate);
+        }
 
 
 

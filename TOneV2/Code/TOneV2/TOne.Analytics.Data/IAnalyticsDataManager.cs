@@ -19,6 +19,7 @@ namespace TOne.Analytics.Data
            char groupByCodeGroup,
            string codeGroup,
            char showSupplier,
+            string orderTarget,
             int from,
             int to);
 
@@ -27,5 +28,13 @@ namespace TOne.Analytics.Data
         List<CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to);
 
         List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile);
+
+        List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount);
+
+        List<Entities.TopCarriersView> GetTopSupplier(DateTime fromDate, DateTime toDate, int topCount);
+
+        List<Entities.ProfitByDay> GetLastWeeksProfit(DateTime from, DateTime to);
+
+        List<Entities.TrafficSummaryView> GetSummary(DateTime fromDate, DateTime toDate);
     }
 }

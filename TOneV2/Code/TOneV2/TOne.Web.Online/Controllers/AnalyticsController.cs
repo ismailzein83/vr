@@ -20,8 +20,16 @@ namespace TOne.Web.Online.Controllers
         public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, char groupByCodeGroup
             , char showSupplier, int from, int to, string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
         {
-           
-            return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, from, to);
+            string orderTarget = "Quantity";
+            return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
+        }
+
+        [HttpGet]
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, char groupByCodeGroup
+            , char showSupplier, int from, int to, string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
+        {
+            string orderTarget = "Quality";
+            return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
         }
 
         [HttpGet]
@@ -41,6 +49,39 @@ namespace TOne.Web.Online.Controllers
         public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile, string customerID = null, string supplierID = null)
         {
             return _analyticsManager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+        }
+
+        [HttpGet]
+        public List<TOne.Analytics.Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return _analyticsManager.GetTopCustomers(fromDate, toDate, topCount);
+        }
+
+        [HttpGet]
+        public List<TOne.Analytics.Entities.TopCarriersView> GetTopSuppliers(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return _analyticsManager.GetTopSuppliers(fromDate, toDate, topCount);
+        }
+
+        [HttpGet]
+        public List<TOne.Analytics.Entities.ProfitByWeekDayView> GetLastTwoWeeksProfit(DateTime fromDate, DateTime toDate)
+        {
+            if (toDate.Subtract(fromDate).TotalDays > 14)
+               throw new  HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Date Range must be 14 days or less"));
+                
+            return _analyticsManager.GetLastWeeksProfit(fromDate, toDate);
+        }
+
+        [HttpGet]
+        public TOne.Analytics.Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate)
+        {
+            return _analyticsManager.GetSummary(fromDate, toDate);
+        }
+
+        [HttpGet]
+        public TOne.Analytics.Entities.TrafficSummaryView  GetSummaryOneDay(DateTime day)
+        {
+            return _analyticsManager.GetSummary(day, day.AddDays(1));
         }
     }
 }

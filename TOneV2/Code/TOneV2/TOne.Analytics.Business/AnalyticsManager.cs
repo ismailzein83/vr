@@ -14,29 +14,47 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
         }
-        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, int from, int to)
+        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to)
         {
-           // IAnalyticsDataManager datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
-
-            return _datamanager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, from, to);
+            return _datamanager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
         }
 
         public List<Entities.AlertView> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID)
         {
-            //IAnalyticsDataManager datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
             List<Entities.Alert> alerts = _datamanager.GetAlerts(topCount, showHiddenAlerts, alertLevel, tag, source, userID);
             return CreateAlertViews(alerts);
         }
 
         public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
         {
-            //IAnalyticsDataManager datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
             return _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
         }
 
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
         {
             return _datamanager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+        }
+
+        public List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return _datamanager.GetTopCustomers(fromDate, toDate, topCount);
+        }
+
+        public List<Entities.TopCarriersView> GetTopSuppliers(DateTime fromDate, DateTime toDate, int topCount)
+        {
+            return _datamanager.GetTopSupplier(fromDate, toDate, topCount);
+        }
+
+        public List<Entities.ProfitByWeekDayView> GetLastWeeksProfit(DateTime fromDate, DateTime toDate)
+        {
+            List<Entities.ProfitByDay> dailyProfit = _datamanager.GetLastWeeksProfit(fromDate, toDate);
+
+            return CreateProfityWeekDayViews(dailyProfit);
+        }
+
+        public Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate)
+        {
+            return _datamanager.GetSummary(fromDate, toDate).FirstOrDefault();
         }
 
         #region Private Methods
@@ -49,6 +67,30 @@ namespace TOne.Analytics.Business
                 alertViews.Add(alertView);
             }
             return alertViews;
+        }
+
+        private List<Entities.ProfitByWeekDayView> CreateProfityWeekDayViews(List<Entities.ProfitByDay> dailyProfit)
+        {
+            List<Entities.ProfitByWeekDayView> result = new List<Entities.ProfitByWeekDayView>();
+
+            foreach (var dailyRecord in dailyProfit)
+            {
+                Entities.ProfitByWeekDayView weekDayItem = result.Where(c => c.DayNumber == dailyRecord.DayNumber).FirstOrDefault();
+                if(weekDayItem == null)
+                {
+                    weekDayItem = new Entities.ProfitByWeekDayView();
+                    weekDayItem.DayNumber = dailyRecord.DayNumber;
+                    weekDayItem.DayOfWeek = dailyRecord.DayOfWeek;
+                    weekDayItem.ProfitWeek1 = dailyRecord.Profit;
+                    result.Add(weekDayItem);
+                }
+                else
+                {
+                    if (weekDayItem.ProfitWeek2 == null)
+                        weekDayItem.ProfitWeek2 = dailyRecord.Profit;
+                }              
+            }
+            return result;
         }
 
         #endregion
