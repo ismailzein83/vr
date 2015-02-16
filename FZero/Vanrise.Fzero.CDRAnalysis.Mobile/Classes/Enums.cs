@@ -1,5 +1,5 @@
 ﻿
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public class Enums
     {

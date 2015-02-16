@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class Entities
     {

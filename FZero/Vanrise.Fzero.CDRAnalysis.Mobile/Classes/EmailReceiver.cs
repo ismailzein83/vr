@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class EmailReceiver
     {
@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailReceiver.Load(" + ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailReceiver.Load(" + ID.ToString() + ")", err);
             }
             return EmailReceiver;
         }
@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailReceiver.Save(" + EmailReceiver.Id.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailReceiver.Save(" + EmailReceiver.Id.ToString() + ")", err);
             }
             return CurrentEmailReceiver;
         }
@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailReceiver.Delete(" + emailReceiver.Id.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailReceiver.Delete(" + emailReceiver.Id.ToString() + ")", err);
             }
             return success;
         }
@@ -99,7 +99,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailReceiver.GetEmailReceivers(" + email + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailReceiver.GetEmailReceivers(" + email + ")", err);
             }
 
 

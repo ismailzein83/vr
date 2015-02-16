@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public class CallsStatistics
     {

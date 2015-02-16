@@ -8,7 +8,7 @@ using Vanrise.CommonLibrary;
 
 
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class User
     {
@@ -51,7 +51,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.GetAllUsers()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.GetAllUsers()", err);
             }
 
 
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.GetUser(" + username + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.GetUser(" + username + ")", err);
             }
             return null;
         }
@@ -94,7 +94,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.Load(" + ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.Load(" + ID.ToString() + ")", err);
             }
             return user;
         }
@@ -120,7 +120,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.Save(" + user.ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.Save(" + user.ID.ToString() + ")", err);
             }
             return id;
         }
@@ -139,7 +139,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.Delete(" + user.ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.Delete(" + user.ID.ToString() + ")", err);
             }
             return success;
         }
@@ -166,7 +166,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.SaveLastLoginTime(" + user.ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.SaveLastLoginTime(" + user.ID.ToString() + ")", err);
             }
             return success;
         }
@@ -183,7 +183,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.IsUsernameExists(" + userName + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.IsUsernameExists(" + userName + ")", err);
             }
             return exists;
         }
@@ -237,7 +237,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.GetUserName()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.GetUserName()", err);
             }
             return UserName;
         }
@@ -260,7 +260,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.ResetPassword(" + userId.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.ResetPassword(" + userId.ToString() + ")", err);
             }
             return success;
 
@@ -282,7 +282,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.User.TruePassword(" + userId.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.User.TruePassword(" + userId.ToString() + ")", err);
             }
             return success;
 

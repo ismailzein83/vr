@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
-using Vanrise.Fzero.CDRAnalysis.Providers;
+using Vanrise.Fzero.CDRAnalysis.Mobile.Providers;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis.Providers
+namespace Vanrise.Fzero.CDRAnalysis.Mobile.Providers
 {
     public class StrategyProperty
     {

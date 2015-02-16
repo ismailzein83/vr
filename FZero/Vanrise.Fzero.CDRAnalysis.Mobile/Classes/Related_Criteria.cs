@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
-using Vanrise.Fzero.CDRAnalysis;
+using Vanrise.Fzero.CDRAnalysis.Mobile;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class Related_Criteria
     {

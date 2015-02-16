@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public static class EmailManager
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class UserPermission
     {
@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.UserPermission.DeleteByUserId(" + userID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.UserPermission.DeleteByUserId(" + userID.ToString() + ")", err);
             }
             return success;
         }
@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.UserPermission.Save()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.UserPermission.Save()", err);
             }
             return success;
         }

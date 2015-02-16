@@ -1,7 +1,7 @@
 ﻿using System;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class Import
     {

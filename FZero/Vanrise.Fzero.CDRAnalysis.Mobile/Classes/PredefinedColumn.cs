@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class PredefinedColumn
     {

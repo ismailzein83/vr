@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
-using Vanrise.Fzero.CDRAnalysis.Providers;
-namespace Vanrise.Fzero.CDRAnalysis
+using Vanrise.Fzero.CDRAnalysis.Mobile.Providers;
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class Report
     {
@@ -264,7 +264,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Report.Delete(" + report.Id.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.Report.Delete(" + report.Id.ToString() + ")", err);
             }
             return success;
         }

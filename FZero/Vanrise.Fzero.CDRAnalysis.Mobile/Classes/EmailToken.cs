@@ -4,7 +4,7 @@ using System.Linq;
 using Vanrise.CommonLibrary;
 
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class EmailToken
     {
@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailToken.GetAllEmailTokens()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailToken.GetAllEmailTokens()", err);
             }
 
 

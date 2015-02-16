@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class EmailReceiverType
     {
@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailReceiverType.GetEmailReceiverTypes()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailReceiverType.GetEmailReceiverTypes()", err);
             }
 
 

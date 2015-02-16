@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 
-using Vanrise.Fzero.CDRAnalysis;
+using Vanrise.Fzero.CDRAnalysis.Mobile;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class Strategy_Min_Values 
     {

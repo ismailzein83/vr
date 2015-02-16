@@ -13,7 +13,7 @@ using System.Data.Entity.Infrastructure;
 
 
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class vw_ReportedNumberNormalCDR
     {

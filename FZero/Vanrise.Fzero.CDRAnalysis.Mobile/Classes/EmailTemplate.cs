@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using Vanrise.CommonLibrary;
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class EmailTemplate
     {
@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailTemplate.Load(" + ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailTemplate.Load(" + ID.ToString() + ")", err);
             }
             return EmailTemplate;
         }
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailTemplate.Load(" + ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailTemplate.Load(" + ID.ToString() + ")", err);
             }
             return EmailTemplate;
         }
@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailTemplate.GetEmailTemplates(" + name + ", " + isActive.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailTemplate.GetEmailTemplates(" + name + ", " + isActive.ToString() + ")", err);
             }
 
 
@@ -86,7 +86,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailTemplate.GetEmailTemplates()", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailTemplate.GetEmailTemplates()", err);
             }
 
 
@@ -109,7 +109,7 @@ namespace Vanrise.Fzero.CDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.EmailTemplate.Save(" + EmailTemplate.ID.ToString() + ")", err);
+                FileLogger.Write("Error in Vanrise.Fzero.CDRAnalysis.Mobile.EmailTemplate.Save(" + EmailTemplate.ID.ToString() + ")", err);
             }
             return success;
         }

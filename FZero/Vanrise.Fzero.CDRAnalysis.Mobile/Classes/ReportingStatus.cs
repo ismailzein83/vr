@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
-using Vanrise.Fzero.CDRAnalysis.Providers;
-namespace Vanrise.Fzero.CDRAnalysis
+using Vanrise.Fzero.CDRAnalysis.Mobile.Providers;
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public partial class ReportingStatu
     {

@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 
 
-namespace Vanrise.Fzero.CDRAnalysis
+namespace Vanrise.Fzero.CDRAnalysis.Mobile
 {
     public class SuspectionOccurance
     {
