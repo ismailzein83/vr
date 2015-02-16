@@ -5,91 +5,91 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="79a4803810004c57ac4a116d7afae062" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.CDR" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.ControlTable" Width="1.5" PointX="11" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Direction" Width="1.5" PointX="14.75" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="21.25" PointY="15.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="19" PointY="18.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="19" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="22" PointY="12.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="19.75" PointY="12.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.MobileCDR" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="11.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.NormalizationRule" Width="1.5" PointX="14" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="8.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.OperationType" Width="1.5" PointX="8.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Peak_Hoursold" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Peak_Time" Width="1.5" PointX="3" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="3.75" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="19.75" PointY="21.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="14.75" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Related_Criteria" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="1.5" PointY="22.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="17" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="0.75" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Strategy_Min_Values" Width="1.5" PointX="6" PointY="13.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Strategy_Suspection_Level" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.StrategyPeriod" Width="1.5" PointX="6" PointY="17" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.StrategyThreshold" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Subscriber_Values" Width="1.5" PointX="9" PointY="13" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="6" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Suspection_Level" Width="1.5" PointX="3.75" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Switch_DatabaseConnections" Width="1.5" PointX="14" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="11.75" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SwitchTrunck" Width="1.5" PointX="17" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SwitchTruncksold" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="16.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Trunck" Width="1.5" PointX="14.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="22" PointY="18.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="16.75" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AN_Profiling" Width="1.5" PointX="10.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.NormalizationRulesBackup" Width="1.5" PointX="19.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.profiletest" Width="1.5" PointX="19.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.vw_Dashboard" Width="1.5" PointX="5.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.vw_ReportedNumber" Width="1.5" PointX="12.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.vw_ReportedNumberNormalCDR" Width="1.5" PointX="14.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="21.75" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="Model.FK_ControlTable_OperationType" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile1" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Strategy_Min_Values_criteria_profile" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_criteria_profile" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_StrategyThreshold_criteria_profile" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Subscriber_Values_criteria_profile" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_SwitchTruncks_Directions" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailReceiverTypes" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailTemplates" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_EmailTemplates_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Imports_ImportTypes" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Imports_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchProfiles" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchTruncks" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchTruncks1" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Peak_time_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_Periods" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Permissions_Permissions" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Permissions" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Report_ReportingStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Report" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_SourceMappings_SwitchProfiles" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Strategy_Min_Values_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Strategy_suspection_level_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_StrategyThreshold_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Subscriber_Values_Strategy" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Strategy_suspection_level_suspection_level" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_SubscriberThresholds_Suspection_Level" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Switch_DatabaseConnections_Switchs" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Switches_Truncks_SwitchProfiles" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_Switches_Truncks_Truncks" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.CDR" Width="1.5" PointX="8.75" PointY="6.875" />
+        <EntityTypeShape EntityType="Model.ControlTable" Width="1.5" PointX="8" PointY="1.125" />
+        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="3.75" PointY="6.125" />
+        <EntityTypeShape EntityType="Model.Direction" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="21.25" PointY="22.75" />
+        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="19" PointY="20" />
+        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="19" PointY="22.375" />
+        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="19" PointY="16.625" />
+        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="16.75" PointY="13" />
+        <EntityTypeShape EntityType="Model.MobileCDR" Width="1.5" PointX="13.75" PointY="11.875" />
+        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="16.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.NormalizationRule" Width="1.5" PointX="17" PointY="7" />
+        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="8.75" PointY="16.875" />
+        <EntityTypeShape EntityType="Model.OperationType" Width="1.5" PointX="5.75" PointY="2.125" />
+        <EntityTypeShape EntityType="Model.Peak_Hoursold" Width="1.5" PointX="2.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.Peak_Time" Width="1.5" PointX="3" PointY="33.125" />
+        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="3.75" PointY="21.625" />
+        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="16.75" PointY="20.5" />
+        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="11.75" PointY="12.625" />
+        <EntityTypeShape EntityType="Model.Related_Criteria" Width="1.5" PointX="9" PointY="13.25" />
+        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="3" PointY="13.375" />
+        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="1.5" PointY="4.625" />
+        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="14" PointY="8" />
+        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="0.75" PointY="12.625" />
+        <EntityTypeShape EntityType="Model.Strategy_Min_Values" Width="1.5" PointX="3" PointY="10.25" />
+        <EntityTypeShape EntityType="Model.Strategy_Suspection_Level" Width="1.5" PointX="3" PointY="16.875" />
+        <EntityTypeShape EntityType="Model.StrategyPeriod" Width="1.5" PointX="6" PointY="13.125" />
+        <EntityTypeShape EntityType="Model.StrategyThreshold" Width="1.5" PointX="6" PointY="9.375" />
+        <EntityTypeShape EntityType="Model.Subscriber_Values" Width="1.5" PointX="6" PointY="17" />
+        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="3" PointY="24.75" />
+        <EntityTypeShape EntityType="Model.Suspection_Level" Width="1.5" PointX="0.75" PointY="17.5" />
+        <EntityTypeShape EntityType="Model.Switch_DatabaseConnections" Width="1.5" PointX="14" PointY="21.75" />
+        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="11.75" PointY="8" />
+        <EntityTypeShape EntityType="Model.SwitchTrunck" Width="1.5" PointX="14" PointY="3.875" />
+        <EntityTypeShape EntityType="Model.SwitchTruncksold" Width="1.5" PointX="13.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="10.75" PointY="16.875" />
+        <EntityTypeShape EntityType="Model.Trunck" Width="1.5" PointX="11.75" PointY="3.625" />
+        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="19" PointY="13.625" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="16.75" PointY="15.875" />
+        <EntityTypeShape EntityType="Model.AN_Profiling" Width="1.5" PointX="18.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.NormalizationRulesBackup" Width="1.5" PointX="19.75" PointY="6.875" />
+        <EntityTypeShape EntityType="Model.profiletest" Width="1.5" PointX="10.75" PointY="19.875" />
+        <EntityTypeShape EntityType="Model.vw_Dashboard" Width="1.5" PointX="12.75" PointY="17.875" />
+        <EntityTypeShape EntityType="Model.vw_ReportedNumber" Width="1.5" PointX="20.75" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.vw_ReportedNumberNormalCDR" Width="1.5" PointX="0.75" PointY="20.875" />
+        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="5.75" PointY="20.875" />
+        <AssociationConnector Association="Model.FK_ControlTable_OperationType" />
+        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile" />
+        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile1" />
+        <AssociationConnector Association="Model.FK_Strategy_Min_Values_criteria_profile" />
+        <AssociationConnector Association="Model.FK_StrategyPeriods_criteria_profile" />
+        <AssociationConnector Association="Model.FK_StrategyThreshold_criteria_profile" />
+        <AssociationConnector Association="Model.FK_Subscriber_Values_criteria_profile" />
+        <AssociationConnector Association="Model.FK_SwitchTruncks_Directions" />
+        <AssociationConnector Association="Model.FK_EmailReceivers_EmailReceiverTypes" />
+        <AssociationConnector Association="Model.FK_EmailReceivers_EmailTemplates" />
+        <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
+        <AssociationConnector Association="Model.FK_Imports_ImportTypes" />
+        <AssociationConnector Association="Model.FK_Imports_Users" />
+        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchProfiles" />
+        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchTruncks" />
+        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchTruncks1" />
+        <AssociationConnector Association="Model.FK_Peak_time_Strategy" />
+        <AssociationConnector Association="Model.FK_StrategyPeriods_Periods" />
+        <AssociationConnector Association="Model.FK_Permissions_Permissions" />
+        <AssociationConnector Association="Model.FK_UserPermissions_Permissions" />
+        <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" />
+        <AssociationConnector Association="Model.FK_Related_Criteria_Strategy" />
+        <AssociationConnector Association="Model.FK_Report_ReportingStatus" />
+        <AssociationConnector Association="Model.FK_ReportDetails_Report" />
+        <AssociationConnector Association="Model.FK_ReportDetails_Strategy" />
+        <AssociationConnector Association="Model.FK_SourceMappings_SwitchProfiles" />
+        <AssociationConnector Association="Model.FK_Strategy_Min_Values_Strategy" />
+        <AssociationConnector Association="Model.FK_Strategy_suspection_level_Strategy" />
+        <AssociationConnector Association="Model.FK_StrategyPeriods_Strategy" />
+        <AssociationConnector Association="Model.FK_StrategyThreshold_Strategy" />
+        <AssociationConnector Association="Model.FK_Subscriber_Values_Strategy" />
+        <AssociationConnector Association="Model.FK_Strategy_suspection_level_suspection_level" />
+        <AssociationConnector Association="Model.FK_SubscriberThresholds_Suspection_Level" />
+        <AssociationConnector Association="Model.FK_Switch_DatabaseConnections_Switchs" />
+        <AssociationConnector Association="Model.FK_Switches_Truncks_SwitchProfiles" />
+        <AssociationConnector Association="Model.FK_Switches_Truncks_Truncks" />
+        <AssociationConnector Association="Model.FK_UserPermissions_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
