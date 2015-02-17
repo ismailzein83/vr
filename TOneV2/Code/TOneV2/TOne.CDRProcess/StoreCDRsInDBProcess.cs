@@ -10,15 +10,15 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.CDRProcess
 {
-    public partial class StoreCDRsInDB : Activity, IBPWorkflow
+    public partial class StoreCDRsInDBProcess : Activity, IBPWorkflow
     {
         #region IBPWorkflow Members
 
         public string GetTitle(CreateProcessInput createProcessInput)
         {
-            StoreCDRsInDBInput inputArg = createProcessInput.InputArguments as StoreCDRsInDBInput;
+            StoreCDRsInDBProcessInput inputArg = createProcessInput.InputArguments as StoreCDRsInDBProcessInput;
             if (inputArg == null)
-                throw new ArgumentNullException("StoreCDRsInDBInput");
+                throw new ArgumentNullException("StoreCDRsInDBProcessInput");
             return String.Format("Store CDRs In DB for Switch {0}", inputArg.SwitchID);
         }
 

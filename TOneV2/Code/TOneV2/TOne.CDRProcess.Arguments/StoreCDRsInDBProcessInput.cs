@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess.Arguments
 {
-    public class StoreCDRsInDBInput
+    public class StoreCDRsInDBProcessInput
     {
         public int SwitchID { get; set; }
 

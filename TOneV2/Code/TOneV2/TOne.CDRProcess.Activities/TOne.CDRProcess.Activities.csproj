@@ -93,10 +93,11 @@
     <Compile Include="ProcessBillingCDRs.cs" />
     <Compile Include="ProcessRawCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveCDRsToQueue.cs" />
     <Compile Include="SaveCDRsToDB.cs" />
+    <Compile Include="SaveCDRsToQueue.cs" />
     <Compile Include="SaveInvalidCDRsToDB.cs" />
     <Compile Include="SaveMainCDRsToDB.cs" />
+    <Compile Include="StoreCDRsToDB.cs" />
     <Compile Include="UpdateBillingStatistics.cs" />
     <Compile Include="UpdateDailyPostpaidAmounts.cs" />
     <Compile Include="UpdateDailyPrepaidAmounts.cs" />
