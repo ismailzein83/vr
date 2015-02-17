@@ -33,22 +33,24 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag = null, string source = null, int? userID = null)
+        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int topCount, int alertLevel, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null)
         {
             
             return _analyticsManager.GetAlerts(topCount, showHiddenAlerts, alertLevel, tag, source, userID);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, int from, int to,string codeGroup = null)
+        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(int carrierType, DateTime effectiveOn, string carrierID, int from, int to,string codeGroup = null)
         {
-            return _analyticsManager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
+            TOne.Analytics.Entities.CarrierType type = (TOne.Analytics.Entities.CarrierType)carrierType;
+            return _analyticsManager.GetRates(type.ToString(), effectiveOn, carrierID, codeGroup, from, to);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile, string customerID = null, string supplierID = null)
+        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(int carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile, string customerID = null, string supplierID = null)
         {
-            return _analyticsManager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+            TOne.Analytics.Entities.CarrierType type = (TOne.Analytics.Entities.CarrierType)carrierType;
+            return _analyticsManager.GetCarrierSummary(type.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
         }
 
         [HttpGet]
