@@ -76,7 +76,7 @@ namespace TOne.CDRProcess.Activities
                             {
                                 cdr.Switch = CDRSwitch;
                                 Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
-                                CdrBillingGenerated.CDRs.Add(getBillingCDRBase(cdrBase));
+                                CdrBillingGenerated.CDRs.Add(GetBillingCDRBase(cdrBase));
                             }
                         }
                         inputArgument.OutputQueue.Enqueue(CdrBillingGenerated);
@@ -99,7 +99,7 @@ namespace TOne.CDRProcess.Activities
 
         #region private Methods
 
-        private BillingCDRBase getBillingCDRBase(Billing_CDR_Base cdrBase)
+        private BillingCDRBase GetBillingCDRBase(Billing_CDR_Base cdrBase)
         {
             BillingCDRBase cdr = new BillingCDRBase();
 

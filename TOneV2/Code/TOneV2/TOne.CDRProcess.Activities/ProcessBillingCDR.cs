@@ -116,8 +116,8 @@ namespace TOne.CDRProcess.Activities
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
 
 
-                                if (main.sale == null)
-                                    ((ProtPricingGenerator)generator).FixParentCodeSale(main, null, null, codeMap);
+                                //if (main.sale == null)
+                                //    ((ProtPricingGenerator)generator).FixParentCodeSale(main, null, null, codeMap);
 
 
                                 //HandlePassThrough(main);

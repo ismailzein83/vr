@@ -20,9 +20,9 @@ namespace TOne.Business
         }
 
 
-        public bool FixParentCodeSale(BillingCDRMain main, Zone originalZone, Code code, ProtCodeMap codeMap )
+        public bool FixParentCodeSale(BillingCDRMain main, int originalZone, Code code, ProtCodeMap codeMap )
         {
-            // If main (without fixing) has a sale, no need to fix. Return true if code is not null
+            // //If main (without fixing) has a sale, no need to fix. Return true if code is not null
             //if (main.sale != null)
             //    return code != null;
 
@@ -33,7 +33,7 @@ namespace TOne.Business
             //    found = codeMap.Find(main.CDPN, TABS.CarrierAccount.SYSTEM, main.Attempt);
             //    if (found != null)
             //    {
-            //        originalZone = main.OurZone;
+            //        originalZone = main.OurZoneID;
             //        return FixParentCodeSale(main, originalZone, found, codeMap);
             //    }
             //    else
@@ -51,7 +51,7 @@ namespace TOne.Business
             //        found = codeMap.Find(codeValue.ToString(), TABS.CarrierAccount.SYSTEM, main.Attempt);
             //        if (found != null)
             //        {
-            //            var rates = GetRates(main.Customer.CarrierAccountID, found.Zone.ZoneID, main.Attempt);
+            //            var rates = GetRates(main.CustomerID, found.Zone.ZoneID, main.Attempt);
             //            if (rates.Count > 0)
             //                break;
             //            else
@@ -63,13 +63,13 @@ namespace TOne.Business
             //    // No parent code found, return false.
             //    if (found == null)
             //    {
-            //        main.OurZone = originalZone; return false;
+            //        main.OurZoneID = originalZone; return false;
             //    }
             //    // Found a parent Sale Code.
             //    else
             //    {
-            //        main.OurZone = found.Zone;
-            //        main.Billing_CDR_Sale = Get<Billing_CDR_Sale>(main);
+            //        main.OurZoneID = found.Zone.ZoneID;
+            //        main.sale = Get<BillingCDRSale>(main);
             //        return FixParentCodeSale(main, originalZone, found, codeMap);
             //    }
             //}
@@ -295,6 +295,120 @@ namespace TOne.Business
         }
         #endregion Cacheable Entities
 
+        //public T Get<T>(BillingCDRMain main) where T : BillingCDRPricingBase , new()
+        //{
+        //    T pricing = new T();
+
+        //    bool cost = pricing is BillingCDRCost;
+
+        //    int zoneId = (cost) ? main.SupplierZoneID : main.OurZoneID;
+
+        //    if (zoneId <= 0) return null;
+
+        //    // Get the proper Rate 
+        //    IList<Rate> rates = GetRates(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, zoneId, main.Attempt);
+
+        //    // If a rate is defined for
+        //    if (rates.Count > 0)
+        //    {
+        //        // Initialize Pricing
+        //        pricing.BillingCDRMainID  = main.ID;
+        //        pricing.RateID = rates[0].ID;
+        //        pricing.ZoneID = rates[0].Zone.ZoneID;
+        //        pricing.RateValue = (double)rates[0].Value;
+        //        pricing.Net = (double)(rates[0].Value * (main.DurationInSeconds / 60m));
+        //        pricing.CurrencySymbol = rates[0].PriceList.Currency.Symbol;
+        //        pricing.DurationInSeconds = main.DurationInSeconds;
+
+        //        rates = null;
+        //        // Usables...
+        //        ToDConsideration tod = null;
+        //        Tariff tariff = null;
+
+        //        #region Get Usables
+
+        //        // Effective and Active ToD for this Call?
+        //        IList<ToDConsideration> tods = GetToDConsiderations(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
+
+        //        // If ToD Considered, the rate applied should be changed
+        //        foreach (ToDConsideration effective in tods) { if (effective.WasActive(main.Attempt)) { tod = effective; break; } }
+
+        //        // Check for ToD first
+        //        if (tod != null)
+        //        {
+        //            pricing.RateType = tod.RateType;
+        //            pricing.RateValue = (double)tod.ActiveRateValue(pricing.Rate);
+        //            pricing.ToDConsiderationID = tod.ToDConsiderationID;
+        //        }
+        //        else
+        //            pricing.RateType = ToDRateType.Normal;
+
+        //        var attemptDate = new DateTime(pricing.Billing_CDR_Main.Attempt.Year, pricing.Billing_CDR_Main.Attempt.Month, pricing.Billing_CDR_Main.Attempt.Day);
+
+        //        // Commissions or extra charges
+        //        IList<Commission> commissionsAndExtraCharges = GetCommissions(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.Customer.CarrierAccountID, pricing.Zone.ZoneID, main.Attempt);
+
+        //        foreach (Commission item in commissionsAndExtraCharges)
+        //        {
+
+        //            var itemClone = (Commission)item.Clone();
+
+        //            var pricingValue = (float?)TABS.Rate.GetRate((decimal)pricing.RateValue, pricing.Currency, cost ? main.Supplier.CarrierProfile.Currency : main.Customer.CarrierProfile.Currency, attemptDate);
+
+        //            if ((!item.FromRate.HasValue || item.FromRate <= pricingValue) && (!item.ToRate.HasValue || item.ToRate >= pricingValue))
+        //            {
+        //                if (item.IsExtraCharge && pricing.ExtraCharge == null)
+        //                {
+        //                    if (item.Amount != null && item.Amount != 0)
+        //                        itemClone.Amount = (decimal?)TABS.Rate.GetRate(item.Amount.Value, cost ? main.Supplier.CarrierProfile.Currency : main.Customer.CarrierProfile.Currency, pricing.Currency, attemptDate);
+
+        //                    pricing.ExtraCharge = itemClone;
+
+        //                }
+
+        //                if (!item.IsExtraCharge && pricing.Commission == null)
+        //                {
+        //                    if (item.Amount != null && item.Amount != 0)
+        //                        itemClone.Amount = (decimal?)TABS.Rate.GetRate(item.Amount.Value, cost ? main.Supplier.CarrierProfile.Currency : main.Customer.CarrierProfile.Currency, pricing.Currency, attemptDate);
+
+        //                    pricing.Commission = itemClone;
+        //                }
+        //            }
+        //        }
+
+        //        // Tariff Considered?
+        //        IList<Tariff> tariffs = GetTariffs(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.Customer.CarrierAccountID, zone.ZoneID, main.Attempt);
+        //        if (tariffs.Count > 0)
+        //        {
+        //            tariff = tariffs[0];
+
+        //            var tariffClone = (Tariff)(tariff.Clone());
+
+        //            if (tariff.CallFee > 0)
+        //                tariffClone.CallFee = TABS.Rate.GetRate(tariff.CallFee, cost ? main.Supplier.CarrierProfile.Currency : main.Customer.CarrierProfile.Currency, pricing.Currency, attemptDate);
+
+        //            if (tariff.FirstPeriodRate > 0)
+        //                tariffClone.FirstPeriodRate = TABS.Rate.GetRate(tariff.FirstPeriodRate, cost ? main.Supplier.CarrierProfile.Currency : main.Customer.CarrierProfile.Currency, pricing.Currency, attemptDate);
+
+        //            pricing.Tariff = tariffClone;
+        //        }
+
+
+
+        //        #endregion Get Usables
+
+        //        // Calculate ...
+        //        CalculateAmounts(pricing);
+        //    }
+        //    // No suitable rate found for this Code / Supplier / Customer Combination
+        //    else
+        //    {
+        //        pricing = null;
+        //    }
+        //    return pricing;
+        //}
+
+
         public T Get<T>(Billing_CDR_Main main) where T : Billing_CDR_Pricing_Base, new()
         {
             T pricing = new T();
@@ -410,6 +524,8 @@ namespace TOne.Business
         public T GetRepricing<T>(Billing_CDR_Main main) where T : Billing_CDR_Pricing_Base, new()
         {
             T pricing = new T();
+
+            //
 
             return pricing;
         }
