@@ -17,8 +17,8 @@ namespace TOne.Web.Online.Models
             }
             internal set
             {
-                if (_current != null)
-                    throw new Exception("Current Token is already set");
+                //if (_current != null)
+                //    throw new Exception("Current Token is already set");
                 _current = value;
             }
         }
