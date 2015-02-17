@@ -152,7 +152,9 @@ namespace TOne.Analytics.Data.SQL
                         Purchases = Convert.ToDecimal(reader["Purchases"]),
                         Profit = Convert.ToDecimal(reader["Profit"]),
                         DurationInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
-                        NumberOfCalls = Convert.ToInt32(reader["Attempts"])
+                        NumberOfCalls = Convert.ToInt32(reader["Attempts"]),
+                        AveragePurchases = Convert.ToDecimal(reader["AveragePurchases"]),
+                        AverageSales = Convert.ToDecimal(reader["AverageSales"])
                     };
                 }, fromDate, toDate);
         }

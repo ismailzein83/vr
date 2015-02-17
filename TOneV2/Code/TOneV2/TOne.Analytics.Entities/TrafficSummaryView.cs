@@ -13,6 +13,8 @@ namespace TOne.Analytics.Entities
         public decimal Profit { get; set; }
         public int NumberOfCalls { get; set; }
         public decimal DurationInMinutes { get; set; }
+        public decimal AverageSales { get; set; }
+        public decimal AveragePurchases { get; set; }
 
     }
 }
