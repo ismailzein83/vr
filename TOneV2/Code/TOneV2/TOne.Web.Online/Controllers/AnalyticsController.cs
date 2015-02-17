@@ -17,8 +17,8 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, char groupByCodeGroup
-            , char showSupplier, int from, int to, string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate
+            , int from, int to, string sortOrder = "DESC", char groupByCodeGroup = 'N', char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
         {
             string orderTarget = "Quantity";
             return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
@@ -47,7 +47,7 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(int carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile, string customerID = null, string supplierID = null)
+        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(int carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile = 'N', string customerID = null, string supplierID = null)
         {
             TOne.Entities.CarrierType type = (TOne.Entities.CarrierType)carrierType;
             return _analyticsManager.GetCarrierSummary(type.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
