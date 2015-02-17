@@ -22,10 +22,5 @@ namespace TOne.Analytics.Entities
         Negative = -1
     }
 
-    public enum CarrierType : short
-    {
-        Exchange = 0,
-        Customer = 1,
-        Supplier = 2
-    }
+   
 }

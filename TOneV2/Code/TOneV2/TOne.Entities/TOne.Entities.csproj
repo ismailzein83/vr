@@ -111,6 +111,7 @@
     <Compile Include="CodeList.cs" />
     <Compile Include="CodeNode.cs" />
     <Compile Include="CodeTree.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="IBulkTableService.cs" />
     <Compile Include="MultipleSelection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
