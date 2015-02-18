@@ -119,6 +119,7 @@ namespace Vanrise.BusinessProcess
                     }
                 }
             });
+            task.Start();
         }
 
         public void ExecutePendings()
@@ -152,6 +153,7 @@ namespace Vanrise.BusinessProcess
                     }
                 }
             });
+            task.Start();
         }
         
         public void TriggerPendingEvents()
