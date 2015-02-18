@@ -24,9 +24,15 @@ namespace Vanrise.Data.SQL
             s_bcpDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(BaseSQLDataManager)).Location), "BCPRoot");
             if (!Directory.Exists(s_bcpDirectory))
                 Directory.CreateDirectory(s_bcpDirectory);
-            File.WriteAllBytes(Path.Combine(s_bcpDirectory, "v_bcp.exe"), Resource.v_bcp);
-            File.WriteAllBytes(Path.Combine(s_bcpDirectory, "bcp.rll"), Resource.bcp);
+            string bcpFullPath = Path.Combine(s_bcpDirectory, "v_bcp.exe");
+            if(!File.Exists(bcpFullPath))
+                File.WriteAllBytes(bcpFullPath, Resource.v_bcp);
+            
+            string bcprllFullPath = Path.Combine(s_bcpDirectory, "bcp.rll");
+            if(!File.Exists(bcprllFullPath))
+                File.WriteAllBytes(bcprllFullPath, Resource.bcp);
         }
+
         #region ctor
 
         public BaseSQLDataManager()
