@@ -81,7 +81,7 @@
                     <!-- BEGIN LOGO -->
                     <a class="brand">
                         <%--<img alt="Metro Lab" src="img/logo.png">--%>
-                        <h2>(PSTN) CDR Analysis </h2>
+                        <h2>PSTN CDR Analysis </h2>
                     </a>
                     <!-- END LOGO -->
                     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
