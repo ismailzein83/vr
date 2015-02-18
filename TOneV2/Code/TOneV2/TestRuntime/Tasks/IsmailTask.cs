@@ -8,6 +8,7 @@ using TOne.Business;
 using TOne.Entities;
 using TOne.LCR.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
@@ -25,14 +26,22 @@ namespace TestRuntime
             ////codeMatchDataManager.FillCodeMatchesFromCodes(new CodeList(distinctCodes), suppliersCodeInfo, DateTime.Today);
             ////Console.ReadKey();
             ////return;
+            
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
-            RuntimeHost host = new RuntimeHost(new List<RuntimeService> { bpService, queueActivationService });
+            var runtimeServices = new List<RuntimeService>();
+            runtimeServices.Add(queueActivationService);
+            //if (System.Windows.Forms.MessageBox.Show("Host Business", "Confirm", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                runtimeServices.Add(bpService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            Console.ReadKey();
-            host.Stop();
-            Console.ReadKey();
+
+            
+            //Console.ReadKey();
+            //host.Stop();
+            //Console.ReadKey();
             //BusinessProcessRuntime.Current.TerminatePendingProcesses();
             //Timer timer = new Timer(1000);
             //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
@@ -48,8 +57,13 @@ namespace TestRuntime
             //////    });
             //////t.Start();
 
-            ProcessManager processManager = new ProcessManager();
-            //processManager.CreateNewProcess(new CreateProcessInput
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "RoutingProcess"
+            });
+
+            //bpClient.CreateNewProcess(new CreateProcessInput
             //{
             //    ProcessName = "UpdateCodeZoneMatchProcess",
             //    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput

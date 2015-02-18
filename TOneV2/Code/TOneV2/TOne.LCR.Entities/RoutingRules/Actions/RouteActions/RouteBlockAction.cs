@@ -9,7 +9,7 @@ namespace TOne.LCR.Entities
 {
     public class RouteBlockAction : BaseRouteRuleAction
     {
-        public MultipleSelection<string> CarrierAccountIDs { get; set; }
+        public MultipleSelection<string> Suppliers { get; set; }
 
         public override string ActionDisplayName
         {

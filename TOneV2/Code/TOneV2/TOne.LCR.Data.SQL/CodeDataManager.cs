@@ -123,6 +123,64 @@ namespace TOne.LCR.Data.SQL
                 });
         }
 
+        public List<LCRCode> GetAllCodesForActiveSuppliers(DateTime effectiveOn, List<SupplierCodeInfo> suppliersCodeInfo)
+        {
+            DataTable dtSuppliersCodeInfo = BuildSuppliersCodeInfoTable(suppliersCodeInfo);
+
+            return GetItemsSPCmd("LCR.sp_Code_GetALLForActiveSuppliers",
+                LCRCodeMapper,
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ActiveSuppliersCodeInfo", SqlDbType.Structured);
+                    dtPrm.Value = dtSuppliersCodeInfo;
+                    dtPrm.TypeName = "LCR.SuppliersCodeInfoType";
+                    cmd.Parameters.Add(dtPrm);
+
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                });
+        }
+
+        public Dictionary<string, Dictionary<string, LCRCode>> GetCodesForActiveSuppliers(Char firstDigit, DateTime effectiveOn, List<SupplierCodeInfo> suppliersCodeInfo, out List<string> distinctCodes)
+        {
+            DataTable dtSuppliersCodeInfo = BuildSuppliersCodeInfoTable(suppliersCodeInfo);
+            Dictionary<string, Dictionary<string, LCRCode>> allSuppliersCodes = new Dictionary<string, Dictionary<string, LCRCode>>();
+            List<string> distinctCodes_Internal = new List<string>();
+            distinctCodes = distinctCodes_Internal;
+            ExecuteReaderSPCmd("LCR.sp_Code_GetByFirstDigitForActiveSuppliers",
+                    (reader) =>
+                    {
+                        string currentCode = null;
+                        while(reader.Read())
+                        {
+                            LCRCode code = LCRCodeMapper(reader);
+                            Dictionary<string, LCRCode> supplierCodes;
+                            if(!allSuppliersCodes.TryGetValue(code.SupplierId, out supplierCodes))
+                            {
+                                supplierCodes = new Dictionary<string, LCRCode>();
+                                allSuppliersCodes.Add(code.SupplierId, supplierCodes);
+                            }
+                            if (!supplierCodes.ContainsKey(code.Value))
+                                supplierCodes.Add(code.Value, code);
+
+                            if (currentCode != code.Value)
+                            {
+                                currentCode = code.Value;
+                                distinctCodes_Internal.Add(currentCode);
+                            }
+                        }
+                    },
+                    (cmd) =>
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@FirstDigit", firstDigit));
+                        var dtPrm = new SqlParameter("@ActiveSuppliersCodeInfo", SqlDbType.Structured);
+                        dtPrm.Value = dtSuppliersCodeInfo;
+                        cmd.Parameters.Add(dtPrm);
+
+                        cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                    });
+            return allSuppliersCodes;
+        }
+
         public List<SupplierCodeInfo> GetActiveSupplierCodeInfo(DateTime effectiveAfter, DateTime effectiveOn)
         {
             return GetItemsSP("LCR.sp_Code_GetActiveSuppliersInfo", (reader) =>

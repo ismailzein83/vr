@@ -51,13 +51,13 @@ namespace TOne.LCRProcess.Activities
                                 DateTime start = DateTime.Now;
                                 dataManager.ApplyCodeMatchesToDB(preparedCodeMatches);
                                 totalTime += (DateTime.Now - start);
-                                Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
+                                //Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
 
                             });
                     }
                     while (!ShouldStop(handle) && hasItem);
                 });
-            Console.WriteLine("{0}: ApplyCodeMatchesToDB is done in {1}", DateTime.Now, totalTime);
+            //Console.WriteLine("{0}: ApplyCodeMatchesToDB is done in {1}", DateTime.Now, totalTime);
         }
     }
 }

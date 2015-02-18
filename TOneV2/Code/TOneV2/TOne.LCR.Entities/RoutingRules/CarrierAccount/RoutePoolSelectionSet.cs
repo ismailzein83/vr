@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class RouteOptionsDetail : RouteOptions
+    public class RoutePoolSelectionSet : BaseCarrierAccountSet
     {
-        public List<SupplierRouteDetail> Options { get; set; }
+        public int RoutePoolId { get; set; }
     }
 }

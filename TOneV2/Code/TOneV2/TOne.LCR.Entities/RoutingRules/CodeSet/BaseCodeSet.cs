@@ -10,7 +10,41 @@ namespace TOne.LCR.Entities
 
     public abstract class BaseCodeSet
     {
+        public virtual CodeSetMatch GetMatch()
+        {
+            return null;
+        }
+
+        public virtual List<int> GetExcludedZoneIds()
+        {
+            return null;
+        }
+
+        public virtual List<int> GetExcludedCodes()
+        {
+            return null;
+        }
+
         public abstract List<MatchCode> GetMatchedCodes();
+
+        public virtual List<Char> GetMatchCodeFirstDigits()
+        {
+            return null;
+        }
+
+
+    }
+
+    public class CodeSetMatch
+    {
+        public bool IsMatchingAllZones { get; set; }
+
+        public List<int> MatchZoneIds { get; set; }
+
+        /// <summary>
+        /// key is code, value is withsubcodes flag
+        /// </summary>
+        public Dictionary<string, bool> MatchCodes { get; set; }
     }
 
     public class MatchCode

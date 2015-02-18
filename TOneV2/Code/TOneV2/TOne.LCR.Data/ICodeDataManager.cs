@@ -8,6 +8,10 @@ namespace TOne.LCR.Data
     {
         void LoadCodesForActiveSuppliers(DateTime effectiveOn, List<SupplierCodeInfo> suppliersCodeInfo, bool onlySuppliersWithUpdatedCodes, Action<string, List<LCRCode>> onSupplierCodesRead);
 
+        List<LCRCode> GetAllCodesForActiveSuppliers(DateTime effectiveOn, List<SupplierCodeInfo> suppliersCodeInfo);
+
+        Dictionary<string, Dictionary<string, LCRCode>> GetCodesForActiveSuppliers(Char firstDigit, DateTime effectiveOn, List<SupplierCodeInfo> suppliersCodeInfo, out List<string> distinctCodes);
+
         List<SupplierCodeInfo> GetActiveSupplierCodeInfo(DateTime effectiveAfter, DateTime effectiveOn);
 
         List<string> GetDistinctCodes(List<SupplierCodeInfo> suppliersCodeInfo, DateTime effectiveOn);

@@ -69,12 +69,12 @@ namespace TOne.LCRProcess.Activities
                             Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.IsFuture);
                             inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
                             totalTime += (DateTime.Now - start);
-                            Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
+                            //Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
-            Console.WriteLine("{0}: PrepareCodeMatchesForDBApply is done in {1}", DateTime.Now, totalTime);
+            //Console.WriteLine("{0}: PrepareCodeMatchesForDBApply is done in {1}", DateTime.Now, totalTime);
         }
     }
 }

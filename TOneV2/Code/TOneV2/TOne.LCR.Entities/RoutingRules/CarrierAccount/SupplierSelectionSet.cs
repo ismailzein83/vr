@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class RouteOptionsDetail : RouteOptions
+    public class SupplierSelectionSet : BaseCarrierAccountSet
     {
-        public List<SupplierRouteDetail> Options { get; set; }
+        public MultipleSelection<string> Suppliers { get; set; }
     }
 }

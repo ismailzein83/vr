@@ -68,5 +68,65 @@ namespace TOne.LCR.Business
                 }
             }
         }
+
+        public void ManipulateRouteRules(List<BaseRouteRule> rules, out RouteRuleMatches saleRuleMatches, out RouteRuleMatches supplierRuleMatches)
+        {
+            saleRuleMatches = new RouteRuleMatches();
+            supplierRuleMatches = new RouteRuleMatches();
+            foreach(var rule in rules)
+            {
+                if (rule is SupplierRouteRule)
+                    AddRuleMatches(supplierRuleMatches, rule);
+                else
+                    AddRuleMatches(saleRuleMatches, rule);
+            }
+        }
+
+        private void AddRuleMatches(RouteRuleMatches ruleMatches, BaseRouteRule rule)
+        {
+            CodeSetMatch codeSetMatch = rule.CodeSet.GetMatch();
+            if(codeSetMatch.MatchCodes != null)
+            {
+                foreach (var matchCodeEntry in codeSetMatch.MatchCodes)
+                {
+                    Dictionary<string, List<BaseRouteRule>> codeRules = matchCodeEntry.Value ? ruleMatches.RulesByMatchCodeAndSubCodes : ruleMatches.RulesByMatchCodes;
+                    AddRuleToGroupDictionary(codeRules, matchCodeEntry.Key, rule);
+                }
+            }
+
+            if (codeSetMatch.IsMatchingAllZones)
+                ruleMatches.RulesMatchingAllZones.Add(rule);
+            else
+                if(codeSetMatch.MatchZoneIds!= null)
+                {
+                    foreach(int matchZoneId in codeSetMatch.MatchZoneIds)
+                    {
+                        AddRuleToGroupDictionary(ruleMatches.RulesByMatchZones, matchZoneId, rule);
+                    }
+                }
+
+            CarrierAccountSetMatch carrierAccountSetMatch = rule.CarrierAccountSet.GetMatch();
+            if (carrierAccountSetMatch.IsMatchingAllAccounts)
+                ruleMatches.RulesMatchingAllCarrierAccounts.Add(rule);
+            else
+                if(carrierAccountSetMatch.MatchAccountIds != null)
+                {
+                    foreach(string matchAccountId in carrierAccountSetMatch.MatchAccountIds)
+                    {
+                        AddRuleToGroupDictionary(ruleMatches.RulesByMatchCarrierAccounts, matchAccountId, rule);
+                    }
+                }
+        }
+
+        void AddRuleToGroupDictionary<T>(Dictionary<T, List<BaseRouteRule>> dictionary, T key, BaseRouteRule rule)
+        {
+            List<BaseRouteRule> routeRules;
+            if (!dictionary.TryGetValue(key, out routeRules))
+            {
+                routeRules = new List<BaseRouteRule>();
+                dictionary.Add(key, routeRules);
+            }
+            routeRules.Add(rule);
+        }
     }
 }
