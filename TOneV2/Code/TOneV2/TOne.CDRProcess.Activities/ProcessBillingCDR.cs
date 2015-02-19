@@ -68,6 +68,29 @@ namespace TOne.CDRProcess.Activities
             }
         }
 
+        private void HandlePassThrough(BillingCDRMain cdr)
+        {
+            TABS.CarrierAccount Customer = TABS.CarrierAccount.All.ContainsKey(cdr.CustomerID) ? TABS.CarrierAccount.All[cdr.CustomerID] : null;
+            TABS.CarrierAccount Supplier = TABS.CarrierAccount.All.ContainsKey(cdr.SupplierID) ? TABS.CarrierAccount.All[cdr.SupplierID] : null;
+
+            if (Customer == null || Supplier == null) return;
+
+            if (Customer.IsPassThroughCustomer && cdr.cost != null)
+            {
+                var sale = new BillingCDRSale();
+                cdr.sale = sale;
+                sale.Copy(cdr.cost);
+                sale.ZoneID = cdr.OurZoneID;
+            }
+            if (Supplier.IsPassThroughSupplier && cdr.sale != null)
+            {
+                var cost = new BillingCDRCost();
+                cdr.cost = cost;
+                cost.Copy(cdr.sale);
+                cost.ZoneID = cdr.SupplierZoneID;
+            }
+        }
+
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
@@ -120,15 +143,15 @@ namespace TOne.CDRProcess.Activities
                                 //    ((ProtPricingGenerator)generator).FixParentCodeSale(main, null, null, codeMap);
 
 
-                                //HandlePassThrough(main);
+                                HandlePassThrough(main);
 
-                                //if (main != null && main.Billing_CDR_Cost != null && main.SupplierCode != null)
-                                //  main.Billing_CDR_Cost.Code = main.SupplierCode;
+                                if (main != null && main.cost != null && main.SupplierCode != null)
+                                    main.cost.Code = main.SupplierCode;
 
-                                //if (main != null && main.Billing_CDR_Sale != null && main.OurCode != null)
-                                //  main.Billing_CDR_Sale.Code = main.OurCode;
+                                if (main != null && main.sale != null && main.OurCode != null)
+                                    main.sale.Code = main.OurCode;
 
-                                //CDRMains.mainCDRs.Add(main);
+                                CDRMains.MainCDRs.Add(main);
 
                             }
                             else

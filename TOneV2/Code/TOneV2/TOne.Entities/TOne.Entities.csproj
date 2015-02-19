@@ -118,7 +118,6 @@
     <Compile Include="QueueName.cs" />
     <Compile Include="SwitchInfo.cs" />
     <Compile Include="TOneQueue.cs" />
-    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
