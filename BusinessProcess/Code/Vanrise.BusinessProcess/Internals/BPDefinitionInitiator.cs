@@ -40,10 +40,11 @@ namespace Vanrise.BusinessProcess
         Task _processExecutionThread;
         //Semaphore _semaphore;
         int? _nbOfThreads;
-        static SqlWorkflowInstanceStore s_InstanceStore = new SqlWorkflowInstanceStore(ConfigurationManager.ConnectionStrings["WFPersistence"].ConnectionString);
+        //static SqlWorkflowInstanceStore s_InstanceStore = new SqlWorkflowInstanceStore(ConfigurationManager.ConnectionStrings["WFPersistence"].ConnectionString);
 
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
         ConcurrentQueue<BPInstance> _qPendingInstances = new ConcurrentQueue<BPInstance>();
+        static bool s_AddConsoleTracking = ConfigurationManager.AppSettings["AddBusinessProcessConsoleTracking"] == "true";
 
         public BPDefinitionInitiator(BPDefinition definition)
         {
@@ -151,7 +152,8 @@ namespace Vanrise.BusinessProcess
             };
             wfApp.Extensions.Add(sharedInstanceData);
 
-            //wfApp.Extensions.Add(ConsoleTracking.Instance);
+            if (s_AddConsoleTracking)
+                wfApp.Extensions.Add(ConsoleTracking.Instance);
 
             wfApp.Completed = (e) =>
                 {
