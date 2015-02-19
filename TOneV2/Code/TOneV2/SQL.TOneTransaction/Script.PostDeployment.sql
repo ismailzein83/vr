@@ -37,8 +37,7 @@ DELETE;
 MERGE INTO bp.[BPDefinition] AS Target 
 USING (VALUES 
 	(N'DailyRepricingProcess', N'Daily Repricing Process', N'TOne.CDRProcess.DailyRepricingProcess, TOne.CDRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":2,"RetryOnProcessFailed":false}'),
-	(N'UpdateCodeZoneMatchProcess', N'Update CodeMatch & ZoneMatch Process', N'TOne.LCRProcess.UpdateCodeZoneMatchProcess, TOne.LCRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":2,"RetryOnProcessFailed":false}'),
-	(N'UpdateZoneRateProcess', N'Update ZoneRate Process', N'TOne.LCRProcess.UpdateZoneRateProcess, TOne.LCRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
+	(N'RoutingProcess', N'Routing Process', N'TOne.LCRProcess.RoutingProcess, TOne.LCRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
 
 
 ) 

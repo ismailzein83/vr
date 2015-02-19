@@ -1,13 +1,10 @@
 ﻿using System;
 namespace TOne.LCR.Data
 {
-    public interface IZoneMatchDataManager : IDataManager
+    public interface IZoneMatchDataManager : IDataManager, IRoutingDataManager
     {
-        int UpdateAll(bool isFuture);
-        //int UpdateByCodeDigit(bool isFuture, char firstDigit);
-        void CreateTempTable(bool isFuture);
+        void UpdateAll();
 
-        void SwapTableWithTemp(bool isFuture);
-        void CreateIndexesOnTable(bool isFuture);
+        void CreateIndexesOnTable();
     }
 }

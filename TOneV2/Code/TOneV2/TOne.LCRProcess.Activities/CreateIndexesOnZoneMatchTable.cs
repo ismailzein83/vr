@@ -12,7 +12,7 @@ namespace TOne.LCRProcess.Activities
 
     public class CreateIndexesOnZoneMatchTableInput
     {
-        public bool IsFuture { get; set; }
+        public int RoutingDatabaseId { get; set; }
     }
 
     #endregion
@@ -20,13 +20,13 @@ namespace TOne.LCRProcess.Activities
     public sealed class CreateIndexesOnZoneMatchTable : BaseAsyncActivity<CreateIndexesOnZoneMatchTableInput>
     {
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }        
+        public InArgument<int> RoutingDatabaseId { get; set; }
        
         protected override CreateIndexesOnZoneMatchTableInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new CreateIndexesOnZoneMatchTableInput
             {
-                IsFuture = this.IsFuture.Get(context)
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
             };
         }
 
@@ -34,7 +34,8 @@ namespace TOne.LCRProcess.Activities
         {
             DateTime start = DateTime.Now;
             IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();
-            dataManager.CreateIndexesOnTable(inputArgument.IsFuture);
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            dataManager.CreateIndexesOnTable();
             Console.WriteLine("{0}: CreateIndexesOnZoneMatchTable is done in {1}", DateTime.Now, (DateTime.Now - start));
         }
     }

@@ -9,17 +9,18 @@ using TOne.Entities;
 using Vanrise.BusinessProcess;
 using System.Threading;
 using TOne.LCR.Data;
+using Vanrise.Queueing;
 
 namespace TOne.LCRProcess.Activities
 {
     #region Argument Classes
     public class PrepareCodeMatchesForDBApplyInput
     {
-        public TOneQueue<List<CodeMatch>> InputQueue { get; set; }
+        public BaseQueue<List<CodeMatch>> InputQueue { get; set; }
 
-        public bool IsFuture { get; set; }
+        public int RoutingDatabaseId { get; set; }
 
-        public TOneQueue<Object> OutputQueue { get; set; }
+        public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
@@ -27,18 +28,18 @@ namespace TOne.LCRProcess.Activities
     public sealed class PrepareCodeMatchesForDBApply : DependentAsyncActivity<PrepareCodeMatchesForDBApplyInput>
     {
         [RequiredArgument]
-        public InArgument<TOneQueue<List<CodeMatch>>> InputQueue { get; set; }
+        public InArgument<BaseQueue<List<CodeMatch>>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
+        public InArgument<int> RoutingDatabaseId { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<TOneQueue<Object>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new TOneQueue<object>());
+                this.OutputQueue.Set(context, new MemoryQueue<object>());
             base.OnBeforeExecute(context, handle);
         }
         
@@ -47,7 +48,7 @@ namespace TOne.LCRProcess.Activities
             return new PrepareCodeMatchesForDBApplyInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                IsFuture = this.IsFuture.Get(context),
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -55,6 +56,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(PrepareCodeMatchesForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -66,7 +68,7 @@ namespace TOne.LCRProcess.Activities
                         {
                             //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
                             DateTime start = DateTime.Now;
-                            Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches, inputArgument.IsFuture);
+                            Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches);
                             inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
                             totalTime += (DateTime.Now - start);
                             //Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));

@@ -9,6 +9,7 @@ using Vanrise.BusinessProcess;
 using TOne.LCR.Data;
 using System.Threading;
 using System.Collections.Concurrent;
+using Vanrise.Queueing;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -16,7 +17,10 @@ namespace TOne.LCRProcess.Activities
 
     public class ApplyCodeMatchesToDBInput
     {
-        public TOneQueue<Object> InputQueue { get; set; }
+        public int RoutingDatabaseId { get; set; }
+
+        public BaseQueue<Object> InputQueue { get; set; }
+
     }
 
     #endregion
@@ -24,13 +28,17 @@ namespace TOne.LCRProcess.Activities
     public sealed class ApplyCodeMatchesToDB : DependentAsyncActivity<ApplyCodeMatchesToDBInput>
     {
         [RequiredArgument]
-        public InArgument<TOneQueue<Object>> InputQueue { get; set; }
+        public InArgument<int> RoutingDatabaseId { get; set; }
+
+        [RequiredArgument]
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
                
 
         protected override ApplyCodeMatchesToDBInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new ApplyCodeMatchesToDBInput
             {
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
                 InputQueue = this.InputQueue.Get(context)
             };
         }
@@ -38,6 +46,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(ApplyCodeMatchesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
             TimeSpan totalTime = default(TimeSpan);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {

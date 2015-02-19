@@ -46,9 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IZoneRateCustomerDataManager.cs" />
+    <Compile Include="IRoutingDatabaseDataManager.cs" />
+    <Compile Include="IRoutingDataManager.cs" />
+    <Compile Include="IZoneInfoDataManager.cs" />
     <Compile Include="LCRDataManagerFactory.cs" />
-    <Compile Include="ICodeDataManager.cs" />
     <Compile Include="ICodeMatchDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
@@ -57,6 +58,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>

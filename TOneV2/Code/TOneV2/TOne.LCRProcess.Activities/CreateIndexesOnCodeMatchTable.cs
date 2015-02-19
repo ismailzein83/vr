@@ -12,7 +12,7 @@ namespace TOne.LCRProcess.Activities
 
     public class CreateIndexesOnCodeMatchTableInput
     {
-        public bool IsFuture { get; set; }
+         public int RoutingDatabaseId { get; set; }
     }
 
     #endregion
@@ -20,22 +20,22 @@ namespace TOne.LCRProcess.Activities
     public sealed class CreateIndexesOnCodeMatchTable : BaseAsyncActivity<CreateIndexesOnCodeMatchTableInput>
     {
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
-        
+        public InArgument<int> RoutingDatabaseId { get; set; }        
        
         protected override CreateIndexesOnCodeMatchTableInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new CreateIndexesOnCodeMatchTableInput
             {
-                IsFuture = this.IsFuture.Get(context)
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
             };
         }
 
         protected override void DoWork(CreateIndexesOnCodeMatchTableInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
-            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();            
-            dataManager.CreateIndexesOnTable(inputArgument.IsFuture);
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            dataManager.CreateIndexesOnTable();
             Console.WriteLine("{0}: CreateIndexesOnCodeMatchTable is done in {1}", DateTime.Now, (DateTime.Now - start));
         }
     }

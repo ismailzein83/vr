@@ -7,6 +7,9 @@ using Vanrise.BusinessProcess;
 using TOne.LCR.Entities;
 using TOne.Entities;
 using TOne.LCR.Data;
+using TOne.BusinessEntity.Entities;
+using TOne.BusinessEntity.Business;
+using Vanrise.Queueing;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -16,11 +19,13 @@ namespace TOne.LCRProcess.Activities
     {
         public Char FirstDigit { get; set; }
 
-        public DateTime EffectiveOn { get; set; }
+        public DateTime EffectiveTime { get; set; }
 
-        public List<SupplierCodeInfo> SupplierCodeInfo { get; set; }
+        public bool IsFuture { get; set; }
 
-        public TOneQueue<List<CodeMatch>> OutputQueue { get; set; }
+        public List<CarrierAccountInfo> ActiveSuppliers { get; set; }
+
+        public BaseQueue<List<CodeMatch>> OutputQueue { get; set; }
     }
 
     #endregion
@@ -31,18 +36,21 @@ namespace TOne.LCRProcess.Activities
         public InArgument<Char> FirstDigit { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> EffectiveOn { get; set; }
+        public InArgument<DateTime> EffectiveTime { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<SupplierCodeInfo>> SupplierCodeInfo { get; set; }
+        public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<TOneQueue<List<CodeMatch>>> OutputQueue { get; set; }
+        public InArgument<List<CarrierAccountInfo>> ActiveSuppliers { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<List<CodeMatch>>> OutputQueue { get; set; }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new TOneQueue<List<CodeMatch>>());
+                this.OutputQueue.Set(context, new MemoryQueue<List<CodeMatch>>());
             base.OnBeforeExecute(context, handle);
         }
 
@@ -51,8 +59,9 @@ namespace TOne.LCRProcess.Activities
             return new BuildCodeMatchByFirstCodeDigitInput
             {
                 FirstDigit = this.FirstDigit.Get(context),
-                EffectiveOn = this.EffectiveOn.Get(context),
-                SupplierCodeInfo = this.SupplierCodeInfo.Get(context),
+                EffectiveTime = this.EffectiveTime.Get(context),
+                IsFuture = this.IsFuture.Get(context),
+                ActiveSuppliers = this.ActiveSuppliers.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -60,9 +69,9 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(BuildCodeMatchByFirstCodeDigitInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
-            ICodeDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeDataManager>();
+            CodeManager codeManager = new CodeManager();
             List<string> distinctCodes;
-            Dictionary<string, Dictionary<string, LCRCode>> suppliersCodes = dataManager.GetCodesForActiveSuppliers(inputArgument.FirstDigit, inputArgument.EffectiveOn, inputArgument.SupplierCodeInfo, out distinctCodes);
+            Dictionary<string, Dictionary<string, Code>> suppliersCodes = codeManager.GetCodes(inputArgument.FirstDigit, inputArgument.EffectiveTime, inputArgument.IsFuture, inputArgument.ActiveSuppliers, out distinctCodes);
             Console.WriteLine("{0}: Code Loaded for Digit '{1}'", DateTime.Now, inputArgument.FirstDigit);
 
             CodeList distinctCodesList = new CodeList(distinctCodes);
@@ -73,7 +82,7 @@ namespace TOne.LCRProcess.Activities
             {
                 foreach (var suppCodes in suppliersCodes)
                 {
-                    LCRCode supplierMatch = null;
+                    Code supplierMatch = null;
                     int index = 0;
                     do
                     {

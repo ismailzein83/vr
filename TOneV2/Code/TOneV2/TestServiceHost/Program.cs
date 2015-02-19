@@ -20,18 +20,18 @@ namespace TestServiceHost
             //////serviceHost.Opened += new EventHandler(serviceHost_Opened);
             //////serviceHost.Open();
 
-            LCRCode code = new LCRCode
-            {
-                ID = 43,
-                CodeGroup = "435235",
-                SupplierId = "C$444",
-                Value = "34"
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(new CreateProcessInput
-                        {
-                            InputArguments = code
-                        });
+            //LCRCode code = new LCRCode
+            //{
+            //    ID = 43,
+            //    CodeGroup = "435235",
+            //    SupplierId = "C$444",
+            //    Value = "34"
+            //};
+            //ProcessManager processManager = new ProcessManager();
+            //processManager.CreateNewProcess(new CreateProcessInput
+            //            {
+            //                InputArguments = code
+            //            });
 
             Console.ReadKey();
         }

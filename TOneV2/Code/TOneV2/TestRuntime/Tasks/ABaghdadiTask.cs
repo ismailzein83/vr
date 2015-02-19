@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Queueing;
+using Vanrise.Runtime;
 
 namespace TestRuntime.Tasks
 {
@@ -14,49 +16,18 @@ namespace TestRuntime.Tasks
 
         public void Execute()
         {
-            Console.WriteLine("Host Started");
-            BusinessProcessRuntime.Current.TerminatePendingProcesses();
-            Timer timer = new Timer(1000);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            timer.Start();
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new Vanrise.Queueing.QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "UpdateCodeZoneMatchProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
-                {
-                    IsFuture = false,
-                    CodeEffectiveOn = DateTime.Today,
-                    //GetChangedCodeGroupsOnly = false
-                }
-            });
+            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            runtimeServices.Add(queueActivationService);
+            runtimeServices.Add(bpService);
 
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
 
         }
 
-        static bool _isRunning;
-        static object _lockObj = new object();
-        static void timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (_lockObj)
-            {
-                if (_isRunning)
-                    return;
-                _isRunning = true;
-            }
-            try
-            {
-                BusinessProcessRuntime.Current.ExecutePendings();
-                BusinessProcessRuntime.Current.TriggerPendingEvents();
-            }
-            finally
-            {
-                lock (_lockObj)
-                {
-                    _isRunning = false;
-                }
-            }
-        }
+       
     }
 }

@@ -12,8 +12,7 @@ namespace TOne.LCRProcess.Activities
 
     public class UpdateZoneMatchInDBInput
     {
-        public bool IsFuture { get; set; }
-        public char FirstDigit { get; set; }
+        public int RoutingDatabaseId { get; set; }
     }
 
     #endregion
@@ -21,20 +20,21 @@ namespace TOne.LCRProcess.Activities
     public sealed class UpdateZoneMatchInDB : BaseAsyncActivity<UpdateZoneMatchInDBInput>
     {
         [RequiredArgument]
-        public InArgument<bool> IsFuture { get; set; }
+        public InArgument<int> RoutingDatabaseId { get; set; }
 
         protected override UpdateZoneMatchInDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new UpdateZoneMatchInDBInput
             {
-                IsFuture = this.IsFuture.Get(context)
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
             };
         }
         protected override void DoWork(UpdateZoneMatchInDBInput inputArgument, AsyncActivityHandle handle)
         {
             DateTime start = DateTime.Now;
             IZoneMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<IZoneMatchDataManager>();
-            dataManager.UpdateAll(inputArgument.IsFuture);
+            dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
+            dataManager.UpdateAll();
             Console.WriteLine("{0}: UpdateZoneMatchInDB is done in {1}", DateTime.Now, (DateTime.Now - start));
         }
     }

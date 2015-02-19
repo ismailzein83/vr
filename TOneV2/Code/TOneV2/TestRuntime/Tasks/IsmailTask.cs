@@ -32,8 +32,8 @@ namespace TestRuntime
 
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);
-            //if (System.Windows.Forms.MessageBox.Show("Host Business", "Confirm", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                runtimeServices.Add(bpService);
+            
+            runtimeServices.Add(bpService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
@@ -60,7 +60,12 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "RoutingProcess"
+                ProcessName = "RoutingProcess",
+                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+                {
+                    EffectiveTime = DateTime.Now,
+                    IsFuture = false
+                }
             });
 
             //bpClient.CreateNewProcess(new CreateProcessInput
