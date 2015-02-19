@@ -69,10 +69,10 @@ namespace TestRuntime.Tasks
 
         private static void TriggerProcessStoreCDRsInDB(int SwitchID)
         {
-            TOne.CDRProcess.Arguments.StoreCDRsInDBInput inputArguments = new TOne.CDRProcess.Arguments.StoreCDRsInDBInput { SwitchID = SwitchID };
+            TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput { SwitchID = SwitchID };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "StoreCDRsInDB",
+                ProcessName = "StoreCDRsInDBProcess",
                 InputArguments = inputArguments
             };
             ProcessManager processManager = new ProcessManager();
@@ -93,18 +93,18 @@ namespace TestRuntime.Tasks
 
         }
 
-        private static void TriggerProcessCDRImportProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "CDRImportProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
+        //private static void TriggerProcessCDRImportProcess(int SwitchID)
+        //{
+        //    TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
+        //    CreateProcessInput input = new CreateProcessInput
+        //    {
+        //        ProcessName = "CDRImportProcess",
+        //        InputArguments = inputArguments
+        //    };
+        //    ProcessManager processManager = new ProcessManager();
+        //    processManager.CreateNewProcess(input);
 
-        }
+        //}
 
         private static void TriggerProcessCDRGenerationProcess(int SwitchID)
         {
