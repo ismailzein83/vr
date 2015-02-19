@@ -10,7 +10,7 @@ namespace Vanrise.Data
 {
     public abstract class BaseDataManager
     {
-        protected string _connectionString;
+        private string _connectionString;
         public BaseDataManager(string connectionStringName): this(connectionStringName, true)
         {
 
@@ -30,6 +30,11 @@ namespace Vanrise.Data
         public BaseDataManager()
             : this("MainDBConnString")
         {
+        }
+
+        protected virtual string GetConnectionString()
+        {
+            return _connectionString;
         }
 
         protected static string GetConnectionStringName(string appSettingWithConnectionStringName, string defaultConnectionStringName)

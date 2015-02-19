@@ -320,7 +320,7 @@ namespace Vanrise.Data.SQL
 
 
             string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
-            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(base._connectionString);
+            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
             StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000 -F2", bulkInsertInfo.TableName, bulkInsertInfo.DataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
             
             if (connStringBuilder.IntegratedSecurity)
@@ -356,7 +356,7 @@ namespace Vanrise.Data.SQL
 
         SqlConnection GetOpenConnection()
         {
-            SqlConnection connection = new System.Data.SqlClient.SqlConnection(base._connectionString);
+            SqlConnection connection = new System.Data.SqlClient.SqlConnection(GetConnectionString());
             connection.Open();
             //return connection;            
             //IDbConnection connection = DataConfiguration.Default.SessionFactory.ConnectionProvider.GetConnection();
@@ -378,7 +378,7 @@ namespace Vanrise.Data.SQL
 
         private SqlDatabase CreateDatabase()
         {
-            SqlDatabase db = new SqlDatabase(_connectionString);
+            SqlDatabase db = new SqlDatabase(GetConnectionString());
             return db;
         }
 

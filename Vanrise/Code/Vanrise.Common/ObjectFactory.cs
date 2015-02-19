@@ -15,7 +15,7 @@ namespace Vanrise.Common
             _assemblies = assemblies;
         }
 
-        ConcurrentDictionary<Type, Object> _cachedObjects = new ConcurrentDictionary<Type, Object>();
+        ConcurrentDictionary<Type, Type> _cachedImplementedTypes = new ConcurrentDictionary<Type, Type>();
 
         public T CreateObjectFromType<T>() where T : class
         {
@@ -24,15 +24,14 @@ namespace Vanrise.Common
 
         private Object GetCachedObj<T>()
         {
-            Object obj;
+            Type implementationType;
             Type baseType = typeof(T);
-            if (!_cachedObjects.TryGetValue(baseType, out obj))
+            if (!_cachedImplementedTypes.TryGetValue(baseType, out implementationType))
             {
-                var implementationType = GetImplementationType(baseType);
-                obj = Activator.CreateInstance(implementationType);
-                _cachedObjects.TryAdd(baseType, obj);
+                implementationType = GetImplementationType(baseType);
+                _cachedImplementedTypes.TryAdd(baseType, implementationType);
             }
-            return obj;
+            return Activator.CreateInstance(implementationType);
         }
 
         private Type GetImplementationType(Type baseType)
