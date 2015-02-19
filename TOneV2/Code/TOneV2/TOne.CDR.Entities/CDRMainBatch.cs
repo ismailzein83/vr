@@ -9,7 +9,7 @@ namespace TOne.CDR.Entities
 {
     public class CDRMainBatch : PersistentQueueItem
     {
-        public List<TABS.Billing_CDR_Main> MainCDRs { get; set; }
+        public List<BillingCDRMain> MainCDRs { get; set; }
 
         public override string GenerateDescription()
         {
