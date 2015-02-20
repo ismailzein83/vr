@@ -3,6 +3,7 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess
 {
@@ -14,6 +15,20 @@ namespace Vanrise.BusinessProcess
             if (sharedData == null)
                 throw new NullReferenceException("BPSharedInstanceData");
             return sharedData;
+        }
+
+        public static void WriteTrackingMessage(this ActivityContext context, BPTrackingSeverity severity, string messageFormat, params object[] args)
+        {
+            BPSharedInstanceData instanceData = context.GetSharedInstanceData();
+            BPTrackingMessage trackingMessage = new BPTrackingMessage
+            {
+                Message = String.Format(messageFormat, args),
+                EventTime = DateTime.Now,
+                ProcessInstanceId = instanceData.InstanceInfo.ProcessInstanceID,
+                ParentProcessId = instanceData.InstanceInfo.ParentProcessID,
+                Severity = severity
+            };
+            BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);
         }
     }
 }

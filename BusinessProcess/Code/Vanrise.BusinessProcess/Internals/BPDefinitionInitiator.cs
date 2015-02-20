@@ -92,7 +92,7 @@ namespace Vanrise.BusinessProcess
                     ProcessInstanceId = processInstanceId,
                     ParentProcessId = runningInstance.BPInstance.ParentProcessID,
                     Message = String.Format("Event '{0}' triggerred", bookmarkName),
-                    Severity = BPTrackingSeverity.Debug,
+                    Severity = BPTrackingSeverity.Verbose,
                     EventTime = DateTime.Now
                 });
             }

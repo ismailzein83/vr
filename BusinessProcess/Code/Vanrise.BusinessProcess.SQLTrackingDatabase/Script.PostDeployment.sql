@@ -15,7 +15,7 @@ USING (VALUES
 	(10, N'Error'),
 	(20, N'Warning'),
 	(30, N'Information'),
-	(40, N'Debug')
+	(40, N'Verbose')
 ) 
 AS Source ([ID], [Description])
 ON Target.[ID] = Source.[ID] 
