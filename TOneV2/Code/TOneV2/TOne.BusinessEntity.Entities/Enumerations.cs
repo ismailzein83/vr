@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.Entities
+namespace TOne.BusinessEntity.Entities
 {
-    public class CarrierInfo
+    public enum CarrierType : short
     {
-      public string CarrierAccountID {get;set;}
-      public string Name { get; set; }
+        Exchange = 0,
+        Customer = 1,
+        Supplier = 2
     }
 }

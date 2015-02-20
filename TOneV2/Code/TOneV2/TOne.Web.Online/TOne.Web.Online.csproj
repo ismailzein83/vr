@@ -250,6 +250,22 @@
       <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
       <Name>TOne.Analytics.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Data.SQL\TOne.BusinessEntity.Data.SQL.csproj">
+      <Project>{584101e7-a41e-4bab-9cc8-32ce70adbc8c}</Project>
+      <Name>TOne.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Data\TOne.BusinessEntity.Data.csproj">
+      <Project>{fe3e9123-4e75-42db-b98c-b37a472aad9a}</Project>
+      <Name>TOne.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
       <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
       <Name>TOne.Business</Name>

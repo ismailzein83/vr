@@ -40,17 +40,15 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(int carrierType, DateTime effectiveOn, string carrierID, int from, int to,string codeGroup = null)
+        public List<TOne.Analytics.Entities.CarrierRateView> GetRates(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime effectiveOn, string carrierID, int from, int to, string codeGroup = null)
         {
-            TOne.Entities.CarrierType type = (TOne.Entities.CarrierType)carrierType;
-            return _analyticsManager.GetRates(type.ToString(), effectiveOn, carrierID, codeGroup, from, to);
+            return _analyticsManager.GetRates(carrierType.ToString(), effectiveOn, carrierID, codeGroup, from, to);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(int carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile = 'N', string customerID = null, string supplierID = null)
+        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile = 'N', string customerID = null, string supplierID = null)
         {
-            TOne.Entities.CarrierType type = (TOne.Entities.CarrierType)carrierType;
-            return _analyticsManager.GetCarrierSummary(type.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+            return _analyticsManager.GetCarrierSummary(carrierType.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
         }
 
         [HttpGet]

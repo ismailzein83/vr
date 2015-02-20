@@ -30,4 +30,12 @@ namespace TOne.LCR.Entities
 
         public List<BaseRouteRule> RulesMatchingAllCarrierAccounts { get; private set; }
     }
+
+    public class CustomerRouteRulesMatches
+    {
+        public CustomerRouteRulesMatches()
+        {
+
+        }
+    }
 }

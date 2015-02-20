@@ -12,10 +12,10 @@ namespace TOne.LCR.Entities
 
         public string Code { get; set; }        
 
-        public int SuppliersOptionId { get; set; }
+        public int? SuppliersCombinationId { get; set; }
 
-        public int SuppliersOrderOptionId { get; set; }
+        public int? SuppliersOrderCombinationId { get; set; }
 
-        public int PercentagesOptionId { get; set; }
+        public int? PercentagesCombinationId { get; set; }
     }
 }

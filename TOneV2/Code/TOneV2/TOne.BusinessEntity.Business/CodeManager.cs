@@ -22,5 +22,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCodes(firstDigit, effectiveOn, isFuture, activeSuppliers, out distinctCodes);
         }
+
+        public List<CodeGroupInfo> GetCodeGroups()
+        {
+            return _dataManager.GetCodeGroups();
+        }
     }
 }

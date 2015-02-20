@@ -53,6 +53,18 @@ namespace TOne.BusinessEntity.Data.SQL
                     });
             return allSuppliersCodes;
         }
+       
+        public List<CodeGroupInfo> GetCodeGroups()
+        {
+            return GetItemsSP("BEntity.SP_CodeGroup_GetCodeGroups", (reader) =>
+            {
+                return new Entities.CodeGroupInfo
+                {
+                    Code = reader["Code"] as string,
+                    Name = reader["Name"] as string
+                };
+            });
+        }
 
         #region Private Methods
 

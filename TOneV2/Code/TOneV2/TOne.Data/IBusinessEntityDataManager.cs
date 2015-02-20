@@ -8,8 +8,6 @@ namespace TOne.Data
 {
     public interface IBusinessEntityDataManager :IDataManager
     {
-        List<CarrierInfo> GetCarriers(string carrierType);
-        List<CodeGroupInfo> GetCodeGroups();
         List<SwitchInfo> GetSwitches();
     }
 }

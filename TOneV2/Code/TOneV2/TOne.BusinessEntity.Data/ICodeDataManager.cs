@@ -10,5 +10,7 @@ namespace TOne.BusinessEntity.Data
     public interface ICodeDataManager : IDataManager
     {
         Dictionary<string, Dictionary<string, Code>> GetCodes(Char firstDigit, DateTime effectiveOn, bool isFuture, List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes);
+
+        List<CodeGroupInfo> GetCodeGroups();
     }
 }

@@ -10,5 +10,7 @@ namespace TOne.BusinessEntity.Data
     public interface ICarrierDataManager : IDataManager
     {
         List<CarrierAccountInfo> GetActiveSuppliersInfo();
+
+        List<CarrierInfo> GetCarriers(CarrierType carrierType);
     }
 }

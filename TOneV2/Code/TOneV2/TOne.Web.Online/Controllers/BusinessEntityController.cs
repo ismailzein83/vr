@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using TOne.Entities;
-using TOne.Data;
 using TOne.Business;
+using TOne.BusinessEntity.Entities;
+using TOne.BusinessEntity.Business;
 
 namespace TOne.Web.Online.Controllers
 {
@@ -14,18 +14,17 @@ namespace TOne.Web.Online.Controllers
     {
         // GET api/<controller>
         [HttpGet]
-        public List<TOne.Entities.CarrierInfo> GetCarriers(int carrierType = 0)
+        public List<CarrierInfo> GetCarriers(CarrierType carrierType = CarrierType.Exchange)
         {
-            BusinessEntityManager businessmanager = new BusinessEntityManager();
-            TOne.Entities.CarrierType type = (CarrierType)carrierType;
-            return businessmanager.GetCarriers(type.ToString());
+            CarrierManager manager = new CarrierManager();
+            return manager.GetCarriers(carrierType);
         }
 
         [HttpGet]
-        public List<TOne.Entities.CodeGroupInfo> GetCodeGroups()
+        public List<CodeGroupInfo> GetCodeGroups()
         {
-            BusinessEntityManager businessmanager = new BusinessEntityManager();
-            return businessmanager.GetCodeGroups();
+            CodeManager manager = new CodeManager();
+            return manager.GetCodeGroups();
         }
 
         [HttpGet]

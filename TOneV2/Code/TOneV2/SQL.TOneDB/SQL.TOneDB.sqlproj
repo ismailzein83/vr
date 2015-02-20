@@ -68,6 +68,8 @@
     <Folder Include="LCR\" />
     <Folder Include="LCR\Tables\" />
     <Folder Include="LCR\Stored Procedures\" />
+    <Folder Include="Analytics\" />
+    <Folder Include="Analytics\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetCaclulatedZoneRates.sql" />
@@ -83,5 +85,17 @@
     <Build Include="LCR\Stored Procedures\sp_RoutingDatabase_Insert.sql" />
     <Build Include="LCR\Stored Procedures\sp_RoutingDatabase_SetReady.sql" />
     <Build Include="Security\LCR.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_Switches_GetSwitches.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_CodeGroup_GetCodeGroups.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Carriers_GetCarriers.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Traffic_TopSuppliers.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Traffic_Summary.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Traffic_DailyProfitSummary.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Traffic_TopCustomers.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Traffic_CarrierSummary.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_Rates_GetRates.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_Traffic_TopNDestination.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_alerts_getalerts.sql" />
+    <Build Include="Security\Analytics.sql" />
   </ItemGroup>
 </Project>
