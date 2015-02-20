@@ -54,13 +54,13 @@ public partial class UnNormalizedCalls : BasePage
 
         // Party (CGPN, CDPN)
         List<ListItem> items = new List<ListItem>();
-        items.Add(new ListItem(Constants.CGPN, Constants.CGPN));
-        items.Add(new ListItem(Constants.CDPN, Constants.CDPN));
+        items.Add(new ListItem(Constants.MSISDN, Constants.MSISDN));
+        items.Add(new ListItem(Constants.Destination, Constants.Destination));
         rblstParty.Items.AddRange(items.ToArray());
-       
 
-        rblstSearchParty.Items.Add(new ListItem(Constants.CGPN, Constants.CGPN));
-        rblstSearchParty.Items.Add(new ListItem(Constants.CDPN, Constants.CDPN));
+
+        rblstSearchParty.Items.Add(new ListItem(Constants.MSISDN, Constants.MSISDN));
+        rblstSearchParty.Items.Add(new ListItem(Constants.Destination, Constants.Destination));
         rblstSearchParty.SelectedIndex = 0;
     }
 
@@ -138,7 +138,7 @@ public partial class UnNormalizedCalls : BasePage
            
             tdIgnore.Attributes.Remove("class");
 
-            if (callsStatistic.Party == Constants.CGPN)
+            if (callsStatistic.Party == Constants.MSISDN)
             {
                 tdIgnore.Attributes.Add("class", "caption");
                 rfvIgnore.Enabled = false;

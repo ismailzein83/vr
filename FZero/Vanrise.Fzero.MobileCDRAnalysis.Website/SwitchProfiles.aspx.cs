@@ -55,7 +55,7 @@ public partial class SwitchProfiles : BasePage
 
     private void SetCaptions()
     {
-        ((MasterPage)this.Master).PageHeaderTitle = "Switches Profiles";
+        ((MasterPage)this.Master).PageHeaderTitle = "Sources Profiles";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)

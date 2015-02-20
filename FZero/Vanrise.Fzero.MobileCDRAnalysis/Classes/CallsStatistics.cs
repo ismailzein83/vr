@@ -42,11 +42,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                 using (MobileEntities context = new MobileEntities())
                 {
-                    if (party == Constants.CGPN)
+                    if (party == Constants.MSISDN)
                     {
                         unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("db_GetUnNormalizedCGPN @FromDate, @ToDate, @Database", _FromDate, _ToDate, _Database).ToList();
                     }
-                    else if (party == Constants.CDPN)
+                    else if (party == Constants.Destination)
                     {
                         unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("db_GetUnNormalizedCDPN @FromDate, @ToDate, @Database", _FromDate, _ToDate, _Database).ToList();
                     }

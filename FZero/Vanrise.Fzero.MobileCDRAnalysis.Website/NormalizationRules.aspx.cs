@@ -64,8 +64,6 @@ public partial class NormalizationRules : BasePage
 
         ddlSwitches.SelectedIndex = 0;
         rblstParty.SelectedIndex = -1;
-        txtCallsCount.Text = string.Empty;
-        txtDuration.Text = string.Empty;
         txtPrefix.Text = string.Empty;
         txtLength.Text = string.Empty;
         txtIgnore.Text = string.Empty;
@@ -132,8 +130,6 @@ public partial class NormalizationRules : BasePage
         currentObject.Party = rblstParty.SelectedValue;
         currentObject.Prefix = txtPrefix.Text;
         currentObject.CallLength = txtLength.Text.ToNullableInt();
-        currentObject.CallsCount = txtCallsCount.Text.ToNullableInt();
-        currentObject.Durations = txtDuration.Text.ToNullableInt();
         currentObject.Ignore = txtIgnore.Text.ToNullableInt();
 
         currentObject.PrefixToAdd = string.IsNullOrWhiteSpace(txtPrefixToAdd.Text) ? null : txtPrefixToAdd.Text.Trim();
@@ -158,8 +154,6 @@ public partial class NormalizationRules : BasePage
         rblstParty.SelectedValue = currentObject.Party;
         txtPrefix.Text = currentObject.Prefix;
         txtLength.Text = currentObject.CallLength.HasValue ? currentObject.CallLength.ToString() : string.Empty;
-        txtCallsCount.Text = currentObject.CallsCount.HasValue ? currentObject.CallsCount.ToString() : string.Empty;
-        txtDuration.Text = currentObject.Durations.HasValue ? currentObject.Durations.ToString() : string.Empty;
         txtIgnore.Text = currentObject.Ignore.HasValue ? currentObject.Ignore.ToString() : string.Empty;
 
         txtPrefixToAdd.Text = currentObject.PrefixToAdd;
@@ -177,8 +171,8 @@ public partial class NormalizationRules : BasePage
 
         // Party (CGPN, CDPN)
         List<ListItem> items = new List<ListItem>();
-        items.Add(new ListItem(Constants.CGPN, Constants.CGPN));
-        items.Add(new ListItem(Constants.CDPN, Constants.CDPN));
+        items.Add(new ListItem(Constants.MSISDN, Constants.MSISDN));
+        items.Add(new ListItem(Constants.Destination, Constants.Destination));
 
         rblstParty.Items.AddRange(items.ToArray());
 
@@ -309,7 +303,7 @@ public partial class NormalizationRules : BasePage
 
     protected void rblstParty_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (rblstParty.SelectedValue == Constants.CGPN)
+        if (rblstParty.SelectedValue == Constants.MSISDN)
         {
             tdIgnore.Attributes.Add("class", "caption");
             rfvIgnore.Enabled = false;

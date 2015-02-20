@@ -69,7 +69,7 @@
                 <div class="widget-body" style="display: block;">
                     <table style="width:100%">
                         <tr>
-                            <td class="caption">Switch
+                            <td class="caption">Source
                             </td>
                             <td class="inputData">
                                 <Telerik:RadComboBox ID="ddlSearchSwitches" runat="server"  ></Telerik:RadComboBox>
@@ -210,71 +210,7 @@
                                                         ErrorMessage="The switch should be selected" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                 </td>
                                                 <td class="space10"></td>
-                                                <td class="caption required"></td>
-                                                <td>
-                                                    
-                                                    <br />
-                                                  
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="caption required">Party</td>
-                                                <td class="inputData" colspan="4">
-                                                    <asp:RadioButtonList ID="rblstParty" runat="server" CssClass="radioButtons"
-                                                        RepeatDirection="Horizontal" RepeatLayout="Table"
-                                                        CellPadding="8" AutoPostBack="True" OnSelectedIndexChanged="rblstParty_SelectedIndexChanged">
-                                                    </asp:RadioButtonList>
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvParty" runat="server" Display="Dynamic"
-                                                        ControlToValidate="rblstParty"
-                                                        ErrorMessage="A Party should be chosen" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                                </td>
-                                             
-                                            </tr>
-                                            <tr id="trStats" runat="server" visible="false">
-                                                <td class="caption">Calls Count</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtCallsCount" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:CompareValidator ID="cvCallsCount" runat="server" Display="Dynamic"
-                                                        CssClass="error"
-                                                        Operator="DataTypeCheck" Type="Double" ControlToValidate="txtCallsCount"
-                                                        ErrorMessage="'Calls Count' field should be a Decimal"></asp:CompareValidator>
-                                                </td>
-                                                <td class="space10"></td>
-                                                <td class="caption">Duration</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtDuration" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:CompareValidator ID="cvDurationDecimal" runat="server" Display="Dynamic"
-                                                        CssClass="error"
-                                                        Operator="DataTypeCheck" Type="Double" ControlToValidate="txtDuration"
-                                                        ErrorMessage="'Duration' field should be a Decimal"></asp:CompareValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="caption required">Prefix</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtPrefix" runat="server" MaxLength="3"></asp:TextBox>
-                                                </td>
-                                                <td class="space10"></td>
-
-                                                <td class="caption required">Length</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtLength" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:CompareValidator ID="cvLengthInteger" runat="server" Display="Dynamic"
-                                                        CssClass="error" ValidationGroup="Save"
-                                                        Operator="DataTypeCheck" Type="Integer" ControlToValidate="txtLength"
-                                                        ErrorMessage="'Length' field should be a Number"></asp:CompareValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="caption"></td>
-                                                <td class="inputData">
-                                                    
-                                                </td>
-                                                <td class="space10"></td>
-                                                <td class="caption required" runat="server" id="tdIgnore">Ignore</td>
+                                                  <td class="caption required" runat="server" id="tdIgnore">Ignore</td>
                                                 <td class="inputData">
                                                     <asp:TextBox ID="txtIgnore" runat="server"></asp:TextBox>
                                                     <br />
@@ -287,6 +223,41 @@
                                                         ErrorMessage="'Ignore' field should be a Number"></asp:CompareValidator>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td class="caption required">Party</td>
+                                                <td class="inputData" >
+                                                    <asp:RadioButtonList ID="rblstParty" runat="server" CssClass="radioButtons"
+                                                        RepeatDirection="Horizontal" RepeatLayout="Table"
+                                                        CellPadding="8" AutoPostBack="True" OnSelectedIndexChanged="rblstParty_SelectedIndexChanged">
+                                                    </asp:RadioButtonList>
+                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvParty" runat="server" Display="Dynamic"
+                                                        ControlToValidate="rblstParty"
+                                                        ErrorMessage="A Party should be chosen" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                                </td>
+                                                 <td class="space10"></td>
+                                                 <td class="caption required">Length</td>
+                                                <td class="inputData">
+                                                    <asp:TextBox ID="txtLength" runat="server"></asp:TextBox>
+                                                    <br />
+                                                    <asp:CompareValidator ID="cvLengthInteger" runat="server" Display="Dynamic"
+                                                        CssClass="error" ValidationGroup="Save"
+                                                        Operator="DataTypeCheck" Type="Integer" ControlToValidate="txtLength"
+                                                        ErrorMessage="'Length' field should be a Number"></asp:CompareValidator>
+                                                </td>
+                                             
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td class="caption required">Prefix</td>
+                                                <td class="inputData">
+                                                    <asp:TextBox ID="txtPrefix" runat="server" MaxLength="3"></asp:TextBox>
+                                                </td>
+                                                <td class="space10"></td>
+                                                <td ></td>
+                                                <td ></td>
+                                               
+                                            </tr>
+                                          
 
                                         </table>
                                     </ContentTemplate>

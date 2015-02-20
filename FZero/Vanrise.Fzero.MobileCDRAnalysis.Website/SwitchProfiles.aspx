@@ -7,7 +7,7 @@
         <div class="span12">
             <div class="widget blue">
                 <div class="widget-title">
-                    <h4><i class="icon-reorder"></i>Search Switches</h4>
+                    <h4><i class="icon-reorder"></i>Search Source</h4>
                   
                 </div>
                 <div class="widget-body" style="display: block;">
@@ -42,14 +42,13 @@
         <div class="span12">
             <div class="widget blue">
                 <div class="widget-title">
-                    <h4><i class="icon-reorder"></i>Switches Data</h4>
+                    <h4><i class="icon-reorder"></i>Source Data</h4>
                     
                 </div>
                 <div class="widget-body" style="display: block;">
                     <asp:GridView ID="gvData" runat="server" SkinID="GridDefault"
                         OnRowCommand="gvData_RowCommand">
                         <Columns>
-                            <asp:BoundField HeaderText="Full Name" DataField="FullName" />
                             <asp:BoundField HeaderText="Name" DataField="Name" />
                             <asp:BoundField HeaderText="Database Name" DataField="Switch_DatabaseConnections.DatabaseName" />
                             <asp:TemplateField>
@@ -76,7 +75,7 @@
         <div class="span12">
             <div class="widget green">
                 <div class="widget-title">
-                    <h4><i class="icon-reorder"></i>Switch Details</h4>
+                    <h4><i class="icon-reorder"></i>Source Details</h4>
                 </div>
 
                 <div class="widget-body" style="display: block;">
@@ -84,7 +83,7 @@
                         <tr>
                             <td>
                                 <div class="span6 allborders">
-                                    <h4 class="breadcrumb">Switch Information</h4>
+                                    <h4 class="breadcrumb">Source Information</h4>
                                     <table cellspacing="0" cellpadding="1" class="table">
                                         <tbody>
                                             <tr>

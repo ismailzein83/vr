@@ -8,8 +8,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 {
     public static class Constants
     {
-        public const  string CDPN = "CDPN";
-        public const string CGPN = "CGPN";
+        public const string Destination = "Destination";
+        public const string MSISDN = "MSISDN";
         public const string ConnectionStringPattern = "data source=@ServerName;initial catalog=@DatabaseName;user id=@UserId;password=@UserPassword;MultipleActiveResultSets=True;";
 
        

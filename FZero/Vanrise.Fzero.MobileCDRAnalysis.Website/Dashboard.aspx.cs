@@ -65,7 +65,7 @@ public partial class Dashboard : BasePage
 
     private void FillControls()
     {
-        Manager.BindCombo(ddlSwitches, SwitchProfile.GetAll(), "Name", "DatabaseConnection", "Select Switch ...", "");
+        Manager.BindCombo(ddlSwitches, SwitchProfile.GetAll(), "Name", "DatabaseConnection", "Select Source ...", "");
     }
 
     private void FillStaticData()

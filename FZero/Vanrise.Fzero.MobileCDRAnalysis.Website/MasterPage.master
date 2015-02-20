@@ -162,7 +162,7 @@
                         <li class="sub-menu" id="btnSwitches" runat="server">
                             <a class="" href="SwitchProfiles.aspx">
                                 <i class="icon-fullscreen"></i>
-                                <span>Switches</span>
+                                <span>Sources</span>
                             </a>
                         </li>
                       

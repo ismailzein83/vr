@@ -13,14 +13,14 @@
                     <a href="TrunckSwitches.aspx" data-original-title="" id="aTrunkscount"  runat="server" >
                         <i class="icon-link"></i>
                         <div class="info" id="divTruncksCount" runat="server"></div>
-                        <div class="status">Trunks</div>
+                        <div class="status"></div>
                     </a>
                 </div>
                 <div class="metro-nav-block nav-block-blue">
                     <a href="SwitchProfiles.aspx" data-original-title=""  id="aSwitchesCount"  runat="server">
                         <i class="icon-fullscreen"></i>
                         <div class="info" id="divSwitchesCount" runat="server"></div>
-                        <div class="status">Switches</div>
+                        <div class="status">Sources</div>
                     </a>
                 </div>
                 <br />
