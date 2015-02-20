@@ -165,12 +165,7 @@
                                 <span>Switches</span>
                             </a>
                         </li>
-                        <li class="sub-menu" id="btnTrunks" runat="server">
-                            <a class="" href="TrunckSwitches.aspx">
-                                <i class="icon-link"></i>
-                                <span>Trunks</span>
-                            </a>
-                        </li>
+                      
                         <li class="sub-menu" id="btnNormalizationRules" runat="server">
                             <a class="" href="NormalizationRules.aspx">
                                 <i class="icon-list"></i>
