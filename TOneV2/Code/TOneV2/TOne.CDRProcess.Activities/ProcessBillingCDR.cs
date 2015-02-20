@@ -50,24 +50,6 @@ namespace TOne.CDRProcess.Activities
 
         #region ProcessBillingCDR Controls
 
-        private void HandlePassThrough(TABS.Billing_CDR_Main cdr)
-        {
-            if (cdr.Customer.IsPassThroughCustomer && cdr.Billing_CDR_Cost != null)
-            {
-                var sale = new TABS.Billing_CDR_Sale();
-                cdr.Billing_CDR_Sale = sale;
-                sale.Copy(cdr.Billing_CDR_Cost);
-                sale.Zone = cdr.OurZone;
-            }
-            if (cdr.Supplier.IsPassThroughSupplier && cdr.Billing_CDR_Sale != null)
-            {
-                var cost = new TABS.Billing_CDR_Cost();
-                cdr.Billing_CDR_Cost = cost;
-                cost.Copy(cdr.Billing_CDR_Sale);
-                cost.Zone = cdr.SupplierZone;
-            }
-        }
-
         private void HandlePassThrough(BillingCDRMain cdr)
         {
             TABS.CarrierAccount Customer = TABS.CarrierAccount.All.ContainsKey(cdr.CustomerID) ? TABS.CarrierAccount.All[cdr.CustomerID] : null;
@@ -109,12 +91,9 @@ namespace TOne.CDRProcess.Activities
             TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
 
             TOne.Business.ProtPricingGenerator generator;
-            using (NHibernate.ISession session = TABS.DataConfiguration.OpenSession())
-            {
-                generator = new TOne.Business.ProtPricingGenerator(cacheManager, session);
-                session.Flush();
-                session.Close();
-            }
+            
+            generator = new TOne.Business.ProtPricingGenerator(cacheManager);
+
 
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
 
@@ -137,11 +116,6 @@ namespace TOne.CDRProcess.Activities
 
                                 main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
-
-
-                                //if (main.sale == null)
-                                //    ((ProtPricingGenerator)generator).FixParentCodeSale(main, null, null, codeMap);
-
 
                                 HandlePassThrough(main);
 
