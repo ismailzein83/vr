@@ -8,133 +8,42 @@ namespace TOne.CDR.Entities
 {
     public class BillingCDRBase
     {
+
+        public long ID { get;set; }
+
+        public DateTime Attempt { get;set; }
+
+        public DateTime? Alert { get;set; }
+
+        public DateTime? Connect { get;set; }
+
+        public DateTime? Disconnect{ get; set; }
+
+        public virtual Decimal DurationInSeconds{ get; set; }
+
+        public  String CDPN { get; set; }
+
+        public  String CGPN { get; set; }
+
+        public  string Port_OUT { get; set; }
+
+        public  string Port_IN { get; set; }
+
+        public  String ReleaseCode { get; set; }
         
-        private long _ID;
-        private DateTime _Attempt;
-        private DateTime? _Alert;
-        private DateTime? _Connect;
-        private DateTime? _Disconnect;
-        private Decimal _DurationInSeconds = Decimal.Zero;
-        private String _CDPN;
-        private String _CGPN;
-        private String _ReleaseCode;
-        private String _ReleaseSource;
-        private int _Switch;
-        private long _SwitchCdrID;
-        private string _Tag;
-        private int _OurZone;
-        private int _SupplierZone;
-        private int _OriginatingZone;
-        private string _Port_IN;
-        private string _Port_OUT;
+        public  String ReleaseSource { get; set; }
 
-        public  long ID
-        {
-            get { return _ID; }
-            set { _ID = value; }
-        }
+        public  int SwitchID { get; set; }
 
-        public  DateTime Attempt
-        {
-            get { return _Attempt; }
-            set { _Attempt = value; }
-        }
+        public  long SwitchCdrID { get; set; }
 
-        public  DateTime? Alert
-        {
-            get { return _Alert; }
-            set { _Alert = value; }
-        }
+        public  String Tag { get; set; }
 
-        public  DateTime? Connect
-        {
-            get { return _Connect; }
-            set { _Connect = value; }
-        }
+        public  int OurZoneID { get; set; }
 
-        public  DateTime? Disconnect
-        {
-            get { return _Disconnect; }
-            set { _Disconnect = value; }
-        }
+        public  int SupplierZoneID { get; set; }
 
-        public virtual Decimal DurationInSeconds
-        {
-            get { return _DurationInSeconds; }
-            set { _DurationInSeconds = value; }
-        }
-
-        public  String CDPN
-        {
-            get { return _CDPN; }
-            set { _CDPN = value; }
-        }
-
-        public  String CGPN
-        {
-            get { return _CGPN; }
-            set { _CGPN = value; }
-        }
-
-        public  string Port_OUT
-        {
-            get { return _Port_OUT; }
-            set { _Port_OUT = value; }
-        }
-
-        public  string Port_IN
-        {
-            get { return _Port_IN; }
-            set { _Port_IN = value; }
-        }
-
-        public  String ReleaseCode
-        {
-            get { return _ReleaseCode; }
-            set { _ReleaseCode = value; }
-        }
-        
-        public  String ReleaseSource
-        {
-            get { return _ReleaseSource; }
-            set { _ReleaseSource = value; }
-        }
-
-        public  int SwitchID
-        {
-            get { return _Switch; }
-            set { _Switch = value; }
-        }
-
-        public  long SwitchCdrID
-        {
-            get { return _SwitchCdrID; }
-            set { _SwitchCdrID = value; }
-        }
-
-        public  String Tag
-        {
-            get { return _Tag; }
-            set { _Tag = value; }
-        }
-
-        public  int OurZoneID
-        {
-            get { return _OurZone; }
-            set { _OurZone = value; }
-        }
-
-        public  int SupplierZoneID
-        {
-            get { return _SupplierZone; }
-            set { _SupplierZone = value; }
-        }
-
-        public  int OriginatingZoneID
-        {
-            get { return _OriginatingZone; }
-            set { _OriginatingZone = value; }
-        }
+        public  int OriginatingZoneID { get; set; }
 
         public  string SIP { get; set; }
 
@@ -156,6 +65,5 @@ namespace TOne.CDR.Entities
 
         public int SubscriberID { get; set; }
         
-       
     }
 }
