@@ -23,10 +23,9 @@ namespace TOne.LCR.Data.SQL
                 }
                 wr.Close();
             }
-            //string tableName = String.Format("LCR.CodeMatch{0}_temp", isFuture ? "Future" : "Current");
             return new BulkInsertInfo
             {
-                TableName = "CodeMatch",// String.Format("LCR.CodeMatch{0}_temp", isFuture ? "Future" : "Current"),
+                TableName = "CodeMatch",
                 DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = '^'

@@ -15,6 +15,7 @@
  xmlns:tla1="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
  xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -91,7 +92,8 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: process started", DateTime.Now)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <Parallel>
+    <tla1:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1" />
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
       <tla1:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_1">
         <tla1:CreateRoutingDatabase.DatabaseId>
           <OutArgument x:TypeArguments="x:Int32">
@@ -116,7 +118,6 @@
           </OutArgument>
         </tbba:GetActiveSuppliersInfo.ActiveSuppliers>
       </tbba:GetActiveSuppliersInfo>
-      <sap2010:WorkflowViewState.IdRef>Parallel_4</sap2010:WorkflowViewState.IdRef>
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <local:GenerateZoneInfoInDB sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.GenerateZoneInfoInDB_1">
@@ -193,12 +194,12 @@
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatchesForDBApply" />
       </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-        <ParallelForEach x:TypeArguments="x:Char" DisplayName="ParallelForEach&lt;Char&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
-          <ParallelForEach.Values>
+        <vbw:ParallelForEach x:TypeArguments="x:Char" DisplayName="ParallelForEach&lt;Char&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1" InitialConcurrentInstances="1" MaxConcurrentInstances="1">
+          <vbw:ParallelForEach.Values>
             <InArgument x:TypeArguments="scg:IEnumerable(x:Char)">
               <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Char)">firstDigitList</mca:CSharpValue>
             </InArgument>
-          </ParallelForEach.Values>
+          </vbw:ParallelForEach.Values>
           <ActivityAction x:TypeArguments="x:Char">
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="x:Char" Name="firstDigit" />
@@ -231,7 +232,7 @@
               </tla1:BuildCodeMatchByFirstCodeDigit.OutputQueue>
             </tla1:BuildCodeMatchByFirstCodeDigit>
           </ActivityAction>
-        </ParallelForEach>
+        </vbw:ParallelForEach>
         <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
           <Assign.To>
             <OutArgument x:TypeArguments="x:Boolean">
@@ -323,14 +324,15 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - processStart))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sOUoDxwIOAgEBTgtOVwIBCFMLU3sCAQJZBV0RAwGnAl4FeBADAYwCeQW3ARADAd8BuAEFogIQAgEyowIFqQIgAgErqgIFuQIQAgEcugIFwAIkAgEVwQIFxQIRAgEOWwlbegMBqAJfB28kAwGUAnAHdiUDAY0CegeaASQDAfMBmwEHtgElAwHgAb0BDb0BcgIBM8MBB/UBEgMBjwH2AQeQAisCAVyRAgehAiMCAT2mAgumAlkCASyrAgexAiwCASSyAge4AiwCAR29Agu9AlkCARbDAgnDAp0BAgEPZw1nYAMBoQJiDWJjAwGbAmwNbMcBAwGVAnMNc3oDAY4CfQ19cgMBhgKMAQ2MAVsDAYACggENggFgAwH6AYcBDYcBWgMB9AGoAQ2oAVsDAe0BngENngFgAwHnAaMBDaMBWgMB4QHEAQnqARsDAZwB6wEJ9AESAwGQAYMCDYMCcwMBhQH5AQ35AXgCAXuIAg2IAlsCAXGNAg2NAn0CAWf+AQ3+AYMBAgFdmQINmQJ1AgFSlAINlAJ7AgFIngINngJbAgE+rgINrgJbAgEltQINtQJbAgEexwEPxwFqAwHVAc4BDegBMwMBnQHyATXyATkDAZsB7gEP7gF7AwGRAdEBE9EBeAMBygHbARPbAVkDAb8B5QET5QGGAQMBtAHWARPWAWYDAakB4AET4AFgAwGeAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sPEsDyAIOAgEBTwtPVwIBCFQLVHsCAQJaBV4RAwGqAl8FX2EDAakCYAV5EAMBjgJ6BbgBEAMB4QG5AQWjAhACATKkAgWqAiACASurAgW6AhACARy7AgXBAiQCARXCAgXGAhECAQ5cCVx6AwGrAmEHcSQDAZYCcgd4JQMBjwJ7B5sBJAMB9QGcAQe3ASUDAeIBvgENvgFyAgEzxAEH9gESAwGPAfcBB5ECKwIBXJICB6ICIwIBPacCC6cCWQIBLKwCB7ICLAIBJLMCB7kCLAIBHb4CC74CWQIBFsQCCcQCnQECAQ9pDWlgAwGjAmQNZGMDAZ0Cbg1uxwEDAZcCdQ11egMBkAJ+DX5yAwGIAo0BDY0BWwMBggKDAQ2DAWADAfwBiAENiAFaAwH2AakBDakBWwMB7wGfAQ2fAWADAekBpAENpAFaAwHjAcUBCesBHwMBnAHsAQn1ARIDAZABhAINhAJzAwGFAfoBDfoBeAIBe4kCDYkCWwIBcY4CDY4CfQIBZ/8BDf8BgwECAV2aAg2aAnUCAVKVAg2VAnsCAUifAg2fAlsCAT6vAg2vAlsCASW2Ag22AlsCAR7IAQ/IAWoDAdcBxQHNAcUB0AEDAdYBxQGyAcUBtQEDAdUBzwEN6QEzAwGdAfMBNfMBOQMBmwHvAQ/vAXsDAZEB0gET0gF4AwHKAdwBE9wBWQMBvwHmARPmAYYBAwG0AdcBE9cBZgMBqQHhARPhAWADAZ4B</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="903,62" />
+      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="1230,62" />
+      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1230,22" />
       <sap2010:ViewStateData Id="CreateRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSuppliersInfo_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="903,86" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1230,86" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -359,7 +361,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_14" sap:VirtualizedContainerService.HintSize="856,392" />
       <sap2010:ViewStateData Id="TOne.LCRProcess.GenerateZoneRatesInDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="903,86" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1230,86" />
       <sap2010:ViewStateData Id="BuildCodeMatchByFirstCodeDigit_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="287,62" />
@@ -372,21 +374,21 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="PrepareCodeMatchesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,436" />
       <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,436" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="903,482" />
-      <sap2010:ViewStateData Id="UpdateZoneMatchInDB_1" sap:VirtualizedContainerService.HintSize="903,22" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1230,482" />
+      <sap2010:ViewStateData Id="UpdateZoneMatchInDB_1" sap:VirtualizedContainerService.HintSize="1230,22" />
       <sap2010:ViewStateData Id="CreateIndexesOnCodeMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateIndexesOnZoneMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="903,86" />
-      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="903,22" />
-      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="903,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="925,1312">
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1230,86" />
+      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1230,22" />
+      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="1230,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1252,1374">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="965,1392" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1292,1454" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

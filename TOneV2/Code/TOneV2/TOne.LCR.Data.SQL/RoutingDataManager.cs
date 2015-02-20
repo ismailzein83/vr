@@ -35,6 +35,19 @@ namespace TOne.LCR.Data.SQL
                 _routingDatabaseType = value;
             }
         }
+        
+        internal void CreateDatabase()
+        {
+            MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
+            masterDataManager.CreateDatabase(GetDatabaseName());
+            CreateDatabaseSchema();
+        }
+
+        internal void DropDatabaseIfExists()
+        {
+            MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
+            masterDataManager.DropDatabaseWithForceIfExists(GetDatabaseName());
+        }
 
         protected override string GetConnectionString()
         {
@@ -52,13 +65,13 @@ namespace TOne.LCR.Data.SQL
             return String.Format(base.GetConnectionString(), _databaseId);
         }
 
-        public string GetDatabaseName()
+        private string GetDatabaseName()
         {
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(this.GetConnectionString());
             return connStringBuilder.InitialCatalog;
         }
 
-        internal void CreateDatabaseSchema()
+        private void CreateDatabaseSchema()
         {
             ExecuteNonQueryText(query_CreateDatabaseSchema, null);
         }

@@ -50,6 +50,7 @@
     <Compile Include="ICarrierDataManager.cs" />
     <Compile Include="ICodeDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IRateDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

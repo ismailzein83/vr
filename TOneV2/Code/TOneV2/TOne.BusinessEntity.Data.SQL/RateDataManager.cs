@@ -2,33 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
-using TOne.LCR.Entities;
 
-namespace TOne.LCR.Data.SQL
-{    
+namespace TOne.BusinessEntity.Data.SQL
+{
     public class RateDataManager : BaseTOneDataManager, IRateDataManager
     {
-        public void LoadZoneRates(DateTime effectiveDate, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable)
+        public void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable)
         {
             var customersZoneRates = new List<ZoneRate>();
             var suppliersZoneRates = new List<ZoneRate>();
-            ExecuteReaderSP("LCR.sp_Rate_GetZoneRates",
+            ExecuteReaderSP("[BEntity].[sp_Rate_GetCaclulatedZoneRates]",
                 (reader) =>
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         ZoneRate zoneRate = new ZoneRate
                         {
                             RateId = (long)reader["RateID"],
                             PriceListId = GetReaderValue<int>(reader, "PriceListID"),
-                            Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0, 
+                            Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
                             ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
                             ZoneId = GetReaderValue<int>(reader, "ZoneID")
                         };
                         string supplierId = reader["SupplierID"] as string;
                         string customerId = reader["CustomerID"] as string;
-                        if(supplierId == "SYS")
+                        if (supplierId == "SYS")
                         {
                             zoneRate.CarrierAccountId = customerId;
                             customersZoneRates.Add(zoneRate);
@@ -38,7 +39,7 @@ namespace TOne.LCR.Data.SQL
                             zoneRate.CarrierAccountId = supplierId;
                             suppliersZoneRates.Add(zoneRate);
                         }
-                        if(suppliersZoneRates.Count >= batchSize)
+                        if (suppliersZoneRates.Count >= batchSize)
                         {
                             onBatchAvailable(new ZoneRateBatch
                             {
@@ -47,13 +48,13 @@ namespace TOne.LCR.Data.SQL
                             });
                             suppliersZoneRates = new List<ZoneRate>();
                         }
-                        else if(customersZoneRates.Count >= batchSize)
+                        else if (customersZoneRates.Count >= batchSize)
                         {
                             onBatchAvailable(new ZoneRateBatch
-                                {
-                                    IsSupplierZoneRateBatch = false,
-                                    ZoneRates = customersZoneRates
-                                });
+                            {
+                                IsSupplierZoneRateBatch = false,
+                                ZoneRates = customersZoneRates
+                            });
                             customersZoneRates = new List<ZoneRate>();
                         }
                     }
@@ -73,7 +74,7 @@ namespace TOne.LCR.Data.SQL
                             ZoneRates = customersZoneRates
                         });
                     }
-                }, effectiveDate);
+                }, effectiveTime, isFuture);
         }
     }
 }

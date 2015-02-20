@@ -49,10 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MasterDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
     <Compile Include="CodeMatchDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RateDataManager.cs" />
     <Compile Include="RoutingDatabaseDataManager.cs" />
     <Compile Include="ZoneInfoDataManager.cs" />
     <Compile Include="ZoneMatchDataManager.cs" />

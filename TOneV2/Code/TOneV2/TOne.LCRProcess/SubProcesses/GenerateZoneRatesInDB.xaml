@@ -8,6 +8,7 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tbe="clr-namespace:TOne.BusinessEntity.Entities;assembly=TOne.BusinessEntity.Entities"
  xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
  xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
@@ -78,8 +79,8 @@
     </Sequence.Variables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)" Name="queueSuppliersZRs" />
-        <Variable x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)" Name="queueCustomersZRs" />
+        <Variable x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)" Name="queueSuppliersZRs" />
+        <Variable x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)" Name="queueCustomersZRs" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadZRsTaskStatus" />
       </Parallel.Variables>
       <tla:LoadZoneRatesFromRate sap2010:WorkflowViewState.IdRef="LoadZoneRatesFromRate_1">
@@ -94,13 +95,13 @@
           </InArgument>
         </tla:LoadZoneRatesFromRate.IsFuture>
         <tla:LoadZoneRatesFromRate.OutputQueueCustomerZR>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">queueCustomersZRs</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">queueCustomersZRs</mca:CSharpReference>
           </InOutArgument>
         </tla:LoadZoneRatesFromRate.OutputQueueCustomerZR>
         <tla:LoadZoneRatesFromRate.OutputQueueSupplierZR>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">queueSuppliersZRs</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">queueSuppliersZRs</mca:CSharpReference>
           </InOutArgument>
         </tla:LoadZoneRatesFromRate.OutputQueueSupplierZR>
         <tla:LoadZoneRatesFromRate.Status>
@@ -111,8 +112,8 @@
       </tla:LoadZoneRatesFromRate>
       <tla:SaveZoneRatesToDB Status="{x:Null}" DisplayName="SaveSuppliersZoneRatesToDB" sap2010:WorkflowViewState.IdRef="SaveZoneRatesToDB_1">
         <tla:SaveZoneRatesToDB.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">queueSuppliersZRs</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">queueSuppliersZRs</mca:CSharpValue>
           </InArgument>
         </tla:SaveZoneRatesToDB.InputQueue>
         <tla:SaveZoneRatesToDB.PreviousActivityStatus>
@@ -128,8 +129,8 @@
       </tla:SaveZoneRatesToDB>
       <tla:SaveZoneRatesToDB Status="{x:Null}" DisplayName="SaveCustomersZoneRatesToDB" sap2010:WorkflowViewState.IdRef="SaveZoneRatesToDB_2">
         <tla:SaveZoneRatesToDB.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:ZoneRateBatch)">queueCustomersZRs</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tbe:ZoneRateBatch)">queueCustomersZRs</mca:CSharpValue>
           </InArgument>
         </tla:SaveZoneRatesToDB.InputQueue>
         <tla:SaveZoneRatesToDB.PreviousActivityStatus>
@@ -149,7 +150,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Zone Rates Saved in {1}", DateTime.Now, (DateTime.Now - start))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcR2VuZXJhdGVab25lUmF0ZXNJbkRCLnhhbWwTRwOZAQ4CAQFLC0tXAgECTwWSARACAQ2TAQWXARECAQdVB28jAgFAcAeAAR8CASeBAQeRAR8CAQ6VAQmVAZoBAgEIbA1scgIBYVgNWFoCAVliDWJ7AgFRXQ1dVAIBSWcNZ3sCAUF4DXhqAgE4cw1zcwIBMH0NfVsCASiJAQ2JAWoCAR+EAQ2EAXMCAReOAQ2OAVsCAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcR2VuZXJhdGVab25lUmF0ZXNJbkRCLnhhbWwTSAOaAQ4CAQFMC0xXAgECUAWTARACAQ2UAQWYARECAQdWB3AjAgFAcQeBAR8CASeCAQeSAR8CAQ6WAQmWAZoBAgEIbQ1tcgIBYVkNWVoCAVljDWN7AgFRXg1eVAIBSWgNaHsCAUF5DXlqAgE4dA10cwIBMH4NflsCASiKAQ2KAWoCAR+FAQ2FAXMCARePAQ2PAVsCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

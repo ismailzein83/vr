@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
-using TOne.LCR.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.LCR.Data.SQL
 {
     public class ZoneRateDataManager : RoutingDataManager, IZoneRateDataManager
-    {      
-       
-
+    {
         public void InsertZoneRates(bool isSupplierZoneRates, List<ZoneRate> zoneRates)
         {
             string filePath = GetFilePathForBulkInsert();
@@ -26,7 +24,7 @@ namespace TOne.LCR.Data.SQL
             }
             var bulkInsertInfo = new BulkInsertInfo
             {
-                TableName = String.Format("{0}ZoneRate", isSupplierZoneRates ? "Supplier":"Customer"),
+                TableName = String.Format("{0}ZoneRate", isSupplierZoneRates ? "Supplier" : "Customer"),
                 DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = '^'
@@ -34,9 +32,7 @@ namespace TOne.LCR.Data.SQL
             InsertBulkToTable(bulkInsertInfo);
         }
 
-        #region Queries       
-
-        
+        #region Queries
 
         #endregion
     }

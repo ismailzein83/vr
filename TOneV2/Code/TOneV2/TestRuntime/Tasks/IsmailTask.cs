@@ -70,6 +70,16 @@ namespace TestRuntime
 
             //bpClient.CreateNewProcess(new CreateProcessInput
             //{
+            //    ProcessName = "RoutingProcess",
+            //    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+            //    {
+            //        EffectiveTime = DateTime.Now,
+            //        IsFuture = true
+            //    }
+            //});
+
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
             //    ProcessName = "UpdateCodeZoneMatchProcess",
             //    InputArguments = new TOne.LCRProcess.Arguments.UpdateCodeZoneMatchProcessInput
             //    {

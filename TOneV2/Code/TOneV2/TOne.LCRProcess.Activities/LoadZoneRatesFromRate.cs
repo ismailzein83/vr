@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
-using TOne.LCR.Entities;
 using TOne.Entities;
 using TOne.LCR.Data;
 using Vanrise.Queueing;
+using TOne.BusinessEntity.Entities;
+using TOne.BusinessEntity.Business;
+using TOne.Business;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -61,8 +63,8 @@ namespace TOne.LCRProcess.Activities
 
         protected override void DoWork(LoadZoneRatesFromRateInput inputArgument, AsyncActivityHandle handle)
         {
-            IRateDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRateDataManager>();
-            dataManager.LoadZoneRates(inputArgument.EffectiveTime, inputArgument.IsFuture, 10000,
+            RateManager rateManager = new RateManager();
+            rateManager.LoadCalculatedZoneRates(inputArgument.EffectiveTime, inputArgument.IsFuture, ConfigParameterManager.Current.GetLoadCalculatedRates(),
                 (zoneRateBatch) =>
                 {
                     if (zoneRateBatch.IsSupplierZoneRateBatch)

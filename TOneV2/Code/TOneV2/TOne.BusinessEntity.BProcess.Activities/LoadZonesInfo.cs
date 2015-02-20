@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using TOne.BusinessEntity.Entities;
 using TOne.BusinessEntity.Data;
+using TOne.Business;
 
 namespace TOne.BusinessEntity.BProcess.Activities
 {
@@ -59,7 +60,7 @@ namespace TOne.BusinessEntity.BProcess.Activities
         protected override void DoWork(LoadZonesInfoInput inputArgument, AsyncActivityHandle handle)
         {
             IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
-            dataManager.LoadZonesInfo(inputArgument.EffectiveTime, inputArgument.IsFuture, inputArgument.ActiveSuppliers, 10000, (zoneInfoBatch) =>
+            dataManager.LoadZonesInfo(inputArgument.EffectiveTime, inputArgument.IsFuture, inputArgument.ActiveSuppliers, ConfigParameterManager.Current.GetLoadZoneBatchSize(), (zoneInfoBatch) =>
                 {
                     inputArgument.OutputQueue.Enqueue(zoneInfoBatch);
                 });

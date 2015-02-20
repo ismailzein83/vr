@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.LCR.Entities
+namespace TOne.BusinessEntity.Entities
 {
     public class ZoneRate
     {

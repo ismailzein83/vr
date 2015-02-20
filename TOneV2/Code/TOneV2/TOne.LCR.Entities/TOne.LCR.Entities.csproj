@@ -69,8 +69,6 @@
     <Compile Include="Routing\SupplierRoute.cs" />
     <Compile Include="Routing\RouteOptions.cs" />
     <Compile Include="Routing\SupplierRouteDetail.cs" />
-    <Compile Include="ZoneRate.cs" />
-    <Compile Include="ZoneRateBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">

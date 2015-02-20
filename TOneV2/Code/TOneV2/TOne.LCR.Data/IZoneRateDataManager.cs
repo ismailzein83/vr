@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TOne.LCR.Entities;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.LCR.Data
 {

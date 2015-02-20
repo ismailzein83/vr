@@ -5,9 +5,9 @@ using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using TOne.Entities;
-using TOne.LCR.Entities;
 using TOne.LCR.Data;
 using Vanrise.Queueing;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.LCRProcess.Activities
 {

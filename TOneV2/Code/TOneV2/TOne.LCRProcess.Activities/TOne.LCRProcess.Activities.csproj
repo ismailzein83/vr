@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
@@ -56,6 +57,10 @@
     <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -70,6 +75,7 @@
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
+    <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
     <Compile Include="PrepareZoneInfosForDBApply.cs" />
     <Compile Include="PrepareCodeMatchesForDBApply.cs" />
@@ -95,6 +101,10 @@
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
       <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
       <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Caching\TOne.Caching.csproj">
       <Project>{1950B29A-5C7B-47A3-8113-FC9211D27CFD}</Project>

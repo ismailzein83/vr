@@ -10,6 +10,7 @@ using TOne.LCR.Data;
 using TOne.BusinessEntity.Entities;
 using TOne.BusinessEntity.Business;
 using Vanrise.Queueing;
+using TOne.Business;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -78,6 +79,7 @@ namespace TOne.LCRProcess.Activities
             int codeMatchCount = 0;
 
             List<CodeMatch> codeMatches = new List<CodeMatch>();
+            int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
             foreach (var dCode in distinctCodesList.CodesWithPossibleMatches)
             {
                 foreach (var suppCodes in suppliersCodes)
@@ -103,7 +105,7 @@ namespace TOne.LCRProcess.Activities
                     }
                     while (supplierMatch == null && index < dCode.Value.Count);
                 }
-                if (codeMatches.Count > 250000)
+                if (codeMatches.Count > bcpBatchSize)
                 {
                     inputArgument.OutputQueue.Enqueue(codeMatches);
                     codeMatchCount += codeMatches.Count;
