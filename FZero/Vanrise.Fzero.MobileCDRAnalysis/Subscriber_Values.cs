@@ -21,6 +21,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> CriteriaId { get; set; }
         public Nullable<int> StrategyId { get; set; }
         public Nullable<decimal> Value { get; set; }
+        public Nullable<int> PeriodId { get; set; }
     
         public virtual Criteria_Profile Criteria_Profile { get; set; }
         public virtual Strategy Strategy { get; set; }

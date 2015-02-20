@@ -25,42 +25,37 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
         public static List<CallsStatistics> GetUnNormalizedCalls(int switchId, string party, DateTime? fromDate, DateTime? toDate)
         {
-            string DatabaseName = Switch_DatabaseConnections.GetDatabaseName(switchId);
-            return GetUnNormalizedCalls(DatabaseName, party, fromDate, toDate);
-        }
-        public static List<CallsStatistics> GetUnNormalizedCalls(string database, string party, DateTime? fromDate, DateTime? toDate)
-        {
-
             List<CallsStatistics> unNormalizedCalls = new List<CallsStatistics>();
 
             try
             {
                 var _FromDate = new SqlParameter("@FromDate", fromDate);
                 var _ToDate = new SqlParameter("@ToDate", toDate);
-                var _Database = new SqlParameter("@Database", database);
+                var _SwitchID = new SqlParameter("@SwitchID", switchId);
 
 
                 using (MobileEntities context = new MobileEntities())
                 {
                     if (party == Constants.MSISDN)
                     {
-                        unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("db_GetUnNormalizedCGPN @FromDate, @ToDate, @Database", _FromDate, _ToDate, _Database).ToList();
+                        unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("prGetUnNormalizedCGPN @FromDate, @ToDate, @SwitchID", _FromDate, _ToDate, _SwitchID).ToList();
                     }
                     else if (party == Constants.Destination)
                     {
-                        unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("db_GetUnNormalizedCDPN @FromDate, @ToDate, @Database", _FromDate, _ToDate, _Database).ToList();
+                        unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<CallsStatistics>("prGetUnNormalizedCDPN @FromDate, @ToDate, @SwitchID", _FromDate, _ToDate, _SwitchID).ToList();
                     }
                 }
-                         
 
 
-             
+
+
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.CallStatistics.GetUnNormalizedCalls(" + database + ")", err);
+                FileLogger.Write("DataLayer.CallStatistics.GetUnNormalizedCalls()", err);
             }
             return unNormalizedCalls;
         }
+       
     }
 }

@@ -449,5 +449,44 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyMobileProfile");
         }
+    
+        public virtual int db_FillHourlySubscriberValues()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberValues");
+        }
+    
+        public virtual int prGetUnNormalizedCDPN(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> switchID)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var switchIDParameter = switchID.HasValue ?
+                new ObjectParameter("SwitchID", switchID) :
+                new ObjectParameter("SwitchID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prGetUnNormalizedCDPN", fromDateParameter, toDateParameter, switchIDParameter);
+        }
+    
+        public virtual int prGetUnNormalizedCGPN(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> switchID)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var switchIDParameter = switchID.HasValue ?
+                new ObjectParameter("SwitchID", switchID) :
+                new ObjectParameter("SwitchID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prGetUnNormalizedCGPN", fromDateParameter, toDateParameter, switchIDParameter);
+        }
     }
 }
