@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public enum RoutingDatabaseType { Current, Future}
+    public enum RoutingDatabaseType { Current = 0, Future = 1 }
 
     public class RoutingDatabase
     {
