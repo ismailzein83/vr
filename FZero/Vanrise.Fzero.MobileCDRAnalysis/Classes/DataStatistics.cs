@@ -20,7 +20,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int ReportDetails { get; set; }
         public int ReportsCount { get; set; }
         public int SwitchesCount { get; set; }
-        public int TruncksCount { get; set; }
         public int RulesCount { get; set; }
         public int StrategyCount { get; set; }
         public DateTime? CDRsLastDate { get; set; }
@@ -40,7 +39,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                     dataStatistics.ReportDetails = context.ReportDetails.Count();
                     dataStatistics.ReportsCount = context.Reports.Count();
                     dataStatistics.SwitchesCount = context.SwitchProfiles.Count();
-                    dataStatistics.TruncksCount = context.SwitchTruncks.Count();
                     dataStatistics.RulesCount= context.NormalizationRules.Count();
                     dataStatistics.StrategyCount = context.Strategies.Count();
                 }

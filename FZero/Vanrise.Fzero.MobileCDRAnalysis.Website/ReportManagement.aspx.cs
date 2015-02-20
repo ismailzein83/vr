@@ -22,8 +22,8 @@ public partial class ReportManagement : BasePage
    
     private void FillControls()
     {
-        List<Suspection_Level> suspection_Levels = new List<Suspection_Level>();
-        suspection_Levels = Suspection_Level.GetAll();
+        List<Suspicion_Level> suspection_Levels = new List<Suspicion_Level>();
+        suspection_Levels = Suspicion_Level.GetAll();
         int StartegyId;
         int.TryParse(Request.QueryString["Strategyid"], out StartegyId);
     }

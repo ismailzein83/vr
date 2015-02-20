@@ -64,15 +64,10 @@ public partial class NormalizationRules : BasePage
 
         ddlSwitches.SelectedIndex = 0;
         rblstParty.SelectedIndex = -1;
-        //txtTrunckName.Text = string.Empty;
-        ddlTruncks.DataSource = new List<SwitchTrunck>();
-        ddlTruncks.DataBind();
-        ddlTruncks.SelectedIndex = -1;
         txtCallsCount.Text = string.Empty;
         txtDuration.Text = string.Empty;
         txtPrefix.Text = string.Empty;
         txtLength.Text = string.Empty;
-        txtSupplement.Text = string.Empty;
         txtIgnore.Text = string.Empty;
 
         txtPrefixToAdd.Text = string.Empty;
@@ -85,7 +80,6 @@ public partial class NormalizationRules : BasePage
     private void ClearFiltrationFields()
     {
         ddlSearchSwitches.SelectedIndex = 0;
-        ddlSearchTruncks.SelectedIndex = 0;
         rblstSearchParty.SelectedIndex = 0;
         txtSearchLength.Text = string.Empty;
         txtSearchPrefix.Text = string.Empty;
@@ -113,7 +107,6 @@ public partial class NormalizationRules : BasePage
     {
         pagination = new DataPagination();
         int switchId = Manager.GetInteger(ddlSearchSwitches.SelectedValue);
-        int TrunckID = Manager.GetInteger(ddlSearchTruncks.SelectedValue);
         string party = rblstSearchParty.SelectedValue;
         int? length = txtSearchLength.Text.ToNullableInt();
         string prefix = txtSearchPrefix.Text;
@@ -121,7 +114,7 @@ public partial class NormalizationRules : BasePage
         int pageNumber = Manager.GetInteger(ddlPages.SelectedValue, 1);
         string orderBy = string.Empty;
         int rowsCount = 0;
-        CurrentList = NormalizationRule.GetList(switchId, TrunckID, party, length, prefix, pageSize, pageNumber, orderBy, out rowsCount);
+        CurrentList = NormalizationRule.GetList(switchId, party, length, prefix, pageSize, pageNumber, orderBy, out rowsCount);
         pagination = new DataPagination(rowsCount, pageSize, pageNumber);
     }
     private void FillGrid()
@@ -137,21 +130,10 @@ public partial class NormalizationRules : BasePage
         currentObject.SwitchId = Manager.GetInteger(ddlSwitches.SelectedValue);
         currentObject.SwitchName = ddlSwitches.SelectedItem.Text;
         currentObject.Party = rblstParty.SelectedValue;
-        if (currentObject.Party == Constants.CGPN)
-        {
-            currentObject.In_TrunckName = ddlTruncks.SelectedItem.Text;//txtTrunckName.Text.Trim();
-            currentObject.In_TrunckId = Manager.GetInteger(ddlTruncks.SelectedValue);
-        }
-        else
-        {
-            currentObject.Out_TrunckName = ddlTruncks.SelectedItem.Text;//txtTrunckName.Text.Trim();
-            currentObject.Out_TrunckId = Manager.GetInteger(ddlTruncks.SelectedValue);
-        }
         currentObject.Prefix = txtPrefix.Text;
         currentObject.CallLength = txtLength.Text.ToNullableInt();
         currentObject.CallsCount = txtCallsCount.Text.ToNullableInt();
         currentObject.Durations = txtDuration.Text.ToNullableInt();
-        currentObject.Supplement = string.IsNullOrWhiteSpace(txtSupplement.Text) ? null : txtSupplement.Text.Trim();
         currentObject.Ignore = txtIgnore.Text.ToNullableInt();
 
         currentObject.PrefixToAdd = string.IsNullOrWhiteSpace(txtPrefixToAdd.Text) ? null : txtPrefixToAdd.Text.Trim();
@@ -173,50 +155,11 @@ public partial class NormalizationRules : BasePage
         id = currentObject.Id;
 
         ddlSwitches.SelectedValue = currentObject.SwitchId.ToString();
-        FillTruncks(currentObject.SwitchId.Value);
         rblstParty.SelectedValue = currentObject.Party;
-        //txtTrunckName.Text = currentObject.Party == Constants.CGPN ? currentObject.In_Trunck : currentObject.Out_Trunck;
-        if(currentObject.Party == Constants.CGPN)
-        {
-            if (currentObject.In_TrunckId.HasValue)
-                ddlTruncks.SelectedValue = currentObject.In_TrunckId.Value.ToString();
-            else
-            {
-                if (string.IsNullOrWhiteSpace(currentObject.In_TrunckName))
-                {
-                    RadComboBoxItem item = ddlTruncks.Items.FindItemByText(currentObject.In_TrunckName);
-                    if (item != null)
-                        ddlTruncks.SelectedValue = item.Value;
-                    else
-                        ddlTruncks.SelectedIndex = -1;
-                }
-                else
-                    ddlTruncks.SelectedIndex = -1;
-            }
-        }
-        else
-        {
-            if (currentObject.Out_TrunckId.HasValue)
-                ddlTruncks.SelectedValue = currentObject.Out_TrunckId.Value.ToString();
-            else
-            {
-                if (string.IsNullOrWhiteSpace(currentObject.Out_TrunckName))
-                {
-                    RadComboBoxItem item = ddlTruncks.Items.FindItemByText(currentObject.Out_TrunckName);
-                    if (item != null)
-                        ddlTruncks.SelectedValue = item.Value;
-                    else
-                        ddlTruncks.SelectedIndex = -1;
-                }
-                else
-                    ddlTruncks.SelectedIndex = -1;
-            }
-        }
         txtPrefix.Text = currentObject.Prefix;
         txtLength.Text = currentObject.CallLength.HasValue ? currentObject.CallLength.ToString() : string.Empty;
         txtCallsCount.Text = currentObject.CallsCount.HasValue ? currentObject.CallsCount.ToString() : string.Empty;
         txtDuration.Text = currentObject.Durations.HasValue ? currentObject.Durations.ToString() : string.Empty;
-        txtSupplement.Text = currentObject.Supplement;
         txtIgnore.Text = currentObject.Ignore.HasValue ? currentObject.Ignore.ToString() : string.Empty;
 
         txtPrefixToAdd.Text = currentObject.PrefixToAdd;
@@ -231,10 +174,6 @@ public partial class NormalizationRules : BasePage
         List<SwitchProfile> switches = SwitchProfile.GetAll();
         Manager.BindCombo(ddlSearchSwitches, switches, "Name", "Id", "", "0");
         Manager.BindCombo(ddlSwitches, switches, "Name", "Id", "", "0");
-
-
-        //List<SwitchTrunck> truncks = SwitchTrunck.GetAll();
-        //Manager.BindCombo(ddlSearchTruncks, truncks, "Name", "Id", "", "0");
 
         // Party (CGPN, CDPN)
         List<ListItem> items = new List<ListItem>();
@@ -251,20 +190,6 @@ public partial class NormalizationRules : BasePage
         ddlPages.Items.Add(new ListItem ("1", "1"));
     }
 
-    private void FillTruncks(int switchId)
-    {
-        List<SwitchTrunck> truncks = new List<SwitchTrunck>();
-        if (switchId > 0)
-        {
-            truncks = SwitchTrunck.GetList(switchId);
-            Manager.BindCombo(ddlTruncks, truncks, "Name", "Id", "", "0");
-        }
-        else
-        {
-            ddlTruncks.DataSource = truncks;
-            ddlTruncks.DataBind();
-        }
-    }
 
     private void SetPermissions()
     {
@@ -381,29 +306,7 @@ public partial class NormalizationRules : BasePage
     {
 
     }
-    protected void ddlSwitches_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        int switchId = Manager.GetInteger(ddlSwitches.SelectedValue);
-        FillTruncks(switchId);
-    }
 
-    protected void ddlSearchSwitches_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        int switchId = Manager.GetInteger(ddlSearchSwitches.SelectedValue);
-        List<SwitchTrunck> truncks = new List<SwitchTrunck>();
-        if (switchId > 0)
-        {
-            truncks = SwitchTrunck.GetList(switchId);
-            Manager.BindCombo(ddlSearchTruncks, truncks, "Name", "Id", "", "0");
-        }
-        else
-        {
-            ddlSearchTruncks.DataSource = truncks;
-            ddlSearchTruncks.DataBind();
-        }
-
-
-    }
     protected void rblstParty_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (rblstParty.SelectedValue == Constants.CGPN)

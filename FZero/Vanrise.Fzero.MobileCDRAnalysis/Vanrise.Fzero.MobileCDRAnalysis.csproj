@@ -50,9 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AN_Profiling.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="CDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -82,9 +79,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="db_GetReportVariables_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Direction.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EmailReceiver.cs">
@@ -121,19 +115,13 @@
     <Compile Include="Classes\SuspectionOccurance.cs" />
     <Compile Include="Classes\Suspection_Level.cs" />
     <Compile Include="Classes\Switch_DatabaseConnection.cs" />
-    <Compile Include="Classes\Direction.cs" />
     <Compile Include="Classes\NormalizationCall.cs" />
     <Compile Include="Classes\SwitchProfile.cs" />
-    <Compile Include="Classes\SwitchTrunck.cs" />
     <Compile Include="Classes\StrategyProperty.cs" />
-    <Compile Include="Classes\Trunck.cs" />
     <Compile Include="Import.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ImportType.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MobileCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Model.Context.cs">
@@ -155,9 +143,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NormalizationRule.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NormalizationRulesBackup.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NumberProfile.cs">
@@ -187,9 +172,6 @@
     <Compile Include="prImportfromSwitches_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="profiletest.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Related_Criteria.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -201,6 +183,12 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ReportingStatu.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_CallType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_SubType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SourceMapping.cs">
@@ -224,7 +212,7 @@
     <Compile Include="Strategy_Min_Values.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Strategy_Suspection_Level.cs">
+    <Compile Include="Strategy_Suspicion_Level.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SubscriberThreshold.cs">
@@ -233,25 +221,16 @@
     <Compile Include="Subscriber_Values.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Suspection_Level.cs">
+    <Compile Include="Suspicion_Level.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SwitchProfile.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchTrunck.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchTruncksold.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Switch_DatabaseConnections.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Trunck.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">

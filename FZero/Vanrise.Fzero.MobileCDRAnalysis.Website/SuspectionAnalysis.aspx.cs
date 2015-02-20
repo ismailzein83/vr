@@ -51,8 +51,8 @@ public partial class SuspectionAnalysis : BasePage
     {
         BindCombo(ddlSearchStrategy, Strategy.GetAll(), "Name", "Id", "", "0");
        
-        List<Suspection_Level> suspection_Levels = new List<Suspection_Level>();
-        suspection_Levels = Suspection_Level.GetAll();
+        List<Suspicion_Level> suspection_Levels = new List<Suspicion_Level>();
+        suspection_Levels = Suspicion_Level.GetAll();
         
 
         int StartegyId;

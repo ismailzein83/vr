@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (MobileEntities context = new MobileEntities())
                 {
                     subscriberThresholds = context.SubscriberThresholds
-                        .Include(s => s.Suspection_Level)
+                        .Include(s => s.Suspicion_Level)
                         .Where(s =>
                             (s.StrategyId == strategyId && s.SubscriberNumber == SubscriberNumber && s.SuspectionLevelId != 1)
 

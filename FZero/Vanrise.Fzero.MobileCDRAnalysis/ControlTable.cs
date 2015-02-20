@@ -22,8 +22,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> TotalRows { get; set; }
         public Nullable<int> StartID { get; set; }
         public Nullable<int> EndID { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<System.DateTime> StartingUnitdate { get; set; }
         public Nullable<System.DateTime> EndingUnitdate { get; set; }
         public Nullable<int> Lastid { get; set; }

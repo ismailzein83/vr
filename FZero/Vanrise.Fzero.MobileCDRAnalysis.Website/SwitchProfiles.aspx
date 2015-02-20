@@ -19,20 +19,7 @@
                                 <asp:TextBox ID="txtSearchName" runat="server"></asp:TextBox>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="caption">Type
-                            </td>
-                            <td class="inputData">
-                                <asp:TextBox ID="txtSearchType" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="caption">Area Code
-                            </td>
-                            <td class="inputData">
-                                <asp:TextBox ID="txtSearchAreaCode" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td>&nbsp;
                             </td>
@@ -64,8 +51,6 @@
                         <Columns>
                             <asp:BoundField HeaderText="Full Name" DataField="FullName" />
                             <asp:BoundField HeaderText="Name" DataField="Name" />
-                            <asp:BoundField HeaderText="Type" DataField="SwitchType" />
-                            <asp:BoundField HeaderText="Area Code" DataField="AreaCode" />
                             <asp:BoundField HeaderText="Database Name" DataField="Switch_DatabaseConnections.DatabaseName" />
                             <asp:TemplateField>
                                 <ItemTemplate>
@@ -112,33 +97,7 @@
                                                     </asp:RequiredFieldValidator>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td class="caption required">Full Name</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtFullName" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvFullName" runat="server" Display="Dynamic"
-                                                        ControlToValidate="txtFullName" ErrorMessage="Full Name should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="caption required">Type</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtType" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvType" runat="server" Display="Dynamic"
-                                                        ControlToValidate="txtType" ErrorMessage="Proxy Type should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="caption required">Area Code</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtAreaCode" runat="server"></asp:TextBox>
-                                                    <br />
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvAreaCode" runat="server" Display="Dynamic"
-                                                        ControlToValidate="txtAreaCode" ErrorMessage="Area Code should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                                </td>
-                                            </tr>
+                                           
 
                                              <tr>
                                                 <td class="caption required">Allow Auto Import</td>

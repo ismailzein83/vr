@@ -12,16 +12,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Direction
+    public partial class Set_CallType
     {
-        public Direction()
-        {
-            this.SwitchTruncks = new HashSet<SwitchTrunck>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<SwitchTrunck> SwitchTruncks { get; set; }
+        public string Description { get; set; }
     }
 }

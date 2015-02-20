@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             }
         }
 
-        public static List<NormalizationRule> GetList(int switchId, int TrunckID, string party, int? length, string prefix, 
+        public static List<NormalizationRule> GetList(int switchId, string party, int? length, string prefix, 
             int pageSize, int pageNumber, string orderedColumn, out int rowsCount)
         {
             List<NormalizationRule> rules = new List<NormalizationRule>();
@@ -55,15 +55,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (MobileEntities context = new MobileEntities())
                 {
                     var query = context.NormalizationRules
-                        .Include(r=>r.SwitchTrunck.Trunck)
-                        .Include(r => r.SwitchTrunck1.Trunck)
                         .Include(r=>r.SwitchProfile)
                         .Where(r => 
                             (switchId <= 0 || r.SwitchId == switchId)
                             &&
                             (party == string.Empty || r.Party == party)
-                            &&
-                            (TrunckID == 0 || r.In_TrunckId == TrunckID || r.Out_TrunckId == TrunckID)
                             &&
                             (!length.HasValue || r.CallLength == length)
                             &&
@@ -175,7 +171,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (MobileEntities context = new MobileEntities())
                 {
                     Count = context.NormalizationRules
-                        .Where(r => r.Party == rule.Party).Where(r => r.SwitchId == rule.SwitchId).Where(r => r.In_TrunckId == rule.In_TrunckId).Where(r => r.CallLength == rule.CallLength).Where(r => r.Prefix == rule.Prefix).Where(r => (r.In_TrunckId.HasValue || r.In_TrunckId == r.In_TrunckId)).Where(r => r.Id != rule.Id)
+                        .Where(r => r.Party == rule.Party).Where(r => r.SwitchId == rule.SwitchId).Where(r => r.CallLength == rule.CallLength).Where(r => r.Prefix == rule.Prefix).Where(r => r.Id != rule.Id)
                         .Count();
                 }
             }

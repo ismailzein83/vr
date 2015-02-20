@@ -13,7 +13,7 @@ using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
-    public partial class Strategy_Suspection_Level
+    public partial class Strategy_Suspicion_Level
     {
 
 
@@ -21,14 +21,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
 
 
-        public static Strategy_Suspection_Level Load(int id)
+        public static Strategy_Suspicion_Level Load(int id)
         {
-            Strategy_Suspection_Level strategy_Suspection_level = new Strategy_Suspection_Level();
+            Strategy_Suspicion_Level Strategy_Suspicion_Level = new Strategy_Suspicion_Level();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    strategy_Suspection_level = context.Strategy_Suspection_Level
+                    Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Include(s => s.Strategy)
                         .Where(s => s.Id == id)
                         .OrderBy(s => new { s.StrategyId, s.LevelId, s.CriteriaId1, s.CriteriaId2, s.CriteriaId3, s.CriteriaId4, s.CriteriaId5, s.CriteriaId6 })
@@ -37,74 +37,74 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Strategy_Suspection_level.Load(" + id + ")", err);
+                FileLogger.Write("DataLayer.Strategy_Suspicion_Level.Load(" + id + ")", err);
             }
-            return strategy_Suspection_level;
+            return Strategy_Suspicion_Level;
         }
         //----------------------------------------
-        public static List<Strategy_Suspection_Level> GetList(int StrategyId)
+        public static List<Strategy_Suspicion_Level> GetList(int StrategyId)
         {
             if (StrategyId==0)
                 return GetAll();
 
-            List<Strategy_Suspection_Level> strategy_Suspection_level = new List<Strategy_Suspection_Level>();
+            List<Strategy_Suspicion_Level> Strategy_Suspicion_Level = new List<Strategy_Suspicion_Level>();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    strategy_Suspection_level = context.Strategy_Suspection_Level
+                    Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Where(s =>
                             (s.StrategyId == StrategyId)
                         )
                         .Include(s => s.Strategy)
-                        .Include(s => s.Suspection_Level)
+                        .Include(s => s.Suspicion_Level)
                         .OrderBy(s => new { s.StrategyId,s.LevelId,s.CriteriaId1, s.CriteriaId2, s.CriteriaId3, s.CriteriaId4, s.CriteriaId5, s.CriteriaId6 })
                         .ToList();
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Strategy_Suspection_level.GetList()", err);
+                FileLogger.Write("DataLayer.Strategy_Suspicion_Level.GetList()", err);
             }
-            return strategy_Suspection_level;
+            return Strategy_Suspicion_Level;
         }
         //----------------------------------------
-        public static List<Strategy_Suspection_Level> GetAll()
+        public static List<Strategy_Suspicion_Level> GetAll()
         {
-            List<Strategy_Suspection_Level> strategy_Suspection_level = new List<Strategy_Suspection_Level>();
+            List<Strategy_Suspicion_Level> Strategy_Suspicion_Level = new List<Strategy_Suspicion_Level>();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    strategy_Suspection_level = context.Strategy_Suspection_Level
+                    Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Include(s => s.Strategy)
-                        .Include(s => s.Suspection_Level)
+                        .Include(s => s.Suspicion_Level)
                         .OrderBy(s => new { s.StrategyId, s.LevelId, s.CriteriaId1, s.CriteriaId2, s.CriteriaId3, s.CriteriaId4, s.CriteriaId5, s.CriteriaId6 })
                         .ToList();
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Strategy_Suspection_level.GetAll()", err);
+                FileLogger.Write("DataLayer.Strategy_Suspicion_Level.GetAll()", err);
             }
-            return strategy_Suspection_level;
+            return Strategy_Suspicion_Level;
         }
        
         //----------------------------------------
-        public static bool Save(Strategy_Suspection_Level strategy_Suspection_level)
+        public static bool Save(Strategy_Suspicion_Level Strategy_Suspicion_Level)
         {
             bool success = false;
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    if (strategy_Suspection_level.Id == 0)
+                    if (Strategy_Suspicion_Level.Id == 0)
                     {
-                        context.Strategy_Suspection_Level.Add(strategy_Suspection_level);
+                        context.Strategy_Suspicion_Level.Add(Strategy_Suspicion_Level);
                     }
                     else
                     {
-                        context.Entry(strategy_Suspection_level).State = System.Data.EntityState.Modified;
+                        context.Entry(Strategy_Suspicion_Level).State = System.Data.EntityState.Modified;
 
                     }
                     context.SaveChanges();
@@ -113,7 +113,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Strategy_Suspection_level.Save(Id: " + strategy_Suspection_level.Id + ")", err);
+                FileLogger.Write("DataLayer.Strategy_Suspicion_Level.Save(Id: " + Strategy_Suspicion_Level.Id + ")", err);
             }
             return success;
         }
@@ -121,25 +121,25 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         //-------------------------------------
         public static bool Delete(int id)
         {
-            Strategy_Suspection_Level strategy_Suspection_Level = new Strategy_Suspection_Level() { Id = id };
-            return Delete(strategy_Suspection_Level);
+            Strategy_Suspicion_Level Strategy_Suspicion_Level = new Strategy_Suspicion_Level() { Id = id };
+            return Delete(Strategy_Suspicion_Level);
         }
         //-------------------------------------
-        private static bool Delete(Strategy_Suspection_Level strategy_Suspection_Level)
+        private static bool Delete(Strategy_Suspicion_Level Strategy_Suspicion_Level)
         {
             bool success = false;
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    context.Entry(strategy_Suspection_Level).State = System.Data.EntityState.Deleted;
+                    context.Entry(Strategy_Suspicion_Level).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
                     success = true;
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Strategy_Suspection_Level.Delete(Id: " + strategy_Suspection_Level.Id + ")", err);
+                FileLogger.Write("DataLayer.Strategy_Suspicion_Level.Delete(Id: " + Strategy_Suspicion_Level.Id + ")", err);
             }
             return success;
         }

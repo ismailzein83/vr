@@ -72,7 +72,6 @@ public partial class Dashboard : BasePage
     {
         divRulesCount.InnerText = staticData.RulesCount.ToString(Formatter.AmountFormat);
         divSwitchesCount.InnerText = staticData.SwitchesCount.ToString(Formatter.AmountFormat);
-        divTruncksCount.InnerText = staticData.TruncksCount.ToString(Formatter.AmountFormat);
         divStrategyCount.InnerText = staticData.StrategyCount.ToString(Formatter.AmountFormat);
         divReports.InnerText = staticData.ReportsCount.ToString(Formatter.AmountFormat);
         divReportedCases.InnerText = staticData.ReportDetails.ToString(Formatter.AmountFormat);

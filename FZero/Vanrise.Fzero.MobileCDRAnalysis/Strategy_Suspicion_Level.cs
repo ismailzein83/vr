@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Strategy_Suspection_Level
+    public partial class Strategy_Suspicion_Level
     {
         public int Id { get; set; }
         public Nullable<int> StrategyId { get; set; }
@@ -25,6 +25,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> CriteriaId6 { get; set; }
     
         public virtual Strategy Strategy { get; set; }
-        public virtual Suspection_Level Suspection_Level { get; set; }
+        public virtual Suspicion_Level Suspicion_Level { get; set; }
     }
 }

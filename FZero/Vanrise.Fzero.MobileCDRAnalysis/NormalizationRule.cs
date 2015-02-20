@@ -17,11 +17,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int Id { get; set; }
         public string Prefix { get; set; }
         public Nullable<int> CallLength { get; set; }
-        public string In_TrunckName { get; set; }
-        public string Out_TrunckName { get; set; }
         public Nullable<decimal> Durations { get; set; }
         public Nullable<int> CallsCount { get; set; }
-        public string Supplement { get; set; }
         public Nullable<int> Ignore { get; set; }
         public string Party { get; set; }
         public Nullable<int> SwitchId { get; set; }
@@ -30,11 +27,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> SubstringStartIndex { get; set; }
         public Nullable<int> SubstringLength { get; set; }
         public string SuffixToAdd { get; set; }
-        public Nullable<int> In_TrunckId { get; set; }
-        public Nullable<int> Out_TrunckId { get; set; }
     
         public virtual SwitchProfile SwitchProfile { get; set; }
-        public virtual SwitchTrunck SwitchTrunck { get; set; }
-        public virtual SwitchTrunck SwitchTrunck1 { get; set; }
     }
 }

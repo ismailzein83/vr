@@ -14,62 +14,62 @@ using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
-     public partial class Suspection_Level
+     public partial class Suspicion_Level
     {
 
-        public static Suspection_Level Load(int id)
+        public static Suspicion_Level Load(int id)
         {
-            Suspection_Level suspection_level = new Suspection_Level();
+            Suspicion_Level Suspicion_Level = new Suspicion_Level();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    suspection_level = context.Suspection_Level
+                    Suspicion_Level = context.Suspicion_Level
                         .Where(s => s.Id == id)
                         .FirstOrDefault();
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Suspection_level.Load(" + id + ")", err);
+                FileLogger.Write("DataLayer.Suspicion_Level.Load(" + id + ")", err);
             }
-            return suspection_level;
+            return Suspicion_Level;
         }
 
         //----------------------------------------
-        public static List<Suspection_Level> GetAll()
+        public static List<Suspicion_Level> GetAll()
         {
-            List<Suspection_Level> suspection_levels = new List<Suspection_Level>();
+            List<Suspicion_Level> suspection_levels = new List<Suspicion_Level>();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    suspection_levels = context.Suspection_Level
+                    suspection_levels = context.Suspicion_Level
                        .ToList();
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Suspection_level.GetAll()", err);
+                FileLogger.Write("DataLayer.Suspicion_Level.GetAll()", err);
             }
             return suspection_levels;
         }
 
         //----------------------------------------
-        public static bool Save(Suspection_Level suspection_level)
+        public static bool Save(Suspicion_Level Suspicion_Level)
         {
             bool success = false;
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    if (suspection_level.Id == 0)
+                    if (Suspicion_Level.Id == 0)
                     {
-                        context.Suspection_Level.Add(suspection_level);
+                        context.Suspicion_Level.Add(Suspicion_Level);
                     }
                     else
                     {
-                        context.Entry(suspection_level).State = System.Data.EntityState.Modified;
+                        context.Entry(Suspicion_Level).State = System.Data.EntityState.Modified;
 
                     }
                     context.SaveChanges();
@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.Suspection_level.Save(Id: " + suspection_level.Id + ")", err);
+                FileLogger.Write("DataLayer.Suspicion_Level.Save(Id: " + Suspicion_Level.Id + ")", err);
             }
             return success;
         }

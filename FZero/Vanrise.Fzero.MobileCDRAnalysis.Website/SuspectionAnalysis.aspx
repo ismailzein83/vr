@@ -356,7 +356,7 @@
                                                                                 </ItemTemplate>
                                                                             </Telerik:GridTemplateColumn>
 
-                                                                            <Telerik:GridBoundColumn HeaderText="Suspicion Level" DataField="Suspection_Level.Name" HeaderStyle-Width="15%"   />
+                                                                            <Telerik:GridBoundColumn HeaderText="Suspicion Level" DataField="Suspicion_Level.Name" HeaderStyle-Width="15%"   />
 
 
                                                                             <Telerik:GridTemplateColumn HeaderText="Criteria 1" HeaderStyle-Width="15%"  >

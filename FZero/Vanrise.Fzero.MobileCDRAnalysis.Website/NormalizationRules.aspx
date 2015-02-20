@@ -72,17 +72,11 @@
                             <td class="caption">Switch
                             </td>
                             <td class="inputData">
-                                <Telerik:RadComboBox ID="ddlSearchSwitches" runat="server"  OnSelectedIndexChanged="ddlSearchSwitches_SelectedIndexChanged" AutoPostBack="true"></Telerik:RadComboBox>
+                                <Telerik:RadComboBox ID="ddlSearchSwitches" runat="server"  ></Telerik:RadComboBox>
                             </td>
                         </tr>
 
-                        <tr>
-                            <td class="caption">Trunk
-                            </td>
-                            <td class="inputData">
-                                <Telerik:RadComboBox ID="ddlSearchTruncks" runat="server"></Telerik:RadComboBox>
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td class="caption">Party
                             </td>
@@ -142,10 +136,7 @@
                             OnRowCommand="gvData_RowCommand" HorizontalAlign="Left">
                             <Columns>
                                 <asp:BoundField HeaderText="Switch Name" DataField="SwitchProfile.Name" />
-                                <asp:BoundField HeaderText="In Trunk" DataField="In_TrunckName" />
-                                <asp:BoundField HeaderText="Out Trunk" DataField="Out_TrunckName" />
                                 <asp:BoundField HeaderText="Party" DataField="Party" />
-                                <%-- <asp:BoundField HeaderText="Calls Count" DataField="CallsCount" />--%>
                                 <asp:BoundField HeaderText="Party Length" DataField="CallLength" />
                                 <asp:BoundField HeaderText="Prefix" DataField="Prefix" />
                                 <asp:BoundField HeaderText="Rule" DataField="UpdateStatement" />
@@ -210,22 +201,20 @@
                                     <ContentTemplate>
                                         <table class="table">
                                             <tr>
-                                                <td class="caption required">Switch</td>
+                                                <td class="caption required">Source</td>
                                                 <td class="inputData">
-                                                    <Telerik:RadComboBox ID="ddlSwitches" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlSwitches_SelectedIndexChanged"></Telerik:RadComboBox>
+                                                    <Telerik:RadComboBox ID="ddlSwitches" runat="server"  ></Telerik:RadComboBox>
                                                     <br />
                                                     <asp:RequiredFieldValidator CssClass="error" ID="rfvSwitch" runat="server" Display="Dynamic"
                                                         ControlToValidate="ddlSwitches" InitialValue="0"
                                                         ErrorMessage="The switch should be selected" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                 </td>
                                                 <td class="space10"></td>
-                                                <td class="caption required">Trunk Name</td>
+                                                <td class="caption required"></td>
                                                 <td>
-                                                    <Telerik:RadComboBox ID="ddlTruncks" runat="server"></Telerik:RadComboBox>
+                                                    
                                                     <br />
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvTruncks" runat="server" Display="Dynamic"
-                                                        ControlToValidate="ddlTruncks" InitialValue="0"
-                                                        ErrorMessage="A Trunk should be selected" ValidationGroup="Save"></asp:RequiredFieldValidator>
+                                                  
                                                 </td>
                                             </tr>
                                             <tr>
@@ -239,13 +228,7 @@
                                                         ControlToValidate="rblstParty"
                                                         ErrorMessage="A Party should be chosen" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                 </td>
-                                                <%-- <td class="space10"></td>
-                                                <td class="caption required">Trunck Name</td>
-                                                <td class="inputData">
-                                                    <asp:TextBox ID="txtTrunckName" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvTrunck" runat="server" Display="Dynamic"
-                                                        ControlToValidate="txtTrunckName" ErrorMessage="<br />Trunck should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>
-                                                </td>--%>
+                                             
                                             </tr>
                                             <tr id="trStats" runat="server" visible="false">
                                                 <td class="caption">Calls Count</td>
@@ -286,9 +269,9 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="caption">Supplement</td>
+                                                <td class="caption"></td>
                                                 <td class="inputData">
-                                                    <asp:TextBox ID="txtSupplement" runat="server"></asp:TextBox>
+                                                    
                                                 </td>
                                                 <td class="space10"></td>
                                                 <td class="caption required" runat="server" id="tdIgnore">Ignore</td>
@@ -383,7 +366,7 @@
                                                                     ErrorMessage="You should enter the substring start index <u> and </u> the substring length"
                                                                     OnServerValidate="cvRuleValidation_ServerValidate"
                                                                     ClientValidationFunction="cvRuleValidation_ClientValidate" />
-                                                                <%--ErrorMessage="You should fill the <b>prefix</b> and/or <b>substring index <u>and</u> length</b> and/or the <b>suffix</b>"--%>
+                                                                
                                                             </td>
                                                         </tr>
                                                     </table>

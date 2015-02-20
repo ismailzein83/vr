@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     public partial  class NormalCDR
     {
 
-        public static List<NormalCDR> GetList(string A_Temp)
+        public static List<NormalCDR> GetList(string MSISDN)
         {
             //if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(Description))
             //    return GetAll();
@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     normalCDRs = context.NormalCDRs
                        .Where(s =>
-                            (s.A_Temp == A_Temp)
+                            (s.MSISDN == MSISDN)
                         ).Take(1000)
                         .ToList();
                 }
@@ -37,13 +37,13 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             return normalCDRs;
         }
 
-        public static IEnumerable<string> GetRelatedList(string A_Temp)
+        public static IEnumerable<string> GetRelatedList(string MSISDN)
         {
-            A_Temp = (A_Temp == "" ? "0" : A_Temp);
-            Int64 a_TempInt = Int64.Parse(A_Temp);
+            MSISDN = (MSISDN == "" ? "0" : MSISDN);
+            Int64 a_TempInt = Int64.Parse(MSISDN);
 
             StringBuilder s = new StringBuilder();
-            for (int i = 0; i < A_Temp.Length - a_TempInt.ToString().Length; i++)
+            for (int i = 0; i < MSISDN.Length - a_TempInt.ToString().Length; i++)
             {
                 s.Append("0");
             }
@@ -52,10 +52,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             for (Int64 i = a_TempInt - 4; i <= a_TempInt + 4; i++)
             {
                 string ns = s + i.ToString();
-                //if (ns != A_Temp)
+                //if (ns != MSISDN)
                 matchList.Add(ns);
             }
-            matchList.Add(A_Temp);
+            matchList.Add(MSISDN);
                     
 
             IEnumerable<string> relatedList = new List<string>();
@@ -66,9 +66,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
 
                     relatedList = (from  c in context.NormalCDRs
-                                   join th in matchList on c.A_Temp equals th
-                                   orderby c.A_Temp
-                                   select c.A_Temp).ToList().Distinct();
+                                   join th in matchList on c.MSISDN equals th
+                                   orderby c.MSISDN
+                                   select c.MSISDN).ToList().Distinct();
                    
                  
                 }

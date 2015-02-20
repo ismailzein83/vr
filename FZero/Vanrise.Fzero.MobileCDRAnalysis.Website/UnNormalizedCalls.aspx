@@ -178,7 +178,7 @@
                                             <tr>
                                                 <td class="caption required">Switch</td>
                                                 <td class="inputData">
-                                                    <Telerik:RadComboBox ID="ddlSwitches" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlSwitches_SelectedIndexChanged"    ></Telerik:RadComboBox>
+                                                    <Telerik:RadComboBox ID="ddlSwitches" runat="server"    ></Telerik:RadComboBox>
                                                     <br />
                                                     <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" runat="server" Display="Dynamic"
                                                         ControlToValidate="ddlSwitches" InitialValue="0"

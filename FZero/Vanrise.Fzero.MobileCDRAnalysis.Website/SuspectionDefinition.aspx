@@ -52,7 +52,7 @@
                         <Columns>
 
                             <asp:BoundField HeaderText="Strategy" DataField="Strategy.Name" />
-                            <asp:BoundField HeaderText="Suspicion Level" DataField="Suspection_Level.Name" />
+                            <asp:BoundField HeaderText="Suspicion Level" DataField="Suspicion_Level.Name" />
                             <%-- <asp:BoundField HeaderText="CriteriaId1" DataField="CriteriaId1" />--%>
 
 

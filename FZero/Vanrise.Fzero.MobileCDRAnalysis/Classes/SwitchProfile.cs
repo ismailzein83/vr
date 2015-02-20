@@ -57,9 +57,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             return switches;
         }
 
-        public static List<SwitchProfile> GetList(string name, string areaCode, string type)
+        public static List<SwitchProfile> GetList(string name)
         {
-            if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(areaCode) && string.IsNullOrWhiteSpace(type))
+            if (string.IsNullOrWhiteSpace(name))
                 return GetAll();
 
             List<SwitchProfile> switches = new List<SwitchProfile>();
@@ -67,42 +67,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-
-                     //switches = context.SwitchProfiles
-                     //   .Include(s => s.Switch_DatabaseConnection)
-                     //   .Where(s =>
-                     //       (s.Name.Contains(name) || s.FullName.Contains(name))
-                     //       ||
-                     //       (s.SwitchType.Contains(type))
-                     //       ||
-                     //       (s.AreaCode == areaCode)
-                     //   )
-                     //   .ToList();
-
-                    
                         var query = context.SwitchProfiles
                         .Include(s => s.Switch_DatabaseConnections);
 
                          if (!string.IsNullOrWhiteSpace(name))
                          {
-                            query = query.Where(s => (s.Name.Contains(name) || s.FullName.Contains(name)));
+                            query = query.Where(s => (s.Name.Contains(name) ));
 
-                         }
-
-                         if (!string.IsNullOrWhiteSpace(areaCode) )
-                         {
-                             query = query.Where(s => s.AreaCode == areaCode);
-                         }
-
-                         if (!string.IsNullOrWhiteSpace(type))
-                         {
-                             query = query.Where(s => s.SwitchType.Contains(type));
                          }
 
                         switches=query.ToList();
-                   
-
-
                 }
             }
             catch (Exception err)
@@ -112,7 +86,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             return switches;
         }
 
-        public static bool IsFullNameUsed(SwitchProfile switchProfile)
+        public static bool IsNameUsed(SwitchProfile switchProfile)
         {
             bool isUsed = false;
             try
@@ -120,14 +94,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (MobileEntities context = new MobileEntities())
                 {
                     isUsed = context.SwitchProfiles
-                        .Where(p => p.FullName == switchProfile.FullName 
+                        .Where(p => p.Name == switchProfile.Name 
                             && p.Id != switchProfile.Id)
                         .Count() > 0;
                 }
             }
             catch (Exception err)
             {
-                FileLogger.Write("DataLayer.SwitchProfile.IsFullNameUnique(Id: " + switchProfile.Id + ", FullName: " + switchProfile.FullName + ")", err);
+                FileLogger.Write("DataLayer.SwitchProfile.IsFullNameUnique(Id: " + switchProfile.Id + ", FullName: " + switchProfile.Name + ")", err);
             }
             return isUsed;
         }
@@ -174,7 +148,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
 
                     SwitchProfile sp = SwitchProfile.Load(switchProfile.Id);
-                    if (sp.NormalizationRules.Count() > 0 || sp.SwitchTruncks.Count() > 0)
+                    if (sp.NormalizationRules.Count() > 0 )
                     {
                         success=false;
                     }

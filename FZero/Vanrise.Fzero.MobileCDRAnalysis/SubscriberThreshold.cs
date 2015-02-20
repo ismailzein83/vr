@@ -26,6 +26,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> SuspectionLevelId { get; set; }
         public Nullable<int> StrategyId { get; set; }
     
-        public virtual Suspection_Level Suspection_Level { get; set; }
+        public virtual Suspicion_Level Suspicion_Level { get; set; }
     }
 }

@@ -13,14 +13,14 @@ public partial class SuspectionDefinition : BasePage
 {
     #region Properties
 
-    List<Strategy_Suspection_Level> CurrentSuspectionList
+    List<Strategy_Suspicion_Level> CurrentSuspectionList
     {
         get
         {
             if (Session["SuspectionLevel.CurrentSuspectionList"] == null
-                || !(Session["SuspectionLevel.CurrentSuspectionList"] is List<Strategy_Suspection_Level>))
+                || !(Session["SuspectionLevel.CurrentSuspectionList"] is List<Strategy_Suspicion_Level>))
                 GetList();
-            return (List<Strategy_Suspection_Level>)Session["SuspectionLevel.CurrentSuspectionList"];
+            return (List<Strategy_Suspicion_Level>)Session["SuspectionLevel.CurrentSuspectionList"];
         }
         set
         {
@@ -45,8 +45,8 @@ public partial class SuspectionDefinition : BasePage
         Manager.BindCombo(ddlStrategies, strategies, "Name", "Id", "", "0");
 
 
-        List<Suspection_Level> suspection_Levels = new List<Suspection_Level>();
-        suspection_Levels = Suspection_Level.GetAll();
+        List<Suspicion_Level> suspection_Levels = new List<Suspicion_Level>();
+        suspection_Levels = Suspicion_Level.GetAll();
         Manager.BindCombo(ddlSuspectionLevel, suspection_Levels, "Name", "Id", "", "0");
 
 
@@ -97,11 +97,11 @@ public partial class SuspectionDefinition : BasePage
     {
         if (IsValidData())
         {
-            Strategy_Suspection_Level strategy_Suspection_Level = SetData(); ;
+            Strategy_Suspicion_Level Strategy_Suspicion_Level = SetData(); ;
 
-            if (!Strategy_Suspection_Level.Save(strategy_Suspection_Level))
+            if (!Strategy_Suspicion_Level.Save(Strategy_Suspicion_Level))
             {
-                id = strategy_Suspection_Level.Id;
+                id = Strategy_Suspicion_Level.Id;
                 ShowError( "An error occured when trying to save data, kindly try to save later.");
                 return;
             }
@@ -159,7 +159,7 @@ public partial class SuspectionDefinition : BasePage
         int strategyId = 0;
         if (ddlSearchStrategy.SelectedItem != null)
             strategyId = int.Parse(ddlSearchStrategy.SelectedItem.Value);
-        CurrentSuspectionList = Vanrise.Fzero.MobileCDRAnalysis.Strategy_Suspection_Level.GetList(strategyId);
+        CurrentSuspectionList = Vanrise.Fzero.MobileCDRAnalysis.Strategy_Suspicion_Level.GetList(strategyId);
         
     }
     private void FillGrid()
@@ -170,9 +170,9 @@ public partial class SuspectionDefinition : BasePage
         gvData.DataBind();
     }
 
-    private Strategy_Suspection_Level  SetData()
+    private Strategy_Suspicion_Level  SetData()
     {
-       Strategy_Suspection_Level currentObject = new Strategy_Suspection_Level() { Id = id };
+       Strategy_Suspicion_Level currentObject = new Strategy_Suspicion_Level() { Id = id };
        currentObject.StrategyId = int.Parse(ddlStrategies.SelectedItem.Value);
        currentObject.LevelId = int.Parse(ddlSuspectionLevel.SelectedItem.Value);
        currentObject.CriteriaId1 = chkCriteria1.Checked == true ? 1 : 0;
@@ -188,12 +188,12 @@ public partial class SuspectionDefinition : BasePage
     private void FillDetails(int id)
     {
 
-        Strategy_Suspection_Level currentObject = Strategy_Suspection_Level.Load(id);
+        Strategy_Suspicion_Level currentObject = Strategy_Suspicion_Level.Load(id);
         FillData(currentObject);
         SetDetailsVisible(true);
     }
 
-    private void FillData(Strategy_Suspection_Level currentObject)
+    private void FillData(Strategy_Suspicion_Level currentObject)
     {
 
 
@@ -251,7 +251,7 @@ public partial class SuspectionDefinition : BasePage
                     FillDetails(id);
                     break;
                 case "Remove":
-                    if (Strategy_Suspection_Level.Delete(id))
+                    if (Strategy_Suspicion_Level.Delete(id))
                     {
                         LoadData();
                         id = 0;

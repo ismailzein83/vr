@@ -31,14 +31,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<CDR> CDRs { get; set; }
         public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
-        public DbSet<Direction> Directions { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<EmailToken> EmailTokens { get; set; }
         public DbSet<Import> Imports { get; set; }
         public DbSet<ImportType> ImportTypes { get; set; }
-        public DbSet<MobileCDR> MobileCDRs { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
@@ -52,26 +50,22 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportDetail> ReportDetails { get; set; }
         public DbSet<ReportingStatu> ReportingStatus { get; set; }
+        public DbSet<Set_CallType> Set_CallType { get; set; }
+        public DbSet<Set_SubType> Set_SubType { get; set; }
         public DbSet<SourceMapping> SourceMappings { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<Strategy_Min_Values> Strategy_Min_Values { get; set; }
-        public DbSet<Strategy_Suspection_Level> Strategy_Suspection_Level { get; set; }
+        public DbSet<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
         public DbSet<StrategyPeriod> StrategyPeriods { get; set; }
         public DbSet<StrategyThreshold> StrategyThresholds { get; set; }
         public DbSet<Subscriber_Values> Subscriber_Values { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
-        public DbSet<Suspection_Level> Suspection_Level { get; set; }
+        public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }
         public DbSet<SwitchProfile> SwitchProfiles { get; set; }
-        public DbSet<SwitchTrunck> SwitchTruncks { get; set; }
-        public DbSet<SwitchTruncksold> SwitchTruncksolds { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
-        public DbSet<Trunck> Truncks { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<AN_Profiling> AN_Profiling { get; set; }
-        public DbSet<NormalizationRulesBackup> NormalizationRulesBackups { get; set; }
-        public DbSet<profiletest> profiletests { get; set; }
         public DbSet<vw_Dashboard> vw_Dashboard { get; set; }
         public DbSet<vw_ReportedNumber> vw_ReportedNumber { get; set; }
         public DbSet<vw_ReportedNumberNormalCDR> vw_ReportedNumberNormalCDR { get; set; }
@@ -444,6 +438,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int db_FillDailyMobileProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyMobileProfile");
+        }
+    
+        public virtual int db_FillHourlyMobileProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyMobileProfile");
         }
     }
 }

@@ -12,13 +12,18 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class SwitchTruncksold
+    public partial class Suspicion_Level
     {
+        public Suspicion_Level()
+        {
+            this.Strategy_Suspicion_Level = new HashSet<Strategy_Suspicion_Level>();
+            this.SubscriberThresholds = new HashSet<SubscriberThreshold>();
+        }
+    
         public int Id { get; set; }
-        public int SwitchId { get; set; }
-        public int TrunckId { get; set; }
         public string Name { get; set; }
-        public string FullName { get; set; }
-        public byte DirectionId { get; set; }
+    
+        public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
+        public virtual ICollection<SubscriberThreshold> SubscriberThresholds { get; set; }
     }
 }

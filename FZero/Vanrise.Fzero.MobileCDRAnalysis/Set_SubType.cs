@@ -12,18 +12,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Suspection_Level
+    public partial class Set_SubType
     {
-        public Suspection_Level()
-        {
-            this.Strategy_Suspection_Level = new HashSet<Strategy_Suspection_Level>();
-            this.SubscriberThresholds = new HashSet<SubscriberThreshold>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<Strategy_Suspection_Level> Strategy_Suspection_Level { get; set; }
-        public virtual ICollection<SubscriberThreshold> SubscriberThresholds { get; set; }
+        public string Description { get; set; }
     }
 }

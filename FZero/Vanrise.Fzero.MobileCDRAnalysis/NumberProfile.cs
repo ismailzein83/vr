@@ -23,14 +23,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Count_Out_Fail { get; set; }
         public int Count_In_Fail { get; set; }
         public Nullable<decimal> Call_Out_Dur_Avg { get; set; }
-        public int Call_In_Dur_Avg { get; set; }
+        public decimal Call_In_Dur_Avg { get; set; }
         public Nullable<decimal> Total_Out_Volume { get; set; }
-        public int Total_In_Volume { get; set; }
-        public Nullable<int> Diff_Output_Numb_ { get; set; }
+        public decimal Total_In_Volume { get; set; }
+        public Nullable<int> Diff_Output_Numb { get; set; }
         public int Diff_Input_Numbers { get; set; }
-        public Nullable<int> Diff_Dest_Codes { get; set; }
-        public int Diff_Sources_Codes { get; set; }
-        public Nullable<int> Diff_Out_Type { get; set; }
-        public int Diff_In_Type { get; set; }
+        public Nullable<int> diff_dest_net { get; set; }
+        public Nullable<int> diff_sources_net { get; set; }
+        public Nullable<int> total_cell { get; set; }
+        public Nullable<int> count_orig_SMS { get; set; }
+        public Nullable<int> count_ter_SMS { get; set; }
+        public Nullable<int> Total_IMEI { get; set; }
     }
 }

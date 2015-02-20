@@ -79,9 +79,9 @@ public partial class SwitchProfiles : BasePage
         if (IsValidData())
         {
             SwitchProfile switchProfile = SetData();
-            if (SwitchProfile.IsFullNameUsed(switchProfile))
+            if (SwitchProfile.IsNameUsed(switchProfile))
             {
-                ShowError("The full name is unique and can not be used more than once.");
+                ShowError("The name is unique and can not be used more than once.");
                 return;
             }
             if (!SwitchProfile.Save(switchProfile))
@@ -116,10 +116,6 @@ public partial class SwitchProfiles : BasePage
     private void ClearDetailsData()
     {
         txtName.Text = string.Empty;
-        txtFullName.Text = string.Empty;
-        txtType.Text = string.Empty;
-        txtAreaCode.Text = string.Empty;
-
         txtServerName.Text = string.Empty;
         txtUserId.Text = string.Empty;
         txtUserPassword.Text = string.Empty;
@@ -129,8 +125,6 @@ public partial class SwitchProfiles : BasePage
     private void ClearFiltrationFields()
     {
         txtSearchName.Text = string.Empty;
-        txtSearchType.Text = string.Empty;
-        txtSearchAreaCode.Text = string.Empty;
     }
 
     private void LoadData()
@@ -143,10 +137,7 @@ public partial class SwitchProfiles : BasePage
     private void GetList()
     {
         string name = txtSearchName.Text;
-        string areaCode = txtSearchAreaCode.Text;
-        string type = txtSearchType.Text;
-
-        CurrentList = SwitchProfile.GetList(name, areaCode, type);
+        CurrentList = SwitchProfile.GetList(name);
     }
     private void FillGrid()
     {
@@ -158,9 +149,6 @@ public partial class SwitchProfiles : BasePage
     {
         SwitchProfile currentObject = new SwitchProfile() { Id = id };
         currentObject.Name = txtName.Text.Trim();
-        currentObject.FullName = txtFullName.Text.Trim();
-        currentObject.SwitchType = txtType.Text.Trim();
-        currentObject.AreaCode = txtAreaCode.Text.Trim();
         currentObject.Switch_DatabaseConnections = new Switch_DatabaseConnections() { Id = id };
         currentObject.Switch_DatabaseConnections.ServerName = txtServerName.Text.Trim();
         currentObject.Switch_DatabaseConnections.UserId = txtUserId.Text.Trim();
@@ -180,11 +168,7 @@ public partial class SwitchProfiles : BasePage
     private void FillData(SwitchProfile currentObject)
     {
  	    txtName.Text = currentObject.Name;
-        txtFullName.Text = currentObject.FullName;
-        txtAreaCode.Text = currentObject.AreaCode;
-        txtType.Text = currentObject.SwitchType;
         chkAutoImport.Checked = currentObject.AllowAutoImport;
-
         txtServerName.Text = currentObject.Switch_DatabaseConnections.ServerName;
         txtUserId.Text = currentObject.Switch_DatabaseConnections.UserId;
         txtUserPassword.Text = currentObject.Switch_DatabaseConnections.UserPassword;
