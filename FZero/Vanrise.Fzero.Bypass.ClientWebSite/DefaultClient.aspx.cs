@@ -549,17 +549,12 @@ public partial class DefaultClient : MobileOperatorPage
         Populate();
     }
 
-    protected void rdpFrom_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        Populate();
-        rblDateRange.SelectedValue = "0";
-    }
-
-    protected void rdpTo_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        Populate();
-        rblDateRange.SelectedValue = "0";
-    }
+   
 
     #endregion
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        Populate();
+        rblDateRange.SelectedValue = "0";
+    }
 }

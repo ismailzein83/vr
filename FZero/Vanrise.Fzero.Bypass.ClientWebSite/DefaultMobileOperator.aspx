@@ -103,69 +103,46 @@
 
 
 
-                                <tr>
+                               <tr>
                                     <td style="vertical-align: top; width: 100%">
                                         <telerik:RadDockZone EnableDrag="false" runat="server" ID="rdzFrom" Orientation="vertical" Style="border: 0px; width: 100%;">
 
 
-                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdFrom" Title="From Date" Width="100%"
+                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdFrom" Title="From - To" Width="100%"
                                                 EnableAnimation="true" DefaultCommands="None">
 
                                                 <ContentTemplate>
 
-                                                    <table style="width:100%">
+                                                    <table style="width: 100%">
                                                         <tr>
-                                                           
-                                                           
-                                                             <td>
-                                                                <telerik:RadDateTimePicker ID="rdpFrom" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpFrom_SelectedDateChanged" AutoPostBackControl="Both">
+
+
+                                                            <td>
+                                                                <telerik:RadDateTimePicker ID="rdpFrom" runat="server">
                                                                 </telerik:RadDateTimePicker>
                                                             </td>
-                                                             <td>
-                                                                <asp:ImageButton ID="btnRefershFrom"  Text="" runat="server"  ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershFrom_Click"  >
-                                                                </asp:ImageButton>
-                                                            </td>
+                                                           
                                                         </tr>
-                                                    </table>
 
 
-
-                                                </ContentTemplate>
-                                            </telerik:RadDock>
-                                        </telerik:RadDockZone>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-                                    <td style="vertical-align: top; width: 100%">
-                                        <telerik:RadDockZone EnableDrag="false" runat="server" ID="rdzTo" Orientation="vertical" Style="border: 0px; width: 100%;">
-
-
-                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdTo" Title="To Date" Width="100%"
-                                                EnableAnimation="true" OnCommand="rdTo_Command" DefaultCommands="None">
-
-                                                <ContentTemplate>
-
-                                                     <table style="width:100%">
                                                         <tr>
-                                                           
-                                                           
-                                                             <td>
-                                                                <telerik:RadDateTimePicker ID="rdpTo" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpTo_SelectedDateChanged" AutoPostBackControl="Both">
-                                                    </telerik:RadDateTimePicker>
+
+
+                                                            <td>
+                                                                <telerik:RadDateTimePicker ID="rdpTo" runat="server">
+                                                                </telerik:RadDateTimePicker>
                                                             </td>
-                                                             <td>
-                                                                <asp:ImageButton ID="btnRefershTo"  Text="" runat="server"  ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershTo_Click"  >
-                                                                </asp:ImageButton>
+                                                           
+                                                        </tr>
+                                                        <tr>
+                                                            <td >
+                                                                <telerik:RadButton ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click">
+                                                                </telerik:RadButton>
                                                             </td>
                                                         </tr>
                                                     </table>
 
 
-
-                                                   
 
                                                 </ContentTemplate>
                                             </telerik:RadDock>

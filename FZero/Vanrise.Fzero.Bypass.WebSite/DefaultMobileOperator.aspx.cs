@@ -490,17 +490,14 @@ public partial class DefaultMobileOperator : BasePage
         Populate();
     }
 
-    protected void rdpFrom_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
+   
+
+    protected void btnSearch_Click(object sender, EventArgs e)
     {
         Populate();
         ddlDateRange.SelectedValue = "0";
     }
 
-    protected void rdpTo_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        Populate();
-        ddlDateRange.SelectedValue = "0";
-    }
 
     protected void ddlMobileOperators_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {

@@ -250,7 +250,7 @@ public partial class Default : BasePage
         }
     }
 
-    protected void rdpFromLogDate_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
+    protected void btnSearch_Click(object sender, EventArgs e)
     {
         gvClientCases.Rebind();
         gvCases.Rebind();
@@ -262,19 +262,8 @@ public partial class Default : BasePage
         gvGeneratedRecieved.Rebind();
         ddlDateRange.SelectedValue = "0";
     }
+
     
-    protected void rdpToLogDate_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        gvClientCases.Rebind();
-        gvCases.Rebind();
-        gvCompares.Rebind();
-        gvGeneratedCalls.Rebind();
-        gvImports.Rebind();
-        gvReports.Rebind();
-        gvReceivedCalls.Rebind();
-        gvGeneratedRecieved.Rebind();
-        ddlDateRange.SelectedValue = "0";
-    }
 
     protected void ddlDateRange_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
     {

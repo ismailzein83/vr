@@ -97,7 +97,7 @@
 
 
                                                     <td>
-                                                        <telerik:RadDateTimePicker ID="rdpFrom" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpFrom_SelectedDateChanged" AutoPostBackControl="Both">
+                                                        <telerik:RadDateTimePicker ID="rdpFrom" runat="server" >
                                                         </telerik:RadDateTimePicker>
                                                     </td>
                                                     <td>
@@ -109,11 +109,17 @@
 
 
                                                     <td>
-                                                        <telerik:RadDateTimePicker ID="rdpTo" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpTo_SelectedDateChanged" AutoPostBackControl="Both">
+                                                        <telerik:RadDateTimePicker ID="rdpTo" runat="server" >
                                                         </telerik:RadDateTimePicker>
                                                     </td>
                                                     <td>
                                                         <asp:ImageButton ID="btnRefershTo" Text="" runat="server" ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershTo_Click"></asp:ImageButton>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"  >
+                                                          <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-primary" OnClick="btnSearch_Click">
+                                                                 <i class="icon-search icon-white"></i> Search </asp:LinkButton>
                                                     </td>
                                                 </tr>
 
@@ -168,45 +174,46 @@
 
                     <tr>
                         <td style="vertical-align: top; width: 100%">
-                              <telerik:RadTabStrip ID="rtsMain" runat="server" ShowBaseLine="true" AutoPostBack="True" SelectedIndex="0" MultiPageID="RadMultiPageMain" OnTabClick="rtsMain_TabClick" ScrollButtonsPosition="Right"  ScrollChildren  ="true"      >
-                    <Tabs>
+                            <telerik:RadTabStrip ID="rtsMain" runat="server" ShowBaseLine="true" AutoPostBack="True" SelectedIndex="0" MultiPageID="RadMultiPageMain" OnTabClick="rtsMain_TabClick" ScrollButtonsPosition="Right" ScrollChildren="true">
+                                <Tabs>
 
 
 
 
 
-                        <telerik:RadTab runat="server" Text="Origination: Route" Selected="True">
-                        </telerik:RadTab>
+                                    <telerik:RadTab runat="server" Text="Origination: Route" Selected="True">
+                                    </telerik:RadTab>
 
-                        <telerik:RadTab runat="server" Text="Origination: Zone">
-                        </telerik:RadTab>
+                                    <telerik:RadTab runat="server" Text="Origination: Zone">
+                                    </telerik:RadTab>
 
-                        <telerik:RadTab runat="server" Text="Time Active">
-                        </telerik:RadTab>
-
-
-                        <telerik:RadTab runat="server" Text="Onnet Cases">
-                        </telerik:RadTab>
-
-                        <telerik:RadTab runat="server" Text="Ofnet Cases">
-                        </telerik:RadTab>
-
-                        <telerik:RadTab runat="server" Text="Call Summary">
-                        </telerik:RadTab>
+                                    <telerik:RadTab runat="server" Text="Time Active">
+                                    </telerik:RadTab>
 
 
+                                    <telerik:RadTab runat="server" Text="Onnet Cases">
+                                    </telerik:RadTab>
 
-                    </Tabs>
-                </telerik:RadTabStrip>
-                            </td></tr>
+                                    <telerik:RadTab runat="server" Text="Ofnet Cases">
+                                    </telerik:RadTab>
+
+                                    <telerik:RadTab runat="server" Text="Call Summary">
+                                    </telerik:RadTab>
+
+
+
+                                </Tabs>
+                            </telerik:RadTabStrip>
+                        </td>
+                    </tr>
 
                     <tr>
                         <td style="vertical-align: top; width: 100%">
 
 
-                            <telerik:RadMultiPage ID="RadMultiPageMain" Width="100%"  runat="server" SelectedIndex="0">
+                            <telerik:RadMultiPage ID="RadMultiPageMain" Width="100%" runat="server" SelectedIndex="0">
 
-                                <telerik:RadPageView ID="RadPageViewCarrier"  Width="100%" runat="server">
+                                <telerik:RadPageView ID="RadPageViewCarrier" Width="100%" runat="server">
                                     <telerik:RadChart ID="rcCarrier" runat="server" DefaultType="Pie" Skin="BlueStripes" Width="650px" Height="550px">
                                         <Appearance>
                                             <FillStyle MainColor="225, 235, 238" FillType="Hatch" SecondColor="207, 223, 229">

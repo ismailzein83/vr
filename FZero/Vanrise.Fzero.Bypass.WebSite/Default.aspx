@@ -57,7 +57,7 @@
                                                 </td>
                                                 <td ></td>
                                                 <td>
-                                                    <telerik:RadDateTimePicker ID="rdpFromLogDate" runat="server" AutoPostBackControl="Both" OnSelectedDateChanged="rdpFromLogDate_SelectedDateChanged">
+                                                    <telerik:RadDateTimePicker ID="rdpFromLogDate" runat="server"  >
                                                         <TimeView CellSpacing="-1"></TimeView>
 
                                                         <TimePopupButton ImageUrl="" HoverImageUrl=""></TimePopupButton>
@@ -80,7 +80,7 @@
                                                 </td>
                                                 <td ></td>
                                                 <td>
-                                                    <telerik:RadDateTimePicker ID="rdpToLogDate" runat="server" AutoPostBackControl="Both" OnSelectedDateChanged="rdpToLogDate_SelectedDateChanged">
+                                                    <telerik:RadDateTimePicker ID="rdpToLogDate" runat="server" >
                                                         <TimeView CellSpacing="-1"></TimeView>
 
                                                         <TimePopupButton ImageUrl="" HoverImageUrl=""></TimePopupButton>
@@ -93,7 +93,10 @@
                                                     </telerik:RadDateTimePicker>
                                                 </td>
 
-
+                                                <td >
+                                                    <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-primary" OnClick="btnSearch_Click">
+                                                                 <i class="icon-search icon-white"></i> Search </asp:LinkButton>
+                                                </td>
                                             </tr>
 
 

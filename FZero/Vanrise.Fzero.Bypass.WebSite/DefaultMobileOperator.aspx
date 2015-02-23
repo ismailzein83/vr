@@ -98,7 +98,7 @@
 
 
                                                     <td>
-                                                        <telerik:RadDateTimePicker ID="rdpFrom" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpFrom_SelectedDateChanged" AutoPostBackControl="Both">
+                                                        <telerik:RadDateTimePicker ID="rdpFrom" runat="server" >
                                                         </telerik:RadDateTimePicker>
                                                     </td>
                                                     <td>
@@ -110,14 +110,19 @@
 
 
                                                     <td>
-                                                        <telerik:RadDateTimePicker ID="rdpTo" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpTo_SelectedDateChanged" AutoPostBackControl="Both">
+                                                        <telerik:RadDateTimePicker ID="rdpTo" runat="server" >
                                                         </telerik:RadDateTimePicker>
                                                     </td>
                                                     <td>
                                                         <asp:ImageButton ID="btnRefershTo" Text="" runat="server" ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershTo_Click"></asp:ImageButton>
                                                     </td>
                                                 </tr>
-
+                                                  <tr>
+                                                    <td colspan="2"  >
+                                                          <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-primary" OnClick="btnSearch_Click">
+                                                                 <i class="icon-search icon-white"></i> Search </asp:LinkButton>
+                                                    </td>
+                                                </tr>
 
                                             </table>
 

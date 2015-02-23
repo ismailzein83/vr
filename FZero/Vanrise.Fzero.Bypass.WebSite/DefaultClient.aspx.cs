@@ -147,6 +147,12 @@ public partial class DefaultClient : BasePage
 
     #region Events
 
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        Populate();
+        ddlDateRange.SelectedValue = "0";
+    }
+
     protected void gvClientSummary_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
     {
         gvClientSummary.DataSource = Dashboard.listprGetSummaryClient_Result;
@@ -489,15 +495,7 @@ public partial class DefaultClient : BasePage
         Populate();
     }
 
-    protected void rtFrom_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        Populate();
-    }
-
-    protected void rtTo_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
-    {
-        Populate();
-    }
+   
 
     protected void rdpFrom_SelectedDateChanged(object sender, Telerik.Web.UI.Calendar.SelectedDateChangedEventArgs e)
     {

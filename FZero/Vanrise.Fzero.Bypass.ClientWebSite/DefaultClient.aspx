@@ -108,7 +108,7 @@
                                         <telerik:RadDockZone EnableDrag="false" runat="server" ID="rdzFrom" Orientation="vertical" Style="border: 0px; width: 100%;">
 
 
-                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdFrom" Title="From Date" Width="100%"
+                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdFrom" Title="From - To" Width="100%"
                                                 EnableAnimation="true" DefaultCommands="None">
 
                                                 <ContentTemplate>
@@ -118,50 +118,29 @@
 
 
                                                             <td>
-                                                                <telerik:RadDateTimePicker ID="rdpFrom" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpFrom_SelectedDateChanged" AutoPostBackControl="Both">
+                                                                <telerik:RadDateTimePicker ID="rdpFrom" runat="server">
                                                                 </telerik:RadDateTimePicker>
                                                             </td>
-                                                            <td>
-                                                                <asp:ImageButton ID="btnRefershFrom" Text="" runat="server" ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershFrom_Click"></asp:ImageButton>
-                                                            </td>
+                                                           
                                                         </tr>
-                                                    </table>
 
 
-
-                                                </ContentTemplate>
-                                            </telerik:RadDock>
-                                        </telerik:RadDockZone>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-                                    <td style="vertical-align: top; width: 100%">
-                                        <telerik:RadDockZone EnableDrag="false" runat="server" ID="rdzTo" Orientation="vertical" Style="border: 0px; width: 100%;">
-
-
-                                            <telerik:RadDock EnableDrag="false" runat="server" ID="rdTo" Title="To Date" Width="100%"
-                                                EnableAnimation="true" OnCommand="rdTo_Command" DefaultCommands="None">
-
-                                                <ContentTemplate>
-
-                                                    <table style="width: 100%">
                                                         <tr>
 
 
                                                             <td>
-                                                                <telerik:RadDateTimePicker ID="rdpTo" runat="server" AutoPostBack="True" OnSelectedDateChanged="rdpTo_SelectedDateChanged" AutoPostBackControl="Both">
+                                                                <telerik:RadDateTimePicker ID="rdpTo" runat="server">
                                                                 </telerik:RadDateTimePicker>
                                                             </td>
-                                                            <td>
-                                                                <asp:ImageButton ID="btnRefershTo" Text="" runat="server" ImageUrl="Icons/refresh-16x16.gif" OnClick="btnRefershTo_Click"></asp:ImageButton>
+                                                           
+                                                        </tr>
+                                                        <tr>
+                                                            <td >
+                                                                <telerik:RadButton ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click">
+                                                                </telerik:RadButton>
                                                             </td>
                                                         </tr>
                                                     </table>
-
-
 
 
 
@@ -171,6 +150,8 @@
                                     </td>
 
                                 </tr>
+
+
                                 <tr>
                                     <td style="vertical-align: top; width: 100%">
                                         <telerik:RadDockZone EnableDrag="false" runat="server" ID="RadDockZone4" Orientation="vertical" Style="border: 0px; width: 100%;">
@@ -525,8 +506,8 @@
                                                     <Icon PrimaryIconUrl="~/Icons/icon_excel.png" />
                                                 </telerik:RadButton>
 
-                                                <telerik:RadGrid ID="gvOnnetFraudGeneratedCalls"  MasterTableView-Caption="Fraud Cases" ShowGroupPanel="true" EnableHeaderContextMenu="true" EnableHeaderContextFilterMenu="false" GroupingEnabled="true" ClientSettings-AllowColumnHide="false" AllowSorting="true" runat="server" CellSpacing="0" PageSize="15"
-                                                    AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true" 
+                                                <telerik:RadGrid ID="gvOnnetFraudGeneratedCalls" MasterTableView-Caption="Fraud Cases" ShowGroupPanel="true" EnableHeaderContextMenu="true" EnableHeaderContextFilterMenu="false" GroupingEnabled="true" ClientSettings-AllowColumnHide="false" AllowSorting="true" runat="server" CellSpacing="0" PageSize="15"
+                                                    AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true"
                                                     AutoGenerateColumns="False" OnItemDataBound="gvOnnetFraudGeneratedCalls_ItemDataBound" ShowFooter="true" OnNeedDataSource="gvOnnetFraudGeneratedCalls_NeedDataSource">
 
                                                     <MasterTableView ShowGroupFooter="true">
@@ -553,7 +534,7 @@
                                                 </telerik:RadButton>
 
                                                 <telerik:RadGrid ID="gvOfnetFraudGeneratedCalls" MasterTableView-Caption="Fraud Cases" ShowGroupPanel="true" EnableHeaderContextMenu="true" EnableHeaderContextFilterMenu="false" GroupingEnabled="true" ClientSettings-AllowColumnHide="false" AllowSorting="true" runat="server" CellSpacing="0" PageSize="15"
-                                                    AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true" 
+                                                    AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true"
                                                     AutoGenerateColumns="False" OnItemDataBound="gvOfnetFraudGeneratedCalls_ItemDataBound" ShowFooter="true" OnNeedDataSource="gvOfnetFraudGeneratedCalls_NeedDataSource">
 
                                                     <MasterTableView ShowGroupFooter="true">
@@ -577,7 +558,7 @@
                                                     <Icon PrimaryIconUrl="~/Icons/icon_excel.png" />
                                                 </telerik:RadButton>
                                                 <telerik:RadGrid ID="gvAllGeneratedCalls" ShowGroupPanel="true" MasterTableView-Caption="Call Summary" EnableHeaderContextMenu="true" EnableHeaderContextFilterMenu="false" GroupingEnabled="true" ClientSettings-AllowColumnHide="false" AllowSorting="true" runat="server" CellSpacing="0" PageSize="15"
-                                                   AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true"
+                                                    AllowPaging="true" AllowCustomPaging="true" AllowMultiRowSelection="true"
                                                     AutoGenerateColumns="False" OnItemDataBound="gvAllGeneratedCalls_ItemDataBound" ShowFooter="true" OnNeedDataSource="gvAllGeneratedCalls_NeedDataSource">
 
                                                     <MasterTableView ShowGroupFooter="true">
@@ -604,7 +585,7 @@
 
                                             <telerik:RadPageView ID="RadPageViewCases" runat="server">
                                                 <table width="100%">
-                                                  
+
                                                     <tr class="vspace-5">
                                                         <td></td>
                                                     </tr>
