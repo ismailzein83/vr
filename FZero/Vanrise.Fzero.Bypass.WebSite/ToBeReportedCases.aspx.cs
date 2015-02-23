@@ -388,6 +388,7 @@ public partial class ToBeReportedCases : BasePage
                 ShowAlert("Report sent Successfully");
                 //SelfRedirect();
             }
+            Response.Redirect("Redirect.aspx");
         }
         else
         {
@@ -489,4 +490,5 @@ public partial class ToBeReportedCases : BasePage
 
     #endregion
 
+   
 }

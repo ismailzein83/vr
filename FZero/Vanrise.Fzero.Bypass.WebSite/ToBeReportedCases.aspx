@@ -206,6 +206,8 @@
 
                                                         <asp:LinkButton ID="btnSendReport" runat="server" CssClass="btn btn-success" OnClick="btnSendReport_Click"   >
                                                                  <i class="icon-arrow-right icon-white"></i> Send </asp:LinkButton>
+
+                                                      
                                                         
                                                     </td>
 
