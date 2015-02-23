@@ -9,8 +9,6 @@ namespace TOne.LCR.Entities
 {
     public class RouteBlockAction : BaseRouteRuleAction
     {
-        public MultipleSelection<string> Suppliers { get; set; }
-
         public override string ActionDisplayName
         {
             get { return "Route Block"; }

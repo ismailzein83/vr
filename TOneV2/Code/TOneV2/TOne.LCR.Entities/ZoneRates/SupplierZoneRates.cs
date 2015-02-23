@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    [Serializable]
-    public class RouteOptions
+    public class SupplierZoneRates
     {
-        public bool IsBlock { get; set; }
-
-        public List<RouteSupplierOption> SupplierOptions { get; set; }
+        public Dictionary<string, ZoneRates> SuppliersZonesRates { get; set; }
     }
 }

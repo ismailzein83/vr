@@ -15,9 +15,14 @@ namespace TOne.LCR.Entities
             return null;
         }
 
-        public virtual List<int> GetExcludedZoneIds()
+        public virtual bool IsCodeExcluded(string code)
         {
-            return null;
+            return false;
+        }
+
+        public virtual bool IsZoneExcluded(int zoneId)
+        {
+            return false;
         }
 
         public virtual List<int> GetExcludedCodes()

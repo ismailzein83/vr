@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloneHelper.cs" />
+    <Compile Include="ZoneRates\CustomerRates.cs" />
+    <Compile Include="ZoneRates\SupplierZoneRates.cs" />
+    <Compile Include="ZoneRates\ZoneCustomerRates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeMatch.cs" />
     <Compile Include="RoutingDatabase.cs" />
@@ -58,17 +62,16 @@
     <Compile Include="RoutingRules\Actions\RouteActions\RouteBlockAction.cs" />
     <Compile Include="RoutingRules\Actions\RouteActions\RouteOverrideAction.cs" />
     <Compile Include="RoutingRules\Actions\RouteActions\RoutePriorityAction.cs" />
-    <Compile Include="RoutingRules\CodeSet\RouteRuleMatches.cs" />
     <Compile Include="RoutingRules\CustomerRouteRule.cs" />
     <Compile Include="RoutingRules\BaseRouteRule.cs" />
     <Compile Include="RoutingRules\CodeSet\ZoneSelectionSet.cs" />
     <Compile Include="RoutingRules\SupplierRouteRule.cs" />
     <Compile Include="Routing\Route.cs" />
     <Compile Include="Routing\RouteDetail.cs" />
-    <Compile Include="Routing\RouteOptionsDetail.cs" />
-    <Compile Include="Routing\SupplierRoute.cs" />
+    <Compile Include="Routing\RouteSupplierOption.cs" />
     <Compile Include="Routing\RouteOptions.cs" />
-    <Compile Include="Routing\SupplierRouteDetail.cs" />
+    <Compile Include="ZoneRates\RateInfo.cs" />
+    <Compile Include="ZoneRates\ZoneRates.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class RouteOptionsDetail : RouteOptions
+    public class CustomerRates
     {
-        public List<SupplierRouteDetail> Options { get; set; }
+        public Dictionary<string, RateInfo> CustomersRates { get; set; }
     }
 }

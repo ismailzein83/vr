@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class SupplierRouteDetail : SupplierRoute
+    public class RateInfo
     {
-        public int SupplierZoneId { get; set; }
-
         public decimal Rate { get; set; }
 
-        public int ServicesFlag { get; set; }
-
-        public int Priority { get; set; }
-
+        public short ServicesFlag { get; set; }
     }
 }

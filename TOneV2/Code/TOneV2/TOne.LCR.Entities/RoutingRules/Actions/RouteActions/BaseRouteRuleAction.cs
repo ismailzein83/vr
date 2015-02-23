@@ -19,15 +19,16 @@ namespace TOne.LCR.Entities
                 return RouteRuleExecutionStage.BeforeLCR;
             }
         }
-
-
-
-        public virtual int GetActionPriority()
+        
+        public virtual int ActionPriority
         {
-            return 0;
+            get
+            {
+                return 0;
+            }
         }
 
-        public virtual RouteRuleExecutionResult Execute(RouteDetail initialRoute, BaseRouteRule ruleDefinition)
+        public virtual RouteRuleExecutionResult Execute(RouteDetail route, BaseRouteRule ruleDefinition, SupplierZoneRates supplierZoneRates)
         {
             return null;
         }
@@ -35,8 +36,6 @@ namespace TOne.LCR.Entities
 
     public class RouteRuleExecutionResult
     {
-        public RouteDetail FinalRoute { get; set; }
-
         public bool IsInactive { get; set; }
     }
 }

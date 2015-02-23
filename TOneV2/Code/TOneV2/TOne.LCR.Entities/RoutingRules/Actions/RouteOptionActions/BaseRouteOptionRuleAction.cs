@@ -8,10 +8,24 @@ namespace TOne.LCR.Entities
 {
     public class BaseRouteOptionRuleAction
     {
-        public virtual bool GetFinalOption(SupplierRouteDetail initialOption, RouteDetail routeDetail, BaseRouteRule ruleDefinition, out SupplierRouteDetail finalOption)
+        public virtual int ActionPriority
         {
-            finalOption = null;
-            return true;
+            get
+            {
+                return 0;
+            }
         }
+
+        public virtual RouteRuleOptionExecutionResult Execute(RouteSupplierOption option, RouteDetail routeDetail, BaseRouteRule ruleDefinition)
+        {
+            return null;
+        }
+    }
+
+    public class RouteRuleOptionExecutionResult
+    {
+        public bool IsInactive { get; set; }
+
+        public bool RemoveOption { get; set; }
     }
 }

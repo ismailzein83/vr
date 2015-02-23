@@ -9,7 +9,7 @@ namespace TOne.LCR.Business
 {
     public class RouteManager
     {
-        public void ConvertRouteOptions(List<SupplierRoute> options, out string suppliersOption, out string suppliersOrderOption, out string percentagesOption)
+        public void ConvertRouteOptions(List<RouteSupplierOption> options, out string suppliersOption, out string suppliersOrderOption, out string percentagesOption)
         {
             suppliersOption = null;
             suppliersOrderOption = null;
@@ -80,6 +80,8 @@ namespace TOne.LCR.Business
                 else
                     AddRuleMatches(saleRuleMatches, rule);
             }
+            saleRuleMatches.SetMinSubCodeLength();
+            supplierRuleMatches.SetMinSubCodeLength();
         }
 
         private void AddRuleMatches(RouteRuleMatches ruleMatches, BaseRouteRule rule)

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteManager.cs" />
+    <Compile Include="RouteRuleMatches.cs" />
+    <Compile Include="RouteRuleMatchFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">

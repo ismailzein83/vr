@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.LCR.Entities;
 
-namespace TOne.LCR.Entities
+namespace TOne.LCR.Business
 {
     public class RouteRuleMatches
     {
@@ -22,6 +23,13 @@ namespace TOne.LCR.Entities
 
         public Dictionary<string, List<BaseRouteRule>> RulesByMatchCodeAndSubCodes { get; private set; }
 
+        public int MinSubCodeLength { get; private set; }
+
+        public void SetMinSubCodeLength()
+        {
+            this.MinSubCodeLength = this.RulesByMatchCodeAndSubCodes.Keys.Min(itm => itm.Length);
+        }
+
         public Dictionary<int, List<BaseRouteRule>> RulesByMatchZones { get; private set; }
 
         public List<BaseRouteRule> RulesMatchingAllZones { get; private set; }
@@ -37,5 +45,11 @@ namespace TOne.LCR.Entities
         {
 
         }
+
+        public RouteRuleMatches BeforeLCRRules { get; set; }
+
+        public RouteRuleMatches AfterLCRRules { get; set; }
+
+        public RouteRuleMatches EndRules { get; set; }
     }
 }
