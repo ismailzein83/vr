@@ -24,19 +24,6 @@ namespace TOne.LCR.Entities
         public RouteDetail Clone()
         {
             return CloneHelper.Clone<RouteDetail>(this);
-            //RouteDetail r = this.MemberwiseClone() as RouteDetail;
-            //if(this.Options != null)
-            //{
-            //    r.Options = this.Options.Clone() as RouteOptions;
-            //    if(this.Options.SupplierOptions != null)
-            //    {
-            //        foreach (var supOption in this.Options.SupplierOptions)
-            //            r.Options.SupplierOptions.Add(supOption.Clone() as RouteSupplierOption);
-            //    }
-            //}
-            //return r;
         }
-
-
     }
 }

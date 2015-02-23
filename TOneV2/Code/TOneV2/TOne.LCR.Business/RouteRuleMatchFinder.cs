@@ -9,22 +9,12 @@ namespace TOne.LCR.Business
 {
     public class RouteRuleMatchFinder
     {
-        #region Private Classes
-
         private enum FinderStep { MatchCodesList, MatchCodeAndSubCodesList, MatchZonesList, MatchingAllZonesList, End }
 
-        private class MatchList
-        {
-            public List<BaseRouteRule> Rules { get; set; }
+        FinderStep _currentSearchStep;
+        List<BaseRouteRule> _matchRules;
+        int _nextReturnedIndex;
 
-            public int NextReturnedIndex { get; set; }
-        }
-
-        #endregion
-
-        FinderStep _currentStep;
-
-        Dictionary<FinderStep, MatchList> _matchLists;
 
         string _code;
         int _zoneId;
@@ -35,86 +25,77 @@ namespace TOne.LCR.Business
             _code = code;
             _zoneId = zoneId;
             _routeRulesMatches = routeRulesMatches;
-            _matchLists = new Dictionary<FinderStep, MatchList>();
+            _matchRules = new List<BaseRouteRule>();
         }
 
         public bool GetNext(out BaseRouteRule rule)
         {
-            if (_currentStep == FinderStep.End)
+            while(_nextReturnedIndex < _matchRules.Count)
+            {
+                var r = _matchRules[_nextReturnedIndex];
+                _nextReturnedIndex++;
+                if (!r.CodeSet.IsCodeExcluded(_code) && !r.CodeSet.IsZoneExcluded(_zoneId))
+                {
+                    rule = r;
+                    return true;
+                }
+            }
+
+            List<BaseRouteRule> nextMatchList = GetNextList();
+            if (nextMatchList != null && nextMatchList.Count > 0)
+            {
+                _matchRules.AddRange(nextMatchList);
+                return GetNext(out rule);
+            }
+            else
             {
                 rule = null;
                 return false;
             }
-
-            MatchList currentList;
-            if (!_matchLists.TryGetValue(_currentStep, out currentList))
-            {
-                currentList = GetMatchList(_currentStep);
-                _matchLists.Add(_currentStep, currentList);
-            }
-
-            if (currentList.Rules != null)
-            {
-                while (currentList.NextReturnedIndex < currentList.Rules.Count)
-                {
-                    rule = currentList.Rules[currentList.NextReturnedIndex];
-                    currentList.NextReturnedIndex++;
-                    if (!rule.CodeSet.IsCodeExcluded(_code) && !rule.CodeSet.IsZoneExcluded(_zoneId))
-                    {                        
-                        return true;
-                    }
-                }
-            }
-
-            _currentStep++;
-            return GetNext(out rule);
         }
 
-        private MatchList GetMatchList(FinderStep step)
+        string _nextParentCode;
+        private List<BaseRouteRule> GetNextList()
         {
-            List<BaseRouteRule> matchRules = null;
-            switch (step)
+            while(_currentSearchStep < FinderStep.End)
             {
-                case FinderStep.MatchCodesList:
-                    _routeRulesMatches.RulesByMatchCodes.TryGetValue(_code, out matchRules);
-                    break;
-                case FinderStep.MatchCodeAndSubCodesList:
-                    matchRules = new List<BaseRouteRule>();
-                    string parentCode = _code;
-                    do
-                    {
-                        List<BaseRouteRule> parentCodeRules;
-                        if (_routeRulesMatches.RulesByMatchCodeAndSubCodes.TryGetValue(parentCode, out parentCodeRules))
+                List<BaseRouteRule> matchRules = null;
+                switch (_currentSearchStep)
+                {
+                    case FinderStep.MatchCodesList:
+                        _routeRulesMatches.RulesByMatchCodes.TryGetValue(_code, out matchRules);
+                        break;
+                    case FinderStep.MatchCodeAndSubCodesList:
+                        if (_nextParentCode == null)
+                            _nextParentCode = _code;
+
+                        while (matchRules == null && _nextParentCode.Length >= _routeRulesMatches.MinSubCodeLength)
                         {
-                            if (parentCodeRules != null)
-                                foreach (var r in parentCodeRules)
-                                {
-                                    if (!matchRules.Contains(r))
-                                        matchRules.Add(r);
-                                }
+                            _routeRulesMatches.RulesByMatchCodeAndSubCodes.TryGetValue(_nextParentCode, out matchRules);
+                            _nextParentCode = _nextParentCode.Substring(0, _nextParentCode.Length - 1);
                         }
-                        parentCode = parentCode.Substring(0, parentCode.Length - 1);
-                    }
-                    while (parentCode.Length >= _routeRulesMatches.MinSubCodeLength);
-                    break;
-                case FinderStep.MatchZonesList:
-                    _routeRulesMatches.RulesByMatchZones.TryGetValue(_zoneId, out matchRules);
-                    break;
-                case FinderStep.MatchingAllZonesList:
-                    matchRules = _routeRulesMatches.RulesMatchingAllZones;
-                    break;
+                        break;
+                    case FinderStep.MatchZonesList:
+                        _routeRulesMatches.RulesByMatchZones.TryGetValue(_zoneId, out matchRules);
+                        break;
+                    case FinderStep.MatchingAllZonesList:
+                        matchRules = _routeRulesMatches.RulesMatchingAllZones;
+                        break;
+                    case FinderStep.End:
+                        return null;
+                }
+                if (matchRules != null)
+                    return matchRules;
+                else
+                    _currentSearchStep++;
             }
-            return new MatchList
-            {
-                Rules = matchRules
-            };
+            return null;
         }
 
+      
         public void GoToStart()
         {
-            _currentStep = default(FinderStep);
-            foreach (MatchList m in _matchLists.Values)
-                m.NextReturnedIndex = 0;
+            _nextReturnedIndex = 0;
         }
     }
 }

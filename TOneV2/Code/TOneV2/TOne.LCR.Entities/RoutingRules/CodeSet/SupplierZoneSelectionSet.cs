@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class ZoneSelectionSet : BaseCodeSet
+    public class SupplierZoneSelectionSet : BaseCodeSet
     {
-        public MultipleSelection<int> ZoneIds { get; set; }
+        public List<int> SupplierZonesIds { get; set; }
     }
 }

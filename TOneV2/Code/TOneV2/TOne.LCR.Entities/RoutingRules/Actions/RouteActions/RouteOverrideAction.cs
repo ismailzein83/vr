@@ -14,6 +14,11 @@ namespace TOne.LCR.Entities
         {
             get { return "Route Override"; }
         }
+
+        public override RouteRuleExecutionResult Execute(RouteDetail route, BaseRouteRule ruleDefinition, SupplierZoneRates supplierZoneRates)
+        {
+            return base.Execute(route, ruleDefinition, supplierZoneRates);
+        }
     }
 
     public class OverrideOption

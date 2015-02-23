@@ -43,7 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertRules\Actions\BaseAlertRuleAction.cs" />
+    <Compile Include="AlertRules\AlertRule.cs" />
+    <Compile Include="AlertRules\Conditions\BaseAlertRuleCondition.cs" />
+    <Compile Include="AlertRules\Conditions\RateMarginRuleCondition.cs" />
     <Compile Include="CloneHelper.cs" />
+    <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionPriceRangeAction.cs" />
+    <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionRateMarginAction.cs" />
+    <Compile Include="RoutingRules\CodeSet\SupplierZoneSelectionSet.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />
     <Compile Include="ZoneRates\ZoneCustomerRates.cs" />

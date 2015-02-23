@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class ZoneSelectionSet : BaseCodeSet
+    public abstract class BaseAlertRuleCondition
     {
-        public MultipleSelection<int> ZoneIds { get; set; }
+        public virtual bool Check(RouteDetail route)
+        {
+            return false;
+        }
     }
 }

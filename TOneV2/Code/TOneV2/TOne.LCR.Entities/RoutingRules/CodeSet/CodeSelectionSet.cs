@@ -13,11 +13,5 @@ namespace TOne.LCR.Entities
         public bool WithSubCodes { get; set; }
 
         public List<string> ExcludedCodes { get; set; }
-
-
-        public override List<MatchCode> GetMatchedCodes()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
