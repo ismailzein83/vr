@@ -65,7 +65,7 @@
                 <div class="widget-body" style="display: block;">
                     <table>
                         <tr>
-                            <td class="caption">Switch
+                            <td class="caption">Source
                             </td>
                             <td >
                                 <Telerik:RadComboBox ID="ddlSearchSwitches" runat="server"      ></Telerik:RadComboBox>
