@@ -49,6 +49,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="ICarrierDataManager.cs" />
     <Compile Include="ICodeDataManager.cs" />
+    <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
