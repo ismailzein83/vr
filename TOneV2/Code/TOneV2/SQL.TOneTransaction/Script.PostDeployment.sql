@@ -53,7 +53,7 @@ WHEN NOT MATCHED BY TARGET THEN
 INSERT ([Name], [Title], [FQTN], [Config])
 VALUES ([Name], [Title], [FQTN], [Config])
 ---- delete rows that are in the target but not the source 
---WHEN NOT MATCHED BY SOURCE THEN 
---DELETE
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
 ;
 
