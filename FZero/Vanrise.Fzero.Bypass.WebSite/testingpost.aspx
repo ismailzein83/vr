@@ -27,7 +27,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
 
-   <asp:LinkButton ID="btnTest" runat="server" CssClass="btn btn-success" OnClick="btnTest_Click"   >
+   <asp:LinkButton ID="btnTest"  OnClientClick="return confirm('Are you certain you want to send this report?');"  runat="server" CssClass="btn btn-success" OnClick="btnTest_Click"   >
                                                                  <i class="icon-arrow-right icon-white"></i> Test </asp:LinkButton>
 
 
