@@ -69,7 +69,7 @@ public partial class ManualImports : BasePage
         {
             string filePath = string.Empty;
 
-            Session["ImportedCalls"] = null;
+            Session["CDRs"] = null;
 
             foreach (UploadedFile f in ruImportedFile.UploadedFiles)
             {
@@ -80,25 +80,25 @@ public partial class ManualImports : BasePage
 
                     case ".xls"://Excel (xls)
                     case ".xlsx"://Excel (xlsx)
-                        Session["ImportedCalls"] = CDR.GetDataFromExcel(filePath, ddlSources.SelectedValue.ToInt());
+                        Session["CDRs"] = CDR.GetDataFromExcel(filePath, ddlSources.SelectedValue.ToInt());
                         break;
 
                     case ".xml":
-                        Session["ImportedCalls"] = CDR.GetDataFromXml(filePath, ddlSources.SelectedValue.ToInt());
+                        Session["CDRs"] = CDR.GetDataFromXml(filePath, ddlSources.SelectedValue.ToInt());
                         break;
 
                     default:
-                        Session["ImportedCalls"] = null;
+                        Session["CDRs"] = null;
                         break;
 
                 }
             }
 
-            if ( Session["ImportedCalls"]==null)
+            if ( Session["CDRs"]==null)
             {
-                Session["ImportedCalls"] = new List<CDR>();
+                Session["CDRs"] = new List<CDR>();
             }
-                gvImportedCalls.DataSource = Session["ImportedCalls"] ;
+                gvImportedCalls.DataSource = Session["CDRs"] ;
                 gvImportedCalls.DataBind();
 
         }
@@ -113,7 +113,7 @@ public partial class ManualImports : BasePage
     {
         if (ddlSources.SelectedValue.ToInt() != 0 && gvImportedCalls.Items.Count > 0)
         {
-            CDR.Confirm(ddlSources.SelectedValue.ToInt(), (DataTable)Session["ImportedCalls"], CurrentUser.User.ID);
+            CDR.Confirm(ddlSources.SelectedValue.ToInt(), (DataTable)Session["CDRs"], CurrentUser.User.ID);
             gvImportedCalls.DataSource = new List<CDR>();
             gvImportedCalls.DataBind();
             ShowAlert("CDRs have been saved to database");
