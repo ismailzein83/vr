@@ -53,6 +53,9 @@
     <Compile Include="CDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="CellProfile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Classes\EmailReceiverType.cs" />
     <Compile Include="Classes\CDR.cs" />
     <Compile Include="Classes\Import.cs" />

@@ -16,119 +16,197 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public static void Confirm(int SourceID, DataTable dt, int? ImportedBy)
         {
 
-            //List<int> listIDs = new List<int>();
-            //Import import = new Import();
-            //import.ImportDate = DateTime.Now;
-            //import.ImportedBy = ImportedBy;
-            //import.ImportTypeId = (int)Enums.ImportTypes.CDRs;
-            //Import.Save(import);
-
-
-
-                   
-
-            //                int CounterGeneratesOnly = 1;
-            //        List<CDR> listCDRs = new List<CDR>();
-            //        foreach (DataRow i in dt.Rows)
-            //        {
-            //            CDR gc = new CDR();
-            //            float DurationInSeconds = 0;
-            //            if (i.Table.Columns.Contains("DurationInSeconds"))
-            //            {
-            //                if (i["DurationInSeconds"].ToString() != string.Empty)
-            //                {
-            //                    float.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
-            //                }
-            //            }
-
-            //            gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);
-
-
-
-
-            //            DateTime? Account_Age ;
-            //            if (i.Table.Columns.Contains("Account_Age"))
-            //            {
-            //                Account_Age = i["Account_Age"].ToString();
-            //            }
-            //            gc.Account_Age = Account_Age;
-
-
-            //            string OUT_TRUNK = string.Empty;
-            //            if (i.Table.Columns.Contains("OUT_TRUNK"))
-            //            {
-            //                OUT_TRUNK = i["OUT_TRUNK"].ToString();
-            //            }
-            //            gc.OUT_TRUNK = OUT_TRUNK;
-
-
-            //            string CGPN = string.Empty;
-            //            if (i.Table.Columns.Contains("CGPN"))
-            //            {
-            //                CGPN = i["CGPN"].ToString();
-            //            }
-            //            gc.CGPN = CGPN;
-
-
-            //            string CDPN = string.Empty;
-            //            if (i.Table.Columns.Contains("CDPN"))
-            //            {
-            //                CDPN = i["CDPN"].ToString();
-            //            }
-            //            gc.CDPN = CDPN;
-
-
-
-
-            //            string Reference = string.Empty;
-            //            if (i.Table.Columns.Contains("Reference"))
-            //            {
-            //                Reference = i["Reference"].ToString();
-            //            }
-            //            gc.Reference = Reference;
+            List<int> listIDs = new List<int>();
+            Import import = new Import();
+            import.ImportDate = DateTime.Now;
+            import.ImportedBy = ImportedBy;
+            import.ImportTypeId = (int)Enums.ImportTypes.CDRs;
+            Import.Save(import);
 
 
 
 
 
-
-            //            DateTime ConnectDateTime = new DateTime();
-            //            if (i.Table.Columns.Contains("ConnectDateTime"))
-            //            {
-            //                if (i["ConnectDateTime"].ToString() != string.Empty)
-            //                {
-            //                    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
-            //                }
-            //            }
-            //            gc.ConnectDateTime = ConnectDateTime;
-
-
-
-            //            DateTime DisconnectDateTime = new DateTime();
-            //            if (i.Table.Columns.Contains("DisconnectDateTime"))
-            //            {
-            //                if (i["DisconnectDateTime"].ToString() != string.Empty)
-            //                {
-            //                    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
-            //                }
-            //            }
-            //            gc.DisconnectDateTime = DisconnectDateTime;
+            int CounterGeneratesOnly = 1;
+            List<CDR> listCDRs = new List<CDR>();
+            foreach (DataRow i in dt.Rows)
+            {
+                CDR gc = new CDR();
+               
 
 
 
 
-            //            gc.SourceID = SourceID;
-            //            CounterGeneratesOnly++;
-
-            //            if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") )
-            //            {
-            //                listCDRs.Add(gc);
-
-            //            }
+                string MSISDN=string.Empty;
+                if (i.Table.Columns.Contains("MSISDN"))
+                {
+                    MSISDN = i["MSISDN"].ToString();
+                }
+                gc.MSISDN = MSISDN;
 
 
-            //        }
-            //        CDR.SaveBulk("CDR", listCDRs);
+                string IMSI = string.Empty;
+                if (i.Table.Columns.Contains("IMSI"))
+                {
+                    IMSI = i["IMSI"].ToString();
+                }
+                gc.IMSI = IMSI;
+
+
+               
+
+                string Destination = string.Empty;
+                if (i.Table.Columns.Contains("Destination"))
+                {
+                    Destination = i["Destination"].ToString();
+                }
+                gc.Destination = Destination;
+
+
+
+
+                string Reference = string.Empty;
+                if (i.Table.Columns.Contains("Reference"))
+                {
+                    Reference = i["Reference"].ToString();
+                }
+                gc.Reference = Reference;
+
+
+
+
+                float DurationInSeconds = 0;
+                if (i.Table.Columns.Contains("DurationInSeconds"))
+                {
+                    if (i["DurationInSeconds"].ToString() != string.Empty)
+                    {
+                        float.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
+                    }
+                }
+
+                gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);
+
+
+
+              
+
+                DateTime Account_Age = new DateTime();
+                if (i.Table.Columns.Contains("Account_Age"))
+                {
+                    DateTime.TryParse(i["Account_Age"].ToString(), out Account_Age);
+                }
+                gc.Account_Age = Account_Age;
+
+                DateTime ConnectDateTime = new DateTime();
+                if (i.Table.Columns.Contains("ConnectDateTime"))
+                {
+                    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
+                }
+                gc.ConnectDateTime = ConnectDateTime;
+
+                DateTime DisconnectDateTime = new DateTime();
+                if (i.Table.Columns.Contains("DisconnectDateTime"))
+                {
+                    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
+                }
+                gc.DisconnectDateTime = DisconnectDateTime;
+
+
+
+
+
+                string Call_Class = string.Empty;
+                if (i.Table.Columns.Contains("Call_Class"))
+                {
+                    Call_Class = i["Call_Class"].ToString();
+                }
+                gc.Call_Class = Call_Class;
+
+
+                int? Call_Type = null;
+                if (i.Table.Columns.Contains("Call_Type"))
+                {
+                    Call_Type = i["Call_Type"].ToString().ToInt();
+                }
+                gc.Call_Type = Call_Type;
+
+
+                string Sub_Type = string.Empty;
+                if (i.Table.Columns.Contains("Sub_Type"))
+                {
+                    Sub_Type = i["Sub_Type"].ToString();
+                }
+                gc.Sub_Type = Sub_Type;
+
+
+                string IMEI = string.Empty;
+                if (i.Table.Columns.Contains("IMEI"))
+                {
+                    IMEI = i["IMEI"].ToString();
+                }
+                gc.IMEI = IMEI;
+
+
+                int? BTS_Id = null;
+                if (i.Table.Columns.Contains("BTS_Id"))
+                {
+                    BTS_Id = i["BTS_Id"].ToString().ToInt();
+                }
+                gc.BTS_Id = BTS_Id;
+
+
+                string LAC = string.Empty;
+                if (i.Table.Columns.Contains("LAC"))
+                {
+                    LAC = i["LAC"].ToString();
+                }
+                gc.LAC = LAC;
+
+
+                string Cell_Id = string.Empty;
+                if (i.Table.Columns.Contains("Cell_Id"))
+                {
+                    Cell_Id = i["Cell_Id"].ToString();
+                }
+                gc.Cell_Id = Cell_Id;
+
+                string Origin_Zone_Code = string.Empty;
+                if (i.Table.Columns.Contains("Origin_Zone_Code"))
+                {
+                    Origin_Zone_Code = i["Origin_Zone_Code"].ToString();
+                }
+                gc.Origin_Zone_Code = Origin_Zone_Code;
+
+
+                string Termin_Zone_Code = string.Empty;
+                if (i.Table.Columns.Contains("Termin_Zone_Code"))
+                {
+                    Termin_Zone_Code = i["Termin_Zone_Code"].ToString();
+                }
+                gc.Sub_Type = Termin_Zone_Code;
+
+
+             
+
+
+             
+            
+
+
+
+
+                gc.SourceID = SourceID;
+                CounterGeneratesOnly++;
+
+                if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && Account_Age != DateTime.Parse("1/1/0001 12:00:00 AM"))
+                {
+                    listCDRs.Add(gc);
+
+                }
+
+
+            }
+            CDR.SaveBulk("CDR", listCDRs);
            
         }
 

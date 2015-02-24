@@ -4,12 +4,221 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="CDR" EntityType="Model.Store.CDR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CellProfile" EntityType="Model.Store.CellProfile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ControlTable" EntityType="Model.Store.ControlTable" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Criteria_Profile" EntityType="Model.Store.Criteria_Profile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EmailReceivers" EntityType="Model.Store.EmailReceivers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EmailReceiverTypes" EntityType="Model.Store.EmailReceiverTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EmailTemplates" EntityType="Model.Store.EmailTemplates" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EmailTokens" EntityType="Model.Store.EmailTokens" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Imports" EntityType="Model.Store.Imports" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ImportTypes" EntityType="Model.Store.ImportTypes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="NormalCDR" EntityType="Model.Store.NormalCDR" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="NormalizationRules" EntityType="Model.Store.NormalizationRules" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="NumberProfile" EntityType="Model.Store.NumberProfile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OperationType" EntityType="Model.Store.OperationType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Peak_Hoursold" EntityType="Model.Store.Peak_Hoursold" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Peak_Time" EntityType="Model.Store.Peak_Time" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Periods" EntityType="Model.Store.Periods" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Permissions" EntityType="Model.Store.Permissions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PredefinedColumns" EntityType="Model.Store.PredefinedColumns" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Related_Criteria" EntityType="Model.Store.Related_Criteria" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Report" EntityType="Model.Store.Report" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReportDetails" EntityType="Model.Store.ReportDetails" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReportingStatus" EntityType="Model.Store.ReportingStatus" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Set_CallType" EntityType="Model.Store.Set_CallType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Set_SubType" EntityType="Model.Store.Set_SubType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SourceMappings" EntityType="Model.Store.SourceMappings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Strategy" EntityType="Model.Store.Strategy" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Strategy_Min_Values" EntityType="Model.Store.Strategy_Min_Values" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Strategy_Suspicion_Level" EntityType="Model.Store.Strategy_Suspicion_Level" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="StrategyPeriods" EntityType="Model.Store.StrategyPeriods" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="StrategyThreshold" EntityType="Model.Store.StrategyThreshold" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Subscriber_Values" EntityType="Model.Store.Subscriber_Values" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SubscriberThresholds" EntityType="Model.Store.SubscriberThresholds" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Suspicion_Level" EntityType="Model.Store.Suspicion_Level" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Switch_DatabaseConnections" EntityType="Model.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SwitchProfiles" EntityType="Model.Store.SwitchProfiles" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="Model.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserPermissions" EntityType="Model.Store.UserPermissions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="vw_Dashboard" EntityType="Model.Store.vw_Dashboard" store:Type="Views" store:Schema="dbo" store:Name="vw_Dashboard">
+            <DefiningQuery>SELECT 
+      [vw_Dashboard].[CountNewCDRs] AS [CountNewCDRs], 
+      [vw_Dashboard].[MaxAttemptDateTime] AS [MaxAttemptDateTime], 
+      [vw_Dashboard].[CountCDPN] AS [CountCDPN], 
+      [vw_Dashboard].[CountCGPN] AS [CountCGPN]
+      FROM [dbo].[vw_Dashboard] AS [vw_Dashboard]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_ReportedNumber" EntityType="Model.Store.vw_ReportedNumber" store:Type="Views" store:Schema="dbo" store:Name="vw_ReportedNumber">
+            <DefiningQuery>SELECT 
+      [vw_ReportedNumber].[CLI] AS [CLI], 
+      [vw_ReportedNumber].[Date_Day] AS [Date_Day], 
+      [vw_ReportedNumber].[OriginatedVolume] AS [OriginatedVolume], 
+      [vw_ReportedNumber].[TerminatedVolume] AS [TerminatedVolume], 
+      [vw_ReportedNumber].[NumberofAttempts] AS [NumberofAttempts], 
+      [vw_ReportedNumber].[CountDistinctCalledParties] AS [CountDistinctCalledParties], 
+      [vw_ReportedNumber].[ReportID] AS [ReportID], 
+      [vw_ReportedNumber].[MonthYear] AS [MonthYear]
+      FROM [dbo].[vw_ReportedNumber] AS [vw_ReportedNumber]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_ReportedNumberNormalCDR" EntityType="Model.Store.vw_ReportedNumberNormalCDR" store:Type="Views" store:Schema="dbo" store:Name="vw_ReportedNumberNormalCDR">
+            <DefiningQuery>SELECT 
+      [vw_ReportedNumberNormalCDR].[Id] AS [Id], 
+      [vw_ReportedNumberNormalCDR].[A_Temp] AS [A_Temp], 
+      [vw_ReportedNumberNormalCDR].[In_Trunk] AS [In_Trunk], 
+      [vw_ReportedNumberNormalCDR].[Switch] AS [Switch], 
+      [vw_ReportedNumberNormalCDR].[ReportID] AS [ReportID]
+      FROM [dbo].[vw_ReportedNumberNormalCDR] AS [vw_ReportedNumberNormalCDR]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.Store.vwSuspectionAnalysis" store:Type="Views" store:Schema="dbo" store:Name="vwSuspectionAnalysis">
+            <DefiningQuery>SELECT 
+      [vwSuspectionAnalysis].[strategyId] AS [strategyId], 
+      [vwSuspectionAnalysis].[SubscriberNumber] AS [SubscriberNumber], 
+      [vwSuspectionAnalysis].[SuspectionLevelId] AS [SuspectionLevelId], 
+      [vwSuspectionAnalysis].[SuspectionLevelName] AS [SuspectionLevelName], 
+      [vwSuspectionAnalysis].[Number_of_occurance] AS [Number_of_occurance], 
+      [vwSuspectionAnalysis].[LastreportNumber] AS [LastreportNumber], 
+      [vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
+      FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ControlTable_OperationType" Association="Model.Store.FK_ControlTable_OperationType">
+            <End Role="OperationType" EntitySet="OperationType" />
+            <End Role="ControlTable" EntitySet="ControlTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Model.Store.FK_EmailReceivers_EmailReceiverTypes">
+            <End Role="EmailReceiverTypes" EntitySet="EmailReceiverTypes" />
+            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailReceivers_EmailTemplates" Association="Model.Store.FK_EmailReceivers_EmailTemplates">
+            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
+            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailTemplates_Users" Association="Model.Store.FK_EmailTemplates_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Imports_ImportTypes" Association="Model.Store.FK_Imports_ImportTypes">
+            <End Role="ImportTypes" EntitySet="ImportTypes" />
+            <End Role="Imports" EntitySet="Imports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Imports_Users" Association="Model.Store.FK_Imports_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Imports" EntitySet="Imports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NormalizationRules_SwitchProfiles" Association="Model.Store.FK_NormalizationRules_SwitchProfiles">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="NormalizationRules" EntitySet="NormalizationRules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Peak_time_Strategy" Association="Model.Store.FK_Peak_time_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Peak_Time" EntitySet="Peak_Time" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permissions_Permissions" Association="Model.Store.FK_Permissions_Permissions">
+            <End Role="Permissions" EntitySet="Permissions" />
+            <End Role="Permissions1" EntitySet="Permissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Model.Store.FK_Related_Criteria_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="Model.Store.FK_Related_Criteria_criteria_profile1">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_Strategy" Association="Model.Store.FK_Related_Criteria_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_ReportingStatus" Association="Model.Store.FK_Report_ReportingStatus">
+            <End Role="ReportingStatus" EntitySet="ReportingStatus" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportDetails_Report" Association="Model.Store.FK_ReportDetails_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="ReportDetails" EntitySet="ReportDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportDetails_Strategy" Association="Model.Store.FK_ReportDetails_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="ReportDetails" EntitySet="ReportDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SourceMappings_PredefinedColumns" Association="Model.Store.FK_SourceMappings_PredefinedColumns">
+            <End Role="PredefinedColumns" EntitySet="PredefinedColumns" />
+            <End Role="SourceMappings" EntitySet="SourceMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SourceMappings_SwitchProfiles" Association="Model.Store.FK_SourceMappings_SwitchProfiles">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="SourceMappings" EntitySet="SourceMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Min_Values_criteria_profile" Association="Model.Store.FK_Strategy_Min_Values_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Min_Values_Strategy" Association="Model.Store.FK_Strategy_Min_Values_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="Model.Store.FK_Strategy_suspection_level_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_suspection_level_suspection_level" Association="Model.Store.FK_Strategy_suspection_level_suspection_level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="Model.Store.FK_StrategyPeriods_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_Periods" Association="Model.Store.FK_StrategyPeriods_Periods">
+            <End Role="Periods" EntitySet="Periods" />
+            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="Model.Store.FK_StrategyPeriods_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="Model.Store.FK_StrategyThreshold_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="Model.Store.FK_StrategyThreshold_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_criteria_profile" Association="Model.Store.FK_Subscriber_Values_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_Strategy" Association="Model.Store.FK_Subscriber_Values_Strategy">
+            <End Role="Strategy" EntitySet="Strategy" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Model.Store.FK_SubscriberThresholds_Suspection_Level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="Model.Store.FK_Switch_DatabaseConnections_Switchs">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="Switch_DatabaseConnections" EntitySet="Switch_DatabaseConnections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_Permissions" Association="Model.Store.FK_UserPermissions_Permissions">
+            <End Role="Permissions" EntitySet="Permissions" />
+            <End Role="UserPermissions" EntitySet="UserPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_Users" Association="Model.Store.FK_UserPermissions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserPermissions" EntitySet="UserPermissions" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="CDR">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="MSISDN" Type="varchar" MaxLength="30" />
           <Property Name="IMSI" Type="varchar" MaxLength="20" />
           <Property Name="ConnectDateTime" Type="datetime" />
@@ -33,11 +242,23 @@
           <Property Name="Ignore" Type="int" />
           <Property Name="IsNormalized" Type="bit" />
         </EntityType>
+        <EntityType Name="CellProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
+          <Property Name="Date_Day" Type="datetime" />
+          <Property Name="Day_Hour" Type="int" />
+          <Property Name="Distinct_MSISDN_Calls" Type="int" />
+          <Property Name="Distinct_IMEI" Type="int" />
+          <Property Name="Distinct_MSISDN_Msg" Type="int" />
+        </EntityType>
         <EntityType Name="ControlTable">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="OperationTypeID" Type="int" Nullable="false" />
           <Property Name="StartedDateTime" Type="datetime" Nullable="false" />
           <Property Name="FinishedDateTime" Type="datetime" />
@@ -56,15 +277,15 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="EmailReceivers">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="EmailTemplateID" Type="int" />
           <Property Name="EmailReceiverTypeID" Type="int" />
         </EntityType>
@@ -72,34 +293,34 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="EmailTemplates">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="MessageBody" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Subject" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Subject" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="LastUpdateDate" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="LastUpdateDate" Type="datetime2" Nullable="false" Precision="0" />
           <Property Name="LastUpdatedBy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="EmailTokens">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Token" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Token" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="Imports">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ImportDate" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ImportDate" Type="datetime2" Nullable="false" Precision="0" />
           <Property Name="ImportedBy" Type="int" />
           <Property Name="ImportTypeId" Type="int" Nullable="false" />
         </EntityType>
@@ -107,14 +328,14 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="NormalCDR">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="MSISDN" Type="varchar" MaxLength="30" />
           <Property Name="IMSI" Type="varchar" MaxLength="20" />
           <Property Name="ConnectDateTime" Type="datetime" />
@@ -137,7 +358,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Prefix" Type="varchar" MaxLength="3" />
           <Property Name="CallLength" Type="int" />
           <Property Name="Durations" Type="numeric" Precision="38" Scale="4" />
@@ -155,7 +376,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
           <Property Name="Date_Day" Type="datetime" />
           <Property Name="Day_Hour" Type="int" />
@@ -164,9 +385,9 @@
           <Property Name="Count_Out_Fail" Type="int" />
           <Property Name="Count_In_Fail" Type="int" Nullable="false" />
           <Property Name="Call_Out_Dur_Avg" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="numeric" Precision="38" Scale="2" Nullable="false" />
+          <Property Name="Call_In_Dur_Avg" Type="numeric" Nullable="false" Precision="38" Scale="2" />
           <Property Name="Total_Out_Volume" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="Total_In_Volume" Type="numeric" Precision="38" Scale="2" Nullable="false" />
+          <Property Name="Total_In_Volume" Type="numeric" Nullable="false" Precision="38" Scale="2" />
           <Property Name="Diff_Output_Numb" Type="int" />
           <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
           <Property Name="diff_dest_net" Type="int" />
@@ -180,8 +401,8 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="SPName" Type="varchar" MaxLength="50" />
           <Property Name="StepOrder" Type="int" />
           <Property Name="IsActive" Type="bit" />
@@ -191,14 +412,14 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="hours" Type="int" />
         </EntityType>
         <EntityType Name="Peak_Time">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Peak_Hour" Type="int" Nullable="false" />
           <Property Name="StrategyId" Type="int" />
         </EntityType>
@@ -214,7 +435,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Category" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentID" Type="int" />
@@ -223,14 +444,14 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="CriteriaId" Type="int" />
           <Property Name="Related_CriteriaId" Type="int" />
@@ -239,7 +460,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ReportDate" Type="datetime" />
           <Property Name="UserId" Type="int" />
           <Property Name="ReportNumber" Type="varchar" MaxLength="12" />
@@ -253,7 +474,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ReportId" Type="int" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
           <Property Name="StrategyId" Type="int" />
@@ -262,30 +483,30 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Set_SubType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SourceMappings">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SwitchID" Type="int" Nullable="false" />
-          <Property Name="ColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ColumnName" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="MappedtoColumnNumber" Type="int" Nullable="false" />
           <Property Name="CreationDate" Type="datetime2" Precision="0" />
           <Property Name="CreatedBy" Type="int" />
@@ -296,7 +517,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="255" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" Nullable="false" />
@@ -307,7 +528,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="Min_Count_Value" Type="int" />
           <Property Name="Min_Aggreg_Volume" Type="numeric" Precision="13" Scale="4" />
@@ -317,7 +538,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="LevelId" Type="int" />
           <Property Name="CriteriaId1" Type="int" />
@@ -331,7 +552,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="PeriodId" Type="int" />
           <Property Name="Value" Type="int" />
@@ -341,29 +562,29 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StrategyId" Type="int" />
-          <Property Name="MaxValue" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="MaxValue" Type="decimal" Scale="3" />
           <Property Name="CriteriaID" Type="int" />
         </EntityType>
         <EntityType Name="Subscriber_Values">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
           <Property Name="FromDate" Type="datetime" />
           <Property Name="ToDate" Type="datetime" />
           <Property Name="CriteriaId" Type="int" />
           <Property Name="StrategyId" Type="int" />
-          <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Value" Type="decimal" Scale="2" />
           <Property Name="PeriodId" Type="int" />
         </EntityType>
         <EntityType Name="SubscriberThresholds">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="DateDay" Type="datetime" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
           <Property Name="Criteria1" Type="int" />
@@ -379,7 +600,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Switch_DatabaseConnections">
@@ -387,26 +608,26 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="ServerName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="DatabaseName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UserId" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UserPassword" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ServerName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DatabaseName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="UserId" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="UserPassword" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="SwitchProfiles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="AllowAutoImport" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
           <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -415,21 +636,21 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="PermissionID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="PermissionID" Type="int" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime2" Nullable="false" Precision="0" />
           <Property Name="CreatedBy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="EmailAddress" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="LastLoginTime" Type="datetime2" Precision="0" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="IsSuperUser" Type="bit" Nullable="false" />
@@ -438,7 +659,8 @@
           <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_Dashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_Dashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="vw_Dashboard">
           <Key>
             <PropertyRef Name="CountNewCDRs" />
@@ -452,7 +674,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_Dashboard' does not have 
           <Property Name="CountCGPN" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="vw_ReportedNumber">
           <Key>
             <PropertyRef Name="TerminatedVolume" />
@@ -468,7 +691,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumber' does not 
           <Property Name="MonthYear" Type="varchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="vw_ReportedNumberNormalCDR">
           <Key>
             <PropertyRef Name="Id" />
@@ -478,13 +702,14 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumberNormalCDR' 
             <PropertyRef Name="ReportID" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="A_Temp" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="In_Trunk" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="Switch" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="A_Temp" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="In_Trunk" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="Switch" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="ReportID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="vwSuspectionAnalysis">
           <Key>
             <PropertyRef Name="strategyId" />
@@ -496,16 +721,16 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
             <PropertyRef Name="StrategyName" />
           </Key>
           <Property Name="strategyId" Type="int" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SubscriberNumber" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="SuspectionLevelId" Type="int" Nullable="false" />
-          <Property Name="SuspectionLevelName" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="SuspectionLevelName" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="Number_of_occurance" Type="int" Nullable="false" />
-          <Property Name="LastreportNumber" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="StrategyName" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="LastreportNumber" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="StrategyName" Type="varchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <Association Name="FK_ControlTable_OperationType">
-          <End Role="OperationType" Type="Self.OperationType" Multiplicity="1" />
-          <End Role="ControlTable" Type="Self.ControlTable" Multiplicity="*" />
+          <End Role="OperationType" Type="Model.Store.OperationType" Multiplicity="1" />
+          <End Role="ControlTable" Type="Model.Store.ControlTable" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OperationType">
               <PropertyRef Name="ID" />
@@ -516,8 +741,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EmailReceivers_EmailReceiverTypes">
-          <End Role="EmailReceiverTypes" Type="Self.EmailReceiverTypes" Multiplicity="0..1" />
-          <End Role="EmailReceivers" Type="Self.EmailReceivers" Multiplicity="*" />
+          <End Role="EmailReceiverTypes" Type="Model.Store.EmailReceiverTypes" Multiplicity="0..1" />
+          <End Role="EmailReceivers" Type="Model.Store.EmailReceivers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="EmailReceiverTypes">
               <PropertyRef Name="Id" />
@@ -528,8 +753,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EmailReceivers_EmailTemplates">
-          <End Role="EmailTemplates" Type="Self.EmailTemplates" Multiplicity="0..1" />
-          <End Role="EmailReceivers" Type="Self.EmailReceivers" Multiplicity="*" />
+          <End Role="EmailTemplates" Type="Model.Store.EmailTemplates" Multiplicity="0..1" />
+          <End Role="EmailReceivers" Type="Model.Store.EmailReceivers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="EmailTemplates">
               <PropertyRef Name="ID" />
@@ -540,8 +765,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EmailTemplates_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="EmailTemplates" Type="Self.EmailTemplates" Multiplicity="*" />
+          <End Role="Users" Type="Model.Store.Users" Multiplicity="1" />
+          <End Role="EmailTemplates" Type="Model.Store.EmailTemplates" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
@@ -552,8 +777,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Imports_ImportTypes">
-          <End Role="ImportTypes" Type="Self.ImportTypes" Multiplicity="1" />
-          <End Role="Imports" Type="Self.Imports" Multiplicity="*" />
+          <End Role="ImportTypes" Type="Model.Store.ImportTypes" Multiplicity="1" />
+          <End Role="Imports" Type="Model.Store.Imports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ImportTypes">
               <PropertyRef Name="ID" />
@@ -564,8 +789,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Imports_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Imports" Type="Self.Imports" Multiplicity="*" />
+          <End Role="Users" Type="Model.Store.Users" Multiplicity="0..1" />
+          <End Role="Imports" Type="Model.Store.Imports" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
@@ -576,8 +801,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_NormalizationRules_SwitchProfiles">
-          <End Role="SwitchProfiles" Type="Self.SwitchProfiles" Multiplicity="0..1" />
-          <End Role="NormalizationRules" Type="Self.NormalizationRules" Multiplicity="*" />
+          <End Role="SwitchProfiles" Type="Model.Store.SwitchProfiles" Multiplicity="0..1" />
+          <End Role="NormalizationRules" Type="Model.Store.NormalizationRules" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SwitchProfiles">
               <PropertyRef Name="Id" />
@@ -588,8 +813,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Peak_time_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Peak_Time" Type="Self.Peak_Time" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="Peak_Time" Type="Model.Store.Peak_Time" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -600,8 +825,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Permissions_Permissions">
-          <End Role="Permissions" Type="Self.Permissions" Multiplicity="0..1" />
-          <End Role="Permissions1" Type="Self.Permissions" Multiplicity="*" />
+          <End Role="Permissions" Type="Model.Store.Permissions" Multiplicity="0..1" />
+          <End Role="Permissions1" Type="Model.Store.Permissions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Permissions">
               <PropertyRef Name="ID" />
@@ -612,8 +837,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Related_Criteria_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="Related_Criteria" Type="Model.Store.Related_Criteria" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -624,8 +849,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Related_Criteria_criteria_profile1">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="Related_Criteria" Type="Model.Store.Related_Criteria" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -636,8 +861,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Related_Criteria_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="Related_Criteria" Type="Model.Store.Related_Criteria" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -648,8 +873,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Report_ReportingStatus">
-          <End Role="ReportingStatus" Type="Self.ReportingStatus" Multiplicity="1" />
-          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <End Role="ReportingStatus" Type="Model.Store.ReportingStatus" Multiplicity="1" />
+          <End Role="Report" Type="Model.Store.Report" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ReportingStatus">
               <PropertyRef Name="ID" />
@@ -660,8 +885,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ReportDetails_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
-          <End Role="ReportDetails" Type="Self.ReportDetails" Multiplicity="*" />
+          <End Role="Report" Type="Model.Store.Report" Multiplicity="0..1" />
+          <End Role="ReportDetails" Type="Model.Store.ReportDetails" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Report">
               <PropertyRef Name="Id" />
@@ -672,8 +897,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ReportDetails_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="ReportDetails" Type="Self.ReportDetails" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="ReportDetails" Type="Model.Store.ReportDetails" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -684,8 +909,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SourceMappings_PredefinedColumns">
-          <End Role="PredefinedColumns" Type="Self.PredefinedColumns" Multiplicity="1" />
-          <End Role="SourceMappings" Type="Self.SourceMappings" Multiplicity="*" />
+          <End Role="PredefinedColumns" Type="Model.Store.PredefinedColumns" Multiplicity="1" />
+          <End Role="SourceMappings" Type="Model.Store.SourceMappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PredefinedColumns">
               <PropertyRef Name="ID" />
@@ -696,8 +921,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SourceMappings_SwitchProfiles">
-          <End Role="SwitchProfiles" Type="Self.SwitchProfiles" Multiplicity="1" />
-          <End Role="SourceMappings" Type="Self.SourceMappings" Multiplicity="*" />
+          <End Role="SwitchProfiles" Type="Model.Store.SwitchProfiles" Multiplicity="1" />
+          <End Role="SourceMappings" Type="Model.Store.SourceMappings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SwitchProfiles">
               <PropertyRef Name="Id" />
@@ -708,8 +933,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Strategy_Min_Values_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Strategy_Min_Values" Type="Self.Strategy_Min_Values" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="Strategy_Min_Values" Type="Model.Store.Strategy_Min_Values" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -720,8 +945,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Strategy_Min_Values_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Strategy_Min_Values" Type="Self.Strategy_Min_Values" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="Strategy_Min_Values" Type="Model.Store.Strategy_Min_Values" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -732,8 +957,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Strategy_suspection_level_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Strategy_Suspicion_Level" Type="Self.Strategy_Suspicion_Level" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="Strategy_Suspicion_Level" Type="Model.Store.Strategy_Suspicion_Level" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -744,8 +969,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Strategy_suspection_level_suspection_level">
-          <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
-          <End Role="Strategy_Suspicion_Level" Type="Self.Strategy_Suspicion_Level" Multiplicity="*" />
+          <End Role="Suspicion_Level" Type="Model.Store.Suspicion_Level" Multiplicity="0..1" />
+          <End Role="Strategy_Suspicion_Level" Type="Model.Store.Strategy_Suspicion_Level" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Suspicion_Level">
               <PropertyRef Name="Id" />
@@ -756,8 +981,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StrategyPeriods_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="StrategyPeriods" Type="Self.StrategyPeriods" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="StrategyPeriods" Type="Model.Store.StrategyPeriods" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -768,8 +993,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StrategyPeriods_Periods">
-          <End Role="Periods" Type="Self.Periods" Multiplicity="0..1" />
-          <End Role="StrategyPeriods" Type="Self.StrategyPeriods" Multiplicity="*" />
+          <End Role="Periods" Type="Model.Store.Periods" Multiplicity="0..1" />
+          <End Role="StrategyPeriods" Type="Model.Store.StrategyPeriods" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Periods">
               <PropertyRef Name="Id" />
@@ -780,8 +1005,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StrategyPeriods_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="StrategyPeriods" Type="Self.StrategyPeriods" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="StrategyPeriods" Type="Model.Store.StrategyPeriods" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -792,8 +1017,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StrategyThreshold_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="StrategyThreshold" Type="Self.StrategyThreshold" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="StrategyThreshold" Type="Model.Store.StrategyThreshold" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -804,8 +1029,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_StrategyThreshold_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="StrategyThreshold" Type="Self.StrategyThreshold" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="StrategyThreshold" Type="Model.Store.StrategyThreshold" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -816,8 +1041,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscriber_Values_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Subscriber_Values" Type="Self.Subscriber_Values" Multiplicity="*" />
+          <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
+          <End Role="Subscriber_Values" Type="Model.Store.Subscriber_Values" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Criteria_Profile">
               <PropertyRef Name="Id" />
@@ -828,8 +1053,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscriber_Values_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Subscriber_Values" Type="Self.Subscriber_Values" Multiplicity="*" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
+          <End Role="Subscriber_Values" Type="Model.Store.Subscriber_Values" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Strategy">
               <PropertyRef Name="Id" />
@@ -840,8 +1065,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SubscriberThresholds_Suspection_Level">
-          <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
-          <End Role="SubscriberThresholds" Type="Self.SubscriberThresholds" Multiplicity="*" />
+          <End Role="Suspicion_Level" Type="Model.Store.Suspicion_Level" Multiplicity="0..1" />
+          <End Role="SubscriberThresholds" Type="Model.Store.SubscriberThresholds" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Suspicion_Level">
               <PropertyRef Name="Id" />
@@ -852,10 +1077,10 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Switch_DatabaseConnections_Switchs">
-          <End Role="SwitchProfiles" Type="Self.SwitchProfiles" Multiplicity="1">
+          <End Role="SwitchProfiles" Type="Model.Store.SwitchProfiles" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Switch_DatabaseConnections" Type="Self.Switch_DatabaseConnections" Multiplicity="0..1" />
+          <End Role="Switch_DatabaseConnections" Type="Model.Store.Switch_DatabaseConnections" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="SwitchProfiles">
               <PropertyRef Name="Id" />
@@ -866,8 +1091,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserPermissions_Permissions">
-          <End Role="Permissions" Type="Self.Permissions" Multiplicity="1" />
-          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
+          <End Role="Permissions" Type="Model.Store.Permissions" Multiplicity="1" />
+          <End Role="UserPermissions" Type="Model.Store.UserPermissions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Permissions">
               <PropertyRef Name="ID" />
@@ -878,10 +1103,10 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserPermissions_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1">
+          <End Role="Users" Type="Model.Store.Users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
+          <End Role="UserPermissions" Type="Model.Store.UserPermissions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
@@ -894,7 +1119,9 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
         <Function Name="db_Dashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Database" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="db_FillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillDailyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -908,11 +1135,11 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           <Parameter Name="ReportID" Type="int" Mode="In" />
         </Function>
         <Function Name="db_GetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="FindSwitchesTimeDiff" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+        <Function Name="FindSwitchesTimeDiff" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SwitchId1" Type="int" Mode="In" />
           <Parameter Name="SwitchId2" Type="int" Mode="In" />
         </Function>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prCollectNormalizedCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Ids" Type="varchar" Mode="In" />
@@ -997,214 +1224,6 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="ModelStoreContainer">
-          <EntitySet Name="CDR" EntityType="Self.CDR" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ControlTable" EntityType="Self.ControlTable" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Criteria_Profile" EntityType="Self.Criteria_Profile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailReceivers" EntityType="Self.EmailReceivers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailReceiverTypes" EntityType="Self.EmailReceiverTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailTokens" EntityType="Self.EmailTokens" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Imports" EntityType="Self.Imports" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ImportTypes" EntityType="Self.ImportTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NormalizationRules" EntityType="Self.NormalizationRules" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Peak_Hoursold" EntityType="Self.Peak_Hoursold" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Peak_Time" EntityType="Self.Peak_Time" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Periods" EntityType="Self.Periods" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PredefinedColumns" EntityType="Self.PredefinedColumns" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Related_Criteria" EntityType="Self.Related_Criteria" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReportDetails" EntityType="Self.ReportDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReportingStatus" EntityType="Self.ReportingStatus" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Set_CallType" EntityType="Self.Set_CallType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Set_SubType" EntityType="Self.Set_SubType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SourceMappings" EntityType="Self.SourceMappings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Strategy_Min_Values" EntityType="Self.Strategy_Min_Values" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Strategy_Suspicion_Level" EntityType="Self.Strategy_Suspicion_Level" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StrategyPeriods" EntityType="Self.StrategyPeriods" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StrategyThreshold" EntityType="Self.StrategyThreshold" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Subscriber_Values" EntityType="Self.Subscriber_Values" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SubscriberThresholds" EntityType="Self.SubscriberThresholds" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Suspicion_Level" EntityType="Self.Suspicion_Level" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Switch_DatabaseConnections" EntityType="Self.Switch_DatabaseConnections" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SwitchProfiles" EntityType="Self.SwitchProfiles" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="vw_Dashboard" EntityType="Self.vw_Dashboard" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vw_Dashboard].[CountNewCDRs] AS [CountNewCDRs], 
-[vw_Dashboard].[MaxAttemptDateTime] AS [MaxAttemptDateTime], 
-[vw_Dashboard].[CountCDPN] AS [CountCDPN], 
-[vw_Dashboard].[CountCGPN] AS [CountCGPN]
-FROM [dbo].[vw_Dashboard] AS [vw_Dashboard]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vw_ReportedNumber" EntityType="Self.vw_ReportedNumber" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vw_ReportedNumber].[CLI] AS [CLI], 
-[vw_ReportedNumber].[Date_Day] AS [Date_Day], 
-[vw_ReportedNumber].[OriginatedVolume] AS [OriginatedVolume], 
-[vw_ReportedNumber].[TerminatedVolume] AS [TerminatedVolume], 
-[vw_ReportedNumber].[NumberofAttempts] AS [NumberofAttempts], 
-[vw_ReportedNumber].[CountDistinctCalledParties] AS [CountDistinctCalledParties], 
-[vw_ReportedNumber].[ReportID] AS [ReportID], 
-[vw_ReportedNumber].[MonthYear] AS [MonthYear]
-FROM [dbo].[vw_ReportedNumber] AS [vw_ReportedNumber]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vw_ReportedNumberNormalCDR" EntityType="Self.vw_ReportedNumberNormalCDR" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vw_ReportedNumberNormalCDR].[Id] AS [Id], 
-[vw_ReportedNumberNormalCDR].[A_Temp] AS [A_Temp], 
-[vw_ReportedNumberNormalCDR].[In_Trunk] AS [In_Trunk], 
-[vw_ReportedNumberNormalCDR].[Switch] AS [Switch], 
-[vw_ReportedNumberNormalCDR].[ReportID] AS [ReportID]
-FROM [dbo].[vw_ReportedNumberNormalCDR] AS [vw_ReportedNumberNormalCDR]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vwSuspectionAnalysis" EntityType="Self.vwSuspectionAnalysis" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwSuspectionAnalysis].[strategyId] AS [strategyId], 
-[vwSuspectionAnalysis].[SubscriberNumber] AS [SubscriberNumber], 
-[vwSuspectionAnalysis].[SuspectionLevelId] AS [SuspectionLevelId], 
-[vwSuspectionAnalysis].[SuspectionLevelName] AS [SuspectionLevelName], 
-[vwSuspectionAnalysis].[Number_of_occurance] AS [Number_of_occurance], 
-[vwSuspectionAnalysis].[LastreportNumber] AS [LastreportNumber], 
-[vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
-FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_ControlTable_OperationType" Association="Self.FK_ControlTable_OperationType">
-            <End Role="OperationType" EntitySet="OperationType" />
-            <End Role="ControlTable" EntitySet="ControlTable" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Self.FK_EmailReceivers_EmailReceiverTypes">
-            <End Role="EmailReceiverTypes" EntitySet="EmailReceiverTypes" />
-            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailReceivers_EmailTemplates" Association="Self.FK_EmailReceivers_EmailTemplates">
-            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
-            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailTemplates_Users" Association="Self.FK_EmailTemplates_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_ImportTypes" Association="Self.FK_Imports_ImportTypes">
-            <End Role="ImportTypes" EntitySet="ImportTypes" />
-            <End Role="Imports" EntitySet="Imports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_Users" Association="Self.FK_Imports_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Imports" EntitySet="Imports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NormalizationRules_SwitchProfiles" Association="Self.FK_NormalizationRules_SwitchProfiles">
-            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
-            <End Role="NormalizationRules" EntitySet="NormalizationRules" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Peak_time_Strategy" Association="Self.FK_Peak_time_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Peak_Time" EntitySet="Peak_Time" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Permissions_Permissions" Association="Self.FK_Permissions_Permissions">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="Permissions1" EntitySet="Permissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Self.FK_Related_Criteria_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="Self.FK_Related_Criteria_criteria_profile1">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_Strategy" Association="Self.FK_Related_Criteria_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_ReportingStatus" Association="Self.FK_Report_ReportingStatus">
-            <End Role="ReportingStatus" EntitySet="ReportingStatus" />
-            <End Role="Report" EntitySet="Report" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Report" Association="Self.FK_ReportDetails_Report">
-            <End Role="Report" EntitySet="Report" />
-            <End Role="ReportDetails" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Strategy" Association="Self.FK_ReportDetails_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="ReportDetails" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_PredefinedColumns" Association="Self.FK_SourceMappings_PredefinedColumns">
-            <End Role="PredefinedColumns" EntitySet="PredefinedColumns" />
-            <End Role="SourceMappings" EntitySet="SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_SwitchProfiles" Association="Self.FK_SourceMappings_SwitchProfiles">
-            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
-            <End Role="SourceMappings" EntitySet="SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_criteria_profile" Association="Self.FK_Strategy_Min_Values_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_Strategy" Association="Self.FK_Strategy_Min_Values_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="Self.FK_Strategy_suspection_level_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_suspection_level" Association="Self.FK_Strategy_suspection_level_suspection_level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="Self.FK_StrategyPeriods_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Periods" Association="Self.FK_StrategyPeriods_Periods">
-            <End Role="Periods" EntitySet="Periods" />
-            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="Self.FK_StrategyPeriods_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="Self.FK_StrategyThreshold_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="Self.FK_StrategyThreshold_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subscriber_Values_criteria_profile" Association="Self.FK_Subscriber_Values_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Subscriber_Values_Strategy" Association="Self.FK_Subscriber_Values_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Self.FK_SubscriberThresholds_Suspection_Level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="Self.FK_Switch_DatabaseConnections_Switchs">
-            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
-            <End Role="Switch_DatabaseConnections" EntitySet="Switch_DatabaseConnections" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Permissions" Association="Self.FK_UserPermissions_Permissions">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="UserPermissions" EntitySet="UserPermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Users" Association="Self.FK_UserPermissions_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="UserPermissions" EntitySet="UserPermissions" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -1315,7 +1334,19 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <FunctionImport Name="sp_upgraddiagrams" />
           <FunctionImport Name="db_FillDailyMobileProfile" />
           <FunctionImport Name="db_FillHourlyMobileProfile" />
+          <FunctionImport Name="db_FillHourlySubscriberValues" />
+          <FunctionImport Name="prGetUnNormalizedCDPN">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SwitchID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prGetUnNormalizedCGPN">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SwitchID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="CDRs" EntityType="Model.CDR" />
+          <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="Model.Criteria_Profile" />
           <EntitySet Name="EmailReceivers" EntityType="Model.EmailReceiver" />
@@ -1485,17 +1516,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="db_FillHourlySubscriberValues" />
-          <FunctionImport Name="prGetUnNormalizedCDPN">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="SwitchID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prGetUnNormalizedCGPN">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="SwitchID" Mode="In" Type="Int32" />
-          </FunctionImport>
+          <FunctionImport Name="db_FillDailyCellProfile" />
+          <FunctionImport Name="db_FillHourlyCellProfile" />
           </EntityContainer>
         <ComplexType Name="db_GetReportedNumberNormalCDR_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1539,56 +1561,68 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MSISDN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="IMSI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ConnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Destination" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="DurationInSeconds" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="DisconnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Call_Class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Call_Type" Type="Int32" />
-          <Property Name="Sub_Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IMEI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="BTS_Id" Type="Int32" />
-          <Property Name="LAC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Cell_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Origin_Zone_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Termin_Zone_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Account_Age" Type="DateTime" Precision="3" />
-          <Property Name="Reference" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SourceID" Type="Int32" />
-          <Property Name="ImportID" Type="Int32" />
-          <Property Name="Switch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ignore" Type="Int32" />
-          <Property Name="IsNormalized" Type="Boolean" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" Precision="3" />
+          <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" Precision="13" Scale="4" />
+          <Property Type="DateTime" Name="DisconnectDateTime" Precision="3" />
+          <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Call_Type" />
+          <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BTS_Id" />
+          <Property Type="String" Name="LAC" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Origin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Account_Age" Precision="3" />
+          <Property Type="String" Name="Reference" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SourceID" />
+          <Property Type="Int32" Name="ImportID" />
+          <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Ignore" />
+          <Property Type="Boolean" Name="IsNormalized" />
+        </EntityType>
+        <EntityType Name="CellProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Date_Day" Precision="3" />
+          <Property Type="Int32" Name="Day_Hour" />
+          <Property Type="Int32" Name="Distinct_MSISDN_Calls" />
+          <Property Type="Int32" Name="Distinct_IMEI" />
+          <Property Type="Int32" Name="Distinct_MSISDN_Msg" />
         </EntityType>
         <EntityType Name="ControlTable">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OperationTypeID" Type="Int32" Nullable="false" />
-          <Property Name="StartedDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FinishedDateTime" Type="DateTime" Precision="3" />
-          <Property Name="RowsPassed" Type="Int32" />
-          <Property Name="TotalRows" Type="Int32" />
-          <Property Name="StartID" Type="Int32" />
-          <Property Name="EndID" Type="Int32" />
-          <Property Name="StartingUnitdate" Type="DateTime" Precision="3" />
-          <Property Name="EndingUnitdate" Type="DateTime" Precision="3" />
-          <Property Name="Lastid" Type="Int32" />
-          <Property Name="PeriodId" Type="Int32" />
-          <Property Name="NumberOfProfileRecords" Type="Int32" />
-          <Property Name="NumberOfCalls" Type="Int32" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OperationTypeID" Nullable="false" />
+          <Property Type="DateTime" Name="StartedDateTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="FinishedDateTime" Precision="3" />
+          <Property Type="Int32" Name="RowsPassed" />
+          <Property Type="Int32" Name="TotalRows" />
+          <Property Type="Int32" Name="StartID" />
+          <Property Type="Int32" Name="EndID" />
+          <Property Type="DateTime" Name="StartingUnitdate" Precision="3" />
+          <Property Type="DateTime" Name="EndingUnitdate" Precision="3" />
+          <Property Type="Int32" Name="Lastid" />
+          <Property Type="Int32" Name="PeriodId" />
+          <Property Type="Int32" Name="NumberOfProfileRecords" />
+          <Property Type="Int32" Name="NumberOfCalls" />
           <NavigationProperty Name="OperationType" Relationship="Model.FK_ControlTable_OperationType" FromRole="ControlTable" ToRole="OperationType" />
         </EntityType>
         <EntityType Name="Criteria_Profile">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_criteria_profile" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Related_Criteria1" Relationship="Model.FK_Related_Criteria_criteria_profile1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Strategy_Min_Values" Relationship="Model.FK_Strategy_Min_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
@@ -1600,10 +1634,10 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EmailTemplateID" Type="Int32" />
-          <Property Name="EmailReceiverTypeID" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="EmailTemplateID" />
+          <Property Type="Int32" Name="EmailReceiverTypeID" />
           <NavigationProperty Name="EmailReceiverType" Relationship="Model.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiver" ToRole="EmailReceiverType" />
           <NavigationProperty Name="EmailTemplate" Relationship="Model.FK_EmailReceivers_EmailTemplates" FromRole="EmailReceiver" ToRole="EmailTemplate" />
         </EntityType>
@@ -1611,21 +1645,21 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EmailReceivers" Relationship="Model.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiverType" ToRole="EmailReceiver" />
         </EntityType>
         <EntityType Name="EmailTemplate">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MessageBody" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Subject" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="LastUpdateDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LastUpdatedBy" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MessageBody" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Subject" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="DateTime" Name="LastUpdateDate" Nullable="false" Precision="0" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="false" />
           <NavigationProperty Name="EmailReceivers" Relationship="Model.FK_EmailReceivers_EmailTemplates" FromRole="EmailTemplate" ToRole="EmailReceiver" />
           <NavigationProperty Name="User" Relationship="Model.FK_EmailTemplates_Users" FromRole="EmailTemplate" ToRole="User" />
         </EntityType>
@@ -1633,17 +1667,17 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Token" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Token" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Import">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImportDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ImportedBy" Type="Int32" />
-          <Property Name="ImportTypeId" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="ImportDate" Nullable="false" Precision="0" />
+          <Property Type="Int32" Name="ImportedBy" />
+          <Property Type="Int32" Name="ImportTypeId" Nullable="false" />
           <NavigationProperty Name="ImportType" Relationship="Model.FK_Imports_ImportTypes" FromRole="Import" ToRole="ImportType" />
           <NavigationProperty Name="User" Relationship="Model.FK_Imports_Users" FromRole="Import" ToRole="User" />
         </EntityType>
@@ -1651,122 +1685,122 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Imports" Relationship="Model.FK_Imports_ImportTypes" FromRole="ImportType" ToRole="Import" />
         </EntityType>
         <EntityType Name="NormalCDR">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MSISDN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="IMSI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ConnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Destination" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="DurationInSeconds" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="DisconnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Call_Class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Call_Type" Type="Int32" />
-          <Property Name="Sub_Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IMEI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="BTS_Id" Type="Int32" />
-          <Property Name="LAC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Cell_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Origin_Zone_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Termin_Zone_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Account_Age" Type="DateTime" Precision="3" />
-          <Property Name="SwitchRecordId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" Precision="3" />
+          <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" Precision="13" Scale="4" />
+          <Property Type="DateTime" Name="DisconnectDateTime" Precision="3" />
+          <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Call_Type" />
+          <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BTS_Id" />
+          <Property Type="String" Name="LAC" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Origin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Account_Age" Precision="3" />
+          <Property Type="Int32" Name="SwitchRecordId" />
         </EntityType>
         <EntityType Name="NormalizationRule">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Prefix" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="CallLength" Type="Int32" />
-          <Property Name="Durations" Type="Decimal" Precision="38" Scale="4" />
-          <Property Name="CallsCount" Type="Int32" />
-          <Property Name="Ignore" Type="Int32" />
-          <Property Name="Party" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="SwitchId" Type="Int32" />
-          <Property Name="SwitchName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PrefixToAdd" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="SubstringStartIndex" Type="Int32" />
-          <Property Name="SubstringLength" Type="Int32" />
-          <Property Name="SuffixToAdd" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Prefix" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="CallLength" />
+          <Property Type="Decimal" Name="Durations" Precision="38" Scale="4" />
+          <Property Type="Int32" Name="CallsCount" />
+          <Property Type="Int32" Name="Ignore" />
+          <Property Type="String" Name="Party" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SwitchId" />
+          <Property Type="String" Name="SwitchName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PrefixToAdd" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SubstringStartIndex" />
+          <Property Type="Int32" Name="SubstringLength" />
+          <Property Type="String" Name="SuffixToAdd" MaxLength="5" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SwitchProfile" Relationship="Model.FK_NormalizationRules_SwitchProfiles" FromRole="NormalizationRule" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Date_Day" Type="DateTime" Precision="3" />
-          <Property Name="Day_Hour" Type="Int32" />
-          <Property Name="Count_Out" Type="Int32" />
-          <Property Name="Count_In" Type="Int32" Nullable="false" />
-          <Property Name="Count_Out_Fail" Type="Int32" />
-          <Property Name="Count_In_Fail" Type="Int32" Nullable="false" />
-          <Property Name="Call_Out_Dur_Avg" Type="Decimal" Precision="38" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="Decimal" Nullable="false" Precision="38" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="Decimal" Precision="38" Scale="2" />
-          <Property Name="Total_In_Volume" Type="Decimal" Nullable="false" Precision="38" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="Int32" />
-          <Property Name="Diff_Input_Numbers" Type="Int32" Nullable="false" />
-          <Property Name="diff_dest_net" Type="Int32" />
-          <Property Name="diff_sources_net" Type="Int32" />
-          <Property Name="total_cell" Type="Int32" />
-          <Property Name="count_orig_SMS" Type="Int32" />
-          <Property Name="count_ter_SMS" Type="Int32" />
-          <Property Name="Total_IMEI" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Date_Day" Precision="3" />
+          <Property Type="Int32" Name="Day_Hour" />
+          <Property Type="Int32" Name="Count_Out" />
+          <Property Type="Int32" Name="Count_In" Nullable="false" />
+          <Property Type="Int32" Name="Count_Out_Fail" />
+          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
+          <Property Type="Decimal" Name="Call_Out_Dur_Avg" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_Out_Volume" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_In_Volume" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="Diff_Output_Numb" />
+          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
+          <Property Type="Int32" Name="diff_dest_net" />
+          <Property Type="Int32" Name="diff_sources_net" />
+          <Property Type="Int32" Name="total_cell" />
+          <Property Type="Int32" Name="count_orig_SMS" />
+          <Property Type="Int32" Name="count_ter_SMS" />
+          <Property Type="Int32" Name="Total_IMEI" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SPName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="StepOrder" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SPName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="StepOrder" />
+          <Property Type="Boolean" Name="IsActive" />
+          <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ControlTables" Relationship="Model.FK_ControlTable_OperationType" FromRole="OperationType" ToRole="ControlTable" />
         </EntityType>
         <EntityType Name="Peak_Hoursold">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="hours" Type="Int32" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="hours" />
         </EntityType>
         <EntityType Name="Peak_Time">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Peak_Hour" Type="Int32" Nullable="false" />
-          <Property Name="StrategyId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Peak_Hour" Nullable="false" />
+          <Property Type="Int32" Name="StrategyId" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Peak_time_Strategy" FromRole="Peak_Time" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Period">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="StrategyPeriods" Relationship="Model.FK_StrategyPeriods_Periods" FromRole="Period" ToRole="StrategyPeriod" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ParentID" Type="Int32" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Category" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ParentID" />
           <NavigationProperty Name="Permissions1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission" ToRole="Permission1" />
           <NavigationProperty Name="Permission1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission1" ToRole="Permission" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Permissions" FromRole="Permission" ToRole="UserPermission" />
@@ -1775,18 +1809,18 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SourceMappings" Relationship="Model.FK_SourceMappings_PredefinedColumns" FromRole="PredefinedColumn" ToRole="SourceMapping" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="CriteriaId" Type="Int32" />
-          <Property Name="Related_CriteriaId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="CriteriaId" />
+          <Property Type="Int32" Name="Related_CriteriaId" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Related_Criteria_criteria_profile" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Criteria_Profile1" Relationship="Model.FK_Related_Criteria_criteria_profile1" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Related_Criteria_Strategy" FromRole="Related_Criteria" ToRole="Strategy" />
@@ -1795,15 +1829,15 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportDate" Type="DateTime" Precision="3" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="ReportNumber" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ReportingStatusID" Type="Int32" Nullable="false" />
-          <Property Name="ReportID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SentDate" Type="DateTime" Precision="3" />
-          <Property Name="SentBy" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="ReportDate" Precision="3" />
+          <Property Type="Int32" Name="UserId" />
+          <Property Type="String" Name="ReportNumber" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="String" Name="ReportID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="SentDate" Precision="3" />
+          <Property Type="Int32" Name="SentBy" />
           <NavigationProperty Name="ReportingStatu" Relationship="Model.FK_Report_ReportingStatus" FromRole="Report" ToRole="ReportingStatu" />
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Report" FromRole="Report" ToRole="ReportDetail" />
         </EntityType>
@@ -1811,10 +1845,10 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportId" Type="Int32" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="StrategyId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ReportId" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="StrategyId" />
           <NavigationProperty Name="Report" Relationship="Model.FK_ReportDetails_Report" FromRole="ReportDetail" ToRole="Report" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_ReportDetails_Strategy" FromRole="ReportDetail" ToRole="Strategy" />
         </EntityType>
@@ -1822,36 +1856,36 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Reports" Relationship="Model.FK_Report_ReportingStatus" FromRole="ReportingStatu" ToRole="Report" />
         </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Set_SubType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SourceMapping">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SwitchID" Type="Int32" Nullable="false" />
-          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="MappedtoColumnNumber" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Precision="0" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="LastUpdateDate" Type="DateTime" Precision="0" />
-          <Property Name="LastUpdatedBy" Type="Int32" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SwitchID" Nullable="false" />
+          <Property Type="String" Name="ColumnName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="MappedtoColumnNumber" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Precision="0" />
+          <Property Type="Int32" Name="CreatedBy" />
+          <Property Type="DateTime" Name="LastUpdateDate" Precision="0" />
+          <Property Type="Int32" Name="LastUpdatedBy" />
           <NavigationProperty Name="PredefinedColumn" Relationship="Model.FK_SourceMappings_PredefinedColumns" FromRole="SourceMapping" ToRole="PredefinedColumn" />
           <NavigationProperty Name="SwitchProfile" Relationship="Model.FK_SourceMappings_SwitchProfiles" FromRole="SourceMapping" ToRole="SwitchProfile" />
         </EntityType>
@@ -1859,12 +1893,12 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Name" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="IsDefault" Nullable="false" />
           <NavigationProperty Name="Peak_Time" Relationship="Model.FK_Peak_time_Strategy" FromRole="Strategy" ToRole="Peak_Time" />
           <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_Strategy" FromRole="Strategy" ToRole="Related_Criteria" />
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
@@ -1878,11 +1912,11 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="Min_Count_Value" Type="Int32" />
-          <Property Name="Min_Aggreg_Volume" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="CriteriaId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="Min_Count_Value" />
+          <Property Type="Decimal" Name="Min_Aggreg_Volume" Precision="13" Scale="4" />
+          <Property Type="Int32" Name="CriteriaId" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Strategy_Min_Values_criteria_profile" FromRole="Strategy_Min_Values" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_Min_Values_Strategy" FromRole="Strategy_Min_Values" ToRole="Strategy" />
         </EntityType>
@@ -1890,15 +1924,15 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="LevelId" Type="Int32" />
-          <Property Name="CriteriaId1" Type="Int32" />
-          <Property Name="CriteriaId2" Type="Int32" />
-          <Property Name="CriteriaId3" Type="Int32" />
-          <Property Name="CriteriaId4" Type="Int32" />
-          <Property Name="CriteriaId5" Type="Int32" />
-          <Property Name="CriteriaId6" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="LevelId" />
+          <Property Type="Int32" Name="CriteriaId1" />
+          <Property Type="Int32" Name="CriteriaId2" />
+          <Property Type="Int32" Name="CriteriaId3" />
+          <Property Type="Int32" Name="CriteriaId4" />
+          <Property Type="Int32" Name="CriteriaId5" />
+          <Property Type="Int32" Name="CriteriaId6" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
         </EntityType>
@@ -1906,11 +1940,11 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="PeriodId" Type="Int32" />
-          <Property Name="Value" Type="Int32" />
-          <Property Name="CriteriaID" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="PeriodId" />
+          <Property Type="Int32" Name="Value" />
+          <Property Type="Int32" Name="CriteriaID" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_StrategyPeriods_criteria_profile" FromRole="StrategyPeriod" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Period" Relationship="Model.FK_StrategyPeriods_Periods" FromRole="StrategyPeriod" ToRole="Period" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_StrategyPeriods_Strategy" FromRole="StrategyPeriod" ToRole="Strategy" />
@@ -1919,10 +1953,10 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="MaxValue" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CriteriaID" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Decimal" Name="MaxValue" Precision="18" Scale="3" />
+          <Property Type="Int32" Name="CriteriaID" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_StrategyThreshold_criteria_profile" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_StrategyThreshold_Strategy" FromRole="StrategyThreshold" ToRole="Strategy" />
         </EntityType>
@@ -1930,14 +1964,14 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FromDate" Type="DateTime" Precision="3" />
-          <Property Name="ToDate" Type="DateTime" Precision="3" />
-          <Property Name="CriteriaId" Type="Int32" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="Value" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PeriodId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FromDate" Precision="3" />
+          <Property Type="DateTime" Name="ToDate" Precision="3" />
+          <Property Type="Int32" Name="CriteriaId" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Decimal" Name="Value" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="PeriodId" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Subscriber_Values_criteria_profile" FromRole="Subscriber_Values" ToRole="Criteria_Profile" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Subscriber_Values_Strategy" FromRole="Subscriber_Values" ToRole="Strategy" />
         </EntityType>
@@ -1945,25 +1979,25 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateDay" Type="DateTime" Precision="3" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Criteria1" Type="Int32" />
-          <Property Name="Criteria2" Type="Int32" />
-          <Property Name="Criteria3" Type="Int32" />
-          <Property Name="Criteria4" Type="Int32" />
-          <Property Name="Criteria5" Type="Int32" />
-          <Property Name="Criteria6" Type="Int32" />
-          <Property Name="SuspectionLevelId" Type="Int32" />
-          <Property Name="StrategyId" Type="Int32" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="DateDay" Precision="3" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Criteria1" />
+          <Property Type="Int32" Name="Criteria2" />
+          <Property Type="Int32" Name="Criteria3" />
+          <Property Type="Int32" Name="Criteria4" />
+          <Property Type="Int32" Name="Criteria5" />
+          <Property Type="Int32" Name="Criteria6" />
+          <Property Type="Int32" Name="SuspectionLevelId" />
+          <Property Type="Int32" Name="StrategyId" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
         </EntityType>
         <EntityType Name="Suspicion_Level">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Suspicion_Level" ToRole="Strategy_Suspicion_Level" />
           <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
         </EntityType>
@@ -1971,20 +2005,20 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="ServerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="ServerName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DatabaseName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserPassword" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SwitchProfile" Relationship="Model.FK_Switch_DatabaseConnections_Switchs" FromRole="Switch_DatabaseConnections" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="SwitchProfile">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AllowAutoImport" Type="Boolean" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="AllowAutoImport" Nullable="false" />
           <NavigationProperty Name="NormalizationRules" Relationship="Model.FK_NormalizationRules_SwitchProfiles" FromRole="SwitchProfile" ToRole="NormalizationRule" />
           <NavigationProperty Name="SourceMappings" Relationship="Model.FK_SourceMappings_SwitchProfiles" FromRole="SwitchProfile" ToRole="SourceMapping" />
           <NavigationProperty Name="Switch_DatabaseConnections" Relationship="Model.FK_Switch_DatabaseConnections_Switchs" FromRole="SwitchProfile" ToRole="Switch_DatabaseConnections" />
@@ -1993,22 +2027,22 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="principal_id" Nullable="false" />
+          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="version" />
+          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="UserPermission">
           <Key>
             <PropertyRef Name="UserID" />
             <PropertyRef Name="PermissionID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="PermissionID" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="PermissionID" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" Precision="0" />
+          <Property Type="Int32" Name="CreatedBy" Nullable="false" />
           <NavigationProperty Name="Permission" Relationship="Model.FK_UserPermissions_Permissions" FromRole="UserPermission" ToRole="Permission" />
           <NavigationProperty Name="User" Relationship="Model.FK_UserPermissions_Users" FromRole="UserPermission" ToRole="User" />
         </EntityType>
@@ -2016,17 +2050,17 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LastLoginTime" Type="DateTime" Precision="0" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="IsSuperUser" Type="Boolean" Nullable="false" />
-          <Property Name="VerificationCode" Type="String" MaxLength="6" FixedLength="true" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EmailAddress" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="LastLoginTime" Precision="0" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Boolean" Name="IsSuperUser" Nullable="false" />
+          <Property Type="String" Name="VerificationCode" MaxLength="6" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Address" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MobileNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EmailTemplates" Relationship="Model.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
           <NavigationProperty Name="Imports" Relationship="Model.FK_Imports_Users" FromRole="User" ToRole="Import" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
@@ -2038,24 +2072,24 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <PropertyRef Name="CountCDPN" />
             <PropertyRef Name="CountCGPN" />
           </Key>
-          <Property Name="CountNewCDRs" Type="Int32" Nullable="false" />
-          <Property Name="MaxAttemptDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CountCDPN" Type="Int32" Nullable="false" />
-          <Property Name="CountCGPN" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="CountNewCDRs" Nullable="false" />
+          <Property Type="DateTime" Name="MaxAttemptDateTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="CountCDPN" Nullable="false" />
+          <Property Type="Int32" Name="CountCGPN" Nullable="false" />
         </EntityType>
         <EntityType Name="vw_ReportedNumber">
           <Key>
             <PropertyRef Name="TerminatedVolume" />
             <PropertyRef Name="ReportID" />
           </Key>
-          <Property Name="CLI" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Date_Day" Type="DateTime" Precision="3" />
-          <Property Name="OriginatedVolume" Type="Decimal" Precision="38" Scale="4" />
-          <Property Name="TerminatedVolume" Type="Int32" Nullable="false" />
-          <Property Name="NumberofAttempts" Type="Int32" />
-          <Property Name="CountDistinctCalledParties" Type="Int32" />
-          <Property Name="ReportID" Type="Int32" Nullable="false" />
-          <Property Name="MonthYear" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CLI" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Date_Day" Precision="3" />
+          <Property Type="Decimal" Name="OriginatedVolume" Precision="38" Scale="4" />
+          <Property Type="Int32" Name="TerminatedVolume" Nullable="false" />
+          <Property Type="Int32" Name="NumberofAttempts" />
+          <Property Type="Int32" Name="CountDistinctCalledParties" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="String" Name="MonthYear" MaxLength="9" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_ReportedNumberNormalCDR">
           <Key>
@@ -2065,11 +2099,11 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <PropertyRef Name="Switch" />
             <PropertyRef Name="ReportID" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="A_Temp" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="In_Trunk" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Switch" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="A_Temp" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="In_Trunk" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Switch" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
         </EntityType>
         <EntityType Name="vwSuspectionAnalysi">
           <Key>
@@ -2081,13 +2115,13 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <PropertyRef Name="LastreportNumber" />
             <PropertyRef Name="StrategyName" />
           </Key>
-          <Property Name="strategyId" Type="Int32" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="SuspectionLevelId" Type="Int32" Nullable="false" />
-          <Property Name="SuspectionLevelName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Number_of_occurance" Type="Int32" Nullable="false" />
-          <Property Name="LastreportNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="StrategyName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="strategyId" Nullable="false" />
+          <Property Type="String" Name="SubscriberNumber" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SuspectionLevelId" Nullable="false" />
+          <Property Type="String" Name="SuspectionLevelName" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Number_of_occurance" Nullable="false" />
+          <Property Type="String" Name="LastreportNumber" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StrategyName" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_ControlTable_OperationType">
           <End Type="Model.OperationType" Role="OperationType" Multiplicity="1" />
@@ -2563,6 +2597,9 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Model.Store.sp_upgraddiagrams" />
           <FunctionImportMapping FunctionImportName="db_FillDailyMobileProfile" FunctionName="Model.Store.db_FillDailyMobileProfile" />
           <FunctionImportMapping FunctionImportName="db_FillHourlyMobileProfile" FunctionName="Model.Store.db_FillHourlyMobileProfile" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberValues" FunctionName="Model.Store.db_FillHourlySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCDPN" FunctionName="Model.Store.prGetUnNormalizedCDPN" />
+          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="Model.CDR">
               <MappingFragment StoreEntitySet="CDR">
@@ -2588,6 +2625,19 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
                 <ScalarProperty Name="IMSI" ColumnName="IMSI" />
                 <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CellProfiles">
+            <EntityTypeMapping TypeName="Model.CellProfile">
+              <MappingFragment StoreEntitySet="CellProfile">
+                <ScalarProperty Name="Distinct_MSISDN_Msg" ColumnName="Distinct_MSISDN_Msg" />
+                <ScalarProperty Name="Distinct_IMEI" ColumnName="Distinct_IMEI" />
+                <ScalarProperty Name="Distinct_MSISDN_Calls" ColumnName="Distinct_MSISDN_Calls" />
+                <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
+                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3080,9 +3130,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberValues" FunctionName="Model.Store.db_FillHourlySubscriberValues" />
-          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCDPN" FunctionName="Model.Store.prGetUnNormalizedCDPN" />
-          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
+          <FunctionImportMapping FunctionImportName="db_FillDailyCellProfile" FunctionName="Model.Store.db_FillDailyCellProfile" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlyCellProfile" FunctionName="Model.Store.db_FillHourlyCellProfile" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

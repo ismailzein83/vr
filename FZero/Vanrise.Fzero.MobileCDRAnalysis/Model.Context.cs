@@ -29,6 +29,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         }
     
         public DbSet<CDR> CDRs { get; set; }
+        public DbSet<CellProfile> CellProfiles { get; set; }
         public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
@@ -487,6 +488,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 new ObjectParameter("SwitchID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prGetUnNormalizedCGPN", fromDateParameter, toDateParameter, switchIDParameter);
+        }
+    
+        public virtual int db_FillDailyCellProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyCellProfile");
+        }
+    
+        public virtual int db_FillHourlyCellProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyCellProfile");
         }
     }
 }
