@@ -50,6 +50,7 @@
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
     <Compile Include="PricingGenerator.cs" />
+    <Compile Include="PricingGeneratorEntites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateManager.cs" />
     <Compile Include="ZoneManager.cs" />

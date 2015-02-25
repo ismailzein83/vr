@@ -7,7 +7,7 @@ using TOne.Caching;
 
 namespace TOne.BusinessEntity.Business
 {
-    public class PricingGenerator 
+    public class PricingGenerator : IDisposable
     {
         TOneCacheManager _cacheManager;
 
@@ -16,5 +16,10 @@ namespace TOne.BusinessEntity.Business
             _cacheManager = cacheManager;
         }
 
+
+        public void Dispose()
+        {
+
+        }
     }
 }
