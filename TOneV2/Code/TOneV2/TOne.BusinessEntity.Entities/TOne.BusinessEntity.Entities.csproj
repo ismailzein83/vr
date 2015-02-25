@@ -47,10 +47,12 @@
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeGroupInfo.cs" />
+    <Compile Include="SupplierCodes.cs" />
     <Compile Include="Commission.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rate.cs" />
+    <Compile Include="SuppliersCodes.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Compile Include="ZoneRate.cs" />
     <Compile Include="ZoneRateBatch.cs" />
