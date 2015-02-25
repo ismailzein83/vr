@@ -286,9 +286,21 @@ namespace Vanrise.CommonLibrary
 
             using (SqlBulkCopy bulkcopy = new SqlBulkCopy(ConfigurationManager.ConnectionStrings[CurrentConnectionString].ConnectionString))
             {
+
                 bulkcopy.BulkCopyTimeout = 660;
                 bulkcopy.DestinationTableName = TabelName;
+
+                foreach (var column in dt.Columns)
+                    bulkcopy.ColumnMappings.Add(column.ToString(), column.ToString());
+
                 bulkcopy.WriteToServer(dt);
+
+
+
+                
+                //bulkcopy.BulkCopyTimeout = 660;
+                //bulkcopy.DestinationTableName = TabelName;
+                //bulkcopy.WriteToServer(dt);
             }
         }
 
@@ -314,6 +326,12 @@ namespace Vanrise.CommonLibrary
                     table.Columns[table.Columns.Count - 1].AllowDBNull = true;
                 }
 
+                if (prop.PropertyType == typeof(Decimal?))
+                {
+                    table.Columns.Add(prop.Name, typeof(Decimal));
+                    table.Columns[table.Columns.Count - 1].AllowDBNull = true;
+                }
+
                 if (prop.PropertyType == typeof(Boolean?))
                 {
                     table.Columns.Add(prop.Name, typeof(Boolean));
@@ -336,7 +354,7 @@ namespace Vanrise.CommonLibrary
                     if (prop.PropertyType.IsEnum)
                         row[prop.Name] = Convert.ToInt32(prop.GetValue(item));
 
-                    if (prop.PropertyType == typeof(int?) || prop.PropertyType == typeof(DateTime?) || prop.PropertyType == typeof(Boolean?))
+                    if (prop.PropertyType == typeof(int?) || prop.PropertyType == typeof(DateTime?) || prop.PropertyType == typeof(Decimal?) || prop.PropertyType == typeof(Boolean?))
                     {
                         row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
                     }

@@ -70,16 +70,19 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
 
 
-                decimal DurationInSeconds = 0;
+                decimal? DurationInSeconds = null;
+                decimal Duration = 0;
+
                 if (i.Table.Columns.Contains("DurationInSeconds"))
                 {
                     if (i["DurationInSeconds"].ToString() != string.Empty)
                     {
-                        decimal.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
+                        decimal.TryParse(i["DurationInSeconds"].ToString(), out Duration);
+                        DurationInSeconds = Duration;
                     }
                 }
 
-                gc.DurationInSeconds = 0;
+                gc.DurationInSeconds =DurationInSeconds;
 
 
                 string Reference = string.Empty;
@@ -90,26 +93,26 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 gc.Reference = Reference;
 
 
-                //DateTime Account_Age = new DateTime();
-                //if (i.Table.Columns.Contains("Account_Age"))
-                //{
-                //    DateTime.TryParse(i["Account_Age"].ToString(), out Account_Age);
-                //}
-                //gc.Account_Age = Account_Age;
+                DateTime Account_Age = new DateTime();
+                if (i.Table.Columns.Contains("Account_Age"))
+                {
+                    DateTime.TryParse(i["Account_Age"].ToString(), out Account_Age);
+                }
+                gc.Account_Age = Account_Age;
 
-                //DateTime ConnectDateTime = new DateTime();
-                //if (i.Table.Columns.Contains("ConnectDateTime"))
-                //{
-                //    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
-                //}
-                //gc.ConnectDateTime = ConnectDateTime;
+                DateTime ConnectDateTime = new DateTime();
+                if (i.Table.Columns.Contains("ConnectDateTime"))
+                {
+                    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
+                }
+                gc.ConnectDateTime = ConnectDateTime;
 
-                //DateTime DisconnectDateTime = new DateTime();
-                //if (i.Table.Columns.Contains("DisconnectDateTime"))
-                //{
-                //    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
-                //}
-                //gc.DisconnectDateTime = DisconnectDateTime;
+                DateTime DisconnectDateTime = new DateTime();
+                if (i.Table.Columns.Contains("DisconnectDateTime"))
+                {
+                    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
+                }
+                gc.DisconnectDateTime = DisconnectDateTime;
 
 
                 string Call_Class = string.Empty;
@@ -120,12 +123,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 gc.Call_Class = Call_Class;
 
 
-                //int? Call_Type = null;
-                //if (i.Table.Columns.Contains("Call_Type"))
-                //{
-                //    Call_Type = i["Call_Type"].ToString().ToInt();
-                //}
-                //gc.Call_Type = Call_Type;
+                int? Call_Type = null;
+                if (i.Table.Columns.Contains("Call_Type"))
+                {
+                    Call_Type = i["Call_Type"].ToString().ToInt();
+                }
+                gc.Call_Type = Call_Type;
 
 
 
@@ -194,11 +197,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                
                 CounterGeneratesOnly++;
 
-                //if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && Account_Age != DateTime.Parse("1/1/0001 12:00:00 AM"))
-                //{
+                if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && Account_Age != DateTime.Parse("1/1/0001 12:00:00 AM"))
+                {
                     listCDRs.Add(gc);
 
-                //}
+                }
 
 
             }

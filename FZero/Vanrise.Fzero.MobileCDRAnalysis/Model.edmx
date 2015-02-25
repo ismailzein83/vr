@@ -230,16 +230,16 @@
           <Property Name="Origin_Zone_Code" Type="varchar" MaxLength="10" />
           <Property Name="Termin_Zone_Code" Type="varchar" MaxLength="10" />
           <Property Name="Reference" Type="varchar" MaxLength="50" />
-          <Property Name="Switch" Type="varchar" MaxLength="50" />
           <Property Name="Call_Type" Type="int" />
           <Property Name="BTS_Id" Type="int" />
           <Property Name="DurationInSeconds" Type="numeric" Precision="13" Scale="4" />
-          <Property Name="SourceID" Type="int" />
-          <Property Name="ImportID" Type="int" />
-          <Property Name="Ignore" Type="int" />
           <Property Name="ConnectDateTime" Type="datetime" />
           <Property Name="DisconnectDateTime" Type="datetime" />
           <Property Name="Account_Age" Type="datetime" />
+          <Property Name="SourceID" Type="int" />
+          <Property Name="ImportID" Type="int" />
+          <Property Name="Switch" Type="varchar" MaxLength="50" />
+          <Property Name="Ignore" Type="int" />
           <Property Name="IsNormalized" Type="bit" />
         </EntityType>
         <EntityType Name="CellProfile">
@@ -1579,16 +1579,16 @@
           <Property Type="String" Name="Origin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Reference" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Call_Type" />
           <Property Type="Int32" Name="BTS_Id" />
           <Property Type="Decimal" Name="DurationInSeconds" Precision="13" Scale="4" />
-          <Property Type="Int32" Name="SourceID" />
-          <Property Type="Int32" Name="ImportID" />
-          <Property Type="Int32" Name="Ignore" />
           <Property Type="DateTime" Name="ConnectDateTime" Precision="3" />
           <Property Type="DateTime" Name="DisconnectDateTime" Precision="3" />
           <Property Type="DateTime" Name="Account_Age" Precision="3" />
+          <Property Type="Int32" Name="SourceID" />
+          <Property Type="Int32" Name="ImportID" />
+          <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Ignore" />
           <Property Type="Boolean" Name="IsNormalized" />
         </EntityType>
         <EntityType Name="CellProfile">
@@ -2618,16 +2618,16 @@
             <EntityTypeMapping TypeName="Model.CDR">
               <MappingFragment StoreEntitySet="CDR">
                 <ScalarProperty Name="IsNormalized" ColumnName="IsNormalized" />
+                <ScalarProperty Name="Ignore" ColumnName="Ignore" />
+                <ScalarProperty Name="Switch" ColumnName="Switch" />
+                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
                 <ScalarProperty Name="Account_Age" ColumnName="Account_Age" />
                 <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
                 <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
-                <ScalarProperty Name="Ignore" ColumnName="Ignore" />
-                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
-                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
                 <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
                 <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
                 <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
-                <ScalarProperty Name="Switch" ColumnName="Switch" />
                 <ScalarProperty Name="Reference" ColumnName="Reference" />
                 <ScalarProperty Name="Termin_Zone_Code" ColumnName="Termin_Zone_Code" />
                 <ScalarProperty Name="Origin_Zone_Code" ColumnName="Origin_Zone_Code" />

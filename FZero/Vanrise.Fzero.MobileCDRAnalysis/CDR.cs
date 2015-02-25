@@ -26,16 +26,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Origin_Zone_Code { get; set; }
         public string Termin_Zone_Code { get; set; }
         public string Reference { get; set; }
-        public string Switch { get; set; }
         public Nullable<int> Call_Type { get; set; }
         public Nullable<int> BTS_Id { get; set; }
         public Nullable<decimal> DurationInSeconds { get; set; }
-        public Nullable<int> SourceID { get; set; }
-        public Nullable<int> ImportID { get; set; }
-        public Nullable<int> Ignore { get; set; }
         public Nullable<System.DateTime> ConnectDateTime { get; set; }
         public Nullable<System.DateTime> DisconnectDateTime { get; set; }
         public Nullable<System.DateTime> Account_Age { get; set; }
+        public Nullable<int> SourceID { get; set; }
+        public Nullable<int> ImportID { get; set; }
+        public string Switch { get; set; }
+        public Nullable<int> Ignore { get; set; }
         public Nullable<bool> IsNormalized { get; set; }
     }
 }
