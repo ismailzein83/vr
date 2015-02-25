@@ -18,8 +18,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string SubscriberNumber { get; set; }
         public Nullable<System.DateTime> Date_Day { get; set; }
         public Nullable<int> Day_Hour { get; set; }
-        public Nullable<int> Count_Out { get; set; }
-        public int Count_In { get; set; }
+        public Nullable<int> Count_Out_Calls { get; set; }
+        public int Count_In_Calls { get; set; }
+        public Nullable<int> Count_Out_SMS { get; set; }
+        public Nullable<int> Count_In_SMS { get; set; }
         public Nullable<int> Count_Out_Fail { get; set; }
         public int Count_In_Fail { get; set; }
         public Nullable<decimal> Call_Out_Dur_Avg { get; set; }
@@ -28,11 +30,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public decimal Total_In_Volume { get; set; }
         public Nullable<int> Diff_Output_Numb { get; set; }
         public int Diff_Input_Numbers { get; set; }
-        public Nullable<int> diff_dest_net { get; set; }
-        public Nullable<int> diff_sources_net { get; set; }
-        public Nullable<int> total_cell { get; set; }
+        public Nullable<int> Diff_Dest_net { get; set; }
+        public Nullable<int> Diff_Sources_net { get; set; }
+        public Nullable<int> Total_Cell { get; set; }
         public Nullable<int> count_orig_SMS { get; set; }
         public Nullable<int> count_ter_SMS { get; set; }
         public Nullable<int> Total_IMEI { get; set; }
+        public Nullable<int> Count_On_Net { get; set; }
+        public Nullable<int> Count_Off_Net { get; set; }
+        public Nullable<int> Total_BTS { get; set; }
     }
 }

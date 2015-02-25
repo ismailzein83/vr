@@ -22,6 +22,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<decimal> DurationInSeconds { get; set; }
         public Nullable<System.DateTime> DisconnectDateTime { get; set; }
         public string Call_Class { get; set; }
+        public Nullable<byte> IsOnNet { get; set; }
         public Nullable<int> Call_Type { get; set; }
         public string Sub_Type { get; set; }
         public string IMEI { get; set; }

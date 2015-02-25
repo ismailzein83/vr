@@ -127,21 +127,23 @@
                                                                 <Columns>
                                                                     <telerik:GridBoundColumn DataField="MSISDN" UniqueName="MSISDN" HeaderText="MSISDN"  />
                                                                     <telerik:GridBoundColumn DataField="IMSI" UniqueName="IMSI" HeaderText="IMSI"  />
-                                                                    <telerik:GridBoundColumn DataField="ConnectDateTime"  UniqueName="ConnectDateTime" HeaderText="Connect" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}"  />
-                                                                    <telerik:GridBoundColumn DataField="Destination" UniqueName="Destination" HeaderText="Dest." />
-                                                                    <telerik:GridBoundColumn DataField="DurationInSeconds" UniqueName="DurationInSeconds" HeaderText="Duration" />
-                                                                    <telerik:GridBoundColumn DataField="DisconnectDateTime" UniqueName="DisconnectDateTime" HeaderText="Disconnect" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}"  />
-                                                                    <telerik:GridBoundColumn DataField="Call_Class" UniqueName="Call_Class" HeaderText="Class"  />
-                                                                    <telerik:GridBoundColumn DataField="Call_Type" UniqueName="Call_Type" HeaderText="Type"  />
-                                                                    <telerik:GridBoundColumn DataField="Sub_Type" UniqueName="Sub_Type"  HeaderText="Sub" />
+                                                                    <telerik:GridBoundColumn DataField="ConnectDateTime"  UniqueName="ConnectDateTime" HeaderText="ConnectDateTime" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}"  />
+                                                                    <telerik:GridBoundColumn DataField="Destination" UniqueName="Destination" HeaderText="Destination" />
+                                                                    
+                                                                    <telerik:GridBoundColumn DataField="DisconnectDateTime" UniqueName="DisconnectDateTime" HeaderText="DisconnectDateTime" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}"  />
+                                                                    <telerik:GridBoundColumn DataField="Call_Class" UniqueName="Call_Class" HeaderText="Call_Class"  />
+                                                                    <telerik:GridBoundColumn DataField="Call_Type" UniqueName="Call_Type" HeaderText="Call_Type"  />
+                                                                    <telerik:GridBoundColumn DataField="Sub_Type" UniqueName="Sub_Type"  HeaderText="Sub_Type" />
                                                                     <telerik:GridBoundColumn DataField="IMEI" UniqueName="IMEI" HeaderText="IMEI"  />
-                                                                    <telerik:GridBoundColumn DataField="BTS_Id"  UniqueName="BTS_Id" HeaderText="BTS"  />
+                                                                    <telerik:GridBoundColumn DataField="BTS_Id"  UniqueName="BTS_Id" HeaderText="BTS_Id"  />
                                                                     <telerik:GridBoundColumn DataField="LAC" UniqueName="LAC" HeaderText="LAC" />
-                                                                    <telerik:GridBoundColumn DataField="Cell_Id" UniqueName="Cell_Id" HeaderText="Cell" />
-                                                                    <telerik:GridBoundColumn DataField="Origin_Zone_Code" UniqueName="Origin_Zone_Code" HeaderText="Origin"  />
-                                                                    <telerik:GridBoundColumn DataField="Termin_Zone_Code" UniqueName="Termin_Zone_Code" HeaderText="Termin"  />
-                                                                    <telerik:GridBoundColumn DataField="Account_Age" UniqueName="Account_Age" HeaderText="Age" />
+                                                                    <telerik:GridBoundColumn DataField="Cell_Id" UniqueName="Cell_Id" HeaderText="Cell_Id" />
+                                                                    <telerik:GridBoundColumn DataField="Origin_Zone_Code" UniqueName="Origin_Zone_Code" HeaderText="Origin_Zone_Code"  />
+                                                                    <telerik:GridBoundColumn DataField="Termin_Zone_Code" UniqueName="Termin_Zone_Code" HeaderText="Termin_Zone_Code"  />
+                                                                    <telerik:GridBoundColumn DataField="Account_Age" UniqueName="Account_Age" HeaderText="Account_Age" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}"  />
                                                                     <telerik:GridBoundColumn DataField="Reference" UniqueName="Reference"  HeaderText="Reference" />
+                                                                    <telerik:GridBoundColumn DataField="DurationInSeconds" UniqueName="DurationInSeconds" HeaderText="DurationInSeconds" />
+                                                                  
                                                                 </Columns>
                                                             </MasterTableView>
                                                         </telerik:RadGrid>

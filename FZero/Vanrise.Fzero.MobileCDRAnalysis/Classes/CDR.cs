@@ -53,7 +53,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 gc.IMSI = IMSI;
 
 
-               
+
 
                 string Destination = string.Empty;
                 if (i.Table.Columns.Contains("Destination"))
@@ -65,6 +65,23 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
 
 
+               
+
+
+
+
+                decimal DurationInSeconds = 0;
+                if (i.Table.Columns.Contains("DurationInSeconds"))
+                {
+                    if (i["DurationInSeconds"].ToString() != string.Empty)
+                    {
+                        decimal.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
+                    }
+                }
+
+                gc.DurationInSeconds = 0;
+
+
                 string Reference = string.Empty;
                 if (i.Table.Columns.Contains("Reference"))
                 {
@@ -73,46 +90,26 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 gc.Reference = Reference;
 
 
+                //DateTime Account_Age = new DateTime();
+                //if (i.Table.Columns.Contains("Account_Age"))
+                //{
+                //    DateTime.TryParse(i["Account_Age"].ToString(), out Account_Age);
+                //}
+                //gc.Account_Age = Account_Age;
 
+                //DateTime ConnectDateTime = new DateTime();
+                //if (i.Table.Columns.Contains("ConnectDateTime"))
+                //{
+                //    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
+                //}
+                //gc.ConnectDateTime = ConnectDateTime;
 
-                float DurationInSeconds = 0;
-                if (i.Table.Columns.Contains("DurationInSeconds"))
-                {
-                    if (i["DurationInSeconds"].ToString() != string.Empty)
-                    {
-                        float.TryParse(i["DurationInSeconds"].ToString(), out DurationInSeconds);
-                    }
-                }
-
-                gc.DurationInSeconds = Convert.ToInt32(DurationInSeconds);
-
-
-
-              
-
-                DateTime Account_Age = new DateTime();
-                if (i.Table.Columns.Contains("Account_Age"))
-                {
-                    DateTime.TryParse(i["Account_Age"].ToString(), out Account_Age);
-                }
-                gc.Account_Age = Account_Age;
-
-                DateTime ConnectDateTime = new DateTime();
-                if (i.Table.Columns.Contains("ConnectDateTime"))
-                {
-                    DateTime.TryParse(i["ConnectDateTime"].ToString(), out ConnectDateTime);
-                }
-                gc.ConnectDateTime = ConnectDateTime;
-
-                DateTime DisconnectDateTime = new DateTime();
-                if (i.Table.Columns.Contains("DisconnectDateTime"))
-                {
-                    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
-                }
-                gc.DisconnectDateTime = DisconnectDateTime;
-
-
-
+                //DateTime DisconnectDateTime = new DateTime();
+                //if (i.Table.Columns.Contains("DisconnectDateTime"))
+                //{
+                //    DateTime.TryParse(i["DisconnectDateTime"].ToString(), out DisconnectDateTime);
+                //}
+                //gc.DisconnectDateTime = DisconnectDateTime;
 
 
                 string Call_Class = string.Empty;
@@ -123,12 +120,13 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 gc.Call_Class = Call_Class;
 
 
-                int? Call_Type = null;
-                if (i.Table.Columns.Contains("Call_Type"))
-                {
-                    Call_Type = i["Call_Type"].ToString().ToInt();
-                }
-                gc.Call_Type = Call_Type;
+                //int? Call_Type = null;
+                //if (i.Table.Columns.Contains("Call_Type"))
+                //{
+                //    Call_Type = i["Call_Type"].ToString().ToInt();
+                //}
+                //gc.Call_Type = Call_Type;
+
 
 
                 string Sub_Type = string.Empty;
@@ -183,26 +181,24 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     Termin_Zone_Code = i["Termin_Zone_Code"].ToString();
                 }
-                gc.Sub_Type = Termin_Zone_Code;
+                gc.Termin_Zone_Code = Termin_Zone_Code;
 
-
-             
-
-
-             
-            
 
 
 
 
                 gc.SourceID = SourceID;
+                gc.ImportID = import.ID;
+                
+
+               
                 CounterGeneratesOnly++;
 
-                if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && Account_Age != DateTime.Parse("1/1/0001 12:00:00 AM"))
-                {
+                //if (ConnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && DisconnectDateTime != DateTime.Parse("1/1/0001 12:00:00 AM") && Account_Age != DateTime.Parse("1/1/0001 12:00:00 AM"))
+                //{
                     listCDRs.Add(gc);
 
-                }
+                //}
 
 
             }
