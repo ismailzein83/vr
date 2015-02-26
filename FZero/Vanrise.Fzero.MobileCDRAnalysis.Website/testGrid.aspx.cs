@@ -37,21 +37,14 @@ public partial class testGrid : BasePage
         if (!CurrentUser.HasPermission(Enums.SystemPermissions.EmailRecievers))
             PreviousPageRedirect();
 
-        //btnAddNew.Visible = CurrentUser.HasPermission(Enums.SystemPermissions.ManageEmailRecievers);
-
-        gvEmailReceivers.Columns[gvEmailReceivers.Columns.Count - 2].Visible = CurrentUser.HasPermission(Enums.SystemPermissions.ManageEmailRecievers);
-        gvEmailReceivers.Columns[gvEmailReceivers.Columns.Count - 1].Visible = CurrentUser.HasPermission(Enums.SystemPermissions.ManageEmailRecievers);
-    }
+           }
 
     private void SetCaptions()
     {
         ((MasterPage)Master).PageHeaderTitle = "Email Recievers";
 
         int columnIndex = 0;
-        gvEmailReceivers.Columns[columnIndex++].HeaderText = "Email Template";
-        gvEmailReceivers.Columns[columnIndex++].HeaderText = "Receiver Type";
-        gvEmailReceivers.Columns[columnIndex++].HeaderText = "Email";
-        gvEmailReceivers.Columns[columnIndex++].HeaderText = "Id";
+      
 
     }
 
@@ -98,7 +91,7 @@ public partial class testGrid : BasePage
     {
         //EmailReceiver EmailReceiver = SetData();
         //EmailReceiver.Save(EmailReceiver);
-        gvEmailReceivers.Rebind();
+        //gvEmailReceivers.Rebind();
         ClearForm();
         return true;
     }
@@ -148,7 +141,7 @@ public partial class testGrid : BasePage
             SetPermissions();
             SetCaptions();
             FillCombos();
-            gvEmailReceivers.Rebind();
+            //gvEmailReceivers.Rebind();
         }
     }
 
@@ -168,7 +161,7 @@ public partial class testGrid : BasePage
     protected void btnSearchClear_Click(object sender, EventArgs e)
     {
         ClearSearchForm();
-        gvEmailReceivers.Rebind();
+       // gvEmailReceivers.Rebind();
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -179,7 +172,7 @@ public partial class testGrid : BasePage
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        gvEmailReceivers.Rebind();
+       // gvEmailReceivers.Rebind();
     }
 
     protected void gvEmailReceivers_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
@@ -188,7 +181,7 @@ public partial class testGrid : BasePage
         //int EmailTemplateID = ddlSearchEmailTemplate.SelectedValue.ToInt();
         //int EmailReceiverTypeID = ddlSearchReceiverType.SelectedValue.ToInt();
 
-        gvEmailReceivers.DataSource = EmailReceiver.GetEmailReceivers("", 0, 0);
+       // gvEmailReceivers.DataSource = EmailReceiver.GetEmailReceivers("", 0, 0);
     }
 
     protected void gvEmailReceivers_ItemCommand(object sender, GridCommandEventArgs e)
@@ -205,7 +198,7 @@ public partial class testGrid : BasePage
             case "Remove":
                 if (Vanrise.Fzero.MobileCDRAnalysis.EmailReceiver.Delete(Id))
                 {
-                    gvEmailReceivers.Rebind();
+                    //gvEmailReceivers.Rebind();
                     ClearForm();
                     ClearSearchForm();
                 }

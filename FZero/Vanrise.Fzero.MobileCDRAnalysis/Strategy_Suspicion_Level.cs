@@ -23,6 +23,30 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> CriteriaId4 { get; set; }
         public Nullable<int> CriteriaId5 { get; set; }
         public Nullable<int> CriteriaId6 { get; set; }
+        public Nullable<int> CriteriaId7 { get; set; }
+        public Nullable<int> CriteriaId8 { get; set; }
+        public Nullable<int> CriteriaId9 { get; set; }
+        public Nullable<int> CriteriaId10 { get; set; }
+        public Nullable<int> CriteriaId11 { get; set; }
+        public Nullable<int> CriteriaId12 { get; set; }
+        public Nullable<int> CriteriaId13 { get; set; }
+        public Nullable<int> CriteriaId14 { get; set; }
+        public Nullable<int> CriteriaId15 { get; set; }
+        public Nullable<decimal> Cr1Per { get; set; }
+        public Nullable<decimal> Cr2Per { get; set; }
+        public Nullable<decimal> Cr3Per { get; set; }
+        public Nullable<decimal> Cr4Per { get; set; }
+        public Nullable<decimal> Cr5Per { get; set; }
+        public Nullable<decimal> Cr6Per { get; set; }
+        public Nullable<decimal> Cr7Per { get; set; }
+        public Nullable<decimal> Cr8Per { get; set; }
+        public Nullable<decimal> Cr9Per { get; set; }
+        public Nullable<decimal> Cr10Per { get; set; }
+        public Nullable<decimal> Cr11Per { get; set; }
+        public Nullable<decimal> Cr12Per { get; set; }
+        public Nullable<decimal> Cr13Per { get; set; }
+        public Nullable<decimal> Cr14Per { get; set; }
+        public Nullable<decimal> Cr15Per { get; set; }
     
         public virtual Strategy Strategy { get; set; }
         public virtual Suspicion_Level Suspicion_Level { get; set; }

@@ -553,6 +553,30 @@
           <Property Name="CriteriaId4" Type="int" />
           <Property Name="CriteriaId5" Type="int" />
           <Property Name="CriteriaId6" Type="int" />
+          <Property Name="CriteriaId7" Type="int" />
+          <Property Name="CriteriaId8" Type="int" />
+          <Property Name="CriteriaId9" Type="int" />
+          <Property Name="CriteriaId10" Type="int" />
+          <Property Name="CriteriaId11" Type="int" />
+          <Property Name="CriteriaId12" Type="int" />
+          <Property Name="CriteriaId13" Type="int" />
+          <Property Name="CriteriaId14" Type="int" />
+          <Property Name="CriteriaId15" Type="int" />
+          <Property Name="Cr1Per" Type="decimal" Scale="2" />
+          <Property Name="Cr2Per" Type="decimal" Scale="2" />
+          <Property Name="Cr3Per" Type="decimal" Scale="2" />
+          <Property Name="Cr4Per" Type="decimal" Scale="2" />
+          <Property Name="Cr5Per" Type="decimal" Scale="2" />
+          <Property Name="Cr6Per" Type="decimal" Scale="2" />
+          <Property Name="Cr7Per" Type="decimal" Scale="2" />
+          <Property Name="Cr8Per" Type="decimal" Scale="2" />
+          <Property Name="Cr9Per" Type="decimal" Scale="2" />
+          <Property Name="Cr10Per" Type="decimal" Scale="2" />
+          <Property Name="Cr11Per" Type="decimal" Scale="2" />
+          <Property Name="Cr12Per" Type="decimal" Scale="2" />
+          <Property Name="Cr13Per" Type="decimal" Scale="2" />
+          <Property Name="Cr14Per" Type="decimal" Scale="2" />
+          <Property Name="Cr15Per" Type="decimal" Scale="2" />
         </EntityType>
         <EntityType Name="StrategyPeriods">
           <Key>
@@ -1945,6 +1969,30 @@
           <Property Type="Int32" Name="CriteriaId4" />
           <Property Type="Int32" Name="CriteriaId5" />
           <Property Type="Int32" Name="CriteriaId6" />
+          <Property Type="Int32" Name="CriteriaId7" />
+          <Property Type="Int32" Name="CriteriaId8" />
+          <Property Type="Int32" Name="CriteriaId9" />
+          <Property Type="Int32" Name="CriteriaId10" />
+          <Property Type="Int32" Name="CriteriaId11" />
+          <Property Type="Int32" Name="CriteriaId12" />
+          <Property Type="Int32" Name="CriteriaId13" />
+          <Property Type="Int32" Name="CriteriaId14" />
+          <Property Type="Int32" Name="CriteriaId15" />
+          <Property Type="Decimal" Name="Cr1Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr2Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr3Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr4Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr5Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr6Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr7Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr8Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr9Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr10Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr11Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr12Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr13Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr14Per" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cr15Per" Precision="18" Scale="2" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
         </EntityType>
@@ -2971,6 +3019,30 @@
           <EntitySetMapping Name="Strategy_Suspicion_Level">
             <EntityTypeMapping TypeName="Model.Strategy_Suspicion_Level">
               <MappingFragment StoreEntitySet="Strategy_Suspicion_Level">
+                <ScalarProperty Name="Cr15Per" ColumnName="Cr15Per" />
+                <ScalarProperty Name="Cr14Per" ColumnName="Cr14Per" />
+                <ScalarProperty Name="Cr13Per" ColumnName="Cr13Per" />
+                <ScalarProperty Name="Cr12Per" ColumnName="Cr12Per" />
+                <ScalarProperty Name="Cr11Per" ColumnName="Cr11Per" />
+                <ScalarProperty Name="Cr10Per" ColumnName="Cr10Per" />
+                <ScalarProperty Name="Cr9Per" ColumnName="Cr9Per" />
+                <ScalarProperty Name="Cr8Per" ColumnName="Cr8Per" />
+                <ScalarProperty Name="Cr7Per" ColumnName="Cr7Per" />
+                <ScalarProperty Name="Cr6Per" ColumnName="Cr6Per" />
+                <ScalarProperty Name="Cr5Per" ColumnName="Cr5Per" />
+                <ScalarProperty Name="Cr4Per" ColumnName="Cr4Per" />
+                <ScalarProperty Name="Cr3Per" ColumnName="Cr3Per" />
+                <ScalarProperty Name="Cr2Per" ColumnName="Cr2Per" />
+                <ScalarProperty Name="Cr1Per" ColumnName="Cr1Per" />
+                <ScalarProperty Name="CriteriaId15" ColumnName="CriteriaId15" />
+                <ScalarProperty Name="CriteriaId14" ColumnName="CriteriaId14" />
+                <ScalarProperty Name="CriteriaId13" ColumnName="CriteriaId13" />
+                <ScalarProperty Name="CriteriaId12" ColumnName="CriteriaId12" />
+                <ScalarProperty Name="CriteriaId11" ColumnName="CriteriaId11" />
+                <ScalarProperty Name="CriteriaId10" ColumnName="CriteriaId10" />
+                <ScalarProperty Name="CriteriaId9" ColumnName="CriteriaId9" />
+                <ScalarProperty Name="CriteriaId8" ColumnName="CriteriaId8" />
+                <ScalarProperty Name="CriteriaId7" ColumnName="CriteriaId7" />
                 <ScalarProperty Name="CriteriaId6" ColumnName="CriteriaId6" />
                 <ScalarProperty Name="CriteriaId5" ColumnName="CriteriaId5" />
                 <ScalarProperty Name="CriteriaId4" ColumnName="CriteriaId4" />
