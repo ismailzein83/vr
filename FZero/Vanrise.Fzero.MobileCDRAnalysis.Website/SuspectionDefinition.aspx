@@ -212,9 +212,8 @@
                     <table style="width: 100%">
                         <tr>
                             <td>
-                                <div class="span6 allborders">
-                                    <h4 class="breadcrumb">Threshold Information</h4>
-                                    <table cellspacing="0" cellpadding="1" class="table">
+                                <div >
+                                    <table cellspacing="0" cellpadding="1" >
                                         <tbody>
                                             <tr>
                                                 <td class="caption required">Strategy</td>
@@ -242,67 +241,155 @@
                                             </tr>
 
                                              <tr>
-                                                <td>Criteria</td>
+                                                <td>Filters</td>
                                                 <td>Is Included</td>
-                                                 <td  class="inputData">Criterion Description</td>
+                                                 <td  class="inputData">Filter Description</td>
                                             </tr>
 
                                             <tr>
-                                                <td>Criterion 1</td>
-                                                <td class="inputData">
+                                                <td>Filter 1</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria1" />
                                                 </td>
-                                                 <td  class="inputData">
+                                                 <td  >
                                                      <asp:Label runat="server" ID="lblCriteria1" ></asp:Label>
                                                  </td>
 
                                             </tr>
                                             <tr>
-                                                <td>Criterion 2</td>
-                                                <td class="inputData">
+                                                <td>Filter 2</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria2" />
                                                 </td>
-                                                <td  class="inputData">
+                                                <td  >
                                                      <asp:Label runat="server" ID="lblCriteria2" ></asp:Label>
                                                  </td>
                                             </tr>
                                             <tr>
-                                                <td>Criterion 3</td>
-                                                <td class="inputData">
+                                                <td>Filter 3</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria3" />
                                                 </td>
-                                               <td  class="inputData">
+                                               <td  >
                                                      <asp:Label runat="server" ID="lblCriteria3" ></asp:Label>
                                                  </td>
                                             </tr>
                                             <tr>
-                                                <td>Criterion 4</td>
-                                                <td class="inputData">
+                                                <td>Filter 4</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria4" />
                                                 </td>
-                                                 <td  class="inputData">
+                                                 <td  >
                                                      <asp:Label runat="server" ID="lblCriteria4" ></asp:Label>
                                                  </td>
                                             </tr>
                                             <tr>
-                                                <td>Criterion 5</td>
-                                                <td class="inputData">
+                                                <td>Filter 5</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria5" />
                                                 </td>
-                                                  <td  class="inputData">
+                                                  <td  >
                                                      <asp:Label runat="server" ID="lblCriteria5" ></asp:Label>
                                                  </td>
                                             </tr>
                                             <tr>
-                                                <td>Criterion 6</td>
-                                                <td class="inputData">
+                                                <td>Filter 6</td>
+                                                <td >
                                                    <asp:CheckBox runat="server" ID="chkCriteria6" />
                                                 </td>
-                                                 <td  class="inputData">
+                                                 <td  >
                                                      <asp:Label runat="server" ID="lblCriteria6" ></asp:Label>
                                                  </td>
                                             </tr>
 
+                                             <tr>
+                                                <td>Filter 7</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria7" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria7" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 8</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria8" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria8" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 9</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria9" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria9" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 10</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria10" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria10" ></asp:Label>
+                                                 </td>
+                                            </tr>
+                                             <tr>
+                                                <td>Filter 11</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria11" />
+                                                </td>
+                                                 <td >
+                                                     <asp:Label runat="server" ID="lblCriteria11" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 12</td>
+                                                <td>
+                                                   <asp:CheckBox runat="server" ID="chkCriteria12" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria12" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 13</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria13" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria13" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 14</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria14" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria14" ></asp:Label>
+                                                 </td>
+                                            </tr>
+
+                                             <tr>
+                                                <td>Filter 15</td>
+                                                <td >
+                                                   <asp:CheckBox runat="server" ID="chkCriteria15" />
+                                                </td>
+                                                 <td  >
+                                                     <asp:Label runat="server" ID="lblCriteria15" ></asp:Label>
+                                                 </td>
+                                            </tr>
 
 
 

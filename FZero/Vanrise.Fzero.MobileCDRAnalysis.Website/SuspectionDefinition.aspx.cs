@@ -231,6 +231,16 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria4.Checked = currentObject.CriteriaId4 == 1 ? true : false;
         chkCriteria5.Checked = currentObject.CriteriaId5 == 1 ? true : false;
         chkCriteria6.Checked = currentObject.CriteriaId6 == 1 ? true : false;
+        chkCriteria7.Checked = currentObject.CriteriaId7 == 1 ? true : false;
+        chkCriteria8.Checked = currentObject.CriteriaId8 == 1 ? true : false;
+        chkCriteria9.Checked = currentObject.CriteriaId9 == 1 ? true : false;
+        chkCriteria10.Checked = currentObject.CriteriaId10 == 1 ? true : false;
+        chkCriteria11.Checked = currentObject.CriteriaId11 == 1 ? true : false;
+        chkCriteria12.Checked = currentObject.CriteriaId12 == 1 ? true : false;
+        chkCriteria13.Checked = currentObject.CriteriaId13 == 1 ? true : false;
+        chkCriteria14.Checked = currentObject.CriteriaId14 == 1 ? true : false;
+        chkCriteria15.Checked = currentObject.CriteriaId15 == 1 ? true : false;
+      
 
         List<Criteria_Profile> criteria_Profiles = Criteria_Profile.GetAll();
         lblCriteria1.Text = criteria_Profiles[0].Description;
@@ -239,6 +249,16 @@ public partial class SuspectionDefinition : BasePage
         lblCriteria4.Text = criteria_Profiles[3].Description;
         lblCriteria5.Text = criteria_Profiles[4].Description;
         lblCriteria6.Text = criteria_Profiles[5].Description;
+        lblCriteria7.Text = criteria_Profiles[6].Description;
+        lblCriteria8.Text = criteria_Profiles[7].Description;
+        lblCriteria9.Text = criteria_Profiles[8].Description;
+        lblCriteria10.Text = criteria_Profiles[9].Description;
+        lblCriteria11.Text = criteria_Profiles[10].Description;
+        lblCriteria12.Text = criteria_Profiles[11].Description;
+        lblCriteria13.Text = criteria_Profiles[12].Description;
+        lblCriteria14.Text = criteria_Profiles[13].Description;
+        lblCriteria15.Text = criteria_Profiles[14].Description;
+      
     }
 
     #endregion
