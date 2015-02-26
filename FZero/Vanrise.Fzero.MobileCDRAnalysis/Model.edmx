@@ -383,8 +383,6 @@
           <Property Name="Day_Hour" Type="int" />
           <Property Name="Count_Out_Calls" Type="int" />
           <Property Name="Count_In_Calls" Type="int" Nullable="false" />
-          <Property Name="Count_Out_SMS" Type="int" />
-          <Property Name="Count_In_SMS" Type="int" />
           <Property Name="Count_Out_Fail" Type="int" />
           <Property Name="Count_In_Fail" Type="int" Nullable="false" />
           <Property Name="Call_Out_Dur_Avg" Type="numeric" Precision="38" Scale="2" />
@@ -548,34 +546,34 @@
           <Property Name="StrategyId" Type="int" />
           <Property Name="LevelId" Type="int" />
           <Property Name="CriteriaId1" Type="int" />
-          <Property Name="CriteriaId2" Type="int" />
-          <Property Name="CriteriaId3" Type="int" />
-          <Property Name="CriteriaId4" Type="int" />
-          <Property Name="CriteriaId5" Type="int" />
-          <Property Name="CriteriaId6" Type="int" />
-          <Property Name="CriteriaId7" Type="int" />
-          <Property Name="CriteriaId8" Type="int" />
-          <Property Name="CriteriaId9" Type="int" />
-          <Property Name="CriteriaId10" Type="int" />
-          <Property Name="CriteriaId11" Type="int" />
-          <Property Name="CriteriaId12" Type="int" />
-          <Property Name="CriteriaId13" Type="int" />
-          <Property Name="CriteriaId14" Type="int" />
-          <Property Name="CriteriaId15" Type="int" />
           <Property Name="Cr1Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId2" Type="int" />
           <Property Name="Cr2Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId3" Type="int" />
           <Property Name="Cr3Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId4" Type="int" />
           <Property Name="Cr4Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId5" Type="int" />
           <Property Name="Cr5Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId6" Type="int" />
           <Property Name="Cr6Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId7" Type="int" />
           <Property Name="Cr7Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId8" Type="int" />
           <Property Name="Cr8Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId9" Type="int" />
           <Property Name="Cr9Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId10" Type="int" />
           <Property Name="Cr10Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId11" Type="int" />
           <Property Name="Cr11Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId12" Type="int" />
           <Property Name="Cr12Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId13" Type="int" />
           <Property Name="Cr13Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId14" Type="int" />
           <Property Name="Cr14Per" Type="decimal" Scale="2" />
+          <Property Name="CriteriaId15" Type="int" />
           <Property Name="Cr15Per" Type="decimal" Scale="2" />
         </EntityType>
         <EntityType Name="StrategyPeriods">
@@ -1772,8 +1770,6 @@
           <Property Type="Int32" Name="Day_Hour" />
           <Property Type="Int32" Name="Count_Out_Calls" />
           <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
-          <Property Type="Int32" Name="Count_Out_SMS" />
-          <Property Type="Int32" Name="Count_In_SMS" />
           <Property Type="Int32" Name="Count_Out_Fail" />
           <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
           <Property Type="Decimal" Name="Call_Out_Dur_Avg" Precision="38" Scale="2" />
@@ -1964,34 +1960,34 @@
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Int32" Name="LevelId" />
           <Property Type="Int32" Name="CriteriaId1" />
-          <Property Type="Int32" Name="CriteriaId2" />
-          <Property Type="Int32" Name="CriteriaId3" />
-          <Property Type="Int32" Name="CriteriaId4" />
-          <Property Type="Int32" Name="CriteriaId5" />
-          <Property Type="Int32" Name="CriteriaId6" />
-          <Property Type="Int32" Name="CriteriaId7" />
-          <Property Type="Int32" Name="CriteriaId8" />
-          <Property Type="Int32" Name="CriteriaId9" />
-          <Property Type="Int32" Name="CriteriaId10" />
-          <Property Type="Int32" Name="CriteriaId11" />
-          <Property Type="Int32" Name="CriteriaId12" />
-          <Property Type="Int32" Name="CriteriaId13" />
-          <Property Type="Int32" Name="CriteriaId14" />
-          <Property Type="Int32" Name="CriteriaId15" />
           <Property Type="Decimal" Name="Cr1Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId2" />
           <Property Type="Decimal" Name="Cr2Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId3" />
           <Property Type="Decimal" Name="Cr3Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId4" />
           <Property Type="Decimal" Name="Cr4Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId5" />
           <Property Type="Decimal" Name="Cr5Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId6" />
           <Property Type="Decimal" Name="Cr6Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId7" />
           <Property Type="Decimal" Name="Cr7Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId8" />
           <Property Type="Decimal" Name="Cr8Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId9" />
           <Property Type="Decimal" Name="Cr9Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId10" />
           <Property Type="Decimal" Name="Cr10Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId11" />
           <Property Type="Decimal" Name="Cr11Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId12" />
           <Property Type="Decimal" Name="Cr12Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId13" />
           <Property Type="Decimal" Name="Cr13Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId14" />
           <Property Type="Decimal" Name="Cr14Per" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="CriteriaId15" />
           <Property Type="Decimal" Name="Cr15Per" Precision="18" Scale="2" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
@@ -2853,8 +2849,6 @@
                 <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
                 <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
                 <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
-                <ScalarProperty Name="Count_In_SMS" ColumnName="Count_In_SMS" />
-                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
                 <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
                 <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
                 <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
@@ -3020,34 +3014,34 @@
             <EntityTypeMapping TypeName="Model.Strategy_Suspicion_Level">
               <MappingFragment StoreEntitySet="Strategy_Suspicion_Level">
                 <ScalarProperty Name="Cr15Per" ColumnName="Cr15Per" />
-                <ScalarProperty Name="Cr14Per" ColumnName="Cr14Per" />
-                <ScalarProperty Name="Cr13Per" ColumnName="Cr13Per" />
-                <ScalarProperty Name="Cr12Per" ColumnName="Cr12Per" />
-                <ScalarProperty Name="Cr11Per" ColumnName="Cr11Per" />
-                <ScalarProperty Name="Cr10Per" ColumnName="Cr10Per" />
-                <ScalarProperty Name="Cr9Per" ColumnName="Cr9Per" />
-                <ScalarProperty Name="Cr8Per" ColumnName="Cr8Per" />
-                <ScalarProperty Name="Cr7Per" ColumnName="Cr7Per" />
-                <ScalarProperty Name="Cr6Per" ColumnName="Cr6Per" />
-                <ScalarProperty Name="Cr5Per" ColumnName="Cr5Per" />
-                <ScalarProperty Name="Cr4Per" ColumnName="Cr4Per" />
-                <ScalarProperty Name="Cr3Per" ColumnName="Cr3Per" />
-                <ScalarProperty Name="Cr2Per" ColumnName="Cr2Per" />
-                <ScalarProperty Name="Cr1Per" ColumnName="Cr1Per" />
                 <ScalarProperty Name="CriteriaId15" ColumnName="CriteriaId15" />
+                <ScalarProperty Name="Cr14Per" ColumnName="Cr14Per" />
                 <ScalarProperty Name="CriteriaId14" ColumnName="CriteriaId14" />
+                <ScalarProperty Name="Cr13Per" ColumnName="Cr13Per" />
                 <ScalarProperty Name="CriteriaId13" ColumnName="CriteriaId13" />
+                <ScalarProperty Name="Cr12Per" ColumnName="Cr12Per" />
                 <ScalarProperty Name="CriteriaId12" ColumnName="CriteriaId12" />
+                <ScalarProperty Name="Cr11Per" ColumnName="Cr11Per" />
                 <ScalarProperty Name="CriteriaId11" ColumnName="CriteriaId11" />
+                <ScalarProperty Name="Cr10Per" ColumnName="Cr10Per" />
                 <ScalarProperty Name="CriteriaId10" ColumnName="CriteriaId10" />
+                <ScalarProperty Name="Cr9Per" ColumnName="Cr9Per" />
                 <ScalarProperty Name="CriteriaId9" ColumnName="CriteriaId9" />
+                <ScalarProperty Name="Cr8Per" ColumnName="Cr8Per" />
                 <ScalarProperty Name="CriteriaId8" ColumnName="CriteriaId8" />
+                <ScalarProperty Name="Cr7Per" ColumnName="Cr7Per" />
                 <ScalarProperty Name="CriteriaId7" ColumnName="CriteriaId7" />
+                <ScalarProperty Name="Cr6Per" ColumnName="Cr6Per" />
                 <ScalarProperty Name="CriteriaId6" ColumnName="CriteriaId6" />
+                <ScalarProperty Name="Cr5Per" ColumnName="Cr5Per" />
                 <ScalarProperty Name="CriteriaId5" ColumnName="CriteriaId5" />
+                <ScalarProperty Name="Cr4Per" ColumnName="Cr4Per" />
                 <ScalarProperty Name="CriteriaId4" ColumnName="CriteriaId4" />
+                <ScalarProperty Name="Cr3Per" ColumnName="Cr3Per" />
                 <ScalarProperty Name="CriteriaId3" ColumnName="CriteriaId3" />
+                <ScalarProperty Name="Cr2Per" ColumnName="Cr2Per" />
                 <ScalarProperty Name="CriteriaId2" ColumnName="CriteriaId2" />
+                <ScalarProperty Name="Cr1Per" ColumnName="Cr1Per" />
                 <ScalarProperty Name="CriteriaId1" ColumnName="CriteriaId1" />
                 <ScalarProperty Name="LevelId" ColumnName="LevelId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />

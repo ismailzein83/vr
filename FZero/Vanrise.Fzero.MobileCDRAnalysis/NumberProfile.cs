@@ -20,8 +20,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Day_Hour { get; set; }
         public Nullable<int> Count_Out_Calls { get; set; }
         public int Count_In_Calls { get; set; }
-        public Nullable<int> Count_Out_SMS { get; set; }
-        public Nullable<int> Count_In_SMS { get; set; }
         public Nullable<int> Count_Out_Fail { get; set; }
         public int Count_In_Fail { get; set; }
         public Nullable<decimal> Call_Out_Dur_Avg { get; set; }
