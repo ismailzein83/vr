@@ -52,6 +52,7 @@
     <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
+    <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IZoneDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

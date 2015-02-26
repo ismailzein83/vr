@@ -10,5 +10,7 @@ namespace TOne.BusinessEntity.Data
     public interface IRateDataManager : IDataManager
     {
         void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable);
+
+        List<Rate> GetRate(int zoneId, string customerId, DateTime when);
     }
 }

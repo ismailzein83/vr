@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,33 @@ namespace TOne.BusinessEntity.Data.SQL
 {
     public class RateDataManager : BaseTOneDataManager, IRateDataManager
     {
+
+        private Rate RateMapper(IDataReader reader)
+        {
+            return new Rate
+            {
+                RateId = (long)reader["RateID"],
+                SupplierId = reader["SupplierID"] as string,
+                CustomerId = reader["CustomerID"] as string,
+                ZoneId = GetReaderValue<int>(reader, "ZoneId"),
+                NormalRate = GetReaderValue<decimal>(reader, "Rate"),
+                OffPeakRate = GetReaderValue<decimal>(reader, "OffPeakRate"),
+                WeekendRate = GetReaderValue<decimal>(reader, "WeekendRate"),
+                PriceListId = GetReaderValue<int>(reader, "PricelistId"),
+                ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "RateBeginEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime>(reader, "RateEndEffectiveDate"),
+                CurrencyID = reader["CurrencyID"] as string,
+                CurrencyLastRate = GetReaderValue<float>(reader, "CurrencyLastRate"),
+                Change = TOne.BusinessEntity.Entities.Change.None
+            };
+        }
+
+        public List<Rate> GetRate(int zoneId,  string customerId, DateTime when)
+        {
+            return GetItemsSP("BEntity.sp_Rate_GetRates", RateMapper, zoneId, customerId, when);
+        }
+
         public void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable)
         {
             var customersZoneRates = new List<ZoneRate>();
