@@ -23,7 +23,6 @@ namespace TOne.BusinessEntity.Business
 
             return new List<T>();
         }
-
         private static List<Commission> GetCommission(string customerId, int zoneId, DateTime when)
         {
             ICommissionDataManager dataManager = BEDataManagerFactory.GetDataManager<ICommissionDataManager>();
@@ -46,8 +45,8 @@ namespace TOne.BusinessEntity.Business
         {
             List<Rate> Rates = new List<Rate>();
             
-            return Rates;
-
+            IRateDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateDataManager>();
+            return dataManager.GetRate(zoneId, customerId, when);
         }
 
         public void Dispose()
