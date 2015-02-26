@@ -50,6 +50,9 @@
     <Reference Include="TABS.Addons.Utilities">
       <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>

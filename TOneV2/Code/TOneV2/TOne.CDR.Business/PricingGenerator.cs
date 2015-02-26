@@ -9,7 +9,7 @@ using TOne.CDR.Entities;
 
 namespace TOne.CDR.Business
 {
-    public class PricingGenerator
+    public class PricingGenerator : IDisposable
     {
 
         TOneCacheManager _cacheManager;
@@ -25,6 +25,11 @@ namespace TOne.CDR.Business
 
             
             return pricing;
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 }
