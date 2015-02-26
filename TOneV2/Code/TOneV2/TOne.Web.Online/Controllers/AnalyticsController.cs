@@ -25,8 +25,9 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, char groupByCodeGroup
-            , char showSupplier, int from, int to, string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(int topCount, DateTime fromDate, DateTime toDate,  int from, int to,
+            string sortOrder = "DESC", char groupByCodeGroup = 'N'
+            , char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
         {
             string orderTarget = "Quality";
             return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
