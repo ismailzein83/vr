@@ -56,49 +56,130 @@
                             <%-- <asp:BoundField HeaderText="CriteriaId1" DataField="CriteriaId1" />--%>
 
 
-                            <asp:TemplateField HeaderText="Criterion 1">
+                            <asp:TemplateField HeaderText="Filt. 1">
                                 <ItemTemplate>
                                     <%-- <asp:Label runat="server" ID="lbldiv" CssClass=<%#  System.Convert.ToString (Eval("CriteriaId1"))== "1" ? "command btn-success" :"command btn-danger" %> >--%>
                                     <asp:Label runat="server" ID="lblCriteriaId1">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                    <asp:Label runat="server" ID="Cr1Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? true :false%>  Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr1Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="Criterion 2">
+                            <asp:TemplateField HeaderText="Filt. 2">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId2">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                     <asp:Label runat="server" ID="Cr2Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr2Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Criterion 3">
+                            <asp:TemplateField HeaderText="Filt. 3">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId3">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                     <asp:Label runat="server" ID="Cr3Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr3Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="Criterion 4">
+                            <asp:TemplateField HeaderText="Filt. 4">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId4">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                     <asp:Label runat="server" ID="Cr4Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr4Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Criterion 5">
+                            <asp:TemplateField HeaderText="Filt. 5">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId5">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                     <asp:Label runat="server" ID="Cr5Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr5Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Criterion 6">
+                            <asp:TemplateField HeaderText="Filt. 6">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId6">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
+                                     <asp:Label runat="server" ID="Cr6Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr6Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                              <asp:TemplateField HeaderText="Filt. 7">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId7">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId7"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr7Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr7Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                              <asp:TemplateField HeaderText="Filt. 8">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId8">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr8Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr8Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                              <asp:TemplateField HeaderText="Filt. 9">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId9">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr9Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr9Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 10">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId10">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr10Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr10Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 11">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId11">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr11Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr11Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 12">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId12">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr12Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr12Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 13">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId13">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr13Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr13Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 14">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId14">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr14Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr14Per")))%>   ></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                              <asp:TemplateField HeaderText="Filt. 15">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="lblCriteriaId15">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                    </asp:Label>
+                                     <asp:Label runat="server" ID="Cr15Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>   ></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>

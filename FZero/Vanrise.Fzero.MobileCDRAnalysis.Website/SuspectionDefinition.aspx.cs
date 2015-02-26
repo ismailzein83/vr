@@ -118,6 +118,12 @@ public partial class SuspectionDefinition : BasePage
     #endregion
 
     #region Methods
+
+    public string Convert_Decimal_Percentage(string x)
+    {
+        return (100 * (x.ToDouble() - 1)).ToString()+"%"; 
+    }
+
     private bool IsValidData()
     {
         return true;
