@@ -12,4 +12,13 @@ namespace TOne.BusinessEntity.Entities
         Customer = 1,
         Supplier = 2
     }
+
+    public enum Change : short
+    {
+        None = 0,
+        Increase = 1,
+        Decrease = -1,
+        New = 2
+    }
+
 }
