@@ -17,27 +17,26 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate
-            , int from, int to, string sortOrder = "DESC", char groupByCodeGroup = 'N', char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, int from, int to, string sortOrder = "DESC"
+            , char groupByCodeGroup = 'N', char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null, int? topCount = null)
         {
             string orderTarget = "Quantity";
-            return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
+            return _analyticsManager.GetTopNDestinations( fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(int topCount, DateTime fromDate, DateTime toDate,  int from, int to,
-            string sortOrder = "DESC", char groupByCodeGroup = 'N'
-            , char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null)
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(DateTime fromDate, DateTime toDate,  int from, int to,string sortOrder = "DESC", char groupByCodeGroup = 'N'
+            , char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null, int? topCount = null)
         {
             string orderTarget = "Quality";
-            return _analyticsManager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
+            return _analyticsManager.GetTopNDestinations(fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int topCount, int alertLevel, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null)
+        public List<TOne.Analytics.Entities.AlertView> GetAlerts(int from, int to, int? topCount = null, int? alertLevel = null, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null)
         {
             
-            return _analyticsManager.GetAlerts(topCount, showHiddenAlerts, alertLevel, tag, source, userID);
+            return _analyticsManager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
         }
 
         [HttpGet]
@@ -47,9 +46,9 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int topCount, char groupByProfile = 'N', string customerID = null, string supplierID = null)
+        public List<TOne.Analytics.Entities.CarrierSummaryView> GetCarrierSummary(TOne.BusinessEntity.Entities.CarrierType carrierType, DateTime fromDate, DateTime toDate, int from, int to, char groupByProfile = 'N', string customerID = null, string supplierID = null, int? topCount = null)
         {
-            return _analyticsManager.GetCarrierSummary(carrierType.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+            return _analyticsManager.GetCarrierSummary(carrierType.ToString(), fromDate, toDate, customerID, supplierID, topCount, groupByProfile, from, to);
         }
 
         [HttpGet]

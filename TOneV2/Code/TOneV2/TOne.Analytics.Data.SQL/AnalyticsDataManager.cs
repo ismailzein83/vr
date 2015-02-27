@@ -9,7 +9,8 @@ namespace TOne.Analytics.Data.SQL
 {
     public class AnalyticsDataManager : BaseTOneDataManager, IAnalyticsDataManager
     {
-        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to)
+        public List<Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID
+            , int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to, int? topCount)
         {
             return GetItemsSP("Analytics.sp_Traffic_TopNDestination", (reader) =>
             {
@@ -27,10 +28,10 @@ namespace TOne.Analytics.Data.SQL
                     CodeGroup = reader["CodeGroupName"] as string
                 };
             },
-                topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, "TopNDestinationTemp");
+                topCount,fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, "TopNDestinationTemp");
         }
 
-        public List<Entities.Alert> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID)
+        public List<Entities.Alert> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID)
         {
             return GetItemsSP("Analytics.sp_alerts_getalerts", (reader) =>
             {
@@ -44,7 +45,7 @@ namespace TOne.Analytics.Data.SQL
                     Tag = reader["Tag"] as string,
                     Description = reader["Description"] as string
                 };
-            }, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
+            }, topCount, showHiddenAlerts, alertLevel, tag, source, userID, from, to);
         }
 
         public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
@@ -75,7 +76,7 @@ namespace TOne.Analytics.Data.SQL
                 }, carrierType, effectiveOn, codeGroup, carrierID, from, to);
         }
 
-        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
+        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile,int? topCount, int from, int to)
         {
             return GetItemsSP("Analytics.SP_Traffic_CarrierSummary", (reader) =>
                 {
@@ -95,7 +96,7 @@ namespace TOne.Analytics.Data.SQL
                         CostNets = Convert.ToDecimal(reader["Cost_Nets"]),
                         Profit = Convert.ToDecimal(reader["Profit"])
                     };
-                }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, customerID, supplierID);
+                }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, customerID, supplierID, from, to);
 
         }
 
@@ -140,7 +141,6 @@ namespace TOne.Analytics.Data.SQL
                     };
                 }, from, to);
         }
-
 
         public List<Entities.TrafficSummaryView> GetSummary(DateTime fromDate, DateTime toDate)
         {

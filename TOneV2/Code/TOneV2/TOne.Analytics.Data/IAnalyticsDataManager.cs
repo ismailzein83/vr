@@ -9,7 +9,7 @@ namespace TOne.Analytics.Data
 {
     public interface IAnalyticsDataManager : IDataManager
     {
-        List<TopNDestinationView> GetTopNDestinations(int topCount,
+        List<TopNDestinationView> GetTopNDestinations(
            DateTime fromDate,
            DateTime toDate,
            string sortOrder,
@@ -21,13 +21,14 @@ namespace TOne.Analytics.Data
            char showSupplier,
             string orderTarget,
             int from,
-            int to);
+            int to,
+            int? topCount);
 
-        List<Alert> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID);
+        List<Alert> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID);
 
         List<CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to);
 
-        List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile);
+        List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile, int? topCount, int from, int to);
 
         List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount);
 

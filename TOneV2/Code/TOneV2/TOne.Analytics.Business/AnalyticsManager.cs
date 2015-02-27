@@ -14,14 +14,14 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IAnalyticsDataManager>();
         }
-        public List<Entities.TopNDestinationView> GetTopNDestinations(int topCount, DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to)
+        public List<Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to, int? topCount)
         {
-            return _datamanager.GetTopNDestinations(topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to);
+            return _datamanager.GetTopNDestinations(fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
-        public List<Entities.AlertView> GetAlerts(int topCount, char showHiddenAlerts, int alertLevel, string tag, string source, int? userID)
+        public List<Entities.AlertView> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID)
         {
-            List<Entities.Alert> alerts = _datamanager.GetAlerts(topCount, showHiddenAlerts, alertLevel, tag, source, userID);
+            List<Entities.Alert> alerts = _datamanager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
             return CreateAlertViews(alerts);
         }
 
@@ -30,9 +30,9 @@ namespace TOne.Analytics.Business
             return _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
         }
 
-        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int topCount, char groupByProfile)
+        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int? topCount, char groupByProfile, int from, int to)
         {
-            return _datamanager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile);
+            return _datamanager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, groupByProfile, topCount, from, to);
         }
 
         public List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
