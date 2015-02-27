@@ -84,6 +84,8 @@ namespace TOne.Analytics.Data.SQL
                     {
                         ProfileID = groupByProfile == 'Y' && reader["ProfileID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["ProfileID"]) : null,
                         CarrierID =  groupByProfile == 'N' ? (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string) : null,
+                        CarrierName =groupByProfile == 'N' ? string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty) : string.Empty,
+                        ProfileName = groupByProfile == 'Y' ? (reader["ProfileName"] != DBNull.Value ? reader["ProfileName"] as string : "") : string.Empty,
                         SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempts"]),
                         DurationsInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
                         ASR = Convert.ToDecimal(reader["ASR"]),
