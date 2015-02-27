@@ -101,12 +101,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
 
                     Strategy st = Strategy.Load(strategy.Id);
-                    //if (st.NormalizationRules.Count() > 0 || st.SwitchTruncks.Count() > 0)
-                    //{
-                    //    success=false;
-                    //}
-
-
                     context.Entry(strategy).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
                     success = true;
