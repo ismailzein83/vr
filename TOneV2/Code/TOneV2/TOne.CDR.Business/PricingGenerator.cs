@@ -389,11 +389,6 @@ namespace TOne.CDR.Business
         
         #endregion Cacheable Entities
 
-        public PricingGenerator(TOneCacheManager cacheManager, NHibernate.ISession session)
-        {
-            _cacheManager = cacheManager;
-        }
-
         public void Dispose()
         {
             GC.Collect();
