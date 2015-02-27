@@ -13,7 +13,8 @@ public partial class test : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-           
+            RadSlider1.SelectedValue = RadSlider1.Items[3].Value;
+
         }
 
     }

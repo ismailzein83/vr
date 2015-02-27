@@ -1,12 +1,16 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.master" CodeFile="SuspectionDefinition.aspx.cs" Inherits="SuspectionDefinition" %>
+
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="Telerik" %>
+<asp:Content ContentPlaceHolderID="head" runat="server" ID="Head">
+   
+</asp:Content>
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="body">
     <div class="row-fluid" id="divFilter" runat="server">
         <div class="span12">
             <div class="widget blue">
                 <div class="widget-title">
                     <h4><i class="icon-reorder"></i>Search Strategies</h4>
-                   
+
                 </div>
                 <div class="widget-body" style="display: block;">
                     <table cellspacing="0" cellpadding="0">
@@ -16,7 +20,7 @@
                             </td>
                             <td class="inputData">
 
-                                <Telerik:RadComboBox ID="ddlSearchStrategy" runat="server"    ></Telerik:RadComboBox>
+                                <Telerik:RadComboBox ID="ddlSearchStrategy" runat="server"></Telerik:RadComboBox>
                             </td>
                         </tr>
 
@@ -27,7 +31,7 @@
                             <td>
                                 <asp:LinkButton ID="btnSearch" runat="server" CssClass="btn btn-primary" OnClick="btnSearch_Click">
                                     <i class="icon-search icon-white"></i> Search </asp:LinkButton>
-                                <asp:LinkButton  ID="btnReturn" runat="server" CssClass="btn btn-danger" OnClick="btnReturn_Click" >
+                                <asp:LinkButton ID="btnReturn" runat="server" CssClass="btn btn-danger" OnClick="btnReturn_Click">
                                     <i class="icon-undo icon-white"></i> Return </asp:LinkButton>
                                 <asp:LinkButton ID="btnAdd" runat="server" CssClass="btn btn-success" OnClick="btnAdd_Click">
                                     <i class="icon-plus icon-white"></i> Add New </asp:LinkButton>
@@ -44,7 +48,7 @@
             <div class="widget blue">
                 <div class="widget-title">
                     <h4><i class="icon-reorder"></i>Suspicion Levels</h4>
-                   
+
                 </div>
                 <div class="widget-body" style="display: block;">
                     <asp:GridView ID="gvData" runat="server" SkinID="GridDefault"
@@ -62,7 +66,7 @@
                                     <asp:Label runat="server" ID="lblCriteriaId1">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                    <asp:Label runat="server" ID="Cr1Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? true :false%>  Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr1Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr1Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr1Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
@@ -71,7 +75,7 @@
                                     <asp:Label runat="server" ID="lblCriteriaId2">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr2Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr2Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr2Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr2Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Filt. 3">
@@ -79,7 +83,7 @@
                                     <asp:Label runat="server" ID="lblCriteriaId3">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr3Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr3Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr3Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr3Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
@@ -88,7 +92,7 @@
                                     <asp:Label runat="server" ID="lblCriteriaId4">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr4Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr4Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr4Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr4Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Filt. 5">
@@ -96,7 +100,7 @@
                                     <asp:Label runat="server" ID="lblCriteriaId5">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr5Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr5Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr5Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr5Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Filt. 6">
@@ -104,82 +108,82 @@
                                     <asp:Label runat="server" ID="lblCriteriaId6">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr6Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr6Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr6Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr6Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                              <asp:TemplateField HeaderText="Filt. 7">
+                            <asp:TemplateField HeaderText="Filt. 7">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId7">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId7"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr7Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr7Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr7Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr7Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                              <asp:TemplateField HeaderText="Filt. 8">
+                            <asp:TemplateField HeaderText="Filt. 8">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId8">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr8Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr8Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr8Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr8Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                              <asp:TemplateField HeaderText="Filt. 9">
+                            <asp:TemplateField HeaderText="Filt. 9">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId9">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr9Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr9Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr9Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr9Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 10">
+                            <asp:TemplateField HeaderText="Filt. 10">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId10">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr10Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr10Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr10Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr10Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 11">
+                            <asp:TemplateField HeaderText="Filt. 11">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId11">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr11Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr11Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr11Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr11Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 12">
+                            <asp:TemplateField HeaderText="Filt. 12">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId12">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr12Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr12Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr12Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr12Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 13">
+                            <asp:TemplateField HeaderText="Filt. 13">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId13">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr13Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr13Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr13Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr13Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 14">
+                            <asp:TemplateField HeaderText="Filt. 14">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId14">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr14Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr14Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr14Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr14Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                              <asp:TemplateField HeaderText="Filt. 15">
+                            <asp:TemplateField HeaderText="Filt. 15">
                                 <ItemTemplate>
                                     <asp:Label runat="server" ID="lblCriteriaId15">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                     </asp:Label>
-                                     <asp:Label runat="server" ID="Cr15Per" Visible= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%> Text=<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>   ></asp:Label>
+                                    <asp:Label runat="server" ID="Cr15Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
@@ -212,187 +216,447 @@
                     <table style="width: 100%">
                         <tr>
                             <td>
-                                <div >
-                                    <table cellspacing="0" cellpadding="1" >
+                                <div>
+                                    <table cellspacing="3" cellpadding="3"  class="table table-advance" >
                                         <tbody>
                                             <tr>
                                                 <td class="caption required">Strategy</td>
-                                                <td class="inputData">
-                                                    <Telerik:RadComboBox ID="ddlStrategies" runat="server"    ></Telerik:RadComboBox>
+                                                <td class="inputData" colspan="3">
+                                                    <Telerik:RadComboBox ID="ddlStrategies" runat="server"></Telerik:RadComboBox>
                                                     <br />
                                                     <asp:RequiredFieldValidator CssClass="error" ID="rfvStrategies" runat="server" Display="Dynamic"
                                                         ControlToValidate="ddlStrategies" InitialValue="0"
                                                         ErrorMessage="The Strategy should be selected" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                     <br />
                                                 </td>
-                                                <td  class="inputData"></td>
                                             </tr>
 
                                             <tr>
                                                 <td class="caption required">Suspicion Level</td>
-                                                <td class="inputData">
-                                                    <Telerik:RadComboBox ID="ddlSuspectionLevel" runat="server"    ></Telerik:RadComboBox>
+                                                <td class="inputData" colspan="3">
+                                                    <Telerik:RadComboBox ID="ddlSuspectionLevel" runat="server"></Telerik:RadComboBox>
                                                     <br />
                                                     <asp:RequiredFieldValidator CssClass="error" ID="rfvSuspectionLevel" runat="server" Display="Dynamic"
                                                         ControlToValidate="ddlSuspectionLevel" InitialValue="0"
                                                         ErrorMessage="The Suspection Level should be selected" ValidationGroup="Save"></asp:RequiredFieldValidator>
                                                 </td>
-                                                <td  class="inputData"></td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filters</td>
-                                                <td>Is Included</td>
-                                                 <td  class="inputData">Filter Description</td>
                                             </tr>
 
                                             <tr>
-                                                <td>Filter 1</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria1" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria1" ></asp:Label>
-                                                 </td>
+                                                <td style="padding-top: 20px; font-weight: bold" colspan="2">Check Included:</td>
 
+                                                <td style="padding-top: 20px; font-weight: bold"></td>
+                                                <td style="padding-top: 20px; font-weight: bold"></td>
                                             </tr>
+
                                             <tr>
-                                                <td>Filter 2</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria2" />
-                                                </td>
-                                                <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria2" ></asp:Label>
-                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Filter 3</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria3" />
-                                                </td>
-                                               <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria3" ></asp:Label>
-                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Filter 4</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria4" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria4" ></asp:Label>
-                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Filter 5</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria5" />
-                                                </td>
-                                                  <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria5" ></asp:Label>
-                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Filter 6</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria6" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria6" ></asp:Label>
-                                                 </td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filter 7</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria7" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria7" ></asp:Label>
-                                                 </td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filter 8</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria8" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria8" ></asp:Label>
-                                                 </td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filter 9</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria9" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria9" ></asp:Label>
-                                                 </td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filter 10</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria10" />
-                                                </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria10" ></asp:Label>
-                                                 </td>
-                                            </tr>
-                                             <tr>
-                                                <td>Filter 11</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria11" />
-                                                </td>
-                                                 <td >
-                                                     <asp:Label runat="server" ID="lblCriteria11" ></asp:Label>
-                                                 </td>
-                                            </tr>
-
-                                             <tr>
-                                                <td>Filter 12</td>
                                                 <td>
-                                                   <asp:CheckBox runat="server" ID="chkCriteria12" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria1" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
                                                 </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria12" ></asp:Label>
-                                                 </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria1"></asp:Label>
+                                                </td>
+
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider1" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria2" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria2"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider2" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria3" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria3"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider3" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria4" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria4"></asp:Label>
+                                                </td>
+
+                                                <td></td>
+
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider4" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria5" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria5"></asp:Label>
+                                                </td>
+
+                                                <td></td>
+
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider5" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria6" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria6"></asp:Label>
+                                                </td>
+                                                <td></td>
+
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider6" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
                                             </tr>
 
-                                             <tr>
-                                                <td>Filter 13</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria13" />
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria7" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
                                                 </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria13" ></asp:Label>
-                                                 </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria7"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider7" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
                                             </tr>
 
-                                             <tr>
-                                                <td>Filter 14</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria14" />
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria8" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
                                                 </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria14" ></asp:Label>
-                                                 </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria8"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider8" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
                                             </tr>
 
-                                             <tr>
-                                                <td>Filter 15</td>
-                                                <td >
-                                                   <asp:CheckBox runat="server" ID="chkCriteria15" />
+                                            <tr>
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria9" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
                                                 </td>
-                                                 <td  >
-                                                     <asp:Label runat="server" ID="lblCriteria15" ></asp:Label>
-                                                 </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria9"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider9" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
                                             </tr>
 
+                                            <tr>
 
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria10" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
 
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria10"></asp:Label>
+                                                </td>
+
+                                                <td></td>
+
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider10" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria11" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria11"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider11" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria12" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria12"></asp:Label>
+                                                </td>
+                                                <td></td>
+
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider12" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria13" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria13"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider13" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria14" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria14"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider14" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria15" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria15"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider15" runat="server" ItemType="Item" Height="50px" Length="300" Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
