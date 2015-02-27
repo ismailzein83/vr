@@ -24,8 +24,10 @@ namespace TOne.LCR.Entities
 
     public class RouteRuleOptionExecutionResult
     {
-        public bool IsInactive { get; set; }
-
         public bool RemoveOption { get; set; }
+
+        public bool BlockOption { get; set; }
+
+        public bool Notify { get; set; }
     }
 }

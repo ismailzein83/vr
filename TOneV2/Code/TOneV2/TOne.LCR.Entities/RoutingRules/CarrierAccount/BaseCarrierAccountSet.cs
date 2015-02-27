@@ -12,6 +12,11 @@ namespace TOne.LCR.Entities
         {
             return null;
         }
+
+        public virtual bool IsAccountIdIncluded(string accountId)
+        {
+            return true;
+        }
     }
 
     public class CarrierAccountSetMatch

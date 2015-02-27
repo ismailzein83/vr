@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.LCR.Entities;
 
-namespace TOne.LCR.Entities
+namespace TOne.LCR.Business
 {
-    public class CustomerRouteRule : BaseRouteRule
+    public class CheckNoOptionsRouteAction : BaseRouteAction
     {
-        public Object ActionData { get; set; }
     }
 }

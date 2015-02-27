@@ -69,20 +69,34 @@ namespace TOne.LCR.Business
             }
         }
 
-        public void ManipulateRouteRules(List<BaseRouteRule> rules, out RouteRuleMatches saleRuleMatches, out RouteRuleMatches supplierRuleMatches)
+        public void StructureRulesForRouteBuild(List<BaseRouteRule> rules, out RouteRulesByActionDataType routeRules, out RouteRuleMatches supplierRuleMatches)
         {
-            saleRuleMatches = new RouteRuleMatches();
+            routeRules = new RouteRulesByActionDataType();
             supplierRuleMatches = new RouteRuleMatches();
             foreach(var rule in rules)
             {
-                if (rule is SupplierRouteRule)
-                    AddRuleMatches(supplierRuleMatches, rule);
+                CustomerRouteRule customerRule = rule as CustomerRouteRule;
+                if(customerRule != null)
+                {
+                    Type ruleActionDataType = customerRule.ActionData.GetType();
+                    RouteRuleMatches matches;
+                    if (!routeRules.Rules.TryGetValue(ruleActionDataType, out matches))
+                    {
+                        matches = new RouteRuleMatches();
+                        routeRules.Rules.Add(ruleActionDataType, matches);
+                    }
+                    AddRuleMatches(matches, rule);
+                }
                 else
-                    AddRuleMatches(saleRuleMatches, rule);
+                    AddRuleMatches(supplierRuleMatches, rule);
+                    
             }
-            saleRuleMatches.SetMinSubCodeLength();
+            foreach (var saleRuleMatch in routeRules.Rules.Values)
+            {
+                saleRuleMatch.SetMinSubCodeLength();
+            }
             supplierRuleMatches.SetMinSubCodeLength();
-        }
+        }         
 
         private void AddRuleMatches(RouteRuleMatches ruleMatches, BaseRouteRule rule)
         {
@@ -130,5 +144,15 @@ namespace TOne.LCR.Business
             }
             routeRules.Add(rule);
         }
+    }
+
+    public class RouteRulesByActionDataType
+    {
+        public RouteRulesByActionDataType()
+        {
+            this.Rules = new Dictionary<Type, RouteRuleMatches>();
+        }
+
+        public Dictionary<Type, RouteRuleMatches> Rules { get; private set; }
     }
 }

@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class RoutePriorityAction : BaseRouteRuleAction
+    public class PriorityRouteActionData
     {
         public List<PriorityOption> Options { get; set; }
-
-        public override string ActionDisplayName
-        {
-            get { return "Route Priority"; }
-        }
     }
 
     public class PriorityOption
@@ -21,6 +16,8 @@ namespace TOne.LCR.Entities
         public string SupplierId { get; set; }
 
         public int Order { get; set; }
+
+        public short? Percentage { get; set; }
 
         public bool Force { get; set; }
     }

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class CustomerRouteRule : BaseRouteRule
+    public abstract class BaseRouteAlertAction
     {
-        public Object ActionData { get; set; }
+        public virtual void Execute(RouteDetail route)
+        {
+        }
     }
 }

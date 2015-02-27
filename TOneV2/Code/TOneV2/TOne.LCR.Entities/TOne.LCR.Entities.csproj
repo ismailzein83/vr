@@ -43,13 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlertRules\Actions\BaseAlertRuleAction.cs" />
+    <Compile Include="AlertRules\Actions\RouteOption\BaseRouteOptionAlertAction.cs" />
+    <Compile Include="AlertRules\Actions\RouteOption\RemoveOptionAlertAction.cs" />
+    <Compile Include="AlertRules\Actions\Route\BaseRouteAlertAction.cs" />
+    <Compile Include="AlertRules\Actions\Route\SwitchToLCRAlertAction.cs" />
     <Compile Include="AlertRules\AlertRule.cs" />
-    <Compile Include="AlertRules\Conditions\BaseAlertRuleCondition.cs" />
-    <Compile Include="AlertRules\Conditions\RateMarginRuleCondition.cs" />
+    <Compile Include="AlertRules\Conditions\Route\BaseRouteAlertCondition.cs" />
+    <Compile Include="AlertRules\Conditions\RouteOption\BaseRouteOptionAlertCondition.cs" />
+    <Compile Include="AlertRules\Conditions\Route\NoOptionsRule.cs" />
     <Compile Include="CloneHelper.cs" />
+    <Compile Include="AlertRules\Conditions\RouteOption\MarginRule.cs" />
+    <Compile Include="RoutingRuleActionType.cs" />
+    <Compile Include="RoutingRules\Actions\BaseRouteAction.cs" />
+    <Compile Include="RoutingRules\Actions\IRouteBuildContext.cs" />
+    <Compile Include="RoutingRules\Actions\RouteActions\BlockRouteActionData.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionPriceRangeAction.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionRateMarginAction.cs" />
+    <Compile Include="RoutingRules\Actions\RuleActionExecutionPath.cs" />
+    <Compile Include="RoutingRules\Actions\RuleActionExecutionStep.cs" />
     <Compile Include="RoutingRules\CodeSet\SupplierZoneSelectionSet.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />
@@ -57,7 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeMatch.cs" />
     <Compile Include="RoutingDatabase.cs" />
-    <Compile Include="RoutingRules\Actions\RouteActions\BaseRouteRuleAction.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\BaseRouteOptionRuleAction.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionBlockAction.cs" />
     <Compile Include="RoutingRules\CarrierAccount\BaseCarrierAccountSet.cs" />
@@ -66,9 +76,8 @@
     <Compile Include="RoutingRules\CarrierAccount\SupplierSelectionSet.cs" />
     <Compile Include="RoutingRules\CodeSet\CodeSelectionSet.cs" />
     <Compile Include="RoutingRules\CodeSet\BaseCodeSet.cs" />
-    <Compile Include="RoutingRules\Actions\RouteActions\RouteBlockAction.cs" />
-    <Compile Include="RoutingRules\Actions\RouteActions\RouteOverrideAction.cs" />
-    <Compile Include="RoutingRules\Actions\RouteActions\RoutePriorityAction.cs" />
+    <Compile Include="RoutingRules\Actions\RouteActions\OverrideRouteActionData.cs" />
+    <Compile Include="RoutingRules\Actions\RouteActions\PriorityRouteActionData.cs" />
     <Compile Include="RoutingRules\CustomerRouteRule.cs" />
     <Compile Include="RoutingRules\BaseRouteRule.cs" />
     <Compile Include="RoutingRules\CodeSet\ZoneSelectionSet.cs" />
@@ -85,6 +94,9 @@
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RateMargin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

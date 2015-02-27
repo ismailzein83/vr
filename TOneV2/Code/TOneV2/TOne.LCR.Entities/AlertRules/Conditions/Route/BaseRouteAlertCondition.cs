@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class RouteBlockAction : BaseRouteRuleAction
+    public abstract class BaseRouteAlertCondition
     {
-        public override string ActionDisplayName
+        public virtual bool IsViolated(RouteDetail route)
         {
-            get { return "Route Block"; }
+            return false;
         }
     }
 }

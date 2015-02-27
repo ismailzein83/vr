@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.LCR.Entities
+namespace TOne.LCR.Business
 {
-    public class CustomerRouteRule : BaseRouteRule
+    class RouteOptionBuildContext
     {
-        public Object ActionData { get; set; }
     }
 }

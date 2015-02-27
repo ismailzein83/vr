@@ -18,8 +18,8 @@ namespace TOne.LCR.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
 
-        public BaseAlertRuleCondition Condition { get; set; }
+        //public BaseAlertRuleCondition Condition { get; set; }
 
-        public BaseAlertRuleAction Action { get; set; }
+        //public BaseAlertRuleAction Action { get; set; }
     }
 }

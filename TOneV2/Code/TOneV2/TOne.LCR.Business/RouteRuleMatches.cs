@@ -52,4 +52,9 @@ namespace TOne.LCR.Business
 
         public RouteRuleMatches EndRules { get; set; }
     }
+
+    public class SupplierRouteOptionRulesMatches
+    {
+        public RouteRuleMatches Rules { get; set; }
+    }
 }

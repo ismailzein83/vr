@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public abstract class BaseAlertRuleAction
+    public class SwitchToLCRAlertAction : BaseRouteAlertAction
     {
-        public virtual void Execute(RouteDetail route)
+        public override void Execute(RouteDetail route)
         {
-
+            base.Execute(route);
         }
     }
 }

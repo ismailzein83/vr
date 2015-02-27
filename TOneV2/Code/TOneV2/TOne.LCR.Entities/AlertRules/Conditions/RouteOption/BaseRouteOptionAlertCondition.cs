@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public abstract class BaseAlertRuleCondition
+    public abstract class BaseRouteOptionAlertCondition
     {
-        public virtual bool Check(RouteDetail route)
+        public virtual bool IsViolated(RouteSupplierOption option, RouteDetail routeDetail)
         {
             return false;
         }

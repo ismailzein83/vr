@@ -44,9 +44,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BuildContexts\SingleDestinationRoutesBuildContext.cs" />
+    <Compile Include="BuildContexts\RouteBuildContext.cs" />
     <Compile Include="RouteManager.cs" />
+    <Compile Include="BuildContexts\RouteOptionBuildContext.cs" />
     <Compile Include="RouteRuleMatches.cs" />
     <Compile Include="RouteRuleMatchFinder.cs" />
+    <Compile Include="RouteRules\BaseRouteOptionFilter.cs" />
+    <Compile Include="RouteRules\RouteActions\ApplyPercentageRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\BlockRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\BuildLCRRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\CheckNoOptionsRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\GetTopOptionsRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\OverrideRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\PriorityRouteAction.cs" />
+    <Compile Include="RouteRules\RouteRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">

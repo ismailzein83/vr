@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.LCR.Entities.RoutingRules.Actions.RouteOptionActions
+namespace TOne.LCR.Entities
 {
     class RouteOptionPriceRangeAction
     {
