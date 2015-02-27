@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TABS;
 using TOne.BusinessEntity.Data;
-using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Business
 {
@@ -25,15 +25,19 @@ namespace TOne.BusinessEntity.Business
         }
         private static List<Commission> GetCommission(string customerId, int zoneId, DateTime when)
         {
-            ICommissionDataManager dataManager = BEDataManagerFactory.GetDataManager<ICommissionDataManager>();
-            return dataManager.GetCommission(customerId, zoneId, when);
+            List<Commission> Commission = new List<Commission>();
+
+
+            return Commission;
+            //ICommissionDataManager dataManager = BEDataManagerFactory.GetDataManager<ICommissionDataManager>();
+            //return dataManager.GetCommission(customerId, zoneId, when);
         }
         private static List<ToDConsideration> GetTOD(string customerId, int zoneId, DateTime when)
         {
-            List<ToDConsideration> Tarrif = new List<ToDConsideration>();
-           
+            List<ToDConsideration> ToDConsideration = new List<ToDConsideration>();
 
-            return Tarrif;
+
+            return ToDConsideration;
         }
         private static List<Tariff> GetTarrif(string customerId, int zoneId, DateTime when)
         {
@@ -45,8 +49,9 @@ namespace TOne.BusinessEntity.Business
         {
             List<Rate> Rates = new List<Rate>();
             
-            IRateDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateDataManager>();
-            return dataManager.GetRate(zoneId, customerId, when);
+            //IRateDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateDataManager>();
+            //return dataManager.GetRate(zoneId, customerId, when);
+            return Rates;
         }
 
         public void Dispose()
