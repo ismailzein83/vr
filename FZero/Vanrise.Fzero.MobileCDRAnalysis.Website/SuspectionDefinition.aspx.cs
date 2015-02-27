@@ -202,7 +202,7 @@ public partial class SuspectionDefinition : BasePage
     {
 
         GetList();
-        gvData.PageIndex = 0;
+        gvData.CurrentPageIndex = 0;
         FillGrid();
     }
 
@@ -243,21 +243,21 @@ public partial class SuspectionDefinition : BasePage
        currentObject.CriteriaId14 = chkCriteria14.Checked == true ? 1 : 0;
        currentObject.CriteriaId15 = chkCriteria15.Checked == true ? 1 : 0;
 
-       currentObject.Cr1Per = RadSlider1.Value;
-       currentObject.Cr2Per = RadSlider2.Value;
-       currentObject.Cr3Per = RadSlider3.Value;
-       currentObject.Cr4Per = RadSlider4.Value;
-       currentObject.Cr5Per = RadSlider5.Value;
-       currentObject.Cr6Per = RadSlider6.Value;
-       currentObject.Cr7Per = RadSlider7.Value;
-       currentObject.Cr8Per = RadSlider8.Value;
-       currentObject.Cr9Per = RadSlider9.Value;
-       currentObject.Cr10Per = RadSlider10.Value;
-       currentObject.Cr11Per = RadSlider11.Value;
-       currentObject.Cr12Per = RadSlider12.Value;
-       currentObject.Cr13Per = RadSlider13.Value;
-       currentObject.Cr14Per = RadSlider14.Value;
-       currentObject.Cr15Per = RadSlider15.Value;
+       currentObject.Cr1Per = RadSlider1.SelectedItem.Value.ToDecimal();
+       currentObject.Cr2Per = RadSlider2.SelectedItem.Value.ToDecimal();
+       currentObject.Cr3Per = RadSlider3.SelectedItem.Value.ToDecimal();
+       currentObject.Cr4Per = RadSlider4.SelectedItem.Value.ToDecimal();
+       currentObject.Cr5Per = RadSlider5.SelectedItem.Value.ToDecimal();
+       currentObject.Cr6Per = RadSlider6.SelectedItem.Value.ToDecimal();
+       currentObject.Cr7Per = RadSlider7.SelectedItem.Value.ToDecimal();
+       currentObject.Cr8Per = RadSlider8.SelectedItem.Value.ToDecimal();
+       currentObject.Cr9Per = RadSlider9.SelectedItem.Value.ToDecimal();
+       currentObject.Cr10Per = RadSlider10.SelectedItem.Value.ToDecimal();
+       currentObject.Cr11Per = RadSlider11.SelectedItem.Value.ToDecimal();
+       currentObject.Cr12Per = RadSlider12.SelectedItem.Value.ToDecimal();
+       currentObject.Cr13Per = RadSlider13.SelectedItem.Value.ToDecimal();
+       currentObject.Cr14Per = RadSlider14.SelectedItem.Value.ToDecimal();
+       currentObject.Cr15Per = RadSlider15.SelectedItem.Value.ToDecimal();
 
        return currentObject;
     }
@@ -371,34 +371,7 @@ public partial class SuspectionDefinition : BasePage
 
     #endregion
 
-    protected void gvData_RowCommand(object sender, GridViewCommandEventArgs e)
-    {
-        if (e.CommandArgument == null)
-            return;
-        id = Manager.GetInteger(e.CommandArgument.ToString());
-        if (e.CommandArgument != null)
-        {
-            switch (e.CommandName)
-            {
-                case "Modify":
-
-                    FillDetails(id);
-                    break;
-                case "Remove":
-                    if (Strategy_Suspicion_Level.Delete(id))
-                    {
-                        LoadData();
-                        id = 0;
-                    }
-                    else
-                    {
-                        ShowError( "An error occured when trying to delete this record.");
-                    }
-
-                    break;
-            }
-        }
-    }
+   
     protected void btnReturn_Click(object sender, EventArgs e)
     {
         Response.Redirect("Strategies.aspx");
@@ -421,5 +394,33 @@ public partial class SuspectionDefinition : BasePage
         RadSlider14.Visible = chkCriteria14.Checked;
         RadSlider15.Visible = chkCriteria15.Checked;
        
+    }
+    protected void gvData_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
+    {
+        if (e.CommandArgument == null)
+            return;
+        id = Manager.GetInteger(e.CommandArgument.ToString());
+        if (e.CommandArgument != null)
+        {
+            switch (e.CommandName)
+            {
+                case "Modify":
+
+                    FillDetails(id);
+                    break;
+                case "Remove":
+                    if (Strategy_Suspicion_Level.Delete(id))
+                    {
+                        LoadData();
+                        id = 0;
+                    }
+                    else
+                    {
+                        ShowError("An error occured when trying to delete this record.");
+                    }
+
+                    break;
+            }
+        }
     }
 }

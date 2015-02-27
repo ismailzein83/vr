@@ -2,7 +2,6 @@
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="Telerik" %>
 <asp:Content ContentPlaceHolderID="head" runat="server" ID="Head">
-   
 </asp:Content>
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="body">
     <div class="row-fluid" id="divFilter" runat="server">
@@ -51,155 +50,174 @@
 
                 </div>
                 <div class="widget-body" style="display: block;">
-                    <asp:GridView ID="gvData" runat="server" SkinID="GridDefault"
-                        OnRowCommand="gvData_RowCommand">
-                        <Columns>
-
-                            <asp:BoundField HeaderText="Strategy" DataField="Strategy.Name" />
-                            <asp:BoundField HeaderText="Suspicion Level" DataField="Suspicion_Level.Name" />
-                            <%-- <asp:BoundField HeaderText="CriteriaId1" DataField="CriteriaId1" />--%>
 
 
-                            <asp:TemplateField HeaderText="Filt. 1">
-                                <ItemTemplate>
-                                    <%-- <asp:Label runat="server" ID="lbldiv" CssClass=<%#  System.Convert.ToString (Eval("CriteriaId1"))== "1" ? "command btn-success" :"command btn-danger" %> >--%>
-                                    <asp:Label runat="server" ID="lblCriteriaId1">
+                    <Telerik:RadGrid ID="gvData" runat="server"  OnItemCommand="gvData_ItemCommand">
+
+                        <ClientSettings>
+
+                            <Scrolling AllowScroll="True"   FrozenColumnsCount="2"></Scrolling>
+
+                        </ClientSettings>
+
+                        <HeaderStyle Width="225px"></HeaderStyle>
+
+
+                        <MasterTableView>
+                            <Columns>
+
+                                <Telerik:GridBoundColumn HeaderText="Strategy" DataField="Strategy.Name" />
+                                <Telerik:GridBoundColumn HeaderText="Suspicion Level" DataField="Suspicion_Level.Name"  />
+
+
+                                <Telerik:GridTemplateColumn HeaderText="Filter 1">
+                                    <ItemTemplate>
+                                        <%-- <asp:Label runat="server" ID="lbldiv" CssClass=<%#  System.Convert.ToString (Eval("CriteriaId1"))== "1" ? "command btn-success" :"command btn-danger" %> >--%>
+                                        <asp:Label runat="server" ID="lblCriteriaId1">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr1Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr1Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr1Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId1"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr1Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
 
-                            <asp:TemplateField HeaderText="Filt. 2">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId2">
+                                <Telerik:GridTemplateColumn HeaderText="Filter 2">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId2">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr2Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr2Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 3">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId3">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr2Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId2"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr2Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 3">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId3">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr3Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr3Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr3Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId3"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr3Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
 
-                            <asp:TemplateField HeaderText="Filt. 4">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId4">
+                                <Telerik:GridTemplateColumn HeaderText="Filter 4">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId4">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr4Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr4Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 5">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId5">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr4Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId4"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr4Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 5">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId5">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr5Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr5Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 6">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId6">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr5Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId5"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr5Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 6">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId6">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr6Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr6Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr6Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr6Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
 
-                            <asp:TemplateField HeaderText="Filt. 7">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId7">
+                                <Telerik:GridTemplateColumn HeaderText="Filter 7">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId7">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId7"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr7Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr7Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr7Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId6"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr7Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
 
-                            <asp:TemplateField HeaderText="Filt. 8">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId8">
+                                <Telerik:GridTemplateColumn HeaderText="Filter 8">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId8">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr8Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr8Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr8Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId8"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr8Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
 
-                            <asp:TemplateField HeaderText="Filt. 9">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId9">
+                                <Telerik:GridTemplateColumn HeaderText="Filter 9">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId9">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr9Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr9Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 10">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId10">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr9Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId9"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr9Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 10">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId10">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr10Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr10Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 11">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId11">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr10Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId10"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr10Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 11">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId11">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr11Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr11Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 12">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId12">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr11Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId11"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr11Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 12">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId12">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr12Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr12Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 13">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId13">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr12Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId12"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr12Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 13">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId13">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr13Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr13Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 14">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId14">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr13Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId13"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr13Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 14">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId14">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr14Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr14Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Filt. 15">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" ID="lblCriteriaId15">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr14Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId14"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr14Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                                <Telerik:GridTemplateColumn HeaderText="Filter 15">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId15">
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
-                                    </asp:Label>
-                                    <asp:Label runat="server" ID="Cr15Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:LinkButton ID="btnEdit" runat="server" CssClass="command btn-success" CommandArgument='<%#Eval("Id").ToString()%>' CommandName="Modify">
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr15Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+
+                            
+                                <Telerik:GridTemplateColumn>
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="btnEdit" runat="server" CssClass="command btn-success" CommandArgument='<%#Eval("Id").ToString()%>' CommandName="Modify">
                                         <i class="icon-pencil"></i>
-                                    </asp:LinkButton>
-                                    <asp:LinkButton ID="btnDelete" runat="server" CssClass="command btn-danger"
-                                        CommandArgument='<%#Eval("Id")%>' CommandName="Remove"
-                                        OnClientClick="return confirm('Are you sure you want to delete this Record?');">
+                                        </asp:LinkButton>
+                                        <asp:LinkButton ID="btnDelete" runat="server" CssClass="command btn-danger"
+                                            CommandArgument='<%#Eval("Id")%>' CommandName="Remove"
+                                            OnClientClick="return confirm('Are you sure you want to delete this Record?');">
                                         <i class="icon-trash"></i>
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
+                                        </asp:LinkButton>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+                            </Columns>
+                        </MasterTableView>
+                    </Telerik:RadGrid>
+
+
+
+
+
                 </div>
             </div>
         </div>
@@ -217,7 +235,7 @@
                         <tr>
                             <td>
                                 <div>
-                                    <table cellspacing="3" cellpadding="3"  class="table table-advance" >
+                                    <table cellspacing="3" cellpadding="3" class="table table-advance">
                                         <tbody>
                                             <tr>
                                                 <td class="caption required">Strategy</td>
@@ -251,7 +269,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria1" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria1" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria1"></asp:Label>
@@ -279,7 +297,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria2" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria2" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
 
                                                 <td>
@@ -306,7 +324,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria3" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria3" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria3"></asp:Label>
@@ -332,7 +350,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria4" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria4" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria4"></asp:Label>
@@ -360,7 +378,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria5" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria5" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria5"></asp:Label>
@@ -388,7 +406,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria6" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria6" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
 
                                                 <td>
@@ -417,7 +435,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria7" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria7" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria7"></asp:Label>
@@ -444,7 +462,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria8" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria8" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria8"></asp:Label>
@@ -470,7 +488,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria9" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria9" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria9"></asp:Label>
@@ -497,7 +515,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria10" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria10" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
 
                                                 <td>
@@ -526,7 +544,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria11" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria11" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria11"></asp:Label>
@@ -553,7 +571,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria12" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria12" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria12"></asp:Label>
@@ -581,7 +599,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria13" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true"  />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria13" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria13"></asp:Label>
@@ -608,7 +626,7 @@
                                             <tr>
 
                                                 <td>
-                                                    <asp:CheckBox runat="server" ID="chkCriteria14" OnCheckedChanged="chkCriteria_CheckedChanged"  AutoPostBack="true" />
+                                                    <asp:CheckBox runat="server" ID="chkCriteria14" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
                                                 <td>
                                                     <asp:Label runat="server" ID="lblCriteria14"></asp:Label>
