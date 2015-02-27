@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Business;
 using TOne.Caching;
+using TOne.CDR.Business;
 using TOne.CDR.Entities;
 using TOne.Entities;
 using Vanrise.BusinessProcess;
@@ -90,9 +91,9 @@ namespace TOne.CDRProcess.Activities
         {
             TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
 
-            TOne.Business.ProtPricingGenerator generator;
+            PricingGenerator generator;
             
-            generator = new TOne.Business.ProtPricingGenerator(cacheManager);
+            generator = new PricingGenerator(cacheManager);
 
 
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);

@@ -121,6 +121,10 @@
       <Project>{1950b29a-5c7b-47a3-8113-fc9211d27cfd}</Project>
       <Name>TOne.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Business\TOne.CDR.Business.csproj">
+      <Project>{5aac8aec-cc1e-489a-99c0-5826b7bc0e35}</Project>
+      <Name>TOne.CDR.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.CDR.Data\TOne.CDR.Data.csproj">
       <Project>{9d556d54-f769-41af-843d-dff72384df32}</Project>
       <Name>TOne.CDR.Data</Name>
