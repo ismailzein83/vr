@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class BaseRouteAction
+    public class BaseRouteOptionAction
     {
-        public virtual RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public virtual RouteOptionActionResult Execute(IRouteOptionBuildContext context, object actionData)
         {
             return null;
         }
@@ -18,9 +18,9 @@ namespace TOne.LCR.Entities
             return null;
         }
 
-        protected RouteActionResult InvalidActionData(string invalidMessage)
+        protected RouteOptionActionResult InvalidActionData(string invalidMessage)
         {
-            return new RouteActionResult
+            return new RouteOptionActionResult
             {
                 IsInvalid = true,
                 ErrorMessage = invalidMessage
@@ -28,14 +28,14 @@ namespace TOne.LCR.Entities
         }
     }
 
-    public class RouteActionResult
+    public class RouteOptionActionResult
     {
         public bool IsInvalid { get; set; }
 
         public string ErrorMessage { get; set; }
 
-        public Type NextActionType { get; set; }
+        public bool RemoveOption { get; set; }
 
-        public object NextActionData { get; set; }
+        public bool BlockOption { get; set; }
     }
 }

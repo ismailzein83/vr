@@ -14,9 +14,9 @@ namespace TOne.LCR.Business
             PriorityRouteActionData priorityActionData = actionData as PriorityRouteActionData;
 
             if (priorityActionData == null)
-                return InvalidRouteActionData("actionData is null or it is not of type PriorityRouteActionData");
+                return InvalidActionData("actionData is null or it is not of type PriorityRouteActionData");
             if (priorityActionData.Options == null)
-                return InvalidRouteActionData("priorityActionData.Options");
+                return InvalidActionData("priorityActionData.Options");
 
             var route = context.Route;
             if (route.Options == null || route.Options.SupplierOptions == null)

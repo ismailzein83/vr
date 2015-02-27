@@ -101,11 +101,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.BusinessEntity.BProces
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneDB", "SQL.TOneDB\SQL.TOneDB.sqlproj", "{11957CDF-2871-4EDA-A725-86D1B85F1E61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Web", "TOne.Web\TOne.Web.csproj", "{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 39
+		SccNumberOfProjects = 40
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TABS.Plugins.Framework\\TABS.Plugins.Framework.csproj
 		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
@@ -259,6 +261,10 @@ Global
 		SccProjectTopLevelParentUniqueName38 = TOneV2.sln
 		SccProjectName38 = SQL.TOneDB
 		SccLocalPath38 = SQL.TOneDB
+		SccProjectUniqueName39 = TOne.Web\\TOne.Web.csproj
+		SccProjectTopLevelParentUniqueName39 = TOneV2.sln
+		SccProjectName39 = TOne.Web
+		SccLocalPath39 = TOne.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -993,6 +999,24 @@ Global
 		{11957CDF-2871-4EDA-A725-86D1B85F1E61}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{11957CDF-2871-4EDA-A725-86D1B85F1E61}.Release|x64.ActiveCfg = Release|Any CPU
 		{11957CDF-2871-4EDA-A725-86D1B85F1E61}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|x64.ActiveCfg = Release|Any CPU
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1030,6 +1054,7 @@ Global
 		{A8389DE1-6F10-470D-8364-CBA3A3F14286} = {DA73FD29-0EEF-42A1-8CBA-09520051C308}
 		{5AAC8AEC-CC1E-489A-99C0-5826B7BC0E35} = {DA73FD29-0EEF-42A1-8CBA-09520051C308}
 		{4B486132-2060-4357-8DA6-4B6072951008} = {2CF9B79B-02C0-4EE4-920A-E395ABBA86B2}
+		{DF927BD2-82EB-4C00-AD9D-005AE0B29EB9} = {2CF9B79B-02C0-4EE4-920A-E395ABBA86B2}
 		{BD38FF84-7FE7-41D5-9D68-63552DFABB3A} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{F6C60928-D1F7-4A6C-9B78-1A86F67CAB06} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{DD37C9F1-5EFC-47DF-A711-A6D5EFB566E1} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}

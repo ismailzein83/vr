@@ -55,6 +55,7 @@
     <Compile Include="AlertRules\Conditions\RouteOption\MarginRule.cs" />
     <Compile Include="RoutingRuleActionType.cs" />
     <Compile Include="RoutingRules\Actions\BaseRouteAction.cs" />
+    <Compile Include="RoutingRules\Actions\BaseRouteOptionAction.cs" />
     <Compile Include="RoutingRules\Actions\IRouteBuildContext.cs" />
     <Compile Include="RoutingRules\Actions\RouteActions\BlockRouteActionData.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\RouteOptionPriceRangeAction.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="RoutingRules\Actions\RuleActionExecutionPath.cs" />
     <Compile Include="RoutingRules\Actions\RuleActionExecutionStep.cs" />
     <Compile Include="RoutingRules\CodeSet\SupplierZoneSelectionSet.cs" />
+    <Compile Include="RoutingRules\Actions\IRouteOptionBuildContext.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />
     <Compile Include="ZoneRates\ZoneCustomerRates.cs" />

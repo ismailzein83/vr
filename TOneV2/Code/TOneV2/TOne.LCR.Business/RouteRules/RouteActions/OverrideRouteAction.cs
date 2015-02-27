@@ -14,9 +14,9 @@ namespace TOne.LCR.Business
             OverrideRouteActionData overrideActionData = actionData as OverrideRouteActionData;
             
             if (overrideActionData == null)
-                return InvalidRouteActionData("actionData is null or it is not of type OverrideRouteActionData");
+                return InvalidActionData("actionData is null or it is not of type OverrideRouteActionData");
             if (overrideActionData.Options == null)
-                return InvalidRouteActionData("overrideActionData.Options");
+                return InvalidActionData("overrideActionData.Options");
 
             RouteActionResult rslt = new RouteActionResult();
 

@@ -66,14 +66,17 @@ namespace TOne.LCR.Business
             RouteRuleManager ruleManager = new RouteRuleManager();
             RuleActionExecutionPath executionPath = ruleManager.GetExecutionPath();
             RuleActionExecutionStep currentStep = executionPath.FirstStep;
+            object nextActionData = null;
             do
             {
                 Type actionDataType = currentStep.Action.GetActionDataType();
-                if (actionDataType == null)
+                if (actionDataType == null || nextActionData != null)
                 {
-                    RouteActionResult actionResult = currentStep.Action.Execute(this, null);
+                    var actionData = nextActionData;
+                    nextActionData = null;
+                    RouteActionResult actionResult = currentStep.Action.Execute(this, actionData);
                     RuleActionExecutionStep nextStep;
-                    if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep))
+                    if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                         currentStep = nextStep;
                 }
                 else
@@ -90,7 +93,7 @@ namespace TOne.LCR.Business
                             {
                                 RouteActionResult actionResult = currentStep.Action.Execute(this, (rule as CustomerRouteRule).ActionData);
                                 RuleActionExecutionStep nextStep;
-                                if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep))
+                                if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                                 {
                                     done = true;
                                     currentStep = nextStep;
@@ -107,9 +110,10 @@ namespace TOne.LCR.Business
             while (currentStep != null);
         }
 
-        private static bool CheckActionResult(RouteActionResult actionResult, RuleActionExecutionPath executionPath, RuleActionExecutionStep currentStep, out RuleActionExecutionStep nextStep)
+        private static bool CheckActionResult(RouteActionResult actionResult, RuleActionExecutionPath executionPath, RuleActionExecutionStep currentStep, out RuleActionExecutionStep nextStep, out object nextActionData)
         {
-            if(actionResult == null)
+            nextActionData = null;
+            if (actionResult == null)
             {
                 nextStep = currentStep.NextStep;
                 return true;
@@ -118,8 +122,10 @@ namespace TOne.LCR.Business
             {
                 if (actionResult.NextActionType != null)
                 {
-                    if (!executionPath.GetAllSteps().Steps.TryGetValue(actionResult.NextActionType, out nextStep))
+                    nextStep = executionPath.GetStep(actionResult.NextActionType);
+                    if (nextStep == null)
                         throw new Exception(String.Format("Route Action Type '{0}' not found in execution path", actionResult.NextActionType));
+                    nextActionData = actionResult.NextActionData;
                 }
                 else if (currentStep.IsEndAction)
                     nextStep = null;
@@ -129,12 +135,12 @@ namespace TOne.LCR.Business
             }
             else
             {
-                nextStep = currentStep.NextStep;
+                nextStep = null;
                 return false;
             }
         }
 
-        private List<BaseRouteOptionFilter> GetRouteOptionFilters()
+        private List<BaseRouteOptionAction> GetRouteOptionFilters()
         {
             throw new NotImplementedException();
         }
@@ -154,21 +160,22 @@ namespace TOne.LCR.Business
             int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
             if (_route.Options != null && _route.Options.SupplierOptions != null)
             {
-                List<BaseRouteOptionFilter> optionFilters = GetRouteOptionFilters();
-                if (optionFilters != null)
-                {
+                List<BaseRouteOptionAction> optionsActions = GetRouteOptionFilters();
+                if (optionsActions != null)
+                {                    
                     List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
                     int validOptions = 0;
                     foreach (var option in _route.Options.SupplierOptions)
                     {
+                        RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(option, this);
                         bool isValid = true;
-                        foreach (var filter in optionFilters)
+                        foreach (var filter in optionsActions)
                         {
-                            var filterResult = filter.Execute(null, option, _route);
+                            var filterResult = filter.Execute(optionBuildContext, null);
                             if (filterResult != null)
                             {
-                                if (filterResult.Notify)
-                                    ;//TODO add to notification
+                                //if (filterResult.Notify)
+                                //    ;//TODO add to notification
                                 if (filterResult.BlockOption || filterResult.RemoveOption)
                                 {
                                     isValid = false;

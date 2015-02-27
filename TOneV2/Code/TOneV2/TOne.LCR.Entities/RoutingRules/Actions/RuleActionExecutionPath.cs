@@ -10,18 +10,17 @@ namespace TOne.LCR.Entities
     {
         public RuleActionExecutionStep FirstStep { get; set; }
 
-        public RuleActionExecutionStepsByActionType GetAllSteps()
+        public RuleActionExecutionStep GetStep(Type actionType)
         {
-            RuleActionExecutionStepsByActionType allSteps = new RuleActionExecutionStepsByActionType();
             var current = this.FirstStep;
             while (current != null)
             {
-                var actionType = current.Action.GetType();
-                if (!allSteps.Steps.ContainsKey(actionType))
-                    allSteps.Steps.Add(actionType, current);
-                current = current.NextStep;
+                if (current.Action.GetType().Equals(actionType))
+                    return current;
+                else
+                    current = current.NextStep;
             }
-            return allSteps;
+            return null;
         }
     }
 
