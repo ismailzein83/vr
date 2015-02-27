@@ -42,9 +42,9 @@
             </div>
         </div>
         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-            <div class="dashboard-stat green">
+            <div class="dashboard-stat yellow">
                 <div class="visual">
-                    <i class="icon-ok-circle"></i>
+                    <i class="icon-bar-chart"></i>
                 </div>
                 <div class="details">
                     <div class="desc">
@@ -59,26 +59,34 @@
             </div>
         </div>
         <div class="span3 responsive" data-tablet="span6  fix-offset" data-desktop="span3">
-            <div class="dashboard-stat red">
+            <div class="dashboard-stat green">
                 <div class="visual">
-                    <i class="icon-remove-circle"></i>
+                    <i class="icon-ok-circle"></i>
                 </div>
                 <div class="details">
-                    <div class="number"><asp:Label ID="lblCLINonDel2" runat="server"></asp:Label></div>
-                    <div class="desc">Non Valid</div>
+                    <div class="desc"><h4><b>Best Supplier:</b></h4>
+                        <table>
+                            <tr><td><asp:Label ID="lblBest1" runat="server"/> %</td></tr>
+                            <tr><td><asp:Label ID="lblBest2" runat="server"/> %</td></tr>
+                        </table>
+                    </div>
                 </div>
                 <a class="more" href="ManageTestOperators.aspx">View more <i class="m-icon-swapright m-icon-white"></i>
                 </a>
             </div>
         </div>
         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
-            <div class="dashboard-stat yellow">
+            <div class="dashboard-stat red">
                 <div class="visual">
-                    <i class="icon-bar-chart"></i>
+                    <i class="icon-remove-circle"></i>
                 </div>
                 <div class="details">
-                    <div class="number">12 Points</div>
-                    <div class="desc">Total Profit</div>
+                    <div class="desc"><h4><b>Worst Supplier:</b></h4>
+                        <table>
+                            <tr><td><asp:Label ID="lblWorst1" runat="server"/> %</td></tr>
+                            <tr><td><asp:Label ID="lblWorst2" runat="server"/> %</td></tr>
+                        </table>
+                    </div>
                 </div>
                 <a class="more" href="#">View more <i class="m-icon-swapright m-icon-white"></i>
                 </a>
@@ -175,10 +183,10 @@
                         
                         var plot_statistics = $.plot($("#site_statistics"), [{
                             data: arr,
-                            label: "Non Valid"
+                            label: "Not Delivered"
                         }, {
                             data: arr2,
-                            label: "CLI Valid"
+                            label: "Delivered"
                         }
                         ], {
                             series: {

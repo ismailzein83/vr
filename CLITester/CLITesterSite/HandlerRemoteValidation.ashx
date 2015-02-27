@@ -24,8 +24,8 @@ public class HandlerRemoteValidation : IHttpHandler, System.Web.SessionState.IRe
         }
         
         String text = jsonString.Split('=')[1].ToString();
-
-        bool b = !CarrierRepository.ExistShortName(text);
+        bool b = true;
+        //bool b = !CarrierRepository.ExistShortName(text);
 
         string msg = b.ToString();
         if (b)

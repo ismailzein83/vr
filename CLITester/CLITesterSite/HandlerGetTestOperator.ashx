@@ -100,6 +100,7 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
 
                     MontyCall m = MontyCallRepository.LoadbyTestOperatorId(testOp.Id);
 
+                    if(testOp.EndDate != null)
                     if ((DateTime.Now.Second - testOp.CreationDate.Value.Second) > exptime)
                     {
                         if (m == null)
@@ -133,7 +134,7 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid).ToString())
                             responseTestOp.Status = "CLI NOT DELIVERED";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired).ToString())
-                            responseTestOp.Status = "EXPIRED";
+                            responseTestOp.Status = "FAILED";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Waiting).ToString())
                             responseTestOp.Status = "WAITING";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.ErrorMessage).ToString())

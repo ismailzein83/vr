@@ -9,7 +9,10 @@ using System.Net.Mail;
 using System.Web.Configuration;
 using System.Configuration;
 using System.Net;
-
+using System.Data;
+using Microsoft.Reporting;
+using Microsoft.Reporting.WebForms;
+using System.IO;
 namespace CallGeneratorLibrary.Utilities
 {
     public class ScheduleManager
@@ -335,6 +338,85 @@ namespace CallGeneratorLibrary.Utilities
             try
             {
                 List<TestOperator> LstOperators = TestOperatorRepository.GetTestOperatorsByScheduleLogId(s.StartDate.Value, s.ScheduleId.Value);
+
+                DataTable dt = new DataTable();
+                dt.Columns.AddRange(new DataColumn[] {
+               new DataColumn("OperatorName",typeof(System.String))
+             , new DataColumn("ScheduleName",typeof(System.String))
+             , new DataColumn("CreationDate",typeof(System.String))
+             , new DataColumn("EndDate",typeof(System.String))
+             , new DataColumn("TestCli",typeof(System.String))
+             , new DataColumn("ReceivedCli",typeof(System.String))
+             , new DataColumn("Status",typeof(System.String))
+            });
+
+                foreach (TestOperator app in LstOperators)
+                {
+                    DataRow row = dt.NewRow();
+
+                    if (app.Operator.FullName != null)
+                        row["OperatorName"] = app.Operator.FullName;
+
+                    if (app.Schedule.DisplayName != null)
+                        row["ScheduleName"] = app.Schedule.DisplayName;
+
+                    if (app.CreationDate != null)
+                        row["CreationDate"] = app.CreationDate;
+
+                    if (app.EndDate != null)
+                        row["EndDate"] = app.EndDate;
+
+                    if (app.TestCli != null)
+                        row["TestCli"] = app.TestCli;
+
+                    if (app.ReceivedCli != null)
+                        row["ReceivedCli"] = app.ReceivedCli;
+
+                    if (app.Status != null)
+                        row["Status"] = app.Status;
+
+                    dt.Rows.Add(row);
+                }
+                WriteToEventLogEx("1");
+
+
+                //Microsoft.Reporting.WebForms.ReportViewer rview = new Microsoft.Reporting.WebForms.ReportViewer();
+                //rview.ServerReport.ReportServerUrl = new Uri("http://localhost:8080/ReportServer");
+                //rview.ServerReport.ReportPath = "Reports\\TestOperatorReport.rdlc";
+                //string mimeType, encoding, extension;
+                //string[] streamids; Microsoft.Reporting.WebForms.Warning[] warnings;
+                //string format = "PDF";
+                //byte[] bytes = rview.ServerReport.Render(format, "", out mimeType, out encoding, out extension, out streamids, out warnings);
+                ////save the pdf byte to the folder
+                //FileStream fs = new FileStream(@"c:\report.pdf", FileMode.Open);
+                //fs.Write(bytes, 0, bytes.Length);
+                //fs.Close();
+
+
+
+
+
+                //Microsoft.Reporting.WebForms.ReportViewer rptApplication = new ReportViewer();
+                //WriteToEventLogEx("2");
+                //rptApplication.LocalReport.ReportPath = "Reports\\TestOperatorReport.rdlc";
+                //rptApplication.LocalReport.DataSources.Clear();
+                //rptApplication.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource("DataSet2", dt));
+                //rptApplication.LocalReport.Refresh();
+                //WriteToEventLogEx("3");
+                //Warning[] warnings;
+                //string[] streamids;
+                //string mimeType;
+                //string encoding;
+                //string filenameExtension;
+
+                //byte[] bytes = rptApplication.LocalReport.Render("PDF", null, out mimeType, out encoding, 
+                //    out filenameExtension, out streamids, out warnings);
+                //WriteToEventLogEx("4");
+                //using (FileStream fs = new FileStream("output.pdf", FileMode.Create))
+                //{
+                //    fs.Write(bytes, 0, bytes.Length);
+                //}
+                WriteToEventLogEx("5");
                 StringBuilder EmailBody = new StringBuilder();
                 EmailBody.Append("<table cellspacing='0' cellpadding='0'>");
                 EmailBody.Append("<tr><td style='font-family: Arial; font-size: 13pt; font-weight: bold'>CLITester Website</td></tr>");
@@ -343,7 +425,7 @@ namespace CallGeneratorLibrary.Utilities
                 EmailBody.Append("<tr><td>&nbsp;</td></tr>");
                 EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Please check out last schedule log details:</td></tr>");
                 EmailBody.Append("<tr><td>&nbsp;</td></tr>");
-                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'><table><tr style='font-family: Arial; font-size: 13pt; font-weight: bold'><td>Name</td><td>Schedule</td><td>Creation Date</td><td>End Date</td><td>Test Cli</td><td>Received Cli</td><td>Status</td></tr>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'><table><tr style='font-family: Arial; font-size: 13pt; font-weight: bold'><td style='Width: 150px;'>Name</td><td style='Width: 150px;'>Schedule</td><td style='Width: 180px;'>Creation Date</td><td style='Width: 180px;'>End Date</td><td style='Width: 180px;'>Test Cli</td><td style='Width: 180px;'>Received Cli</td><td style='Width: 130px;'>Status</td></tr>");
                 bool trouv = false;
                 foreach (TestOperator t in LstOperators)
                 {

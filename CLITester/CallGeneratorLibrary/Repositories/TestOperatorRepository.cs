@@ -101,6 +101,27 @@ namespace CallGeneratorLibrary.Repositories
             }
             return Total;
         }
+        public static int GetPercentage(string prefix, int? status, int userId)
+        {
+            int Total = 0;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    if(status == null)
+                        Total = context.TestOperators.Where(l => l.CreationDate.Value.Month == DateTime.Now.Month && l.UserId == userId && l.CarrierPrefix == prefix).Count();
+                    else
+                        Total = context.TestOperators.Where(l => l.CreationDate.Value.Month == DateTime.Now.Month && l.Status == status && l.UserId == userId && l.CarrierPrefix == prefix).Count();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return Total;
+        }
+        
         public static List<DataCalls> GetDataCalls()
         {
             List<DataCalls> LstOperators = new List<DataCalls>();
@@ -118,7 +139,7 @@ namespace CallGeneratorLibrary.Repositories
             }
             return LstOperators;
         }
-
+        
         public static List<TestOperator> GetTestCalls(int userId)
         {
             List<TestOperator> LstOperators = new List<TestOperator>();
@@ -263,13 +284,28 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<TestOperator>(c => c.User);
                     context.LoadOptions = options;
 
-                    LstOperators = context.TestOperators.Where(x => (x.Operator.Service.Value == (int)Enums.Service.Monty) && x.EndDate == null && x.Requested == null).ToList<TestOperator>();
+                    LstOperators = context.TestOperators.Where(x =>  x.EndDate == null && x.Requested == null).ToList<TestOperator>();
 
                     for (int i = 0; i < LstOperators.Count(); i++)
                     {
                         TestOperator op = new TestOperator();
                         op = LstOperators[i];
                         op.Requested = true;
+
+                        DateTime dt = op.CreationDate.Value;
+                        TimeSpan span = new TimeSpan();
+                        if (dt != null)
+                            span = DateTime.Now - dt;
+                        double totalSeconds = span.TotalSeconds;
+
+                        int exptime = 180;//seconds
+
+                        if (totalSeconds >= exptime)
+                        {
+                            op.ErrorMessage = exptime + " sec - EXPIRED";
+                            op.EndDate = DateTime.Now;
+                            LstOperators.Remove(op);
+                        }
                         TestOperatorRepository.Save(op);
                     }
                 }
@@ -294,7 +330,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<TestOperator>(c => c.User);
                     context.LoadOptions = options;
 
-                    LstOperators = context.TestOperators.Where(x => (x.Operator.Service.Value == (int)Enums.Service.Monty) && x.EndDate == null && x.Requested == true).ToList<TestOperator>();
+                    LstOperators = context.TestOperators.Where(x =>  x.EndDate == null && x.Requested == true).ToList<TestOperator>();
                 }
             }
             catch (System.Exception ex)
@@ -372,7 +408,7 @@ namespace CallGeneratorLibrary.Repositories
 
         private static void WriteToEventLogEx(string message)
         {
-            string cs = "Call Generator Lib Excep";
+            string cs = "Service CallGen";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

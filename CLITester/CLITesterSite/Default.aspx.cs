@@ -8,6 +8,16 @@ using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using CallGeneratorLibrary.Utilities;
 
+public class CarrierStat
+{
+    public string Prefix { get; set; }
+    public int Total { get; set; }
+    public int Delivered { get; set; }
+    public int NotDelivered { get; set; }
+    public decimal percentage { get; set; }
+    public decimal percentageW { get; set; }
+}
+
 public partial class Default : BasePage
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -23,7 +33,8 @@ public partial class Default : BasePage
         CliDeliv = TestOperatorRepository.GetCLIDeliv(Current.User.Id);
         CliNonDeliv = TestOperatorRepository.GetCLINonDeliv(Current.User.Id);
         total = TestOperatorRepository.GetTotalCalls(Current.User.Id);
-        balance = Current.User.User.Balance.Value;
+        if(Current.User.User.Balance.HasValue)
+            balance = Current.User.User.Balance.Value;
         
         int totCalls = CliDeliv + CliNonDeliv;
         failed = total - totCalls;
@@ -32,5 +43,52 @@ public partial class Default : BasePage
         lblFailed.Text = failed.ToString();
         lblCLIDel.Text = TestOperatorRepository.GetCLIDeliv(Current.User.Id).ToString();
         lblCLINonDel.Text = TestOperatorRepository.GetCLINonDeliv(Current.User.Id).ToString();
+
+        List<Carrier> LstCarriers = CarrierRepository.LoadbyUserID(Current.User.User.Id);
+        List<CarrierStat> LstStat = new List<CarrierStat>();
+        foreach (Carrier c in LstCarriers)
+        {
+            CarrierStat cstat = new CarrierStat();
+            cstat.Prefix = c.Prefix;
+            
+            cstat.Delivered = TestOperatorRepository.GetPercentage(c.Prefix, 1, Current.User.User.Id);
+            cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
+            cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
+            cstat.Total = TestOperatorRepository.GetPercentage(c.Prefix, null, Current.User.User.Id);
+            if (cstat.Delivered != 0 && cstat.Delivered != null)
+                cstat.percentage = decimal.Round((((decimal)(cstat.Delivered) / (decimal)(cstat.Total)) * 100), 2);
+            else
+                cstat.percentage = 0;
+
+            if (cstat.NotDelivered != 0 && cstat.NotDelivered != null)
+                cstat.percentageW = decimal.Round((((decimal)(cstat.NotDelivered) / (decimal)(cstat.Total)) * 100), 2);
+            else
+                cstat.percentageW = 0;
+
+            LstStat.Add(cstat);
+        }
+        LstStat.OrderBy(l => l.percentage);
+        if (LstStat.Count >= 1)
+        {
+            lblBest1.Text = LstStat[0].Prefix +  " " + LstStat[0].percentage.ToString("#00.00");
+            //lblWorst1.Text = LstStat[0].Prefix + " " + LstStat[0].percentageW.ToString();
+        }
+        if (LstStat.Count > 1)
+        {
+            lblBest2.Text = LstStat[1].Prefix + " " + LstStat[1].percentage.ToString("#00.00");
+            //lblWorst2.Text = LstStat[1].Prefix + " " + LstStat[1].percentageW.ToString();
+        }
+
+        LstStat.OrderBy(l => l.percentageW);
+        if (LstStat.Count >= 1)
+        {
+            //lblBest1.Text = LstStat[0].Prefix + " " + LstStat[0].percentage.ToString();
+            lblWorst1.Text = LstStat[0].Prefix + " " + LstStat[0].percentageW.ToString("#00.00");
+        }
+        if (LstStat.Count > 1)
+        {
+            //lblBest2.Text = LstStat[1].Prefix + " " + LstStat[1].percentage.ToString();
+            lblWorst2.Text = LstStat[1].Prefix + " " + LstStat[1].percentageW.ToString("#00.00");
+        }
     }
 }

@@ -18,6 +18,10 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
+                    DataLoadOptions options = new DataLoadOptions();
+                    options.LoadWith<SipAccount>(c => c.User);
+                    context.LoadOptions = options;
+
                     log = context.SipAccounts.Where(l => l.Id == Id).FirstOrDefault<SipAccount>();
                 }
             }

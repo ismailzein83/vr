@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CliTesterDataSet" targetNamespace="http://tempuri.org/CliTesterDataSet.xsd" xmlns:mstns="http://tempuri.org/CliTesterDataSet.xsd" xmlns="http://tempuri.org/CliTesterDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="CliTesterDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="CliTesterDataSet" msprop:Generator_UserDSName="CliTesterDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TestOperatorReport" msprop:Generator_TableClassName="TestOperatorReportDataTable" msprop:Generator_TableVarName="tableTestOperatorReport" msprop:Generator_TablePropName="TestOperatorReport" msprop:Generator_RowDeletingName="TestOperatorReportRowDeleting" msprop:Generator_RowChangingName="TestOperatorReportRowChanging" msprop:Generator_RowEvHandlerName="TestOperatorReportRowChangeEventHandler" msprop:Generator_RowDeletedName="TestOperatorReportRowDeleted" msprop:Generator_UserTableName="TestOperatorReport" msprop:Generator_RowChangedName="TestOperatorReportRowChanged" msprop:Generator_RowEvArgName="TestOperatorReportRowChangeEvent" msprop:Generator_RowClassName="TestOperatorReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:string" minOccurs="0" />
+              <xs:element name="OperatorId" msprop:Generator_ColumnVarNameInTable="columnOperatorId" msprop:Generator_ColumnPropNameInRow="OperatorId" msprop:Generator_ColumnPropNameInTable="OperatorIdColumn" msprop:Generator_UserColumnName="OperatorId" type="xs:string" minOccurs="0" />
+              <xs:element name="OperatorName" msprop:Generator_ColumnVarNameInTable="columnOperatorName" msprop:Generator_ColumnPropNameInRow="OperatorName" msprop:Generator_ColumnPropNameInTable="OperatorNameColumn" msprop:Generator_UserColumnName="OperatorName" type="xs:string" minOccurs="0" />
+              <xs:element name="ScheduleId" msprop:Generator_ColumnVarNameInTable="columnScheduleId" msprop:Generator_ColumnPropNameInRow="ScheduleId" msprop:Generator_ColumnPropNameInTable="ScheduleIdColumn" msprop:Generator_UserColumnName="ScheduleId" type="xs:string" minOccurs="0" />
+              <xs:element name="ScheduleName" msprop:Generator_ColumnVarNameInTable="columnScheduleName" msprop:Generator_ColumnPropNameInRow="ScheduleName" msprop:Generator_ColumnPropNameInTable="ScheduleNameColumn" msprop:Generator_UserColumnName="ScheduleName" type="xs:string" minOccurs="0" />
+              <xs:element name="CreationDate" msprop:Generator_ColumnVarNameInTable="columnCreationDate" msprop:Generator_ColumnPropNameInRow="CreationDate" msprop:Generator_ColumnPropNameInTable="CreationDateColumn" msprop:Generator_UserColumnName="CreationDate" type="xs:string" minOccurs="0" />
+              <xs:element name="EndDate" msprop:Generator_ColumnVarNameInTable="columnEndDate" msprop:Generator_ColumnPropNameInRow="EndDate" msprop:Generator_ColumnPropNameInTable="EndDateColumn" msprop:Generator_UserColumnName="EndDate" type="xs:string" minOccurs="0" />
+              <xs:element name="TestCli" msprop:Generator_ColumnVarNameInTable="columnTestCli" msprop:Generator_ColumnPropNameInRow="TestCli" msprop:Generator_ColumnPropNameInTable="TestCliColumn" msprop:Generator_UserColumnName="TestCli" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceivedCli" msprop:Generator_ColumnVarNameInTable="columnReceivedCli" msprop:Generator_ColumnPropNameInRow="ReceivedCli" msprop:Generator_ColumnPropNameInTable="ReceivedCliColumn" msprop:Generator_UserColumnName="ReceivedCli" type="xs:string" minOccurs="0" />
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

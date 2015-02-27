@@ -169,47 +169,26 @@ namespace CallGeneratorServiceCLI
                     if ((c.idle == false) && (c.startDate == DateTime.MinValue))
                     {
                         GeneratedCall GenCall = GeneratedCallRepository.Load(NewCallGenCLI.LstChanels[i].GeneratedCallid);
-                        WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
+                        //WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
                         //GenCall.Status = "2";
                         //GenCall.StartCall = DateTime.Now;
                         //GeneratedCallRepository.Save(GenCall);
 
                         NewCallGenCLI.LstChanels[i].startDate = DateTime.Now;
                         NewCallGenCLI.LstChanels[i].startLastCall = DateTime.Now;
-                        //int ii = NewCallGenCLI.LstChanels[i].sip.ConfigId;
-
-                        //p.Config.ExSipAccount_SetDefaultIdx(ii);
-                        //p.ApplyConfig();
-                        //p.Initialize();
-                        //System.Threading.Thread.Sleep(1000);
-                        //p.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
-
-                        //int ConnectionId = p.StartCall2(NewCallGenCLI.LstChanels[i].destinationNumber);
 
                         lock (_syncRoot)
                         {
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.ExSipAccount_SetDefaultIdx(0);
-
-                            //WriteToEventLogEx("GenCall.SipAccount.Id: " + GenCall.SipAccount.Id);
-
-                            //if (GenCall.SipAccount.Id == 2)
-                            //    NewCallGenCLI.LstChanels[i].sip.phone.Config.RegDomain = "91.223.215.10";
-
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegUser = GenCall.SipAccount.User.CallerId;
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegPass = GenCall.SipAccount.User.CallerId;
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.RegAuthId = GenCall.SipAccount.User.CallerId;
-                            //NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId = GenCall.SipAccount.User.CallerId;
-
-                            //System.Threading.Thread.Sleep(1000);
-
-                            //NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
-
-                            //System.Threading.Thread.Sleep(1000);
+                            WriteToEventLogEx("SetCurrentLine: " + (NewCallGenCLI.LstChanels[i].id + 1).ToString());
 
                             NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
-                            //string ss = (NewCallGenCLI.LstChanels[i].id + 1).ToString();
 
+                            WriteToEventLogEx("CallerId: " + NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId);
+                            //NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
+                            //System.Threading.Thread.Sleep(1000);
                             int ConnectionId = NewCallGenCLI.LstChanels[i].sip.phone.StartCall2(NewCallGenCLI.LstChanels[i].destinationNumber);
+                            NewCallGenCLI.LstChanels[i].ConnectionId = ConnectionId;
+
                             //WriteToEventLogEx("ConnectionId: " + ConnectionId);
                             //String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                             //NewCallGenCLI.displayList(f, "threadId: " + threadId + " StartCall " + ConnectionId + " Line :" + NewCallGenCLI.LstChanels[i].id + 1 + " SIPCONFIG: " + NewCallGenCLI.LstChanels[i].sip.ConfigId + " ii " + ii);
@@ -227,7 +206,7 @@ namespace CallGeneratorServiceCLI
                             span = DateTime.Now - dt;
                         double totalSeconds = span.TotalSeconds;
 
-                        if (chanel.Idle == false && totalSeconds > 40)
+                        if (chanel.Idle == false && totalSeconds > 60)
                         {
                             //Reset the phone with this Id;
                             if (NewCallGenCLI.LstChanels[i].destinationNumber == "")
@@ -252,11 +231,14 @@ namespace CallGeneratorServiceCLI
                             }
 
                             //Reset the phone with this Id and the Object
+                            WriteToEventLogEx("Clear TimeOut: " + NewCallGenCLI.LstChanels[i].ConnectionId);
                             NewCallGenCLI.LstChanels[i].Idle = true;
                             NewCallGenCLI.LstChanels[i].DestinationNumber = "";
                             NewCallGenCLI.LstChanels[i].sip = null;
                             NewCallGenCLI.LstChanels[i].startLastCall = DateTime.MinValue;
                             NewCallGenCLI.LstChanels[i].generatedCallid = 0;
+                            NewCallGenCLI.LstChanels[i].GeneratedCallid = 0;
+                            NewCallGenCLI.LstChanels[i].ConnectionId = 0;
                             //NewCallGenCLI.displayList(f, "Clear TimeOut");
                         }
                     }
@@ -264,6 +246,7 @@ namespace CallGeneratorServiceCLI
             }
             catch (System.Exception ex)
             {
+                WriteToEventLogEx("ChannelAllocation: " + ex.ToString());
                 Logger.LogException(ex);
             }
         }
@@ -311,6 +294,27 @@ namespace CallGeneratorServiceCLI
             }
         }
 
+        public static ChannelAllocation GetCallServiceConnection(int ConnectionId)
+        {
+            try
+            {
+                for (int i = 0; i < 64; i++)
+                {
+                    if (NewCallGenCLI.LstChanels[i].ConnectionId == ConnectionId)
+                    {
+                        ChannelAllocation service = NewCallGenCLI.LstChanels[i];
+                        return service;
+                    }
+                }
+                return null;
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+                return null;
+            }
+        }
+
         private static void WriteToEventLogEx(string message)
         {
             string cs = "Service CallGen";
@@ -323,5 +327,6 @@ namespace CallGeneratorServiceCLI
             elog.EnableRaisingEvents = true;
             elog.WriteEntry(message);
         }
+
     }
 }

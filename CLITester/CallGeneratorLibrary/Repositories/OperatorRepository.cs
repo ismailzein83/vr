@@ -110,7 +110,8 @@ namespace CallGeneratorLibrary.Repositories
                     look.mcc = oper.mcc;
                     look.mnc = oper.mnc;
                     look.Country = oper.Country;
-                    look.Service = oper.Service;
+                    look.ServiceAndroid = oper.ServiceAndroid;
+                    look.ServiceMonty = oper.ServiceMonty;
                     context.SubmitChanges();
                     success = true;
                 }

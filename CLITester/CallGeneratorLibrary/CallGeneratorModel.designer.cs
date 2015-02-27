@@ -22,7 +22,7 @@ namespace CallGeneratorLibrary
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FraudTest2")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FraudTest")]
 	public partial class CallGeneratorModelDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -90,9 +90,6 @@ namespace CallGeneratorLibrary
     partial void InsertScheduleOperator(ScheduleOperator instance);
     partial void UpdateScheduleOperator(ScheduleOperator instance);
     partial void DeleteScheduleOperator(ScheduleOperator instance);
-    partial void InsertOperator(Operator instance);
-    partial void UpdateOperator(Operator instance);
-    partial void DeleteOperator(Operator instance);
     partial void InsertTestNumber(TestNumber instance);
     partial void UpdateTestNumber(TestNumber instance);
     partial void DeleteTestNumber(TestNumber instance);
@@ -117,9 +114,6 @@ namespace CallGeneratorLibrary
     partial void InsertSipAccount(SipAccount instance);
     partial void UpdateSipAccount(SipAccount instance);
     partial void DeleteSipAccount(SipAccount instance);
-    partial void InsertMontyCall(MontyCall instance);
-    partial void UpdateMontyCall(MontyCall instance);
-    partial void DeleteMontyCall(MontyCall instance);
     partial void InsertScheduleLog(ScheduleLog instance);
     partial void UpdateScheduleLog(ScheduleLog instance);
     partial void DeleteScheduleLog(ScheduleLog instance);
@@ -129,6 +123,12 @@ namespace CallGeneratorLibrary
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertOperator(Operator instance);
+    partial void UpdateOperator(Operator instance);
+    partial void DeleteOperator(Operator instance);
+    partial void InsertMontyCall(MontyCall instance);
+    partial void UpdateMontyCall(MontyCall instance);
+    partial void DeleteMontyCall(MontyCall instance);
     #endregion
 		
 		public CallGeneratorModelDataContext() : 
@@ -321,14 +321,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<Operator> Operators
-		{
-			get
-			{
-				return this.GetTable<Operator>();
-			}
-		}
-		
 		public System.Data.Linq.Table<TestNumber> TestNumbers
 		{
 			get
@@ -401,14 +393,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<MontyCall> MontyCalls
-		{
-			get
-			{
-				return this.GetTable<MontyCall>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ScheduleLog> ScheduleLogs
 		{
 			get
@@ -454,6 +438,22 @@ namespace CallGeneratorLibrary
 			get
 			{
 				return this.GetTable<TestOperatorHistory>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Operator> Operators
+		{
+			get
+			{
+				return this.GetTable<Operator>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MontyCall> MontyCalls
+		{
+			get
+			{
+				return this.GetTable<MontyCall>();
 			}
 		}
 		
@@ -5041,268 +5041,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Operators")]
-	public partial class Operator : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private string _mcc;
-		
-		private string _mnc;
-		
-		private string _Country;
-		
-		private System.Nullable<int> _Service;
-		
-		private string _CountryPicture;
-		
-		private EntitySet<ScheduleOperator> _ScheduleOperators;
-		
-		private EntitySet<TestOperator> _TestOperators;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnmccChanging(string value);
-    partial void OnmccChanged();
-    partial void OnmncChanging(string value);
-    partial void OnmncChanged();
-    partial void OnCountryChanging(string value);
-    partial void OnCountryChanged();
-    partial void OnServiceChanging(System.Nullable<int> value);
-    partial void OnServiceChanged();
-    partial void OnCountryPictureChanging(string value);
-    partial void OnCountryPictureChanged();
-    #endregion
-		
-		public Operator()
-		{
-			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
-			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mcc", DbType="VarChar(10)")]
-		public string mcc
-		{
-			get
-			{
-				return this._mcc;
-			}
-			set
-			{
-				if ((this._mcc != value))
-				{
-					this.OnmccChanging(value);
-					this.SendPropertyChanging();
-					this._mcc = value;
-					this.SendPropertyChanged("mcc");
-					this.OnmccChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mnc", DbType="VarChar(10)")]
-		public string mnc
-		{
-			get
-			{
-				return this._mnc;
-			}
-			set
-			{
-				if ((this._mnc != value))
-				{
-					this.OnmncChanging(value);
-					this.SendPropertyChanging();
-					this._mnc = value;
-					this.SendPropertyChanged("mnc");
-					this.OnmncChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Country", DbType="NVarChar(50)")]
-		public string Country
-		{
-			get
-			{
-				return this._Country;
-			}
-			set
-			{
-				if ((this._Country != value))
-				{
-					this.OnCountryChanging(value);
-					this.SendPropertyChanging();
-					this._Country = value;
-					this.SendPropertyChanged("Country");
-					this.OnCountryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Service", DbType="Int")]
-		public System.Nullable<int> Service
-		{
-			get
-			{
-				return this._Service;
-			}
-			set
-			{
-				if ((this._Service != value))
-				{
-					this.OnServiceChanging(value);
-					this.SendPropertyChanging();
-					this._Service = value;
-					this.SendPropertyChanged("Service");
-					this.OnServiceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CountryPicture", DbType="VarChar(10)")]
-		public string CountryPicture
-		{
-			get
-			{
-				return this._CountryPicture;
-			}
-			set
-			{
-				if ((this._CountryPicture != value))
-				{
-					this.OnCountryPictureChanging(value);
-					this.SendPropertyChanging();
-					this._CountryPicture = value;
-					this.SendPropertyChanged("CountryPicture");
-					this.OnCountryPictureChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="OperatorId")]
-		public EntitySet<ScheduleOperator> ScheduleOperators
-		{
-			get
-			{
-				return this._ScheduleOperators;
-			}
-			set
-			{
-				this._ScheduleOperators.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="OperatorId")]
-		public EntitySet<TestOperator> TestOperators
-		{
-			get
-			{
-				return this._TestOperators;
-			}
-			set
-			{
-				this._TestOperators.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = this;
-		}
-		
-		private void detach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = null;
-		}
-		
-		private void attach_TestOperators(TestOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = this;
-		}
-		
-		private void detach_TestOperators(TestOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TestNumbers")]
 	public partial class TestNumber : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -8736,318 +8474,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MontyCalls")]
-	public partial class MontyCall : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.Nullable<int> _TestOperatorId;
-		
-		private string _MSISDN;
-		
-		private System.Nullable<System.DateTime> _CreationDate;
-		
-		private string _RequestId;
-		
-		private System.Nullable<System.DateTime> _CallDate;
-		
-		private string _ReturnMessage;
-		
-		private System.Nullable<int> _CallEntryId;
-		
-		private EntityRef<GeneratedCall> _GeneratedCall;
-		
-		private EntityRef<TestOperator> _TestOperator;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnTestOperatorIdChanging(System.Nullable<int> value);
-    partial void OnTestOperatorIdChanged();
-    partial void OnMSISDNChanging(string value);
-    partial void OnMSISDNChanged();
-    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreationDateChanged();
-    partial void OnRequestIdChanging(string value);
-    partial void OnRequestIdChanged();
-    partial void OnCallDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCallDateChanged();
-    partial void OnReturnMessageChanging(string value);
-    partial void OnReturnMessageChanged();
-    partial void OnCallEntryIdChanging(System.Nullable<int> value);
-    partial void OnCallEntryIdChanged();
-    #endregion
-		
-		public MontyCall()
-		{
-			this._GeneratedCall = default(EntityRef<GeneratedCall>);
-			this._TestOperator = default(EntityRef<TestOperator>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestOperatorId", DbType="Int")]
-		public System.Nullable<int> TestOperatorId
-		{
-			get
-			{
-				return this._TestOperatorId;
-			}
-			set
-			{
-				if ((this._TestOperatorId != value))
-				{
-					if (this._TestOperator.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTestOperatorIdChanging(value);
-					this.SendPropertyChanging();
-					this._TestOperatorId = value;
-					this.SendPropertyChanged("TestOperatorId");
-					this.OnTestOperatorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MSISDN", DbType="NVarChar(200)")]
-		public string MSISDN
-		{
-			get
-			{
-				return this._MSISDN;
-			}
-			set
-			{
-				if ((this._MSISDN != value))
-				{
-					this.OnMSISDNChanging(value);
-					this.SendPropertyChanging();
-					this._MSISDN = value;
-					this.SendPropertyChanged("MSISDN");
-					this.OnMSISDNChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CreationDate
-		{
-			get
-			{
-				return this._CreationDate;
-			}
-			set
-			{
-				if ((this._CreationDate != value))
-				{
-					this.OnCreationDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreationDate = value;
-					this.SendPropertyChanged("CreationDate");
-					this.OnCreationDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestId", DbType="NVarChar(50)")]
-		public string RequestId
-		{
-			get
-			{
-				return this._RequestId;
-			}
-			set
-			{
-				if ((this._RequestId != value))
-				{
-					this.OnRequestIdChanging(value);
-					this.SendPropertyChanging();
-					this._RequestId = value;
-					this.SendPropertyChanged("RequestId");
-					this.OnRequestIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CallDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CallDate
-		{
-			get
-			{
-				return this._CallDate;
-			}
-			set
-			{
-				if ((this._CallDate != value))
-				{
-					this.OnCallDateChanging(value);
-					this.SendPropertyChanging();
-					this._CallDate = value;
-					this.SendPropertyChanged("CallDate");
-					this.OnCallDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnMessage", DbType="NVarChar(500)")]
-		public string ReturnMessage
-		{
-			get
-			{
-				return this._ReturnMessage;
-			}
-			set
-			{
-				if ((this._ReturnMessage != value))
-				{
-					this.OnReturnMessageChanging(value);
-					this.SendPropertyChanging();
-					this._ReturnMessage = value;
-					this.SendPropertyChanged("ReturnMessage");
-					this.OnReturnMessageChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CallEntryId", DbType="Int")]
-		public System.Nullable<int> CallEntryId
-		{
-			get
-			{
-				return this._CallEntryId;
-			}
-			set
-			{
-				if ((this._CallEntryId != value))
-				{
-					if (this._GeneratedCall.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCallEntryIdChanging(value);
-					this.SendPropertyChanging();
-					this._CallEntryId = value;
-					this.SendPropertyChanged("CallEntryId");
-					this.OnCallEntryIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GeneratedCall_MontyCall", Storage="_GeneratedCall", ThisKey="CallEntryId", OtherKey="Id", IsForeignKey=true)]
-		public GeneratedCall GeneratedCall
-		{
-			get
-			{
-				return this._GeneratedCall.Entity;
-			}
-			set
-			{
-				GeneratedCall previousValue = this._GeneratedCall.Entity;
-				if (((previousValue != value) 
-							|| (this._GeneratedCall.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._GeneratedCall.Entity = null;
-						previousValue.MontyCalls.Remove(this);
-					}
-					this._GeneratedCall.Entity = value;
-					if ((value != null))
-					{
-						value.MontyCalls.Add(this);
-						this._CallEntryId = value.Id;
-					}
-					else
-					{
-						this._CallEntryId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("GeneratedCall");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TestOperator_MontyCall", Storage="_TestOperator", ThisKey="TestOperatorId", OtherKey="Id", IsForeignKey=true)]
-		public TestOperator TestOperator
-		{
-			get
-			{
-				return this._TestOperator.Entity;
-			}
-			set
-			{
-				TestOperator previousValue = this._TestOperator.Entity;
-				if (((previousValue != value) 
-							|| (this._TestOperator.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._TestOperator.Entity = null;
-						previousValue.MontyCalls.Remove(this);
-					}
-					this._TestOperator.Entity = value;
-					if ((value != null))
-					{
-						value.MontyCalls.Add(this);
-						this._TestOperatorId = value.Id;
-					}
-					else
-					{
-						this._TestOperatorId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("TestOperator");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ScheduleLogs")]
 	public partial class ScheduleLog : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -9359,11 +8785,11 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<MontyCall> _MontyCalls;
 		
-		private EntityRef<Operator> _Operator;
-		
 		private EntityRef<Schedule> _Schedule;
 		
 		private EntityRef<User> _User;
+		
+		private EntityRef<Operator> _Operator;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -9402,9 +8828,9 @@ namespace CallGeneratorLibrary
 		public TestOperator()
 		{
 			this._MontyCalls = new EntitySet<MontyCall>(new Action<MontyCall>(this.attach_MontyCalls), new Action<MontyCall>(this.detach_MontyCalls));
-			this._Operator = default(EntityRef<Operator>);
 			this._Schedule = default(EntityRef<Schedule>);
 			this._User = default(EntityRef<User>);
+			this._Operator = default(EntityRef<Operator>);
 			OnCreated();
 		}
 		
@@ -9713,40 +9139,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_Operator", ThisKey="OperatorId", OtherKey="Id", IsForeignKey=true)]
-		public Operator Operator
-		{
-			get
-			{
-				return this._Operator.Entity;
-			}
-			set
-			{
-				Operator previousValue = this._Operator.Entity;
-				if (((previousValue != value) 
-							|| (this._Operator.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Operator.Entity = null;
-						previousValue.TestOperators.Remove(this);
-					}
-					this._Operator.Entity = value;
-					if ((value != null))
-					{
-						value.TestOperators.Add(this);
-						this._OperatorId = value.Id;
-					}
-					else
-					{
-						this._OperatorId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Operator");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_TestOperator", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
 		public Schedule Schedule
 		{
@@ -9811,6 +9203,40 @@ namespace CallGeneratorLibrary
 						this._UserId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_Operator", ThisKey="OperatorId", OtherKey="Id", IsForeignKey=true)]
+		public Operator Operator
+		{
+			get
+			{
+				return this._Operator.Entity;
+			}
+			set
+			{
+				Operator previousValue = this._Operator.Entity;
+				if (((previousValue != value) 
+							|| (this._Operator.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Operator.Entity = null;
+						previousValue.TestOperators.Remove(this);
+					}
+					this._Operator.Entity = value;
+					if ((value != null))
+					{
+						value.TestOperators.Add(this);
+						this._OperatorId = value.Id;
+					}
+					else
+					{
+						this._OperatorId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Operator");
 				}
 			}
 		}
@@ -10985,6 +10411,628 @@ namespace CallGeneratorLibrary
 				{
 					this._Status = value;
 				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Operators")]
+	public partial class Operator : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private string _mcc;
+		
+		private string _mnc;
+		
+		private string _Country;
+		
+		private string _CountryPicture;
+		
+		private System.Nullable<bool> _ServiceAndroid;
+		
+		private System.Nullable<bool> _ServiceMonty;
+		
+		private EntitySet<ScheduleOperator> _ScheduleOperators;
+		
+		private EntitySet<TestOperator> _TestOperators;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnmccChanging(string value);
+    partial void OnmccChanged();
+    partial void OnmncChanging(string value);
+    partial void OnmncChanged();
+    partial void OnCountryChanging(string value);
+    partial void OnCountryChanged();
+    partial void OnCountryPictureChanging(string value);
+    partial void OnCountryPictureChanged();
+    partial void OnServiceAndroidChanging(System.Nullable<bool> value);
+    partial void OnServiceAndroidChanged();
+    partial void OnServiceMontyChanging(System.Nullable<bool> value);
+    partial void OnServiceMontyChanged();
+    #endregion
+		
+		public Operator()
+		{
+			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
+			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mcc", DbType="VarChar(10)")]
+		public string mcc
+		{
+			get
+			{
+				return this._mcc;
+			}
+			set
+			{
+				if ((this._mcc != value))
+				{
+					this.OnmccChanging(value);
+					this.SendPropertyChanging();
+					this._mcc = value;
+					this.SendPropertyChanged("mcc");
+					this.OnmccChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mnc", DbType="VarChar(10)")]
+		public string mnc
+		{
+			get
+			{
+				return this._mnc;
+			}
+			set
+			{
+				if ((this._mnc != value))
+				{
+					this.OnmncChanging(value);
+					this.SendPropertyChanging();
+					this._mnc = value;
+					this.SendPropertyChanged("mnc");
+					this.OnmncChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Country", DbType="NVarChar(50)")]
+		public string Country
+		{
+			get
+			{
+				return this._Country;
+			}
+			set
+			{
+				if ((this._Country != value))
+				{
+					this.OnCountryChanging(value);
+					this.SendPropertyChanging();
+					this._Country = value;
+					this.SendPropertyChanged("Country");
+					this.OnCountryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CountryPicture", DbType="VarChar(10)")]
+		public string CountryPicture
+		{
+			get
+			{
+				return this._CountryPicture;
+			}
+			set
+			{
+				if ((this._CountryPicture != value))
+				{
+					this.OnCountryPictureChanging(value);
+					this.SendPropertyChanging();
+					this._CountryPicture = value;
+					this.SendPropertyChanged("CountryPicture");
+					this.OnCountryPictureChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceAndroid", DbType="Bit")]
+		public System.Nullable<bool> ServiceAndroid
+		{
+			get
+			{
+				return this._ServiceAndroid;
+			}
+			set
+			{
+				if ((this._ServiceAndroid != value))
+				{
+					this.OnServiceAndroidChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceAndroid = value;
+					this.SendPropertyChanged("ServiceAndroid");
+					this.OnServiceAndroidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceMonty", DbType="Bit")]
+		public System.Nullable<bool> ServiceMonty
+		{
+			get
+			{
+				return this._ServiceMonty;
+			}
+			set
+			{
+				if ((this._ServiceMonty != value))
+				{
+					this.OnServiceMontyChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceMonty = value;
+					this.SendPropertyChanged("ServiceMonty");
+					this.OnServiceMontyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="OperatorId")]
+		public EntitySet<ScheduleOperator> ScheduleOperators
+		{
+			get
+			{
+				return this._ScheduleOperators;
+			}
+			set
+			{
+				this._ScheduleOperators.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="OperatorId")]
+		public EntitySet<TestOperator> TestOperators
+		{
+			get
+			{
+				return this._TestOperators;
+			}
+			set
+			{
+				this._TestOperators.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ScheduleOperators(ScheduleOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = this;
+		}
+		
+		private void detach_ScheduleOperators(ScheduleOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = null;
+		}
+		
+		private void attach_TestOperators(TestOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = this;
+		}
+		
+		private void detach_TestOperators(TestOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MontyCalls")]
+	public partial class MontyCall : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Nullable<int> _TestOperatorId;
+		
+		private string _MSISDN;
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private string _RequestId;
+		
+		private System.Nullable<System.DateTime> _CallDate;
+		
+		private string _ReturnMessage;
+		
+		private System.Nullable<int> _CallEntryId;
+		
+		private System.Nullable<int> _ServiceId;
+		
+		private EntityRef<GeneratedCall> _GeneratedCall;
+		
+		private EntityRef<TestOperator> _TestOperator;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnTestOperatorIdChanging(System.Nullable<int> value);
+    partial void OnTestOperatorIdChanged();
+    partial void OnMSISDNChanging(string value);
+    partial void OnMSISDNChanged();
+    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreationDateChanged();
+    partial void OnRequestIdChanging(string value);
+    partial void OnRequestIdChanged();
+    partial void OnCallDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCallDateChanged();
+    partial void OnReturnMessageChanging(string value);
+    partial void OnReturnMessageChanged();
+    partial void OnCallEntryIdChanging(System.Nullable<int> value);
+    partial void OnCallEntryIdChanged();
+    partial void OnServiceIdChanging(System.Nullable<int> value);
+    partial void OnServiceIdChanged();
+    #endregion
+		
+		public MontyCall()
+		{
+			this._GeneratedCall = default(EntityRef<GeneratedCall>);
+			this._TestOperator = default(EntityRef<TestOperator>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestOperatorId", DbType="Int")]
+		public System.Nullable<int> TestOperatorId
+		{
+			get
+			{
+				return this._TestOperatorId;
+			}
+			set
+			{
+				if ((this._TestOperatorId != value))
+				{
+					if (this._TestOperator.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTestOperatorIdChanging(value);
+					this.SendPropertyChanging();
+					this._TestOperatorId = value;
+					this.SendPropertyChanged("TestOperatorId");
+					this.OnTestOperatorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MSISDN", DbType="NVarChar(200)")]
+		public string MSISDN
+		{
+			get
+			{
+				return this._MSISDN;
+			}
+			set
+			{
+				if ((this._MSISDN != value))
+				{
+					this.OnMSISDNChanging(value);
+					this.SendPropertyChanging();
+					this._MSISDN = value;
+					this.SendPropertyChanged("MSISDN");
+					this.OnMSISDNChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this.OnCreationDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreationDate = value;
+					this.SendPropertyChanged("CreationDate");
+					this.OnCreationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestId", DbType="NVarChar(50)")]
+		public string RequestId
+		{
+			get
+			{
+				return this._RequestId;
+			}
+			set
+			{
+				if ((this._RequestId != value))
+				{
+					this.OnRequestIdChanging(value);
+					this.SendPropertyChanging();
+					this._RequestId = value;
+					this.SendPropertyChanged("RequestId");
+					this.OnRequestIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CallDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CallDate
+		{
+			get
+			{
+				return this._CallDate;
+			}
+			set
+			{
+				if ((this._CallDate != value))
+				{
+					this.OnCallDateChanging(value);
+					this.SendPropertyChanging();
+					this._CallDate = value;
+					this.SendPropertyChanged("CallDate");
+					this.OnCallDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnMessage", DbType="NVarChar(500)")]
+		public string ReturnMessage
+		{
+			get
+			{
+				return this._ReturnMessage;
+			}
+			set
+			{
+				if ((this._ReturnMessage != value))
+				{
+					this.OnReturnMessageChanging(value);
+					this.SendPropertyChanging();
+					this._ReturnMessage = value;
+					this.SendPropertyChanged("ReturnMessage");
+					this.OnReturnMessageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CallEntryId", DbType="Int")]
+		public System.Nullable<int> CallEntryId
+		{
+			get
+			{
+				return this._CallEntryId;
+			}
+			set
+			{
+				if ((this._CallEntryId != value))
+				{
+					if (this._GeneratedCall.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCallEntryIdChanging(value);
+					this.SendPropertyChanging();
+					this._CallEntryId = value;
+					this.SendPropertyChanged("CallEntryId");
+					this.OnCallEntryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceId", DbType="Int")]
+		public System.Nullable<int> ServiceId
+		{
+			get
+			{
+				return this._ServiceId;
+			}
+			set
+			{
+				if ((this._ServiceId != value))
+				{
+					this.OnServiceIdChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceId = value;
+					this.SendPropertyChanged("ServiceId");
+					this.OnServiceIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GeneratedCall_MontyCall", Storage="_GeneratedCall", ThisKey="CallEntryId", OtherKey="Id", IsForeignKey=true)]
+		public GeneratedCall GeneratedCall
+		{
+			get
+			{
+				return this._GeneratedCall.Entity;
+			}
+			set
+			{
+				GeneratedCall previousValue = this._GeneratedCall.Entity;
+				if (((previousValue != value) 
+							|| (this._GeneratedCall.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._GeneratedCall.Entity = null;
+						previousValue.MontyCalls.Remove(this);
+					}
+					this._GeneratedCall.Entity = value;
+					if ((value != null))
+					{
+						value.MontyCalls.Add(this);
+						this._CallEntryId = value.Id;
+					}
+					else
+					{
+						this._CallEntryId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("GeneratedCall");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TestOperator_MontyCall", Storage="_TestOperator", ThisKey="TestOperatorId", OtherKey="Id", IsForeignKey=true)]
+		public TestOperator TestOperator
+		{
+			get
+			{
+				return this._TestOperator.Entity;
+			}
+			set
+			{
+				TestOperator previousValue = this._TestOperator.Entity;
+				if (((previousValue != value) 
+							|| (this._TestOperator.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TestOperator.Entity = null;
+						previousValue.MontyCalls.Remove(this);
+					}
+					this._TestOperator.Entity = value;
+					if ((value != null))
+					{
+						value.MontyCalls.Add(this);
+						this._TestOperatorId = value.Id;
+					}
+					else
+					{
+						this._TestOperatorId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("TestOperator");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}

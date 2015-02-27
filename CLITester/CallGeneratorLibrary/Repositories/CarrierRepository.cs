@@ -48,7 +48,7 @@ namespace CallGeneratorLibrary.Repositories
             return log;
         }
 
-        public static bool ExistShortName(string ShortName)
+        public static bool ExistShortName(string ShortName, int id)
         {
             bool Exist = false;
             List<Carrier> LstCarriers = new List<Carrier>();
@@ -58,7 +58,14 @@ namespace CallGeneratorLibrary.Repositories
                 {
                     LstCarriers = context.Carriers.Where(l => l.ShortName == ShortName).ToList<Carrier>();
                     if (LstCarriers.Count > 0)
-                        Exist = true;
+                    {
+                        if (LstCarriers.Count == 1 && id == LstCarriers[0].Id)
+                        {
+                            Exist = false;
+                        }
+                        else
+                            Exist = true;
+                    }
                 }
             }
             catch (System.Exception ex)

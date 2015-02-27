@@ -30,29 +30,56 @@
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
     <div class="row-fluid">
-        <div class="span3">
+<%--        <div class="span3">
             <select id="ddClientId" class="span10" tabindex="1">
                 <option value="">Select Operator</option>
-                <option value="1">ITPC</option>
-                <option value="2">Zain</option>
-                <option value="3">Syria</option>
+                <asp:Repeater ID="rptCarriers" runat="server">
+                    <ItemTemplate>
+                        <option value='<%# Eval("Id") %>'><%# Eval("Name")  == null ? "" : Eval("Name") %></option>
+                    </ItemTemplate>
+                </asp:Repeater>
             </select>
+        </div>--%>
+
+        <div class="span3">
+            <div class="control-group">
+                <%--<label class="control-label">Operators List</label>--%>
+                <div class="controls controls-row">
+                    <select class="span10 select2" tabindex="1" id="selectOperator" name="selectOperator">
+                        <option value="aa">All</option>
+                        <asp:Repeater ID="rptOperators" runat="server">
+                            <ItemTemplate>
+                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Name") %> - <%# Eval("Country") %></option>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </select>
+                </div>
+            </div>
+
         </div>
 
         <div class="span3">
-            <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
+            <div class="input-append date date-picker span12" data-date="12-02-2012" data-date-format="dd-mm-yyyy" data-date-viewmode="years">
+			    <input id="txtStartDate" class="m-wrap span8 m-ctrl-medium date-picker" placeholder="From" readonly size="16" type="text" value="" />
+                <span class="add-on"><i class="icon-calendar"></i></span>
+			</div>
+<%--       <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
                 <input id="txtStartDate" type="text" value="" placeholder="From" readonly class="m-wrap span8">
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>
+            </div>--%>
         </div>
 
         <div class="span3">
-            <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
+            <div class="input-append date date-picker span12" data-date="12-02-2012" data-date-format="dd-mm-yyyy" data-date-viewmode="years">
+			    <input id="txtEndDate" class="m-wrap span8 m-ctrl-medium date-picker" placeholder="To" readonly size="16" type="text" value="" />
+                <span class="add-on"><i class="icon-calendar"></i></span>
+			</div>
+<%--            <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
                 <input id="txtEndDate" type="text" value="" placeholder="To" readonly class="m-wrap span8">
                 <span class="add-on"><i class="icon-remove"></i></span>
                 <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>
+            </div>--%>
         </div>
 
         <div class="span2">
@@ -160,7 +187,8 @@
                 'bServerSide': true,
                 "bSort": false,
                 'aoColumns': [null, null, null, null, null, null, null],
-                'sAjaxSource': 'SearchTestOpHandler.ashx?operatorId=' + $('#ddClientId option:selected').val() + '&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val(),
+                'bStateSave': false,
+                'sAjaxSource': 'SearchTestOpHandler.ashx?operatorId=0&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val(),
             });
 
             jQuery('#sample_2_wrapper .dataTables_filter input').addClass("m-wrap small"); // modify table search input
@@ -175,13 +203,27 @@
             });
 
             $("#btnSearch").click(function () {
-                console.log($('#txtStartDate').val());
-                var ajaxHandler = 'SearchTestOpHandler.ashx?operatorId=' + $('#ddClientId option:selected').val() + '&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val();
+                var dl1 = $('select[name=selectOperator]').val();
+                var res = dl1.split("~");
+                var ajaxHandler = 'SearchTestOpHandler.ashx?operatorId=' + res[1] + '&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val();
                 oTable.fnPageChange(0);
-                oTable.fnReloadAjax(ajaxHandler);
+                setTimeout(function () {
+                    oTable.fnReloadAjax(ajaxHandler);
+                }, 500);
             });
 
         }
+
+        var handleDatePickers = function () {
+
+            if (jQuery().datepicker) {
+                $('.date-picker').datepicker({
+                    rtl: App.isRTL(),
+                    format: "dd MM yyyy",
+                });
+            }
+        }
+
 
         var handleDatetimePicker = function () {
             $(".form_advance_datetime").datetimepicker({
@@ -194,6 +236,23 @@
                 minuteStep: 10
             });
         }
+
+        var handleSelect2Modal = function () {
+
+            function format(state) {
+                if (!state.id) return state.text; // optgroup
+                return "<img class='flag' src='assets/img/flags/" + state.id.toLowerCase().split('~')[0] + ".png'/>&nbsp;&nbsp;" + state.text;
+            }
+
+            $("#selectOperator").select2({
+                allowClear: true,
+                formatResult: format,
+                formatSelection: format,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+        }
     </script>
     <!-- END TABLE  SCRIPTS -->
 
@@ -202,6 +261,8 @@
             App.init();
             handleValidation1();
             handleDatetimePicker();
+            handleSelect2Modal();
+            handleDatePickers();
 
             if (!jQuery().dataTable) {
                 return;

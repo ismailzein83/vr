@@ -37,6 +37,10 @@ namespace AndroidApplicationService
             {
                 locked = true;
 
+                //Expiry minutes
+                int exptime = 0;
+                int.TryParse(ConfigurationManager.AppSettings["ExpiryTime"], out exptime);
+
                 try
                 {
                     List<TestOperator> testoperators = TestOperatorRepository.GetRequestedTestOperators();
@@ -49,15 +53,11 @@ namespace AndroidApplicationService
                             GeneratedCall GenEnd = GeneratedCallRepository.Load(m.CallEntryId.Value);
                             if (GenEnd != null)
                             {
-                                //Expiry minutes
-                                int exptime = 0;
-                                int.TryParse(ConfigurationManager.AppSettings["ExpiryTime"], out exptime);
-
                                 if (GenEnd.StartDate.HasValue)
                                 {
                                     if (exptime != 0 && (DateTime.Now.Second - GenEnd.StartDate.Value.Second) > exptime)
                                     {
-                                        Err = "Expired - more then " + exptime.ToString() + " seconds";
+                                        Err = "Expired - No Line Availables";
                                         GenEnd.EndDate = DateTime.Now;
                                         
                                         testoperators[i].ErrorMessage = Err;
@@ -69,17 +69,17 @@ namespace AndroidApplicationService
                                 //Check the call entries
                                 if (GenEnd.EndDate != null)
                                 {
-                                    // Check if the Call is failed // don't check the result from Android Service
+                                    // Check if the Call is failed // don't check the result from Android Service //480 removed
                                     if ((GenEnd.ResponseCode == "408") || 
-                                       // (GenEnd.ResponseCode == "480") || 
+                                        (GenEnd.ResponseCode == "486") || 
                                         (GenEnd.ResponseCode == "503") || 
                                         (GenEnd.ResponseCode == "487"))
                                     {
                                         testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
                                         if (GenEnd.ResponseCode == "408")
                                             testoperators[i].ErrorMessage = "408 - Request Timeout";
-                                        //if (GenEnd.ResponseCode == "480")
-                                        //    testoperators[i].ErrorMessage = "480 - Temporarily Unavailable";
+                                        if (GenEnd.ResponseCode == "486")
+                                            testoperators[i].ErrorMessage = "486 - Busy Here";
                                         if (GenEnd.ResponseCode == "503")
                                             testoperators[i].ErrorMessage = "503 - Service Unavailable";
                                         if (GenEnd.ResponseCode == "487")
@@ -104,10 +104,59 @@ namespace AndroidApplicationService
                                             testoperators[i].EndDate = DateTime.Now;
                                             testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
                                             testoperators[i].ReceivedCli = resp2.CLI;
-                                            if (testoperators[i].TestCli == testoperators[i].ReceivedCli)
-                                                testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
+
+                                            //Check without zeroes
+                                            string TestCli1 = testoperators[i].TestCli.Substring(0, 2);
+                                            string RecCli1 = "";
+
+                                            if (testoperators[i].ReceivedCli.Length > 2)
+                                            {
+                                                RecCli1 = testoperators[i].ReceivedCli.Substring(0, 2);    
+                                            }
+                                            
+                                            if ((TestCli1 == "00" && RecCli1 == "00") || (TestCli1 != "00" && RecCli1 != "00"))
+                                            {
+                                                if (testoperators[i].TestCli == testoperators[i].ReceivedCli)
+                                                    testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
+                                                else
+                                                    testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid;
+                                            }
                                             else
-                                                testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid;
+                                            {
+                                                if (TestCli1 == "00")
+                                                {
+                                                    string testCli2 = testoperators[i].TestCli.Substring(2);
+                                                    if (testCli2 == testoperators[i].ReceivedCli)
+                                                        testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
+                                                    else
+                                                        testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid;
+                                                }
+                                                else
+                                                {
+                                                    if (RecCli1 == "00")
+                                                    {
+                                                        string RecCli2 = "";
+                                                        if (testoperators[i].ReceivedCli.Length > 2)
+                                                        {
+                                                            RecCli2 = testoperators[i].ReceivedCli.Substring(2);
+                                                        }
+                                                        
+                                                        if (testoperators[i].TestCli == RecCli2)
+                                                            testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
+                                                        else
+                                                            testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (testoperators[i].TestCli == testoperators[i].ReceivedCli)
+                                                            testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
+                                                        else
+                                                            testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid;
+                                                    }
+                                                }
+                                            }
+
+
                                             TestOperatorRepository.Save(testoperators[i]);
                                             //h = true;
                                         }
@@ -122,6 +171,19 @@ namespace AndroidApplicationService
                                         }
                                     }
                                 }
+                            }
+                        }
+
+                        if (testoperators[i].CreationDate.HasValue)
+                        {
+                            if (exptime != 0 && (DateTime.Now.Second - testoperators[i].CreationDate.Value.Second) > exptime)
+                            {
+                                Err = "Expired Call";
+                                testoperators[i].EndDate = DateTime.Now;
+
+                                testoperators[i].ErrorMessage = Err;
+                                testoperators[i].EndDate = DateTime.Now;
+                                TestOperatorRepository.Save(testoperators[i]);
                             }
                         }
                     }

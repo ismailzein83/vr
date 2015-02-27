@@ -16,6 +16,8 @@ namespace CallGeneratorTestApp
 {
     public partial class Form2 : Form
     {
+        private static readonly object _syncRoot = new object();
+
         public ChannelAllocation c = new ChannelAllocation();
         
         public GetCalls thGetCalls = new GetCalls();
@@ -26,7 +28,7 @@ namespace CallGeneratorTestApp
 
         public static void displayList(Form2 f, string s) {
             f.AppendTextBox2( s + " :");
-            int count = 5;
+            int count = 3;
             f.AppendTextBox2("Id  GCallId      SIPID     SIPCONFIG     IDLE          STARTDATE                      startLastCall                       CONID     ");
             //Id: {0}, GCallId:{1}, SIPID:{2}, SIPCONFIG:{3} , IDLE:{4} , STARTDATE:{5} , ENDDATE:{6} , CONID:{7}
             foreach (ChannelAllocation c in LstChanels)
@@ -119,9 +121,11 @@ namespace CallGeneratorTestApp
         {
             try
             {
-                List<SipAccount> LstSipAccounts = SipAccountRepository.GetSipAccounts();
+                //List<SipAccount> LstSipAccounts = SipAccountRepository.GetSipAccounts();
+                SipAccount sp = SipAccountRepository.Load(1);
+
                 int i = 0;
-                foreach (SipAccount sp in LstSipAccounts)
+                //foreach (SipAccount sp in LstSipAccounts)
                 {
                     SIP s = new SIP();
 
@@ -156,17 +160,24 @@ namespace CallGeneratorTestApp
                     config.CallInviteTimeout = 60;
                     config.UserAgent = "ABTO Video SIP SDK";
                     config.CallerId = sp.User.CallerId;
-                    config.RegDomain = sp.Server;
-                    config.RegUser = sp.Login;
-                    config.RegPass = sp.Password;
-                    config.RegAuthId = sp.Username;
+                    config.RegDomain = "91.236.236.53";
+                    config.RegUser = sp.User.CallerId;
+                    config.RegPass = sp.User.CallerId;
+                    config.RegAuthId = sp.User.CallerId;
+
+                    //config.RegDomain = sp.Server;
+                    //config.RegUser = sp.Login;
+                    //config.RegPass = sp.Password;
+                    //config.RegAuthId = sp.Username;
                     config.RegExpire = 300;
 
                     //config.ExSipAccount_Add(sp.Server, sp.Login, sp.Password, sp.Username, sp.DisplayName, 300, 1, 0);
                     //System.Threading.Thread.Sleep(1000);
                     
-                    s.SipId = sp.Id;
-                    s.ConfigId = i;
+                    //s.SipId = sp.Id;
+                    //s.ConfigId = i;
+                    s.SipId = 1;
+                    s.ConfigId = 1;
 
                     //config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 1);
                     //config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
@@ -181,7 +192,7 @@ namespace CallGeneratorTestApp
                     s.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
                     s.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
                     s.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
-                    s.phone.OnRemoteAlerting += new _IAbtoPhoneEvents_OnRemoteAlertingEventHandler(phone_OnRemoteAlerting);
+                    s.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
                     s.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
                     s.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
 
@@ -212,6 +223,14 @@ namespace CallGeneratorTestApp
                     Chanel.Idle = true;
                     Chanel.DestinationNumber = "";
                     Chanel.StartLastCall = DateTime.MinValue;
+
+                    //Addedddd
+                    Chanel.sip = new SIP();
+                    Chanel.sip.ConfigId = 1;
+                    Chanel.sip.SipId = 1;
+                    Chanel.sip.phone = LstSip[0].phone;
+                    ////////////////////////////////////////////
+
                     LstChanels.Add(Chanel);
                 }
                 thGetCalls.Start(this);
@@ -255,16 +274,75 @@ namespace CallGeneratorTestApp
         {
         }
 
-        void phone_OnRemoteAlerting(int ConnectionId, int responseCode, string reasonMsg)
+        void phone_OnRemoteAlerting2(int ConnectionId, int LineId, int responseCode, string reasonMsg)
         {
-            try
+
+            //lock (_syncRoot)
             {
-                textBox1.Text += " \r\n" + ("phone_OnRemoteAlerting: ConnectionId" + ConnectionId.ToString() + " responseCode: " + responseCode.ToString() + " reasonMsg: " + reasonMsg.ToString());
+                try
+                {
+                    textBox1.Text += " \r\n" + ("phone_OnRemoteAlerting: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString() + " responseCode: " + responseCode.ToString() + " reasonMsg: " + reasonMsg.ToString());
+
+                    //180 = Ringing
+                    if (responseCode == 180)
+                    {
+                        ChannelAllocation c2 = ChannelAllocation.GetCallServiceConnection(ConnectionId);
+
+                        textBox1.Text += " \r\n" + ("phone_OnRemoteAlerting: c2.GeneratedCallid" + c2.GeneratedCallid.ToString() );
+
+                        //ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                        GeneratedCall GenCall = GeneratedCallRepository.Load(c2.GeneratedCallid);
+
+                        if (GenCall != null)
+                        {
+                            //WriteToEventLog(" \r\n" + "GenCall : " + GenCall.Id);
+                            GenCall.Status = "3";
+                            GenCall.EndDate = DateTime.Now;
+                            GenCall.ResponseCode = responseCode.ToString();
+                            GeneratedCallRepository.Save(GenCall);
+                        }
+                        //else
+                        //WriteToEventLog(" \r\n" + "GenCall NULL: " + GenCall);
+
+                        System.Threading.Thread.Sleep(5000);
+                        //Form2.LstChanels[LineId].sip.phone.HangUp(ConnectionId);
+                        Form2.LstChanels[c2.Id].sip.phone.HangUp(ConnectionId);
+
+                        LstChanels[c2.Id].Idle = true;
+                        LstChanels[c2.Id].StartDate = DateTime.MinValue;
+                        LstChanels[c2.Id].StartLastCall = DateTime.MinValue;
+                        LstChanels[c2.Id].GeneratedCallid = 0;
+                        LstChanels[c2.Id].ConnectionId = 0;
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    ChannelAllocation c2 = ChannelAllocation.GetCallServiceConnection(ConnectionId);
+
+                    textBox1.Text += " \r\n" + ("phone_OnRemoteAlerting CATCH: c2.GeneratedCallid" + c2.GeneratedCallid.ToString());
+
+                    //ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                    GeneratedCall GenCall = GeneratedCallRepository.Load(c2.GeneratedCallid);
+
+                    if (GenCall != null)
+                    {
+                        //WriteToEventLog(" \r\n" + "GenCall : " + GenCall.Id);
+                        GenCall.Status = "3";
+                        GenCall.EndDate = DateTime.Now;
+                        GenCall.ResponseCode = responseCode.ToString();
+                        GeneratedCallRepository.Save(GenCall);
+                    }
+
+                    LstChanels[c2.Id].Idle = true;
+                    LstChanels[c2.Id].StartDate = DateTime.MinValue;
+                    LstChanels[c2.Id].StartLastCall = DateTime.MinValue;
+                    LstChanels[c2.Id].GeneratedCallid = 0;
+                    LstChanels[c2.Id].ConnectionId = 0;
+
+                    textBox1.Text += " \r\n" + (ex.ToString());
+                }
             }
-            catch (System.Exception ex)
-            {
-                textBox1.Text += " \r\n" + (ex.ToString());
-            }
+            
         }
 
         void phone_OnPhoneNotify(string Msg)
@@ -326,36 +404,43 @@ namespace CallGeneratorTestApp
 
         void phone_OnClearedCall(string Msg, int Status, int LineId)
         {
-            try
+            lock (_syncRoot)
             {
-                ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
-                if (c == null)
-                    textBox1.Text += " \r\n" + "c is null : ";
-                else
-                    textBox1.Text += " \r\n" + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id;
-                GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
-
-                if (GenCall != null)
+                try
                 {
-                    textBox1.Text += " \r\n" + "GenCall : " + GenCall.Id;
-                    GenCall.Status = "3";
-                    GenCall.EndDate = DateTime.Now;
-                    GenCall.ResponseCode = Status.ToString();
-                    GeneratedCallRepository.Save(GenCall);
-                }
-                else
-                    textBox1.Text += " \r\n" + "GenCall NULL: " + GenCall;
+                    textBox1.Text += " \r\n" + ("phone_OnClearedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString() + " Status: " + Status.ToString());
 
-                LstChanels[c.Id].Idle = true;
-                LstChanels[c.Id].StartDate = DateTime.MinValue;
-                LstChanels[c.Id].StartLastCall = DateTime.MinValue;
-                LstChanels[c.Id].GeneratedCallid = 0;
-                displayList(this, "Ophone_OnClearedCall on Line " + LineId);
-                textBox1.Text += " \r\n" + ("phone_OnClearedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString() + " Status: " + Status.ToString());
-            }
-            catch (System.Exception ex)
-            {
-                textBox1.Text += " \r\n" + (ex.ToString());
+                    ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                    if (c == null)
+                        textBox1.Text += " \r\n" + "c is null : ";
+                    else
+                        textBox1.Text += " \r\n" + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id;
+                    GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
+
+                    if (GenCall != null && c.GeneratedCallid != 0)
+                    {
+                        LstChanels[c.Id].Idle = true;
+                        LstChanels[c.Id].StartDate = DateTime.MinValue;
+                        LstChanels[c.Id].StartLastCall = DateTime.MinValue;
+                        LstChanels[c.Id].GeneratedCallid = 0;
+                        LstChanels[c.Id].ConnectionId = 0;
+
+
+                        textBox1.Text += " \r\n" + "GenCall : " + GenCall.Id;
+                        GenCall.Status = "3";
+                        GenCall.EndDate = DateTime.Now;
+                        GenCall.ResponseCode = Status.ToString();
+                        GeneratedCallRepository.Save(GenCall);
+                    }
+                    else
+                        textBox1.Text += " \r\n" + "GenCall NULL: ";
+
+                    displayList(this, "Ophone_OnClearedCall on Line " + LineId);
+                }
+                catch (System.Exception ex)
+                {
+                    textBox1.Text += " \r\n" + (ex.ToString());
+                }
             }
         }
 
@@ -373,13 +458,16 @@ namespace CallGeneratorTestApp
 
         void phone_OnLineSwiched(int LineId)
         {
-            try
+            lock (_syncRoot)
             {
-                textBox1.Text += " \r\n" + ("phone_OnLineSwiched: LineId" + LineId.ToString());
-            }
-            catch (System.Exception ex)
-            {
-                textBox1.Text += " \r\n" + (ex.ToString());
+                try
+                {
+                    textBox1.Text += " \r\n" + ("phone_OnLineSwiched: LineId" + LineId.ToString());
+                }
+                catch (System.Exception ex)
+                {
+                    textBox1.Text += " \r\n" + (ex.ToString());
+                }
             }
         }
 
@@ -394,6 +482,7 @@ namespace CallGeneratorTestApp
                 textBox1.Text += " \r\n" + (ex.ToString());
             }
         }
+
 
         #endregion
 

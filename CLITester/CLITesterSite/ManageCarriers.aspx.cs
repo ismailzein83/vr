@@ -180,7 +180,10 @@ public partial class ManageCarriers : BasePage
         ShortName = ShortName.Replace("$", "");
         ShortName = ShortName.Replace("~", "");
 
-        if (CarrierRepository.ExistShortName(ShortName))
+        int id2 = 0;
+        if (Int32.TryParse(HdnId.Value, out id2))
+
+        if (CarrierRepository.ExistShortName(ShortName, id2))
         {
             lblError.Text = "Short Name Exist";
             return;

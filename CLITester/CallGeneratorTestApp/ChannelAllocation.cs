@@ -204,7 +204,7 @@ namespace CallGeneratorTestApp
                             Form2.LstChanels[i].sip.phone.SetCurrentLine(Form2.LstChanels[i].id + 1);
                            
                             int ConnectionId = Form2.LstChanels[i].sip.phone.StartCall2(Form2.LstChanels[i].destinationNumber);
-
+                            Form2.LstChanels[i].ConnectionId = ConnectionId;
                             String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                             Form2.displayList(f, "threadId: " + threadId + " StartCall " + ConnectionId + " Line :" + Form2.LstChanels[i].id + 1 + " SIPCONFIG: " + Form2.LstChanels[i].sip.ConfigId + " ii " + ii);
                         }
@@ -221,7 +221,7 @@ namespace CallGeneratorTestApp
                             span = DateTime.Now - dt;
                         double totalSeconds = span.TotalSeconds;
 
-                        if (chanel.Idle == false && totalSeconds > 120)
+                        if (chanel.Idle == false && totalSeconds > 60)
                         {
                             //Reset the phone with this Id;
                             if (Form2.LstChanels[i].destinationNumber == "")
@@ -234,7 +234,7 @@ namespace CallGeneratorTestApp
                                 GeneratedCall CallGenEnd = GeneratedCallRepository.Load(Form2.LstChanels[i].generatedCallid);
                                 if (CallGenEnd != null)
                                 {
-                                    CallGenEnd.Status = "0";
+                                    //CallGenEnd.Status = "0";
                                     CallGenEnd.EndDate = DateTime.Now;
                                     bool tr = GeneratedCallRepository.Save(CallGenEnd);
                                 }
@@ -246,11 +246,14 @@ namespace CallGeneratorTestApp
                             }
 
                             //Reset the phone with this Id and the Object
+                            Form2.displayList(f, "Clear TimeOut: " + Form2.LstChanels[i].ConnectionId);
                             Form2.LstChanels[i].Idle = true;
                             Form2.LstChanels[i].DestinationNumber = "";
                             Form2.LstChanels[i].sip = null;
                             Form2.LstChanels[i].startLastCall = DateTime.MinValue;
                             Form2.LstChanels[i].generatedCallid = 0;
+                            Form2.LstChanels[i].GeneratedCallid = 0;
+                            Form2.LstChanels[i].ConnectionId = 0;
                             Form2.displayList(f, "Clear TimeOut");
                         }
                     }
@@ -291,6 +294,27 @@ namespace CallGeneratorTestApp
             {
                 ChannelAllocation service = Form2.LstChanels[lineId - 1];
                 return service;
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+                return null;
+            }
+        }
+
+        public static ChannelAllocation GetCallServiceConnection(int ConnectionId)
+        {
+            try
+            {
+                for (int i = 0; i < 64; i++)
+                {
+                    if (Form2.LstChanels[i].ConnectionId == ConnectionId)
+                    {
+                        ChannelAllocation service = Form2.LstChanels[i];
+                        return service;
+                    }
+                }
+                return null;
             }
             catch (System.Exception ex)
             {

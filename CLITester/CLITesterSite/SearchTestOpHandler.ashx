@@ -18,10 +18,11 @@ public class SearchTestOpHandler : IHttpHandler, System.Web.SessionState.IRequir
             return;
         }
 
-        String dateFormat = "dd MMMM yyyy - HH:mm";
+        //String dateFormat = "dd MMMM yyyy - HH:mm";
+        String dateFormat = "dd MMMM yyyy";
         int iDisplayLength = int.Parse(context.Request["iDisplayLength"]);
         int iDisplayStart = int.Parse(context.Request["iDisplayStart"]);
-        string sdff = context.Request["startDate"];
+        
         DateTime? startDate = null;
         DateTime? endDate = null;
         int? operatorId = null;
@@ -59,7 +60,13 @@ public class SearchTestOpHandler : IHttpHandler, System.Web.SessionState.IRequir
             iTotalRecords = RowCount,
             iTotalDisplayRecords = RowCount,
             aaData = data
-            .Select(p => new[] { p.Name, p.CreationDate.ToString(), p.EndDate == null ? "" : p.EndDate.ToString(), p.DisplayName == null ? "" : p.DisplayName, p.TestCli == null ? "" : p.TestCli, p.ReceivedCli == null ? "" : p.ReceivedCli, p.Status == null ? "" : p.Status.ToString() })
+            .Select(p => new[] { p.Name , p.CreationDate.ToString(), p.EndDate == null ? "" : p.EndDate.ToString(), p.DisplayName == null ? "" : p.DisplayName, p.TestCli == null ? "" : p.TestCli, p.ReceivedCli == null ? "" : p.ReceivedCli,
+                p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid ? "<span class='label label-success'>CLI DELIVERED</span>" :
+                p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid ? "<span class='label label-important'>CLI NOT DELIVERED</span>" :
+                p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired ? "<span class='label label-inverse'>EXPIRED</span>" :
+                p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Waiting ? "<span class='label label-warning'>WAITING</span>" :
+                p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.ErrorMessage ? "<span class='label label-ERROR'>ERROR</span>" :
+                 "<span class='label label-default'>NO STATUS</span>" })
         };
 
         var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();

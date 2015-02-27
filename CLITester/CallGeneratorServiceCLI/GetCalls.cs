@@ -38,8 +38,43 @@ namespace CallGeneratorServiceCLI
                     {
                         if (user.IsChangedCallerId == true)
                         {
-                            CallGeneratorServiceCLI.NewCallGenCLI c = new CallGeneratorServiceCLI.NewCallGenCLI();
-                            c.AddnewSIP(user);
+                            WriteToEventLogEx("IsChangedCallerId: ");
+                            bool finish = false;
+                            bool ExistCall = false;
+                            //Search for idle client
+                            while (finish == false)
+                            {
+                                for (int i = 0; i < 64; i++)
+                                {
+                                    ChannelAllocation c = NewCallGenCLI.LstChanels[i];
+                                    if (c.idle == false)
+                                    {
+                                        ExistCall = true;
+                                        break;
+                                    }
+                                }
+
+                                if (ExistCall == false)
+                                {
+                                    // apply configuration, no call exists
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = user.CallerId;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegDomain = "91.236.236.53";
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegUser = user.CallerId;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegPass = user.CallerId;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegAuthId = user.CallerId;
+
+                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.ApplyConfig();
+                                    System.Threading.Thread.Sleep(1000);
+                                    finish = true;
+                                    WriteToEventLogEx("finish: ");
+                                }
+                            }
+
+
+                            //CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = user.CallerId;
+                            //CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.ApplyConfig();
+                            //CallGeneratorServiceCLI.NewCallGenCLI c = new CallGeneratorServiceCLI.NewCallGenCLI();
+                            //c.AddnewSIP(user);
                             user.IsChangedCallerId = false;
                             UserRepository.Save(user);
                         }
@@ -47,10 +82,10 @@ namespace CallGeneratorServiceCLI
                     string SipAccId = ConfigurationManager.AppSettings["SipAccId"];
                     int SipAccountId = 0;
                     int.TryParse(SipAccId, out SipAccountId);
-
                     GeneratedCall GenCall = GeneratedCallRepository.GetTopGeneratedCall(SipAccountId);
                     if (GenCall != null)
                     {
+                        WriteToEventLogEx("GenIDD: " + GenCall.Id);
                         bool ClientFound = false;
                         int ClientId = -1;
                         //Search for idle client
@@ -81,6 +116,7 @@ namespace CallGeneratorServiceCLI
                             //    }
                             //}
 
+                            NewCallGenCLI.LstChanels[ClientId].GeneratedCallid = GenCall.Id;
                             NewCallGenCLI.LstChanels[ClientId].generatedCallid = GenCall.Id;
                             NewCallGenCLI.LstChanels[ClientId].destinationNumber = GenCall.Number;
                             NewCallGenCLI.LstChanels[ClientId].idle = false;
@@ -107,6 +143,7 @@ namespace CallGeneratorServiceCLI
             }
             catch (System.Exception ex)
             {
+                WriteToEventLogEx("GetCall: " + ex.ToString());
                 Logger.LogException(ex);
             }
         }

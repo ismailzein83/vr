@@ -85,7 +85,7 @@
                     <table id="myTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="span2">Name</th>
+                                <th class="span3">Name</th>
                                 <th class="span1">Prefix</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
@@ -93,7 +93,7 @@
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
                                  <th class="span1"></th>
-                                <th class="span4">Message</th>
+                                <th class="span3">Message</th>
                                
                             </tr>
                         </thead>
@@ -150,8 +150,8 @@
                 if (msg.Status == "CLI DELIVERED")
                     statusClass = "label-success"
                 else
-                    if (msg.Status == "EXPIRED")
-                        statusClass = "label-inverse"
+                    if (msg.Status == "FAILED") statusClass = "label-warning"
+                        //statusClass = "label-inverse"
                     else
                         if (msg.Status == "WAITING")
                             statusClass = "label-warning"
@@ -163,7 +163,6 @@
                                     statusClass = "label-default"
 
             var progressImg = "<img src=\"assets/img/input-spinner.gif\" />";
-            //msg.progressNbr
 
             if (msg.progressNbr == Progress0.Id && Progress0.flag) {
                 var progressImg = "<img src=\"assets/img/phone-blue.png\" />";
@@ -173,7 +172,7 @@
             if (msg.progressNbr == Progress1.Id && Progress1.flag) {
                 if (msg.Status == "CLI DELIVERED")
                     var progressImg = "<img src=\"assets/img/phone-green.png\" />";
-                if (msg.Status == "CLI NOT DELIVERED")
+                else if (msg.Status == "CLI NOT DELIVERED")
                     var progressImg = "<img src=\"assets/img/phone-red.png\" />";
                 else
                     var progressImg = "<img src=\"assets/img/phone-nostatus.png\" />";
