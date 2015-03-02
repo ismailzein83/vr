@@ -71,12 +71,12 @@ namespace TOne.Business
                 // Check for ToD first
                 if (tod != null)
                 {
-                    pricing.RateType = tod.RateType;
+                    //pricing.RateType =  tod.RateType;
                     pricing.RateValue = (double)tod.ActiveRateValue(rates[0]);
                     pricing.ToDConsiderationID = tod.ToDConsiderationID;
                 }
-                else
-                    pricing.RateType = ToDRateType.Normal;
+                //else
+                   //pricing.RateType = ToDRateType.Normal;
 
                 var attemptDate = new DateTime(main.Attempt.Year, main.Attempt.Month, main.Attempt.Day);
 
