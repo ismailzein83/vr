@@ -1,4 +1,5 @@
-﻿function decodeDate(date) {
+﻿var baseurl = 'http://localhost:6666';
+function decodeDate(date) {
     if (typeof (date) == "string") {
         var date = date.substring(6, date.length - 2);
         var d = new Date(parseInt(date));
@@ -134,7 +135,15 @@ function dateToStringWithHMS2(date) {
     }
     return dateString;
 }
+function timeTostring(date) {
+    var timeString = "";
+    if (date) {      
 
+        timeString += date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }   
+
+    return timeString;
+}
 
 //var dateString = date.Format("d/m/y"); retourne par exemple : 24/11/10
 function dateToString(date) {

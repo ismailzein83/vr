@@ -23,8 +23,9 @@ namespace Vanrise.BusinessProcess.Web
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                       "~/Scripts/angular.js",
                       "~/Scripts/angular-route.js",
-                      "~/Scripts/ng-quick-date.js",
-                      "~/Scripts/ng-grid.debug.js",
+                      "~/Scripts/angular-strap.js",
+                      "~/Scripts/angular-strap.tpl.js",  
+                      "~/Scripts/ui-grid.js",                      
                       "~/Client/Javascript/share.js",
                       "~/Client/Javascript/app.js"
                       ).IncludeDirectory(
@@ -34,8 +35,7 @@ namespace Vanrise.BusinessProcess.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                       "~/Content/ng-quick-date.css",
-                        "~/Content/ng-grid.css",
+                       "~/Content/ui-grid.css",
                       "~/Content/site.css"));
         }
     }

@@ -1,4 +1,4 @@
-.ngGrid {
+﻿.ngGrid {
   background-color: #fdfdfd;
 }
 .ngGrid input[type="checkbox"] {
@@ -447,6 +447,6 @@
 }
 .gridStyle {
     border: 1px solid rgb(212,212,212);
-    width: 95%; 
+    width:99%; 
     height:  450px;
 }

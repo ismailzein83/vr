@@ -1,0 +1,37 @@
+﻿USE [TOneWFTracking]
+GO
+
+/****** Object:  StoredProcedure [bp].[sp_BPTrackings_GetByInstanceId]    Script Date: 02/25/2015 17:02:23 ******/
+/****** Object:  to be excuted after last get latest version ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [bp].[sp_BPTrackings_GetByInstanceId]	
+	@ProcessInstanceID bigint
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    SELECT  [ID]
+      ,[ProcessInstanceID]
+      ,[ParentProcessID]
+      ,[TrackingMessage]
+      ,[Severity]
+      ,[EventTime]
+	FROM [TOneWFTracking].[bp].[BPTracking] as bpt WITH(NOLOCK)
+	WHERE
+		bpt.ProcessInstanceID = @ProcessInstanceID
+END
+GO
+
+

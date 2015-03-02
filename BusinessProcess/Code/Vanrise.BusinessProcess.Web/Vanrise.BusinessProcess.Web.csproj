@@ -15,7 +15,7 @@
     <AssemblyName>Vanrise.BusinessProcess.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -137,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
@@ -164,22 +163,32 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelMappers\BPMappers.cs" />
+    <Compile Include="Models\BPInstanceModel.cs" />
+    <Compile Include="Models\BPTrackingMessageModel.cs" />
+    <Compile Include="Models\EnumModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Client\Javascript\Controllers\layout-controller.js" />
+    <Content Include="Client\Javascript\Controllers\list-tracking-controller.js" />
     <Content Include="Client\Javascript\Controllers\main-controller.js" />
     <Content Include="Client\Javascript\share.js" />
+    <Content Include="Client\Views\listtracking.html" />
     <Content Include="Client\Views\main.html" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\loaderNEW.gif" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-quick-date.css" />
+    <Content Include="Content\ui-grid.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-strap.js" />
+    <Content Include="Scripts\angular-strap.tpl.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Client\Javascript\app.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -196,14 +205,20 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Scripts\angular-route.min.js.map" />
+    <Content Include="Content\ui-grid.eot" />
+    <Content Include="Content\ui-grid.ttf" />
+    <Content Include="Content\ui-grid.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\ng-grid.debug.js" />
     <Content Include="Scripts\ng-quick-date.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Content\ui-grid.css" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.12.1.js" />
+    <Content Include="Scripts\ui-grid.js" />
+    <Content Include="SQL_SP_Scripts\sp_BPTrackings_GetByInstanceId.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -264,7 +279,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>18685</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/BusinessProcess</IISUrl>
+          <IISUrl>http://localhost:18685/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

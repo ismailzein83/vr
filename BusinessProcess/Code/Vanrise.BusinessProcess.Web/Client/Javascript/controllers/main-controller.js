@@ -1,48 +1,60 @@
-﻿
-function MainPageCtrl($scope, $location, $rootScope , $http) {
-  $http.get("/BusinessProcess/api/BusinessProcess/GetDefinitions")
-   .success(function (response) {
-       $scope.defnitions = response;
-   });
+﻿function MainPageCtrl($scope, $location, $rootScope, $http) {
+    $http.get(baseurl + "/api/BusinessProcess/GetDefinitions")
+     .success(function (response) {
+        $scope.defnitions = response;
+    });
+    $http.get(baseurl + "/api/BusinessProcess/GetStatusList")
+      .success(function (response) {
+        $scope.bpInstanceStatusList = response;
+    });
     $scope.myData = [];
     $scope.gridOptions = {
         data: 'myData',
-        rowTemplate: '<div ng-click="onDblClickRow(row)" ng-style="{ \'cursor\': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}"><div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }">&nbsp;</div><div ng-cell></div></div>',
+        enableHorizontalScrollbar: 0,
+        enableVerticalScrollbar: 1,
         columnDefs: [
-            { field: 'Title', displayName: 'Title' },
-            { field: 'Status', displayName: 'Status' },
-            { field: 'LastMessage', displayName: 'Error / Warning' },
-            { field: 'CreatedTime', displayName: 'Created Time' }
+          { name: 'Title', field: 'Title' ,height:40},
+          { name: 'Status', field: 'StatusDescription', height: 40, width: 100 },
+          { name: 'Last Message', field: 'LastMessage', height: 40, width:250 },
+          { name: 'CreatedTime', field: 'CreatedTime', type: 'date', cellFilter: 'date:"yyyy-MM-dd HH:mm:ss"', height: 40, width: 150 }
         ],
-        multiSelect: false,
+        paginationPageSizes: [10, 25, 50, 75],
+        paginationPageSize: 10,
+        appScopeProvider: {
+            onDblClick: function (row) {
+                $location.path("/ListTracking/" + row.entity.ProcessInstanceID).replace();
+            }
+        },
+        rowTemplate: '<div ng-dblclick=\"grid.appScope.onDblClick(row)\"   ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell hand" ui-grid-cell></div>'
+
     };
-    $scope.onDblClickRow = function (rowItem) {
-      
-        $http.get("/BusinessProcess/api/BusinessProcess/GetTrackingsByInstanceId",
-             {
-                 params: {
-                     ProcessInstanceID: rowItem.entity.ProcessInstanceID
-                 }
-             })
-         .success(function (response) {
-             //$scope.Instances = response;
-             //$scope.myData = response;
-             console.log(response);
-         });
-    };
- $scope.filter = {};
- $scope.onlickSearch = function () {        
-     $http.get("/BusinessProcess/api/BusinessProcess/GetFilteredInstances",
+    var d = new Date();
+    if ($rootScope.filter.FromDate == null && $rootScope.filter.definitionID == null) {
+        $rootScope.filter.FromDate = d;
+        $rootScope.filter.definitionID = { BPDefinitionID: 1 };
+    }
+    $scope.onclickClear = function () {
+        $rootScope.filter = {};
+    }
+    //$rootScope.filter.etime = d;
+    $scope.onclickSearch = function () {
+        $http.get(baseurl + "/api/BusinessProcess/GetFilteredInstances",
             {
                 params: {
-                    definitionID: $scope.filter.definitionID.BPDefinitionID,
-                    datefrom: dateToStringWithHMS($scope.filter.FromDate),
-                    dateto: dateToStringWithHMS($scope.filter.ToDate)
+                    definitionID: $rootScope.filter.definitionID.BPDefinitionID,
+                    datefrom: dateToStringWithHMS($rootScope.filter.FromDate),
+                    dateto: dateToStringWithHMS($rootScope.filter.EndDate)// + " "+timeTostring($rootScope.filter.etime) //" 00:00:00" //+ $rootScope.filter.etime
                 }
             })
         .success(function (response) {
-            //$scope.Instances = response;
-            $scope.myData = response;
+
+            $scope.myData = response.slice(1, 21);
         });
     };
+    if (typeof ($rootScope.filter.definitionID) != 'undefined') {
+        $scope.onclickSearch();
+    }
+
+
+
 }

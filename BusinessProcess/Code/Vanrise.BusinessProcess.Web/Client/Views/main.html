@@ -1,21 +1,58 @@
-﻿
+﻿<div class="container-fluid">
+    <h3 style="margin: 10px; color: #4C5359">Business Process </h3>
+    <div class="panel panel-primary panel-over-color">
+        <div class="panel-body">
+            <div class="row">
+                <fieldset class="panel-primary padding-md" style="width: auto; display: inline;">
 
+                    <div style="width:auto;display:inline">
+                        <div>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="defnitionId">Definitions</label><br>
+                                    <select required class="form-control" id="defnitionId" ng-options="obj.Title for obj in defnitions track by obj.BPDefinitionID" ng-model="filter.definitionID"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="statusId">Status</label><br>
+                                    <select required class="form-control" id="statusId" ng-options="obj.Description for obj in bpInstanceStatusList " ng-model="filter.status"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Start date</label><br>
+                                    <div class="form-group">
+                                        <input size="10" required class="form-control" ng-model="filter.FromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <input size="8" required class="form-control" ng-model="filter.FromDate" data-autoclose="1" minutestep="1" placeholder="Time" bs-timepicker type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">End date</label><br>
+                                    <div class="form-group">
+                                        <input size="10" class="form-control" data-min-date="{{filter.FromDate}}" ng-model="filter.EndDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <input size="8" class="form-control" ng-model="filter.EndDate" data-autoclose="1" placeholder="Time" bs-timepicker type="text">
+                                    </div>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-        <select class="form-control" id="defnitionId" ng-options="obj.Title for obj in defnitions track by obj.BPDefinitionID" ng-model="filter.definitionID"></select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="action-bar">
+                    <div class="btn-group">
+                        <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickSearch()">Search<span style="padding-left:4px" class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Clear<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+               
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-top">
+                    <div class="loader" ></div>
+                    <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers"></div>                 
+                </div>
+                
+            </div>
+        </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-        <quick-datepicker ng-model='filter.FromDate' time-format="hh:mm:ss a"  icon-class='fa fa-calendar'></quick-datepicker>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-        <quick-datepicker ng-model='filter.ToDate' time-format="hh:mm:ss a" icon-class='fa fa-calendar'></quick-datepicker>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-        <button class="btn btn-default"   ng-click='onlickSearch()'>Search</button>
-    </div>   
-</div>
-<div class="row" style="padding-top:10px">
-    <div class="gridStyle" ng-grid="gridOptions">
-    </div>
-</div>

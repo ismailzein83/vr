@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.Web.ModelMappers;
+using Vanrise.BusinessProcess.Web.Models;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
@@ -20,21 +22,34 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        public List<BPInstance> GetFilteredInstances(int definitionID, string datefrom, string dateto)
+        public List<BPInstanceModel> GetFilteredInstances(int definitionID, string datefrom, string dateto)
         {
             DateTime dateFrom = DateTime.ParseExact(datefrom, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
-            DateTime dateTo = DateTime.ParseExact(dateto, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
+            DateTime dateTo = (String.IsNullOrEmpty(dateto)) ? DateTime.Now : DateTime.ParseExact(dateto, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
             BPClient manager = new BPClient();
-            return manager.GetFilteredInstances( definitionID,  dateFrom,  dateTo);
+            return BPMappers.MapTMapInstances(manager.GetFilteredInstances(definitionID, dateFrom, dateTo));
+
         }
 
         [HttpGet]
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID)
+        public List<BPTrackingMessageModel> GetTrackingsByInstanceId(long ProcessInstanceID)
         {
             BPClient manager = new BPClient();
-            return manager.GetTrackingsByInstanceId(ProcessInstanceID);
+            return   BPMappers.MapTrackingMessages( manager.GetTrackingsByInstanceId(ProcessInstanceID) );
         }
-         
+        public List<EnumModel> GetStatusList()
+        {
+            var lst  = new List<EnumModel>();
+            foreach(var val in Enum.GetValues(typeof(BPInstanceStatus)))
+            {
+                EnumModel item = new EnumModel{
+                    Value = (int)val ,
+                    Description = ((BPInstanceStatus)val).ToString()
+                };
+                lst.Add(item);
+            }
+            return lst;
+        }
         // GET api/<controller>
         public IEnumerable<string> Get()
         {

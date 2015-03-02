@@ -62,7 +62,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID)
         {
-
+            
             return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, ProcessInstanceID);
 
         }
@@ -71,9 +71,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             var bpTrackingMessage = new BPTrackingMessage
             {
                 ProcessInstanceId = (long)reader["ProcessInstanceID"],
-                ParentProcessId = (long)reader["ParentProcessId"],
+                ParentProcessId = GetReaderValue<long?>(reader, "ParentProcessId"),
                 Message = reader["TrackingMessage"] as string,
-                Severity = (BPTrackingSeverity)reader["Severity"],
+                Severity = (BPTrackingSeverity)((int)reader["Severity"]),
                 EventTime = (DateTime)reader["EventTime"]
             };
 
