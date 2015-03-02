@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TABS;
 using TOne.BusinessEntity.Business;
+using TOne.BusinessEntity.Entities;
 using TOne.Caching;
 using TOne.CDR.Entities;
 using TOne.Entities;
@@ -47,15 +47,16 @@ namespace TOne.CDR.Business
             {
                 // Initialize Pricing
                 pricing.BillingCDRMainID = main.ID;
-                pricing.RateID = rates[0].ID;
-                pricing.ZoneID = rates[0].Zone.ZoneID;
-                pricing.RateValue = (double)rates[0].Value;
-                pricing.Net = (double)(rates[0].Value * (main.DurationInSeconds / 60m));
-                pricing.CurrencySymbol = rates[0].PriceList.Currency.Symbol;
+                pricing.RateID = rates[0].RateId;
+                pricing.ZoneID = rates[0].ZoneId;
+                pricing.RateValue = (double)rates[0].NormalRate;
+                pricing.Net = (double)(rates[0].NormalRate * (main.DurationInSeconds / 60m));
+                pricing.CurrencySymbol = rates[0].CurrencyID;
                 pricing.DurationInSeconds = main.DurationInSeconds;
 
-                TABS.Rate rate = rates[0];
-                TABS.Currency rateCurrency = rates[0].PriceList.Currency;
+                Rate rate = rates[0];
+
+                TABS.Currency rateCurrency = TABS.Currency.All.Keys.Contains(pricing.CurrencySymbol) ? TABS.Currency.All[pricing.CurrencySymbol] : new TABS.Currency();
 
                 // Usables...
                 ToDConsideration tod = null;
@@ -64,7 +65,7 @@ namespace TOne.CDR.Business
                 #region Get Usables
 
                 // Effective and Active ToD for this Call?
-                IList<ToDConsideration> tods = GetToDConsiderations(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
+                IList<ToDConsideration> tods = GetToDConsiderations(cost ? TABS.CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
 
                 // If ToD Considered, the rate applied should be changed
                 foreach (ToDConsideration effective in tods) { if (effective.WasActive(main.Attempt)) { tod = effective; break; } }
@@ -82,7 +83,7 @@ namespace TOne.CDR.Business
                 var attemptDate = new DateTime(main.Attempt.Year, main.Attempt.Month, main.Attempt.Day);
 
                 // Commissions or extra charges
-                IList<Commission> commissionsAndExtraCharges = GetCommissions(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
+                IList<Commission> commissionsAndExtraCharges = GetCommissions(cost ? TABS.CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
 
                 Commission commission = null;
                 Commission extraCharge = null;
@@ -100,7 +101,7 @@ namespace TOne.CDR.Business
                             item.Amount = item.Amount != null ? item.Amount : (decimal)0.0; //in order if the commission value null apply the percentage and vise versa,also if the amount and perc found apply the two ammount then perc
                             //if (item.Amount != null && item.Amount != 0)
                             itemClone.Amount = (decimal?)TABS.Rate.GetRate(item.Amount.Value, cost ? supplier.CarrierProfile.Currency : customer.CarrierProfile.Currency, rateCurrency, attemptDate);
-                            pricing.ExtraChargeID = itemClone.CommissionID;
+                            pricing.ExtraChargeID = itemClone.ID;
 
                             extraCharge = itemClone;
                         }
@@ -110,14 +111,14 @@ namespace TOne.CDR.Business
                             item.Amount = item.Amount != null ? item.Amount : (decimal)0.0;//in order if the commission value null apply the percentage and vise versa,also if the amount and perc found apply the two ammount then perc
                             //if (item.Amount != null && item.Amount != 0)
                             itemClone.Amount = (decimal?)TABS.Rate.GetRate(item.Amount.Value, cost ? supplier.CarrierProfile.Currency : customer.CarrierProfile.Currency, rateCurrency, attemptDate);
-                            pricing.CommissionID = itemClone.CommissionID;
+                            pricing.CommissionID = itemClone.ID;
 
                             commission = itemClone;
                         }
                     }
                 }
                 // Tariff Considered?
-                IList<Tariff> tariffs = GetTariffs(cost ? CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, zoneId, main.Attempt);
+                IList<Tariff> tariffs = GetTariffs(cost ? TABS.CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, zoneId, main.Attempt);
 
                 Tariff tarrif = null;
 
@@ -175,8 +176,8 @@ namespace TOne.CDR.Business
             return net;
         }
 
-        void CalculateAmounts(BillingCDRPricingBase pricing, decimal mainDurationInSeconds, bool isCustomerCeiling, bool isSupplierCeiling, TABS.Tariff tarrif,
-            TABS.ToDConsideration ToDConsideration, TABS.Commission commission, TABS.Rate rate, TABS.Commission ExtraCharge)
+        void CalculateAmounts(BillingCDRPricingBase pricing, decimal mainDurationInSeconds, bool isCustomerCeiling, bool isSupplierCeiling, Tariff tarrif,
+            ToDConsideration ToDConsideration, Commission commission, Rate rate, Commission ExtraCharge)
         {
             bool isCost = pricing is BillingCDRCost;
 
@@ -215,9 +216,8 @@ namespace TOne.CDR.Business
                 // Calculate the Net from the Tariff
                 pricing.Net += (double)tarrif.CallFee;
             }
-
             if (ToDConsideration != null)
-                pricing.Discount = ((double)rate.Value - ToDConsideration.ActiveRateValue(rate)) * (double)accountedDuration / 60;
+                pricing.Discount = ((double)rate.NormalRate - ToDConsideration.ActiveRateValue(rate)) * (double)accountedDuration / 60;
             else
                 pricing.Discount = 0;
 
@@ -244,8 +244,8 @@ namespace TOne.CDR.Business
 
         #region Cacheable Entities
 
-        protected static Zone _AnyZone;
-        protected static Zone AnyZone
+        protected static TABS.Zone _AnyZone;
+        protected static TABS.Zone AnyZone
         {
             get
             {
@@ -253,7 +253,7 @@ namespace TOne.CDR.Business
                 {
                     if (_AnyZone == null)
                     {
-                        _AnyZone = new Zone();
+                        _AnyZone = new TABS.Zone();
                         _AnyZone.Name = "**** Any Zone ****";
                         _AnyZone.Supplier = null;
                     }
@@ -262,7 +262,7 @@ namespace TOne.CDR.Business
             }
         }
 
-        protected class DateSensitiveEntityCache<T> where T : TABS.Interfaces.IZoneSupplied
+        protected class DateSensitiveEntityCache<T> where T : IZoneSupplied
         {
             Dictionary<int, List<T>> _supplierEntities = new Dictionary<int, List<T>>();
             Dictionary<int, Dictionary<String, List<T>>> _ourEntities = new Dictionary<int, Dictionary<String, List<T>>>();
@@ -279,23 +279,26 @@ namespace TOne.CDR.Business
 
             protected void Load(string customerId, int zoneId, DateTime pricingStart, bool IsRepricing)
             {
-
-                IList<T> all = PricingGeneratorEntites<T>.Load(customerId, zoneId, pricingStart, IsRepricing);
+                IList<T> all = TOne.CDR.Business.PricingGeneratorEntities<T>.Load(customerId, zoneId, pricingStart, IsRepricing);
                 foreach (T entity in all)
                 {
-                    if (entity.Supplier == null) continue;
-                    TABS.CarrierAccount entityCustomer = entity.Customer;
-                    TABS.CarrierAccount entitySupplier = entity.Supplier;
-                    TABS.Zone entityZone = (entity.Zone == null) ? AnyZone : entity.Zone;
+                    TABS.CarrierAccount entityCustomer;
+                    TABS.CarrierAccount entitySupplier;
+
+                    if (TABS.CarrierAccount.All.TryGetValue(entity.CustomerId, out entityCustomer)) continue;
+
+                    if (TABS.CarrierAccount.All.TryGetValue(entity.SupplierId, out entitySupplier)) continue;
+
+                    int entityZoneID = (entity.ZoneId == null) ? AnyZone.ZoneID : entity.ZoneId;
 
                     // Our Entities
                     if (entitySupplier.Equals(TABS.CarrierAccount.SYSTEM))
                     {
                         Dictionary<String, List<T>> zoneEntities = null;
-                        if (!_ourEntities.TryGetValue(entityZone.ZoneID, out zoneEntities))
+                        if (!_ourEntities.TryGetValue(entityZoneID, out zoneEntities))
                         {
                             zoneEntities = new Dictionary<String, List<T>>();
-                            _ourEntities[entityZone.ZoneID] = zoneEntities;
+                            _ourEntities[entityZoneID] = zoneEntities;
                         }
                         List<T> zoneCustomerEntities = null;
                         if (!zoneEntities.TryGetValue(entityCustomer.CarrierAccountID, out zoneCustomerEntities))
@@ -309,14 +312,22 @@ namespace TOne.CDR.Business
                     else
                     {
                         List<T> zoneEntities = null;
-                        if (!_supplierEntities.TryGetValue(entityZone.ZoneID, out zoneEntities))
+                        if (!_supplierEntities.TryGetValue(entityZoneID, out zoneEntities))
                         {
                             zoneEntities = new List<T>();
-                            _supplierEntities[entityZone.ZoneID] = zoneEntities;
+                            _supplierEntities[entityZoneID] = zoneEntities;
                         }
                         zoneEntities.Add(entity);
                     }
                 }
+            }
+
+            public bool GetIsEffective(DateTime? BeginEffectiveDate, DateTime? EndEffectiveDate, DateTime when)
+            {
+                bool isEffective = BeginEffectiveDate.HasValue ? BeginEffectiveDate.Value <= when : true;
+                if (isEffective)
+                    isEffective = EndEffectiveDate.HasValue ? EndEffectiveDate.Value >= when : true;
+                return isEffective;
             }
 
             public List<T> GetEffectiveEntities(String customerID, int zoneID, DateTime whenEffective)
@@ -332,7 +343,7 @@ namespace TOne.CDR.Business
                         {
                             List<T> entities = _ourEntities[zoneID][customerID];
                             foreach (T entity in entities)
-                                if (TABS.Components.DateTimeEffectiveEntity.GetIsEffective(entity, whenEffective))
+                                if (GetIsEffective(entity.BeginEffectiveDate , entity.EndEffectiveDate, whenEffective))
                                     effective.Add(entity);
                         }
                     }
@@ -345,7 +356,7 @@ namespace TOne.CDR.Business
                     {
                         List<T> entities = _supplierEntities[zoneID];
                         foreach (T entity in entities)
-                            if (TABS.Components.DateTimeEffectiveEntity.GetIsEffective(entity, whenEffective))
+                            if (GetIsEffective(entity.BeginEffectiveDate, entity.EndEffectiveDate, whenEffective))
                                 effective.Add(entity);
                     }
                 }
@@ -355,7 +366,7 @@ namespace TOne.CDR.Business
 
         protected DateTime _PricingStart = new DateTime(2000, 1, 1);
 
-        public List<T> GetEffectiveEntities<T>(String customerID, int zoneID, DateTime whenEffective) where T : TABS.Interfaces.IZoneSupplied
+        public List<T> GetEffectiveEntities<T>(String customerID, int zoneID, DateTime whenEffective) where T : IZoneSupplied
         {
             return _cacheManager.GetOrCreateObject(String.Format("GetEffectiveEntities_{0}_{1}_{2}_{3:ddMMMyy}", typeof(T).Name, customerID, zoneID, whenEffective.Date),
                 CacheObjectType.Pricing,

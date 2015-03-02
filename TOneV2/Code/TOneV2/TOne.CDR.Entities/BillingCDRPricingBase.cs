@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.CDR.Entities
 {
@@ -25,7 +26,7 @@ namespace TOne.CDR.Entities
 
         public  Double? Discount { get; set; }
 
-        public  TABS.ToDRateType RateType { get; set; }
+        public  ToDRateType RateType { get; set; }
 
         public  int ToDConsiderationID { get; set; }
 

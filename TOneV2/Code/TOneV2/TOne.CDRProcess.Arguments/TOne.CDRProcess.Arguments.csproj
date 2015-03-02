@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingCDRsProcessInput.cs" />
     <Compile Include="CDRGenerationProcessInput.cs" />
     <Compile Include="DailyRepricingProcessInput.cs" />
     <Compile Include="ImportCDRProcessInput.cs" />

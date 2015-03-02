@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingCDRsProcess.cs" />
     <Compile Include="CDRGenerationProcess.cs" />
     <Compile Include="CDRImportProcess.cs" />
     <Compile Include="DailyRepricingProcess.cs" />
@@ -165,6 +166,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRImportProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="BillingCDRsProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

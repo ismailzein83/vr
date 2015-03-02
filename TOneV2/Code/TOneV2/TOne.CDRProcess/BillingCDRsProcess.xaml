@@ -1,0 +1,130 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.BillingCDRsProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
+ xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:tce="clr-namespace:TOne.CDR.Entities;assembly=TOne.CDR.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tca:BillingCDRsProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.BillingCDRsProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.CDRProcess.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>log4net</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.CDR.Business</AssemblyReference>
+      <AssemblyReference>TOne.CDR.Entities</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.CDRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(tce:CDRInvalidBatch)" Name="CDRInvalidQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRInvalidBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRInvalidQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="vq:BaseQueue(tce:CDRMainBatch)" Name="CDRMainQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRMainBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRMainQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <WriteLine>
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Billing CDRs Process stared Process CDRS for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
+      </InArgument>
+      <sap2010:WorkflowViewState.IdRef>WriteLine_1</sap2010:WorkflowViewState.IdRef>
+    </WriteLine>
+    <tca1:ProcessBillingCDR PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessBillingCDR_1">
+      <tca1:ProcessBillingCDR.CacheManagerId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerId</mca:CSharpValue>
+        </InArgument>
+      </tca1:ProcessBillingCDR.CacheManagerId>
+      <tca1:ProcessBillingCDR.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRBillingQueue(Input.SwitchID)</mca:CSharpValue>
+        </InArgument>
+      </tca1:ProcessBillingCDR.InputQueue>
+      <tca1:ProcessBillingCDR.OutputInvalidCDRQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(tce:CDRInvalidBatch)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:CDRInvalidBatch)">CDRInvalidQueue</mca:CSharpReference>
+        </InOutArgument>
+      </tca1:ProcessBillingCDR.OutputInvalidCDRQueue>
+      <tca1:ProcessBillingCDR.OutputMainCDRQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(tce:CDRMainBatch)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:CDRMainBatch)">CDRMainQueue</mca:CSharpReference>
+        </InOutArgument>
+      </tca1:ProcessBillingCDR.OutputMainCDRQueue>
+    </tca1:ProcessBillingCDR>
+    <WriteLine>
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Billing CDRs Process finished Process CDRS for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
+      </InArgument>
+      <sap2010:WorkflowViewState.IdRef>WriteLine_2</sap2010:WorkflowViewState.IdRef>
+    </WriteLine>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xCaWxsaW5nQ0RSc1Byb2Nlc3MueGFtbAxCA3IOAgEBRgtGpgECAQZLC0ugAQIBAk8FVBECASBVBWoeAgEPawVwEQIBClEJUbQBAgEhXQtdpgECARxiC2J5AgEYZwtncwIBFFgLWFsCARBtCW22AQIBCw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="ProcessBillingCDR_1" sap:VirtualizedContainerService.HintSize="211,22" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,350">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.CDRProcess.BillingCDRsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

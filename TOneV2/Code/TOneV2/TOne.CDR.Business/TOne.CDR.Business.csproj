@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="CDRQueueFactory.cs" />
     <Compile Include="PricingGenerator.cs" />
+    <Compile Include="PricingGeneratorEntities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
