@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class RuleActionExecutionPath
+    public class ActionExecutionPath<T>
     {
-        public RuleActionExecutionStep FirstStep { get; set; }
+        public ActionExecutionStep<T> FirstStep { get; set; }
 
-        public RuleActionExecutionStep GetStep(Type actionType)
+        public ActionExecutionStep<T> GetStep(Type actionType)
         {
             var current = this.FirstStep;
             while (current != null)
@@ -24,12 +24,12 @@ namespace TOne.LCR.Entities
         }
     }
 
-    public class RuleActionExecutionStepsByActionType
+    public class ActionExecutionStepsByActionType<T>
     {
-        public RuleActionExecutionStepsByActionType()
+        public ActionExecutionStepsByActionType()
         {
-            Steps = new Dictionary<Type, RuleActionExecutionStep>();
+            Steps = new Dictionary<Type, ActionExecutionStep<T>>();
         }
-        public Dictionary<Type, RuleActionExecutionStep> Steps { get; private set; }
+        public Dictionary<Type, ActionExecutionStep<T>> Steps { get; private set; }
     }
 }

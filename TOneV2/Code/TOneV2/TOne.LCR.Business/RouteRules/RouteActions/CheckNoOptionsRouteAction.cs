@@ -9,5 +9,9 @@ namespace TOne.LCR.Business
 {
     public class CheckNoOptionsRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return null;
+        }
     }
 }

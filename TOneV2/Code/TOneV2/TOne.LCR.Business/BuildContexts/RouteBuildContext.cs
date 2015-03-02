@@ -13,20 +13,11 @@ namespace TOne.LCR.Business
 
         RouteDetail _route;
         SingleDestinationRoutesBuildContext _parentContext;
-        Dictionary<Type, RouteRuleMatchFinder> _routeRuleFindersByActionDataType;        
-        Dictionary<string, CodeMatch> _suppliersCodeMatches;
-        private SupplierZoneRates _supplierZoneRates;
 
-        bool _removeBlockedOptions = true;
-
-        internal RouteBuildContext(RouteDetail route, SingleDestinationRoutesBuildContext parentContext, Dictionary<string, CodeMatch> suppliersCodeMatches,
-            SupplierZoneRates supplierZoneRates, Dictionary<Type, RouteRuleMatchFinder> routeRuleFindersByActionDataType)
+        internal RouteBuildContext(RouteDetail route, SingleDestinationRoutesBuildContext parentContext)
         {
             _route = route;
             _parentContext = parentContext;
-            _suppliersCodeMatches = suppliersCodeMatches;
-            _supplierZoneRates = supplierZoneRates;
-            _routeRuleFindersByActionDataType = routeRuleFindersByActionDataType;
         }
 
         #endregion
@@ -45,7 +36,7 @@ namespace TOne.LCR.Business
         {
             get
             {
-                return _suppliersCodeMatches;
+                return _parentContext.SuppliersCodeMatches;
             }
         }
 
@@ -53,10 +44,18 @@ namespace TOne.LCR.Business
         {
             get
             {
-                return _supplierZoneRates;
+                return _parentContext.SupplierRates;
             }
         }
 
+        public RouteOptionRulesBySupplier RouteOptionsRules
+        {
+            get
+            {
+                return _parentContext.RouteOptionsRules;
+            }
+        }
+        
         #endregion
 
         #region Private/Internal Methods
@@ -64,8 +63,8 @@ namespace TOne.LCR.Business
         internal void BuildRoute()
         {
             RouteRuleManager ruleManager = new RouteRuleManager();
-            RuleActionExecutionPath executionPath = ruleManager.GetExecutionPath();
-            RuleActionExecutionStep currentStep = executionPath.FirstStep;
+            ActionExecutionPath<BaseRouteAction> executionPath = ruleManager.GetRouteActionExecutionPath();
+            ActionExecutionStep<BaseRouteAction> currentStep = executionPath.FirstStep;
             object nextActionData = null;
             do
             {
@@ -75,24 +74,24 @@ namespace TOne.LCR.Business
                     var actionData = nextActionData;
                     nextActionData = null;
                     RouteActionResult actionResult = currentStep.Action.Execute(this, actionData);
-                    RuleActionExecutionStep nextStep;
+                    ActionExecutionStep<BaseRouteAction> nextStep;
                     if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                         currentStep = nextStep;
                 }
                 else
                 {
                     RouteRuleMatchFinder ruleFinder;
-                    if (_routeRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
+                    if (_parentContext.RouteRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
                     {
                         ruleFinder.GoToStart();
-                        BaseRouteRule rule;
+                        RouteRule rule;
                         bool done = false;
                         while (!done && ruleFinder.GetNext(out rule))
                         {
                             if (rule.CarrierAccountSet.IsAccountIdIncluded(_route.CustomerID))
                             {
-                                RouteActionResult actionResult = currentStep.Action.Execute(this, (rule as CustomerRouteRule).ActionData);
-                                RuleActionExecutionStep nextStep;
+                                RouteActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData);
+                                ActionExecutionStep<BaseRouteAction> nextStep;
                                 if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                                 {
                                     done = true;
@@ -110,7 +109,7 @@ namespace TOne.LCR.Business
             while (currentStep != null);
         }
 
-        private static bool CheckActionResult(RouteActionResult actionResult, RuleActionExecutionPath executionPath, RuleActionExecutionStep currentStep, out RuleActionExecutionStep nextStep, out object nextActionData)
+        private bool CheckActionResult(RouteActionResult actionResult, ActionExecutionPath<BaseRouteAction> executionPath, ActionExecutionStep<BaseRouteAction> currentStep, out ActionExecutionStep<BaseRouteAction> nextStep, out object nextActionData)
         {
             nextActionData = null;
             if (actionResult == null)
@@ -140,74 +139,17 @@ namespace TOne.LCR.Business
             }
         }
 
-        private List<BaseRouteOptionAction> GetRouteOptionFilters()
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Public Methods
 
-        public void BuildLCR()
-        {
-            _route.Options = new RouteOptions();
-            _route.Options.SupplierOptions = _parentContext.GetLCROptions(_route.ServicesFlag).ToList();
-        }
-
-        public void ApplyOptionsFilter(int? nbOfOptions, bool onlyImportantFilters)
-        {
-            int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
-            if (_route.Options != null && _route.Options.SupplierOptions != null)
-            {
-                List<BaseRouteOptionAction> optionsActions = GetRouteOptionFilters();
-                if (optionsActions != null)
-                {                    
-                    List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
-                    int validOptions = 0;
-                    foreach (var option in _route.Options.SupplierOptions)
-                    {
-                        RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(option, this);
-                        bool isValid = true;
-                        foreach (var filter in optionsActions)
-                        {
-                            var filterResult = filter.Execute(optionBuildContext, null);
-                            if (filterResult != null)
-                            {
-                                //if (filterResult.Notify)
-                                //    ;//TODO add to notification
-                                if (filterResult.BlockOption || filterResult.RemoveOption)
-                                {
-                                    isValid = false;
-
-                                    if (filterResult.RemoveOption
-                                        || (filterResult.BlockOption && _removeBlockedOptions))
-                                        optionsToRemove.Add(option);
-                                    else if (filterResult.BlockOption)
-                                        option.IsBlocked = true;
-
-                                    break;
-                                }
-                            }
-                        }
-                        if (isValid)
-                            validOptions++;
-                        if (validOptions == maxOptions)
-                            break;
-                    }
-                    foreach (var optionToRemove in optionsToRemove)
-                        _route.Options.SupplierOptions.Remove(optionToRemove);
-                }
-            }
-        }
-
         public bool TryBuildSupplierOption(string supplierId, short? percentage, out RouteSupplierOption routeOption)
         {
             CodeMatch supplierCodeMatch;
-            if (_suppliersCodeMatches.TryGetValue(supplierId, out supplierCodeMatch))
+            if (_parentContext.SuppliersCodeMatches.TryGetValue(supplierId, out supplierCodeMatch))
             {
                 ZoneRates zoneRates;
-                if (_supplierZoneRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
+                if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
                 {
                     RateInfo rate;
                     if (zoneRates.ZonesRates.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
@@ -226,6 +168,45 @@ namespace TOne.LCR.Business
             }
             routeOption = null;
             return false;
+        }
+
+        public void BuildLCR()
+        {
+            _route.Options = new RouteOptions();
+            _route.Options.SupplierOptions = _parentContext.GetLCROptions(_route.ServicesFlag).ToList();
+        }
+
+        public void ExecuteOptionsActions(int? nbOfOptions, bool onlyImportantFilters)
+        {
+            int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
+            if (_route.Options != null && _route.Options.SupplierOptions != null)
+            {
+                RouteRuleManager ruleManager = new RouteRuleManager();
+                var executionPath = ruleManager.GetRouteOptionActionExecutionPath();
+                List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
+                int validOptions = 0;
+                foreach (var option in _route.Options.SupplierOptions)
+                {
+                    RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(option, this);
+                    bool isOptionRemovedFromRoute;
+                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, optionsToRemove, option, out isOptionRemovedFromRoute);
+                    
+                    if (!isOptionRemovedFromRoute)
+                        validOptions++;
+                    if (validOptions == maxOptions)
+                    {
+                        int removeStartIndex = _route.Options.SupplierOptions.IndexOf(option) + 1;
+                        if (_route.Options.SupplierOptions.Count > removeStartIndex)
+                            _route.Options.SupplierOptions.RemoveRange(removeStartIndex, _route.Options.SupplierOptions.Count - removeStartIndex);
+                        break;
+                    }
+                }
+
+                foreach (var optionToRemove in optionsToRemove)
+                {
+                    _route.Options.SupplierOptions.Remove(optionToRemove);
+                }                
+            }
         }
 
         public void BlockRoute()

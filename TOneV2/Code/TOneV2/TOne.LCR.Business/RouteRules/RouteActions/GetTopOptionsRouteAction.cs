@@ -9,5 +9,15 @@ namespace TOne.LCR.Business
 {
     public class GetTopOptionsRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return null;
+        }
+
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        {
+            context.ExecuteOptionsActions(5, false);
+            return null;
+        }
     }
 }

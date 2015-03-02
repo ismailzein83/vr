@@ -9,6 +9,11 @@ namespace TOne.LCR.Business
 {
     public class PriorityRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return typeof(PriorityRouteActionData);
+        }
+
         public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
         {
             PriorityRouteActionData priorityActionData = actionData as PriorityRouteActionData;

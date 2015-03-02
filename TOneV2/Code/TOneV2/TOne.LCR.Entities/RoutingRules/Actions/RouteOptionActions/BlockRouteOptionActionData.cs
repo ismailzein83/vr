@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public abstract class BaseRouteAlertCondition
+    public class BlockRouteOptionActionData
     {
-        public virtual bool IsViolated(RouteDetail route)
-        {
-            return false;
-        }
+        public MultipleSelection<string> Customers { get; set; }
     }
 }

@@ -9,5 +9,9 @@ namespace TOne.LCR.Business
 {
     public class ApplyPercentageRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return typeof(ApplyPercentageRouteActionData);
+        }
     }
 }

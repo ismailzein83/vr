@@ -50,7 +50,6 @@
     <Compile Include="BuildContexts\RouteOptionBuildContext.cs" />
     <Compile Include="RouteRuleMatches.cs" />
     <Compile Include="RouteRuleMatchFinder.cs" />
-    <Compile Include="RouteRules\BaseRouteOptionFilter.cs" />
     <Compile Include="RouteRules\RouteActions\ApplyPercentageRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\BlockRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\BuildLCRRouteAction.cs" />
@@ -62,6 +61,10 @@
     <Compile Include="RouteRules\RouteRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
       <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
       <Name>TOne.LCR.Entities</Name>

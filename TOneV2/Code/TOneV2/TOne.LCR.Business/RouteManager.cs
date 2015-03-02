@@ -69,43 +69,67 @@ namespace TOne.LCR.Business
             }
         }
 
-        public void StructureRulesForRouteBuild(List<BaseRouteRule> rules, out RouteRulesByActionDataType routeRules, out RouteRuleMatches supplierRuleMatches)
+        public void StructureRulesForRouteBuild(List<RouteRule> rules, out RouteRulesByActionDataType routeRules, out RouteOptionRulesBySupplier routeOptionRules)
         {
             routeRules = new RouteRulesByActionDataType();
-            supplierRuleMatches = new RouteRuleMatches();
-            foreach(var rule in rules)
+            routeOptionRules = new RouteOptionRulesBySupplier();
+            foreach (var rule in rules)
             {
-                CustomerRouteRule customerRule = rule as CustomerRouteRule;
-                if(customerRule != null)
-                {
-                    Type ruleActionDataType = customerRule.ActionData.GetType();
-                    RouteRuleMatches matches;
-                    if (!routeRules.Rules.TryGetValue(ruleActionDataType, out matches))
-                    {
-                        matches = new RouteRuleMatches();
-                        routeRules.Rules.Add(ruleActionDataType, matches);
-                    }
-                    AddRuleMatches(matches, rule);
-                }
+                RouteRulesByActionDataType targetRules;
+                if (rule.Type == RouteRuleType.RouteRule)
+                    targetRules = routeRules;
                 else
-                    AddRuleMatches(supplierRuleMatches, rule);
-                    
+                {
+                    SupplierSelectionSet supplierSelectionSet = rule.CarrierAccountSet as SupplierSelectionSet;
+                    if (supplierSelectionSet == null)
+                    {
+                        SetRuleInvalid(rule);
+                        continue;
+                    }
+
+                    if (!routeOptionRules.Rules.TryGetValue(supplierSelectionSet.SupplierId, out targetRules))
+                    {
+                        targetRules = new RouteRulesByActionDataType();
+                        routeOptionRules.Rules.Add(supplierSelectionSet.SupplierId, targetRules);
+                    }
+                }
+
+                Type ruleActionDataType = rule.ActionData.GetType();
+                RouteRuleMatches matches;
+                if (!targetRules.Rules.TryGetValue(ruleActionDataType, out matches))
+                {
+                    matches = new RouteRuleMatches();
+                    targetRules.Rules.Add(ruleActionDataType, matches);
+                }
+                AddRuleMatches(matches, rule);
             }
-            foreach (var saleRuleMatch in routeRules.Rules.Values)
+
+            foreach (var ruleMatch in routeRules.Rules.Values)
             {
-                saleRuleMatch.SetMinSubCodeLength();
+                ruleMatch.SetMinSubCodeLength();
             }
-            supplierRuleMatches.SetMinSubCodeLength();
+            foreach (var supplierRules in routeOptionRules.Rules.Values)
+            {
+                foreach (var ruleMatch in supplierRules.Rules.Values)
+                {
+                    ruleMatch.SetMinSubCodeLength();
+                }
+            }
+        }
+
+        private void SetRuleInvalid(RouteRule rule)
+        {
+            throw new NotImplementedException();
         }         
 
-        private void AddRuleMatches(RouteRuleMatches ruleMatches, BaseRouteRule rule)
+        private void AddRuleMatches(RouteRuleMatches ruleMatches, RouteRule rule)
         {
             CodeSetMatch codeSetMatch = rule.CodeSet.GetMatch();
             if(codeSetMatch.MatchCodes != null)
             {
                 foreach (var matchCodeEntry in codeSetMatch.MatchCodes)
                 {
-                    Dictionary<string, List<BaseRouteRule>> codeRules = matchCodeEntry.Value ? ruleMatches.RulesByMatchCodeAndSubCodes : ruleMatches.RulesByMatchCodes;
+                    Dictionary<string, List<RouteRule>> codeRules = matchCodeEntry.Value ? ruleMatches.RulesByMatchCodeAndSubCodes : ruleMatches.RulesByMatchCodes;
                     AddRuleToGroupDictionary(codeRules, matchCodeEntry.Key, rule);
                 }
             }
@@ -120,26 +144,14 @@ namespace TOne.LCR.Business
                         AddRuleToGroupDictionary(ruleMatches.RulesByMatchZones, matchZoneId, rule);
                     }
                 }
-
-            CarrierAccountSetMatch carrierAccountSetMatch = rule.CarrierAccountSet.GetMatch();
-            if (carrierAccountSetMatch.IsMatchingAllAccounts)
-                ruleMatches.RulesMatchingAllCarrierAccounts.Add(rule);
-            else
-                if(carrierAccountSetMatch.MatchAccountIds != null)
-                {
-                    foreach(string matchAccountId in carrierAccountSetMatch.MatchAccountIds)
-                    {
-                        AddRuleToGroupDictionary(ruleMatches.RulesByMatchCarrierAccounts, matchAccountId, rule);
-                    }
-                }
         }
 
-        void AddRuleToGroupDictionary<T>(Dictionary<T, List<BaseRouteRule>> dictionary, T key, BaseRouteRule rule)
+        void AddRuleToGroupDictionary<T>(Dictionary<T, List<RouteRule>> dictionary, T key, RouteRule rule)
         {
-            List<BaseRouteRule> routeRules;
+            List<RouteRule> routeRules;
             if (!dictionary.TryGetValue(key, out routeRules))
             {
-                routeRules = new List<BaseRouteRule>();
+                routeRules = new List<RouteRule>();
                 dictionary.Add(key, routeRules);
             }
             routeRules.Add(rule);
@@ -154,5 +166,14 @@ namespace TOne.LCR.Business
         }
 
         public Dictionary<Type, RouteRuleMatches> Rules { get; private set; }
+    }
+
+    public class RouteOptionRulesBySupplier
+    {
+        public RouteOptionRulesBySupplier()
+        {
+            Rules = new Dictionary<string, RouteRulesByActionDataType>();
+        }
+        public Dictionary<string, RouteRulesByActionDataType> Rules { get; private set; }
     }
 }

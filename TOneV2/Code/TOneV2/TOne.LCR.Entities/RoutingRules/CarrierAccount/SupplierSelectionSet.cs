@@ -9,6 +9,6 @@ namespace TOne.LCR.Entities
 {
     public class SupplierSelectionSet : BaseCarrierAccountSet
     {
-        public MultipleSelection<string> Suppliers { get; set; }
+        public string SupplierId { get; set; }
     }
 }

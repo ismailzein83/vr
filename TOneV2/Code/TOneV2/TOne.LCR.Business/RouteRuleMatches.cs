@@ -11,17 +11,15 @@ namespace TOne.LCR.Business
     {
         public RouteRuleMatches()
         {
-            RulesByMatchCodes = new Dictionary<string, List<BaseRouteRule>>();
-            RulesByMatchCodeAndSubCodes = new Dictionary<string, List<BaseRouteRule>>();
-            RulesByMatchZones = new Dictionary<int, List<BaseRouteRule>>();
-            RulesMatchingAllZones = new List<BaseRouteRule>();
-            RulesByMatchCarrierAccounts = new Dictionary<string, List<BaseRouteRule>>();
-            RulesMatchingAllCarrierAccounts = new List<BaseRouteRule>();
+            RulesByMatchCodes = new Dictionary<string, List<RouteRule>>();
+            RulesByMatchCodeAndSubCodes = new Dictionary<string, List<RouteRule>>();
+            RulesByMatchZones = new Dictionary<int, List<RouteRule>>();
+            RulesMatchingAllZones = new List<RouteRule>();
         }
 
-        public Dictionary<string, List<BaseRouteRule>> RulesByMatchCodes { get; private set; }
+        public Dictionary<string, List<RouteRule>> RulesByMatchCodes { get; private set; }
 
-        public Dictionary<string, List<BaseRouteRule>> RulesByMatchCodeAndSubCodes { get; private set; }
+        public Dictionary<string, List<RouteRule>> RulesByMatchCodeAndSubCodes { get; private set; }
 
         public int MinSubCodeLength { get; private set; }
 
@@ -30,31 +28,8 @@ namespace TOne.LCR.Business
             this.MinSubCodeLength = this.RulesByMatchCodeAndSubCodes.Keys.Min(itm => itm.Length);
         }
 
-        public Dictionary<int, List<BaseRouteRule>> RulesByMatchZones { get; private set; }
+        public Dictionary<int, List<RouteRule>> RulesByMatchZones { get; private set; }
 
-        public List<BaseRouteRule> RulesMatchingAllZones { get; private set; }
-
-        public Dictionary<string, List<BaseRouteRule>> RulesByMatchCarrierAccounts { get; private set; }
-
-        public List<BaseRouteRule> RulesMatchingAllCarrierAccounts { get; private set; }
-    }
-
-    public class CustomerRouteRulesMatches
-    {
-        public CustomerRouteRulesMatches()
-        {
-
-        }
-
-        public RouteRuleMatches BeforeLCRRules { get; set; }
-
-        public RouteRuleMatches AfterLCRRules { get; set; }
-
-        public RouteRuleMatches EndRules { get; set; }
-    }
-
-    public class SupplierRouteOptionRulesMatches
-    {
-        public RouteRuleMatches Rules { get; set; }
+        public List<RouteRule> RulesMatchingAllZones { get; private set; }
     }
 }

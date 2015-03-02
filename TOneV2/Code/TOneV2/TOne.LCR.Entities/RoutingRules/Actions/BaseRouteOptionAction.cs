@@ -8,6 +8,11 @@ namespace TOne.LCR.Entities
 {
     public class BaseRouteOptionAction
     {
+        public virtual bool MatchRoute(IRouteOptionBuildContext context, object actionData)
+        {
+            return true;
+        }
+
         public virtual RouteOptionActionResult Execute(IRouteOptionBuildContext context, object actionData)
         {
             return null;
@@ -26,6 +31,14 @@ namespace TOne.LCR.Entities
                 ErrorMessage = invalidMessage
             };
         }
+
+        public virtual bool IsImportant
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 
     public class RouteOptionActionResult
@@ -33,6 +46,8 @@ namespace TOne.LCR.Entities
         public bool IsInvalid { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public bool DontMatchRoute { get; set; }
 
         public bool RemoveOption { get; set; }
 

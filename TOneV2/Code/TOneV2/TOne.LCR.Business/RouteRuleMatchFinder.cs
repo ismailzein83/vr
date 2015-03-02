@@ -12,7 +12,7 @@ namespace TOne.LCR.Business
         private enum FinderStep { MatchCodesList, MatchCodeAndSubCodesList, MatchZonesList, MatchingAllZonesList, End }
 
         FinderStep _currentSearchStep;
-        List<BaseRouteRule> _matchRules;
+        List<RouteRule> _matchRules;
         int _nextReturnedIndex;
 
 
@@ -25,10 +25,10 @@ namespace TOne.LCR.Business
             _code = code;
             _zoneId = zoneId;
             _routeRulesMatches = routeRulesMatches;
-            _matchRules = new List<BaseRouteRule>();
+            _matchRules = new List<RouteRule>();
         }
 
-        public bool GetNext(out BaseRouteRule rule)
+        public bool GetNext(out RouteRule rule)
         {
             while(_nextReturnedIndex < _matchRules.Count)
             {
@@ -41,7 +41,7 @@ namespace TOne.LCR.Business
                 }
             }
 
-            List<BaseRouteRule> nextMatchList = GetNextList();
+            List<RouteRule> nextMatchList = GetNextList();
             if (nextMatchList != null && nextMatchList.Count > 0)
             {
                 _matchRules.AddRange(nextMatchList);
@@ -55,11 +55,11 @@ namespace TOne.LCR.Business
         }
 
         string _nextParentCode;
-        private List<BaseRouteRule> GetNextList()
+        private List<RouteRule> GetNextList()
         {
             while(_currentSearchStep < FinderStep.End)
             {
-                List<BaseRouteRule> matchRules = null;
+                List<RouteRule> matchRules = null;
                 switch (_currentSearchStep)
                 {
                     case FinderStep.MatchCodesList:

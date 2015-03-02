@@ -9,6 +9,11 @@ namespace TOne.LCR.Business
 {
     public class OverrideRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return typeof(OverrideRouteActionData);
+        }
+
         public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
         {
             OverrideRouteActionData overrideActionData = actionData as OverrideRouteActionData;
@@ -21,7 +26,7 @@ namespace TOne.LCR.Business
             RouteActionResult rslt = new RouteActionResult();
 
             BuildRouteFromOverrideOptions(context, overrideActionData.Options);
-            context.ApplyOptionsFilter(null, false);
+            context.ExecuteOptionsActions(null, false);
             if(context.Route.Options.SupplierOptions.Count == 0)
             {
                 switch(overrideActionData.NoOptionAction)
@@ -35,7 +40,7 @@ namespace TOne.LCR.Business
                         if (overrideActionData.BackupOptions != null)
                         {
                             BuildRouteFromOverrideOptions(context, overrideActionData.BackupOptions);
-                            context.ApplyOptionsFilter(null, true);
+                            context.ExecuteOptionsActions(null, true);
                         }
                         break;
                 }

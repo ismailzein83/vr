@@ -20,10 +20,5 @@ namespace TOne.LCR.Entities
         public short ServicesFlag { get; set; }
 
         public RouteOptions Options { get; set; }
-
-        public RouteDetail Clone()
-        {
-            return CloneHelper.Clone<RouteDetail>(this);
-        }
     }
 }

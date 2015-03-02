@@ -9,15 +9,15 @@ namespace TOne.LCR.Business
 {
     public class BlockRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return typeof(BlockRouteActionData);
+        }
+
         public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
         {
             context.BlockRoute();
             return null;
-        }
-
-        public override Type GetActionDataType()
-        {
-            return typeof(BlockRouteActionData);
         }
     }
 }

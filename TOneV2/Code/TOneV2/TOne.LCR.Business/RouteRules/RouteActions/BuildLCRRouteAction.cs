@@ -9,6 +9,11 @@ namespace TOne.LCR.Business
 {
     public class BuildLCRRouteAction : BaseRouteAction
     {
+        public override Type GetActionDataType()
+        {
+            return null;
+        }
+
         public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
         {
             context.BuildLCR();

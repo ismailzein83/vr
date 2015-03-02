@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class AlertRule
+    public enum RouteRuleType { RouteRule, RouteOptionRule }
+    public class RouteRule
     {
-        public int AlertRuleId { get; set; }
+        public int RouteRuleId { get; set; }
 
         public BaseCarrierAccountSet CarrierAccountSet { get; set; }
 
         public BaseCodeSet CodeSet { get; set; }
 
+        public RouteRuleType Type { get; set; }
+
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
 
-        //public BaseAlertRuleCondition Condition { get; set; }
+        public string Reason { get; set; }
 
-        //public BaseAlertRuleAction Action { get; set; }
+        public Object ActionData { get; set; }
     }
 }

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class RuleActionExecutionStep
+    public class ActionExecutionStep<T>
     {
-        public BaseRouteAction Action { get; set; }
+        public T Action { get; set; }
 
         /// <summary>
         /// i.e. dont go to next step if action found and executed
         /// </summary>
         public bool IsEndAction { get; set; }
 
-        public RuleActionExecutionStep NextStep { get; set; }
+        public ActionExecutionStep<T> NextStep { get; set; }
     }
 }

@@ -15,21 +15,59 @@ namespace TOne.LCR.Business
         ZoneCustomerRates _customerRates;
         SupplierZoneRates _supplierRates;
         RouteRulesByActionDataType _routeRules;
-        SupplierRouteOptionRulesMatches _supplierRules;
+        RouteOptionRulesBySupplier _routeOptionsRules;
+        Dictionary<Type, RouteRuleMatchFinder> _routeRuleFindersByActionDataType;
 
         string _routeCode;
         int _saleZoneId;
         CustomerRates _saleZoneCustomerRates;
 
         public SingleDestinationRoutesBuildContext(Dictionary<string, CodeMatch> suppliersCodeMatches, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
-            RouteRulesByActionDataType routeRules, SupplierRouteOptionRulesMatches supplierRules)
+            RouteRulesByActionDataType routeRules, RouteOptionRulesBySupplier routeOptionsRules)
         {
             _suppliersCodeMatches = suppliersCodeMatches;
             _customerRates = customerRates;
             _supplierRates = supplierRates;
             _routeRules = routeRules;
-            _supplierRules = supplierRules;
+            _routeOptionsRules = routeOptionsRules;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        public Dictionary<Type, RouteRuleMatchFinder> RouteRuleFindersByActionDataType
+        {
+            get
+            {
+                return _routeRuleFindersByActionDataType;
+            }
+        }
+
+        public RouteOptionRulesBySupplier RouteOptionsRules
+        {
+            get
+            {
+                return _routeOptionsRules;
+            }
+        }
+
+        public Dictionary<string, CodeMatch> SuppliersCodeMatches
+        {
+            get
+            {
+                return _suppliersCodeMatches;
+            }
+        }
+
+        public SupplierZoneRates SupplierRates
+        {
+            get
+            {
+                return _supplierRates;
+            }
+        }
+
 
         #endregion
 
@@ -95,12 +133,12 @@ namespace TOne.LCR.Business
 
             List<RouteDetail> routes = new List<RouteDetail>();
 
-            Dictionary<Type, RouteRuleMatchFinder> routeRuleFindersByActionDataType = new Dictionary<Type, RouteRuleMatchFinder>();
+            _routeRuleFindersByActionDataType = new Dictionary<Type, RouteRuleMatchFinder>();
             if (_routeRules != null)
             {
                 foreach (var customerRuleEntry in _routeRules.Rules)
                 {
-                    routeRuleFindersByActionDataType.Add(customerRuleEntry.Key, new RouteRuleMatchFinder(_routeCode, _saleZoneId, customerRuleEntry.Value));
+                    _routeRuleFindersByActionDataType.Add(customerRuleEntry.Key, new RouteRuleMatchFinder(_routeCode, _saleZoneId, customerRuleEntry.Value));
                 }
             }
 
@@ -114,7 +152,7 @@ namespace TOne.LCR.Business
                     ServicesFlag = customerRateEntry.Value.ServicesFlag,
                     SaleZoneId = _saleZoneId
                 };
-                RouteBuildContext routeBuildContext = new RouteBuildContext(route, this, _suppliersCodeMatches, _supplierRates, routeRuleFindersByActionDataType);
+                RouteBuildContext routeBuildContext = new RouteBuildContext(route, this);
                 routeBuildContext.BuildRoute();
                 routes.Add(route);
             }
