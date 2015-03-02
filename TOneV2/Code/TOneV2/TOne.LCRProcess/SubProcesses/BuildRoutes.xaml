@@ -9,14 +9,16 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:tbe="clr-namespace:TOne.BusinessEntity.Entities;assembly=TOne.BusinessEntity.Entities"
- xmlns:tla="clr-namespace:TOne.LCRProcess.Arguments;assembly=TOne.LCRProcess.Arguments"
- xmlns:tla1="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
  xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
- xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(tla:BuildRoutesInput)" />
+    <x:Property Name="ActiveSuppliers" Type="InArgument(scg:List(tbe:CarrierAccountInfo))" />
+    <x:Property Name="CodePrefixGroup" Type="InArgument(x:String)" />
+    <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
+    <x:Property Name="EffectiveTime" Type="InArgument(s:DateTime)" />
+    <x:Property Name="CodeMatchesQueue" Type="InArgument(vq:BaseQueue(scg:List(tle:CodeMatch)))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.BuildRoutes_1</sap2010:WorkflowViewState.IdRef>
@@ -70,49 +72,36 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <Sequence.Variables>
-      <Variable x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))" Name="queueCodeMatches" />
-      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCodeMatchesTaskStatus">
-        <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
-        </Variable.Default>
-      </Variable>
-    </Sequence.Variables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <tla1:BuildCodeMatchByCodeGroup sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
-        <tla1:BuildCodeMatchByCodeGroup.ActiveSuppliers>
+      <tla:BuildCodeMatchByCodeGroup Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
+        <tla:BuildCodeMatchByCodeGroup.ActiveSuppliers>
           <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
-            <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">Input.ActiveSuppliers</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">ActiveSuppliers</mca:CSharpValue>
           </InArgument>
-        </tla1:BuildCodeMatchByCodeGroup.ActiveSuppliers>
-        <tla1:BuildCodeMatchByCodeGroup.CodePrefixGroup>
+        </tla:BuildCodeMatchByCodeGroup.ActiveSuppliers>
+        <tla:BuildCodeMatchByCodeGroup.CodePrefixGroup>
           <InArgument x:TypeArguments="x:String">
-            <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefixGroup</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:String">CodePrefixGroup</mca:CSharpValue>
           </InArgument>
-        </tla1:BuildCodeMatchByCodeGroup.CodePrefixGroup>
-        <tla1:BuildCodeMatchByCodeGroup.EffectiveTime>
+        </tla:BuildCodeMatchByCodeGroup.CodePrefixGroup>
+        <tla:BuildCodeMatchByCodeGroup.EffectiveTime>
           <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveTime</mca:CSharpValue>
           </InArgument>
-        </tla1:BuildCodeMatchByCodeGroup.EffectiveTime>
-        <tla1:BuildCodeMatchByCodeGroup.IsFuture>
+        </tla:BuildCodeMatchByCodeGroup.EffectiveTime>
+        <tla:BuildCodeMatchByCodeGroup.IsFuture>
           <InArgument x:TypeArguments="x:Boolean">
-            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Boolean">IsFuture</mca:CSharpValue>
           </InArgument>
-        </tla1:BuildCodeMatchByCodeGroup.IsFuture>
-        <tla1:BuildCodeMatchByCodeGroup.OutputQueue>
+        </tla:BuildCodeMatchByCodeGroup.IsFuture>
+        <tla:BuildCodeMatchByCodeGroup.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">Input.CodeMatchesQueue</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">CodeMatchesQueue</mca:CSharpReference>
           </InOutArgument>
-        </tla1:BuildCodeMatchByCodeGroup.OutputQueue>
-        <tla1:BuildCodeMatchByCodeGroup.Status>
-          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchesTaskStatus</mca:CSharpReference>
-          </OutArgument>
-        </tla1:BuildCodeMatchByCodeGroup.Status>
-      </tla1:BuildCodeMatchByCodeGroup>
+        </tla:BuildCodeMatchByCodeGroup.OutputQueue>
+      </tla:BuildCodeMatchByCodeGroup>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbApIA3QOAgEBTQtNcAIBAlEFchACAQZSB3EoAgEHVQ1VeAIBHFoNWmACARhuDW57AgEUaQ1phgECARBfDV9gAgEMZA1kWgIBCA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0dDOlx0ZnNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbAhKA2kOAgEBSwVnEAIBAkwHZicCAQNPDU9yAgEcVA1UWgIBFmMNY4ABAgEQWQ1ZWgIBCl4NXlQCAQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
