@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodePrefixGroupDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
     <Compile Include="CodeMatchDataManager.cs" />

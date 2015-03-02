@@ -71,11 +71,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyZoneInfosToDB.cs" />
+    <Compile Include="BuildCodeMatchByCodeGroup.cs" />
     <Compile Include="BuildCodeMatchByFirstCodeDigit.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
+    <Compile Include="GetCodePrefixGroup.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
     <Compile Include="PrepareZoneInfosForDBApply.cs" />
     <Compile Include="PrepareCodeMatchesForDBApply.cs" />

@@ -1,0 +1,131 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.BuildRoutes"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tbe="clr-namespace:TOne.BusinessEntity.Entities;assembly=TOne.BusinessEntity.Entities"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Arguments;assembly=TOne.LCRProcess.Arguments"
+ xmlns:tla1="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tla:BuildRoutesInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.BuildRoutes_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.LCRProcess.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.BProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCR.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))" Name="queueCodeMatches" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCodeMatchesTaskStatus">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <tla1:BuildCodeMatchByCodeGroup sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
+        <tla1:BuildCodeMatchByCodeGroup.ActiveSuppliers>
+          <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">Input.ActiveSuppliers</mca:CSharpValue>
+          </InArgument>
+        </tla1:BuildCodeMatchByCodeGroup.ActiveSuppliers>
+        <tla1:BuildCodeMatchByCodeGroup.CodePrefixGroup>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefixGroup</mca:CSharpValue>
+          </InArgument>
+        </tla1:BuildCodeMatchByCodeGroup.CodePrefixGroup>
+        <tla1:BuildCodeMatchByCodeGroup.EffectiveTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
+          </InArgument>
+        </tla1:BuildCodeMatchByCodeGroup.EffectiveTime>
+        <tla1:BuildCodeMatchByCodeGroup.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tla1:BuildCodeMatchByCodeGroup.IsFuture>
+        <tla1:BuildCodeMatchByCodeGroup.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">Input.CodeMatchesQueue</mca:CSharpReference>
+          </InOutArgument>
+        </tla1:BuildCodeMatchByCodeGroup.OutputQueue>
+        <tla1:BuildCodeMatchByCodeGroup.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchesTaskStatus</mca:CSharpReference>
+          </OutArgument>
+        </tla1:BuildCodeMatchByCodeGroup.Status>
+      </tla1:BuildCodeMatchByCodeGroup>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbApIA3QOAgEBTQtNcAIBAlEFchACAQZSB3EoAgEHVQ1VeAIBHFoNWmACARhuDW57AgEUaQ1phgECARBfDV9gAgEMZA1kWgIBCA==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="BuildCodeMatchByCodeGroup_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="314,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildRoutes_1" sap:VirtualizedContainerService.HintSize="376,290" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

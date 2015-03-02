@@ -85,6 +85,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SubProcesses\BuildRoutes.cs" />
     <Compile Include="Entities\CodeZoneMatchProcessLastRunInfo.cs" />
     <Compile Include="Entities\ZoneRateProcessLastRunInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

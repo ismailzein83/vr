@@ -11,6 +11,10 @@ namespace TOne.BusinessEntity.Data
     {
         Dictionary<string, Dictionary<string, Code>> GetCodes(Char firstDigit, DateTime effectiveOn, bool isFuture, List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes);
 
+
+        SuppliersCodes GetCodesByCodePrefixGroup(String codePrefixGroup, DateTime effectiveOn, bool isFuture, List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes);
+
+
         List<CodeGroupInfo> GetCodeGroups();
     }
 }

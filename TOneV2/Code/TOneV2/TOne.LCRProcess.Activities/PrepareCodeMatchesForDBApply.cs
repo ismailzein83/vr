@@ -10,6 +10,7 @@ using Vanrise.BusinessProcess;
 using System.Threading;
 using TOne.LCR.Data;
 using Vanrise.Queueing;
+using TOne.Business;
 
 namespace TOne.LCRProcess.Activities
 {
@@ -42,7 +43,7 @@ namespace TOne.LCRProcess.Activities
                 this.OutputQueue.Set(context, new MemoryQueue<object>());
             base.OnBeforeExecute(context, handle);
         }
-        
+
         protected override PrepareCodeMatchesForDBApplyInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new PrepareCodeMatchesForDBApplyInput
@@ -55,9 +56,10 @@ namespace TOne.LCRProcess.Activities
 
         protected override void DoWork(PrepareCodeMatchesForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
-            TimeSpan totalTime = default(TimeSpan);
+            List<CodeMatch> codeMatchesBatch = new List<CodeMatch>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -66,17 +68,23 @@ namespace TOne.LCRProcess.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (codeMatches) =>
                         {
-                            //Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, dtCodeMatches.Rows.Count);
-                            DateTime start = DateTime.Now;
-                            Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatches);
-                            inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
-                            totalTime += (DateTime.Now - start);
-                            //Console.WriteLine("{0}: Preparing {1} records for DB Apply is done in {2}", DateTime.Now, codeMatches.Count, (DateTime.Now - start));
+                            codeMatchesBatch.AddRange(codeMatches);
+                            if (codeMatchesBatch.Count >= bcpBatchSize)
+                            {
+                                Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
+                                inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
+                                codeMatchesBatch = new List<CodeMatch>();
+                            }
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
+
             });
-            //Console.WriteLine("{0}: PrepareCodeMatchesForDBApply is done in {1}", DateTime.Now, totalTime);
+            if (codeMatchesBatch.Count >= 0)
+            {
+                Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
+                inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
+            }
         }
     }
 }

@@ -23,6 +23,12 @@ namespace TOne.BusinessEntity.Business
             return _dataManager.GetCodes(firstDigit, effectiveOn, isFuture, activeSuppliers, out distinctCodes);
         }
 
+        public SuppliersCodes GetCodesByCodePrefixGroup(String codePrefixGroup, DateTime effectiveOn, bool isFuture,
+       List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes)
+        {
+            return _dataManager.GetCodesByCodePrefixGroup(codePrefixGroup, effectiveOn, isFuture, activeSuppliers, out distinctCodes);
+        }
+
         public List<CodeGroupInfo> GetCodeGroups()
         {
             return _dataManager.GetCodeGroups();

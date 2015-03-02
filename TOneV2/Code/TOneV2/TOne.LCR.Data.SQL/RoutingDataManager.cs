@@ -123,6 +123,14 @@ namespace TOne.LCR.Data.SQL
 	                                                        [SupplierID] ASC
                                                         )
                                                     )
+
+                                                    CREATE TYPE [IntIDType] AS TABLE(
+	                                                    [ID] [int] NOT NULL
+	                                                    PRIMARY KEY CLUSTERED 
+                                                        (
+	                                                        [ID] ASC
+                                                        )
+                                                    )
                                                     ";
 
         #endregion
