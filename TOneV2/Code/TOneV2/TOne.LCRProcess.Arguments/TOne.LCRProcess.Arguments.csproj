@@ -41,10 +41,24 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildRoutesInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingProcessInput.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
