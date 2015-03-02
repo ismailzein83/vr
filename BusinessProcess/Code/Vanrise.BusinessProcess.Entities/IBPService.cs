@@ -14,8 +14,11 @@ namespace Vanrise.BusinessProcess
     {
         [OperationContract]
         CreateProcessOutput CreateNewProcess(string serializedInput);
+
         [OperationContract]
         TriggerProcessEventOutput TriggerProcessEvent(string serializedInput);
 
+        [OperationContract]
+        BPInstance GetInstance(long processInstanceId);
     }
 }

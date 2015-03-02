@@ -88,6 +88,7 @@
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_Update.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_GetByKey.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

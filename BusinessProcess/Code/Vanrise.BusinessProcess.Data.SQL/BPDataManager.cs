@@ -45,13 +45,15 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         public List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
-        {
-            
+        {            
             return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, datefrom , dateto);
-
-           
         }
        
+        public BPInstance GetInstance(long instanceId)
+        {
+            return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, instanceId);
+        }
+
         public long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
         {
             object processInstanceId;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Data;
@@ -51,6 +53,12 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstancesByCriteria(definitionID, datefrom, dateto);
         }
 
+        public BPInstance GetInstance(long instanceId)
+        {
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            return dataManager.GetInstance(instanceId);
+        }
+
         public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
@@ -64,16 +72,37 @@ namespace Vanrise.BusinessProcess.Client
 
         private void CreateServiceClient(Action<IBPService> onClientReady)
         {
-            NetNamedPipeBinding binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
+            Binding binding;
+            string serviceURL;
+
+            string tcpServiceHost = ConfigurationManager.AppSettings["BusinessProcessServiceHost"];
+            if (!String.IsNullOrEmpty(tcpServiceHost))
+            {
+                binding = new NetTcpBinding(SecurityMode.None)
+                {
+                    MaxBufferPoolSize = int.MaxValue,
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue
+                };
+                serviceURL = String.Format("net.tcp://{0}/BPService", tcpServiceHost);
+            }
+            else
+            {
+                binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None)
+                    {
+                        MaxBufferPoolSize = int.MaxValue,
+                        MaxBufferSize = int.MaxValue,
+                        MaxReceivedMessageSize = int.MaxValue
+                    };
+                serviceURL = "net.pipe://localhost/BPService";
+            }
+
             binding.OpenTimeout = TimeSpan.FromMinutes(5);
             binding.CloseTimeout = TimeSpan.FromMinutes(5);
             binding.SendTimeout = TimeSpan.FromMinutes(5);
             binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
-            binding.MaxBufferPoolSize = int.MaxValue;
-            binding.MaxBufferSize = int.MaxValue;
-            binding.MaxReceivedMessageSize = int.MaxValue;
 
-            ChannelFactory<IBPService> channelFactory = new ChannelFactory<IBPService>(binding, new EndpointAddress("net.pipe://localhost/BPService"));
+            ChannelFactory<IBPService> channelFactory = new ChannelFactory<IBPService>(binding, new EndpointAddress(serviceURL));
             IBPService client = channelFactory.CreateChannel();
             try
             {
