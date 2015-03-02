@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BusinessEntity.Entities
 {
-    public class Rate
+    public class Rate : IZoneSupplied
     {
         public long RateId { get; set; }
 
@@ -20,15 +20,15 @@ namespace TOne.BusinessEntity.Entities
 
         public decimal NormalRate { get; set; }
 
-        public decimal OffPeakRate { get; set; }
+        public decimal? OffPeakRate { get; set; }
 
-        public decimal WeekendRate { get; set; }
+        public decimal? WeekendRate { get; set; }
 
         public short ServicesFlag { get; set; }
 
-        public DateTime BeginEffectiveDate { get; set; }
+        public DateTime? BeginEffectiveDate { get; set; }
 
-        public DateTime EndEffectiveDate { get; set; }
+        public DateTime? EndEffectiveDate { get; set; }
 
         public string CurrencyID { get; set; }
 

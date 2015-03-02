@@ -17,16 +17,16 @@ namespace TOne.BusinessEntity.Data.SQL
             return new Commission
             {
                 ID = (int)reader["ID"],
-                SupplierId = (int)reader["supplierId"],
-                CustomerId = (int)reader["customerId"],
-                ZoneId = (int)reader["zoneId"],
+                SupplierId = reader["supplierId"] as string,
+                CustomerId = reader["customerId"] as string,
+                ZoneId = GetReaderValue<int>(reader, "zoneId"),
                 Amount = GetReaderValue<decimal?>(reader, "amount"),
                 FromRate = GetReaderValue<float?>(reader, "fromRate"),
                 ToRate = GetReaderValue<float?>(reader, "toRate"),
                 IsExtraCharge = reader["isExtraCharge"] as string == "Y",
                 Percentage = GetReaderValue<float?>(reader, "percentage"),
-                BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime>(reader, "EED"),
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BED"),
+                EndEffectiveDate = GetReaderValue<DateTime>(reader, "EED"),
                 IsEffective = reader["IsEffective"] as string == "Y",
                 UserId = (int)reader["userId"],
             };

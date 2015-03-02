@@ -7,8 +7,8 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface ITariffDataManager : IDataManager
+    public interface IToDConsiderationDataManager : IDataManager
     {
-        List<Tariff> GetTariff(string customerId, int zoneId, DateTime when);
+        List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when);
     }
 }

@@ -21,4 +21,12 @@ namespace TOne.BusinessEntity.Entities
         New = 2
     }
 
+    public enum ToDRateType : byte
+    {
+        Normal = 0,
+        OffPeak = 1,
+        Weekend = 2,
+        Holiday = 4
+    }
+
 }

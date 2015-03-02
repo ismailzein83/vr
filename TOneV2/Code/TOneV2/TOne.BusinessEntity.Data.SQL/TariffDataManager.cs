@@ -16,20 +16,20 @@ namespace TOne.BusinessEntity.Data.SQL
             return new Tariff
             {
                 TariffID = (int)reader["TariffID"],
-                ZoneID = GetReaderValue<int>(reader, "ZoneID"),
-                SupplierID = reader["SupplierID"] as string,
-                CustomerID = reader["CustomerID"] as string,
+                ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                SupplierId = reader["SupplierID"] as string,
+                CustomerId = reader["CustomerID"] as string,
                 CallFee = GetReaderValue<decimal>(reader, "CallFee"),
                 FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
                 FirstPeriod = GetReaderValue<int>(reader, "FirstPeriod"),
-                RepeatFirstPeriod = reader["RepeatFirstPeriod"] as string,
+                RepeatFirstPeriod = reader["RepeatFirstPeriod"] as string == "Y",
                 FractionUnit = GetReaderValue<int>(reader, "FractionUnit"),
-                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
+                BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "BeginEffectiveDate"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate")
             };
         }
 
-        public List<Tariff> GetTariff(int zoneId, string customerId, DateTime when)
+        public List<Tariff> GetTariff(string customerId, int zoneId, DateTime when)
         {
             return GetItemsSP("BEntity.sp_Tariff_GetTariffs", TariffMapper, zoneId, customerId, when);
         }

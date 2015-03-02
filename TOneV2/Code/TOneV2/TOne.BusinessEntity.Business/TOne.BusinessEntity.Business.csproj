@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NHibernate">
-      <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,16 +49,12 @@
     <Compile Include="CarrierManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="CommissionManager.cs" />
-    <Compile Include="PricingGeneratorEntites.cs" />
+    <Compile Include="PricingGeneratorManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateManager.cs" />
     <Compile Include="ZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TABS\TABS.csproj">
-      <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
-      <Name>TABS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Data\TOne.BusinessEntity.Data.csproj">
       <Project>{fe3e9123-4e75-42db-b98c-b37a472aad9a}</Project>
       <Name>TOne.BusinessEntity.Data</Name>
