@@ -12,7 +12,7 @@
     $scope.gridOptions = {
         data: 'myData',
         enableHorizontalScrollbar: 0,
-        enableVerticalScrollbar: 1,
+        enableVerticalScrollbar: 0,
         columnDefs: [
           { name: 'Title', field: 'Title' ,height:40},
           { name: 'Status', field: 'StatusDescription', height: 40, width: 100 },
@@ -37,33 +37,39 @@
     $scope.onclickClear = function () {
         $rootScope.filter = {};
     }
-    //$rootScope.filter.etime = d;
-    //$scope.isloadingdata = false;
+    $scope.isloadingdata = false;
+    $scope.pageNumber = 1;
+    $scope.pageSize = 10;
     $scope.onclickSearch = function () {
-        //$scope.$apply(function () {
-            $scope.isloadingdata = true;
-        // });
-            console.log($rootScope.filter)
+        $scope.isloadingdata = true;
         $http.get(baseurl + "/api/BusinessProcess/GetFilteredInstances",
             {
                 params: {
                     definitionID: $rootScope.filter.definitionID.BPDefinitionID,
                     datefrom: dateToStringWithHMS($rootScope.filter.FromDate),
-                    dateto: dateToStringWithHMS($rootScope.filter.EndDate)// + " "+timeTostring($rootScope.filter.etime) //" 00:00:00" //+ $rootScope.filter.etime
+                    dateto: dateToStringWithHMS($rootScope.filter.EndDate),
+                    pageNumber: $scope.pageNumber,
+                    pageSize:$scope.pageSize
                 }
             })
         .success(function (response) {
-            
-            setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.isloadingdata = false;
-                    $scope.myData = response.slice(1, 21);
-                });
-            }, 1000)
+            $scope.isloadingdata = false;
+            $scope.myData = response;
+            $scope.last = (response.length < 10) ? false : true;
+          
            
         });
     };
     if (typeof ($rootScope.filter.definitionID) != 'undefined') {
+        $scope.onclickSearch();
+    }
+    $scope.goPrevious = function () {
+        $scope.pageNumber--;
+        $scope.onclickSearch();
+
+    }
+    $scope.goNext = function () {
+        $scope.pageNumber++;
         $scope.onclickSearch();
     }
 

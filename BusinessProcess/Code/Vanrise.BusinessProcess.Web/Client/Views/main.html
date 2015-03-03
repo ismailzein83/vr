@@ -68,6 +68,13 @@
                     </div>
                     <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers">
                     </div>
+                    <nav>
+                        <ul class="pager">
+                            <li ng-show="pageNumber>1" ng-click="goPrevious()" class="previous"><a href=""><span aria-hidden="true">&larr;</span> Previous</a></li>
+                            <li ng-show="last" ng-click="goNext()" class="next"><a href="">Next <span aria-hidden="true">&rarr;</span></a></li>
+                        </ul>
+                    </nav>
+                   
                 </div>
 
             </div>

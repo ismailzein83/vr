@@ -22,12 +22,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        public List<BPInstanceModel> GetFilteredInstances(int definitionID, string datefrom, string dateto)
+        public IEnumerable<BPInstanceModel> GetFilteredInstances(int definitionID, string datefrom, string dateto, int pageNumber, int pageSize)
         {
             DateTime dateFrom = DateTime.ParseExact(datefrom, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
             DateTime dateTo = (String.IsNullOrEmpty(dateto)) ? DateTime.Now : DateTime.ParseExact(dateto, "dd/MM/yyyy H:m:s", CultureInfo.CurrentCulture);
             BPClient manager = new BPClient();
-            return BPMappers.MapTMapInstances(manager.GetFilteredInstances(definitionID, dateFrom, dateTo));
+            IEnumerable<BPInstanceModel> rows = BPMappers.MapTMapInstances(manager.GetFilteredInstances(definitionID, dateFrom, dateTo));            
+            rows = rows.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            return rows ;
 
         }
 
