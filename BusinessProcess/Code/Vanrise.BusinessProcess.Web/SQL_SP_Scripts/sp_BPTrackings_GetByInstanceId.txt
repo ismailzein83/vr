@@ -35,3 +35,51 @@ END
 GO
 
 
+USE [TOneTransactionDB]
+GO
+
+/****** Object:  StoredProcedure [bp].[sp_BPInstance_GetByCriteria]    Script Date: 03/03/2015 09:41:12 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [bp].[sp_BPInstance_GetByCriteria]	
+	@DefinitionID int,
+	@DateFrom dateTime,
+	@DateTo dateTime
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    SELECT [ID]
+	  ,[Title]
+      ,[ParentID]
+      ,[DefinitionID]
+      ,[WorkflowInstanceID]
+      ,[InputArgument]
+      ,[ExecutionStatus]
+      ,[LoadedByRuntime]
+      ,[LastMessage]
+      ,[RetryCount]
+      ,[CreatedTime]
+      ,[StatusUpdatedTime]
+	FROM bp.[BPInstance] as bps WITH(NOLOCK)
+	WHERE
+	bps.DefinitionID = @DefinitionID and bps.CreatedTime BETWEEN  @DateFrom and @DateTo
+	ORDER BY CreatedTime
+END
+
+
+
+GO
