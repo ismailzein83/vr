@@ -108,12 +108,15 @@ namespace TOne.CDRProcess.Activities
                         TOne.CDR.Entities.CDRMainBatch CDRMains = new TOne.CDR.Entities.CDRMainBatch();
                         TOne.CDR.Entities.CDRInvalidBatch CDRInvalids = new TOne.CDR.Entities.CDRInvalidBatch();
 
+                        CDRMains.MainCDRs = new List<BillingCDRMain>();
+                        CDRInvalids.InvalidCDRs = new List<BillingCDRInvalid>();
+
                         foreach (BillingCDRBase CDR in billingCDR.CDRs)
                         {
 
                             if (CDR.IsValid)
                             {
-                                BillingCDRMain main = (BillingCDRMain)CDR;
+                                BillingCDRMain main = new BillingCDRMain(CDR);
 
                                 main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
@@ -130,7 +133,7 @@ namespace TOne.CDRProcess.Activities
 
                             }
                             else
-                                CDRInvalids.InvalidCDRs.Add((BillingCDRInvalid)(CDR));
+                                CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(CDR));
                         }
 
                         inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);

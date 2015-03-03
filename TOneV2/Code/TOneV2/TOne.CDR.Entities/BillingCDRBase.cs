@@ -64,6 +64,44 @@ namespace TOne.CDR.Entities
         public string CDPNOut { get; set; }
 
         public int SubscriberID { get; set; }
+
+        public BillingCDRBase()
+        {
+        }
+        public BillingCDRBase(BillingCDRBase copy)
+        {
+            if (copy != null)
+            {
+                this.ID  = copy.ID ;
+                this.Attempt  = copy.Attempt ;
+                this.Alert  = copy.Alert ;
+                this.Connect  = copy.Connect ;
+                this.Disconnect  = copy.Disconnect ;
+                this.DurationInSeconds  = copy.DurationInSeconds ;
+                this.CDPN   = copy.CDPN  ;
+                this.CGPN   = copy.CGPN  ;
+                this.Port_OUT   = copy.Port_OUT  ;
+                this.Port_IN   = copy.Port_IN  ;
+                this.ReleaseCode  = copy.ReleaseCode ;
+                this.ReleaseSource   = copy.ReleaseSource  ;
+                this.SwitchID   = copy.SwitchID  ;
+                this.SwitchCdrID   = copy.SwitchCdrID  ;
+                this.Tag   = copy.Tag  ;
+                this.OurZoneID   = copy.OurZoneID  ;
+                this.SupplierZoneID   = copy.SupplierZoneID  ;
+                this.OriginatingZoneID   = copy.OriginatingZoneID  ;
+                this.SIP   = copy.SIP  ;
+                this.Extra_Fields   = copy.Extra_Fields  ;
+                this.CustomerID   = copy.CustomerID  ;
+                this.SupplierID   = copy.SupplierID  ;
+                this.OurCode   = copy.OurCode  ;
+                this.SupplierCode   = copy.SupplierCode  ;
+                this.IsValid   = copy.IsValid  ;
+                this.IsRerouted   = copy.IsRerouted  ;
+                this.CDPNOut   = copy.CDPNOut  ;
+                this.SubscriberID   = copy.SubscriberID  ;
+            }
+        }
         
     }
 }

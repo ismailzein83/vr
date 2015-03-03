@@ -8,6 +8,8 @@ namespace TOne.CDR.Entities
 {
     public class BillingCDRInvalid  : BillingCDRBase
     {
+        public BillingCDRInvalid(BillingCDRBase copy) : base(copy) { }
 
+        public BillingCDRInvalid() { }
     }
 }

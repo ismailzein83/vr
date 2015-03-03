@@ -11,6 +11,10 @@ namespace TOne.CDR.Entities
         public BillingCDRCost cost { get; set; }
 
         public BillingCDRSale sale { get; set; }
+
+        public BillingCDRMain(BillingCDRBase copy) : base(copy) { }
+
+        public BillingCDRMain() { }
     }
 
 }

@@ -83,8 +83,6 @@
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
     <Compile Include="ImportCDRs.cs" />
     <Compile Include="PrepareCDRsForDBApply.cs" />
-    <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
-    <Compile Include="PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessBillingCDR.cs" />
     <Compile Include="ProcessCDRs.cs" />
     <Compile Include="GetCDRs.cs" />
@@ -95,9 +93,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRsToDB.cs" />
     <Compile Include="SaveCDRsToQueue.cs" />
-    <Compile Include="SaveInvalidCDRsToDB.cs" />
     <Compile Include="SaveMainCDRsToDB.cs" />
     <Compile Include="StoreCDRsToDB.cs" />
+    <Compile Include="StoreInvalidCDRsToDB.cs" />
+    <Compile Include="StoreMainCDRsToDB.cs" />
     <Compile Include="UpdateBillingStatistics.cs" />
     <Compile Include="UpdateDailyPostpaidAmounts.cs" />
     <Compile Include="UpdateDailyPrepaidAmounts.cs" />

@@ -10,7 +10,7 @@ namespace TOne.CDR.Data.SQL
     public class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
 
-        public Object PrepareMainCDRsForDBApply(List<TABS.Billing_CDR_Main> cdrs)
+        public Object PrepareMainCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRMain> cdrs)
         {
             BulkInsertInfo preparedMainCDRs = PrepareMainCDRsForDBApply2(cdrs);
 
@@ -20,59 +20,59 @@ namespace TOne.CDR.Data.SQL
             System.IO.StreamWriter wrCost = new System.IO.StreamWriter(filePathCost);
             System.IO.StreamWriter wrSale = new System.IO.StreamWriter(filePathSale);
 
-            foreach (TABS.Billing_CDR_Main cdr in cdrs)
+            foreach (TOne.CDR.Entities.BillingCDRMain cdr in cdrs)
             {
 
-                if (cdr.Billing_CDR_Cost != null)
+                if (cdr.cost != null)
                 {
                     wrCost.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                            cdr.Billing_CDR_Cost.ID,
-                            cdr.Billing_CDR_Cost.Zone != null ? cdr.Billing_CDR_Cost.Zone.ZoneID.ToString() : "",
-                            cdr.Billing_CDR_Cost.Net,
-                            cdr.Billing_CDR_Cost.Currency != null ? cdr.Billing_CDR_Cost.Currency.Symbol.ToString() : "",
-                            cdr.Billing_CDR_Cost.RateValue,
-                            cdr.Billing_CDR_Cost.Rate != null ? cdr.Billing_CDR_Cost.Rate.ID.ToString() : "",
-                            cdr.Billing_CDR_Cost.Discount.HasValue ? cdr.Billing_CDR_Cost.Discount.Value.ToString() : null,
-                            Convert.ChangeType(cdr.Billing_CDR_Cost.RateType, cdr.Billing_CDR_Cost.RateType.GetTypeCode()),
-                            cdr.Billing_CDR_Cost.ToDConsideration != null ? cdr.Billing_CDR_Cost.ToDConsideration.ToDConsiderationID.ToString() : null,
-                            cdr.Billing_CDR_Cost.FirstPeriod.HasValue ? cdr.Billing_CDR_Cost.FirstPeriod.Value.ToString() : null,
-                            cdr.Billing_CDR_Cost.RepeatFirstperiod.HasValue ? cdr.Billing_CDR_Cost.RepeatFirstperiod.Value.ToString() : null,
-                            cdr.Billing_CDR_Cost.FractionUnit.HasValue ? cdr.Billing_CDR_Cost.RepeatFirstperiod.Value.ToString() : null,
-                            cdr.Billing_CDR_Cost.Tariff != null ? cdr.Billing_CDR_Cost.Tariff.TariffID.ToString() : null,
-                            cdr.Billing_CDR_Cost.CommissionValue,
-                            cdr.Billing_CDR_Cost.Commission != null ? cdr.Billing_CDR_Cost.Commission.CommissionID.ToString() : null,
-                            cdr.Billing_CDR_Cost.ExtraChargeValue,
-                            cdr.Billing_CDR_Cost.ExtraCharge != null ? cdr.Billing_CDR_Cost.ExtraCharge.CommissionID.ToString() : null,
-                            cdr.Billing_CDR_Cost.Updated != null ? cdr.Billing_CDR_Cost.Updated.ToShortDateString() : DateTime.Now.ToShortDateString(),  //?
-                            cdr.Billing_CDR_Cost.DurationInSeconds,
-                            cdr.Billing_CDR_Cost.Code,
-                            cdr.Billing_CDR_Cost.Attempt.ToString()));
+                            cdr.cost.ID,
+                            cdr.cost.ZoneID.ToString(),
+                            cdr.cost.Net,
+                            cdr.cost.CurrencySymbol != null ? cdr.cost.CurrencySymbol.ToString() : "",
+                            cdr.cost.RateValue,
+                            cdr.cost.RateID.ToString() ,
+                            cdr.cost.Discount.HasValue ? cdr.cost.Discount.Value.ToString() : null,
+                            Convert.ChangeType(cdr.cost.RateType, cdr.cost.RateType.GetTypeCode()),
+                            cdr.cost.ToDConsiderationID.ToString(),
+                            cdr.cost.FirstPeriod.HasValue ? cdr.cost.FirstPeriod.Value.ToString() : null,
+                            cdr.cost.RepeatFirstperiod.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
+                            cdr.cost.FractionUnit.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
+                            cdr.cost.TariffID.ToString(),
+                            cdr.cost.CommissionValue,
+                            cdr.cost.CommissionID.ToString(),
+                            cdr.cost.ExtraChargeValue,
+                            cdr.cost.ExtraChargeID.ToString() ,
+                            cdr.cost.Updated.ToShortDateString(),
+                            cdr.cost.DurationInSeconds,
+                            cdr.cost.Code,
+                            cdr.cost.Attempt.ToString()));
                 }
 
-                if (cdr.Billing_CDR_Sale != null)
+                if (cdr.sale != null)
                 {
                     wrSale.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                        cdr.Billing_CDR_Sale.ID,
-                        cdr.Billing_CDR_Sale.Zone != null ? cdr.Billing_CDR_Sale.Zone.ZoneID.ToString() : "",
-                        cdr.Billing_CDR_Sale.Net,
-                        cdr.Billing_CDR_Sale.Currency != null ? cdr.Billing_CDR_Sale.Currency.Symbol : "",
-                        cdr.Billing_CDR_Sale.RateValue,
-                        cdr.Billing_CDR_Sale.Rate != null ? cdr.Billing_CDR_Sale.Rate.ID.ToString() : "",
-                        cdr.Billing_CDR_Sale.Discount.HasValue ? cdr.Billing_CDR_Sale.Discount.Value.ToString() : null,
-                        Convert.ChangeType(cdr.Billing_CDR_Sale.RateType, cdr.Billing_CDR_Sale.RateType.GetTypeCode()),
-                        cdr.Billing_CDR_Sale.ToDConsideration != null ? cdr.Billing_CDR_Sale.ToDConsideration.ToDConsiderationID.ToString() : null,
-                        cdr.Billing_CDR_Sale.FirstPeriod.HasValue ? cdr.Billing_CDR_Sale.FirstPeriod.Value.ToString() : null,
-                        cdr.Billing_CDR_Sale.RepeatFirstperiod.HasValue ? cdr.Billing_CDR_Sale.RepeatFirstperiod.Value.ToString() : null,
-                        cdr.Billing_CDR_Sale.FractionUnit.HasValue ? cdr.Billing_CDR_Sale.FractionUnit.Value.ToString() : null,
-                        cdr.Billing_CDR_Sale.Tariff != null ? cdr.Billing_CDR_Sale.Tariff.TariffID.ToString() : null,
-                        cdr.Billing_CDR_Sale.CommissionValue,
-                        cdr.Billing_CDR_Sale.Commission != null ? cdr.Billing_CDR_Sale.Commission.CommissionID.ToString() : null,
-                        cdr.Billing_CDR_Sale.ExtraChargeValue,
-                        cdr.Billing_CDR_Sale.ExtraCharge != null ? cdr.Billing_CDR_Sale.ExtraCharge.CommissionID.ToString() : null,
-                        cdr.Billing_CDR_Sale.Updated != null ? cdr.Billing_CDR_Sale.Updated.ToShortDateString() : DateTime.Now.ToShortDateString(), // ?
-                        cdr.Billing_CDR_Sale.DurationInSeconds,
-                        cdr.Billing_CDR_Sale.Code,
-                        cdr.Billing_CDR_Sale.Attempt.ToString()));
+                        cdr.sale.ID,
+                        cdr.sale.ZoneID.ToString(),
+                        cdr.sale.Net,
+                        cdr.sale.CurrencySymbol != null ? cdr.sale.CurrencySymbol : "",
+                        cdr.sale.RateValue,
+                        cdr.sale.RateID.ToString() ,
+                        cdr.sale.Discount.HasValue ? cdr.sale.Discount.Value.ToString() : null,
+                        Convert.ChangeType(cdr.sale.RateType, cdr.sale.RateType.GetTypeCode()),
+                        cdr.sale.ToDConsiderationID.ToString(),
+                        cdr.sale.FirstPeriod.HasValue ? cdr.sale.FirstPeriod.Value.ToString() : null,
+                        cdr.sale.RepeatFirstperiod.HasValue ? cdr.sale.RepeatFirstperiod.Value.ToString() : null,
+                        cdr.sale.FractionUnit.HasValue ? cdr.sale.FractionUnit.Value.ToString() : null,
+                        cdr.sale.TariffID.ToString(),
+                        cdr.sale.CommissionValue,
+                        cdr.sale.CommissionID.ToString(),
+                        cdr.sale.ExtraChargeValue,
+                        cdr.sale.ExtraChargeID.ToString(),
+                        cdr.sale.Updated.ToShortDateString(),
+                        cdr.sale.DurationInSeconds,
+                        cdr.sale.Code,
+                        cdr.sale.Attempt.ToString()));
                 }
             }
 
@@ -103,7 +103,7 @@ namespace TOne.CDR.Data.SQL
             return preparedCDRs;
         }
 
-        private BulkInsertInfo PrepareMainCDRsForDBApply2(List<TABS.Billing_CDR_Main> cdrs)
+        private BulkInsertInfo PrepareMainCDRsForDBApply2(List<TOne.CDR.Entities.BillingCDRMain> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -118,15 +118,15 @@ namespace TOne.CDR.Data.SQL
                         cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "",
                         cdr.DurationInSeconds,
                         cdr.CustomerID,
-                        cdr.OurZone != null ? cdr.OurZone.ZoneID.ToString() : "",
-                        cdr.OriginatingZone != null ? cdr.OriginatingZone.ZoneID.ToString() : "",
+                        cdr.OurZoneID != null ? cdr.OurZoneID.ToString() : "",
+                        cdr.OriginatingZoneID != null ? cdr.OriginatingZoneID.ToString() : "",
                         cdr.SupplierID,
-                        cdr.SupplierZone != null ? cdr.SupplierZone.ZoneID.ToString() : "",
+                        cdr.SupplierZoneID != null ? cdr.SupplierZoneID.ToString() : "",
                         cdr.CDPN,
                         cdr.CGPN,
                         cdr.ReleaseCode,
                         cdr.ReleaseSource,
-                        cdr.Switch != null ? cdr.Switch.SwitchID.ToString() : "",
+                        cdr.SwitchID != null ? cdr.SwitchID.ToString() : "",
                         cdr.SwitchCdrID,
                         cdr.Tag,
                         cdr.Extra_Fields,
@@ -168,7 +168,7 @@ namespace TOne.CDR.Data.SQL
             InsertBulkToTable(preparedCDRs as BulkInsertInfo);
         }
 
-        public Object PrepareInvalidCDRsForDBApply(List<TABS.Billing_CDR_Invalid> cdrs)
+        public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -183,17 +183,17 @@ namespace TOne.CDR.Data.SQL
                         cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "",
                         cdr.DurationInSeconds,
                         cdr.CustomerID,
-                        cdr.OurZone.ZoneID,
+                        cdr.OurZoneID,
                         cdr.SupplierID,
-                        cdr.SupplierZone.ZoneID,
+                        cdr.SupplierZoneID,
                         cdr.CDPN,
                         cdr.CGPN,
                         cdr.ReleaseCode,
                         cdr.ReleaseSource,
-                        cdr.Switch.SwitchID,
+                        cdr.SwitchID,
                         cdr.SwitchCdrID,
                         cdr.Tag,
-                        cdr.OriginatingZone.ZoneID,
+                        cdr.OriginatingZoneID,
                         cdr.Extra_Fields,
                         cdr.IsRerouted,
                         cdr.Port_IN,
