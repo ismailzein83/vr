@@ -1,4 +1,7 @@
-﻿var baseurl = 'http://localhost:6666';
+﻿var pathArray = location.href.split('/');
+var protocol = pathArray[0];
+var host = pathArray[2];
+var baseurl = protocol + '//' + host
 function decodeDate(date) {
     if (typeof (date) == "string") {
         var date = date.substring(6, date.length - 2);
