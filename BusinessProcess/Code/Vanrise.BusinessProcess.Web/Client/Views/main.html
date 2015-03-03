@@ -64,8 +64,12 @@
             <div class="row">
 
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-top">
-                    <div class="loader"></div>
-                    <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers"></div>
+                    <div class="outer-loader" ng-show="isloadingdata"></div>
+                    <div class="loader" ng-show="isloadingdata">
+                        <img src="~/../Content/loader-mask.gif" />
+                    </div>
+                    <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers">
+                    </div>
                 </div>
 
             </div>
