@@ -13,18 +13,7 @@
     <form id="form1" runat="server">
         <div>
 
-            <telerik:RadSlider ID="RadSlider1" runat="server"  ItemType="Item"      Height="50px" Length="300" Width="1000px">
-                <Items>
-                    <telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                    <telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                    <telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                    <telerik:RadSliderItem runat="server" Text="0%" Value="1"  />
-                    <telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                    <telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                    <telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-                    
-                </Items>
-            </telerik:RadSlider>
+           
 
         </div>
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server">

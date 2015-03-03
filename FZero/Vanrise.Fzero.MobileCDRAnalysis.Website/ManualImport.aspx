@@ -48,7 +48,7 @@
                                                                 </td>
                                                                 <td></td>
                                                                 <td>
-                                                                    <telerik:RadUpload ID="ruImportedFile" OverwriteExistingFiles="true" InitialFileInputsCount="1" MaxFileInputsCount="1" runat="server" AllowedFileExtensions="xls,xlsx,xml" ControlObjectsVisibility="None" />
+                                                                    <telerik:RadUpload ID="ruImportedFile" OverwriteExistingFiles="true" InitialFileInputsCount="1" MaxFileInputsCount="1" runat="server" AllowedFileExtensions="xls,xlsx,xml,dat" ControlObjectsVisibility="None" />
                                                                 </td>
 
 

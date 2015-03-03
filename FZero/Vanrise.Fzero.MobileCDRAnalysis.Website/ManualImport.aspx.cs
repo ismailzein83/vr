@@ -87,6 +87,10 @@ public partial class ManualImports : BasePage
                         Session["CDRs"] = CDR.GetDataFromXml(filePath, ddlSources.SelectedValue.ToInt());
                         break;
 
+                    case ".DAT":
+                        Session["CDRs"] = CDR.GetDataFromDat(filePath, ddlSources.SelectedValue.ToInt());
+                        break;
+
                     default:
                         Session["CDRs"] = null;
                         break;
