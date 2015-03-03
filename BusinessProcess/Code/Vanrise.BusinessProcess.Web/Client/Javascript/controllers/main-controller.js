@@ -1,4 +1,5 @@
 ﻿function MainPageCtrl($scope, $location, $rootScope, $http) {
+   // $('.collapse').collapse();
     $http.get(baseurl + "/api/BusinessProcess/GetDefinitions")
      .success(function (response) {
         $scope.defnitions = response;
@@ -37,7 +38,12 @@
         $rootScope.filter = {};
     }
     //$rootScope.filter.etime = d;
+    //$scope.isloadingdata = false;
     $scope.onclickSearch = function () {
+        //$scope.$apply(function () {
+            $scope.isloadingdata = true;
+        // });
+            console.log($rootScope.filter)
         $http.get(baseurl + "/api/BusinessProcess/GetFilteredInstances",
             {
                 params: {
@@ -47,8 +53,14 @@
                 }
             })
         .success(function (response) {
-
-            $scope.myData = response.slice(1, 21);
+            
+            setTimeout(function () {
+                $scope.$apply(function () {
+                    $scope.isloadingdata = false;
+                    $scope.myData = response.slice(1, 21);
+                });
+            }, 1000)
+           
         });
     };
     if (typeof ($rootScope.filter.definitionID) != 'undefined') {

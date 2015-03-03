@@ -1,6 +1,6 @@
 'use strict';
 
-var bussPro = angular.module('bussPro', ['ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ngRoute', 'mgcrea.ngStrap']).
+var bussPro = angular.module('bussPro', ['ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ngRoute', 'mgcrea.ngStrap', 'isteven-multi-select']).
   config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
       $routeProvider.
         when('/Main', { templateUrl: '../Client/Views/main.html', controller: MainPageCtrl }).
@@ -21,7 +21,7 @@ var bussPro = angular.module('bussPro', ['ui.grid', 'ui.grid.edit', 'ui.grid.pag
 angular.module('bussPro')
 .config(function ($timepickerProvider) {
     angular.extend($timepickerProvider.defaults, {
-        timeFormat: 'HH:mm:ss a',
+        timeFormat: 'HH:mm:ss',
         length: 7,
         minuteStep:1
     });

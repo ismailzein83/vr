@@ -177,9 +177,11 @@
     <Content Include="Client\Javascript\share.js" />
     <Content Include="Client\Views\listtracking.html" />
     <Content Include="Client\Views\main.html" />
+    <Content Include="Content\ajax-loader.gif" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\loaderNEW.gif" />
+    <Content Include="Content\isteven-multi-select.css" />
+    <Content Include="Content\loader-mask.gif" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-quick-date.css" />
     <Content Include="Content\ui-grid.svg" />
@@ -209,6 +211,7 @@
     <Content Include="Content\ui-grid.ttf" />
     <Content Include="Content\ui-grid.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\isteven-multi-select.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />

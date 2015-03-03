@@ -5,7 +5,7 @@
             <div class="row">
                 <fieldset class="panel-primary padding-md" style="width: auto; display: inline;">
 
-                    <div style="width:auto;display:inline">
+                    <div class="collapse in" id="collapseExample">
                         <div>
                             <form class="form-inline">
                                 <div class="form-group">
@@ -14,7 +14,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="statusId">Status</label><br>
-                                    <select required class="form-control" id="statusId" ng-options="obj.Description for obj in bpInstanceStatusList " ng-model="filter.status"></select>
+                                    <div isteven-multi-select
+                                         input-model="bpInstanceStatusList"
+                                         output-model="filter.selectedStatus"
+                                         button-label="Description"
+                                         item-label="Description"
+                                         none-label=" "
+                                         tick-property="ticked" max-labels="2" class="max-width-md">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">Start date</label><br>
@@ -25,7 +32,7 @@
                                         <input size="8" required class="form-control" ng-model="filter.FromDate" data-autoclose="1" minutestep="1" placeholder="Time" bs-timepicker type="text">
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" >
                                     <label class="control-label">End date</label><br>
                                     <div class="form-group">
                                         <input size="10" class="form-control" data-min-date="{{filter.FromDate}}" ng-model="filter.EndDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
@@ -40,19 +47,27 @@
                     </div>
                 </fieldset>
                 <div class="action-bar">
-                    <div class="btn-group">
-                        <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickSearch()">Search<span style="padding-left:4px" class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    <div class="btn-group action-bar-left"  >
+                        <button ng-init="custom=true" ng-click="custom = !custom" style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
+                            <span ng-show="custom" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                            <span ng-hide="custom" class="glyphicon glyphicon-chevron-down"  aria-hidden="true"></span>
+                        </button>
+
+                    </div>
+                    <div class="btn-group action-bar-right" ng-show="custom">
+
                         <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Clear<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                        <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickSearch()">Search<span style="padding-left:4px" class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </div>
                 </div>
             </div>
             <div class="row">
-               
+
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-top">
-                    <div class="loader" ></div>
-                    <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers"></div>                 
+                    <div class="loader"></div>
+                    <div id="grid1" ui-grid="gridOptions" external-scopes="gridHandlers"></div>
                 </div>
-                
+
             </div>
         </div>
     </div>

@@ -25,7 +25,8 @@ namespace Vanrise.BusinessProcess.Web
                       "~/Scripts/angular-route.js",
                       "~/Scripts/angular-strap.js",
                       "~/Scripts/angular-strap.tpl.js",  
-                      "~/Scripts/ui-grid.js",                      
+                      "~/Scripts/ui-grid.js",
+                       "~/Scripts/isteven-multi-select.js",  
                       "~/Client/Javascript/share.js",
                       "~/Client/Javascript/app.js"
                       ).IncludeDirectory(
@@ -35,7 +36,8 @@ namespace Vanrise.BusinessProcess.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                       "~/Content/ui-grid.css",
+                      "~/Content/ui-grid.css",
+                      "~/Content/isteven-multi-select.css",  
                       "~/Content/site.css"));
         }
     }
