@@ -81,6 +81,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawCDRsProcess.cs" />
     <Compile Include="StoreCDRsInDBProcess.cs" />
+    <Compile Include="StoreInvalidCDRsInDBProcess.cs" />
+    <Compile Include="StoreMainCDRsInDBProcess.cs" />
     <Compile Include="TimeRangeRepricingProcess.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,18 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="BillingCDRsProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="StoreMainCDRsInDBProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="StoreInvalidCDRsInDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
