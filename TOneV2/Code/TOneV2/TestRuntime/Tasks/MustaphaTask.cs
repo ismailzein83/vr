@@ -19,11 +19,11 @@ namespace TestRuntime.Tasks
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
 
-            int switchID = 14;
+            int switchID = 2;
 
             System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
             {
-                TriggerProcessRawCDRsProcess(switchID);
+                TriggerProcessImportCDRProcess(switchID);
             });
             t.Start();
 
@@ -51,8 +51,42 @@ namespace TestRuntime.Tasks
 
         }
 
+        private static void TriggerStoreMainCDRsInDBProcess(int SwitchID)
+        {
+            TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput { SwitchID = SwitchID };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "StoreMainCDRsInDBProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
+        }
+
+        private static void TriggerStoreInvalidCDRsInDBProcess(int SwitchID)
+        {
+            TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput { SwitchID = SwitchID };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "StoreInvalidCDRsInDBProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
+        }
 
         //
+        private static void TriggerBillingCDRsProcess(int SwitchID)
+        {
+            TOne.CDRProcess.Arguments.BillingCDRsProcessInput inputArguments = new TOne.CDRProcess.Arguments.BillingCDRsProcessInput { SwitchID = SwitchID, CacheManagerId = new Guid() };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "BillingCDRsProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
+        }
 
         private static void TriggerProcessRawCDRsProcess(int SwitchID)
         {
@@ -77,6 +111,7 @@ namespace TestRuntime.Tasks
             };
             ProcessManager processManager = new ProcessManager();
             processManager.CreateNewProcess(input);
+
 
         }
 

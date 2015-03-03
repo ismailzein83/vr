@@ -32,9 +32,9 @@ namespace TOne.CDR.Business
             TABS.CarrierAccount supplier;
             TABS.CarrierAccount customer;
 
-            if (TABS.CarrierAccount.All.TryGetValue(main.CustomerID, out customer)) return null;
+            if (! TABS.CarrierAccount.All.TryGetValue(main.CustomerID, out customer)) return null;
             
-            if (TABS.CarrierAccount.All.TryGetValue(main.SupplierID, out supplier)) return null;
+            if (! TABS.CarrierAccount.All.TryGetValue(main.SupplierID, out supplier)) return null;
             
             IList<Rate> rates;
             if (cost)

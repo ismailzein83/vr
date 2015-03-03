@@ -8,17 +8,20 @@ using TOne.CDRProcess.Arguments;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 
-public partial class StoreInvalidCDRsInDBProcess : Activity, IBPWorkflow
+namespace TOne.CDRProcess
 {
-    #region IBPWorkflow Members
-
-    public string GetTitle(CreateProcessInput createProcessInput)
+    public partial class StoreInvalidCDRsInDBProcess : Activity, IBPWorkflow
     {
-        StoreInvalidCDRsInDBProcessInput inputArg = createProcessInput.InputArguments as StoreInvalidCDRsInDBProcessInput;
-        if (inputArg == null)
-            throw new ArgumentNullException("StoreInvalidCDRsInDBProcessInput");
-        return String.Format("Store Invalid CDRs for Switch {0}",inputArg.SwitchID);
-    }
+        #region IBPWorkflow Members
 
-    #endregion
+        public string GetTitle(CreateProcessInput createProcessInput)
+        {
+            StoreInvalidCDRsInDBProcessInput inputArg = createProcessInput.InputArguments as StoreInvalidCDRsInDBProcessInput;
+            if (inputArg == null)
+                throw new ArgumentNullException("StoreInvalidCDRsInDBProcessInput");
+            return String.Format("Store Invalid CDRs for Switch {0}", inputArg.SwitchID);
+        }
+
+        #endregion
+    }
 }
