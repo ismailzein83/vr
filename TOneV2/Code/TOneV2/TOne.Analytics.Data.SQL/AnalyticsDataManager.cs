@@ -98,7 +98,7 @@ namespace TOne.Analytics.Data.SQL
                         CostNets = Convert.ToDecimal(reader["Cost_Nets"]),
                         Profit = Convert.ToDecimal(reader["Profit"])
                     };
-                }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, customerID, supplierID, from, to);
+                }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, null, null, from, to);
 
         }
 
