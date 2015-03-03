@@ -97,5 +97,9 @@
     <Build Include="Analytics\Stored Procedures\sp_Traffic_TopNDestination.sql" />
     <Build Include="Analytics\Stored Procedures\sp_alerts_getalerts.sql" />
     <Build Include="Security\Analytics.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_ToDConsideration_GetToDConsiderations.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Tariff_GetTariffs.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Rate_GetRates.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Commission_GetCommissions.sql" />
   </ItemGroup>
 </Project>
