@@ -157,6 +157,7 @@ namespace Vanrise.BusinessProcess
 
             wfApp.Completed = (e) =>
                 {
+                    sharedInstanceData.ClearCacheManagers();
                     OnWorkflowCompleted(bpInstance, e);
                 };
 
