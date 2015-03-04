@@ -25,7 +25,7 @@ var allDir = [
 ];
 
 
-var overrideAttributes = function (attrs, obj) {
+var defaultAttributes = function (attrs, obj) {
     if (attrs.type.toLowerCase() == obj.name) {
         if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
         if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
@@ -43,7 +43,7 @@ app.directive('vTextbox', function () {
         },
         compile: function (element, attrs) {
             allDir.forEach(function (item) {
-                attrs = overrideAttributes(attrs, item);
+                attrs = defaultAttributes(attrs, item);
             });
         },
         templateUrl: function (element, attrs) {
