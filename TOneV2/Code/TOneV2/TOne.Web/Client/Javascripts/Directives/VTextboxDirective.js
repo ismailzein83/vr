@@ -25,16 +25,12 @@ var allDir = [
 ];
 
 
-var compileObj = function (attrs, obj) {
+var overrideAttributes = function (attrs, obj) {
     if (attrs.type.toLowerCase() == obj.name) {
         if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
         if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
     }
     return attrs;
-};
-
-var checkType = function (attrs, obj) {
-    return (attrs.type.toLowerCase() == obj.name);
 };
 
 app.directive('vTextbox', function () {
@@ -47,12 +43,12 @@ app.directive('vTextbox', function () {
         },
         compile: function (element, attrs) {
             allDir.forEach(function (item) {
-                attrs = compileObj(attrs, item);
+                attrs = overrideAttributes(attrs, item);
             });
         },
         templateUrl: function (element, attrs) {
             for (var index = 0; index < allDir.length; ++index) {
-                if (checkType(attrs,allDir[index])) return allDir[index].dTemplateURL;
+                if (attrs.type.toLowerCase() == allDir[index].name) return allDir[index].dTemplateURL;
             }
             return templates.getTemplateByType(attrs.type);
         }
