@@ -17,16 +17,16 @@ namespace TOne.BusinessEntity.Business
             _dataManager = BEDataManagerFactory.GetDataManager<ICodeDataManager>();
         }
 
-        public Dictionary<string, Dictionary<string, Code>> GetCodes(Char firstDigit, DateTime effectiveOn, bool isFuture, 
+        public Dictionary<string, Dictionary<string, Code>> GetCodes(Char firstDigit, DateTime effectiveOn, bool isFuture,
             List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes)
         {
             return _dataManager.GetCodes(firstDigit, effectiveOn, isFuture, activeSuppliers, out distinctCodes);
         }
 
         public SuppliersCodes GetCodesByCodePrefixGroup(String codePrefixGroup, DateTime effectiveOn, bool isFuture,
-       List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes)
+       List<CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes, out HashSet<Int32> supplierZoneIds, out HashSet<Int32> saleZoneIds)
         {
-            return _dataManager.GetCodesByCodePrefixGroup(codePrefixGroup, effectiveOn, isFuture, activeSuppliers, out distinctCodes);
+            return _dataManager.GetCodesByCodePrefixGroup(codePrefixGroup, effectiveOn, isFuture, activeSuppliers, out distinctCodes, out supplierZoneIds, out  saleZoneIds);
         }
 
         public List<CodeGroupInfo> GetCodeGroups()

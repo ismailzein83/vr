@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
+using TOne.LCR.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.LCR.Data.SQL
@@ -32,8 +34,145 @@ namespace TOne.LCR.Data.SQL
             InsertBulkToTable(bulkInsertInfo);
         }
 
+        public ZoneRate ZoneRateMapper(IDataReader reader, bool isSupplierZoneRates)
+        {
+            return new ZoneRate()
+            {
+                RateId = (int)reader["RateID"],
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                CarrierAccountId = reader[string.Format("{0}ID", isSupplierZoneRates ? "Supplier" : "Customer")] as string,
+                Rate = GetReaderValue<decimal>(reader, "NormalRate"),
+                ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag")
+            };
+        }
+
+        public ZoneCustomerRates GetZoneCustomerRates(IEnumerable<Int32> lstZoneIds)
+        {
+            ZoneCustomerRates allCustomerZoneRates = new ZoneCustomerRates();
+            DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
+            allCustomerZoneRates.ZonesCustomersRates = new Dictionary<int, CustomerRates>();
+
+
+            ExecuteReaderText(string.Format(query_GetZoneRates,  "Customer"),
+
+
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+
+                        int zoneID = GetReaderValue<int>(reader, "ZoneID");
+                        string carrierID = reader["Customer"] as string;
+                        decimal rate = Convert.ToDecimal(GetReaderValue<double>(reader, "NormalRate"));
+                        short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
+
+                        CustomerRates customerRates;
+                        if (!allCustomerZoneRates.ZonesCustomersRates.TryGetValue(zoneID, out customerRates))
+                        {
+                            customerRates = new CustomerRates();
+                            customerRates.CustomersRates = new Dictionary<string, RateInfo>();
+                            allCustomerZoneRates.ZonesCustomersRates.Add(zoneID, customerRates);
+                        }
+
+                        if (!customerRates.CustomersRates.ContainsKey(carrierID))
+                            customerRates.CustomersRates.Add(carrierID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+                    }
+
+                },
+
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
+                    dtPrm.TypeName = "IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                });
+
+            return allCustomerZoneRates;
+
+        }
+
+        public SupplierZoneRates GetSupplierZoneRates(IEnumerable<int> lstZoneIds)
+        {
+            SupplierZoneRates allSupplierZoneRates = new SupplierZoneRates();
+            DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
+            allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
+
+
+            ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier" ),
+                 (reader) =>
+                 {
+                     while (reader.Read())
+                     {
+
+                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
+                         string carrierID = reader["SupplierID"] as string;
+                         decimal rate = Convert.ToDecimal(GetReaderValue<double>(reader, "NormalRate"));
+                         short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
+
+                         ZoneRates supplierRates;
+                         if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
+                         {
+                             supplierRates = new ZoneRates();
+                             supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
+                             allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
+                         }
+
+                         if (!supplierRates.ZonesRates.ContainsKey(zoneID))
+                             supplierRates.ZonesRates.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+                     }
+
+                 },
+
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
+                    dtPrm.TypeName = "IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                });
+
+            return allSupplierZoneRates;
+
+        }
+
+        private DataTable BuildZoneInfoTable(IEnumerable<int> zoneIds)
+        {
+            DataTable dtZoneInfo = new DataTable();
+            dtZoneInfo.Columns.Add("ZoneID", typeof(Int32));
+            dtZoneInfo.BeginLoadData();
+            foreach (var z in zoneIds)
+            {
+                DataRow dr = dtZoneInfo.NewRow();
+                dr["ZoneID"] = z;
+                dtZoneInfo.Rows.Add(dr);
+            }
+            dtZoneInfo.EndLoadData();
+            return dtZoneInfo;
+        }
+
+
         #region Queries
 
+        const string query_GetZoneRates = @" 
+                                                                                       
+                                            SELECT
+                                           zr.[ZoneID]
+	                                       ,zr.[{0}ID]
+                                           ,zr.[NormalRate]
+                                           ,zr.[ServicesFlag]
+                                      FROM  [{0}ZoneRate] zr
+                                        JOIN @ZoneList z ON z.ID = zr.ZoneID
+                                        order by zr.ZoneID";
+
         #endregion
+
+
+
+
+
+
+
     }
 }

@@ -7,6 +7,7 @@
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.Core"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:tbe="clr-namespace:TOne.BusinessEntity.Entities;assembly=TOne.BusinessEntity.Entities"
  xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
@@ -19,6 +20,7 @@
     <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
     <x:Property Name="EffectiveTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="CodeMatchesQueue" Type="InArgument(vq:BaseQueue(scg:List(tle:CodeMatch)))" />
+    <x:Property Name="RoutingDataBaseId" Type="InArgument(x:Int32)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.BuildRoutes_1</sap2010:WorkflowViewState.IdRef>
@@ -32,6 +34,8 @@
       <x:String>TOne.LCRProcess.Arguments</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.BusinessEntity.Entities</x:String>
+      <x:String>TOne.LCR.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -72,18 +76,77 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(x:String)" Name="distinctCodes">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:List(x:String)">new List&lt;string&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="tbe:SuppliersCodes" Name="suppliersCodes" />
+      <Variable x:TypeArguments="scg1:HashSet(x:Int32)" Name="saleZoneIds" />
+      <Variable x:TypeArguments="scg1:HashSet(x:Int32)" Name="costZoneIds" />
+    </Sequence.Variables>
+    <tla:GetCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCodes_2">
+      <tla:GetCodes.ActiveSuppliers>
+        <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
+          <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">ActiveSuppliers</mca:CSharpValue>
+        </InArgument>
+      </tla:GetCodes.ActiveSuppliers>
+      <tla:GetCodes.CodePrefixGroup>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">CodePrefixGroup</mca:CSharpValue>
+        </InArgument>
+      </tla:GetCodes.CodePrefixGroup>
+      <tla:GetCodes.CostZoneIds>
+        <OutArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+          <mca:CSharpReference x:TypeArguments="scg1:HashSet(x:Int32)">costZoneIds</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetCodes.CostZoneIds>
+      <tla:GetCodes.DistinctCodes>
+        <OutArgument x:TypeArguments="scg:List(x:String)">
+          <mca:CSharpReference x:TypeArguments="scg:List(x:String)">distinctCodes</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetCodes.DistinctCodes>
+      <tla:GetCodes.EffectiveTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveTime</mca:CSharpValue>
+        </InArgument>
+      </tla:GetCodes.EffectiveTime>
+      <tla:GetCodes.IsFuture>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">IsFuture</mca:CSharpValue>
+        </InArgument>
+      </tla:GetCodes.IsFuture>
+      <tla:GetCodes.SaleZoneIds>
+        <OutArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+          <mca:CSharpReference x:TypeArguments="scg1:HashSet(x:Int32)">saleZoneIds</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetCodes.SaleZoneIds>
+      <tla:GetCodes.SupplierCodes>
+        <OutArgument x:TypeArguments="tbe:SuppliersCodes">
+          <mca:CSharpReference x:TypeArguments="tbe:SuppliersCodes">suppliersCodes</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetCodes.SupplierCodes>
+    </tla:GetCodes>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="tle:ZoneCustomerRates" Name="customerZoneRates">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="tle:ZoneCustomerRates">new ZoneCustomerRates()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="tle:SupplierZoneRates" Name="supplierZoneRates">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="tle:SupplierZoneRates">new SupplierZoneRates()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+      </Parallel.Variables>
       <tla:BuildCodeMatchByCodeGroup Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
-        <tla:BuildCodeMatchByCodeGroup.ActiveSuppliers>
-          <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
-            <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">ActiveSuppliers</mca:CSharpValue>
+        <tla:BuildCodeMatchByCodeGroup.DistinctCodes>
+          <InArgument x:TypeArguments="scg:List(x:String)">
+            <mca:CSharpValue x:TypeArguments="scg:List(x:String)">distinctCodes</mca:CSharpValue>
           </InArgument>
-        </tla:BuildCodeMatchByCodeGroup.ActiveSuppliers>
-        <tla:BuildCodeMatchByCodeGroup.CodePrefixGroup>
-          <InArgument x:TypeArguments="x:String">
-            <mca:CSharpValue x:TypeArguments="x:String">CodePrefixGroup</mca:CSharpValue>
-          </InArgument>
-        </tla:BuildCodeMatchByCodeGroup.CodePrefixGroup>
+        </tla:BuildCodeMatchByCodeGroup.DistinctCodes>
         <tla:BuildCodeMatchByCodeGroup.EffectiveTime>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveTime</mca:CSharpValue>
@@ -99,22 +162,65 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">CodeMatchesQueue</mca:CSharpReference>
           </InOutArgument>
         </tla:BuildCodeMatchByCodeGroup.OutputQueue>
+        <tla:BuildCodeMatchByCodeGroup.SupplierCodes>
+          <InArgument x:TypeArguments="tbe:SuppliersCodes">
+            <mca:CSharpValue x:TypeArguments="tbe:SuppliersCodes">suppliersCodes</mca:CSharpValue>
+          </InArgument>
+        </tla:BuildCodeMatchByCodeGroup.SupplierCodes>
       </tla:BuildCodeMatchByCodeGroup>
+      <tla:GetCustomerZoneRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneRates_1">
+        <tla:GetCustomerZoneRates.CustomerZoneRates>
+          <OutArgument x:TypeArguments="tle:ZoneCustomerRates">
+            <mca:CSharpReference x:TypeArguments="tle:ZoneCustomerRates">customerZoneRates</mca:CSharpReference>
+          </OutArgument>
+        </tla:GetCustomerZoneRates.CustomerZoneRates>
+        <tla:GetCustomerZoneRates.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDataBaseId</mca:CSharpValue>
+          </InArgument>
+        </tla:GetCustomerZoneRates.RoutingDatabaseId>
+        <tla:GetCustomerZoneRates.ZoneIds>
+          <InArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+            <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">saleZoneIds</mca:CSharpValue>
+          </InArgument>
+        </tla:GetCustomerZoneRates.ZoneIds>
+      </tla:GetCustomerZoneRates>
+      <tla:GetSupplierZoneRates Status="{x:Null}">
+        <tla:GetSupplierZoneRates.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDataBaseId</mca:CSharpValue>
+          </InArgument>
+        </tla:GetSupplierZoneRates.RoutingDatabaseId>
+        <tla:GetSupplierZoneRates.SupplierZoneRates>
+          <OutArgument x:TypeArguments="tle:SupplierZoneRates">
+            <mca:CSharpReference x:TypeArguments="tle:SupplierZoneRates">supplierZoneRates</mca:CSharpReference>
+          </OutArgument>
+        </tla:GetSupplierZoneRates.SupplierZoneRates>
+        <tla:GetSupplierZoneRates.ZoneIds>
+          <InArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+            <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">costZoneIds</mca:CSharpValue>
+          </InArgument>
+        </tla:GetSupplierZoneRates.ZoneIds>
+        <sap2010:WorkflowViewState.IdRef>GetSupplierZoneRates_1</sap2010:WorkflowViewState.IdRef>
+      </tla:GetSupplierZoneRates>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0dDOlx0ZnNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbAhKA2kOAgEBSwVnEAIBAkwHZicCAQNPDU9yAgEcVA1UWgIBFmMNY4ABAgEQWQ1ZWgIBCl4NXlQCAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbBxOA9ABDgIBAVILUmsCAQJZBYIBFAMBugGDAQXOARACAQ1cC1xwAwGIAmYLZmkDAf0BYQthWAMB8gFrC2toAwHnAXoLemkDAdwBcAtwWAMB0QF/C39pAwHGAXULdVIDAbsBhwENhwFvAgEbjAENjAFvAgEOkAEHqgEnAgF4qwEHuwEiAgFQvAEHzQEiAgEokwENkwFiAwGtAaIBDaIBgAEDAaABmAENmAFaAwGTAacBDacBYwMBhgGdAQ2dAVQCAXmzAQ2zAVsCAWu4AQ24AWMCAV6uAQ2uAXECAVHEAQ3EAXECAUO/AQ2/AVsCATbJAQ3JAWMCASk=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetCodes_2" sap:VirtualizedContainerService.HintSize="794,22" />
       <sap2010:ViewStateData Id="BuildCodeMatchByCodeGroup_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="314,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,210">
+      <sap2010:ViewStateData Id="GetCustomerZoneRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetSupplierZoneRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildRoutes_1" sap:VirtualizedContainerService.HintSize="376,290" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildRoutes_1" sap:VirtualizedContainerService.HintSize="856,352" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

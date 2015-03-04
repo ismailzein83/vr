@@ -16,22 +16,22 @@ namespace TOne.LCRProcess.Activities
 {
     public class BuildCodeMatchByCodeGroupInput
     {
-        public String CodePrefixGroup { get; set; }
+
 
         public DateTime EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
 
-        public List<CarrierAccountInfo> ActiveSuppliers { get; set; }
+        public List<String> DistinctCodes { get; set; }
 
         public BaseQueue<List<CodeMatch>> OutputQueue { get; set; }
+
+        public SuppliersCodes SuppliersCodes { get; set; }
     }
 
     public class BuildCodeMatchByCodeGroup : BaseAsyncActivity<BuildCodeMatchByCodeGroupInput>
     {
 
-        [RequiredArgument]
-        public InArgument<String> CodePrefixGroup { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveTime { get; set; }
@@ -40,10 +40,14 @@ namespace TOne.LCRProcess.Activities
         public InArgument<bool> IsFuture { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<CarrierAccountInfo>> ActiveSuppliers { get; set; }
+        public InArgument<List<String>> DistinctCodes { get; set; }
+
+        [RequiredArgument]
+        public InArgument<SuppliersCodes> SupplierCodes { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<List<CodeMatch>>> OutputQueue { get; set; }
+
 
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -57,10 +61,10 @@ namespace TOne.LCRProcess.Activities
         {
             return new BuildCodeMatchByCodeGroupInput
             {
-                CodePrefixGroup = this.CodePrefixGroup.Get(context),
+                SuppliersCodes = this.SupplierCodes.Get(context),
+                DistinctCodes = this.DistinctCodes.Get(context),
                 EffectiveTime = this.EffectiveTime.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                ActiveSuppliers = this.ActiveSuppliers.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -69,20 +73,16 @@ namespace TOne.LCRProcess.Activities
         {
 
             DateTime start = DateTime.Now;
-            //Console.WriteLine("{0}: Code Load Started for Code Prefix Group '{1}'", DateTime.Now, inputArgument.CodePrefixGroup);
-            CodeManager codeManager = new CodeManager();
-            List<string> distinctCodes;
-            SuppliersCodes suppliersCodes = codeManager.GetCodesByCodePrefixGroup(inputArgument.CodePrefixGroup, inputArgument.EffectiveTime, inputArgument.IsFuture, inputArgument.ActiveSuppliers, out distinctCodes);
-            //Console.WriteLine("{0}: Code Loaded for Code Prefix Group '{1}'", DateTime.Now, inputArgument.CodePrefixGroup);
 
-            CodeList distinctCodesList = new CodeList(distinctCodes);
+
+            CodeList distinctCodesList = new CodeList(inputArgument.DistinctCodes);
             int codeMatchCount = 0;
 
             List<CodeMatch> codeMatches = new List<CodeMatch>();
             int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
             foreach (var dCode in distinctCodesList.CodesWithPossibleMatches)
             {
-                foreach (var suppCodes in suppliersCodes.Codes)
+                foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
                     Code supplierMatch = null;
                     int index = 0;
@@ -115,6 +115,7 @@ namespace TOne.LCRProcess.Activities
 
             if (codeMatches.Count > 0)
                 inputArgument.OutputQueue.Enqueue(codeMatches);
+
             codeMatchCount += codeMatches.Count;
         }
     }
