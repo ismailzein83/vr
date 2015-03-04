@@ -17,27 +17,59 @@ public partial class test : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            //string cs = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"text;HDR=YES;FMT=Delimited\"","C:\\Users\\Walid\\Desktop\\CDR\\sample-switch-records.dat");
 
-            //StringBuilder sb = new StringBuilder();
-            //using (OleDbConnection conn = new OleDbConnection(cs))
-            //{
-            //    conn.Open();
-            //    OleDbDataAdapter da = new OleDbDataAdapter("SELECT * from [sample-switch-records.dat]", conn);
-            //    DataSet ds = new DataSet();
-            //    da.Fill(ds);
-            //    DataTable dt = ds.Tables[0];
-            //    foreach (DataRow dr in dt.Rows)
-            //    {
-            //        foreach (DataColumn dc in dt.Columns)
-            //        {
-            //            sb.AppendFormat("{0}: {1}|", dc.ColumnName, dr[dc]);
-            //        }
-            //        sb.Remove(sb.Length - 1, 1);
-            //        sb.Append("\r\n");
-            //    }
-            //    Console.Write(sb.ToString());
-            //}
+
+            foreach (string path in Directory.GetFiles("C:\\", "*.dat"))
+            {
+                // Read all lines into an array
+                string[] contents = File.ReadAllLines(path);
+                // Sort the in-memory array
+
+
+                foreach (var i in contents)
+                {
+                    Response.Write("Source_Type: " + i.Substring(0, 9));
+                    Response.Write("Source_Name: " + i.Substring(0, 9));
+                    Response.Write("Source_File: " + i.Substring(0, 9));
+                    Response.Write("Record_Type: " + i.Substring(0, 9));
+                    Response.Write("Call_Type: " + i.Substring(0, 9));
+                    Response.Write("IMEI: " + i.Substring(0, 9));
+                    Response.Write("IMEI14: " + i.Substring(0, 9));
+                    Response.Write("Entity: " + i.Substring(0, 9));
+                    Response.Write("Substring: " + i.Substring(0, 9));
+                    Response.Write("Substring: " + i.Substring(0, 9));
+                    Response.Write("Substring: " + i.Substring(0, 9));
+
+                }
+
+
+                           }
+
+
+
+
+
+            string cs = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"text;HDR=YES;FMT=Delimited\"", "C:/Users/Walid/Desktop/CDR/sample-switch-records.dat");
+
+            StringBuilder sb = new StringBuilder();
+            using (OleDbConnection conn = new OleDbConnection(cs))
+            {
+                conn.Open();
+                OleDbDataAdapter da = new OleDbDataAdapter("SELECT * from [sample-switch-records.dat]", conn);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                DataTable dt = ds.Tables[0];
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        sb.AppendFormat("{0}: {1}|", dc.ColumnName, dr[dc]);
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                    sb.Append("\r\n");
+                }
+                Console.Write(sb.ToString());
+            }
 
 
 
