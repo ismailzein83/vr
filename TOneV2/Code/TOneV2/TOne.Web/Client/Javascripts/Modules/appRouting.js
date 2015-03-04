@@ -10,6 +10,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/TestView.html',
             controller: 'TestViewController'
         }).
+        when('/RouteRuleEditor', {
+            templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
+            controller: 'RouteRuleEditorController'
+        }).
         otherwise({
             redirectTo: '/default'
         });
