@@ -96,7 +96,8 @@ namespace TOne.Analytics.Data.SQL
                         PricedDuration = reader["PricedDuration"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["PricedDuration"]) : null,
                         SaleNets = Convert.ToDecimal(reader["Sale_Nets"]),
                         CostNets = Convert.ToDecimal(reader["Cost_Nets"]),
-                        Profit = Convert.ToDecimal(reader["Profit"])
+                        Profit = Convert.ToDecimal(reader["Profit"]),
+                        Attempts = Convert.ToInt32(reader["Attempts"])
                     };
                 }, carrierType, fromDate, toDate, customerID, supplierID, topCount, groupByProfile, null, null, from, to);
 

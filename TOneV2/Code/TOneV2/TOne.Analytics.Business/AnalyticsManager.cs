@@ -16,6 +16,7 @@ namespace TOne.Analytics.Business
         }
         public List<Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, string sortOrder, string customerID, string supplierID, int? switchID, char groupByCodeGroup, string codeGroup, char showSupplier, string orderTarget, int from, int to, int? topCount)
         {
+            toDate = toDate.AddDays(1).AddSeconds(-1);
             return _datamanager.GetTopNDestinations(fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
@@ -32,21 +33,25 @@ namespace TOne.Analytics.Business
 
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int? topCount, char groupByProfile, int from, int to)
         {
+            toDate = toDate.AddDays(1).AddSeconds(-1);
             return _datamanager.GetCarrierSummary(carrierType, fromDate, toDate, customerID, supplierID, groupByProfile, topCount, from, to);
         }
 
         public List<Entities.TopCarriersView> GetTopCustomers(DateTime fromDate, DateTime toDate, int topCount)
         {
+            toDate = toDate.AddDays(1).AddSeconds(-1);
             return _datamanager.GetTopCustomers(fromDate, toDate, topCount);
         }
 
         public List<Entities.TopCarriersView> GetTopSuppliers(DateTime fromDate, DateTime toDate, int topCount)
         {
+            toDate = toDate.AddDays(1).AddSeconds(-1);
             return _datamanager.GetTopSupplier(fromDate, toDate, topCount);
         }
 
         public List<Entities.ProfitByWeekDayView> GetLastWeeksProfit(DateTime fromDate, DateTime toDate)
         {
+            toDate = toDate.AddDays(1).AddSeconds(-1);
             List<Entities.ProfitByDay> dailyProfit = _datamanager.GetLastWeeksProfit(fromDate, toDate);
 
             return CreateProfityWeekDayViews(dailyProfit);
