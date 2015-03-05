@@ -63,7 +63,9 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            inputArgument.OutputQueue.Enqueue(GetCDRsBySwitchId(inputArgument.SwitchID));
+            TOne.CDR.Entities.CDRBatch cdrBatch = GetCDRsBySwitchId(inputArgument.SwitchID);
+            if(cdrBatch != null && cdrBatch.CDRs != null && cdrBatch.CDRs.Count > 0)
+                inputArgument.OutputQueue.Enqueue(cdrBatch);
         }
 
         protected override ImportCDRsInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
