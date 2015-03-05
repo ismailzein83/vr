@@ -140,44 +140,33 @@ namespace TOne.CDRProcess.Activities
         private Billing_CDR_Base GenerateBillingCdr(TOne.Business.ProtCodeMap codeMap, TABS.CDR cdr)
         {
             Billing_CDR_Base billingCDR = null;
-            try
+          
+            if (cdr.DurationInSeconds > 0)
             {
-                if (cdr.DurationInSeconds > 0)
+                billingCDR = new Billing_CDR_Main();
+            }
+            else
+                billingCDR = new Billing_CDR_Invalid();
+
+            bool valid = cdr.Switch.SwitchManager.FillCDRInfo(cdr.Switch, cdr, billingCDR);
+
+            GenerateZones(codeMap, billingCDR);
+
+            // If there is a duration and missing supplier (zone) or Customer (zone) info
+            // then it is considered invalid
+            if (billingCDR is Billing_CDR_Main)
+                if (!valid
+                    || billingCDR.Customer.RepresentsASwitch
+                    || billingCDR.Supplier.RepresentsASwitch
+                    || billingCDR.CustomerID == null
+                    || billingCDR.SupplierID == null
+                    || billingCDR.OurZone == null
+                    || billingCDR.SupplierZone == null
+                    || billingCDR.Customer.ActivationStatus == ActivationStatus.Inactive
+                    || billingCDR.Supplier.ActivationStatus == ActivationStatus.Inactive)
                 {
-                    billingCDR = new Billing_CDR_Main();
+                    billingCDR = new Billing_CDR_Invalid(billingCDR);
                 }
-                else
-                    billingCDR = new Billing_CDR_Invalid();
-                //log.Info("Switch:" + cdr.Switch.SwitchID + "(" + cdr.Switch.Name + ")");
-
-                bool valid = cdr.Switch.SwitchManager.FillCDRInfo(cdr.Switch, cdr, billingCDR);
-
-                //billingCDR.CDPNOut = cdr.CDPNOut;
-
-                GenerateZones(codeMap, billingCDR);
-
-                // If there is a duration and missing supplier (zone) or Customer (zone) info
-                // then it is considered invalid
-                if (billingCDR is Billing_CDR_Main)
-                    if (!valid
-                        || billingCDR.Customer.RepresentsASwitch
-                        || billingCDR.Supplier.RepresentsASwitch
-                        || billingCDR.CustomerID == null
-                        || billingCDR.SupplierID == null
-                        || billingCDR.OurZone == null
-                        || billingCDR.SupplierZone == null
-                        || billingCDR.Customer.ActivationStatus == ActivationStatus.Inactive
-                        || billingCDR.Supplier.ActivationStatus == ActivationStatus.Inactive)
-                    {
-                        billingCDR = new Billing_CDR_Invalid(billingCDR);
-                    }
-                return billingCDR;
-            }
-            catch (Exception EX)
-            {
-                throw (EX);
-                //log.Error("Error Generating Billing Cdr: " + EX.Message);
-            }
             return billingCDR;
         }
 
