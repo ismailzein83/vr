@@ -84,7 +84,7 @@ namespace TOne.CDR.Data.SQL
                 TableName = "[dbo].[Billing_CDR_Cost]",
                 DataFilePath = filePathCost,
                 TabLock = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
 
             BulkInsertInfo preparedSaleCDRs = new BulkInsertInfo
@@ -92,7 +92,7 @@ namespace TOne.CDR.Data.SQL
                 TableName = "[dbo].[Billing_CDR_Sale]",
                 DataFilePath = filePathSale,
                 TabLock = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
 
             List<BulkInsertInfo> preparedCDRs = new List<BulkInsertInfo>();
@@ -146,7 +146,7 @@ namespace TOne.CDR.Data.SQL
                 TableName = "[dbo].[Billing_CDR_Main]",
                 DataFilePath = filePath,
                 TabLock = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
         }
 
@@ -212,7 +212,7 @@ namespace TOne.CDR.Data.SQL
                 TableName = "Billing_CDR_Invalid",
                 DataFilePath = filePath,
                 TabLock = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
         }
 
@@ -260,7 +260,7 @@ namespace TOne.CDR.Data.SQL
                 TableName = "CDR",
                 DataFilePath = filePath,
                 TabLock = false,
-                FieldSeparator = ','
+                FieldSeparator = '^'
             };
         }
 
