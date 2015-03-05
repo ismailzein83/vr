@@ -9,6 +9,21 @@ namespace Vanrise.BusinessProcess
     {
         public BPSharedInstanceData SharedInstanceData { get; internal set; }
 
-        public Dictionary<string,object> CustomData { get; set; }
+        Dictionary<string, object> _customData;
+        public Dictionary<string, object> CustomData
+        {
+            get
+            {
+                if (_customData == null)
+                {
+                    lock (this)
+                    {
+                        if (_customData == null)
+                            _customData = new Dictionary<string, object>();
+                    }
+                }
+                return _customData;
+            }
+        }
     }
 }
