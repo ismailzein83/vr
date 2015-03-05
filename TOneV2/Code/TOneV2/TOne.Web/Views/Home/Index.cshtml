@@ -11,11 +11,7 @@
     @Styles.Render("~/Content/Semantic")
     @Styles.Render("~/Content/Styles")
 
-    @Scripts.Render("~/bundles/JQuery")
-    @Scripts.Render("~/bundles/Angular")
-    @*@Scripts.Render("~/bundles/bootstrap")*@
-    @Scripts.Render("~/bundles/Semantic")
-    @Scripts.Render("~/bundles/Javascripts")
+    
 
 </head>
 <body ng-controller="mainCtrl">
@@ -24,5 +20,11 @@
     <a href="#/RouteRuleEditor">Route Rule Editor</a>
     <div ng-view></div>
 </body>
+
+@Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/Angular")
+@*@Scripts.Render("~/bundles/bootstrap")*@
+@Scripts.Render("~/bundles/Semantic")
+@Scripts.Render("~/bundles/Javascripts")
 </html>
 
