@@ -10,27 +10,27 @@ var templates = {
 };
 
 var allDir = [
-        {
-            name: "search",
-            dPlaceholder: "Search ...",
-            dIcon: "search",
-            dTemplateURL: templates.templateIcon
-        }
-        ,
-        {
-            name: "mail",
-            dPlaceholder: "Mail ...",
-            dIcon: "mail",
-            dTemplateURL: templates.templateIcon
-        }
-];
+{
+    name: "search",
+    dPlaceholder: "Search ...",
+    dIcon: "search",
+    dTemplateURL: templates.templateIcon
+}
+,
+{
+    name: "mail",
+    dPlaceholder: "Mail ...",
+    dIcon: "mail",
+    dTemplateURL: templates.templateIcon
+}
 
+];
 
 var defaultAttributes = function (attrs, obj) {
     if (attrs.type.toLowerCase() == obj.name) {
         if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
         if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
-        if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dPlaceholder);
+        if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dButtonText);
     }
     return attrs;
 };
