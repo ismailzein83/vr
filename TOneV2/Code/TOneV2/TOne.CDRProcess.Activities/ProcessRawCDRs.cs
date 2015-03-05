@@ -10,6 +10,7 @@ using TOne.Caching;
 using TOne.CDR.Entities;
 using Vanrise.Caching;
 using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -35,9 +36,6 @@ namespace TOne.CDRProcess.Activities
     {
 
         [RequiredArgument]
-        public InArgument<Guid> CacheManagerId { get; set; }
-
-        [RequiredArgument]
         public InArgument<BaseQueue<TOne.CDR.Entities.CDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
@@ -51,13 +49,14 @@ namespace TOne.CDRProcess.Activities
         {
             if (this.OutputQueue.Get(context) == null)
                 this.OutputQueue.Set(context, new MemoryQueue<TOne.CDR.Entities.CDRBillingBatch>());
-
+            var cacheManager = context.GetSharedInstanceData().GetCacheManager<TOneCacheManager>();
+            handle.CustomData.Add("CacheManager", cacheManager);
             base.OnBeforeExecute(context, handle);
         }
 
         protected override void DoWork(ProcessRawCDRsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityStatus previousActivityStatus, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
-            TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
+            TOneCacheManager cacheManager = handle.CustomData["CacheManager"] as TOneCacheManager;
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
 
             TABS.Switch CDRSwitch;
@@ -94,8 +93,7 @@ namespace TOne.CDRProcess.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 SwitchID = this.SwitchID.Get(context),
-                OutputQueue = this.OutputQueue.Get(context),
-                CacheManagerId = this.CacheManagerId.Get(context)
+                OutputQueue = this.OutputQueue.Get(context)
             };
         }
 
