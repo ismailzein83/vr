@@ -80,7 +80,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Billing CDRs Process stared Process CDRS for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <tca1:ProcessBillingCDR CacheManagerId="{x:Null}" PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessBillingCDR_1">
+    <tca1:ProcessBillingCDR  PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessBillingCDR_1">
       <tca1:ProcessBillingCDR.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRBillingQueue(Input.SwitchID)</mca:CSharpValue>
