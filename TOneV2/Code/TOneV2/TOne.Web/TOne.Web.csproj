@@ -180,6 +180,7 @@
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
+    <Content Include="Client\Javascripts\Directives\VGridviewDirective.js" />
     <Content Include="Client\Javascripts\Directives\VTextboxDirective.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
@@ -279,6 +280,7 @@
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Templates\Directives\VGridviewStandard.html" />
     <Content Include="Client\Templates\Directives\VTextboxButton.html" />
     <Content Include="Client\Templates\Directives\VTextboxIcon.html" />
     <Content Include="Client\Templates\Directives\VTextboxStandard.html" />
