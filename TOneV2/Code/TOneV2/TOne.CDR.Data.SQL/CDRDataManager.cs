@@ -107,37 +107,12 @@ namespace TOne.CDR.Data.SQL
         private BulkInsertInfo PrepareMainCDRsForDBApply2(List<TOne.CDR.Entities.BillingCDRMain> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
+
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
-                foreach (var cdr in cdrs)
+                foreach (TOne.CDR.Entities.BillingCDRMain cdr in cdrs)
                 {
-                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25}",
-                        cdr.ID,
-                        cdr.Attempt.ToString(),
-                        cdr.Alert.HasValue ? cdr.Alert.Value.ToString() : "",
-                        cdr.Connect.HasValue ? cdr.Connect.Value.ToString() : "",
-                        cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "",
-                        cdr.DurationInSeconds,
-                        cdr.CustomerID,
-                        cdr.OurZoneID == default(int) ? "" : cdr.OurZoneID.ToString(),
-                        cdr.OriginatingZoneID == default(int) ? "" : cdr.OriginatingZoneID.ToString(),
-                        cdr.SupplierID,
-                        cdr.SupplierZoneID == default(int) ? "" : cdr.SupplierZoneID.ToString(),
-                        cdr.CDPN,
-                        cdr.CGPN,
-                        cdr.ReleaseCode,
-                        cdr.ReleaseSource,
-                        cdr.SwitchID.ToString() ,
-                        cdr.SwitchCdrID,
-                        cdr.Tag,
-                        cdr.Extra_Fields,
-                        cdr.Port_IN,
-                        cdr.Port_OUT,
-                        cdr.OurCode,
-                        cdr.SupplierCode,
-                        cdr.CDPNOut,
-                        cdr.SubscriberID,
-                        cdr.SIP));
+                    PrepareCDRBillingBaseForDBApply(cdr, wr);
                 }
                 wr.Close();
             }
@@ -172,14 +147,9 @@ namespace TOne.CDR.Data.SQL
             InsertBulkToTable(preparedCDRs as BulkInsertInfo);
         }
 
-        public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
+        private void PrepareCDRBillingBaseForDBApply(TOne.CDR.Entities.BillingCDRBase cdr, System.IO.StreamWriter wr)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
-            {
-                foreach (var cdr in cdrs)
-                {
-                    wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}",
+            wr.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}",
                         cdr.ID,
                         cdr.Attempt.ToString(),
                         cdr.Alert.HasValue ? cdr.Alert.Value.ToString() : "",
@@ -207,6 +177,17 @@ namespace TOne.CDR.Data.SQL
                         cdr.CDPNOut,
                         cdr.SubscriberID,
                         cdr.SIP));
+        }
+
+        public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
+        {
+            string filePath = GetFilePathForBulkInsert();
+            
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            {
+                foreach (TOne.CDR.Entities.BillingCDRInvalid cdr in cdrs)
+                {
+                    PrepareCDRBillingBaseForDBApply(cdr, wr);
                 }
                 wr.Close();
             }
