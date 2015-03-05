@@ -1,40 +1,116 @@
 ﻿
 
-
-<div class="ui grid">
-    <div class="three wide column">
-        <div class="ui simple dropdown  button">
-            <input type="text" value="test" />
-            <div style="min-width: 150px; max-width: 150px; width: 150px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;">
-                <div ng-show="selectedCountries.length <= 2" ng-hide="selectedCountries.length > 2" style="display:inline-block;" ng-repeat="c in selectedCountries">{{c}}<span ng-if="selectedCountries.length > 0 && $index < selectedCountries.length -1  "> ,</span> </div>
-                <div style=" width: 100px;max-width:100px; white-space: nowrap; text-overflow: ellipsis;white-space: nowrap;" ng-show="selectedCountries.length > 2" ng-hide="selectedCountries.length <= 2">
-                    <span>{{selectedCountries.length}} items selected</span>
-                </div>
-            </div>
-            <div class="menu" tabindex="-1">
-                <div class="header" style="width: 200px; white-space: normal; ">
-                    <div class="ui label pading-top-s" ng-repeat="obj in selectedCountries">
-                        {{obj}}
-                        <i class="delete icon" ng-click="selectLanguage(obj)"></i>
+<div style="padding-top:20px">
+    <div class="ui grid">
+        <div class="row" style="min-height:300px">
+            <!--<div class="three wide column">
+                <div class="ui animated fade button" ng-init="true" ng-model='carrierAccountSelectionOption' ng-click="carrierAccountSelectionOption = !carrierAccountSelectionOption">
+                    <div class="visible content">{{carrierAccountSelectionOption ? "Customer: " : "All Customers Except:"}}</div>
+                    <div class="hidden content">
+                        {{carrierAccountSelectionOption == false? "Customer: " : "All Customers Except:"}}
                     </div>
                 </div>
-                <div ng-repeat="l in Countries" ng-click="selectLanguage(l)" class="item ">
-                    <div class="ui checkbox">
-                        <input ng-checked="selectedCountries.indexOf(l) > -1" type="checkbox">
-                        <label>{{l}}</label>
+            </div>-->
+            <div style="display:inline-block">
+                <div class="ui dropdown button menuddl" style="background-color:transparent;border:none"
+                     ng-model='carrierAccountSelectionOption' ng-init="carrierAccountSelectionOption = 1">
+                    {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
+                    <!--<i class="dropdown icon"></i>-->
+                    <div class="menu" tabindex="-1">
+                        <a class="item" ng-click="carrierAccountSelectionOption = 1" ng-show="carrierAccountSelectionOption != 1">Customers</a>
+                        <a class="item" ng-click="carrierAccountSelectionOption = 2" ng-show="carrierAccountSelectionOption != 2">All Customers Except</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="three wide column">
+                <div class="ui simple dropdown  button ddl">
+                    <div class="three wide column" >
+                        {{getSelectCustomerText()}}
+                    </div>
+                   
+                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
+                    <div class="menu" tabindex="-1">
+                        <div ng-show="selectedCustomers.length > 0">
+                            <div style="padding:5px 10px;min-width:225px">
+                                Selected Customers:
+                                <a class="ui icon" href="" style="position: absolute; right: 5px;" ng-click="selectedCustomers.length = 0">
+                                    Clear all
+                                    <i class="trash icon"></i>
+                                </a>
+                            </div>
+                            <div class="header" style=" white-space: normal; max-height: 75px; overflow: auto;">
+                                <div class="ui label pading-top-s" ng-repeat="obj in selectedCustomers">
+                                    {{obj.Name}}
+                                    <i class="delete icon" ng-click="selectCustomer(obj)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="selectedCustomers.length > 0" class="ui horizontal divider"></div>
+                       
+                         <div class="ui icon input" style="margin:2px">
+                            <input type="text" placeholder="Search" ng-model="filtername">
+                            <i class="delete icon" ng-click="filtername = ''"></i>
+                        </div>
+                        <div class="ui horizontal divider"></div>
+                        <div style="height:200px;overflow:auto">
+                            <div ng-repeat="c in customers  |filter:filtername" ng-click="selectCustomer(c)" class="item ">
+                                <div class="ui checkbox" style="margin:1px">
+                                    <input ng-checked="selectedCustomers.indexOf(c) > -1" type="checkbox">
+                                    <label>{{c.Name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="four wide column">
-        <div ng-sortable="{handle:'.handeldrag'}" class="ui divided items dragbelzone">
-            <div ng-repeat="item in selectedCountries" class="item">
-                <i class="list layout icon handeldrag"></i>
-                {{item}}
+        <div  style="color: black; font-size: 14px"> {{getSelectCustomerText()}}</div>
+        <div class="row">
+            <div class="four wide column">
+                <div class="ui simple dropdown  button ddl">
+
+                    <div style="min-width: 250px; max-width: 250px; width: 250px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;" ng-show="selectedSuppliers.length ==0">
+                        Select ...
+                    </div>
+                    <div ng-show="selectedSuppliers.length >0" style="min-width: 250px; max-width: 250px; width: 250px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;">
+                        <div ng-show="selectedSuppliers.length <= 2" ng-hide="selectedSuppliers.length > 2" style="display:inline-block;" ng-repeat="c in selectedSuppliers">{{c.Name}}<span ng-if="selectedSuppliers.length > 0 && $index < selectedSuppliers.length -1  "> ,</span> </div>
+                        <div style=" width: 200px;max-width:200px; white-space: nowrap; text-overflow: ellipsis;white-space: nowrap;" ng-show="selectedSuppliers.length > 2" ng-hide="selectedSuppliers.length <= 2">
+                            <span>{{selectedSuppliers.length}} items selected</span>
+                        </div>
+                    </div>
+                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
+                    <div class="menu" tabindex="-1">
+                        <div class="ui icon input">
+                            <input type="text" placeholder="Search" ng-model="filtersup">
+                            <i class="delete icon" ng-click="filtersup = ''"></i>
+                        </div>
+                        <div style="height:200px;overflow:auto">
+                            <div ng-repeat="c in suppliers  |filter:filtersup" ng-click="selectSupplier(c)" class="item ">
+                                <div class="ui checkbox">
+                                    <input ng-checked="selectedSuppliers.indexOf(c) > -1" type="checkbox">
+                                    <label>{{c.Name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <div ng-sortable="itemsSortable" class="ui divided items dragbelzone" ng-show="selectedSuppliers.length > 0">
+                    <div ng-repeat="item in selectedSuppliers" class="item">
+                        <i class="list layout icon handeldrag"></i>
+                        {{item.Name}}
+                        <i class="delete icon" style="float: right; padding-top: 10px; cursor:default" ng-click="selectSupplier(item)"></i>
+                        <div style="float: right">
+                            <input type="text" class="custom-input" style="max-width: 40px" size="3">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    
 
+    </div>
 </div>

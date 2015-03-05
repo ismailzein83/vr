@@ -11,4 +11,21 @@
 }
 .dragbelzone .handeldrag{
    cursor:move ;
+   padding-top: 10px;
+}
+.dragbelzone:empty{
+    display:none;
+}
+.hand-cursor{
+     cursor:hand ;
+}
+.custom-input{
+    font-family: "Lato","Helvetica Neue",Arial,Helvetica,sans-serif;
+    padding:5px ;
+    background: none repeat scroll 0% 0% #FFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.8);
+    border-radius: 0.2857rem;
+    transition: background-color 0.2s ease 0s, box-shadow 0.2s ease 0s, border-color 0.2s ease 0s;
+    box-shadow: none;
 }
