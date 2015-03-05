@@ -22,9 +22,10 @@ namespace TOne.LCR.Business
         int _saleZoneId;
         CustomerRates _saleZoneCustomerRates;
 
-        public SingleDestinationRoutesBuildContext(Dictionary<string, CodeMatch> suppliersCodeMatches, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
+        public SingleDestinationRoutesBuildContext(string routeCode, Dictionary<string, CodeMatch> suppliersCodeMatches, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
             RouteRulesByActionDataType routeRules, RouteOptionRulesBySupplier routeOptionsRules)
         {
+            _routeCode = routeCode;
             _suppliersCodeMatches = suppliersCodeMatches;
             _customerRates = customerRates;
             _supplierRates = supplierRates;
@@ -78,7 +79,6 @@ namespace TOne.LCR.Business
             CodeMatch sysCodeMatch;
             if (_suppliersCodeMatches.TryGetValue("SYS", out sysCodeMatch))
             {
-                _routeCode = sysCodeMatch.Code;
                 _saleZoneId = sysCodeMatch.SupplierZoneId;
                 _customerRates.ZonesCustomersRates.TryGetValue(sysCodeMatch.SupplierZoneId, out _saleZoneCustomerRates);
             }

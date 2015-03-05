@@ -10,5 +10,10 @@ namespace TOne.LCR.Entities
     public class SupplierSelectionSet : BaseCarrierAccountSet
     {
         public string SupplierId { get; set; }
+
+        public override bool IsAccountIdIncluded(string accountId)
+        {
+            return this.SupplierId == accountId;
+        }
     }
 }

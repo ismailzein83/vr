@@ -81,7 +81,8 @@ namespace TOne.LCR.Business
                 else
                 {
                     RouteRuleMatchFinder ruleFinder;
-                    if (_parentContext.RouteRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
+                    if (_parentContext.RouteRuleFindersByActionDataType != null 
+                        && _parentContext.RouteRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
                     {
                         ruleFinder.GoToStart();
                         RouteRule rule;

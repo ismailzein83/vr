@@ -13,5 +13,17 @@ namespace TOne.LCR.Entities
         public bool WithSubCodes { get; set; }
 
         public List<string> ExcludedCodes { get; set; }
+
+        public override CodeSetMatch GetMatch()
+        {
+            CodeSetMatch match = new CodeSetMatch { MatchCodes = new Dictionary<string, bool>() };
+            match.MatchCodes.Add(this.Code, this.WithSubCodes);
+            return match;
+        }
+
+        public override bool IsCodeExcluded(string code)
+        {
+            return this.ExcludedCodes != null && this.ExcludedCodes.Contains(code);
+        }
     }
 }

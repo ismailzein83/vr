@@ -67,7 +67,8 @@ namespace TOne.LCR.Business
                 {
                     RouteRulesByActionDataType optionRules;
                     bool done = false;
-                    if (_parentContext.RouteOptionsRules.Rules.TryGetValue(option.SupplierId, out optionRules))
+                    if (_parentContext.RouteOptionsRules != null 
+                        && _parentContext.RouteOptionsRules.Rules.TryGetValue(option.SupplierId, out optionRules))
                     {
                         RouteRuleMatches ruleMatches;
                         if (optionRules.Rules.TryGetValue(actionDataType, out ruleMatches))

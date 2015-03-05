@@ -22,13 +22,6 @@ namespace TOne.LCR.Entities
         {
             return false;
         }
-        
-        public virtual List<Char> GetMatchCodeFirstDigits()
-        {
-            return null;
-        }
-
-
     }
 
     public class CodeSetMatch
