@@ -25,8 +25,6 @@ namespace TOne.CDRProcess.Activities
 
         public BaseQueue<TOne.CDR.Entities.CDRBillingBatch> OutputQueue { get; set; }
 
-        public Guid CacheManagerId { get; set; }
-
     }
 
     #endregion

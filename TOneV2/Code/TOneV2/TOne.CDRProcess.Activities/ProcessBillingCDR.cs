@@ -25,7 +25,6 @@ namespace TOne.CDRProcess.Activities
 
         public BaseQueue<TOne.CDR.Entities.CDRInvalidBatch> OutputInvalidCDRQueue { get; set; }
 
-        public Guid CacheManagerId { get; set; }
 
     }
 
@@ -43,9 +42,6 @@ namespace TOne.CDRProcess.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<TOne.CDR.Entities.CDRInvalidBatch>> OutputInvalidCDRQueue { get; set; }
-
-        [RequiredArgument]
-        public InArgument<Guid> CacheManagerId { get; set; }
 
         #endregion
 
@@ -83,13 +79,15 @@ namespace TOne.CDRProcess.Activities
 
             if (this.OutputInvalidCDRQueue.Get(context) == null)
                 this.OutputInvalidCDRQueue.Set(context, new MemoryQueue<TOne.CDR.Entities.CDRInvalidBatch>());
-
+            
+            var cacheManager = context.GetSharedInstanceData().GetCacheManager<TOneCacheManager>();
+            handle.CustomData.Add("CacheManager", cacheManager);
             base.OnBeforeExecute(context, handle);
         }
 
         protected override void DoWork(ProcessBillingCDRInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
+            TOneCacheManager cacheManager = handle.CustomData["CacheManager"] as TOneCacheManager;
 
             PricingGenerator generator;
             
@@ -152,8 +150,7 @@ namespace TOne.CDRProcess.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputMainCDRQueue = this.OutputMainCDRQueue.Get(context),
-                OutputInvalidCDRQueue = this.OutputInvalidCDRQueue.Get(context),
-                CacheManagerId = this.CacheManagerId.Get(context)
+                OutputInvalidCDRQueue = this.OutputInvalidCDRQueue.Get(context)
             };
         }
     }

@@ -2,7 +2,6 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
- xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -76,18 +75,12 @@
         </Variable.Default>
       </Variable>
     </Sequence.Variables>
-    <WriteLine>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Billing CDRs Process stared Process CDRS for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_1</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
-    <tca1:ProcessBillingCDR PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessBillingCDR_1">
-      <tca1:ProcessBillingCDR.CacheManagerId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerId</mca:CSharpValue>
-        </InArgument>
-      </tca1:ProcessBillingCDR.CacheManagerId>
+    <tca1:ProcessBillingCDR CacheManagerId="{x:Null}" PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessBillingCDR_1">
       <tca1:ProcessBillingCDR.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRBillingQueue(Input.SwitchID)</mca:CSharpValue>
@@ -104,13 +97,12 @@
         </InOutArgument>
       </tca1:ProcessBillingCDR.OutputMainCDRQueue>
     </tca1:ProcessBillingCDR>
-    <WriteLine>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Billing CDRs Process finished Process CDRS for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_2</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xCaWxsaW5nQ0RSc1Byb2Nlc3MueGFtbAxCA3IOAgEBRgtGpgECAQZLC0ugAQIBAk8FVBECASBVBWoeAgEPawVwEQIBClEJUbQBAgEhXQtdpgECARxiC2J5AgEYZwtncwIBFFgLWFsCARBtCW22AQIBCw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xCaWxsaW5nQ0RSc1Byb2Nlc3MueGFtbAtBA2oOAgEBRQtFpgECAQZKC0qgAQIBAk4FUhECARxTBWMeAgEPZAVoEQIBClAJULQBAgEdVgtWpgECARhbC1t5AgEUYAtgcwIBEGYJZrYBAgEL</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
