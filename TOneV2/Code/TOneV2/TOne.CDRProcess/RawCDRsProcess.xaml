@@ -82,11 +82,7 @@
       </InArgument>
     </WriteLine>
     <tca1:ProcessRawCDRs PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRawCDRs_2">
-      <tca1:ProcessRawCDRs.CacheManagerId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.CacheManagerId</mca:CSharpValue>
-        </InArgument>
-      </tca1:ProcessRawCDRs.CacheManagerId>
+      
       <tca1:ProcessRawCDRs.InputQueue>
         <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBatch)">
           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBatch)">CDRsQueue</mca:CSharpValue>
