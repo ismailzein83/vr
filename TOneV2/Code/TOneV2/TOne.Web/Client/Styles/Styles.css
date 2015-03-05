@@ -2,3 +2,13 @@
 }
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.pading-top-s {
+    margin-top: 2px !important;
+}
+.dragbelzone{
+    background-color: #FFF;
+    padding:5px ;
+}
+.dragbelzone .handeldrag{
+   cursor:move ;
+}

@@ -1,1 +1,1 @@
-﻿var appControllers = angular.module('appControllers', []);
+﻿var appControllers = angular.module('appControllers', ['ng-sortable']);

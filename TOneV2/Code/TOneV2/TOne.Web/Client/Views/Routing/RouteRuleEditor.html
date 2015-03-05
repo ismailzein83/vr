@@ -1,112 +1,40 @@
-﻿<div class="demo">
-    <div class="example">
-        <div class="ui three item teal menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
-        </div>
-        <div class="ui vertical demo menu">
-            <a class="active teal item">
-                A
-            </a>
-            <a class="item">
-                B
-                <div class="ui label">1</div>
-            </a>
-            <div class="item">
-                <div class="ui transparent icon input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search icon"></i>
+﻿
+
+
+<div class="ui grid">
+    <div class="three wide column">
+        <div class="ui simple dropdown  button">
+            <input type="text" value="test" />
+            <div style="min-width: 150px; max-width: 150px; width: 150px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;">
+                <div ng-show="selectedCountries.length <= 2" ng-hide="selectedCountries.length > 2" style="display:inline-block;" ng-repeat="c in selectedCountries">{{c}}<span ng-if="selectedCountries.length > 0 && $index < selectedCountries.length -1  "> ,</span> </div>
+                <div style=" width: 100px;max-width:100px; white-space: nowrap; text-overflow: ellipsis;white-space: nowrap;" ng-show="selectedCountries.length > 2" ng-hide="selectedCountries.length <= 2">
+                    <span>{{selectedCountries.length}} items selected</span>
+                </div>
+            </div>
+            <div class="menu" tabindex="-1">
+                <div class="header" style="width: 200px; white-space: normal; ">
+                    <div class="ui label pading-top-s" ng-repeat="obj in selectedCountries">
+                        {{obj}}
+                        <i class="delete icon" ng-click="selectLanguage(obj)"></i>
+                    </div>
+                </div>
+                <div ng-repeat="l in Countries" ng-click="selectLanguage(l)" class="item ">
+                    <div class="ui checkbox">
+                        <input ng-checked="selectedCountries.indexOf(l) > -1" type="checkbox">
+                        <label>{{l}}</label>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="ui tabular menu">
-            <a class="active item">
-                Tab
-            </a>
-            <a class="item">
-                Tab
-            </a>
-        </div>
-        <div class="ui text demo menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
-        </div>
-        <div class="ui secondary demo menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
-        </div>
-        <div class="ui secondary pointing three item demo menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
-        </div>
-        <div class="ui secondary vertical demo menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
-        </div>
-        <div class="ui secondary pointing vertical demo menu">
-            <a class="active item">
-                A
-            </a>
-            <a class="item">
-                B
-            </a>
-            <a class="item">
-                C
-            </a>
+    </div>
+    <div class="four wide column">
+        <div ng-sortable="{handle:'.handeldrag'}" class="ui divided items dragbelzone">
+            <div ng-repeat="item in selectedCountries" class="item">
+                <i class="list layout icon handeldrag"></i>
+                {{item}}
+            </div>
         </div>
     </div>
+    
+
 </div>
-<script type="text/javascript">
-    $(document)
-      .ready(function () {
-          $('.demo .example .menu a.item')
-            .on('click', function () {
-                if (!$(this).hasClass('dropdown')) {
-                    $(this)
-                      .addClass('active')
-                      .closest('.ui.menu')
-                      .find('.item')
-                        .not($(this))
-                        .removeClass('active')
-                    ;
-                }
-            })
-          ;
-      })
-    ;
-</script>

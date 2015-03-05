@@ -35,8 +35,10 @@ namespace TOne.Web
             //    "~/Client/Libraries/Angular", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
-               "~/Client/Libraries/Angular/angular.js", 
-               "~/Client/Libraries/Angular/angular-route.js"));
+               "~/Client/Libraries/Angular/angular.js",
+               "~/Client/Libraries/Angular/angular-route.js",
+              "~/Client/Libraries/Angular/sortable.js",
+              "~/Client/Libraries/Angular/ng-sortable.js"));
 
             //Bootstrap
             //bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(

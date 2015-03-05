@@ -158,6 +158,19 @@
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
     <Content Include="Client\Libraries\Angular\angular.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.html" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\model.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\server\fixtures.js" />
+    <Content Include="Client\Libraries\Angular\meteor\methods.js" />
+    <Content Include="Client\Libraries\Angular\meteor\package.js" />
+    <Content Include="Client\Libraries\Angular\meteor\reactivize.js" />
+    <Content Include="Client\Libraries\Angular\meteor\template.html" />
+    <Content Include="Client\Libraries\Angular\meteor\test.js" />
+    <Content Include="Client\Libraries\Angular\ng-sortable.js" />
+    <Content Include="Client\Libraries\Angular\sortable-old.js" />
+    <Content Include="Client\Libraries\Angular\Sortable.js" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
@@ -236,6 +249,7 @@
     <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
+    <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
     <Content Include="Client\Templates\Directives\VTextboxIcon.html" />
     <Content Include="Client\Templates\Directives\VTextboxStandard.html" />
@@ -286,6 +300,18 @@
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.woff2" />
     <Content Include="Client\Libraries\Angular\angular-route.min.js.map" />
     <Content Include="Client\Libraries\Angular\angular.min.js.map" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\.gitignore" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\packages" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\release" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\versions" />
+    <Content Include="Client\Libraries\Angular\meteor\example\package.json" />
+    <Content Include="Client\Libraries\Angular\meteor\example\packages\Sortable" />
+    <Content Include="Client\Libraries\Angular\meteor\example\README.md" />
+    <Content Include="Client\Libraries\Angular\meteor\example\run.bat" />
+    <Content Include="Client\Libraries\Angular\meteor\example\run.sh" />
+    <Content Include="Client\Libraries\Angular\meteor\publish.sh" />
+    <Content Include="Client\Libraries\Angular\meteor\README.md" />
+    <Content Include="Client\Libraries\Angular\meteor\runtests.sh" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>
