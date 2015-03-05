@@ -101,5 +101,7 @@
     <Build Include="BEntity\Stored Procedures\sp_Tariff_GetTariffs.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetRates.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Commission_GetCommissions.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Code_GetDistinctCodePrefixes.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Code_GetByCodePrefixGroupForActiveSuppliers.sql" />
   </ItemGroup>
 </Project>

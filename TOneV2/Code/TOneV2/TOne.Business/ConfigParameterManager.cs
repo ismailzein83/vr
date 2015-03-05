@@ -50,7 +50,12 @@ namespace TOne.Business
         public int GetLoadCalculatedRates()
         {
             return GetIntValue(ConfigParameterName.LoadCalculatedRates);
-        }        
+        }    
+    
+        public int GetRoutingCodePrefixLength()
+        {
+            return GetIntValue(ConfigParameterName.RoutingCodePrefixLength);
+        }
 
         #endregion
 

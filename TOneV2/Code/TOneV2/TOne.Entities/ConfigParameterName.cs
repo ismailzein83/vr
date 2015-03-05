@@ -15,7 +15,9 @@ namespace TOne.Entities
         [ConfigParameterName(DefaultValue = "50000")]
         LoadZoneBatchSize = 3,
         [ConfigParameterName(DefaultValue = "50000")]
-        LoadCalculatedRates = 4
+        LoadCalculatedRates = 4,
+        [ConfigParameterName(DefaultValue = "3")]
+        RoutingCodePrefixLength = 5
     }
 
     public class ConfigParameterNameAttribute : Attribute
