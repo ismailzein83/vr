@@ -60,6 +60,12 @@ namespace TOne.CDRProcess.Activities
             TOneCacheManager cacheManager = CacheManagerFactory.GetCacheManager<TOneCacheManager>(inputArgument.CacheManagerId);
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
 
+            TABS.Switch CDRSwitch;
+            if (! TABS.Switch.All.TryGetValue(inputArgument.SwitchID, out CDRSwitch))
+            { 
+                throw new Exception("Switch Not Exist");
+            }
+
             bool hasItem = false;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -69,15 +75,11 @@ namespace TOne.CDRProcess.Activities
                     {
                         TOne.CDR.Entities.CDRBillingBatch CdrBillingGenerated = new TOne.CDR.Entities.CDRBillingBatch();
                         CdrBillingGenerated.CDRs = new List<BillingCDRBase>();
-                        TABS.Switch CDRSwitch;
-                        if (TABS.Switch.All.TryGetValue(inputArgument.SwitchID, out CDRSwitch))
+                        foreach (TABS.CDR cdr in cdrBatch.CDRs)
                         {
-                            foreach (TABS.CDR cdr in cdrBatch.CDRs)
-                            {
-                                cdr.Switch = CDRSwitch;
-                                Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
-                                CdrBillingGenerated.CDRs.Add(GetBillingCDRBase(cdrBase));
-                            }
+                            cdr.Switch = CDRSwitch;
+                            Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
+                            CdrBillingGenerated.CDRs.Add(GetBillingCDRBase(cdrBase));
                         }
                         inputArgument.OutputQueue.Enqueue(CdrBillingGenerated);
                     });
