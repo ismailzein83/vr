@@ -279,6 +279,7 @@
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Templates\Directives\VTextboxButton.html" />
     <Content Include="Client\Templates\Directives\VTextboxIcon.html" />
     <Content Include="Client\Templates\Directives\VTextboxStandard.html" />
     <Content Include="Client\Views\Default.html" />

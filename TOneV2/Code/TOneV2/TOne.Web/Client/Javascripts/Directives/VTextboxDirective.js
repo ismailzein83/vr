@@ -20,7 +20,7 @@ var allDir = [
             name: "mail",
             dPlaceholder: "Mail ...",
             dIcon: "mail",
-            dTemplateURL: templates.dTemplate
+            dTemplateURL: templates.templateIcon
         }
 ];
 
