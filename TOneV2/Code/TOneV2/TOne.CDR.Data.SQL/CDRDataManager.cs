@@ -20,65 +20,71 @@ namespace TOne.CDR.Data.SQL
 
             System.IO.StreamWriter wrCost = new System.IO.StreamWriter(filePathCost);
             System.IO.StreamWriter wrSale = new System.IO.StreamWriter(filePathSale);
-
-            foreach (TOne.CDR.Entities.BillingCDRMain cdr in cdrs)
+            try
             {
-
-                if (cdr.cost != null)
+                foreach (TOne.CDR.Entities.BillingCDRMain cdr in cdrs)
                 {
-                    wrCost.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                            cdr.cost.ID,
-                            cdr.cost.ZoneID.ToString(),
-                            cdr.cost.Net,
-                            cdr.cost.CurrencySymbol != null ? cdr.cost.CurrencySymbol.ToString() : "",
-                            cdr.cost.RateValue,
-                            cdr.cost.RateID.ToString() ,
-                            cdr.cost.Discount.HasValue ? cdr.cost.Discount.Value.ToString() : null,
-                            Convert.ChangeType(cdr.cost.RateType, cdr.cost.RateType.GetTypeCode()),
-                            cdr.cost.ToDConsiderationID.ToString(),
-                            cdr.cost.FirstPeriod.HasValue ? cdr.cost.FirstPeriod.Value.ToString() : null,
-                            cdr.cost.RepeatFirstperiod.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
-                            cdr.cost.FractionUnit.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
-                            cdr.cost.TariffID.ToString(),
-                            cdr.cost.CommissionValue,
-                            cdr.cost.CommissionID.ToString(),
-                            cdr.cost.ExtraChargeValue,
-                            cdr.cost.ExtraChargeID.ToString() ,
-                            cdr.cost.Updated.ToShortDateString(),
-                            cdr.cost.DurationInSeconds,
-                            cdr.cost.Code,
-                            cdr.cost.Attempt.ToString()));
-                }
 
-                if (cdr.sale != null)
-                {
-                    wrSale.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                        cdr.sale.ID,
-                        cdr.sale.ZoneID.ToString(),
-                        cdr.sale.Net,
-                        cdr.sale.CurrencySymbol != null ? cdr.sale.CurrencySymbol : "",
-                        cdr.sale.RateValue,
-                        cdr.sale.RateID.ToString() ,
-                        cdr.sale.Discount.HasValue ? cdr.sale.Discount.Value.ToString() : null,
-                        Convert.ChangeType(cdr.sale.RateType, cdr.sale.RateType.GetTypeCode()),
-                        cdr.sale.ToDConsiderationID.ToString(),
-                        cdr.sale.FirstPeriod.HasValue ? cdr.sale.FirstPeriod.Value.ToString() : null,
-                        cdr.sale.RepeatFirstperiod.HasValue ? cdr.sale.RepeatFirstperiod.Value.ToString() : null,
-                        cdr.sale.FractionUnit.HasValue ? cdr.sale.FractionUnit.Value.ToString() : null,
-                        cdr.sale.TariffID.ToString(),
-                        cdr.sale.CommissionValue,
-                        cdr.sale.CommissionID.ToString(),
-                        cdr.sale.ExtraChargeValue,
-                        cdr.sale.ExtraChargeID.ToString(),
-                        cdr.sale.Updated.ToShortDateString(),
-                        cdr.sale.DurationInSeconds,
-                        cdr.sale.Code,
-                        cdr.sale.Attempt.ToString()));
+                    if (cdr.cost != null)
+                    {
+                        wrCost.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
+                                cdr.cost.ID,
+                                cdr.cost.ZoneID.ToString(),
+                                cdr.cost.Net,
+                                cdr.cost.CurrencySymbol != null ? cdr.cost.CurrencySymbol.ToString() : "",
+                                cdr.cost.RateValue,
+                                cdr.cost.RateID.ToString(),
+                                cdr.cost.Discount.HasValue ? cdr.cost.Discount.Value.ToString() : null,
+                                Convert.ChangeType(cdr.cost.RateType, cdr.cost.RateType.GetTypeCode()),
+                                cdr.cost.ToDConsiderationID.ToString(),
+                                cdr.cost.FirstPeriod.HasValue ? cdr.cost.FirstPeriod.Value.ToString() : null,
+                                cdr.cost.RepeatFirstperiod.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
+                                cdr.cost.FractionUnit.HasValue ? cdr.cost.RepeatFirstperiod.Value.ToString() : null,
+                                cdr.cost.TariffID.ToString(),
+                                cdr.cost.CommissionValue,
+                                cdr.cost.CommissionID.ToString(),
+                                cdr.cost.ExtraChargeValue,
+                                cdr.cost.ExtraChargeID.ToString(),
+                                cdr.cost.Updated.ToShortDateString(),
+                                cdr.cost.DurationInSeconds,
+                                cdr.cost.Code,
+                                cdr.cost.Attempt.ToString()));
+                    }
+
+                    if (cdr.sale != null)
+                    {
+                        wrSale.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
+                            cdr.sale.ID,
+                            cdr.sale.ZoneID.ToString(),
+                            cdr.sale.Net,
+                            cdr.sale.CurrencySymbol != null ? cdr.sale.CurrencySymbol : "",
+                            cdr.sale.RateValue,
+                            cdr.sale.RateID.ToString(),
+                            cdr.sale.Discount.HasValue ? cdr.sale.Discount.Value.ToString() : null,
+                            Convert.ChangeType(cdr.sale.RateType, cdr.sale.RateType.GetTypeCode()),
+                            cdr.sale.ToDConsiderationID.ToString(),
+                            cdr.sale.FirstPeriod.HasValue ? cdr.sale.FirstPeriod.Value.ToString() : null,
+                            cdr.sale.RepeatFirstperiod.HasValue ? cdr.sale.RepeatFirstperiod.Value.ToString() : null,
+                            cdr.sale.FractionUnit.HasValue ? cdr.sale.FractionUnit.Value.ToString() : null,
+                            cdr.sale.TariffID.ToString(),
+                            cdr.sale.CommissionValue,
+                            cdr.sale.CommissionID.ToString(),
+                            cdr.sale.ExtraChargeValue,
+                            cdr.sale.ExtraChargeID.ToString(),
+                            cdr.sale.Updated.ToShortDateString(),
+                            cdr.sale.DurationInSeconds,
+                            cdr.sale.Code,
+                            cdr.sale.Attempt.ToString()));
+                    }
                 }
             }
-
-            wrCost.Close();
-            wrSale.Close();
+            finally
+            {
+                wrCost.Close();
+                wrCost.Dispose();
+                wrSale.Close();
+                wrSale.Dispose();
+            }
 
             BulkInsertInfo preparedCostCDRs = new BulkInsertInfo
             {
@@ -115,6 +121,7 @@ namespace TOne.CDR.Data.SQL
                     PrepareCDRBillingBaseForDBApply(cdr, wr);
                 }
                 wr.Close();
+                wr.Dispose();
             }
 
             return new BulkInsertInfo
