@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TOne.Data.SQL;
 using Vanrise.Data.SQL;
 
@@ -118,15 +119,15 @@ namespace TOne.CDR.Data.SQL
                         cdr.Disconnect.HasValue ? cdr.Disconnect.Value.ToString() : "",
                         cdr.DurationInSeconds,
                         cdr.CustomerID,
-                        cdr.OurZoneID != null ? cdr.OurZoneID.ToString() : "",
-                        cdr.OriginatingZoneID != null ? cdr.OriginatingZoneID.ToString() : "",
+                        cdr.OurZoneID.ToString(),
+                        cdr.OriginatingZoneID.ToString(),
                         cdr.SupplierID,
-                        cdr.SupplierZoneID != null ? cdr.SupplierZoneID.ToString() : "",
+                        cdr.SupplierZoneID.ToString() ,
                         cdr.CDPN,
                         cdr.CGPN,
                         cdr.ReleaseCode,
                         cdr.ReleaseSource,
-                        cdr.SwitchID != null ? cdr.SwitchID.ToString() : "",
+                        cdr.SwitchID.ToString() ,
                         cdr.SwitchCdrID,
                         cdr.Tag,
                         cdr.Extra_Fields,
@@ -154,8 +155,11 @@ namespace TOne.CDR.Data.SQL
         {
             List<BulkInsertInfo> listPreparedCDRs = (List<BulkInsertInfo>)preparedMainCDRs;
 
-            foreach (BulkInsertInfo item in listPreparedCDRs)
+            Parallel.ForEach(listPreparedCDRs, item =>
+            {
                 InsertBulkToTable(item);
+            });
+    
         }
 
         public void ApplyInvalidCDRsToDB(Object preparedInvalidCDRs)
