@@ -49,13 +49,6 @@ namespace TOne.CDRProcess.Activities
             });
         }
 
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.InputQueue.Get(context) == null)
-                this.InputQueue.Set(context, new MemoryQueue<object>());
-            base.OnBeforeExecute(context, handle);
-        }
-
         protected override StoreCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new StoreCDRsToDBInput
