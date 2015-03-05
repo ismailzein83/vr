@@ -83,7 +83,7 @@ namespace TOne.CDR.Data.SQL
             {
                 TableName = "[dbo].[Billing_CDR_Cost]",
                 DataFilePath = filePathCost,
-                TabLock = true,
+                TabLock = false,
                 FieldSeparator = ','
             };
 
@@ -91,7 +91,7 @@ namespace TOne.CDR.Data.SQL
             {
                 TableName = "[dbo].[Billing_CDR_Sale]",
                 DataFilePath = filePathSale,
-                TabLock = true,
+                TabLock = false,
                 FieldSeparator = ','
             };
 
@@ -145,7 +145,7 @@ namespace TOne.CDR.Data.SQL
             {
                 TableName = "[dbo].[Billing_CDR_Main]",
                 DataFilePath = filePath,
-                TabLock = true,
+                TabLock = false,
                 FieldSeparator = ','
             };
         }
@@ -211,7 +211,7 @@ namespace TOne.CDR.Data.SQL
             {
                 TableName = "Billing_CDR_Invalid",
                 DataFilePath = filePath,
-                TabLock = true,
+                TabLock = false,
                 FieldSeparator = ','
             };
         }
@@ -259,7 +259,7 @@ namespace TOne.CDR.Data.SQL
             {
                 TableName = "CDR",
                 DataFilePath = filePath,
-                TabLock = true,
+                TabLock = false,
                 FieldSeparator = ','
             };
         }
