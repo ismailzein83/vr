@@ -3,6 +3,7 @@
 var templates = {
     dTemplate: "../../Client/Templates/Directives/VTextboxStandard.html",
     templateIcon: "../../Client/Templates/Directives/VTextboxIcon.html",
+    templateButton: "../../Client/Templates/Directives/VTextboxButton.html",
     getTemplateByType: function (type) {
         return '../../Client/Templates/Directives/VTextbox' + type + '.html'
     }
@@ -29,6 +30,7 @@ var defaultAttributes = function (attrs, obj) {
     if (attrs.type.toLowerCase() == obj.name) {
         if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
         if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
+        if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dPlaceholder);
     }
     return attrs;
 };
@@ -39,7 +41,9 @@ app.directive('vTextbox', function () {
         scope: {
             holder: '@placeholder',
             icon: '@icon',
-            text:'=text'
+            btnText: '@buttontext',
+            text: '=text',
+            btnclick: '&btnClick'
         },
         compile: function (element, attrs) {
             allDir.forEach(function (item) {
