@@ -65,30 +65,22 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div  style="color: black; font-size: 14px"> {{getSelectCustomerText()}}</div>
+        </div>       
         <div class="row">
             <div class="four wide column">
                 <div class="ui simple dropdown  button ddl">
-
-                    <div style="min-width: 250px; max-width: 250px; width: 250px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;" ng-show="selectedSuppliers.length ==0">
-                        Select ...
-                    </div>
-                    <div ng-show="selectedSuppliers.length >0" style="min-width: 250px; max-width: 250px; width: 250px; white-space: nowrap;overflow:hidden; text-overflow: ellipsis;white-space: nowrap; height: 15px;">
-                        <div ng-show="selectedSuppliers.length <= 2" ng-hide="selectedSuppliers.length > 2" style="display:inline-block;" ng-repeat="c in selectedSuppliers">{{c.Name}}<span ng-if="selectedSuppliers.length > 0 && $index < selectedSuppliers.length -1  "> ,</span> </div>
-                        <div style=" width: 200px;max-width:200px; white-space: nowrap; text-overflow: ellipsis;white-space: nowrap;" ng-show="selectedSuppliers.length > 2" ng-hide="selectedSuppliers.length <= 2">
-                            <span>{{selectedSuppliers.length}} items selected</span>
-                        </div>
+                    <div class="three wide column">
+                        {{getSelectSuppliersText()}}
                     </div>
                     <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
                     <div class="menu" tabindex="-1">
                         <div class="ui icon input">
-                            <input type="text" placeholder="Search" ng-model="filtersup">
+                            <input type="text" placeholder="Search" style="margin:2px" ng-model="filtersup">
                             <i class="delete icon" ng-click="filtersup = ''"></i>
                         </div>
                         <div style="height:200px;overflow:auto">
                             <div ng-repeat="c in suppliers  |filter:filtersup" ng-click="selectSupplier(c)" class="item ">
-                                <div class="ui checkbox">
+                                <div class="ui checkbox" style="margin:1px">
                                     <input ng-checked="selectedSuppliers.indexOf(c) > -1" type="checkbox">
                                     <label>{{c.Name}}</label>
                                 </div>

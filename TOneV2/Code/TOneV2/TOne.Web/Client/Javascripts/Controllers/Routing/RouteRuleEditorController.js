@@ -45,7 +45,23 @@
                 label = label.substring(0, 20) + "..";
             return label;
         };
-
+        $scope.getSelectSuppliersText = function () {
+            var label;
+            if ($scope.selectedSuppliers.length == 0)
+                label = "Select Suppliers...";
+            else if ($scope.selectedSuppliers.length == 1)
+                label = $scope.selectedSuppliers[0].Name;
+            else if ($scope.selectedSuppliers.length == 2)
+                label = $scope.selectedSuppliers[0].Name + "," + $scope.selectedSuppliers[1].Name;
+            else if ($scope.selectedSuppliers.length == 3)
+                label = $scope.selectedSuppliers[0].Name + "," + $scope.selectedSuppliers[1].Name + "," + $scope.selectedSuppliers[2].Name;
+            else
+                label = $scope.selectedSuppliers.length + " Suppliers selected";
+            if (label.length > 21)
+                label = label.substring(0, 20) + "..";
+            return label;
+        };
+        
         // 
         $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
           {
