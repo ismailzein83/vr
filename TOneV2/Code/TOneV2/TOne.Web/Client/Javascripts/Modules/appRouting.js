@@ -14,6 +14,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
             controller: 'RouteRuleEditorController'
         }).
+        when('/Chart1', {
+            templateUrl: '/Client/Views/Chart1.html',
+            controller: 'Chart1Controller'
+        }).
         otherwise({
             redirectTo: '/default'
         });

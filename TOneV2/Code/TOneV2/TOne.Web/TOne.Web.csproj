@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Client\Javascripts\Controllers\Chart1Controller.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
@@ -286,6 +287,7 @@
     <Content Include="Client\Templates\Directives\VTextboxIcon.html" />
     <Content Include="Client\Templates\Directives\VTextboxStandard.html" />
     <Content Include="Client\Templates\Views\VGridviewV1.html" />
+    <Content Include="Client\Views\Chart1.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
     <Content Include="Client\Views\TestView.html" />
