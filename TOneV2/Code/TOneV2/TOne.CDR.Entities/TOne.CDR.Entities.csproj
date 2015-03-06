@@ -55,19 +55,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingCDRBase.cs" />
-    <Compile Include="BillingCDRCost.cs" />
-    <Compile Include="BillingCDRInvalid.cs" />
-    <Compile Include="BillingCDRMain.cs" />
-    <Compile Include="BillingCDRPricingBase.cs" />
-    <Compile Include="BillingCDRSale.cs" />
-    <Compile Include="CDRBatch.cs" />
-    <Compile Include="CDRBillingBatch.cs" />
-    <Compile Include="CDRInvalidBatch.cs" />
-    <Compile Include="CDRMainBatch.cs" />
+    <Compile Include="TrafficStatistics\BaseTrafficStatistic.cs" />
+    <Compile Include="CDRs\BillingCDRBase.cs" />
+    <Compile Include="CDRs\BillingCDRCost.cs" />
+    <Compile Include="CDRs\BillingCDRInvalid.cs" />
+    <Compile Include="CDRs\BillingCDRMain.cs" />
+    <Compile Include="CDRs\BillingCDRPricingBase.cs" />
+    <Compile Include="CDRs\BillingCDRSale.cs" />
+    <Compile Include="CDRs\CDRBatch.cs" />
+    <Compile Include="CDRs\CDRBillingBatch.cs" />
+    <Compile Include="CDRs\CDRInvalidBatch.cs" />
+    <Compile Include="CDRs\CDRMainBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrafficStatisticsBatch.cs" />
-    <Compile Include="TrafficStatisticsDailyBatch.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatistic.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticDaily.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticDailyBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS\TABS.csproj">
@@ -79,6 +82,7 @@
       <Name>TOne.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

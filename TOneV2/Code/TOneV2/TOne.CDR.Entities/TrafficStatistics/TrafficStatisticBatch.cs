@@ -7,9 +7,13 @@ using Vanrise.Queueing;
 
 namespace TOne.CDR.Entities
 {
-    public class TrafficStatisticsBatch : PersistentQueueItem
+    public class TrafficStatisticBatch : PersistentQueueItem
     {
-        public List<TABS.TrafficStats> TrafficStatistics { get; set; }
+        public Dictionary<string, TrafficStatistic> TrafficStatistics { get; set; }
+
+        public DateTime BatchStart { get; set; }
+
+        public DateTime BatchEnd { get; set; }
 
         public override string GenerateDescription()
         {

@@ -47,14 +47,14 @@ namespace TOne.CDR.Business
             return GetSwitchQueue<CDRInvalidBatch>(switchId, QueueName.CDRInvalid);
         }
 
-        public static PersistentQueue<TrafficStatisticsBatch> GetTrafficStatsQueue(int switchId)
+        public static PersistentQueue<TrafficStatisticBatch> GetTrafficStatsQueue(int switchId)
         {
-            return GetSwitchQueue<TrafficStatisticsBatch>(switchId, QueueName.TrafficStats);
+            return GetSwitchQueue<TrafficStatisticBatch>(switchId, QueueName.TrafficStats);
         }
 
-        public static PersistentQueue<TrafficStatisticsDailyBatch> GetTrafficStatsDailyQueue(int switchId)
+        public static PersistentQueue<TrafficStatisticDailyBatch> GetTrafficStatsDailyQueue(int switchId)
         {
-            return GetSwitchQueue<TrafficStatisticsDailyBatch>(switchId, QueueName.TrafficStatsDaily);
+            return GetSwitchQueue<TrafficStatisticDailyBatch>(switchId, QueueName.TrafficStatsDaily);
         }
 
         private static PersistentQueue<T> GetSwitchQueue<T>(int switchId, QueueName queueNameTemplate) where T : PersistentQueueItem
@@ -71,8 +71,7 @@ namespace TOne.CDR.Business
             lock (s_CreatedSwitchesQueues)
             {
                 if (s_CreatedSwitchesQueues.Contains(switchId))
-                    return;
-               
+                    return;               
 
                 CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRaw);
                 CreateSwitchQueueIfNotExists<CDRBatch>(switchId, QueueName.CDRRawForBilling, QueueName.CDRRaw);
@@ -81,13 +80,13 @@ namespace TOne.CDR.Business
                 CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStatsDaily, QueueName.CDRBilling);
                 CreateSwitchQueueIfNotExists<CDRMainBatch>(switchId, QueueName.CDRMain);
                 CreateSwitchQueueIfNotExists<CDRInvalidBatch>(switchId, QueueName.CDRInvalid);
-                CreateSwitchQueueIfNotExists<TrafficStatisticsBatch>(switchId, QueueName.TrafficStats);
-                CreateSwitchQueueIfNotExists<TrafficStatisticsDailyBatch>(switchId, QueueName.TrafficStatsDaily);
+                CreateSwitchQueueIfNotExists<TrafficStatisticBatch>(switchId, QueueName.TrafficStats, null, new QueueSettings { SingleConcurrentReader = true });
+                CreateSwitchQueueIfNotExists<TrafficStatisticDailyBatch>(switchId, QueueName.TrafficStatsDaily, null, new QueueSettings { SingleConcurrentReader = true });
                 s_CreatedSwitchesQueues.Add(switchId);
             }
         }
 
-        private static void CreateSwitchQueueIfNotExists<T>(int switchId, QueueName queueNameTemplate, QueueName? sourceQueueNameTemplate = null) where T : PersistentQueueItem
+        private static void CreateSwitchQueueIfNotExists<T>(int switchId, QueueName queueNameTemplate, QueueName? sourceQueueNameTemplate = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
         {
             string queueName = String.Format("{0}_{1}", queueNameTemplate, switchId);
             QueueNameAttribute queueNameAtt = Vanrise.Common.Utilities.GetEnumAttribute<QueueName, QueueNameAttribute>(queueNameTemplate);
@@ -95,7 +94,7 @@ namespace TOne.CDR.Business
             string[] sourceQueueNames = null;
             if (sourceQueueNameTemplate != null)
                 sourceQueueNames = new string[] { String.Format("{0}_{1}", sourceQueueNameTemplate, switchId) };
-            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames);
+            PersistentQueueFactory.Default.CreateQueueIfNotExists<T>(queueName, queueTitle, sourceQueueNames, queueSettings);
         }
 
         static List<int> s_CreatedSwitchesQueues = new List<int>();
