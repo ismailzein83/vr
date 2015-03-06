@@ -79,56 +79,60 @@ namespace Vanrise.Queueing
             return TryDequeuePrivate(processItem, true);
         }
 
-        public void StartListening(Action<T> processItem, int maxThreads = 1)
-        {
-            if (processItem == null)
-                throw new ArgumentNullException("processItem");
+        #region Disabled Functionalities
+
+        //public void StartListening(Action<T> processItem, int maxThreads = 1)
+        //{
+        //    if (processItem == null)
+        //        throw new ArgumentNullException("processItem");
             
-            lock (this)
-            {
-                if (this.IsListening)
-                    throw new InvalidOperationException("Listening is already started on this queue");
-                this.IsListening = true;
-            }
+        //    lock (this)
+        //    {
+        //        if (this.IsListening)
+        //            throw new InvalidOperationException("Listening is already started on this queue");
+        //        this.IsListening = true;
+        //    }
 
-            Task task = new Task(() =>
-            {
-                int consecutiveFoundItems = 0;
-                do
-                {
-                    if (TryDequeuePrivate(processItem, false))//if item is returned from the queue
-                        consecutiveFoundItems++;
-                    else
-                    {
-                        if (consecutiveFoundItems > 0)
-                            consecutiveFoundItems--;
-                        Thread.Sleep(1000);
-                    }
+        //    Task task = new Task(() =>
+        //    {
+        //        int consecutiveFoundItems = 0;
+        //        do
+        //        {
+        //            if (TryDequeuePrivate(processItem, false))//if item is returned from the queue
+        //                consecutiveFoundItems++;
+        //            else
+        //            {
+        //                if (consecutiveFoundItems > 0)
+        //                    consecutiveFoundItems--;
+        //                Thread.Sleep(1000);
+        //            }
 
-                    //if many items are found in the queue consecutively, initialize multiple concurrent threads to dequeue and process items
-                    if (consecutiveFoundItems > 1 && maxThreads > 1)
-                    {
-                        Parallel.For(0, maxThreads, (i) =>
-                        {
-                            bool hasItem = false;
-                            do
-                            {
-                                hasItem = TryDequeuePrivate(processItem, false);
-                            }
-                            while (this.IsListening && hasItem);
-                        });
-                    }
-                }
-                while (this.IsListening);
-            });
-            task.Start();
-        }
+        //            //if many items are found in the queue consecutively, initialize multiple concurrent threads to dequeue and process items
+        //            if (consecutiveFoundItems > 1 && maxThreads > 1)
+        //            {
+        //                Parallel.For(0, maxThreads, (i) =>
+        //                {
+        //                    bool hasItem = false;
+        //                    do
+        //                    {
+        //                        hasItem = TryDequeuePrivate(processItem, false);
+        //                    }
+        //                    while (this.IsListening && hasItem);
+        //                });
+        //            }
+        //        }
+        //        while (this.IsListening);
+        //    });
+        //    task.Start();
+        //}
 
-        public void StopListening()
-        {
-            lock (this)
-                this.IsListening = false;
-        }
+        //public void StopListening()
+        //{
+        //    lock (this)
+        //        this.IsListening = false;
+        //}
+
+        #endregion
 
         #endregion
 
