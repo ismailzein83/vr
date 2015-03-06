@@ -24,12 +24,12 @@ namespace TOne.CDR.Entities
 
         public override string GetGroupKey()
         {
-            return GetGroupKey(this.SwitchId, this.CustomerId, this.OurZoneId, this.OriginatingZoneId, this.SupplierId, this.SupplierZoneId);
+            return GetGroupKey(this.SwitchId, this.CustomerId, this.OurZoneId, this.OriginatingZoneId, this.SupplierZoneId);
         }
 
-        public static string GetGroupKey(int switchId, string customerId, int ourZoneId, int originatingZoneId, string supplierId, int supplierZoneId)
+        public static string GetGroupKey(int switchId, string customerId, int ourZoneId, int originatingZoneId, int supplierZoneId)
         {
-            return String.Format("{0}^{1}^{2}^{3}^{4}^{5}", switchId, customerId, ourZoneId, originatingZoneId, supplierId, supplierZoneId);
+            return String.Format("{0}^{1}^{2}^{3}^{4}", switchId, customerId, ourZoneId, originatingZoneId, supplierZoneId);
         }
     }
 }
