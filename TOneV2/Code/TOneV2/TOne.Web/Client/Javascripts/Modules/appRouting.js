@@ -14,9 +14,13 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
             controller: 'RouteRuleEditorController'
         }).
-        when('/Chart1', {
-            templateUrl: '/Client/Views/Chart1.html',
-            controller: 'Chart1Controller'
+        when('/ZingChart', {
+            templateUrl: '/Client/Views/ZingChart.html',
+            controller: 'ZingChartController'
+        }).
+        when('/HighChart', {
+            templateUrl: '/Client/Views/HighChart.html',
+            controller: 'HighChartController'
         }).
         otherwise({
             redirectTo: '/default'
