@@ -2,6 +2,48 @@
 
 <div style="padding-top:20px">
     <div class="ui grid">
+        <div class="row" >
+            <div class="sixteen wide column">
+                <span style="display:inline-block;width:100px">Rule type</span>
+                <div class="ui icon searchable floating dropdown  button ddl" tabindex="0">
+                 
+                    <span class="text" style="width:150px"> </span>
+                    <i class="dropdown icon" ></i>
+                    <div class="menu" tabindex="-1">
+                        <div class="item">
+                            Overide
+                        </div>
+                        <div class="item">
+                            Block
+                        </div>
+                        <div class="item">
+                            Priority
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="five wide column">
+                <span style="display:inline-block;width:100px">Filter </span>
+                <div class="ui icon searchable floating dropdown  button ddl" tabindex="0">
+                    <span style="border-right: 1px solid #000; display: inline-block;padding-right:5px">By</span>
+                    <span class="text" style="width:125px"> </span>
+                    <i class="dropdown icon"></i>
+                    <div class="menu" tabindex="-1">                        
+                        <div class="item">
+                            Customer
+                        </div>
+                        <div class="item">
+                            Pool
+                        </div>
+                        <div class="item">
+                            Product
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row" style="min-height:300px">
             <!--<div class="three wide column">
                 <div class="ui animated fade button" ng-init="true" ng-model='carrierAccountSelectionOption' ng-click="carrierAccountSelectionOption = !carrierAccountSelectionOption">
@@ -22,13 +64,13 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="three wide column">
-                <div class="ui simple dropdown  button ddl">
-                    <div class="three wide column" >
+                <div class="ui dropdown  button ddl">
+                    <div class="three wide column">
                         {{getSelectCustomerText()}}
                     </div>
-                   
+
                     <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
                     <div class="menu" tabindex="-1">
                         <div ng-show="selectedCustomers.length > 0">
@@ -42,19 +84,19 @@
                             <div class="header" style=" white-space: normal; max-height: 75px; overflow: auto;">
                                 <div class="ui label pading-top-s" ng-repeat="obj in selectedCustomers">
                                     {{obj.Name}}
-                                    <i class="delete icon" ng-click="selectCustomer(obj)"></i>
+                                    <i class="delete icon" ng-click="selectCustomer($event,obj)"></i>
                                 </div>
                             </div>
                         </div>
                         <div ng-show="selectedCustomers.length > 0" class="ui horizontal divider"></div>
-                       
-                         <div class="ui icon input" style="margin:2px">
+
+                        <div class="ui icon input" style="margin:2px">
                             <input type="text" placeholder="Search" ng-model="filtername">
                             <i class="delete icon" ng-click="filtername = ''"></i>
                         </div>
                         <div class="ui horizontal divider"></div>
                         <div style="height:200px;overflow:auto">
-                            <div ng-repeat="c in customers  |filter:filtername" ng-click="selectCustomer(c)" class="item ">
+                            <div ng-repeat="c in customers  |filter:filtername" ng-click="selectCustomer($event, c)" class="item ">
                                 <div class="ui checkbox" style="margin:1px">
                                     <input ng-checked="selectedCustomers.indexOf(c) > -1" type="checkbox">
                                     <label>{{c.Name}}</label>
@@ -65,21 +107,69 @@
                     </div>
                 </div>
             </div>
-        </div>       
+        </div>
+
+        <div class="row">
+            <div class="three wide column">
+                <div class="ui   dropdown  button ddl">
+                    <div class="three wide column">
+                        {{getSelectZoneText()}}
+                    </div>
+
+                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
+                    <div class="menu" tabindex="-1">
+                        <div ng-show="selectedZones.length > 0">
+                            <div style="padding:5px 10px;min-width:225px">
+                                Selected Zones:
+                                <a class="ui icon" href="" style="position: absolute; right: 5px;" ng-click="selectedZones.length = 0">
+                                    Clear all
+                                    <i class="trash icon"></i>
+                                </a>
+                            </div>
+                            <div class="header" style=" white-space: normal; max-height: 75px; overflow: auto;">
+                                <div class="ui label pading-top-s" ng-repeat="obj in selectedZones">
+                                    {{obj.Name}}
+                                    <i class="delete icon" ng-click="selectZone($event,obj)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="selectedZones.length > 0" class="ui horizontal divider"></div>
+                        <div class="ui icon input" style="margin:2px">
+                            <div class="ui icon input loading">
+                                <input type="text" placeholder="Type 2 characters.." ng-model="filterzone" ng-keyup="searchZones()">
+                                <i class="search icon" ng-show="showloading"></i>
+                            </div>
+                        </div>
+                        <div ng-show="filterzone.length < 2">Please type {{2 - filterzone.length}} character(s)..</div>
+                        <div ng-show="showloading">Loading..</div>
+                        <div class="ui horizontal divider"></div>
+                        <div style="height:200px;overflow:auto">
+                            <div ng-repeat="c in zones " ng-click="selectZone($event, c)" class="item ">
+                                <div class="ui checkbox" style="margin:1px">
+                                    <input ng-checked="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1" type="checkbox">
+                                    <label>{{c.Name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="four wide column">
-                <div class="ui simple dropdown  button ddl">
+                <div class="ui dropdown  button ddl">
                     <div class="three wide column">
                         {{getSelectSuppliersText()}}
                     </div>
                     <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
                     <div class="menu" tabindex="-1">
                         <div class="ui icon input">
-                            <input type="text" placeholder="Search" style="margin:2px" ng-model="filtersup">
+                            <input class="focuselem" type="text" name="search" placeholder="Search" style="margin:2px" ng-model="filtersup">
                             <i class="delete icon" ng-click="filtersup = ''"></i>
                         </div>
                         <div style="height:200px;overflow:auto">
-                            <div ng-repeat="c in suppliers  |filter:filtersup" ng-click="selectSupplier(c)" class="item ">
+                            <div ng-repeat="c in suppliers  |filter:filtersup" ng-click="selectSupplier($event, c)" class="item ">
                                 <div class="ui checkbox" style="margin:1px">
                                     <input ng-checked="selectedSuppliers.indexOf(c) > -1" type="checkbox">
                                     <label>{{c.Name}}</label>
@@ -95,7 +185,7 @@
                     <div ng-repeat="item in selectedSuppliers" class="item">
                         <i class="list layout icon handeldrag"></i>
                         {{item.Name}}
-                        <i class="delete icon" style="float: right; padding-top: 10px; cursor:default" ng-click="selectSupplier(item)"></i>
+                        <i class="delete icon" style="float: right; padding-top: 10px; cursor:default" ng-click="selectSupplier($event,item)"></i>
                         <div style="float: right">
                             <input type="text" class="custom-input" style="max-width: 40px" size="3">
                         </div>

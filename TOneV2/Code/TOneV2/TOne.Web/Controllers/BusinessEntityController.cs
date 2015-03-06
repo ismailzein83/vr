@@ -14,8 +14,17 @@ namespace TOne.Web.Controllers
         [HttpGet]
         public List<CarrierInfo> GetCarriers(CarrierType carrierType)
         {
+            
             CarrierManager manager = new CarrierManager();
             return manager.GetCarriers(carrierType);
+        }
+
+        [HttpGet]
+        public List<ZoneInfo> GetSalesZones(string nameFilter)
+        {
+            //System.Threading.Thread.Sleep(2000);
+            ZoneManager manager = new ZoneManager();
+            return manager.GetSalesZones(nameFilter);
         }
     }
 }

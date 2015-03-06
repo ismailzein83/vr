@@ -10,5 +10,6 @@ namespace TOne.BusinessEntity.Data
     public interface IZoneDataManager : IDataManager
     {
         void LoadZonesInfo(DateTime effectiveTime, bool isFuture, List<CarrierAccountInfo> activeSuppliers, int batchSize, Action<List<ZoneInfo>> onBatchAvailable);
+        List<ZoneInfo> GetZones(string supplierId ,string nameFilter);
     }
 }

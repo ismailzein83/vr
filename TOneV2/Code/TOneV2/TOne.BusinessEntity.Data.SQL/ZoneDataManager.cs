@@ -45,7 +45,13 @@ namespace TOne.BusinessEntity.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
                 });
         }
-
+        
+        public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
+        {
+            return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
+         
+        }
+        
         #region Private Methods
 
         private ZoneInfo ZoneInfoMapper(IDataReader reader)
