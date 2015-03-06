@@ -285,6 +285,7 @@
     <Content Include="Client\Templates\Directives\VTextboxButton.html" />
     <Content Include="Client\Templates\Directives\VTextboxIcon.html" />
     <Content Include="Client\Templates\Directives\VTextboxStandard.html" />
+    <Content Include="Client\Templates\Views\VGridviewV1.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
     <Content Include="Client\Views\TestView.html" />

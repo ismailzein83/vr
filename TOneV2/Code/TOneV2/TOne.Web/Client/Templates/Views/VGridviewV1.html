@@ -1,9 +1,10 @@
-﻿<table  class="ui table">
+﻿<table class="ui table">
     <thead>
-        <th ng-repeat="n in gridoptions.header">{{n}}</th>
+    <th>Name</th>
     </thead>
     <tbody>
         <tr id="trbody" ng-repeat="n in gridoptions.data">
+            <td>{{n.name}}</td>
         </tr>
     </tbody>
 </table>

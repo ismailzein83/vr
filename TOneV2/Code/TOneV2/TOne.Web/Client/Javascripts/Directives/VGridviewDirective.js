@@ -12,9 +12,8 @@ app.directive('vGridview', function () {
     return {
         restrict: 'E',
         scope: {
-            source: '=datasource',
-            header: '=header',
-            uniquecname: '@uniquecname'
+            gridoptions: '=',
+            columndefs: '@columnDefs'
         },
         templateUrl: function (element, attrs) {
             if (attrs.type == undefined) return templatesG.dTemplate;
@@ -23,11 +22,12 @@ app.directive('vGridview', function () {
         compile: function (tElement, attrs) {
             var tr = angular.element(document.getElementById('trbody'));
             var row = '';
-
-            angular.forEach(attrs.uniquecname.split(','), function (item) {
+            if (attrs.columnDefs == undefined) return;
+            
+            angular.forEach(attrs.columnDefs.split(','), function (item) {
                 row = row + '<td>{{n.' + item + '}}</td>';
-                console.log(row);
             });
+
             tr.append(row);
         }
     };

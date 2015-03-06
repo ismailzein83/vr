@@ -9,10 +9,10 @@
 <v-textbox type="Button" text="Input" buttontext="Alert" btn-click="alertMsg()"></v-textbox>
 <br />
 
-<v-gridview type="Standard" datasource="items" header="header" uniquecname="name,age">
+<v-gridview type="Standard" gridoptions="gridOptions" column-defs="name,age">
 </v-gridview>
 
-<v-gridview type="Standard" datasource="items" header="header" uniquecname="age,name">
+<v-gridview type="V1" gridoptions="gridOptionsV1">
 </v-gridview>
 
 {{Input}}
