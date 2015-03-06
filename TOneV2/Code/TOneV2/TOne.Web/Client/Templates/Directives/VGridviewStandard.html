@@ -1,9 +1,9 @@
-﻿<table>
+﻿<table class="ui table">
     <thead>
         <th ng-repeat="n in header">{{n.name}}</th>
     </thead>
-    <tbody >
-        <tr ng-repeat="n in source" ng-transclude>
-        </tr>
+    <tbody>
+        <tr id="trbody" ng-repeat="n in source"></tr>
     </tbody>
 </table>
+

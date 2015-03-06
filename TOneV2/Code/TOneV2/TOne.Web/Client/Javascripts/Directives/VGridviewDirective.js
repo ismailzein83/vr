@@ -2,7 +2,6 @@
 
 var templatesG = {
     dTemplate: "../../Client/Templates/Directives/VGridviewStandard.html",
-    dTemplateGridColumn: "../../Client/Templates/Directives/VGridRowTemplate.html",
     getTemplateByType: function (type) {
         return '../../Client/Templates/Directives/VGridview' + type + '.html'
     }
@@ -12,29 +11,24 @@ var templatesG = {
 app.directive('vGridview', function () {
     return {
         restrict: 'E',
-        transclude: true,
         scope: {
             source: '=datasource',
-            header:'=header'
+            header: '=header',
+            uniquecname: '@uniquecname'
         },
         templateUrl: function (element, attrs) {
             if (attrs.type == undefined) return templatesG.dTemplate;
             return templatesG.getTemplateByType(attrs.type);
-        }
-    };
-});
+        },
+        compile: function (tElement, attrs) {
+            var tr = angular.element(document.getElementById('trbody'));
+            var row = '';
 
-app.directive('VGridRowTemplate', function () {
-    return {
-        require: '^vGridview',
-        restrict: 'E',
-        transclude: true,
-        scope: {
-            values: '=values'
-        },
-        templateUrl: function (element, attrs) {
-            if (attrs.type == undefined) return templatesG.dTemplate;
-            return templatesG.getTemplateByType(attrs.type);
+            angular.forEach(attrs.uniquecname.split(','), function (item) {
+                row = row + '<td>{{n.' + item + '}}</td>';
+                console.log(row);
+            });
+            tr.append(row);
         }
     };
 });
