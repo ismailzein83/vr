@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var templates = {
+var templatesTxt = {
     dTemplate: "../../Client/Templates/Directives/VTextboxStandard.html",
     templateIcon: "../../Client/Templates/Directives/VTextboxIcon.html",
     templateButton: "../../Client/Templates/Directives/VTextboxButton.html",
@@ -14,14 +14,14 @@ var allDir = [
     name: "search",
     dPlaceholder: "Search ...",
     dIcon: "search",
-    dTemplateURL: templates.templateIcon
+    dTemplateURL: templatesTxt.templateIcon
 }
 ,
 {
     name: "mail",
     dPlaceholder: "Mail ...",
     dIcon: "mail",
-    dTemplateURL: templates.templateIcon
+        dTemplateURL: templatesTxt.templateIcon
 }
 
 ];
@@ -54,7 +54,7 @@ app.directive('vTextbox', function () {
             for (var index = 0; index < allDir.length; ++index) {
                 if (attrs.type.toLowerCase() == allDir[index].name) return allDir[index].dTemplateURL;
             }
-            return templates.getTemplateByType(attrs.type);
+            return templatesTxt.getTemplateByType(attrs.type);
         }
     };
 });
