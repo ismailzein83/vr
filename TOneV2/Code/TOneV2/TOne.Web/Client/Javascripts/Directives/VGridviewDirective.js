@@ -3,7 +3,7 @@
 var templatesG = {
     dTemplate: "../../Client/Templates/Directives/VGridviewStandard.html",
     getTemplateByType: function (type) {
-        return '../../Client/Templates/Directives/VGridview' + type + '.html'
+        return '../../Client/Templates/Views/VGridview' + type + '.html'
     }
 };
 
