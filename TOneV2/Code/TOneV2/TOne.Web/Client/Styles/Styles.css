@@ -17,7 +17,8 @@
     display:none;
 }
 .hand-cursor{
-     cursor:hand ;
+    cursor: pointer !important;
+     cursor: hand !important;
 }
 .custom-input{
     font-family: "Lato","Helvetica Neue",Arial,Helvetica,sans-serif;
@@ -28,4 +29,27 @@
     border-radius: 0.2857rem;
     transition: background-color 0.2s ease 0s, box-shadow 0.2s ease 0s, border-color 0.2s ease 0s;
     box-shadow: none;
+}
+.selected{
+    background-color: #D0D0D0  !important;
+    border-color: #D0D0D0  !important;
+}
+.mark-select:hover{
+    background-color: #D0D0D0  !important;
+    border-color: #D0D0D0  !important;
+    color:#fff !important;
+    cursor: pointer !important;
+    cursor: hand !important;
+}
+.single-col-checklist{
+    width:226px ;
+}
+.double-col-checklist{
+    width:452px ;
+}
+.single-col-checklist-md{
+    width:285px ;
+}
+.double-col-checklist-md{
+    width:575px ;
 }

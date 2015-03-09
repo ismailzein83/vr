@@ -1,6 +1,6 @@
 ﻿appControllers.controller('RouteRuleEditorController',
     function RouteRuleEditorController($scope,$http) {
-        
+       
         $('.ddl').dropdown({
             onShow: function (e) {
                
