@@ -17,20 +17,18 @@ app.directive('vrGridview', ['GridViewService', function (GridViewService) {
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            gridoptions: '=',
-            columndefs: '@columnDefs'
+            gridoptions: '='
         },
         templateUrl: function (element, attrs) {
-            if (attrs.type == undefined) return GridViewService.dTemplate;
-            return GridViewService.getTemplateByType(attrs.type);
+            return GridViewService.dTemplate;
         },
         compile: function (tElement, attrs) {
             var tr = angular.element(document.getElementById('trbody'));
             var row = '';
-            if (attrs.columnDefs == undefined) return;
+            if (attrs.columndefs == undefined) return;
 
-            angular.forEach(attrs.columnDefs.split(','), function (item) {
-                row = row + '<td>{{n.' + item + '}}</td>';
+            angular.forEach(attrs.columndefs.split(','), function (item) {
+                row = row + '<td>{{item.' + item + '}}</td>';
             });
 
             tr.append(row);
@@ -40,3 +38,9 @@ app.directive('vrGridview', ['GridViewService', function (GridViewService) {
     return directiveDefinitionObject;
 
 }]);
+
+
+
+
+
+
