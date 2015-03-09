@@ -1,16 +1,16 @@
 ﻿<h1>Test View</h1>
-<vr-textbox type="standard" placeholder="Username" value="Input"></vr-textbox>
-<vr-textbox type="icon" placeholder="Search .." icon="circular search" value="Input"></vr-textbox>
-<vr-textbox type="icon" placeholder="Search .." icon="search" value="Input"></vr-textbox>
-<vr-textbox type="search" value="Input"></vr-textbox>
-<vr-textbox type="search" placeholder="Custom Place Holder" value="Input"></vr-textbox>
-<vr-textbox type="mail" value="Input"></vr-textbox>
+<vr-textbox type="standard" placeholder="Username" value="testview.Input"></vr-textbox>
+<vr-textbox type="icon" placeholder="Search .." icon="circular search" value="testview.Input"></vr-textbox>
+<vr-textbox type="icon" placeholder="Search .." icon="search" value="testview.Input"></vr-textbox>
+<vr-textbox type="search" value="testview.Input"></vr-textbox>
+<vr-textbox type="search" placeholder="Custom Place Holder" value="testview.Input"></vr-textbox>
+<vr-textbox type="mail" value="testview.Input"></vr-textbox>
 
-<vr-textbox type="button" value="Input" buttontext="Alert" btn-click="alertMsg()"></vr-textbox>
+<vr-textbox type="button" value="testview.Input" placeholder="Alert .. " buttontext="Alert" btn-click="testview.alertMsg()"></vr-textbox>
 <br />
-
-<vr-gridview gridoptions="gridOptions" column-defs="name,age">
+{{testview.Input}}
+<br />
+<vr-gridview gridoptions="testview.gridOptions" column-defs="name,age">
 </vr-gridview>
 
 
-{{Input}}

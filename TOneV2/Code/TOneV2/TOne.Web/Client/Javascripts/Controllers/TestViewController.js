@@ -1,12 +1,12 @@
 ﻿appControllers.controller('TestViewController',
-    function DefaultController($scope) {
-        $scope.model = 'Test View model';
-        $scope.Input = '123';
-        $scope.alertMsg = function () {
-            alert($scope.Input);
+    function DefaultController() {
+        this.model = 'Test View model';
+        this.Input = '123';
+        this.alertMsg = function () {
+            alert(this.Input);
         };
 
-        $scope.gridOptions = {
+        this.gridOptions = {
             data:[{ name: "Moroni", age: 50 },
                 { name: "Tiancum", age: 43 },
                 { name: "Jacob", age: 27 },
@@ -28,7 +28,7 @@
         };
 
 
-        $scope.gridOptionsV1 = {
+        this.gridOptionsV1 = {
             data: [{ name: "Moroni", age: 50 },
                 { name: "Tiancum", age: 43 },
                 { name: "Jacob", age: 27 },

@@ -8,7 +8,8 @@ appRouting.config(['$routeProvider',
         }).
         when('/TestView', {
             templateUrl: '/Client/Views/TestView.html',
-            controller: 'TestViewController'
+            controller: 'TestViewController',
+            controllerAs : 'testview'
         }).
         when('/RouteRuleEditor', {
             templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
