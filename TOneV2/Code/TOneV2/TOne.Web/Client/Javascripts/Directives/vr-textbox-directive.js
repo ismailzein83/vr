@@ -32,6 +32,17 @@ app.service('TextBoxService', ['TemplatesService', function (TemplatesService) {
 
 }]);
 
+
+var defaultAttributes = function (attrs, obj) {
+    if(attrs.type.toLowerCase() == obj.name) {
+        if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
+        if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
+        if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dButtonText);
+        }
+    return attrs;
+    };
+
+
 app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
     return {
         restrict: 'E',
@@ -46,7 +57,12 @@ app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
         controller: function () {
         },
         controllerAs: 'ctrl',
-        bindToController : true,
+        bindToController: true,
+        compile: function (element, attrs) {
+            TextBoxService.allDirective.forEach(function (item) {
+                attrs = defaultAttributes(attrs, item);
+            });
+        },
         templateUrl: function (element, attrs) {
             for (var index = 0; index < TextBoxService.allDirective.length; ++index) {
                 if(attrs.type.toLowerCase() == TextBoxService.allDirective[index].name) return TextBoxService.allDirective[index].dTemplate;
