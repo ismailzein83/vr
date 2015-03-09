@@ -27,15 +27,15 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Sub_Type { get; set; }
         public string IMEI { get; set; }
         public Nullable<int> BTS_Id { get; set; }
-        public string LAC { get; set; }
         public string Cell_Id { get; set; }
-        public string Origin_Zone_Code { get; set; }
-        public string Termin_Zone_Code { get; set; }
-        public Nullable<System.DateTime> Account_Age { get; set; }
         public Nullable<int> SwitchRecordId { get; set; }
         public Nullable<decimal> Up_Volume { get; set; }
         public Nullable<decimal> Down_Volume { get; set; }
         public Nullable<decimal> Cell_Latitude { get; set; }
         public Nullable<decimal> Cell_Longitude { get; set; }
+        public string In_Trunk { get; set; }
+        public string Out_Trunk { get; set; }
+        public Nullable<int> Service_Type { get; set; }
+        public string Service_VAS_Name { get; set; }
     }
 }

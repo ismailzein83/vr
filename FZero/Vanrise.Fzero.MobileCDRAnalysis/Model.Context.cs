@@ -529,5 +529,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberThresholds", strategyIdParameter);
         }
+    
+        public virtual int db_FillDailyProfileNew()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyProfileNew");
+        }
     }
 }

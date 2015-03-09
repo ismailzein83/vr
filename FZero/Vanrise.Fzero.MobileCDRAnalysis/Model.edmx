@@ -223,21 +223,25 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="MSISDN" Type="varchar" MaxLength="30" />
           <Property Name="IMSI" Type="varchar" MaxLength="20" />
+          <Property Name="ConnectDateTime" Type="datetime" />
           <Property Name="Destination" Type="varchar" MaxLength="40" />
+          <Property Name="DurationInSeconds" Type="numeric" Precision="13" Scale="4" />
+          <Property Name="DisconnectDateTime" Type="datetime" />
           <Property Name="Call_Class" Type="varchar" MaxLength="50" />
+          <Property Name="Call_Type" Type="int" />
           <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
           <Property Name="IMEI" Type="varchar" MaxLength="20" />
-          <Property Name="LAC" Type="varchar" MaxLength="50" />
-          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
-          <Property Name="Origin_Zone_Code" Type="varchar" MaxLength="10" />
-          <Property Name="Termin_Zone_Code" Type="varchar" MaxLength="10" />
-          <Property Name="Reference" Type="varchar" MaxLength="50" />
-          <Property Name="Call_Type" Type="int" />
           <Property Name="BTS_Id" Type="int" />
-          <Property Name="DurationInSeconds" Type="numeric" Precision="13" Scale="4" />
-          <Property Name="ConnectDateTime" Type="datetime" />
-          <Property Name="DisconnectDateTime" Type="datetime" />
-          <Property Name="Account_Age" Type="datetime" />
+          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
+          <Property Name="Up_Volume" Type="decimal" Scale="2" />
+          <Property Name="Down_Volume" Type="decimal" Scale="2" />
+          <Property Name="Cell_Latitude" Type="decimal" Scale="8" />
+          <Property Name="Cell_Longitude" Type="decimal" Scale="8" />
+          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Service_Type" Type="int" />
+          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Reference" Type="varchar" MaxLength="50" />
           <Property Name="SourceID" Type="int" />
           <Property Name="ImportID" Type="int" />
           <Property Name="Switch" Type="varchar" MaxLength="50" />
@@ -350,16 +354,16 @@
           <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
           <Property Name="IMEI" Type="varchar" MaxLength="20" />
           <Property Name="BTS_Id" Type="int" />
-          <Property Name="LAC" Type="varchar" MaxLength="50" />
           <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
-          <Property Name="Origin_Zone_Code" Type="varchar" MaxLength="10" />
-          <Property Name="Termin_Zone_Code" Type="varchar" MaxLength="10" />
-          <Property Name="Account_Age" Type="datetime" />
           <Property Name="SwitchRecordId" Type="int" />
           <Property Name="Up_Volume" Type="decimal" Scale="2" />
           <Property Name="Down_Volume" Type="decimal" Scale="2" />
           <Property Name="Cell_Latitude" Type="decimal" Scale="8" />
           <Property Name="Cell_Longitude" Type="decimal" Scale="8" />
+          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Service_Type" Type="int" />
+          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="NormalizationRules">
           <Key>
@@ -442,6 +446,8 @@
           <Property Name="Total_BTS" Type="int" />
           <Property Name="Count_Out_Inter" Type="int" />
           <Property Name="Count_In_Inter" Type="int" />
+          <Property Name="IsOnNet" Type="int" />
+          <Property Name="Total_Data_Volume" Type="decimal" Scale="2" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
@@ -538,7 +544,7 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="IsOnNet" Type="int" />
+          <Property Name="NetType" Type="int" />
         </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
@@ -1210,6 +1216,7 @@
         </Function>
         <Function Name="db_FillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillDailyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillDailyProfileNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
@@ -1444,6 +1451,14 @@
           </FunctionImport>
           <FunctionImport Name="db_FillDailyCellProfile" />
           <FunctionImport Name="db_FillHourlyCellProfile" />
+          <FunctionImport Name="db_FillDailySubscriberThresholds">
+          <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="db_FillDailySubscriberValues" />
+          <FunctionImport Name="db_FillHourlyProfileNew" />
+          <FunctionImport Name="db_FillHourlySubscriberThresholds">
+          <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="CDRs" EntityType="Model.CDR" />
           <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
@@ -1617,14 +1632,7 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="db_FillDailySubscriberThresholds">
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="db_FillDailySubscriberValues" />
-          <FunctionImport Name="db_FillHourlyProfileNew" />
-          <FunctionImport Name="db_FillHourlySubscriberThresholds">
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
+          <FunctionImport Name="db_FillDailyProfileNew" />
           </EntityContainer>
         <ComplexType Name="db_GetReportedNumberNormalCDR_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1671,21 +1679,25 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" Precision="3" />
           <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" Precision="13" Scale="4" />
+          <Property Type="DateTime" Name="DisconnectDateTime" Precision="3" />
           <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Call_Type" />
           <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LAC" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Origin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Reference" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="Call_Type" />
           <Property Type="Int32" Name="BTS_Id" />
-          <Property Type="Decimal" Name="DurationInSeconds" Precision="13" Scale="4" />
-          <Property Type="DateTime" Name="ConnectDateTime" Precision="3" />
-          <Property Type="DateTime" Name="DisconnectDateTime" Precision="3" />
-          <Property Type="DateTime" Name="Account_Age" Precision="3" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="Up_Volume" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Down_Volume" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cell_Latitude" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Cell_Longitude" Precision="18" Scale="8" />
+          <Property Type="String" Name="In_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Out_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Service_Type" />
+          <Property Type="String" Name="Service_VAS_Name" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Reference" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="SourceID" />
           <Property Type="Int32" Name="ImportID" />
           <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1813,16 +1825,16 @@
           <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="BTS_Id" />
-          <Property Type="String" Name="LAC" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Origin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Account_Age" Precision="3" />
           <Property Type="Int32" Name="SwitchRecordId" />
           <Property Type="Decimal" Name="Up_Volume" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="Down_Volume" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="Cell_Latitude" Precision="18" Scale="8" />
           <Property Type="Decimal" Name="Cell_Longitude" Precision="18" Scale="8" />
+          <Property Type="String" Name="In_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Out_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Service_Type" />
+          <Property Type="String" Name="Service_VAS_Name" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="NormalizationRule">
           <Key>
@@ -1906,6 +1918,8 @@
           <Property Type="Int32" Name="Total_BTS" />
           <Property Type="Int32" Name="Count_Out_Inter" />
           <Property Type="Int32" Name="Count_In_Inter" />
+          <Property Type="Int32" Name="IsOnNet" />
+          <Property Type="Decimal" Name="Total_Data_Volume" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
@@ -2017,7 +2031,7 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Description" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="IsOnNet" />
+          <Property Type="Int32" Name="NetType" />
         </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
@@ -2796,6 +2810,10 @@
           <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
           <FunctionImportMapping FunctionImportName="db_FillDailyCellProfile" FunctionName="Model.Store.db_FillDailyCellProfile" />
           <FunctionImportMapping FunctionImportName="db_FillHourlyCellProfile" FunctionName="Model.Store.db_FillHourlyCellProfile" />
+          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberThresholds" FunctionName="Model.Store.db_FillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValues" FunctionName="Model.Store.db_FillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlyProfileNew" FunctionName="Model.Store.db_FillHourlyProfileNew" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberThresholds" FunctionName="Model.Store.db_FillHourlySubscriberThresholds" />
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="Model.CDR">
               <MappingFragment StoreEntitySet="CDR">
@@ -2804,21 +2822,25 @@
                 <ScalarProperty Name="Switch" ColumnName="Switch" />
                 <ScalarProperty Name="ImportID" ColumnName="ImportID" />
                 <ScalarProperty Name="SourceID" ColumnName="SourceID" />
-                <ScalarProperty Name="Account_Age" ColumnName="Account_Age" />
-                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
-                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
-                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
                 <ScalarProperty Name="Reference" ColumnName="Reference" />
-                <ScalarProperty Name="Termin_Zone_Code" ColumnName="Termin_Zone_Code" />
-                <ScalarProperty Name="Origin_Zone_Code" ColumnName="Origin_Zone_Code" />
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
                 <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
-                <ScalarProperty Name="LAC" ColumnName="LAC" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
                 <ScalarProperty Name="IMEI" ColumnName="IMEI" />
                 <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
                 <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
                 <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
                 <ScalarProperty Name="IMSI" ColumnName="IMSI" />
                 <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -2926,16 +2948,16 @@
           <EntitySetMapping Name="NormalCDRs">
             <EntityTypeMapping TypeName="Model.NormalCDR">
               <MappingFragment StoreEntitySet="NormalCDR">
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
                 <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
                 <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
                 <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
                 <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
                 <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
-                <ScalarProperty Name="Account_Age" ColumnName="Account_Age" />
-                <ScalarProperty Name="Termin_Zone_Code" ColumnName="Termin_Zone_Code" />
-                <ScalarProperty Name="Origin_Zone_Code" ColumnName="Origin_Zone_Code" />
                 <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
-                <ScalarProperty Name="LAC" ColumnName="LAC" />
                 <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
                 <ScalarProperty Name="IMEI" ColumnName="IMEI" />
                 <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
@@ -3005,6 +3027,8 @@
           <EntitySetMapping Name="NumberProfileNews">
             <EntityTypeMapping TypeName="Model.NumberProfileNew">
               <MappingFragment StoreEntitySet="NumberProfileNew">
+                <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
                 <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
                 <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
                 <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
@@ -3139,7 +3163,7 @@
           <EntitySetMapping Name="Set_CallClass">
             <EntityTypeMapping TypeName="Model.Set_CallClass">
               <MappingFragment StoreEntitySet="Set_CallClass">
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="NetType" ColumnName="NetType" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -3415,10 +3439,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberThresholds" FunctionName="Model.Store.db_FillDailySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValues" FunctionName="Model.Store.db_FillDailySubscriberValues" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlyProfileNew" FunctionName="Model.Store.db_FillHourlyProfileNew" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberThresholds" FunctionName="Model.Store.db_FillHourlySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="db_FillDailyProfileNew" FunctionName="Model.Store.db_FillDailyProfileNew" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

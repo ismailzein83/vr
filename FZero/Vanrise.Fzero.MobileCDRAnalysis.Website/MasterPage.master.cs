@@ -43,8 +43,6 @@ public partial class MasterPage : System.Web.UI.MasterPage
         btnSentEmails.Visible = BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.SentEmails);
         btnEmailTemplates.Visible = BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.EmailTemplates);
         btnSourcesMappings.Visible = BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.SourcesMapping);
-        btnManualImport.Visible = BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.ManualImport);
-
 
 
         if (!btnDashboard.Visible && !btnSwitches.Visible &&  !btnNormalizationRules.Visible && !btnStrategies.Visible && !btnSuspectionAnalysis.Visible && !btnReportManagement.Visible   )
@@ -53,7 +51,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
             ScriptManager.RegisterStartupScript(Page, this.GetType(), "CallFunction", functionName, true);
         }
 
-        if (!btnSentEmails.Visible && !btnEmailTemplates.Visible && !btnUsers.Visible && !btnEmailReceivers.Visible && !btnManualImport.Visible && !btnSourcesMappings.Visible )
+        if (!btnSentEmails.Visible && !btnEmailTemplates.Visible && !btnUsers.Visible && !btnEmailReceivers.Visible && !btnSourcesMappings.Visible )
         {
             liConfigurations.Visible = false;
         }

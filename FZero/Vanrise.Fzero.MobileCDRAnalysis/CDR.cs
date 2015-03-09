@@ -17,21 +17,25 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int Id { get; set; }
         public string MSISDN { get; set; }
         public string IMSI { get; set; }
+        public Nullable<System.DateTime> ConnectDateTime { get; set; }
         public string Destination { get; set; }
+        public Nullable<decimal> DurationInSeconds { get; set; }
+        public Nullable<System.DateTime> DisconnectDateTime { get; set; }
         public string Call_Class { get; set; }
+        public Nullable<int> Call_Type { get; set; }
         public string Sub_Type { get; set; }
         public string IMEI { get; set; }
-        public string LAC { get; set; }
-        public string Cell_Id { get; set; }
-        public string Origin_Zone_Code { get; set; }
-        public string Termin_Zone_Code { get; set; }
-        public string Reference { get; set; }
-        public Nullable<int> Call_Type { get; set; }
         public Nullable<int> BTS_Id { get; set; }
-        public Nullable<decimal> DurationInSeconds { get; set; }
-        public Nullable<System.DateTime> ConnectDateTime { get; set; }
-        public Nullable<System.DateTime> DisconnectDateTime { get; set; }
-        public Nullable<System.DateTime> Account_Age { get; set; }
+        public string Cell_Id { get; set; }
+        public Nullable<decimal> Up_Volume { get; set; }
+        public Nullable<decimal> Down_Volume { get; set; }
+        public Nullable<decimal> Cell_Latitude { get; set; }
+        public Nullable<decimal> Cell_Longitude { get; set; }
+        public string In_Trunk { get; set; }
+        public string Out_Trunk { get; set; }
+        public Nullable<int> Service_Type { get; set; }
+        public string Service_VAS_Name { get; set; }
+        public string Reference { get; set; }
         public Nullable<int> SourceID { get; set; }
         public Nullable<int> ImportID { get; set; }
         public string Switch { get; set; }

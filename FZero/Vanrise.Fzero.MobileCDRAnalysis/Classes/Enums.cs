@@ -7,7 +7,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             Dashboard= 1,
             Switches= 2,
-            Trunks= 3,
             NormalizationRules= 4,
             UnNormalizationRules= 5,
             Strategies= 6,
@@ -18,7 +17,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             ActivateDeactivateUser=11,
             ResetUserPassword=12,
             ManageSwitches=13,	
-            ManageTrunks=14,	
             ManageNormalizationRules=15, 	
             AddRule=16 ,
             ManageStrategies=17	,
@@ -32,7 +30,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             ManageEmailRecievers = 25,
             SentEmails= 26,
             DeleteSentEmails =27, 
-            ManualImport=28,
             SourcesMapping = 29
         }
 

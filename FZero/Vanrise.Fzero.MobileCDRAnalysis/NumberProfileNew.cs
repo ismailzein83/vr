@@ -43,5 +43,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Total_BTS { get; set; }
         public Nullable<int> Count_Out_Inter { get; set; }
         public Nullable<int> Count_In_Inter { get; set; }
+        public Nullable<int> IsOnNet { get; set; }
+        public Nullable<decimal> Total_Data_Volume { get; set; }
     }
 }

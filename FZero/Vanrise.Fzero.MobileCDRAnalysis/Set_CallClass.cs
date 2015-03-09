@@ -16,6 +16,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public Nullable<int> IsOnNet { get; set; }
+        public Nullable<int> NetType { get; set; }
     }
 }

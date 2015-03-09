@@ -42,8 +42,6 @@ public partial class Dashboard : BasePage
             RedirectToAuthenticationPage();
 
         aSwitchesCount.HRef = (BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.Switches) ? aSwitchesCount.HRef : "javascript:void(0);");
-
-        aTrunkscount.HRef = (BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.Trunks) ? aTrunkscount.HRef: "javascript:void(0);") ;
         aRulesCount.HRef = (BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.NormalizationRules) ? aRulesCount.HRef : "javascript:void(0);");
         aUnNormalizedCDPN.HRef = (BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.UnNormalizationRules) ? aUnNormalizedCDPN.HRef : "javascript:void(0);");
         aUnNormalizedCGPN.HRef = (BasePage.CurrentUser.HasPermission((Enums.SystemPermissions)(int)Enums.SystemPermissions.UnNormalizationRules) ? aUnNormalizedCGPN.HRef : "javascript:void(0);");
