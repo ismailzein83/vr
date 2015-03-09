@@ -1,29 +1,34 @@
 ﻿'use strict';
 
-var templatesG = {
-    dTemplate: "../../Client/Templates/Directives/vr-gridview-standard.html",
-    getTemplateByType: function (type) {
-        return '../../Client/Templates/Views/vr-gridview-' + type + '.html'
-    }
-};
+app.service('GridViewService', ['BaseDirService', function (BaseDirService) {
+
+    this.dTemplate = BaseDirService.directiveMainURL + "vr-gridview-standard.html";
+
+    this.getTemplateByType = function (type) {
+        return BaseDirService.directiveMainURL + 'vr-gridview-' + type + '.html';
+    };
+
+}]);
 
 
-app.directive('vrGridview', function () {
-    return {
+
+app.directive('vrGridview', ['GridViewService', function (GridViewService) {
+
+    var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             gridoptions: '=',
             columndefs: '@columnDefs'
         },
         templateUrl: function (element, attrs) {
-            if (attrs.type == undefined) return templatesG.dTemplate;
-            return templatesG.getTemplateByType(attrs.type);
+            if (attrs.type == undefined) return GridViewService.dTemplate;
+            return GridViewService.getTemplateByType(attrs.type);
         },
         compile: function (tElement, attrs) {
             var tr = angular.element(document.getElementById('trbody'));
             var row = '';
             if (attrs.columnDefs == undefined) return;
-            
+
             angular.forEach(attrs.columnDefs.split(','), function (item) {
                 row = row + '<td>{{n.' + item + '}}</td>';
             });
@@ -31,4 +36,7 @@ app.directive('vrGridview', function () {
             tr.append(row);
         }
     };
-});
+
+    return directiveDefinitionObject;
+
+}]);
