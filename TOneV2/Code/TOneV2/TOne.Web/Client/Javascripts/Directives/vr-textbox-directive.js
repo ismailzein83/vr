@@ -57,7 +57,6 @@ app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
 
         restrict: 'E',
         scope: {
-            type: '@',
             placeholder: '@',
             icon: '@',
             buttontext: '@',
