@@ -8,16 +8,10 @@ app.service('TemplatesService', function () {
 
 app.service('TextBoxService', ['TemplatesService', function (TemplatesService) {
 
-    this.templates = {
-        dTemplate: TemplatesService.directiveMainURL + "VTextboxStandard.html",
-        templateIcon: TemplatesService.directiveMainURL + "VTextboxIcon.html",
-        templateButton: TemplatesService.directiveMainURL + "VTextboxButton.html",
-    };
+    this.dTemplate =TemplatesService.directiveMainURL + "vr-textbox-standard.html";
 
     this.getTemplatesByType = function (type) {
-
-        return TemplatesService.directiveMainURL + 'VTextbox' + type + '.html';
-
+        return TemplatesService.directiveMainURL + 'vr-textbox-' + type + '.html';
     };
 
     this.allDirective =[
@@ -26,19 +20,19 @@ app.service('TextBoxService', ['TemplatesService', function (TemplatesService) {
             name: "search",
             dPlaceholder: "Search ...",
             dIcon: "search",
-            dTemplateURL: this.templates.templateIcon
+            dTemplate: this.getTemplatesByType('icon')
         },
         {
             name: "mail",
             dPlaceholder: "Mail ...",
             dIcon: "mail",
-            dTemplateURL: this.templates.templateIcon
+            dTemplate: this.getTemplatesByType('icon')
         }
     ];
 
 }]);
 
-app.directive('vTextbox', ['TextBoxService', function (TextBoxService) {
+app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
     return {
         restrict: 'E',
         scope: {
@@ -55,7 +49,7 @@ app.directive('vTextbox', ['TextBoxService', function (TextBoxService) {
         bindToController : true,
         templateUrl: function (element, attrs) {
             for (var index = 0; index < TextBoxService.allDirective.length; ++index) {
-                if(attrs.type.toLowerCase() == TextBoxService.allDirective[index].name) return TextBoxService.allDirective[index].dTemplateURL;
+                if(attrs.type.toLowerCase() == TextBoxService.allDirective[index].name) return TextBoxService.allDirective[index].dTemplate;
             }
             return TextBoxService.getTemplatesByType(attrs.type);
         }

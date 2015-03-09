@@ -1,14 +1,14 @@
 ﻿'use strict';
 
 var templatesG = {
-    dTemplate: "../../Client/Templates/Directives/VGridviewStandard.html",
+    dTemplate: "../../Client/Templates/Directives/vr-gridview-standard.html",
     getTemplateByType: function (type) {
-        return '../../Client/Templates/Views/VGridview' + type + '.html'
+        return '../../Client/Templates/Views/vr-gridview-' + type + '.html'
     }
 };
 
 
-app.directive('vGridview', function () {
+app.directive('vrGridview', function () {
     return {
         restrict: 'E',
         scope: {
