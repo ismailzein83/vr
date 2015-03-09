@@ -34,6 +34,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/ChartPrototypes/CanvasJSChart.html',
             controller: 'CanvasJSChartController'
         }).
+        when('/AMChart', {
+            templateUrl: '/Client/Views/ChartPrototypes/AMChart.html',
+            controller: 'AMChartController'
+        }).
         otherwise({
             redirectTo: '/default'
         });
