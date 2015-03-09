@@ -151,6 +151,9 @@
     <Compile Include="NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="NumberProfileNew.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="OperationType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -186,6 +189,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ReportingStatu.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_CallClass.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Set_CallType.cs">

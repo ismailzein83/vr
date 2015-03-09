@@ -41,6 +41,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
+        public DbSet<NumberProfileNew> NumberProfileNews { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
@@ -51,6 +52,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportDetail> ReportDetails { get; set; }
         public DbSet<ReportingStatu> ReportingStatus { get; set; }
+        public DbSet<Set_CallClass> Set_CallClass { get; set; }
         public DbSet<Set_CallType> Set_CallType { get; set; }
         public DbSet<Set_SubType> Set_SubType { get; set; }
         public DbSet<SourceMapping> SourceMappings { get; set; }
@@ -498,6 +500,34 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual int db_FillHourlyCellProfile()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyCellProfile");
+        }
+    
+        public virtual int db_FillDailySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberThresholds", strategyIdParameter);
+        }
+    
+        public virtual int db_FillDailySubscriberValues()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberValues");
+        }
+    
+        public virtual int db_FillHourlyProfileNew()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyProfileNew");
+        }
+    
+        public virtual int db_FillHourlySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberThresholds", strategyIdParameter);
         }
     }
 }

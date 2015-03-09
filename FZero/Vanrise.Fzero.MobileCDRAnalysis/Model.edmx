@@ -19,6 +19,7 @@
           <EntitySet Name="NormalCDR" EntityType="Model.Store.NormalCDR" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="NormalizationRules" EntityType="Model.Store.NormalizationRules" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="NumberProfile" EntityType="Model.Store.NumberProfile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="NumberProfileNew" EntityType="Model.Store.NumberProfileNew" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OperationType" EntityType="Model.Store.OperationType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Peak_Hoursold" EntityType="Model.Store.Peak_Hoursold" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Peak_Time" EntityType="Model.Store.Peak_Time" store:Type="Tables" Schema="dbo" />
@@ -29,6 +30,7 @@
           <EntitySet Name="Report" EntityType="Model.Store.Report" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ReportDetails" EntityType="Model.Store.ReportDetails" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ReportingStatus" EntityType="Model.Store.ReportingStatus" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Set_CallClass" EntityType="Model.Store.Set_CallClass" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Set_CallType" EntityType="Model.Store.Set_CallType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Set_SubType" EntityType="Model.Store.Set_SubType" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SourceMappings" EntityType="Model.Store.SourceMappings" store:Type="Tables" Schema="dbo" />
@@ -354,6 +356,10 @@
           <Property Name="Termin_Zone_Code" Type="varchar" MaxLength="10" />
           <Property Name="Account_Age" Type="datetime" />
           <Property Name="SwitchRecordId" Type="int" />
+          <Property Name="Up_Volume" Type="decimal" Scale="2" />
+          <Property Name="Down_Volume" Type="decimal" Scale="2" />
+          <Property Name="Cell_Latitude" Type="decimal" Scale="8" />
+          <Property Name="Cell_Longitude" Type="decimal" Scale="8" />
         </EntityType>
         <EntityType Name="NormalizationRules">
           <Key>
@@ -400,6 +406,42 @@
           <Property Name="Count_On_Net" Type="int" />
           <Property Name="Count_Off_Net" Type="int" />
           <Property Name="Total_BTS" Type="int" />
+          <Property Name="Count_Out_Inter" Type="int" />
+          <Property Name="Count_In_Inter" Type="int" />
+        </EntityType>
+        <EntityType Name="NumberProfileNew">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
+          <Property Name="Date_Day" Type="datetime" />
+          <Property Name="Day_Hour" Type="int" />
+          <Property Name="Count_Out_Calls" Type="int" />
+          <Property Name="Count_In_Calls" Type="int" Nullable="false" />
+          <Property Name="Count_Out_Fail" Type="int" />
+          <Property Name="Count_In_Fail" Type="int" Nullable="false" />
+          <Property Name="Call_Out_Dur_Avg" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="numeric" Nullable="false" Precision="38" Scale="2" />
+          <Property Name="Total_Out_Volume" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="Total_In_Volume" Type="numeric" Nullable="false" Precision="38" Scale="2" />
+          <Property Name="Diff_Output_Numb" Type="int" />
+          <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
+          <Property Name="Diff_Dest_net" Type="int" />
+          <Property Name="Diff_Sources_net" Type="int" />
+          <Property Name="Total_Cell_In" Type="int" />
+          <Property Name="Total_Cell_Out" Type="int" />
+          <Property Name="Total_Cell" Type="int" />
+          <Property Name="Count_Out_SMS" Type="int" />
+          <Property Name="Count_In_SMS" Type="int" />
+          <Property Name="Total_IMEI" Type="int" />
+          <Property Name="Count_Out_OnNet" Type="int" />
+          <Property Name="Count_In_OnNet" Type="int" />
+          <Property Name="Count_Out_OffNet" Type="int" />
+          <Property Name="Count_In_OffNet" Type="int" />
+          <Property Name="Total_BTS" Type="int" />
+          <Property Name="Count_Out_Inter" Type="int" />
+          <Property Name="Count_In_Inter" Type="int" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
@@ -490,11 +532,20 @@
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Set_CallClass">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="IsOnNet" Type="int" />
+        </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="int" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Set_SubType">
@@ -621,8 +672,18 @@
           <Property Name="Criteria4" Type="int" />
           <Property Name="Criteria5" Type="int" />
           <Property Name="Criteria6" Type="int" />
+          <Property Name="Criteria7" Type="int" />
+          <Property Name="Criteria8" Type="int" />
+          <Property Name="Criteria9" Type="int" />
+          <Property Name="Criteria10" Type="int" />
+          <Property Name="Criteria11" Type="int" />
+          <Property Name="Criteria12" Type="int" />
+          <Property Name="Criteria13" Type="int" />
+          <Property Name="Criteria14" Type="int" />
+          <Property Name="Criteria15" Type="int" />
           <Property Name="SuspectionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
+          <Property Name="PeriodId" Type="int" />
         </EntityType>
         <EntityType Name="Suspicion_Level">
           <Key>
@@ -1149,8 +1210,16 @@
         </Function>
         <Function Name="db_FillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillDailyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="db_FillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillHourlyProfileNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
         <Function Name="db_FillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
@@ -1388,6 +1457,7 @@
           <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
           <EntitySet Name="NormalizationRules" EntityType="Model.NormalizationRule" />
           <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
+          <EntitySet Name="NumberProfileNews" EntityType="Model.NumberProfileNew" />
           <EntitySet Name="OperationTypes" EntityType="Model.OperationType" />
           <EntitySet Name="Peak_Hoursold" EntityType="Model.Peak_Hoursold" />
           <EntitySet Name="Peak_Time" EntityType="Model.Peak_Time" />
@@ -1398,6 +1468,7 @@
           <EntitySet Name="Reports" EntityType="Model.Report" />
           <EntitySet Name="ReportDetails" EntityType="Model.ReportDetail" />
           <EntitySet Name="ReportingStatus" EntityType="Model.ReportingStatu" />
+          <EntitySet Name="Set_CallClass" EntityType="Model.Set_CallClass" />
           <EntitySet Name="Set_CallType" EntityType="Model.Set_CallType" />
           <EntitySet Name="Set_SubType" EntityType="Model.Set_SubType" />
           <EntitySet Name="SourceMappings" EntityType="Model.SourceMapping" />
@@ -1546,6 +1617,14 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
+          <FunctionImport Name="db_FillDailySubscriberThresholds">
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="db_FillDailySubscriberValues" />
+          <FunctionImport Name="db_FillHourlyProfileNew" />
+          <FunctionImport Name="db_FillHourlySubscriberThresholds">
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="db_GetReportedNumberNormalCDR_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1740,6 +1819,10 @@
           <Property Type="String" Name="Termin_Zone_Code" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Account_Age" Precision="3" />
           <Property Type="Int32" Name="SwitchRecordId" />
+          <Property Type="Decimal" Name="Up_Volume" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Down_Volume" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cell_Latitude" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Cell_Longitude" Precision="18" Scale="8" />
         </EntityType>
         <EntityType Name="NormalizationRule">
           <Key>
@@ -1787,6 +1870,42 @@
           <Property Type="Int32" Name="Count_On_Net" />
           <Property Type="Int32" Name="Count_Off_Net" />
           <Property Type="Int32" Name="Total_BTS" />
+          <Property Type="Int32" Name="Count_Out_Inter" />
+          <Property Type="Int32" Name="Count_In_Inter" />
+        </EntityType>
+        <EntityType Name="NumberProfileNew">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Date_Day" Precision="3" />
+          <Property Type="Int32" Name="Day_Hour" />
+          <Property Type="Int32" Name="Count_Out_Calls" />
+          <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
+          <Property Type="Int32" Name="Count_Out_Fail" />
+          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
+          <Property Type="Decimal" Name="Call_Out_Dur_Avg" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_Out_Volume" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_In_Volume" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="Diff_Output_Numb" />
+          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
+          <Property Type="Int32" Name="Diff_Dest_net" />
+          <Property Type="Int32" Name="Diff_Sources_net" />
+          <Property Type="Int32" Name="Total_Cell_In" />
+          <Property Type="Int32" Name="Total_Cell_Out" />
+          <Property Type="Int32" Name="Total_Cell" />
+          <Property Type="Int32" Name="Count_Out_SMS" />
+          <Property Type="Int32" Name="Count_In_SMS" />
+          <Property Type="Int32" Name="Total_IMEI" />
+          <Property Type="Int32" Name="Count_Out_OnNet" />
+          <Property Type="Int32" Name="Count_In_OnNet" />
+          <Property Type="Int32" Name="Count_Out_OffNet" />
+          <Property Type="Int32" Name="Count_In_OffNet" />
+          <Property Type="Int32" Name="Total_BTS" />
+          <Property Type="Int32" Name="Count_Out_Inter" />
+          <Property Type="Int32" Name="Count_In_Inter" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
@@ -1892,11 +2011,20 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Reports" Relationship="Model.FK_Report_ReportingStatus" FromRole="ReportingStatu" ToRole="Report" />
         </EntityType>
+        <EntityType Name="Set_CallClass">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="IsOnNet" />
+        </EntityType>
         <EntityType Name="Set_CallType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Code" />
           <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Set_SubType">
@@ -2044,8 +2172,18 @@
           <Property Type="Int32" Name="Criteria4" />
           <Property Type="Int32" Name="Criteria5" />
           <Property Type="Int32" Name="Criteria6" />
+          <Property Type="Int32" Name="Criteria7" />
+          <Property Type="Int32" Name="Criteria8" />
+          <Property Type="Int32" Name="Criteria9" />
+          <Property Type="Int32" Name="Criteria10" />
+          <Property Type="Int32" Name="Criteria11" />
+          <Property Type="Int32" Name="Criteria12" />
+          <Property Type="Int32" Name="Criteria13" />
+          <Property Type="Int32" Name="Criteria14" />
+          <Property Type="Int32" Name="Criteria15" />
           <Property Type="Int32" Name="SuspectionLevelId" />
           <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="PeriodId" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
         </EntityType>
         <EntityType Name="Suspicion_Level">
@@ -2788,6 +2926,10 @@
           <EntitySetMapping Name="NormalCDRs">
             <EntityTypeMapping TypeName="Model.NormalCDR">
               <MappingFragment StoreEntitySet="NormalCDR">
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
                 <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
                 <ScalarProperty Name="Account_Age" ColumnName="Account_Age" />
                 <ScalarProperty Name="Termin_Zone_Code" ColumnName="Termin_Zone_Code" />
@@ -2832,6 +2974,8 @@
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="Model.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
+                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
+                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
                 <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
                 <ScalarProperty Name="Count_Off_Net" ColumnName="Count_Off_Net" />
                 <ScalarProperty Name="Count_On_Net" ColumnName="Count_On_Net" />
@@ -2839,6 +2983,41 @@
                 <ScalarProperty Name="count_ter_SMS" ColumnName="count_ter_SMS" />
                 <ScalarProperty Name="count_orig_SMS" ColumnName="count_orig_SMS" />
                 <ScalarProperty Name="Total_Cell" ColumnName="Total_Cell" />
+                <ScalarProperty Name="Diff_Sources_net" ColumnName="Diff_Sources_net" />
+                <ScalarProperty Name="Diff_Dest_net" ColumnName="Diff_Dest_net" />
+                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
+                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
+                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
+                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
+                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
+                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
+                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
+                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
+                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
+                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
+                <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
+                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NumberProfileNews">
+            <EntityTypeMapping TypeName="Model.NumberProfileNew">
+              <MappingFragment StoreEntitySet="NumberProfileNew">
+                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
+                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
+                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
+                <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
+                <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
+                <ScalarProperty Name="Count_In_OnNet" ColumnName="Count_In_OnNet" />
+                <ScalarProperty Name="Count_Out_OnNet" ColumnName="Count_Out_OnNet" />
+                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
+                <ScalarProperty Name="Count_In_SMS" ColumnName="Count_In_SMS" />
+                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
+                <ScalarProperty Name="Total_Cell" ColumnName="Total_Cell" />
+                <ScalarProperty Name="Total_Cell_Out" ColumnName="Total_Cell_Out" />
+                <ScalarProperty Name="Total_Cell_In" ColumnName="Total_Cell_In" />
                 <ScalarProperty Name="Diff_Sources_net" ColumnName="Diff_Sources_net" />
                 <ScalarProperty Name="Diff_Dest_net" ColumnName="Diff_Dest_net" />
                 <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
@@ -2957,10 +3136,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Set_CallClass">
+            <EntityTypeMapping TypeName="Model.Set_CallClass">
+              <MappingFragment StoreEntitySet="Set_CallClass">
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Set_CallType">
             <EntityTypeMapping TypeName="Model.Set_CallType">
               <MappingFragment StoreEntitySet="Set_CallType">
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3087,8 +3276,18 @@
           <EntitySetMapping Name="SubscriberThresholds">
             <EntityTypeMapping TypeName="Model.SubscriberThreshold">
               <MappingFragment StoreEntitySet="SubscriberThresholds">
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
+                <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
+                <ScalarProperty Name="Criteria13" ColumnName="Criteria13" />
+                <ScalarProperty Name="Criteria12" ColumnName="Criteria12" />
+                <ScalarProperty Name="Criteria11" ColumnName="Criteria11" />
+                <ScalarProperty Name="Criteria10" ColumnName="Criteria10" />
+                <ScalarProperty Name="Criteria9" ColumnName="Criteria9" />
+                <ScalarProperty Name="Criteria8" ColumnName="Criteria8" />
+                <ScalarProperty Name="Criteria7" ColumnName="Criteria7" />
                 <ScalarProperty Name="Criteria6" ColumnName="Criteria6" />
                 <ScalarProperty Name="Criteria5" ColumnName="Criteria5" />
                 <ScalarProperty Name="Criteria4" ColumnName="Criteria4" />
@@ -3216,6 +3415,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberThresholds" FunctionName="Model.Store.db_FillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValues" FunctionName="Model.Store.db_FillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlyProfileNew" FunctionName="Model.Store.db_FillHourlyProfileNew" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberThresholds" FunctionName="Model.Store.db_FillHourlySubscriberThresholds" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

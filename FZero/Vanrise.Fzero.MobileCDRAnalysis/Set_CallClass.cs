@@ -12,10 +12,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Set_CallType
+    public partial class Set_CallClass
     {
         public int Id { get; set; }
-        public Nullable<int> Code { get; set; }
         public string Description { get; set; }
+        public Nullable<int> IsOnNet { get; set; }
     }
 }

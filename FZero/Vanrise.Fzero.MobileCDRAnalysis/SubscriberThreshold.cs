@@ -23,8 +23,18 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Criteria4 { get; set; }
         public Nullable<int> Criteria5 { get; set; }
         public Nullable<int> Criteria6 { get; set; }
+        public Nullable<int> Criteria7 { get; set; }
+        public Nullable<int> Criteria8 { get; set; }
+        public Nullable<int> Criteria9 { get; set; }
+        public Nullable<int> Criteria10 { get; set; }
+        public Nullable<int> Criteria11 { get; set; }
+        public Nullable<int> Criteria12 { get; set; }
+        public Nullable<int> Criteria13 { get; set; }
+        public Nullable<int> Criteria14 { get; set; }
+        public Nullable<int> Criteria15 { get; set; }
         public Nullable<int> SuspectionLevelId { get; set; }
         public Nullable<int> StrategyId { get; set; }
+        public Nullable<int> PeriodId { get; set; }
     
         public virtual Suspicion_Level Suspicion_Level { get; set; }
     }

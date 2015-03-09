@@ -33,5 +33,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Termin_Zone_Code { get; set; }
         public Nullable<System.DateTime> Account_Age { get; set; }
         public Nullable<int> SwitchRecordId { get; set; }
+        public Nullable<decimal> Up_Volume { get; set; }
+        public Nullable<decimal> Down_Volume { get; set; }
+        public Nullable<decimal> Cell_Latitude { get; set; }
+        public Nullable<decimal> Cell_Longitude { get; set; }
     }
 }

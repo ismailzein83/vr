@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class NumberProfile
+    public partial class NumberProfileNew
     {
         public int Id { get; set; }
         public string SubscriberNumber { get; set; }
@@ -30,12 +30,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int Diff_Input_Numbers { get; set; }
         public Nullable<int> Diff_Dest_net { get; set; }
         public Nullable<int> Diff_Sources_net { get; set; }
+        public Nullable<int> Total_Cell_In { get; set; }
+        public Nullable<int> Total_Cell_Out { get; set; }
         public Nullable<int> Total_Cell { get; set; }
-        public Nullable<int> count_orig_SMS { get; set; }
-        public Nullable<int> count_ter_SMS { get; set; }
+        public Nullable<int> Count_Out_SMS { get; set; }
+        public Nullable<int> Count_In_SMS { get; set; }
         public Nullable<int> Total_IMEI { get; set; }
-        public Nullable<int> Count_On_Net { get; set; }
-        public Nullable<int> Count_Off_Net { get; set; }
+        public Nullable<int> Count_Out_OnNet { get; set; }
+        public Nullable<int> Count_In_OnNet { get; set; }
+        public Nullable<int> Count_Out_OffNet { get; set; }
+        public Nullable<int> Count_In_OffNet { get; set; }
         public Nullable<int> Total_BTS { get; set; }
         public Nullable<int> Count_Out_Inter { get; set; }
         public Nullable<int> Count_In_Inter { get; set; }
