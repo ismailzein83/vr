@@ -15,12 +15,24 @@ appRouting.config(['$routeProvider',
             controller: 'RouteRuleEditorController'
         }).
         when('/ZingChart', {
-            templateUrl: '/Client/Views/ZingChart.html',
+            templateUrl: '/Client/Views/ChartPrototypes/ZingChart.html',
             controller: 'ZingChartController'
         }).
         when('/HighChart', {
-            templateUrl: '/Client/Views/HighChart.html',
+            templateUrl: '/Client/Views/ChartPrototypes/HighChart.html',
             controller: 'HighChartController'
+        }).
+        when('/HighChartSparkline', {
+            templateUrl: '/Client/Views/ChartPrototypes/HighChartSparkline.html',
+            controller: 'HighChartSparklineController'
+        }).
+        when('/FusionChart', {
+            templateUrl: '/Client/Views/ChartPrototypes/FusionChart.html',
+            controller: 'FusionChartController'
+        }).
+        when('/CanvasJSChart', {
+            templateUrl: '/Client/Views/ChartPrototypes/CanvasJSChart.html',
+            controller: 'CanvasJSChartController'
         }).
         otherwise({
             redirectTo: '/default'

@@ -198,4 +198,100 @@
         setTimeout(function () {
             $scope.loadChart();
         }, 600);
+        var dynamicChartSeries = [];
+        $http.get($scope.baseurl + "/api/ChartTest/GetLatestValues",
+          {
+          })
+      .success(function (response) {
+          
+          for (var i = 0; i < response.length; i++)
+          {
+              var ser = {
+                  name: "Serie " + i,
+                  data: []
+              };
+
+              var time = (new Date()).getTime(),
+                        j;
+
+              for (j = -500; j <= 0; j += 1) {
+                  ser.data.push({
+                      x: time + j * 1000,
+                      y: null
+                  });
+              }
+              dynamicChartSeries.push(ser);
+          }
+          $scope.loadDynamicChart();
+      });
+
+
+        $scope.loadDynamicChart = function () {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
+
+            $('#container4').highcharts({
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10,
+                    events: {
+                        load: function () {
+
+                            // set up the updating of the chart each second
+                            var dynSeries = this.series;
+                            setInterval(function () {
+                                
+                                $http.get($scope.baseurl + "/api/ChartTest/GetLatestValues",
+          {              
+          })
+      .success(function (response) {
+          for (var i = 0; i < response.length; i++) {
+              angular.forEach(response[i], function (item) {
+
+                  var x = new Date(item.Time).getTime(), // current time
+                  y = item.Value;
+                  dynSeries[i].addPoint([x, y], true, true);
+              });
+          }
+      });
+
+                               
+                            }, 2000);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Live random data'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {                    
+                    shared: true
+                },
+                legend: {
+                    enabled: true
+                },
+                exporting: {
+                    enabled: false
+                },
+                series: dynamicChartSeries
+            });
+        };
+       
     });
