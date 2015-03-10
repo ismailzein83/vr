@@ -1,14 +1,37 @@
 ﻿appControllers.controller('RouteRuleEditorController',
     function RouteRuleEditorController($scope,$http) {
        
-        $('.ddl').dropdown({
-            onShow: function (e) {
-               
+        $('.dropdown').on('show.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        });
+
+         //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('.dropdown').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        });
+
+        var dropdownHidingTimeoutHandler;
+
+        $('.dropdown-custom').on('mouseenter', function () {
+            var $this = $(this);
+            clearTimeout(dropdownHidingTimeoutHandler);
+            if (!$this.hasClass('open')) {
+                $('.dropdown-toggle', $this).dropdown('toggle');
             }
         });
-        $('.menuddl').dropdown({
-            on: 'hover'
+
+        $('.dropdown-custom').on('mouseleave', function () {
+            var $this = $(this);
+            dropdownHidingTimeoutHandler = setTimeout(function () {
+                if ($this.hasClass('open')) {
+                    $('.dropdown-toggle', $this).dropdown('toggle');
+                }
+            }, 150);
         });
+        $scope.muteAction = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
            {
                params: {
@@ -144,18 +167,8 @@
         $scope.selectZone = function ($event,s) {
             $event.preventDefault();
             $event.stopPropagation();
-           // var index = null;
-           // try {
             var index = $scope.findExsite($scope.selectedZones, s.ZoneId, 'ZoneId');
-               // JSON.parse(angular.toJson($scope.selectedZones)).indexOf(JSON.parse(s));
-
-               //;
-
-           // }
-           // catch (e) {
-
-            // }
-               console.log(s)
+          
             if (index >= 0) {
                 $scope.selectedZones.splice(index, 1);
             }

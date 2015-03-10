@@ -37,23 +37,25 @@ namespace TOne.Web
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/Angular/angular.js",
                "~/Client/Libraries/Angular/angular-route.js",
+                "~/Client/Libraries/Angular/angular-strap.js",
+               "~/Client/Libraries/Angular/angular-strap.tpl.js",
               "~/Client/Libraries/Angular/sortable.js",
               "~/Client/Libraries/Angular/ng-sortable.js"));
 
             //Bootstrap
-            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
-            //    "~/Client/Libraries/Bootstrap", "*.js", true));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
+                "~/Client/Libraries/Bootstrap", "*.js", true));
 
-            //bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
-            //    "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
-            //    "~/Client/Libraries/Bootstrap", "*.png", true));
+            bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
+                "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
+                "~/Client/Libraries/Bootstrap", "*.png", true));
 
             //Semantic
-            bundles.Add(new ScriptBundle("~/bundles/Semantic").IncludeDirectory(
-                "~/Client/Libraries/Semantic", "*.js", true));
+            //bundles.Add(new ScriptBundle("~/bundles/Semantic").IncludeDirectory(
+            //    "~/Client/Libraries/Semantic", "*.js", true));
 
-            bundles.Add(new StyleBundle("~/Content/Semantic").IncludeDirectory(
-                "~/Client/Libraries/Semantic", "*.css", true));
+            //bundles.Add(new StyleBundle("~/Content/Semantic").IncludeDirectory(
+            //    "~/Client/Libraries/Semantic", "*.css", true));
             //.IncludeDirectory(
             //    "~/Client/Libraries/Semantic", "*.png", true).IncludeDirectory(
             //    "~/Client/Libraries/Semantic", "*.eot", true).IncludeDirectory(

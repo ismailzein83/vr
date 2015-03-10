@@ -1,199 +1,242 @@
 ﻿
 
-<div style="padding-top:20px">
-    <div class="ui grid">
-        <div class="row">
-            <div class="sixteen wide column">
-                <span style="display:inline-block;width:100px">Rule type</span>
-                <div class="ui icon searchable floating dropdown  button ddl" tabindex="0">
 
-                    <span class="text" style="width:150px"> </span>
-                    <i class="dropdown icon"></i>
-                    <div class="menu" tabindex="-1">
-                        <div class="item">
-                            Overide
-                        </div>
-                        <div class="item">
-                            Block
-                        </div>
-                        <div class="item">
-                            Priority
-                        </div>
-                    </div>
+<div class="container-fluid">
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-3">
+            <label class="control-label">Rule Type</label>
+            <div class="form-group">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true" ng-model='ruletype' ng-init="ruletype = 'Select..'">
+                        {{ruletype}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-custom" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="muteaction($event);">
+                        <li role="presentation">
+                            <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="ruletype = 'Overide'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Overide</div>
+                            </div>
+                            <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="ruletype = 'Block'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Block</div>
+                            </div>
+                            <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="ruletype = 'Priority'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                <div class="hand-cursor" style="display: table-cell; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Priority</div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="three wide column">
-                <div class="ui icon searchable floating dropdown  button ddl" tabindex="0">
-                    <span style=" display: inline-block; padding: 5px; background-color: rgba(0, 0, 0, 0.05); position: absolute; left: 0; top: 0; height: 100%; line-height: 2; }">By</span>
-                    <span class="text" style="text-indent:20px;width:125px"> </span>
-                    <div class="menu" tabindex="-1">
-                        <div class="item">
-                            Customer
+    </div>
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuType" data-toggle="dropdown" aria-expanded="true" ng-model='routetype' ng-init="routetype = ''">
+                    <span style=" display: inline-block; padding:2px 5px; background-color: rgba(0, 0, 0, 0.05); position: absolute; left: 0; top: 0; height: 100%; line-height: 2; }">By</span>
+                    <span style="display:inline-block;min-width:100px">{{routetype}}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-custom" role="menu" aria-labelledby="dropdownMenuType" ng-mouseenter="muteaction($event);">
+                    <li role="presentation">
+                        <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="routetype = 'Customer'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Customer</div>
                         </div>
-                        <div class="item">
-                            Pool
+                        <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="routetype = 'Pool'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Pool</div>
                         </div>
-                        <div class="item">
-                            Product
+                        <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="routetype = 'Product'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Product</div>
                         </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
-            <div class="three wide column">
-                <div style="display:inline-block">
-                    <div class="ui dropdown button menuddl" style="background-color:transparent;border:none"
-                         ng-model='carrierAccountSelectionOption' ng-init="carrierAccountSelectionOption = 1">
-                        {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
-                        <!--<i class="dropdown icon"></i>-->
-                        <div class="menu" tabindex="-1">
-                            <a class="item" ng-click="carrierAccountSelectionOption = 1" ng-show="carrierAccountSelectionOption != 1">Customers</a>
-                            <a class="item" ng-click="carrierAccountSelectionOption = 2" ng-show="carrierAccountSelectionOption != 2">All Customers Except</a>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="dropdown dropdown-custom">
+                <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption' ng-init="carrierAccountSelectionOption = 1">
+                    {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-custom" role="menu" aria-labelledby="dropdownMenuCu">
+                    <li role="presentation" ng-show="carrierAccountSelectionOption != 1">
+                        <label class="item-menu " ng-click="carrierAccountSelectionOption = 1">Customers</label>
+                    </li>
+                    <li role="presentation" ng-show="carrierAccountSelectionOption != 2">
+                        <label class="item-menu" ng-click="carrierAccountSelectionOption = 2">All Customers Except</label>
+                    </li>
+                </ul>
             </div>
-            <div class="three wide column">
-                <div class="ui dropdown  button ddl">
-                    <div class="three wide column">
-                        {{getSelectCustomerText()}}
-                    </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    {{getSelectCustomerText()}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" ng-class="selectedCustomers.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
+                    <li role="presentation" ng-click="muteAction($event)">
 
-                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
-                    <div class="menu" ng-class="selectedCustomers.length == 0 ? 'single-col-checklist':'double-col-checklist' " tabindex="-1">
-                        <div style="display: inline-block; ">
-                            <div class="ui icon input" style="margin: 2px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px">
-                                <input type="text" placeholder="Search" ng-model="filtername">
-                                <i class="delete icon" ng-click="filtername = ''"></i>
-                            </div>
 
-                            <div style="height:225px;overflow:auto;margin-top:5px">
-                                <div ng-repeat="c in customers  | filter:filtername" ng-attr-title="{{c.Name}}" ng-click="selectCustomer($event, c)" class="item hand-cursor">
-                                    <div class="ui mark-select " style="padding: 5px ;margin:2px; white-space: normal;" ng-class="findExsite(selectedCustomers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' " style="margin:5px">
-                                        <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                        <div style="float:right" ng-show="selectedCustomers.indexOf(c) > -1">✔</div>
-                                    </div>
+                        <div style="display: inline-block; width: 220px;">
+                            <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                                <div class="inner-addon right-addon">
+                                    <i class="glyphicon glyphicon-remove hand-cursor" ng-click="muteAction($event);filtername= '' "></i>
+                                    <input type="text" class="form-control input-sm" ng-model="filtername" ng-click="muteAction($event)" />
                                 </div>
                             </div>
+                            <div style="height: 225px; overflow: auto; margin-top: 5px">
+                                <div class="mark-select " ng-click="selectCustomer($event, c)" ng-repeat="c in customers  | filter:filtername" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedCustomers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
+                                    <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
+                                    <div style="float:right" ng-show="selectedCustomers.indexOf(c) > -1">✔</div>
+                                </div>
+                            </div>
+
                         </div>
-                        <div style="vertical-align: text-bottom; max-width: 220px; overflow: auto; white-space: normal; display: inline-block; height: 282px; border-left: 1px solid #f0f0f0;padding-left:5px" ng-show="selectedCustomers.length > 0">
-                            <div style="padding:5px 10px;">
+                        <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="selectedCustomers.length > 0">
+                            <div style="padding:5px ;">
                                 Selected Customers:
-                                <a class="ui icon" href="" style="position: absolute; right: 5px;" ng-click="selectedCustomers.length = 0">
+                                <a href="" class="link" style="position: absolute; right: 5px;" ng-click="muteAction($event);selectedCustomers.length = 0">
                                     Clear all
-                                    <i class="trash icon"></i>
+                                    <i class="glyphicon glyphicon-trash hand-cursor "></i>
                                 </a>
                             </div>
-                            <div class="header" style=" white-space: normal; overflow: auto; height: 257px;">
-                                <div class="ui label pading-top-s" ng-repeat="obj in selectedCustomers">
+                            <div style="height: 225px; overflow: auto;padding-top:5px">
+                                <span class="label custom-label" ng-repeat="obj in selectedCustomers">
                                     {{obj.Name}}
-                                    <i class="delete icon" ng-click="selectCustomer($event,obj)"></i>
-                                </div>
+                                    <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectCustomer($event,obj)"></span>
+                                </span>
                             </div>
+
                         </div>
-                        <!--<div ng-show="selectedCustomers.length > 0" class="ui horizontal divider"></div>-->
-
-
-
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="row" style="min-height:300px">
-            <div class="three wide column">
-                
-
+    </div>
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownZoneType" data-toggle="dropdown" aria-expanded="true" ng-model='zonetype' ng-init="zonetype = ''">
+                    <span style=" display: inline-block; padding:2px 5px; background-color: rgba(0, 0, 0, 0.05); position: absolute; left: 0; top: 0; height: 100%; line-height: 2; }">By</span>
+                    <span style="display:inline-block;min-width:100px">{{zonetype}}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-custom" role="menu" aria-labelledby="dropdownZoneType" ng-mouseenter="muteaction($event);">
+                    <li role="presentation">
+                        <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="zonetype = 'Zone'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Zone</div>
+                        </div>
+                        <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="zonetype = 'Code'" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Code</div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-
         </div>
-
-        <div class="row">
-            <div class="three wide column">
-                <div class="ui   dropdown  button ddl">
-                    <div class="three wide column">
-                        {{getSelectZoneText()}}
-                    </div>
-
-                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
-
-                    <div class="menu" ng-class="selectedZones.length == 0 ? 'single-col-checklist':'double-col-checklist' " tabindex="-1">
-                        <div style="display: inline-block;width:225px">
-                            <div class="ui icon input" style="margin: 2px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px;width:100%;margin-bottom:5px ">
-                                <div class="ui icon input loading">
-                                    <input type="text" placeholder="Type 2 characters.." ng-model="filterzone" ng-keyup="searchZones()">
-                                    <i class="search icon" ng-show="showloading"></i>
+        <div class="col-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
+                    {{getSelectZoneText()}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuZ" ng-class="selectedZones.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
+                    <li role="presentation" ng-click="muteAction($event)">
+                        <div style="display: inline-block; width: 220px;">
+                            <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                                <div class="inner-addon right-addon">
+                                    <i class="glyphicon icon-loader" ng-show="showloading"></i>
+                                    <input class="form-control input-sm" type="text" placeholder="Type 2 characters.." ng-model="filterzone" ng-keyup="searchZones()">
                                 </div>
                             </div>
                             <div ng-show="filterzone.length < 2">Please type {{2 - filterzone.length}} character(s)..</div>
                             <div ng-show="showloading">Loading..</div>
-                            <div style="height:225px;overflow:auto;margin-top:5px">
-                                <div ng-repeat="c in zones " ng-attr-title="{{c.Name}}" ng-click="selectZone($event, c)" class="item hand-cursor">
-                                    <div class="ui mark-select " style="padding: 5px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1 ?'selected':'' ">
-                                        <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                        <div style="float:right" ng-show="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1">✔</div>
-                                    </div>
+                            <div style="height: 225px; overflow: auto; margin-top: 5px">
+                                <div class="mark-select " ng-click="selectZone($event, c)" ng-attr-title="{{c.Name}}" ng-repeat="c in zones" style="display: block;padding:3px 2px 0px 2px; margin:2px; white-space: normal;" ng-class="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1 ?'selected':'' ">
+                                    <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
+                                    <div style="display:inline-block;float:right" ng-show="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1 ">✔</div>
                                 </div>
                             </div>
+
                         </div>
-                        <div style="vertical-align: text-bottom; max-width: 220px; overflow: auto; white-space: normal; display: inline-block; height: 282px; border-left: 1px solid #f0f0f0;padding-left:5px" ng-show="selectedZones.length > 0">
-                            <div style="padding: 5px 10px;">
+                        <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="selectedZones.length > 0">
+                            <div style="padding:5px ;">
                                 Selected Zones:
-                                <a class="ui icon" href="" style="position: absolute; right: 5px;" ng-click="selectedZones.length = 0">
+                                <a href="" class="link" style="position: absolute; right: 5px;" ng-click="muteAction($event);selectedZones.length = 0">
                                     Clear all
-                                    <i class="trash icon"></i>
+                                    <i class="glyphicon glyphicon-trash hand-cursor "></i>
                                 </a>
                             </div>
-                            <div class="header" style=" white-space: normal; overflow: auto; height: 257px;">
-                                <div class="ui label pading-top-s" ng-repeat="obj in selectedZones">
+                            <div style="height: 225px; overflow: auto;padding-top:5px">
+                                <span class="label custom-label" ng-repeat="obj in selectedZones">
                                     {{obj.Name}}
-                                    <i class="delete icon" ng-click="selectZone($event,obj)"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="four wide column">
-                <div class="ui dropdown  button ddl">
-                    <div class="three wide column">
-                        {{getSelectSuppliersText()}}
-                    </div>
-                    <i class="dropdown icon" style="position: absolute; top: 12px; right: 5px;"></i>
-                    <div class="menu single-col-checklist" tabindex="-1">
-                        <div style="display: inline-block; ">
-                            <div class="ui icon input" style="margin: 2px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px">
-                                <input type="text" placeholder="Search" ng-model="filtersup">
-                                <i class="delete icon" ng-click="filtersup = ''"></i>
+                                    <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectZone($event,obj)"></span>
+                                </span>
                             </div>
 
-                            <div style="height:225px;overflow:auto;margin-top:5px">
-                                <div ng-repeat="c in customers  | filter:filtersup" ng-attr-title="{{c.Name}}" ng-click="selectSupplier($event, c)" class="item hand-cursor">
-                                    <div class="ui mark-select " style="padding: 5px ;margin:2px; white-space: normal;" ng-class="findExsite(selectedSuppliers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
-                                        <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                        <div style="float:right" ng-show="selectedSuppliers.indexOf(c) > -1">✔</div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="four wide column">
-                <div ng-sortable="itemsSortable" class="ui divided items dragbelzone" ng-show="selectedSuppliers.length > 0">
-                    <div ng-repeat="item in selectedSuppliers" class="item">
-                        <i class="list layout icon handeldrag"></i>
-                        {{item.Name}}
-                        <i class="delete icon" style="float: right; padding-top: 10px; cursor:default" ng-click="selectSupplier($event,item)"></i>
-                        <div style="float: right">
-                            <input type="text" class="custom-input" style="max-width: 40px" size="3">
-                        </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
 
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-3">
+            <label class="control-label">BED</label>
+            <div class="form-group">
+                <input size="10" class="form-control max-width-md inline-block" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <label class="control-label">EED</label>
+            <div class="form-group">
+                <input size="10" class="form-control max-width-md inline-block" data-min-date="{{BEDDate}}" ng-model="EEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-12">
+            <label class="control-label">Reason</label>
+            <textarea class="form-control" />
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; ">
+        <div class="col-lg-3">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuS" data-toggle="dropdown" aria-expanded="true">
+                    {{getSelectSuppliersText()}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuS" ng-class="single-col-checklist">
+                    <li role="presentation" ng-click="muteAction($event)">
+                        <div style="display: inline-block; width: 220px;">
+                            <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                                <div class="inner-addon right-addon">
+                                    <i class="glyphicon glyphicon-remove hand-cursor" ng-click="muteAction($event);filtername= '' "></i>
+                                    <input type="text" class="form-control input-sm" ng-model="filtersup" ng-click="muteAction($event)" />
+                                </div>
+                            </div>
+                            <div style="height: 225px; overflow: auto; margin-top: 5px">
+                                <div class="mark-select " ng-click="selectSupplier($event, c)" ng-repeat="c in suppliers  | filter:filtersup" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedSuppliers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
+                                    <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
+                                    <div style="float:right" ng-show="selectedSuppliers.indexOf(c) > -1">✔</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="selectedSuppliers.length > 0">
+                <li ng-repeat="item in selectedSuppliers" class="list-group-item" style="margin:1px">
+                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                    {{item.Name}}
+                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor:default" ng-click="selectSupplier($event,item)"></i>
+                    <div style="float: right">
+                        <input type="text" class="custom-input" style="max-width: 40px" size="3">
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

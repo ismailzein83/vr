@@ -195,6 +195,8 @@
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
+    <Content Include="Client\Libraries\Angular\angular-strap.js" />
+    <Content Include="Client\Libraries\Angular\angular-strap.tpl.js" />
     <Content Include="Client\Libraries\Angular\angular.js" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.html" />
@@ -212,6 +214,7 @@
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-0.12.1.min.js" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-tpls-0.12.1.min.js" />
     <Content Include="Client\Libraries\Charts\AMChart\amcharts.js" />
@@ -426,6 +429,7 @@
     <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
+    <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
     <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
@@ -541,6 +545,9 @@
     <Content Include="Client\Libraries\Angular\meteor\README.md" />
     <Content Include="Client\Libraries\Angular\meteor\runtests.sh" />
     <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\readme.md" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>
