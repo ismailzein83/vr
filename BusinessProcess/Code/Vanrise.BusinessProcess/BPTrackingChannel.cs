@@ -69,8 +69,9 @@ namespace Vanrise.BusinessProcess
                 if (lstTrackingMsgs.Count > 0)
                     WriteToDB(lstTrackingMsgs);
             }
-            catch
+            catch(Exception ex)
             {
+                Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
 
             lock (this)
