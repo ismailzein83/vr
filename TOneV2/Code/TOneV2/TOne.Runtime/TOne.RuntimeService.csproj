@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{023C7DEA-3554-408D-A8F8-5BB2A8648D58}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TOne.RuntimeService</RootNamespace>
+    <AssemblyName>TOne.RuntimeService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Resources\DLLs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Resources\DLLs\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NGenerics">
+      <HintPath>..\Resources\DLLs\NGenerics.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SecurityEssentials">
+      <HintPath>..\Resources\DLLs\SecurityEssentials.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TABS.Addons.AlcatelSwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.AlcatelSwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.EricssonEIN3_1ProxyLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.EricssonEIN3_1ProxyLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.EricssonSwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.EricssonSwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProRadiusMultipleQueueProxyLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.MvtsProSwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProSwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.MvtsProSwitchLibraryMultipleQueue">
+      <HintPath>..\Resources\DLLs\TABS.Addons.MvtsProSwitchLibraryMultipleQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.NextPointSwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.NextPointSwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.NortelDMS300SwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.NortelDMS300SwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.TelesSwitchLibrary">
+      <HintPath>..\Resources\DLLs\TABS.Addons.TelesSwitchLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.Utilities">
+      <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.UtilitiesMultipleQueue">
+      <HintPath>..\Resources\DLLs\TABS.Addons.UtilitiesMultipleQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Plugins.VoipSwitch">
+      <HintPath>..\Resources\DLLs\TABS.Plugins.VoipSwitch.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Logging.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Data.SQL">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Extensions">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Service1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service1.Designer.cs">
+      <DependentUpon>Service1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
+      <Project>{234abdf0-dae3-4979-8bf4-57f3eed90268}</Project>
+      <Name>TABS.Plugins.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TABS\TABS.csproj">
+      <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
+      <Name>TABS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.BProcess.Activities\TOne.BusinessEntity.BProcess.Activities.csproj">
+      <Project>{776bb39b-81da-466c-b247-3616ca61a66d}</Project>
+      <Name>TOne.BusinessEntity.BProcess.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Data.SQL\TOne.BusinessEntity.Data.SQL.csproj">
+      <Project>{584101e7-a41e-4bab-9cc8-32ce70adbc8c}</Project>
+      <Name>TOne.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Data\TOne.BusinessEntity.Data.csproj">
+      <Project>{fe3e9123-4e75-42db-b98c-b37a472aad9a}</Project>
+      <Name>TOne.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Caching\TOne.Caching.csproj">
+      <Project>{1950b29a-5c7b-47a3-8113-fc9211d27cfd}</Project>
+      <Name>TOne.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Business\TOne.CDR.Business.csproj">
+      <Project>{5aac8aec-cc1e-489a-99c0-5826b7bc0e35}</Project>
+      <Name>TOne.CDR.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Data.SQL\TOne.CDR.Data.SQL.csproj">
+      <Project>{a8389de1-6f10-470d-8364-cba3a3f14286}</Project>
+      <Name>TOne.CDR.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Data\TOne.CDR.Data.csproj">
+      <Project>{9d556d54-f769-41af-843d-dff72384df32}</Project>
+      <Name>TOne.CDR.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
+      <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
+      <Name>TOne.CDR.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess.Activities\TOne.CDRProcess.Activities.csproj">
+      <Project>{85d05a41-8510-40ce-a2aa-e0cd39099eac}</Project>
+      <Name>TOne.CDRProcess.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess.Arguments\TOne.CDRProcess.Arguments.csproj">
+      <Project>{34c38ef3-c2d1-41d7-ab7c-e375f030b5f3}</Project>
+      <Name>TOne.CDRProcess.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess\TOne.CDRProcess.csproj">
+      <Project>{dfbaf471-2f49-40cd-b42a-574fefe5fffd}</Project>
+      <Name>TOne.CDRProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
+      <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
+      <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data\TOne.Data.csproj">
+      <Project>{ac26c25e-a2bf-4f95-9070-8a910fda5989}</Project>
+      <Name>TOne.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Business\TOne.LCR.Business.csproj">
+      <Project>{5e726053-e223-49ce-9bf6-61271153a94d}</Project>
+      <Name>TOne.LCR.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data.SQL\TOne.LCR.Data.SQL.csproj">
+      <Project>{acc3f0e9-3a0c-4b90-afe7-d9cdaa858c0b}</Project>
+      <Name>TOne.LCR.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Data\TOne.LCR.Data.csproj">
+      <Project>{1c4e2326-4dd4-4bf4-8b8c-aa1c6fa0c4fc}</Project>
+      <Name>TOne.LCR.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
+      <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
+      <Name>TOne.LCR.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCRProcess.Activities\TOne.LCRProcess.Activities.csproj">
+      <Project>{8e765860-8d8c-4296-9ee4-7749e861b629}</Project>
+      <Name>TOne.LCRProcess.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCRProcess.Arguments\TOne.LCRProcess.Arguments.csproj">
+      <Project>{e875395b-f198-4c06-9c10-1fed1450c7d7}</Project>
+      <Name>TOne.LCRProcess.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCRProcess\TOne.LCRProcess.csproj">
+      <Project>{244516f9-e7b8-47d0-b3af-ec24631ba485}</Project>
+      <Name>TOne.LCRProcess</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
