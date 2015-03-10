@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{023C7DEA-3554-408D-A8F8-5BB2A8648D58}</ProjectGuid>
+    <ProjectGuid>{E4731DA6-C0F3-4800-9181-CDD8BA20C0BD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TOne.RuntimeService</RootNamespace>
