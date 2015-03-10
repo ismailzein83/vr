@@ -7,11 +7,11 @@ using TOne.LCR.Entities;
 
 namespace TOne.LCR.Business
 {
-    public class SingleDestinationRoutesBuildContext
+    public class SingleDestinationRoutesBuildContext : IDisposable
     {
         #region ctor/Local Variables
 
-        Dictionary<string, CodeMatch> _suppliersCodeMatches;
+        CodeMatchesBySupplierId _codeMatchesBySupplierId;
         ZoneCustomerRates _customerRates;
         SupplierZoneRates _supplierRates;
         RouteRulesByActionDataType _routeRules;
@@ -22,11 +22,11 @@ namespace TOne.LCR.Business
         int _saleZoneId;
         CustomerRates _saleZoneCustomerRates;
 
-        public SingleDestinationRoutesBuildContext(string routeCode, Dictionary<string, CodeMatch> suppliersCodeMatches, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
+        public SingleDestinationRoutesBuildContext(string routeCode, CodeMatchesBySupplierId codeMatchesBySupplierId, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
             RouteRulesByActionDataType routeRules, RouteOptionRulesBySupplier routeOptionsRules)
         {
             _routeCode = routeCode;
-            _suppliersCodeMatches = suppliersCodeMatches;
+            _codeMatchesBySupplierId = codeMatchesBySupplierId;
             _customerRates = customerRates;
             _supplierRates = supplierRates;
             _routeRules = routeRules;
@@ -53,11 +53,11 @@ namespace TOne.LCR.Business
             }
         }
 
-        public Dictionary<string, CodeMatch> SuppliersCodeMatches
+        public CodeMatchesBySupplierId CodeMatchesBySupplierId
         {
             get
             {
-                return _suppliersCodeMatches;
+                return _codeMatchesBySupplierId;
             }
         }
 
@@ -77,7 +77,7 @@ namespace TOne.LCR.Business
         void InitializeRoutes()
         {
             CodeMatch sysCodeMatch;
-            if (_suppliersCodeMatches.TryGetValue("SYS", out sysCodeMatch))
+            if (_codeMatchesBySupplierId.TryGetValue("SYS", out sysCodeMatch))
             {
                 _saleZoneId = sysCodeMatch.SupplierZoneId;
                 _customerRates.ZonesCustomersRates.TryGetValue(sysCodeMatch.SupplierZoneId, out _saleZoneCustomerRates);
@@ -94,7 +94,7 @@ namespace TOne.LCR.Business
             if (_lcrOptions == null)
             {
                 var lcrOptions = new List<RouteSupplierOption>();
-                foreach (CodeMatch cm in _suppliersCodeMatches.Values)
+                foreach (CodeMatch cm in _codeMatchesBySupplierId.Values)
                 {
                     if (cm.SupplierId != "SYS")
                     {
@@ -161,5 +161,10 @@ namespace TOne.LCR.Business
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

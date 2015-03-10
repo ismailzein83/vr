@@ -32,11 +32,11 @@ namespace TOne.LCR.Business
             }
         }
 
-        public Dictionary<string, CodeMatch> SuppliersCodeMatches
+        public CodeMatchesBySupplierId CodeMatchesBySupplierId
         {
             get
             {
-                return _parentContext.SuppliersCodeMatches;
+                return _parentContext.CodeMatchesBySupplierId;
             }
         }
 
@@ -147,7 +147,7 @@ namespace TOne.LCR.Business
         public bool TryBuildSupplierOption(string supplierId, short? percentage, out RouteSupplierOption routeOption)
         {
             CodeMatch supplierCodeMatch;
-            if (_parentContext.SuppliersCodeMatches.TryGetValue(supplierId, out supplierCodeMatch))
+            if (_parentContext.CodeMatchesBySupplierId.TryGetValue(supplierId, out supplierCodeMatch))
             {
                 ZoneRates zoneRates;
                 if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))

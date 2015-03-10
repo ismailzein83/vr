@@ -13,4 +13,16 @@ namespace TOne.LCR.Entities
         public long SupplierCodeId { get; set; }
         public int SupplierZoneId { get; set; }
     }
+
+    public class CodeMatchesBySupplierId : Dictionary<string, CodeMatch>
+    {
+
+    }
+
+    public class SingleDestinationCodeMatches
+    {
+        public string RouteCode { get; set; }
+
+        public CodeMatchesBySupplierId CodeMatchesBySupplierId { get; set; }
+    }
 }

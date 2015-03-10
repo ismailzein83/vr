@@ -21,4 +21,9 @@ namespace TOne.LCR.Entities
 
         public RouteOptions Options { get; set; }
     }
+
+    public class RouteDetailBatch
+    {
+        public List<RouteDetail> Routes { get; set; }
+    }
 }

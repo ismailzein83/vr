@@ -26,6 +26,8 @@ namespace TOne.LCRProcess.Activities
 
         public BaseQueue<List<CodeMatch>> OutputQueue { get; set; }
 
+        public BaseQueue<SingleDestinationCodeMatches> OutputQueueForRouting { get; set; }
+
         public SuppliersCodes SuppliersCodes { get; set; }
     }
 
@@ -48,12 +50,19 @@ namespace TOne.LCRProcess.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<List<CodeMatch>>> OutputQueue { get; set; }
 
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<SingleDestinationCodeMatches>> OutputQueueForRouting { get; set; }
+
 
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
                 this.OutputQueue.Set(context, new MemoryQueue<List<CodeMatch>>());
+
+            if (this.OutputQueueForRouting.Get(context) == null)
+                this.OutputQueueForRouting.Set(context, new MemoryQueue<SingleDestinationCodeMatches>());
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -65,7 +74,8 @@ namespace TOne.LCRProcess.Activities
                 DistinctCodes = this.DistinctCodes.Get(context),
                 EffectiveTime = this.EffectiveTime.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                OutputQueueForRouting = this.OutputQueueForRouting.Get(context)
             };
         }
 
@@ -82,6 +92,11 @@ namespace TOne.LCRProcess.Activities
             int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
             foreach (var dCode in distinctCodesList.CodesWithPossibleMatches)
             {
+                SingleDestinationCodeMatches singleDestinationCodeMatches = new SingleDestinationCodeMatches
+                {
+                    RouteCode = dCode.Key,
+                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId()
+                };
                 foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
                     Code supplierMatch = null;
@@ -99,12 +114,14 @@ namespace TOne.LCRProcess.Activities
                                 SupplierZoneId = supplierMatch.ZoneId,
                                 SupplierCodeId = supplierMatch.ID
                             };
+                            singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
                             codeMatches.Add(codeMatch);
                         }
                         index++;
                     }
                     while (supplierMatch == null && index < dCode.Value.Count);
                 }
+                inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
                 if (codeMatches.Count > bcpBatchSize)
                 {
                     inputArgument.OutputQueue.Enqueue(codeMatches);

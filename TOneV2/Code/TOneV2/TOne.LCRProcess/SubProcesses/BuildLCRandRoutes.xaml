@@ -140,6 +140,7 @@
             <mca:CSharpValue x:TypeArguments="tle:SupplierZoneRates">new SupplierZoneRates()</mca:CSharpValue>
           </Variable.Default>
         </Variable>
+        <Variable x:TypeArguments="vq:BaseQueue(tle:SingleDestinationCodeMatches)" Name="queueCodeMatchesForRouting" />
       </Parallel.Variables>
       <tla:BuildCodeMatchByCodeGroup Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
         <tla:BuildCodeMatchByCodeGroup.DistinctCodes>
@@ -162,6 +163,11 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">CodeMatchesQueue</mca:CSharpReference>
           </InOutArgument>
         </tla:BuildCodeMatchByCodeGroup.OutputQueue>
+        <tla:BuildCodeMatchByCodeGroup.OutputQueueForRouting>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(tle:SingleDestinationCodeMatches)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tle:SingleDestinationCodeMatches)">queueCodeMatchesForRouting</mca:CSharpReference>
+          </InOutArgument>
+        </tla:BuildCodeMatchByCodeGroup.OutputQueueForRouting>
         <tla:BuildCodeMatchByCodeGroup.SupplierCodes>
           <InArgument x:TypeArguments="tbe:SuppliersCodes">
             <mca:CSharpValue x:TypeArguments="tbe:SuppliersCodes">suppliersCodes</mca:CSharpValue>
@@ -185,7 +191,7 @@
           </InArgument>
         </tla:GetCustomerZoneRates.ZoneIds>
       </tla:GetCustomerZoneRates>
-      <tla:GetSupplierZoneRates Status="{x:Null}">
+      <tla:GetSupplierZoneRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneRates_1">
         <tla:GetSupplierZoneRates.RoutingDatabaseId>
           <InArgument x:TypeArguments="x:Int32">
             <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDataBaseId</mca:CSharpValue>
@@ -201,10 +207,9 @@
             <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">costZoneIds</mca:CSharpValue>
           </InArgument>
         </tla:GetSupplierZoneRates.ZoneIds>
-        <sap2010:WorkflowViewState.IdRef>GetSupplierZoneRates_1</sap2010:WorkflowViewState.IdRef>
       </tla:GetSupplierZoneRates>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRSb3V0ZXMueGFtbBxOA9ABDgIBAVILUmsCAQJZBYIBFAMBugGDAQXOARACAQ1cC1xwAwGIAmYLZmkDAf0BYQthWAMB8gFrC2toAwHnAXoLemkDAdwBcAtwWAMB0QF/C39pAwHGAXULdVIDAbsBhwENhwFvAgEbjAENjAFvAgEOkAEHqgEnAgF4qwEHuwEiAgFQvAEHzQEiAgEokwENkwFiAwGtAaIBDaIBgAEDAaABmAENmAFaAwGTAacBDacBYwMBhgGdAQ2dAVQCAXmzAQ2zAVsCAWu4AQ24AWMCAV6uAQ2uAXECAVHEAQ3EAXECAUO/AQ2/AVsCATbJAQ3JAWMCASk=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbB1OA9UBDgIBAVILUmsCAQJZBYIBFAMB1QGDAQXTARACAQ1cC1xwAwGjAmYLZmkDAZgCYQthWAMBjQJrC2toAwGCAnoLemkDAfcBcAtwWAMB7AF/C39pAwHhAXULdVIDAdYBhwENhwFvAgEcjAENjAFvAgEOkQEHsAEnAwGAAbEBB8EBIgIBVcIBB9IBIgIBKpQBDZQBYgMBxwGjAQ2jAYABAwG5AZkBDZkBWgMBqwGoAQ2oAZMBAwGdAa0BDa0BYwMBjwGeAQ2eAVQDAYEBuQENuQFbAgFyvgENvgFjAgFktAENtAFxAgFWygENygFxAgFHxQENxQFbAgE5zwENzwFjAgEr</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
