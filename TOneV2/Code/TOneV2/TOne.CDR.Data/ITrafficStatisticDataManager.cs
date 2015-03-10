@@ -9,8 +9,8 @@ namespace TOne.CDR.Data
 {
     public interface ITrafficStatisticDataManager : IDataManager
     {
-        void UpdateTrafficStatisticBatch(string batchStart, string batchEnd, Dictionary<string, TrafficStatistic> trafficStatisticsByKey);
+        void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, Dictionary<string, TrafficStatistic> trafficStatisticsByKey);
 
-        void UpdateTrafficStatisticDailyBatch(string batchStart, string batchEnd, Dictionary<string, TrafficStatisticDaily> trafficStatisticsByKey);
+        void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, Dictionary<string, TrafficStatisticDaily> trafficStatisticsByKey);
     }
 }

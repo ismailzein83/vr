@@ -43,5 +43,20 @@ namespace TOne.CDR.Entities
         {
             return String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}", switchId, port_IN, port_OUT, customerId, ourZoneId, originatingZoneId, supplierZoneId);
         }
+
+        public static TrafficStatistic CreateFromKey(int switchId, string port_IN, string port_OUT, string customerId, int ourZoneId, int originatingZoneId, string supplierId, int supplierZoneId)
+        {
+            return new TrafficStatistic
+            {
+                SwitchId = switchId,
+                Port_IN = port_IN,
+                Port_OUT = port_OUT,
+                CustomerId = customerId,
+                OurZoneId = ourZoneId,
+                OriginatingZoneId = originatingZoneId,
+                SupplierId = supplierId,
+                SupplierZoneId = supplierZoneId
+            };
+        }
     }
 }
