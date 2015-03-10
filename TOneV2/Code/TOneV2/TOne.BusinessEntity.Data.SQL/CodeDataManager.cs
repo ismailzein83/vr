@@ -54,7 +54,7 @@ namespace TOne.BusinessEntity.Data.SQL
             return allSuppliersCodes;
         }
 
-    
+
         public SuppliersCodes GetCodesByCodePrefixGroup(string codePrefix, DateTime effectiveOn, bool isFuture, List<Entities.CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes, out HashSet<Int32> supplierZoneIds, out HashSet<Int32> saleZoneIds)
         {
             DataTable dtSuppliersCodeInfo = CarrierDataManager.BuildCarrierAccountInfoTable(activeSuppliers);
@@ -62,7 +62,7 @@ namespace TOne.BusinessEntity.Data.SQL
             SuppliersCodes allSuppliersCodes = new SuppliersCodes();
             allSuppliersCodes.Codes = new Dictionary<string, SupplierCodes>();
 
-         
+
 
             HashSet<int> saleZoneIds_Internal = new HashSet<int>();
             HashSet<int> supplierZoneIds_Internal = new HashSet<int>();
@@ -80,7 +80,7 @@ namespace TOne.BusinessEntity.Data.SQL
                         {
                             Code code = CodeMapper(reader);
                             SupplierCodes supplierCodes;
-                            if (code.SupplierId.ToLower() == "sys")
+                            if (String.Compare(code.SupplierId, "sys", true) == 0)
                                 saleZoneIds_Internal.Add(code.ZoneId);
                             else
                                 supplierZoneIds_Internal.Add(code.ZoneId);

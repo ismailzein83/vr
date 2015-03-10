@@ -54,7 +54,7 @@ namespace TOne.LCR.Data.SQL
             allCustomerZoneRates.ZonesCustomersRates = new Dictionary<int, CustomerRates>();
 
 
-            ExecuteReaderText(string.Format(query_GetZoneRates,  "Customer"),
+            ExecuteReaderText(string.Format(query_GetZoneRates, "Customer"),
 
 
                 (reader) =>
@@ -64,7 +64,7 @@ namespace TOne.LCR.Data.SQL
 
                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
                         string carrierID = reader["Customer"] as string;
-                        decimal rate = Convert.ToDecimal(GetReaderValue<double>(reader, "NormalRate"));
+                        decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
                         short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
 
                         CustomerRates customerRates;
@@ -100,7 +100,7 @@ namespace TOne.LCR.Data.SQL
             allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
 
 
-            ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier" ),
+            ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier"),
                  (reader) =>
                  {
                      while (reader.Read())
@@ -108,7 +108,7 @@ namespace TOne.LCR.Data.SQL
 
                          int zoneID = GetReaderValue<int>(reader, "ZoneID");
                          string carrierID = reader["SupplierID"] as string;
-                         decimal rate = Convert.ToDecimal(GetReaderValue<double>(reader, "NormalRate"));
+                         decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
                          short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
 
                          ZoneRates supplierRates;

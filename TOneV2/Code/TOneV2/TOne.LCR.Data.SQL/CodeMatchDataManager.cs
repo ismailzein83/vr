@@ -14,15 +14,24 @@ namespace TOne.LCR.Data.SQL
     {
         public Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches)
         {
+            System.IO.StreamWriter wr = null;
             string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            try
             {
-                foreach (var cm in codeMatches)
+                using (wr = new System.IO.StreamWriter(filePath))
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+                    foreach (var cm in codeMatches)
+                    {
+                        wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
+                    }
                 }
-                wr.Close();
             }
+            finally
+            {
+                if (wr != null)
+                    wr.Dispose();
+            }
+
             return new BulkInsertInfo
             {
                 TableName = "CodeMatch",
@@ -44,7 +53,7 @@ namespace TOne.LCR.Data.SQL
 
         #region Private Methods
 
-       
+
         #endregion
 
         #region Queries
@@ -67,7 +76,7 @@ namespace TOne.LCR.Data.SQL
 		                                                CREATE NONCLUSTERED INDEX [IX_CodeMatch_SZoneID] ON [CodeMatch] 
 		                                                (
 			                                                [SupplierZoneID] ASC
-		                                                )*/ ";       
+		                                                )*/ ";
 
         #endregion
     }
