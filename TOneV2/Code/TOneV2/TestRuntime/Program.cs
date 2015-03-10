@@ -15,7 +15,7 @@ namespace TestRuntime
     {
         static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             MainForm f = new MainForm();
             f.ShowDialog();
             Console.ReadKey();

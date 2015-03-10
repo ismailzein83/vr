@@ -66,12 +66,22 @@
     <Folder Include="bp\Tables\" />
     <Folder Include="bp\Views\" />
     <Folder Include="Security\" />
+    <Folder Include="logging\" />
+    <Folder Include="logging\Tables\" />
+    <Folder Include="bp\Stored Procedures\" />
+    <Folder Include="logging\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
     <Build Include="bp\Tables\LKUP_TrackingSeverity.sql" />
     <Build Include="bp\Views\vw_BPTracking.sql" />
     <Build Include="Security\bp.sql" />
+    <Build Include="logging\Tables\LogAttribute.sql" />
+    <Build Include="logging\Tables\LogEntry.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetByInstanceId.sql" />
+    <Build Include="logging\Stored Procedures\sp_LogAttribute_InsertIfNeededAndGetID.sql" />
+    <Build Include="logging\Stored Procedures\sp_LogAttribute_GetAll.sql" />
+    <Build Include="Security\logging.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
