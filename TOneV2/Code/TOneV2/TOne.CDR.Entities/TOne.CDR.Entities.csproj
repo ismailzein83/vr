@@ -71,6 +71,8 @@
     <Compile Include="TrafficStatistics\TrafficStatisticDaily.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticBatch.cs" />
     <Compile Include="TrafficStatistics\TrafficStatisticDailyBatch.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticsByKey.cs" />
+    <Compile Include="TrafficStatistics\TrafficStatisticsDailyByKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS\TABS.csproj">

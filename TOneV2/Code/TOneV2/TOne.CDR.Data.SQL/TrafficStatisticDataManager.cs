@@ -13,7 +13,7 @@ namespace TOne.CDR.Data.SQL
     {
         const string TRAFFICSTATISTIC_TABLENAME = "TrafficStats";
 
-        public void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, Dictionary<string, TrafficStatistic> trafficStatisticsByKey)
+        public void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsByKey trafficStatisticsByKey)
         {
             Dictionary<string, int> existingItemsIdByGroupKeys = GetTrafficStatisticsIdsByGroupKeys(batchStart, batchEnd);
             
@@ -144,7 +144,7 @@ namespace TOne.CDR.Data.SQL
             throw new NotImplementedException();
         }
 
-        public void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, Dictionary<string, TrafficStatisticDaily> trafficStatisticsByKey)
+        public void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsDailyByKey trafficStatisticsByKey)
         {
             //Same as UpdateTrafficStatisticBatch for the TrafficStatsDaily
             throw new NotImplementedException();

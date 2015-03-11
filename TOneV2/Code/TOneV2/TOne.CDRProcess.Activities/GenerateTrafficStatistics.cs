@@ -70,7 +70,7 @@ namespace TOne.CDRProcess.Activities
                                     {
                                         BatchStart = cdrTrafficBatchStart,
                                         BatchEnd = cdrTrafficBatchStart.AddMinutes(sampleIntervalInMinute),
-                                        TrafficStatistics = new Dictionary<string, TrafficStatistic>()
+                                        TrafficStatistics = new TrafficStatisticsByKey()
                                     };
                                     batches.Add(cdrTrafficBatchStart, trafficStatisticBatch);
                                 }

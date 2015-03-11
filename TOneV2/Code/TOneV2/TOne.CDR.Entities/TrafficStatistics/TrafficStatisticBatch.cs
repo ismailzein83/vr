@@ -9,7 +9,7 @@ namespace TOne.CDR.Entities
 {
     public class TrafficStatisticBatch : PersistentQueueItem
     {
-        public Dictionary<string, TrafficStatistic> TrafficStatistics { get; set; }
+        public TrafficStatisticsByKey TrafficStatistics { get; set; }
 
         public DateTime BatchStart { get; set; }
 
