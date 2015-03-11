@@ -116,3 +116,54 @@
 .inline-block{
     display:inline-block !important;
 }
+.panel-over-color{
+    border-color: transparent !important;
+    background-color:#fff;
+}
+.action-bar{
+    background-color: #4C5359;
+}
+.action-bar-left{   
+    width:49%;
+}
+.action-bar-left button{
+    float:left;
+}
+.action-bar-right{
+    width:49%;
+}
+.action-bar-right button{
+    float:right !important ;
+}
+.btncustom:hover{
+ 
+    opacity:0.99;
+    background-color:black !important;
+
+}
+.style-col{
+    background-color: #FFF;
+    border-radius: 4px;
+    margin-left:10px;
+}
+.col-no-padding{
+   
+    padding-left:0px !important;
+    padding-right:0px !important;
+}
+.style-row{
+    padding: 10px;
+    border-bottom: 1px dashed #BABABA;
+} 
+.emptycol{
+    display:none;
+}
+label{
+    font-weight:normal;
+}
+body{
+     background-color:#f0f0f0;
+}
+.pad-top-m{
+    padding-top : 10px
+}

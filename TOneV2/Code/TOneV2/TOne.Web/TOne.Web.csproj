@@ -444,6 +444,7 @@
     <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
+    <Content Include="Client\Views\Routing\popoverTemp.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
     <Content Include="Client\Views\TestView.html" />

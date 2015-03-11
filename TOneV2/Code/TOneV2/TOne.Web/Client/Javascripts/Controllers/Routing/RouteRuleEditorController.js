@@ -10,6 +10,14 @@
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
 
+        var popoverTemplate = [
+        ].join('');
+
+        $scope.tooltip = {
+            title: 'fffff',
+            html: true,
+            template: 'popoverTemp.html'
+        };       
         var dropdownHidingTimeoutHandler;
 
         $('.dropdown-custom').on('mouseenter', function () {
