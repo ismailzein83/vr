@@ -95,7 +95,6 @@
     <Compile Include="EmailToken.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\vw_ReportedNumberNormalCDR.cs" />
     <Compile Include="Classes\vw_ReportedNumber.cs" />
