@@ -66,7 +66,7 @@ namespace TOne.LCRProcess.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((singleDestinationCodeMatches) =>
                     {
-                        using(var context = new SingleDestinationRoutesBuildContext(singleDestinationCodeMatches.RouteCode, singleDestinationCodeMatches.CodeMatchesBySupplierId, 
+                        using(var context = new SingleDestinationRoutesBuildContext(singleDestinationCodeMatches.RouteCode, singleDestinationCodeMatches.CodeMatchesBySupplierId, singleDestinationCodeMatches.CodeMatchesByZoneId, 
                             inputArgument.CustomerZoneRates, inputArgument.SupplierZoneRates, null, null))
                         {
                             var routes = context.BuildRoutes();

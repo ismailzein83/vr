@@ -105,6 +105,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Net.Ftp, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>

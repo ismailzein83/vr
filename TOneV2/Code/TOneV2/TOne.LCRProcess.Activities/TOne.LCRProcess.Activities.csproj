@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyRouteDetailsToDB.cs" />
     <Compile Include="ApplyZoneInfosToDB.cs" />
     <Compile Include="BuildCodeMatchByCodeGroup.cs" />
     <Compile Include="BuildCodeMatchByFirstCodeDigit.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="GetSupplierZoneRates.cs" />
     <Compile Include="GetCustomerZoneRates.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
+    <Compile Include="PrepareRouteDetailsForDBApply.cs" />
     <Compile Include="PrepareRoutesForDBApply.cs" />
     <Compile Include="PrepareZoneInfosForDBApply.cs" />
     <Compile Include="PrepareCodeMatchesForDBApply.cs" />

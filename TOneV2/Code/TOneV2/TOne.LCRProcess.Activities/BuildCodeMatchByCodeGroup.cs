@@ -95,7 +95,8 @@ namespace TOne.LCRProcess.Activities
                 SingleDestinationCodeMatches singleDestinationCodeMatches = new SingleDestinationCodeMatches
                 {
                     RouteCode = dCode.Key,
-                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId()
+                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId(),
+                    CodeMatchesByZoneId = new CodeMatchesByZoneId()
                 };
                 foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
@@ -115,6 +116,7 @@ namespace TOne.LCRProcess.Activities
                                 SupplierCodeId = supplierMatch.ID
                             };
                             singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                            singleDestinationCodeMatches.CodeMatchesByZoneId.Add(codeMatch.SupplierZoneId, codeMatch);
                             codeMatches.Add(codeMatch);
                         }
                         index++;

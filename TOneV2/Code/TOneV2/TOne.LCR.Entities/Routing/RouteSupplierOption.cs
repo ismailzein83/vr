@@ -9,6 +9,12 @@ namespace TOne.LCR.Entities
     [Serializable]
     public class RouteSupplierOption
     {
+        static RouteSupplierOption()
+        {
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RouteSupplierOption),
+                "SupplierId", "SupplierZoneId", "Rate", "ServicesFlag", "Percentage", "IsBlocked", "Priority");
+        }
+
         public string SupplierId { get; set; }
 
         public int SupplierZoneId { get; set; }
@@ -22,5 +28,10 @@ namespace TOne.LCR.Entities
         public bool IsBlocked { get; set; }
 
         public int Priority { get; set; }
+
+        public RouteSupplierOption Clone()
+        {
+            return this.MemberwiseClone() as RouteSupplierOption;
+        }
     }    
 }

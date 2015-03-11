@@ -63,7 +63,7 @@ namespace TOne.LCR.Data.SQL
                     {
 
                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
-                        string carrierID = reader["Customer"] as string;
+                        string carrierID = reader["CustomerID"] as string;
                         decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
                         short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
 
@@ -97,8 +97,8 @@ namespace TOne.LCR.Data.SQL
         {
             SupplierZoneRates allSupplierZoneRates = new SupplierZoneRates();
             DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
-            allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
-
+            //allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
+            allSupplierZoneRates.RatesByZoneId = new Dictionary<int, RateInfo>();
 
             ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier"),
                  (reader) =>
@@ -111,16 +111,19 @@ namespace TOne.LCR.Data.SQL
                          decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
                          short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
 
-                         ZoneRates supplierRates;
-                         if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
-                         {
-                             supplierRates = new ZoneRates();
-                             supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
-                             allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
-                         }
+                         //ZoneRates supplierRates;
+                         //if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
+                         //{
+                         //    supplierRates = new ZoneRates();
+                         //    supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
+                         //    allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
+                         //}
 
-                         if (!supplierRates.ZonesRates.ContainsKey(zoneID))
-                             supplierRates.ZonesRates.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+                         //if (!supplierRates.ZonesRates.ContainsKey(zoneID))
+                         //    supplierRates.ZonesRates.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+
+                         if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(zoneID))
+                             allSupplierZoneRates.RatesByZoneId.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
                      }
 
                  },

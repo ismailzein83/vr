@@ -12,6 +12,7 @@ namespace TOne.LCR.Business
         #region ctor/Local Variables
 
         CodeMatchesBySupplierId _codeMatchesBySupplierId;
+        CodeMatchesByZoneId _codeMatchesByZoneId;
         ZoneCustomerRates _customerRates;
         SupplierZoneRates _supplierRates;
         RouteRulesByActionDataType _routeRules;
@@ -22,11 +23,12 @@ namespace TOne.LCR.Business
         int _saleZoneId;
         CustomerRates _saleZoneCustomerRates;
 
-        public SingleDestinationRoutesBuildContext(string routeCode, CodeMatchesBySupplierId codeMatchesBySupplierId, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
+        public SingleDestinationRoutesBuildContext(string routeCode, CodeMatchesBySupplierId codeMatchesBySupplierId, CodeMatchesByZoneId codeMatchesByZoneId, ZoneCustomerRates customerRates, SupplierZoneRates supplierRates,
             RouteRulesByActionDataType routeRules, RouteOptionRulesBySupplier routeOptionsRules)
         {
             _routeCode = routeCode;
             _codeMatchesBySupplierId = codeMatchesBySupplierId;
+            _codeMatchesByZoneId = codeMatchesByZoneId;
             _customerRates = customerRates;
             _supplierRates = supplierRates;
             _routeRules = routeRules;
@@ -98,11 +100,11 @@ namespace TOne.LCR.Business
                 {
                     if (cm.SupplierId != "SYS")
                     {
-                        ZoneRates supplierZoneRates;
-                        if (_supplierRates.SuppliersZonesRates.TryGetValue(cm.SupplierId, out supplierZoneRates))
-                        {
+                        //ZoneRates supplierZoneRates;
+                        //if (_supplierRates.SuppliersZonesRates.TryGetValue(cm.SupplierId, out supplierZoneRates))
+                        //{
                             RateInfo rate;
-                            if (supplierZoneRates.ZonesRates.TryGetValue(cm.SupplierZoneId, out rate))
+                            if (_supplierRates.RatesByZoneId.TryGetValue(cm.SupplierZoneId, out rate))
                             {
                                 RouteSupplierOption option = new RouteSupplierOption
                                 {
@@ -113,12 +115,46 @@ namespace TOne.LCR.Business
                                 };
                                 lcrOptions.Add(option);
                             }
-                        }
+                        //}
                     }
                 }
-                _lcrOptions = lcrOptions.OrderBy(itm => itm.Rate);
+                _lcrOptions = lcrOptions;//.OrderBy(itm => itm.Rate);
             }
-            return CloneHelper.Clone<IEnumerable<RouteSupplierOption>>(_lcrOptions.Where(itm => itm.ServicesFlag >= servicesFlag));
+
+            List<RouteSupplierOption> copy = new List<RouteSupplierOption>();
+
+            foreach (var o in _lcrOptions)
+            {
+                if(o.ServicesFlag >= servicesFlag)
+                    copy.Add(o.Clone());
+            }
+                    
+            return copy;
+        }
+
+        IEnumerator<KeyValuePair<int, RateInfo>> _supplierRatesEnumerator;
+
+        internal RouteSupplierOption GetNextOptionInLCR()
+        {
+            if (_supplierRatesEnumerator != null)
+                return null;
+            while(_supplierRatesEnumerator.MoveNext())
+            {
+                var supplierZoneRate = _supplierRatesEnumerator.Current;
+                CodeMatch codeMatch;
+                if(_codeMatchesByZoneId.TryGetValue(supplierZoneRate.Key, out codeMatch))
+                {
+                    RouteSupplierOption option = new RouteSupplierOption
+                                {
+                                    SupplierId = codeMatch.SupplierId,
+                                    SupplierZoneId = codeMatch.SupplierZoneId,
+                                    Rate = supplierZoneRate.Value.Rate,
+                                    ServicesFlag = supplierZoneRate.Value.ServicesFlag
+                                };
+                    return option;
+                }
+            }
+            return null;
         }
 
         #endregion
@@ -141,7 +177,8 @@ namespace TOne.LCR.Business
                     _routeRuleFindersByActionDataType.Add(customerRuleEntry.Key, new RouteRuleMatchFinder(_routeCode, _saleZoneId, customerRuleEntry.Value));
                 }
             }
-
+            if (_supplierRates == null || _supplierRates.RatesByZoneId == null)
+                _supplierRatesEnumerator = _supplierRates.RatesByZoneId.GetEnumerator();
             foreach (var customerRateEntry in _saleZoneCustomerRates.CustomersRates)
             {
                 RouteDetail route = new RouteDetail
@@ -152,6 +189,8 @@ namespace TOne.LCR.Business
                     ServicesFlag = customerRateEntry.Value.ServicesFlag,
                     SaleZoneId = _saleZoneId
                 };
+                if (_supplierRatesEnumerator != null)
+                    _supplierRatesEnumerator.Reset();
                 RouteBuildContext routeBuildContext = new RouteBuildContext(route, this);
                 routeBuildContext.BuildRoute();
                 routes.Add(route);

@@ -149,11 +149,11 @@ namespace TOne.LCR.Business
             CodeMatch supplierCodeMatch;
             if (_parentContext.CodeMatchesBySupplierId.TryGetValue(supplierId, out supplierCodeMatch))
             {
-                ZoneRates zoneRates;
-                if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
-                {
+                //ZoneRates zoneRates;
+                //if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
+                //{
                     RateInfo rate;
-                    if (zoneRates.ZonesRates.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
+                    if (_parentContext.SupplierRates.RatesByZoneId.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
                     {
                         routeOption = new RouteSupplierOption
                         {
@@ -165,7 +165,7 @@ namespace TOne.LCR.Business
                         };
                         return true;
                     }
-                }
+                //}
             }
             routeOption = null;
             return false;
@@ -177,37 +177,59 @@ namespace TOne.LCR.Business
             _route.Options.SupplierOptions = _parentContext.GetLCROptions(_route.ServicesFlag).ToList();
         }
 
+        //public bool TryAddOptionFromLCR(out RouteSupplierOption option)
+        //{
+        //    if(_route.Options == null || _route.Options.SupplierOptions == null)
+        //    {
+        //        _route.Options = new RouteOptions();
+        //        _route.Options.SupplierOptions = new List<RouteSupplierOption>();
+        //    }
+        //    option = _parentContext.GetNextOptionInLCR();
+        //    if (option != null)
+        //    {
+        //        _route.Options.SupplierOptions.Add(option);
+        //        return true;
+        //    }
+        //    else
+        //        return false;
+        //}
+
         public void ExecuteOptionsActions(int? nbOfOptions, bool onlyImportantFilters)
         {
             int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
+
+            RouteRuleManager ruleManager = new RouteRuleManager();
+            var executionPath = ruleManager.GetRouteOptionActionExecutionPath();
+            //List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
+            int validOptions = 0;
+            Queue<RouteSupplierOption> qInitialOptions = new Queue<RouteSupplierOption>();
             if (_route.Options != null && _route.Options.SupplierOptions != null)
             {
-                RouteRuleManager ruleManager = new RouteRuleManager();
-                var executionPath = ruleManager.GetRouteOptionActionExecutionPath();
-                List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
-                int validOptions = 0;
-                foreach (var option in _route.Options.SupplierOptions)
-                {
-                    RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(option, this);
-                    bool isOptionRemovedFromRoute;
-                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, optionsToRemove, option, out isOptionRemovedFromRoute);
-                    
-                    if (!isOptionRemovedFromRoute)
-                        validOptions++;
-                    if (validOptions == maxOptions)
-                    {
-                        int removeStartIndex = _route.Options.SupplierOptions.IndexOf(option) + 1;
-                        if (_route.Options.SupplierOptions.Count > removeStartIndex)
-                            _route.Options.SupplierOptions.RemoveRange(removeStartIndex, _route.Options.SupplierOptions.Count - removeStartIndex);
-                        break;
-                    }
-                }
-
-                foreach (var optionToRemove in optionsToRemove)
-                {
-                    _route.Options.SupplierOptions.Remove(optionToRemove);
-                }                
+                foreach (var o in _route.Options.SupplierOptions)
+                    qInitialOptions.Enqueue(o);
             }
+
+            _route.Options = new RouteOptions();
+            _route.Options.SupplierOptions = new List<RouteSupplierOption>();
+            do
+            {
+                RouteSupplierOption current;
+                if (qInitialOptions.Count > 0)
+                    current = qInitialOptions.Dequeue();
+                else
+                    current = _parentContext.GetNextOptionInLCR();
+                if (current == null)
+                    break;
+                RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this);
+                bool removeOption;
+                optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, current, out removeOption);
+
+                if (!removeOption || !current.IsBlocked)
+                    validOptions++;
+                if (!removeOption)
+                    _route.Options.SupplierOptions.Add(current);
+            }
+            while (validOptions < maxOptions);
         }
 
         public void BlockRoute()

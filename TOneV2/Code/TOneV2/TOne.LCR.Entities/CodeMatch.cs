@@ -19,10 +19,17 @@ namespace TOne.LCR.Entities
 
     }
 
+    public class CodeMatchesByZoneId : Dictionary<int, CodeMatch>
+    {
+
+    }
+
     public class SingleDestinationCodeMatches
     {
         public string RouteCode { get; set; }
 
         public CodeMatchesBySupplierId CodeMatchesBySupplierId { get; set; }
+
+        public CodeMatchesByZoneId CodeMatchesByZoneId { get; set; }
     }
 }

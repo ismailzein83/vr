@@ -46,9 +46,9 @@ namespace TOne.LCR.Business
         #region Private/Internal Methods
 
         internal void ExecuteOptionActions(bool onlyImportantFilters, ActionExecutionPath<BaseRouteOptionAction> executionPath,
-            List<RouteSupplierOption> optionsToRemove, RouteSupplierOption option, out bool isOptionRemovedFromRoute)
+            RouteSupplierOption option, out bool removeOption)
         {
-            isOptionRemovedFromRoute = false;
+            removeOption = false;
             ActionExecutionStep<BaseRouteOptionAction> currentStep = executionPath.FirstStep;
             do
             {
@@ -60,7 +60,7 @@ namespace TOne.LCR.Business
                 {
                     RouteOptionActionResult actionResult = currentStep.Action.Execute(this, null);
                     ActionExecutionStep<BaseRouteOptionAction> nextStep;
-                    if (CheckActionResult(actionResult, option, optionsToRemove, executionPath, currentStep, out nextStep, ref isOptionRemovedFromRoute))
+                    if (CheckActionResult(actionResult, option, executionPath, currentStep, out nextStep, out removeOption))
                         currentStep = nextStep;
                 }
                 else
@@ -81,7 +81,7 @@ namespace TOne.LCR.Business
                             {
                                 RouteOptionActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData);
                                 ActionExecutionStep<BaseRouteOptionAction> nextStep;
-                                if (CheckActionResult(actionResult, option, optionsToRemove, executionPath, currentStep, out nextStep, ref isOptionRemovedFromRoute))
+                                if (CheckActionResult(actionResult, option, executionPath, currentStep, out nextStep, out removeOption))
                                 {
                                     done = true;
                                     currentStep = nextStep;
@@ -96,9 +96,10 @@ namespace TOne.LCR.Business
             while (currentStep != null);
         }
 
-        private bool CheckActionResult(RouteOptionActionResult actionResult, RouteSupplierOption option, List<RouteSupplierOption> optionsToRemove, ActionExecutionPath<BaseRouteOptionAction> executionPath,
-            ActionExecutionStep<BaseRouteOptionAction> currentStep, out ActionExecutionStep<BaseRouteOptionAction> nextStep, ref bool isOptionRemovedFromRoute)
+        private bool CheckActionResult(RouteOptionActionResult actionResult, RouteSupplierOption option, ActionExecutionPath<BaseRouteOptionAction> executionPath,
+            ActionExecutionStep<BaseRouteOptionAction> currentStep, out ActionExecutionStep<BaseRouteOptionAction> nextStep, out bool removeOption)
         {
+            removeOption = false;
             if (actionResult == null)
             {
                 nextStep = currentStep.NextStep;
@@ -117,10 +118,9 @@ namespace TOne.LCR.Business
                 {
                     if (actionResult.RemoveOption
                             || (actionResult.BlockOption && _removeBlockedOptions))
-                        optionsToRemove.Add(option);
+                        removeOption = true;
                     else if (actionResult.BlockOption)
                         option.IsBlocked = true;
-                    isOptionRemovedFromRoute = true;
                     nextStep = null;
                 }
                 else
