@@ -80,7 +80,7 @@ namespace TOne.LCRProcess.Activities
                 while (!ShouldStop(handle) && hasItem);
 
             });
-            if (codeMatchesBatch.Count >= 0)
+            if (codeMatchesBatch.Count > 0)
             {
                 Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
                 inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
