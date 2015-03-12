@@ -69,6 +69,7 @@
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Arguments</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -119,13 +120,28 @@
           </OutArgument>
         </tbba:GetActiveSuppliersInfo.ActiveSuppliers>
       </tbba:GetActiveSuppliersInfo>
-      <tla1:GetCodePrefixGroup sap2010:WorkflowViewState.IdRef="GetCodePrefixGroup_1">
-        <tla1:GetCodePrefixGroup.CodePrefixGroups>
+      <tbba:GetDistinctCodePrefixes sap2010:WorkflowViewState.IdRef="GetDistinctCodePrefixes_1">
+        <tbba:GetDistinctCodePrefixes.CodePrefixLength>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Business.ConfigParameterManager.Current.GetRoutingCodePrefixLength()</mca:CSharpValue>
+          </InArgument>
+        </tbba:GetDistinctCodePrefixes.CodePrefixLength>
+        <tbba:GetDistinctCodePrefixes.CodePrefixes>
           <OutArgument x:TypeArguments="scg:List(x:String)">
             <mca:CSharpReference x:TypeArguments="scg:List(x:String)">codePrefixGroups</mca:CSharpReference>
           </OutArgument>
-        </tla1:GetCodePrefixGroup.CodePrefixGroups>
-      </tla1:GetCodePrefixGroup>
+        </tbba:GetDistinctCodePrefixes.CodePrefixes>
+        <tbba:GetDistinctCodePrefixes.EffectiveTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
+          </InArgument>
+        </tbba:GetDistinctCodePrefixes.EffectiveTime>
+        <tbba:GetDistinctCodePrefixes.IsFuture>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+          </InArgument>
+        </tbba:GetDistinctCodePrefixes.IsFuture>
+      </tbba:GetDistinctCodePrefixes>
     </Parallel>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <local:GenerateZoneInfoInDB sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.GenerateZoneInfoInDB_1">
@@ -413,7 +429,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - processStart))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sTEsDoQMOAgEBTwtPVwIBCVQLVHsCAQJbBV8RAwGwBGAFYGEDAa8EYQWBARADAYgEggEFwAEQAwHUA8EBBfwCEAIBOf0CBYMDIAIBMYQDBZMDEAIBIJQDBZoDJAIBGJsDBZ8DEQIBEF0JXXoDAbEEYgdyJAMBmQRzB3klAwGRBHoHgAEhAwGJBIMBB6MBJAMB6wOkAQe/ASUDAdUDxQENxQGqAQIBVsoBDcoBcgIBSNEBDdEBoAECATrXAQejAhIDAcgCpAIHvgIrAwGBAr8CB88CIwMB1gHQAgfqAiwDAY8B6wIH+wIkAgFkgAMLgANZAgEyhQMHiwMsAgEpjAMHkgMsAgEhlwMLlwNZAgEZnQMJnQOdAQIBEWoNamADAagEZQ1lYwMBoQRvDW/HAQMBmgR2DXZ6AwGSBH0NfW0DAYoEhgENhgFyAwGBBJUBDZUBWwMB+gOLAQ2LAWADAfMDkAENkAFaAwHsA7EBDbEBWwMB5AOnAQ2nAWADAd0DrAENrAFaAwHWA9gBCZgCHwMB2QKZAgmiAhIDAckCsQINsQJ0AwG6AqcCDacCeAMBrAK2Ag22AlsDAZ4CuwINuwJ9AwGQAqwCDawCgwEDAYICxwINxwJ1AwHzAcICDcICewMB5QHMAg3MAlsDAdcB3QIN3QJ0AwHIAdMCDdMCdgMBugHiAg3iAlsDAawB5wIN5wJ+AwGeAdgCDdgChAEDAZAB8wIN8wJ2AwGBAe4CDe4CfAIBc/gCDfgCWwIBZYgDDYgDWwIBKo8DDY8DWwIBItsBD9sBbgMBxgPYAdEB2AHUAQMBxQPYAbYB2AG5AQMBxAPiAQ2WAicDAdoCoAI1oAI5AwHYApwCD5wCfAMBygLlARPlAXgDAbUDgwITgwJhAwGmA+oBE+oBfgMBlwP+ARP+AXwDAYgD7wET7wFbAwH5AvQBE/QBZgMB6gL5ARP5AWADAdsC</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sT0wDsQMOAgEBUAtQVwIBCVULVXsCAQJcBWARAwHFBGEFYWEDAcQEYgWRARADAYgEkgEF0AEQAwHUA9EBBYwDEAIBOY0DBZMDIAIBMZQDBaMDEAIBIKQDBaoDJAIBGKsDBa8DEQIBEF4JXnoDAcYEYwdzJAMBrgR0B3olAwGmBHsHkAEmAwGJBJMBB7MBJAMB6wO0AQfPASUDAdUD1QEN1QGqAQIBVtoBDdoBcgIBSOEBDeEBoAECATrnAQezAhIDAcgCtAIHzgIrAwGBAs8CB98CIwMB1gHgAgf6AiwDAY8B+wIHiwMkAgFkkAMLkANZAgEylQMHmwMsAgEpnAMHogMsAgEhpwMLpwNZAgEZrQMJrQOdAQIBEWsNa2ADAb0EZg1mYwMBtgRwDXDHAQMBrwR3DXd6AwGnBIMBDYMBbQMBnwR+DX6OAQMBmASIAQ2IAWADAZEEjQENjQFaAwGKBJYBDZYBcgMBgQSlAQ2lAVsDAfoDmwENmwFgAwHzA6ABDaABWgMB7APBAQ3BAVsDAeQDtwENtwFgAwHdA7wBDbwBWgMB1gPoAQmoAh8DAdkCqQIJsgISAwHJAsECDcECdAMBugK3Ag23AngDAawCxgINxgJbAwGeAssCDcsCfQMBkAK8Ag28AoMBAwGCAtcCDdcCdQMB8wHSAg3SAnsDAeUB3AIN3AJbAwHXAe0CDe0CdAMByAHjAg3jAnYDAboB8gIN8gJbAwGsAfcCDfcCfgMBngHoAg3oAoQBAwGQAYMDDYMDdgMBgQH+Ag3+AnwCAXOIAw2IA1sCAWWYAw2YA1sCASqfAw2fA1sCASLrAQ/rAW4DAcYD6AHRAegB1AEDAcUD6AG2AegBuQEDAcQD8gENpgInAwHaArACNbACOQMB2AKsAg+sAnwDAcoC9QET9QF4AwG1A5MCE5MCYQMBpgP6ARP6AX4DAZcDjgITjgJ8AwGIA/8BE/8BWwMB+QKEAhOEAmYDAeoCiQITiQJgAwHbAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -421,7 +437,7 @@
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1383,22" />
       <sap2010:ViewStateData Id="CreateRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSuppliersInfo_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetCodePrefixGroup_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetDistinctCodePrefixes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1383,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

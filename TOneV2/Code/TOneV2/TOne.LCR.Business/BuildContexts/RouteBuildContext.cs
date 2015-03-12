@@ -7,7 +7,7 @@ using TOne.LCR.Entities;
 
 namespace TOne.LCR.Business
 {    
-    public class RouteBuildContext : IRouteBuildContext
+    public class RouteBuildContext : IRouteBuildContext, IDisposable
     {
         #region ctor/Local Variables
 
@@ -218,18 +218,22 @@ namespace TOne.LCR.Business
                     current = qInitialOptions.Dequeue();
                 else if (retrieveFromLCR)
                     current = _parentContext.GetNextOptionInLCR();
+
                 if (current == null)
                     break;
+
                 if (!onlyImportantFilters && current.Rate > _route.Rate)
                     break;
-                RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this);
-                bool removeOption;
-                optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, current, out removeOption);
 
-                if (!removeOption && !current.IsBlocked)
-                    validOptions++;
-                if (!removeOption)
-                    _route.Options.SupplierOptions.Add(current);
+                using (RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this))
+                {
+                    bool removeOption;
+                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, current, out removeOption);
+                    if (!removeOption && !current.IsBlocked)
+                        validOptions++;
+                    if (!removeOption)
+                        _route.Options.SupplierOptions.Add(current);
+                }
             }
             while (validOptions < maxOptions);
         }
@@ -241,5 +245,9 @@ namespace TOne.LCR.Business
         }
 
         #endregion
+
+        public void Dispose()
+        {
+        }
     }
 }

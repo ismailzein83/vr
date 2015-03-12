@@ -126,6 +126,11 @@ namespace TOne.BusinessEntity.Data.SQL
             });
         }
 
+        public List<string> GetDistinctCodePrefixes(int codePrefixLength, DateTime effectiveOn, bool isFuture)
+        {
+            return GetItemsSP("[BEntity].[sp_Code_GetDistinctCodePrefixes]", (reader) => reader["CodePrefix"] as string, codePrefixLength, effectiveOn, isFuture);
+        }
+
         #region Private Methods
 
         Code CodeMapper(IDataReader reader)

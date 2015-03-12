@@ -7,7 +7,7 @@ using TOne.LCR.Entities;
 
 namespace TOne.LCR.Business
 {
-    public class RouteOptionBuildContext : IRouteOptionBuildContext
+    public class RouteOptionBuildContext : IRouteOptionBuildContext, IDisposable
     {
         #region ctor/Local Variables
 
@@ -142,5 +142,9 @@ namespace TOne.LCR.Business
 
         #endregion
 
+
+        public void Dispose()
+        {
+        }
     }
 }

@@ -91,21 +91,6 @@ namespace TOne.LCR.Data.SQL
                     {
                         wr.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag,
                             rd.Options != null ? Serialize(rd.Options) : null);
-
-                        //wr.Write("{0}^{1}^{2}^{3: 0.00000}^{4}^", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag);
-                        ////if(rd.Options != null)
-                        ////{
-                        ////    wr.Write(rd.Options.IsBlock);
-                        ////    wr.Write("|");
-                        ////    if(rd.Options.SupplierOptions != null)
-                        ////    {
-                        ////        foreach (var o in rd.Options.SupplierOptions)
-                        ////        {
-                        ////            wr.Write("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, o.Percentage, o.Priority, o.IsBlocked, o.ServicesFlag);
-                        ////        }
-                        ////    }
-                        ////}
-                        //wr.WriteLine();
                     }
                 }
             }
