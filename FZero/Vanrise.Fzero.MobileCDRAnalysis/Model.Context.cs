@@ -32,6 +32,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<CellProfile> CellProfiles { get; set; }
         public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
+        public DbSet<delete_NumberProfile> delete_NumberProfile { get; set; }
+        public DbSet<delete_Peak_Hours> delete_Peak_Hours { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -41,9 +43,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
-        public DbSet<NumberProfileNew> NumberProfileNews { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
-        public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
@@ -69,97 +69,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<vw_Dashboard> vw_Dashboard { get; set; }
-        public DbSet<vw_ReportedNumber> vw_ReportedNumber { get; set; }
-        public DbSet<vw_ReportedNumberNormalCDR> vw_ReportedNumberNormalCDR { get; set; }
+        public DbSet<vwDashboard> vwDashboards { get; set; }
+        public DbSet<vwReportedNumber> vwReportedNumbers { get; set; }
+        public DbSet<vwReportedNumberNormalCDR> vwReportedNumberNormalCDRs { get; set; }
         public DbSet<vwSuspectionAnalysi> vwSuspectionAnalysis { get; set; }
-    
-        public virtual int db_Dashboard(string database)
-        {
-            var databaseParameter = database != null ?
-                new ObjectParameter("Database", database) :
-                new ObjectParameter("Database", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_Dashboard", databaseParameter);
-        }
-    
-        public virtual int db_FillSwitchTrunks()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillSwitchTrunks");
-        }
-    
-        public virtual int db_findSuspectionOccurance(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId, string suspectionList, Nullable<int> minimumOccurance)
-        {
-            var fromDateParameter = fromDate.HasValue ?
-                new ObjectParameter("fromDate", fromDate) :
-                new ObjectParameter("fromDate", typeof(System.DateTime));
-    
-            var toDateParameter = toDate.HasValue ?
-                new ObjectParameter("ToDate", toDate) :
-                new ObjectParameter("ToDate", typeof(System.DateTime));
-    
-            var strategyIdParameter = strategyId.HasValue ?
-                new ObjectParameter("strategyId", strategyId) :
-                new ObjectParameter("strategyId", typeof(int));
-    
-            var suspectionListParameter = suspectionList != null ?
-                new ObjectParameter("SuspectionList", suspectionList) :
-                new ObjectParameter("SuspectionList", typeof(string));
-    
-            var minimumOccuranceParameter = minimumOccurance.HasValue ?
-                new ObjectParameter("MinimumOccurance", minimumOccurance) :
-                new ObjectParameter("MinimumOccurance", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_findSuspectionOccurance", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
-        }
-    
-        public virtual ObjectResult<db_GetReportedNumberNormalCDR_Result> db_GetReportedNumberNormalCDR(Nullable<int> reportID)
-        {
-            var reportIDParameter = reportID.HasValue ?
-                new ObjectParameter("ReportID", reportID) :
-                new ObjectParameter("ReportID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<db_GetReportedNumberNormalCDR_Result>("db_GetReportedNumberNormalCDR", reportIDParameter);
-        }
-    
-        public virtual ObjectResult<db_GetReportVariables_Result> db_GetReportVariables()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<db_GetReportVariables_Result>("db_GetReportVariables");
-        }
-    
-        public virtual int db_GetUnNormalizedCDPN(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, string database)
-        {
-            var fromDateParameter = fromDate.HasValue ?
-                new ObjectParameter("FromDate", fromDate) :
-                new ObjectParameter("FromDate", typeof(System.DateTime));
-    
-            var toDateParameter = toDate.HasValue ?
-                new ObjectParameter("ToDate", toDate) :
-                new ObjectParameter("ToDate", typeof(System.DateTime));
-    
-            var databaseParameter = database != null ?
-                new ObjectParameter("Database", database) :
-                new ObjectParameter("Database", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_GetUnNormalizedCDPN", fromDateParameter, toDateParameter, databaseParameter);
-        }
-    
-        public virtual int db_GetUnNormalizedCGPN(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, string database)
-        {
-            var fromDateParameter = fromDate.HasValue ?
-                new ObjectParameter("FromDate", fromDate) :
-                new ObjectParameter("FromDate", typeof(System.DateTime));
-    
-            var toDateParameter = toDate.HasValue ?
-                new ObjectParameter("ToDate", toDate) :
-                new ObjectParameter("ToDate", typeof(System.DateTime));
-    
-            var databaseParameter = database != null ?
-                new ObjectParameter("Database", database) :
-                new ObjectParameter("Database", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_GetUnNormalizedCGPN", fromDateParameter, toDateParameter, databaseParameter);
-        }
     
         public virtual int prCollectNormalizedCDR()
         {
@@ -443,20 +356,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
     
-        public virtual int db_FillDailyMobileProfile()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyMobileProfile");
-        }
-    
-        public virtual int db_FillHourlyMobileProfile()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyMobileProfile");
-        }
-    
-        public virtual int db_FillHourlySubscriberValues()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberValues");
-        }
     
         public virtual int prGetUnNormalizedCDPN(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> switchID)
         {
@@ -492,60 +391,25 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prGetUnNormalizedCGPN", fromDateParameter, toDateParameter, switchIDParameter);
         }
     
-        public virtual int db_FillDailyCellProfile()
+    
+    
+    
+        public virtual int delete_db_FillDailyMobileProfile()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyCellProfile");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_db_FillDailyMobileProfile");
         }
     
-        public virtual int db_FillHourlyCellProfile()
+        public virtual int delete_db_FillDailySubscriberValues()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyCellProfile");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_db_FillDailySubscriberValues");
         }
     
-        public virtual int db_FillDailySubscriberThresholds(Nullable<int> strategyId)
+        public virtual int delete_db_FillHourlySubscriberValues()
         {
-            var strategyIdParameter = strategyId.HasValue ?
-                new ObjectParameter("StrategyId", strategyId) :
-                new ObjectParameter("StrategyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberThresholds", strategyIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_db_FillHourlySubscriberValues");
         }
     
-        public virtual int db_FillDailySubscriberValues()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberValues");
-        }
-    
-        public virtual int db_FillHourlyProfileNew()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlyProfileNew");
-        }
-    
-        public virtual int db_FillHourlySubscriberThresholds(Nullable<int> strategyId)
-        {
-            var strategyIdParameter = strategyId.HasValue ?
-                new ObjectParameter("StrategyId", strategyId) :
-                new ObjectParameter("StrategyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberThresholds", strategyIdParameter);
-        }
-    
-        public virtual int db_FillDailyProfileNew()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyProfileNew");
-        }
-    
-        public virtual int db_FillDailySubscriberValuesNew()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberValuesNew");
-        }
-    
-        public virtual int db_FillHourlySubscriberValuesNew()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberValuesNew");
-        }
-    
-        public virtual int db_findSuspectionOccuranceNew(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId, string suspectionList, Nullable<int> minimumOccurance)
+        public virtual int delete_db_findSuspectionOccurance(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId, string suspectionList, Nullable<int> minimumOccurance)
         {
             var fromDateParameter = fromDate.HasValue ?
                 new ObjectParameter("fromDate", fromDate) :
@@ -567,7 +431,108 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 new ObjectParameter("MinimumOccurance", minimumOccurance) :
                 new ObjectParameter("MinimumOccurance", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_findSuspectionOccuranceNew", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_db_findSuspectionOccurance", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
+        }
+    
+        public virtual int delete_FillHourlyMobileProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_FillHourlyMobileProfile");
+        }
+    
+        public virtual int prDashboard(string database)
+        {
+            var databaseParameter = database != null ?
+                new ObjectParameter("Database", database) :
+                new ObjectParameter("Database", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prDashboard", databaseParameter);
+        }
+    
+        public virtual int prFillDailyCellProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillDailyCellProfile");
+        }
+    
+        public virtual int prFillDailyProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillDailyProfile");
+        }
+    
+        public virtual int prFillDailySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillDailySubscriberThresholds", strategyIdParameter);
+        }
+    
+        public virtual int prFillDailySubscriberValues()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillDailySubscriberValues");
+        }
+    
+        public virtual int prFillHourlyCellProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillHourlyCellProfile");
+        }
+    
+        public virtual int prFillHourlyProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillHourlyProfile");
+        }
+    
+        public virtual int prFillHourlySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillHourlySubscriberThresholds", strategyIdParameter);
+        }
+    
+        public virtual int prFillHourlySubscriberValues()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillHourlySubscriberValues");
+        }
+    
+        public virtual int prfindSuspicionOccurrence(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId, string suspectionList, Nullable<int> minimumOccurance)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("fromDate", fromDate) :
+                new ObjectParameter("fromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("strategyId", strategyId) :
+                new ObjectParameter("strategyId", typeof(int));
+    
+            var suspectionListParameter = suspectionList != null ?
+                new ObjectParameter("SuspectionList", suspectionList) :
+                new ObjectParameter("SuspectionList", typeof(string));
+    
+            var minimumOccuranceParameter = minimumOccurance.HasValue ?
+                new ObjectParameter("MinimumOccurance", minimumOccurance) :
+                new ObjectParameter("MinimumOccurance", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prfindSuspicionOccurrence", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
+        }
+    
+        public virtual int prGetReportedNumberNormalCDR(Nullable<int> reportID)
+        {
+            var reportIDParameter = reportID.HasValue ?
+                new ObjectParameter("ReportID", reportID) :
+                new ObjectParameter("ReportID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prGetReportedNumberNormalCDR", reportIDParameter);
+        }
+    
+        public virtual ObjectResult<prGetReportVariables_Result> prGetReportVariables()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<prGetReportVariables_Result>("prGetReportVariables");
         }
     }
 }

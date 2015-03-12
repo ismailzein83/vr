@@ -278,10 +278,10 @@ public partial class ReportManagement : BasePage
 
         rvToOperator.LocalReport.ReportPath = Path.Combine(string.Empty, @"Reports\rptReportedNumbers.rdlc");
 
-        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportedNumbers", vw_ReportedNumber.GetList(ReportID));
+        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportedNumbers", vwReportedNumber.GetList(ReportID));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
-        ReportDataSource rptDataSourceReportedNumberNormalCDRs = new ReportDataSource("DSReportedNumberNormalCDR", vw_ReportedNumberNormalCDR.GetList(ReportID));
+        ReportDataSource rptDataSourceReportedNumberNormalCDRs = new ReportDataSource("DSReportedNumberNormalCDR", vwReportedNumberNormalCDR.GetList(ReportID));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourceReportedNumberNormalCDRs);
 
         rvToOperator.LocalReport.Refresh();

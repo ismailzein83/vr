@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class vw_Dashboard
+    public partial class vwDashboard
     {
         public int CountNewCDRs { get; set; }
         public System.DateTime MaxAttemptDateTime { get; set; }

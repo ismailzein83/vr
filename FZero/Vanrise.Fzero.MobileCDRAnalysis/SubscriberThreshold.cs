@@ -36,6 +36,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> StrategyId { get; set; }
         public Nullable<int> PeriodId { get; set; }
     
+        public virtual Period Period { get; set; }
         public virtual Suspicion_Level Suspicion_Level { get; set; }
     }
 }

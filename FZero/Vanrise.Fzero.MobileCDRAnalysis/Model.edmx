@@ -10,6 +10,8 @@
           <EntitySet Name="CellProfile" EntityType="Model.Store.CellProfile" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ControlTable" EntityType="Model.Store.ControlTable" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Criteria_Profile" EntityType="Model.Store.Criteria_Profile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="delete_NumberProfile" EntityType="Model.Store.delete_NumberProfile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="delete_Peak_Hours" EntityType="Model.Store.delete_Peak_Hours" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EmailReceivers" EntityType="Model.Store.EmailReceivers" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EmailReceiverTypes" EntityType="Model.Store.EmailReceiverTypes" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EmailTemplates" EntityType="Model.Store.EmailTemplates" store:Type="Tables" Schema="dbo" />
@@ -19,9 +21,7 @@
           <EntitySet Name="NormalCDR" EntityType="Model.Store.NormalCDR" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="NormalizationRules" EntityType="Model.Store.NormalizationRules" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="NumberProfile" EntityType="Model.Store.NumberProfile" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="NumberProfileNew" EntityType="Model.Store.NumberProfileNew" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OperationType" EntityType="Model.Store.OperationType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Peak_Hoursold" EntityType="Model.Store.Peak_Hoursold" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Peak_Time" EntityType="Model.Store.Peak_Time" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Periods" EntityType="Model.Store.Periods" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Permissions" EntityType="Model.Store.Permissions" store:Type="Tables" Schema="dbo" />
@@ -47,34 +47,34 @@
           <EntitySet Name="sysdiagrams" EntityType="Model.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserPermissions" EntityType="Model.Store.UserPermissions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="vw_Dashboard" EntityType="Model.Store.vw_Dashboard" store:Type="Views" store:Schema="dbo" store:Name="vw_Dashboard">
+          <EntitySet Name="vwDashboard" EntityType="Model.Store.vwDashboard" store:Type="Views" store:Schema="dbo" store:Name="vwDashboard">
             <DefiningQuery>SELECT 
-      [vw_Dashboard].[CountNewCDRs] AS [CountNewCDRs], 
-      [vw_Dashboard].[MaxAttemptDateTime] AS [MaxAttemptDateTime], 
-      [vw_Dashboard].[CountCDPN] AS [CountCDPN], 
-      [vw_Dashboard].[CountCGPN] AS [CountCGPN]
-      FROM [dbo].[vw_Dashboard] AS [vw_Dashboard]</DefiningQuery>
+      [vwDashboard].[CountNewCDRs] AS [CountNewCDRs], 
+      [vwDashboard].[MaxAttemptDateTime] AS [MaxAttemptDateTime], 
+      [vwDashboard].[CountCDPN] AS [CountCDPN], 
+      [vwDashboard].[CountCGPN] AS [CountCGPN]
+      FROM [dbo].[vwDashboard] AS [vwDashboard]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vw_ReportedNumber" EntityType="Model.Store.vw_ReportedNumber" store:Type="Views" store:Schema="dbo" store:Name="vw_ReportedNumber">
+          <EntitySet Name="vwReportedNumber" EntityType="Model.Store.vwReportedNumber" store:Type="Views" store:Schema="dbo" store:Name="vwReportedNumber">
             <DefiningQuery>SELECT 
-      [vw_ReportedNumber].[CLI] AS [CLI], 
-      [vw_ReportedNumber].[Date_Day] AS [Date_Day], 
-      [vw_ReportedNumber].[OriginatedVolume] AS [OriginatedVolume], 
-      [vw_ReportedNumber].[TerminatedVolume] AS [TerminatedVolume], 
-      [vw_ReportedNumber].[NumberofAttempts] AS [NumberofAttempts], 
-      [vw_ReportedNumber].[CountDistinctCalledParties] AS [CountDistinctCalledParties], 
-      [vw_ReportedNumber].[ReportID] AS [ReportID], 
-      [vw_ReportedNumber].[MonthYear] AS [MonthYear]
-      FROM [dbo].[vw_ReportedNumber] AS [vw_ReportedNumber]</DefiningQuery>
+      [vwReportedNumber].[CLI] AS [CLI], 
+      [vwReportedNumber].[Date_Day] AS [Date_Day], 
+      [vwReportedNumber].[OriginatedVolume] AS [OriginatedVolume], 
+      [vwReportedNumber].[TerminatedVolume] AS [TerminatedVolume], 
+      [vwReportedNumber].[NumberofAttempts] AS [NumberofAttempts], 
+      [vwReportedNumber].[CountDistinctCalledParties] AS [CountDistinctCalledParties], 
+      [vwReportedNumber].[ReportID] AS [ReportID], 
+      [vwReportedNumber].[MonthYear] AS [MonthYear]
+      FROM [dbo].[vwReportedNumber] AS [vwReportedNumber]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vw_ReportedNumberNormalCDR" EntityType="Model.Store.vw_ReportedNumberNormalCDR" store:Type="Views" store:Schema="dbo" store:Name="vw_ReportedNumberNormalCDR">
+          <EntitySet Name="vwReportedNumberNormalCDR" EntityType="Model.Store.vwReportedNumberNormalCDR" store:Type="Views" store:Schema="dbo" store:Name="vwReportedNumberNormalCDR">
             <DefiningQuery>SELECT 
-      [vw_ReportedNumberNormalCDR].[Id] AS [Id], 
-      [vw_ReportedNumberNormalCDR].[A_Temp] AS [A_Temp], 
-      [vw_ReportedNumberNormalCDR].[In_Trunk] AS [In_Trunk], 
-      [vw_ReportedNumberNormalCDR].[Switch] AS [Switch], 
-      [vw_ReportedNumberNormalCDR].[ReportID] AS [ReportID]
-      FROM [dbo].[vw_ReportedNumberNormalCDR] AS [vw_ReportedNumberNormalCDR]</DefiningQuery>
+      [vwReportedNumberNormalCDR].[Id] AS [Id], 
+      [vwReportedNumberNormalCDR].[A_Temp] AS [A_Temp], 
+      [vwReportedNumberNormalCDR].[In_Trunk] AS [In_Trunk], 
+      [vwReportedNumberNormalCDR].[Switch] AS [Switch], 
+      [vwReportedNumberNormalCDR].[ReportID] AS [ReportID]
+      FROM [dbo].[vwReportedNumberNormalCDR] AS [vwReportedNumberNormalCDR]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.Store.vwSuspectionAnalysis" store:Type="Views" store:Schema="dbo" store:Name="vwSuspectionAnalysis">
             <DefiningQuery>SELECT 
@@ -87,8 +87,20 @@
       [vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
       FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_CDR_Imports" Association="Model.Store.FK_CDR_Imports">
+            <End Role="Imports" EntitySet="Imports" />
+            <End Role="CDR" EntitySet="CDR" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_SwitchProfiles" Association="Model.Store.FK_CDR_SwitchProfiles">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="CDR" EntitySet="CDR" />
+          </AssociationSet>
           <AssociationSet Name="FK_ControlTable_OperationType" Association="Model.Store.FK_ControlTable_OperationType">
             <End Role="OperationType" EntitySet="OperationType" />
+            <End Role="ControlTable" EntitySet="ControlTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlTable_Periods" Association="Model.Store.FK_ControlTable_Periods">
+            <End Role="Periods" EntitySet="Periods" />
             <End Role="ControlTable" EntitySet="ControlTable" />
           </AssociationSet>
           <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Model.Store.FK_EmailReceivers_EmailReceiverTypes">
@@ -139,6 +151,10 @@
             <End Role="ReportingStatus" EntitySet="ReportingStatus" />
             <End Role="Report" EntitySet="Report" />
           </AssociationSet>
+          <AssociationSet Name="FK_Report_Users" Association="Model.Store.FK_Report_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
           <AssociationSet Name="FK_ReportDetails_Report" Association="Model.Store.FK_ReportDetails_Report">
             <End Role="Report" EntitySet="Report" />
             <End Role="ReportDetails" EntitySet="ReportDetails" />
@@ -171,6 +187,10 @@
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
           </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Users" Association="Model.Store.FK_Strategy_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Strategy" EntitySet="Strategy" />
+          </AssociationSet>
           <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="Model.Store.FK_StrategyPeriods_criteria_profile">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
             <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
@@ -195,9 +215,17 @@
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
             <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
           </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_Periods" Association="Model.Store.FK_Subscriber_Values_Periods">
+            <End Role="Periods" EntitySet="Periods" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
           <AssociationSet Name="FK_Subscriber_Values_Strategy" Association="Model.Store.FK_Subscriber_Values_Strategy">
             <End Role="Strategy" EntitySet="Strategy" />
             <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Periods" Association="Model.Store.FK_SubscriberThresholds_Periods">
+            <End Role="Periods" EntitySet="Periods" />
+            <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
           </AssociationSet>
           <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Model.Store.FK_SubscriberThresholds_Suspection_Level">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
@@ -285,6 +313,43 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="delete_NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
+          <Property Name="Date_Day" Type="datetime" />
+          <Property Name="Day_Hour" Type="int" />
+          <Property Name="Count_Out_Calls" Type="int" />
+          <Property Name="Count_In_Calls" Type="int" Nullable="false" />
+          <Property Name="Count_Out_Fail" Type="int" />
+          <Property Name="Count_In_Fail" Type="int" Nullable="false" />
+          <Property Name="Call_Out_Dur_Avg" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="numeric" Nullable="false" Precision="38" Scale="2" />
+          <Property Name="Total_Out_Volume" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="Total_In_Volume" Type="numeric" Nullable="false" Precision="38" Scale="2" />
+          <Property Name="Diff_Output_Numb" Type="int" />
+          <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
+          <Property Name="Diff_Dest_net" Type="int" />
+          <Property Name="Diff_Sources_net" Type="int" />
+          <Property Name="Total_Cell" Type="int" />
+          <Property Name="count_orig_SMS" Type="int" />
+          <Property Name="count_ter_SMS" Type="int" />
+          <Property Name="Total_IMEI" Type="int" />
+          <Property Name="Count_On_Net" Type="int" />
+          <Property Name="Count_Off_Net" Type="int" />
+          <Property Name="Total_BTS" Type="int" />
+          <Property Name="Count_Out_Inter" Type="int" />
+          <Property Name="Count_In_Inter" Type="int" />
+        </EntityType>
+        <EntityType Name="delete_Peak_Hours">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="hours" Type="int" />
         </EntityType>
         <EntityType Name="EmailReceivers">
           <Key>
@@ -403,36 +468,6 @@
           <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
           <Property Name="Diff_Dest_net" Type="int" />
           <Property Name="Diff_Sources_net" Type="int" />
-          <Property Name="Total_Cell" Type="int" />
-          <Property Name="count_orig_SMS" Type="int" />
-          <Property Name="count_ter_SMS" Type="int" />
-          <Property Name="Total_IMEI" Type="int" />
-          <Property Name="Count_On_Net" Type="int" />
-          <Property Name="Count_Off_Net" Type="int" />
-          <Property Name="Total_BTS" Type="int" />
-          <Property Name="Count_Out_Inter" Type="int" />
-          <Property Name="Count_In_Inter" Type="int" />
-        </EntityType>
-        <EntityType Name="NumberProfileNew">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
-          <Property Name="Date_Day" Type="datetime" />
-          <Property Name="Day_Hour" Type="int" />
-          <Property Name="Count_Out_Calls" Type="int" />
-          <Property Name="Count_In_Calls" Type="int" Nullable="false" />
-          <Property Name="Count_Out_Fail" Type="int" />
-          <Property Name="Count_In_Fail" Type="int" Nullable="false" />
-          <Property Name="Call_Out_Dur_Avg" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="numeric" Nullable="false" Precision="38" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="Total_In_Volume" Type="numeric" Nullable="false" Precision="38" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="int" />
-          <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
-          <Property Name="Diff_Dest_net" Type="int" />
-          <Property Name="Diff_Sources_net" Type="int" />
           <Property Name="Total_Cell_In" Type="int" />
           <Property Name="Total_Cell_Out" Type="int" />
           <Property Name="Total_Cell" Type="int" />
@@ -459,13 +494,6 @@
           <Property Name="StepOrder" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Peak_Hoursold">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="hours" Type="int" />
         </EntityType>
         <EntityType Name="Peak_Time">
           <Key>
@@ -754,9 +782,9 @@
           <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_Dashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="vw_Dashboard">
+        <EntityType Name="vwDashboard">
           <Key>
             <PropertyRef Name="CountNewCDRs" />
             <PropertyRef Name="MaxAttemptDateTime" />
@@ -769,26 +797,26 @@
           <Property Name="CountCGPN" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="vw_ReportedNumber">
+        <EntityType Name="vwReportedNumber">
           <Key>
             <PropertyRef Name="TerminatedVolume" />
             <PropertyRef Name="ReportID" />
           </Key>
           <Property Name="CLI" Type="varchar" MaxLength="30" />
           <Property Name="Date_Day" Type="datetime" />
-          <Property Name="OriginatedVolume" Type="numeric" Precision="38" Scale="4" />
-          <Property Name="TerminatedVolume" Type="int" Nullable="false" />
+          <Property Name="OriginatedVolume" Type="numeric" Precision="38" Scale="2" />
+          <Property Name="TerminatedVolume" Type="numeric" Nullable="false" Precision="38" Scale="2" />
           <Property Name="NumberofAttempts" Type="int" />
           <Property Name="CountDistinctCalledParties" Type="int" />
           <Property Name="ReportID" Type="int" Nullable="false" />
           <Property Name="MonthYear" Type="varchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vw_ReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="vw_ReportedNumberNormalCDR">
+        <EntityType Name="vwReportedNumberNormalCDR">
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="A_Temp" />
@@ -823,6 +851,30 @@
           <Property Name="LastreportNumber" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="StrategyName" Type="varchar" Nullable="false" MaxLength="1" />
         </EntityType>
+        <Association Name="FK_CDR_Imports">
+          <End Role="Imports" Type="Model.Store.Imports" Multiplicity="0..1" />
+          <End Role="CDR" Type="Model.Store.CDR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Imports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CDR">
+              <PropertyRef Name="ImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_SwitchProfiles">
+          <End Role="SwitchProfiles" Type="Model.Store.SwitchProfiles" Multiplicity="0..1" />
+          <End Role="CDR" Type="Model.Store.CDR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR">
+              <PropertyRef Name="SourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ControlTable_OperationType">
           <End Role="OperationType" Type="Model.Store.OperationType" Multiplicity="1" />
           <End Role="ControlTable" Type="Model.Store.ControlTable" Multiplicity="*" />
@@ -832,6 +884,18 @@
             </Principal>
             <Dependent Role="ControlTable">
               <PropertyRef Name="OperationTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlTable_Periods">
+          <End Role="Periods" Type="Model.Store.Periods" Multiplicity="0..1" />
+          <End Role="ControlTable" Type="Model.Store.ControlTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlTable">
+              <PropertyRef Name="PeriodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -979,6 +1043,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Report_Users">
+          <End Role="Users" Type="Model.Store.Users" Multiplicity="0..1" />
+          <End Role="Report" Type="Model.Store.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="SentBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ReportDetails_Report">
           <End Role="Report" Type="Model.Store.Report" Multiplicity="0..1" />
           <End Role="ReportDetails" Type="Model.Store.ReportDetails" Multiplicity="*" />
@@ -1075,6 +1151,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Strategy_Users">
+          <End Role="Users" Type="Model.Store.Users" Multiplicity="1" />
+          <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_StrategyPeriods_criteria_profile">
           <End Role="Criteria_Profile" Type="Model.Store.Criteria_Profile" Multiplicity="0..1" />
           <End Role="StrategyPeriods" Type="Model.Store.StrategyPeriods" Multiplicity="*" />
@@ -1147,6 +1235,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Subscriber_Values_Periods">
+          <End Role="Periods" Type="Model.Store.Periods" Multiplicity="0..1" />
+          <End Role="Subscriber_Values" Type="Model.Store.Subscriber_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriber_Values">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Subscriber_Values_Strategy">
           <End Role="Strategy" Type="Model.Store.Strategy" Multiplicity="0..1" />
           <End Role="Subscriber_Values" Type="Model.Store.Subscriber_Values" Multiplicity="*" />
@@ -1156,6 +1256,18 @@
             </Principal>
             <Dependent Role="Subscriber_Values">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Periods">
+          <End Role="Periods" Type="Model.Store.Periods" Multiplicity="0..1" />
+          <End Role="SubscriberThresholds" Type="Model.Store.SubscriberThresholds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholds">
+              <PropertyRef Name="PeriodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1211,52 +1323,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="db_Dashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Database" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="db_FillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillDailyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillDailyProfileNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="StrategyId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="db_FillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillDailySubscriberValuesNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillHourlyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillHourlyProfileNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="StrategyId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="db_FillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_FillHourlySubscriberValuesNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="delete_db_FillDailyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="delete_db_FillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="delete_db_FillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="delete_db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="strategyId" Type="int" Mode="In" />
           <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
           <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
         </Function>
-        <Function Name="db_findSuspectionOccuranceNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="fromDate" Type="datetime" Mode="In" />
-          <Parameter Name="ToDate" Type="datetime" Mode="In" />
-          <Parameter Name="strategyId" Type="int" Mode="In" />
-          <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
-          <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
-        </Function>
-        <Function Name="db_GetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ReportID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="db_GetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="delete_FillHourlyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="FindSwitchesTimeDiff" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SwitchId1" Type="int" Mode="In" />
           <Parameter Name="SwitchId2" Type="int" Mode="In" />
         </Function>
         <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prCollectNormalizedCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prDashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Database" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Ids" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="prFillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prFillSubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
@@ -1267,11 +1368,22 @@
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
+        <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="strategyId" Type="int" Mode="In" />
+          <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
+          <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
+        </Function>
         <Function Name="prGetEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DestinationEmail" Type="varchar" Mode="In" />
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="prGetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReportID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prGetUnNormalizedCDPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
@@ -1469,10 +1581,21 @@
           <Parameter Name="StrategyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="db_FillDailyProfileNew" />
+          <FunctionImport Name="db_FillDailySubscriberValuesNew" />
+          <FunctionImport Name="db_FillHourlySubscriberValuesNew" />
+          <FunctionImport Name="db_findSuspectionOccuranceNew">
+            <Parameter Name="fromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="strategyId" Mode="In" Type="Int32" />
+            <Parameter Name="SuspectionList" Mode="In" Type="String" />
+            <Parameter Name="MinimumOccurance" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="CDRs" EntityType="Model.CDR" />
           <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="Model.Criteria_Profile" />
+          <EntitySet Name="delete_NumberProfile" EntityType="Model.delete_NumberProfile" />
+          <EntitySet Name="delete_Peak_Hours" EntityType="Model.delete_Peak_Hours" />
           <EntitySet Name="EmailReceivers" EntityType="Model.EmailReceiver" />
           <EntitySet Name="EmailReceiverTypes" EntityType="Model.EmailReceiverType" />
           <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
@@ -1482,9 +1605,7 @@
           <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
           <EntitySet Name="NormalizationRules" EntityType="Model.NormalizationRule" />
           <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
-          <EntitySet Name="NumberProfileNews" EntityType="Model.NumberProfileNew" />
           <EntitySet Name="OperationTypes" EntityType="Model.OperationType" />
-          <EntitySet Name="Peak_Hoursold" EntityType="Model.Peak_Hoursold" />
           <EntitySet Name="Peak_Time" EntityType="Model.Peak_Time" />
           <EntitySet Name="Periods" EntityType="Model.Period" />
           <EntitySet Name="Permissions" EntityType="Model.Permission" />
@@ -1510,12 +1631,24 @@
           <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
           <EntitySet Name="UserPermissions" EntityType="Model.UserPermission" />
           <EntitySet Name="Users" EntityType="Model.User" />
-          <EntitySet Name="vw_Dashboard" EntityType="Model.vw_Dashboard" />
-          <EntitySet Name="vw_ReportedNumber" EntityType="Model.vw_ReportedNumber" />
-          <EntitySet Name="vw_ReportedNumberNormalCDR" EntityType="Model.vw_ReportedNumberNormalCDR" />
+          <EntitySet Name="vwDashboards" EntityType="Model.vwDashboard" />
+          <EntitySet Name="vwReportedNumbers" EntityType="Model.vwReportedNumber" />
+          <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="Model.vwReportedNumberNormalCDR" />
           <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.vwSuspectionAnalysi" />
+          <AssociationSet Name="FK_CDR_Imports" Association="Model.FK_CDR_Imports">
+            <End Role="Import" EntitySet="Imports" />
+            <End Role="CDR" EntitySet="CDRs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_SwitchProfiles" Association="Model.FK_CDR_SwitchProfiles">
+            <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
+            <End Role="CDR" EntitySet="CDRs" />
+          </AssociationSet>
           <AssociationSet Name="FK_ControlTable_OperationType" Association="Model.FK_ControlTable_OperationType">
             <End Role="OperationType" EntitySet="OperationTypes" />
+            <End Role="ControlTable" EntitySet="ControlTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlTable_Periods" Association="Model.FK_ControlTable_Periods">
+            <End Role="Period" EntitySet="Periods" />
             <End Role="ControlTable" EntitySet="ControlTables" />
           </AssociationSet>
           <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Model.FK_Related_Criteria_criteria_profile">
@@ -1574,6 +1707,14 @@
             <End Role="Period" EntitySet="Periods" />
             <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
           </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_Periods" Association="Model.FK_Subscriber_Values_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Periods" Association="Model.FK_SubscriberThresholds_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
           <AssociationSet Name="FK_Permissions_Permissions" Association="Model.FK_Permissions_Permissions">
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="Permission1" EntitySet="Permissions" />
@@ -1592,6 +1733,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Report_ReportingStatus" Association="Model.FK_Report_ReportingStatus">
             <End Role="ReportingStatu" EntitySet="ReportingStatus" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Users" Association="Model.FK_Report_Users">
+            <End Role="User" EntitySet="Users" />
             <End Role="Report" EntitySet="Reports" />
           </AssociationSet>
           <AssociationSet Name="FK_ReportDetails_Report" Association="Model.FK_ReportDetails_Report">
@@ -1613,6 +1758,10 @@
           <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="Model.FK_Strategy_suspection_level_Strategy">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Users" Association="Model.FK_Strategy_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Strategy" EntitySet="Strategies" />
           </AssociationSet>
           <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="Model.FK_StrategyPeriods_Strategy">
             <End Role="Strategy" EntitySet="Strategies" />
@@ -1642,15 +1791,43 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="db_FillDailySubscriberValuesNew" />
-          <FunctionImport Name="db_FillHourlySubscriberValuesNew" />
-          <FunctionImport Name="db_findSuspectionOccuranceNew">
+          <FunctionImport Name="delete_db_FillDailyMobileProfile" />
+          <FunctionImport Name="delete_db_FillDailySubscriberValues" />
+          <FunctionImport Name="delete_db_FillHourlySubscriberValues" />
+          <FunctionImport Name="delete_db_findSuspectionOccurance">
             <Parameter Name="fromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
             <Parameter Name="strategyId" Mode="In" Type="Int32" />
             <Parameter Name="SuspectionList" Mode="In" Type="String" />
             <Parameter Name="MinimumOccurance" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="delete_FillHourlyMobileProfile" />
+          <FunctionImport Name="prDashboard">
+            <Parameter Name="Database" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="prFillDailyCellProfile" />
+          <FunctionImport Name="prFillDailyProfile" />
+          <FunctionImport Name="prFillDailySubscriberThresholds">
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prFillDailySubscriberValues" />
+          <FunctionImport Name="prFillHourlyCellProfile" />
+          <FunctionImport Name="prFillHourlyProfile" />
+          <FunctionImport Name="prFillHourlySubscriberThresholds">
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prFillHourlySubscriberValues" />
+          <FunctionImport Name="prfindSuspicionOccurrence">
+            <Parameter Name="fromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="strategyId" Mode="In" Type="Int32" />
+            <Parameter Name="SuspectionList" Mode="In" Type="String" />
+            <Parameter Name="MinimumOccurance" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prGetReportedNumberNormalCDR">
+            <Parameter Name="ReportID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prGetReportVariables" ReturnType="Collection(Model.prGetReportVariables_Result)" />
           </EntityContainer>
         <ComplexType Name="db_GetReportedNumberNormalCDR_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1721,6 +1898,8 @@
           <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Ignore" />
           <Property Type="Boolean" Name="IsNormalized" />
+          <NavigationProperty Name="Import" Relationship="Model.FK_CDR_Imports" FromRole="CDR" ToRole="Import" />
+          <NavigationProperty Name="SwitchProfile" Relationship="Model.FK_CDR_SwitchProfiles" FromRole="CDR" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="CellProfile">
           <Key>
@@ -1753,6 +1932,7 @@
           <Property Type="Int32" Name="NumberOfProfileRecords" />
           <Property Type="Int32" Name="NumberOfCalls" />
           <NavigationProperty Name="OperationType" Relationship="Model.FK_ControlTable_OperationType" FromRole="ControlTable" ToRole="OperationType" />
+          <NavigationProperty Name="Period" Relationship="Model.FK_ControlTable_Periods" FromRole="ControlTable" ToRole="Period" />
         </EntityType>
         <EntityType Name="Criteria_Profile">
           <Key>
@@ -1766,6 +1946,43 @@
           <NavigationProperty Name="StrategyPeriods" Relationship="Model.FK_StrategyPeriods_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
           <NavigationProperty Name="StrategyThresholds" Relationship="Model.FK_StrategyThreshold_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values" Relationship="Model.FK_Subscriber_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
+        </EntityType>
+        <EntityType Name="delete_NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Date_Day" Precision="3" />
+          <Property Type="Int32" Name="Day_Hour" />
+          <Property Type="Int32" Name="Count_Out_Calls" />
+          <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
+          <Property Type="Int32" Name="Count_Out_Fail" />
+          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
+          <Property Type="Decimal" Name="Call_Out_Dur_Avg" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_Out_Volume" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Total_In_Volume" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="Diff_Output_Numb" />
+          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
+          <Property Type="Int32" Name="Diff_Dest_net" />
+          <Property Type="Int32" Name="Diff_Sources_net" />
+          <Property Type="Int32" Name="Total_Cell" />
+          <Property Type="Int32" Name="count_orig_SMS" />
+          <Property Type="Int32" Name="count_ter_SMS" />
+          <Property Type="Int32" Name="Total_IMEI" />
+          <Property Type="Int32" Name="Count_On_Net" />
+          <Property Type="Int32" Name="Count_Off_Net" />
+          <Property Type="Int32" Name="Total_BTS" />
+          <Property Type="Int32" Name="Count_Out_Inter" />
+          <Property Type="Int32" Name="Count_In_Inter" />
+        </EntityType>
+        <EntityType Name="delete_Peak_Hours">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="hours" />
         </EntityType>
         <EntityType Name="EmailReceiver">
           <Key>
@@ -1815,6 +2032,7 @@
           <Property Type="DateTime" Name="ImportDate" Nullable="false" Precision="0" />
           <Property Type="Int32" Name="ImportedBy" />
           <Property Type="Int32" Name="ImportTypeId" Nullable="false" />
+          <NavigationProperty Name="CDRs" Relationship="Model.FK_CDR_Imports" FromRole="Import" ToRole="CDR" />
           <NavigationProperty Name="ImportType" Relationship="Model.FK_Imports_ImportTypes" FromRole="Import" ToRole="ImportType" />
           <NavigationProperty Name="User" Relationship="Model.FK_Imports_Users" FromRole="Import" ToRole="User" />
         </EntityType>
@@ -1893,36 +2111,6 @@
           <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
           <Property Type="Int32" Name="Diff_Dest_net" />
           <Property Type="Int32" Name="Diff_Sources_net" />
-          <Property Type="Int32" Name="Total_Cell" />
-          <Property Type="Int32" Name="count_orig_SMS" />
-          <Property Type="Int32" Name="count_ter_SMS" />
-          <Property Type="Int32" Name="Total_IMEI" />
-          <Property Type="Int32" Name="Count_On_Net" />
-          <Property Type="Int32" Name="Count_Off_Net" />
-          <Property Type="Int32" Name="Total_BTS" />
-          <Property Type="Int32" Name="Count_Out_Inter" />
-          <Property Type="Int32" Name="Count_In_Inter" />
-        </EntityType>
-        <EntityType Name="NumberProfileNew">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Date_Day" Precision="3" />
-          <Property Type="Int32" Name="Day_Hour" />
-          <Property Type="Int32" Name="Count_Out_Calls" />
-          <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
-          <Property Type="Int32" Name="Count_Out_Fail" />
-          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
-          <Property Type="Decimal" Name="Call_Out_Dur_Avg" Precision="38" Scale="2" />
-          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" Precision="38" Scale="2" />
-          <Property Type="Decimal" Name="Total_Out_Volume" Precision="38" Scale="2" />
-          <Property Type="Decimal" Name="Total_In_Volume" Nullable="false" Precision="38" Scale="2" />
-          <Property Type="Int32" Name="Diff_Output_Numb" />
-          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
-          <Property Type="Int32" Name="Diff_Dest_net" />
-          <Property Type="Int32" Name="Diff_Sources_net" />
           <Property Type="Int32" Name="Total_Cell_In" />
           <Property Type="Int32" Name="Total_Cell_Out" />
           <Property Type="Int32" Name="Total_Cell" />
@@ -1951,13 +2139,6 @@
           <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ControlTables" Relationship="Model.FK_ControlTable_OperationType" FromRole="OperationType" ToRole="ControlTable" />
         </EntityType>
-        <EntityType Name="Peak_Hoursold">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="hours" />
-        </EntityType>
         <EntityType Name="Peak_Time">
           <Key>
             <PropertyRef Name="Id" />
@@ -1973,7 +2154,10 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ControlTables" Relationship="Model.FK_ControlTable_Periods" FromRole="Period" ToRole="ControlTable" />
           <NavigationProperty Name="StrategyPeriods" Relationship="Model.FK_StrategyPeriods_Periods" FromRole="Period" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="Subscriber_Values" Relationship="Model.FK_Subscriber_Values_Periods" FromRole="Period" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThresholds_Periods" FromRole="Period" ToRole="SubscriberThreshold" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -2022,6 +2206,7 @@
           <Property Type="DateTime" Name="SentDate" Precision="3" />
           <Property Type="Int32" Name="SentBy" />
           <NavigationProperty Name="ReportingStatu" Relationship="Model.FK_Report_ReportingStatus" FromRole="Report" ToRole="ReportingStatu" />
+          <NavigationProperty Name="User" Relationship="Model.FK_Report_Users" FromRole="Report" ToRole="User" />
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Report" FromRole="Report" ToRole="ReportDetail" />
         </EntityType>
         <EntityType Name="ReportDetail">
@@ -2096,6 +2281,7 @@
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
           <NavigationProperty Name="Strategy_Min_Values" Relationship="Model.FK_Strategy_Min_Values_Strategy" FromRole="Strategy" ToRole="Strategy_Min_Values" />
           <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
+          <NavigationProperty Name="User" Relationship="Model.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
           <NavigationProperty Name="StrategyPeriods" Relationship="Model.FK_StrategyPeriods_Strategy" FromRole="Strategy" ToRole="StrategyPeriod" />
           <NavigationProperty Name="StrategyThresholds" Relationship="Model.FK_StrategyThreshold_Strategy" FromRole="Strategy" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values" Relationship="Model.FK_Subscriber_Values_Strategy" FromRole="Strategy" ToRole="Subscriber_Values" />
@@ -2189,6 +2375,7 @@
           <Property Type="Decimal" Name="Value" Precision="18" Scale="2" />
           <Property Type="Int32" Name="PeriodId" />
           <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Subscriber_Values_criteria_profile" FromRole="Subscriber_Values" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Period" Relationship="Model.FK_Subscriber_Values_Periods" FromRole="Subscriber_Values" ToRole="Period" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Subscriber_Values_Strategy" FromRole="Subscriber_Values" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="SubscriberThreshold">
@@ -2216,6 +2403,7 @@
           <Property Type="Int32" Name="SuspectionLevelId" />
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Int32" Name="PeriodId" />
+          <NavigationProperty Name="Period" Relationship="Model.FK_SubscriberThresholds_Periods" FromRole="SubscriberThreshold" ToRole="Period" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
         </EntityType>
         <EntityType Name="Suspicion_Level">
@@ -2245,6 +2433,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="AllowAutoImport" Nullable="false" />
+          <NavigationProperty Name="CDRs" Relationship="Model.FK_CDR_SwitchProfiles" FromRole="SwitchProfile" ToRole="CDR" />
           <NavigationProperty Name="NormalizationRules" Relationship="Model.FK_NormalizationRules_SwitchProfiles" FromRole="SwitchProfile" ToRole="NormalizationRule" />
           <NavigationProperty Name="SourceMappings" Relationship="Model.FK_SourceMappings_SwitchProfiles" FromRole="SwitchProfile" ToRole="SourceMapping" />
           <NavigationProperty Name="Switch_DatabaseConnections" Relationship="Model.FK_Switch_DatabaseConnections_Switchs" FromRole="SwitchProfile" ToRole="Switch_DatabaseConnections" />
@@ -2289,9 +2478,11 @@
           <Property Type="String" Name="MobileNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EmailTemplates" Relationship="Model.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
           <NavigationProperty Name="Imports" Relationship="Model.FK_Imports_Users" FromRole="User" ToRole="Import" />
+          <NavigationProperty Name="Reports" Relationship="Model.FK_Report_Users" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="Strategies" Relationship="Model.FK_Strategy_Users" FromRole="User" ToRole="Strategy" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
         </EntityType>
-        <EntityType Name="vw_Dashboard">
+        <EntityType Name="vwDashboard">
           <Key>
             <PropertyRef Name="CountNewCDRs" />
             <PropertyRef Name="MaxAttemptDateTime" />
@@ -2303,21 +2494,21 @@
           <Property Type="Int32" Name="CountCDPN" Nullable="false" />
           <Property Type="Int32" Name="CountCGPN" Nullable="false" />
         </EntityType>
-        <EntityType Name="vw_ReportedNumber">
+        <EntityType Name="vwReportedNumber">
           <Key>
             <PropertyRef Name="TerminatedVolume" />
             <PropertyRef Name="ReportID" />
           </Key>
           <Property Type="String" Name="CLI" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Date_Day" Precision="3" />
-          <Property Type="Decimal" Name="OriginatedVolume" Precision="38" Scale="4" />
-          <Property Type="Int32" Name="TerminatedVolume" Nullable="false" />
+          <Property Type="Decimal" Name="OriginatedVolume" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TerminatedVolume" Nullable="false" Precision="38" Scale="2" />
           <Property Type="Int32" Name="NumberofAttempts" />
           <Property Type="Int32" Name="CountDistinctCalledParties" />
           <Property Type="Int32" Name="ReportID" Nullable="false" />
           <Property Type="String" Name="MonthYear" MaxLength="9" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="vw_ReportedNumberNormalCDR">
+        <EntityType Name="vwReportedNumberNormalCDR">
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="A_Temp" />
@@ -2349,6 +2540,30 @@
           <Property Type="String" Name="LastreportNumber" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="StrategyName" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
+        <Association Name="FK_CDR_Imports">
+          <End Type="Model.Import" Role="Import" Multiplicity="0..1" />
+          <End Type="Model.CDR" Role="CDR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Import">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CDR">
+              <PropertyRef Name="ImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_SwitchProfiles">
+          <End Type="Model.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
+          <End Type="Model.CDR" Role="CDR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR">
+              <PropertyRef Name="SourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ControlTable_OperationType">
           <End Type="Model.OperationType" Role="OperationType" Multiplicity="1" />
           <End Type="Model.ControlTable" Role="ControlTable" Multiplicity="*" />
@@ -2358,6 +2573,18 @@
             </Principal>
             <Dependent Role="ControlTable">
               <PropertyRef Name="OperationTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlTable_Periods">
+          <End Type="Model.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="Model.ControlTable" Role="ControlTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlTable">
+              <PropertyRef Name="PeriodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2529,6 +2756,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Subscriber_Values_Periods">
+          <End Type="Model.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="Model.Subscriber_Values" Role="Subscriber_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriber_Values">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Periods">
+          <End Type="Model.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="Model.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThreshold">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Permissions_Permissions">
           <End Type="Model.Permission" Role="Permission" Multiplicity="0..1" />
           <End Type="Model.Permission" Role="Permission1" Multiplicity="*" />
@@ -2589,6 +2840,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Report_Users">
+          <End Type="Model.User" Role="User" Multiplicity="0..1" />
+          <End Type="Model.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="SentBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ReportDetails_Report">
           <End Type="Model.Report" Role="Report" Multiplicity="0..1" />
           <End Type="Model.ReportDetail" Role="ReportDetail" Multiplicity="*" />
@@ -2646,6 +2909,18 @@
             </Principal>
             <Dependent Role="Strategy_Suspicion_Level">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_Users">
+          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <End Type="Model.Strategy" Role="Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2737,33 +3012,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="prGetReportVariables_Result">
+          <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="ReportNumber" Nullable="true" MaxLength="8000" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="MobileEntities">
-          <FunctionImportMapping FunctionImportName="db_Dashboard" FunctionName="Model.Store.db_Dashboard" />
-          <FunctionImportMapping FunctionImportName="db_findSuspectionOccurance" FunctionName="Model.Store.db_findSuspectionOccurance" />
-          <FunctionImportMapping FunctionImportName="db_GetReportedNumberNormalCDR" FunctionName="Model.Store.db_GetReportedNumberNormalCDR">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.db_GetReportedNumberNormalCDR_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="A_Temp" ColumnName="A_Temp" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="Switch" ColumnName="Switch" />
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="db_GetReportVariables" FunctionName="Model.Store.db_GetReportVariables">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.db_GetReportVariables_Result">
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR" FunctionName="Model.Store.prCollectNormalizedCDR" />
           <FunctionImportMapping FunctionImportName="prDeleteEmail" FunctionName="Model.Store.prDeleteEmail" />
           <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds" FunctionName="Model.Store.prFillSubscriberThresholds" />
@@ -2821,18 +3079,8 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Model.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Model.Store.sp_upgraddiagrams" />
-          <FunctionImportMapping FunctionImportName="db_FillDailyMobileProfile" FunctionName="Model.Store.db_FillDailyMobileProfile" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlyMobileProfile" FunctionName="Model.Store.db_FillHourlyMobileProfile" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberValues" FunctionName="Model.Store.db_FillHourlySubscriberValues" />
           <FunctionImportMapping FunctionImportName="prGetUnNormalizedCDPN" FunctionName="Model.Store.prGetUnNormalizedCDPN" />
           <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
-          <FunctionImportMapping FunctionImportName="db_FillDailyCellProfile" FunctionName="Model.Store.db_FillDailyCellProfile" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlyCellProfile" FunctionName="Model.Store.db_FillHourlyCellProfile" />
-          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberThresholds" FunctionName="Model.Store.db_FillDailySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValues" FunctionName="Model.Store.db_FillDailySubscriberValues" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlyProfileNew" FunctionName="Model.Store.db_FillHourlyProfileNew" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberThresholds" FunctionName="Model.Store.db_FillHourlySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="db_FillDailyProfileNew" FunctionName="Model.Store.db_FillDailyProfileNew" />
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="Model.CDR">
               <MappingFragment StoreEntitySet="CDR">
@@ -2904,6 +3152,45 @@
               <MappingFragment StoreEntitySet="Criteria_Profile">
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="delete_NumberProfile">
+            <EntityTypeMapping TypeName="Model.delete_NumberProfile">
+              <MappingFragment StoreEntitySet="delete_NumberProfile">
+                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
+                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
+                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
+                <ScalarProperty Name="Count_Off_Net" ColumnName="Count_Off_Net" />
+                <ScalarProperty Name="Count_On_Net" ColumnName="Count_On_Net" />
+                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
+                <ScalarProperty Name="count_ter_SMS" ColumnName="count_ter_SMS" />
+                <ScalarProperty Name="count_orig_SMS" ColumnName="count_orig_SMS" />
+                <ScalarProperty Name="Total_Cell" ColumnName="Total_Cell" />
+                <ScalarProperty Name="Diff_Sources_net" ColumnName="Diff_Sources_net" />
+                <ScalarProperty Name="Diff_Dest_net" ColumnName="Diff_Dest_net" />
+                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
+                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
+                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
+                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
+                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
+                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
+                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
+                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
+                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
+                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
+                <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
+                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="delete_Peak_Hours">
+            <EntityTypeMapping TypeName="Model.delete_Peak_Hours">
+              <MappingFragment StoreEntitySet="delete_Peak_Hours">
+                <ScalarProperty Name="hours" ColumnName="hours" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3015,37 +3302,6 @@
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="Model.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
-                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
-                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
-                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
-                <ScalarProperty Name="Count_Off_Net" ColumnName="Count_Off_Net" />
-                <ScalarProperty Name="Count_On_Net" ColumnName="Count_On_Net" />
-                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
-                <ScalarProperty Name="count_ter_SMS" ColumnName="count_ter_SMS" />
-                <ScalarProperty Name="count_orig_SMS" ColumnName="count_orig_SMS" />
-                <ScalarProperty Name="Total_Cell" ColumnName="Total_Cell" />
-                <ScalarProperty Name="Diff_Sources_net" ColumnName="Diff_Sources_net" />
-                <ScalarProperty Name="Diff_Dest_net" ColumnName="Diff_Dest_net" />
-                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
-                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
-                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
-                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
-                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
-                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
-                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
-                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
-                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
-                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
-                <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
-                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NumberProfileNews">
-            <EntityTypeMapping TypeName="Model.NumberProfileNew">
-              <MappingFragment StoreEntitySet="NumberProfileNew">
                 <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
                 <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
                 <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
@@ -3088,14 +3344,6 @@
                 <ScalarProperty Name="StepOrder" ColumnName="StepOrder" />
                 <ScalarProperty Name="SPName" ColumnName="SPName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Peak_Hoursold">
-            <EntityTypeMapping TypeName="Model.Peak_Hoursold">
-              <MappingFragment StoreEntitySet="Peak_Hoursold">
-                <ScalarProperty Name="hours" ColumnName="hours" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3410,9 +3658,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vw_Dashboard">
-            <EntityTypeMapping TypeName="Model.vw_Dashboard">
-              <MappingFragment StoreEntitySet="vw_Dashboard">
+          <EntitySetMapping Name="vwDashboards">
+            <EntityTypeMapping TypeName="Model.vwDashboard">
+              <MappingFragment StoreEntitySet="vwDashboard">
                 <ScalarProperty Name="CountCGPN" ColumnName="CountCGPN" />
                 <ScalarProperty Name="CountCDPN" ColumnName="CountCDPN" />
                 <ScalarProperty Name="MaxAttemptDateTime" ColumnName="MaxAttemptDateTime" />
@@ -3420,9 +3668,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vw_ReportedNumber">
-            <EntityTypeMapping TypeName="Model.vw_ReportedNumber">
-              <MappingFragment StoreEntitySet="vw_ReportedNumber">
+          <EntitySetMapping Name="vwReportedNumbers">
+            <EntityTypeMapping TypeName="Model.vwReportedNumber">
+              <MappingFragment StoreEntitySet="vwReportedNumber">
                 <ScalarProperty Name="MonthYear" ColumnName="MonthYear" />
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="CountDistinctCalledParties" ColumnName="CountDistinctCalledParties" />
@@ -3434,9 +3682,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vw_ReportedNumberNormalCDR">
-            <EntityTypeMapping TypeName="Model.vw_ReportedNumberNormalCDR">
-              <MappingFragment StoreEntitySet="vw_ReportedNumberNormalCDR">
+          <EntitySetMapping Name="vwReportedNumberNormalCDRs">
+            <EntityTypeMapping TypeName="Model.vwReportedNumberNormalCDR">
+              <MappingFragment StoreEntitySet="vwReportedNumberNormalCDR">
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="Switch" ColumnName="Switch" />
                 <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
@@ -3458,9 +3706,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValuesNew" FunctionName="Model.Store.db_FillDailySubscriberValuesNew" />
-          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberValuesNew" FunctionName="Model.Store.db_FillHourlySubscriberValuesNew" />
-          <FunctionImportMapping FunctionImportName="db_findSuspectionOccuranceNew" FunctionName="Model.Store.db_findSuspectionOccuranceNew" />
+          <FunctionImportMapping FunctionImportName="delete_db_FillDailyMobileProfile" FunctionName="Model.Store.delete_db_FillDailyMobileProfile" />
+          <FunctionImportMapping FunctionImportName="delete_db_FillDailySubscriberValues" FunctionName="Model.Store.delete_db_FillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="delete_db_FillHourlySubscriberValues" FunctionName="Model.Store.delete_db_FillHourlySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="delete_db_findSuspectionOccurance" FunctionName="Model.Store.delete_db_findSuspectionOccurance" />
+          <FunctionImportMapping FunctionImportName="delete_FillHourlyMobileProfile" FunctionName="Model.Store.delete_FillHourlyMobileProfile" />
+          <FunctionImportMapping FunctionImportName="prDashboard" FunctionName="Model.Store.prDashboard" />
+          <FunctionImportMapping FunctionImportName="prFillDailyCellProfile" FunctionName="Model.Store.prFillDailyCellProfile" />
+          <FunctionImportMapping FunctionImportName="prFillDailyProfile" FunctionName="Model.Store.prFillDailyProfile" />
+          <FunctionImportMapping FunctionImportName="prFillDailySubscriberThresholds" FunctionName="Model.Store.prFillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillDailySubscriberValues" FunctionName="Model.Store.prFillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prFillHourlyCellProfile" FunctionName="Model.Store.prFillHourlyCellProfile" />
+          <FunctionImportMapping FunctionImportName="prFillHourlyProfile" FunctionName="Model.Store.prFillHourlyProfile" />
+          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberThresholds" FunctionName="Model.Store.prFillHourlySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberValues" FunctionName="Model.Store.prFillHourlySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prfindSuspicionOccurrence" FunctionName="Model.Store.prfindSuspicionOccurrence" />
+          <FunctionImportMapping FunctionImportName="prGetReportedNumberNormalCDR" FunctionName="Model.Store.prGetReportedNumberNormalCDR" />
+          <FunctionImportMapping FunctionImportName="prGetReportVariables" FunctionName="Model.Store.prGetReportVariables">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportVariables_Result">
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

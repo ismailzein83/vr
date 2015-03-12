@@ -12,12 +12,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class vw_ReportedNumberNormalCDR
+    public partial class delete_Peak_Hours
     {
-        public int Id { get; set; }
-        public string A_Temp { get; set; }
-        public string In_Trunk { get; set; }
-        public string Switch { get; set; }
-        public int ReportID { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> hours { get; set; }
     }
 }

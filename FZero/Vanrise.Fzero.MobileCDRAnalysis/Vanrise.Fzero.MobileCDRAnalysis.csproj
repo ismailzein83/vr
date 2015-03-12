@@ -83,6 +83,12 @@
     <Compile Include="db_GetReportVariables_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="delete_NumberProfile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_Peak_Hours.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="EmailReceiver.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -96,8 +102,8 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\Constants.cs" />
-    <Compile Include="Classes\vw_ReportedNumberNormalCDR.cs" />
-    <Compile Include="Classes\vw_ReportedNumber.cs" />
+    <Compile Include="Classes\vwReportedNumberNormalCDR.cs" />
+    <Compile Include="Classes\vwReportedNumber.cs" />
     <Compile Include="Classes\Criteria_profile.cs" />
     <Compile Include="Classes\DataStatistics.cs" />
     <Compile Include="Classes\NormalCDR.cs" />
@@ -149,13 +155,7 @@
     <Compile Include="NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="NumberProfileNew.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="OperationType.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Peak_Hoursold.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Peak_Time.cs">
@@ -171,6 +171,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="prGetEmails_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="prGetReportVariables_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="prImportfromSwitches_Result.cs">
@@ -246,16 +249,16 @@
     <Compile Include="UserPermission.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwDashboard.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwReportedNumber.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwReportedNumberNormalCDR.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwSuspectionAnalysi.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_Dashboard.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_ReportedNumber.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vw_ReportedNumberNormalCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>

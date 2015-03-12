@@ -16,6 +16,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public SwitchProfile()
         {
+            this.CDRs = new HashSet<CDR>();
             this.NormalizationRules = new HashSet<NormalizationRule>();
             this.SourceMappings = new HashSet<SourceMapping>();
         }
@@ -24,6 +25,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Name { get; set; }
         public bool AllowAutoImport { get; set; }
     
+        public virtual ICollection<CDR> CDRs { get; set; }
         public virtual ICollection<NormalizationRule> NormalizationRules { get; set; }
         public virtual ICollection<SourceMapping> SourceMappings { get; set; }
         public virtual Switch_DatabaseConnections Switch_DatabaseConnections { get; set; }

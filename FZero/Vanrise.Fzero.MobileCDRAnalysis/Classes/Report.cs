@@ -189,7 +189,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    var result = (from c in context.db_GetReportVariables() select c).FirstOrDefault();
+                    var result = (from c in context.prGetReportVariables() select c).FirstOrDefault();
 
                     report.ReportNumber = result.ReportNumber;
                     report.ReportDate = result.ReportDate; 

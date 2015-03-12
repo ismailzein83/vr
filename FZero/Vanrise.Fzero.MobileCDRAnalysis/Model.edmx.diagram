@@ -5,52 +5,55 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="0c0afd205ce94db9a4c530fae9060cc0" Name="Diagram1" ZoomLevel="66">
-        <EntityTypeShape EntityType="Model.CDR" Width="1.5" PointX="6.49766164016801" PointY="9.2612237228365721" />
-        <EntityTypeShape EntityType="Model.CellProfile" Width="1.5" PointX="9.5770301453662245" PointY="12.373203119436839" />
-        <EntityTypeShape EntityType="Model.ControlTable" Width="1.5" PointX="11.065255119961339" PointY="28.713989092369559" />
-        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="11.397719951066058" PointY="1.2807738488916185" />
-        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="10.938729654503394" PointY="9.8913460121915424" />
-        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="5.4416858188070751" PointY="4.503158333014305" />
-        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="6.459379387302036" PointY="7.1108861449690934" />
-        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="6.4749372165999084" PointY="31.894905880044636" />
-        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="10.315709463467687" PointY="25.448218893934143" />
-        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="10.618073371526819" PointY="19.347441682288164" />
-        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="0.39378966223159317" PointY="25.152621683270027" />
-        <EntityTypeShape EntityType="Model.NormalizationRule" Width="1.5" PointX="8.71235689740272" PointY="0.27364864958154439" />
-        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="7.4560276174247395" PointY="18.24300230398914" />
-        <EntityTypeShape EntityType="Model.NumberProfileNew" Width="1.5" PointX="7.7474997172818973" PointY="7.9147429205080231" />
-        <EntityTypeShape EntityType="Model.OperationType" Width="1.5" PointX="4.2295140252586059" PointY="25.166545581615782" />
-        <EntityTypeShape EntityType="Model.Peak_Hoursold" Width="1.5" PointX="0.0367835797540767" PointY="31.911753252107534" />
-        <EntityTypeShape EntityType="Model.Peak_Time" Width="1.5" PointX="0.49395347782129118" PointY="18.039688774403039" />
-        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="5.4737296223052443" PointY="25.781834346140659" />
-        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="9.38244663243296" PointY="19.644231432883178" />
-        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="4.6991532559968316" PointY="4.1140932459915494" />
-        <EntityTypeShape EntityType="Model.Related_Criteria" Width="1.5" PointX="2.9354490372051711" PointY="14.821958220946582" />
-        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="2.079682231917829" PointY="9.8999158339108888" />
-        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="6.5905138545625448" PointY="2.6455422503154455" />
-        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="9.4413380685454875" PointY="3.0694862618434646" />
-        <EntityTypeShape EntityType="Model.Set_CallClass" Width="1.5" PointX="3.1019431720962478" PointY="1.9615696528747537" />
-        <EntityTypeShape EntityType="Model.Set_CallType" Width="1.5" PointX="5.7218024794579492" PointY="21.098997379233595" />
-        <EntityTypeShape EntityType="Model.Set_SubType" Width="1.5" PointX="11.580792981936035" PointY="27.608637047749308" />
-        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="3.5946850681652709" PointY="24.174476023844665" />
-        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="6.7606019986609942" PointY="25.265098404728388" />
-        <EntityTypeShape EntityType="Model.Strategy_Min_Values" Width="1.5" PointX="9.1839235523640745" PointY="11.264344682574432" />
-        <EntityTypeShape EntityType="Model.Strategy_Suspicion_Level" Width="1.5" PointX="3.0202461923566863" PointY="22.479176949001467" />
-        <EntityTypeShape EntityType="Model.StrategyPeriod" Width="1.5" PointX="8.25077616807575" PointY="4.0034001637266021" />
-        <EntityTypeShape EntityType="Model.StrategyThreshold" Width="1.5" PointX="3.6724711748177512" PointY="14.599408931377999" />
-        <EntityTypeShape EntityType="Model.Subscriber_Values" Width="1.5" PointX="1.1947308970590731" PointY="31.185322925069055" />
-        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="9.1928526820581649" PointY="23.484664898125764" />
-        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="2.5781430725837793" PointY="7.8643271363639862" />
-        <EntityTypeShape EntityType="Model.Switch_DatabaseConnections" Width="1.5" PointX="4.8439288292284726" PointY="24.200769078079968" />
-        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="4.31984159365289" PointY="18.228147545004333" />
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="7.3525508993084312" PointY="13.333035892496367" />
-        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="5.5121043890305348" PointY="17.237198062817193" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="9.39978779545044" PointY="17.5905129842416" />
-        <EntityTypeShape EntityType="Model.vw_Dashboard" Width="1.5" PointX="11.86608542309426" PointY="9.3171344144815276" />
-        <EntityTypeShape EntityType="Model.vw_ReportedNumber" Width="1.5" PointX="3.7156521136479697" PointY="10.999092166777277" />
-        <EntityTypeShape EntityType="Model.vw_ReportedNumberNormalCDR" Width="1.5" PointX="0.38611448760429146" PointY="5.7085722264408005" />
-        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="3.1701982222358689" PointY="22.422136302302654" />
+        <EntityTypeShape EntityType="Model.CDR" Width="1.5" PointX="2.907585881141753" PointY="31.754759281759505" />
+        <EntityTypeShape EntityType="Model.CellProfile" Width="1.5" PointX="10.182663234967116" PointY="1.266730666750451" />
+        <EntityTypeShape EntityType="Model.ControlTable" Width="1.5" PointX="10.522538774890144" PointY="17.348687150212324" />
+        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="9.3074581647792165" PointY="1.5424191213876097" />
+        <EntityTypeShape EntityType="Model.delete_NumberProfile" Width="1.5" PointX="0.039997262898831279" PointY="2.9752946807887848" />
+        <EntityTypeShape EntityType="Model.delete_Peak_Hours" Width="1.5" PointX="11.797347446809219" PointY="25.991578591052246" />
+        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="3.9582046661331343" PointY="16.787183560797565" />
+        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="10.157445547244254" PointY="7.3938128088572119" />
+        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="3.0681951879841254" PointY="6.6813455404161219" />
+        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="6.0333972992531013" PointY="23.357679303436392" />
+        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="1.7128776096333178" PointY="4.6952361039329489" />
+        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="3.9623075127426106" PointY="7.2532647434870086" />
+        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="6.8243414605149724" PointY="22.4634768620429" />
+        <EntityTypeShape EntityType="Model.NormalizationRule" Width="1.5" PointX="8.56360593278129" PointY="12.684935367053811" />
+        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="9.7856229477495056" PointY="30.794164299403395" />
+        <EntityTypeShape EntityType="Model.OperationType" Width="1.5" PointX="5.0886638616624591" PointY="29.477376832383396" />
+        <EntityTypeShape EntityType="Model.Peak_Time" Width="1.5" PointX="8.5242978746650273" PointY="2.0921375165191187" />
+        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="5.8991634556554082" PointY="7.1202889117972408" />
+        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="4.7664594411693795" PointY="11.650412877858809" />
+        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="10.552749629389844" PointY="26.170890432862048" />
+        <EntityTypeShape EntityType="Model.Related_Criteria" Width="1.5" PointX="9.5280971645974066" PointY="18.064383276768208" />
+        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="4.9598911967873063" PointY="11.723650356625976" />
+        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="6.666601826747228" PointY="31.074522196815593" />
+        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="2.6382377029574653" PointY="14.855710900787129" />
+        <EntityTypeShape EntityType="Model.Set_CallClass" Width="1.5" PointX="5.3364798581863191" PointY="2.5145928275373732" />
+        <EntityTypeShape EntityType="Model.Set_CallType" Width="1.5" PointX="1.0564643745573537" PointY="26.34829309319532" />
+        <EntityTypeShape EntityType="Model.Set_SubType" Width="1.5" PointX="8.1073172856622" PointY="17.096182622525927" />
+        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="6.6954235037301775" PointY="3.0583262457783924" />
+        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="7.945727217917204" PointY="19.900503883091968" />
+        <EntityTypeShape EntityType="Model.Strategy_Min_Values" Width="1.5" PointX="5.6506825395164464" PointY="5.5966265376641537" />
+        <EntityTypeShape EntityType="Model.Strategy_Suspicion_Level" Width="1.5" PointX="9.9421517485483335" PointY="12.134953072357435" />
+        <EntityTypeShape EntityType="Model.StrategyPeriod" Width="1.5" PointX="2.7927842227708473" PointY="1.3124950683268231" />
+        <EntityTypeShape EntityType="Model.StrategyThreshold" Width="1.5" PointX="8.0270716436333363" PointY="1.9822163591078559" />
+        <EntityTypeShape EntityType="Model.Subscriber_Values" Width="1.5" PointX="1.222544096979566" PointY="8.4630749265025713" />
+        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="0.39603037964367788" PointY="19.966232547520768" />
+        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="10.006220362152076" PointY="28.531440956765525" />
+        <EntityTypeShape EntityType="Model.Switch_DatabaseConnections" Width="1.5" PointX="3.9527549482662021" PointY="21.918169031812887" />
+        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="11.231032574191239" PointY="18.50329034892064" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="8.8008223421875478" PointY="30.842503010687654" />
+        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="8.0533724520604011" PointY="19.123721697891" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="5.7855661203086219" PointY="7.9805715866296421" />
+        <EntityTypeShape EntityType="Model.vwDashboard" Width="1.5" PointX="11.42037090445886" PointY="23.580401699794642" />
+        <EntityTypeShape EntityType="Model.vwReportedNumber" Width="1.5" PointX="10.491347237718919" PointY="19.221477204571233" />
+        <EntityTypeShape EntityType="Model.vwReportedNumberNormalCDR" Width="1.5" PointX="2.946699026481574" PointY="5.6352783765808114" />
+        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="6.089128064964493" PointY="12.672776302636031" />
+        <AssociationConnector Association="Model.FK_CDR_Imports" />
+        <AssociationConnector Association="Model.FK_CDR_SwitchProfiles" />
         <AssociationConnector Association="Model.FK_ControlTable_OperationType" />
+        <AssociationConnector Association="Model.FK_ControlTable_Periods" />
         <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile" />
         <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile1" />
         <AssociationConnector Association="Model.FK_Strategy_Min_Values_criteria_profile" />
@@ -65,16 +68,20 @@
         <AssociationConnector Association="Model.FK_NormalizationRules_SwitchProfiles" />
         <AssociationConnector Association="Model.FK_Peak_time_Strategy" />
         <AssociationConnector Association="Model.FK_StrategyPeriods_Periods" />
+        <AssociationConnector Association="Model.FK_Subscriber_Values_Periods" />
+        <AssociationConnector Association="Model.FK_SubscriberThresholds_Periods" />
         <AssociationConnector Association="Model.FK_Permissions_Permissions" />
         <AssociationConnector Association="Model.FK_UserPermissions_Permissions" />
         <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" />
         <AssociationConnector Association="Model.FK_Related_Criteria_Strategy" />
         <AssociationConnector Association="Model.FK_Report_ReportingStatus" />
+        <AssociationConnector Association="Model.FK_Report_Users" />
         <AssociationConnector Association="Model.FK_ReportDetails_Report" />
         <AssociationConnector Association="Model.FK_ReportDetails_Strategy" />
         <AssociationConnector Association="Model.FK_SourceMappings_SwitchProfiles" />
         <AssociationConnector Association="Model.FK_Strategy_Min_Values_Strategy" />
         <AssociationConnector Association="Model.FK_Strategy_suspection_level_Strategy" />
+        <AssociationConnector Association="Model.FK_Strategy_Users" />
         <AssociationConnector Association="Model.FK_StrategyPeriods_Strategy" />
         <AssociationConnector Association="Model.FK_StrategyThreshold_Strategy" />
         <AssociationConnector Association="Model.FK_Subscriber_Values_Strategy" />

@@ -15,12 +15,12 @@ using System.Data.Entity.Infrastructure;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
-    public partial class vw_ReportedNumberNormalCDR
+    public partial class vwReportedNumberNormalCDR
     {
-        public static List<vw_ReportedNumberNormalCDR> GetList(int ReportID)
+        public static List<vwReportedNumberNormalCDR> GetList(int ReportID)
         {
 
-            List<vw_ReportedNumberNormalCDR> unNormalizedCalls = new List<vw_ReportedNumberNormalCDR>();
+            List<vwReportedNumberNormalCDR> unNormalizedCalls = new List<vwReportedNumberNormalCDR>();
 
             try
             {
@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                 using (MobileEntities context = new MobileEntities())
                 {
-                    unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vw_ReportedNumberNormalCDR>("db_GetReportedNumberNormalCDR @ReportID", _ReportID).ToList();
+                    unNormalizedCalls = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwReportedNumberNormalCDR>("prGetReportedNumberNormalCDR @ReportID", _ReportID).ToList();
 
                 }
 

@@ -38,6 +38,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual ICollection<ReportDetail> ReportDetails { get; set; }
         public virtual ICollection<Strategy_Min_Values> Strategy_Min_Values { get; set; }
         public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
         public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
         public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }

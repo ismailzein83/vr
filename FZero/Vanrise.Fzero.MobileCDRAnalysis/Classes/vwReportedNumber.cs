@@ -13,17 +13,17 @@ using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
-    public partial class vw_ReportedNumber
+    public partial class vwReportedNumber
     {
-        public static List<vw_ReportedNumber> GetList(int ReportID)
+        public static List<vwReportedNumber> GetList(int ReportID)
         {
 
-            List<vw_ReportedNumber> list_ReportedNumbers = new List<vw_ReportedNumber>();
+            List<vwReportedNumber> list_ReportedNumbers = new List<vwReportedNumber>();
             try
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    list_ReportedNumbers = context.vw_ReportedNumber.ToList();
+                    list_ReportedNumbers = context.vwReportedNumbers.ToList();
                 }
             }
             catch (Exception err)

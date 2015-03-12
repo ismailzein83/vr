@@ -30,5 +30,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> NumberOfCalls { get; set; }
     
         public virtual OperationType OperationType { get; set; }
+        public virtual Period Period { get; set; }
     }
 }

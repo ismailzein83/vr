@@ -30,6 +30,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> SentBy { get; set; }
     
         public virtual ReportingStatu ReportingStatu { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<ReportDetail> ReportDetails { get; set; }
     }
 }

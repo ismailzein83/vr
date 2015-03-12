@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
         public static DataStatistics GetCDRsStatistics(string database)
         {
-            vw_Dashboard dashboard = new vw_Dashboard();
+            vwDashboard dashboard = new vwDashboard();
             DataStatistics dataStatistics = new DataStatistics();
             try
             {
@@ -61,7 +61,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (MobileEntities context = new MobileEntities())
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
-                    dashboard = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vw_Dashboard>("db_Dashboard @Database", _Database).ToList().FirstOrDefault();
+                    dashboard = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwDashboard>("prDashboard @Database", _Database).ToList().FirstOrDefault();
                     dataStatistics.CDRsLastDate = dashboard.MaxAttemptDateTime;
                     dataStatistics.NewCDRsCount = dashboard.CountNewCDRs;
                     dataStatistics.CDPNCount = dashboard.CountCDPN;
