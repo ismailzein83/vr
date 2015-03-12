@@ -47,14 +47,19 @@ namespace TOne.Business
             return GetIntValue( ConfigParameterName.LoadZoneBatchSize);
         }
 
-        public int GetLoadCalculatedRates()
+        public int GetLoadCalculatedRatesBatchSize()
         {
-            return GetIntValue(ConfigParameterName.LoadCalculatedRates);
+            return GetIntValue(ConfigParameterName.LoadCalculatedRatesBatchSize);
         }    
     
         public int GetRoutingCodePrefixLength()
         {
             return GetIntValue(ConfigParameterName.RoutingCodePrefixLength);
+        }
+
+        public int GetRouteBCPBatchSize()
+        {
+            return GetIntValue(ConfigParameterName.RouteBCPBatchSize);
         }
 
         #endregion

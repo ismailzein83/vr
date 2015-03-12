@@ -13,6 +13,7 @@
  xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
  xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -87,7 +88,19 @@
       <Variable x:TypeArguments="tbe:SuppliersCodes" Name="suppliersCodes" />
       <Variable x:TypeArguments="scg1:HashSet(x:Int32)" Name="saleZoneIds" />
       <Variable x:TypeArguments="scg1:HashSet(x:Int32)" Name="costZoneIds" />
+      <Variable x:TypeArguments="s:DateTime" Name="startTime">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
+      <vbw:WriteTrackingMessage.Message>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing of Code Group '{0}' started", CodePrefixGroup)</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Message>
+    </vbw:WriteTrackingMessage>
     <tla:GetCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCodes_2">
       <tla:GetCodes.ActiveSuppliers>
         <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
@@ -248,10 +261,18 @@
         </tla:BuildRoutes>
       </Sequence>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbCZQA/wBDgIBAVQLVGsCAQJbBYQBFAMB1QKFAQX6ARACAQ5eC15wAwGqA2gLaGkDAZ4DYwtjWAMBkgNtC21oAwGGA3wLfGkDAfoCcgtyWAMB7gKBAQuBAWkDAeICdwt3UgMB1gKJAQ2JAW8CAR+OAQ2OAW8CAQ+UAQe4AScDAeQBuQEH+QESAgEvlwENlwFiAwHFArABDbABdAMBtQKmAQ2mAYABAwGlApwBDZwBWgMBlQKrAQ2rAZMBAwGFArUBDbUBYwMB9QGhAQ2hAVQDAeUBugEJ3QEUAwGBAd4BCfgBGwIBMLsBC8sBJgMBswHMAQvcASYDAYIB9QEP9QFrAgFx8AEP8AFuAgFh5gEP5gGNAQIBUesBD+sBhQECAUHhAQ/hAWsCATHDARHDAV8DAdQByAERyAFnAwHEAb4BEb4BdQMBtAHUARHUAXUDAaMBzwERzwFfAwGTAdkBEdkBZwMBgwE=</sads:DebugSymbol.Symbol>
+    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+      <vbw:WriteTrackingMessage.Message>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing of Code Group '{0}' is done in {1}", CodePrefixGroup, (DateTime.Now - startTime))</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Message>
+    </vbw:WriteTrackingMessage>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbCtRA5ACDgIBAVULVWsCAQ9dC11XAgECYQVnIAMB7gNoBZEBFAMBhQOSAQWHAhACASqIAgWOAiACARxkC2SRAQMB7wNrC2twAwHhA3ULdWkDAdQDcAtwWAMBxwN6C3poAwG6A4kBC4kBaQMBrQN/C39YAwGgA44BC44BaQMBkwOEAQuEAVIDAYYDlgENlgFvAgE8mwENmwFvAgEroQEHxQEnAwGNAsYBB4YCEgIBTYsCC4sCtAECAR2kAQ2kAWIDAfQCvQENvQF0AwHjArMBDbMBgAEDAdICqQENqQFaAwHBArgBDbgBkwEDAbACwgENwgFjAwGfAq4BDa4BVAMBjgLHAQnqARQDAaQB6wEJhQIbAgFOyAEL2AEmAwHZAdkBC+kBJgMBpQGCAg+CAmsDAZMB/QEP/QFuAwGCAfMBD/MBjQECAXH4AQ/4AYUBAgFg7gEP7gFrAgFP0AER0AFfAwH8AdUBEdUBZwMB6wHLARHLAXUDAdoB4QER4QF1AwHIAdwBEdwBXwMBtwHmARHmAWcDAaYB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="930,22" />
       <sap2010:ViewStateData Id="GetCodes_2" sap:VirtualizedContainerService.HintSize="930,22" />
       <sap2010:ViewStateData Id="BuildCodeMatchByCodeGroup_1" sap:VirtualizedContainerService.HintSize="200,272" />
       <sap2010:ViewStateData Id="GetCustomerZoneRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -266,14 +287,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="930,318" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="952,504">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="952,628">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="992,584" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="992,708" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

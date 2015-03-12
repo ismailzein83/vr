@@ -64,7 +64,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(LoadZoneRatesFromRateInput inputArgument, AsyncActivityHandle handle)
         {
             RateManager rateManager = new RateManager();
-            rateManager.LoadCalculatedZoneRates(inputArgument.EffectiveTime, inputArgument.IsFuture, ConfigParameterManager.Current.GetLoadCalculatedRates(),
+            rateManager.LoadCalculatedZoneRates(inputArgument.EffectiveTime, inputArgument.IsFuture, ConfigParameterManager.Current.GetLoadCalculatedRatesBatchSize(),
                 (zoneRateBatch) =>
                 {
                     if (zoneRateBatch.IsSupplierZoneRateBatch)

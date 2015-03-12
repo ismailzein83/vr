@@ -32,12 +32,53 @@ namespace TOne.LCR.Data.SQL
             StringBuilder str = new StringBuilder();
             str.Append(routeOptions.IsBlock);
             str.Append("|");
-            foreach(var o in routeOptions.SupplierOptions)
+            if (routeOptions.SupplierOptions != null)
             {
-                str.AppendFormat("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, o.Percentage, o.Priority, o.IsBlocked, o.ServicesFlag);                
+                foreach (var o in routeOptions.SupplierOptions)
+                {
+                    str.AppendFormat("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, o.Percentage, o.Priority, o.IsBlocked, o.ServicesFlag);
+                }
             }
             return str.ToString();
         }
+
+        public class DBApplyPrepareInfo
+        {
+            public string FilePath { get; set; }
+            public System.IO.StreamWriter StreamWriter { get; set; }
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            string filePath = GetFilePathForBulkInsert();
+            return new DBApplyPrepareInfo
+            {
+                FilePath = filePath,
+                StreamWriter = new System.IO.StreamWriter(filePath)
+            };
+        }
+
+        public void WriteRouteToStream(RouteDetail routeDetail, object stream)
+        {
+            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
+            prepareInfo.StreamWriter.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
+                           routeDetail.Options != null ? Serialize(routeDetail.Options) : null);
+        }
+
+        public object FinishDBApplyStream(object stream)
+        {
+            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
+            prepareInfo.StreamWriter.Close();
+            prepareInfo.StreamWriter.Dispose();
+            return new BulkInsertInfo
+            {
+                TableName = "Route",
+                DataFilePath = prepareInfo.FilePath,
+                TabLock = true,
+                FieldSeparator = '^'
+            };
+        }
+
         public object PrepareRouteDetailsForDBApply(List<RouteDetail> routeDetails)
         {
             System.IO.StreamWriter wr = null;
@@ -48,8 +89,23 @@ namespace TOne.LCR.Data.SQL
                 {
                     foreach (var rd in routeDetails)
                     {
-                        wr.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag, 
+                        wr.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag,
                             rd.Options != null ? Serialize(rd.Options) : null);
+
+                        //wr.Write("{0}^{1}^{2}^{3: 0.00000}^{4}^", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag);
+                        ////if(rd.Options != null)
+                        ////{
+                        ////    wr.Write(rd.Options.IsBlock);
+                        ////    wr.Write("|");
+                        ////    if(rd.Options.SupplierOptions != null)
+                        ////    {
+                        ////        foreach (var o in rd.Options.SupplierOptions)
+                        ////        {
+                        ////            wr.Write("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, o.Percentage, o.Priority, o.IsBlocked, o.ServicesFlag);
+                        ////        }
+                        ////    }
+                        ////}
+                        //wr.WriteLine();
                     }
                 }
             }

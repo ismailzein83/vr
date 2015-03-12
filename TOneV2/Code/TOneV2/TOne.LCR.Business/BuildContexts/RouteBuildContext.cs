@@ -171,11 +171,11 @@ namespace TOne.LCR.Business
             return false;
         }
 
-        public void BuildLCR()
-        {
-            _route.Options = new RouteOptions();
-            _route.Options.SupplierOptions = _parentContext.GetLCROptions(_route.ServicesFlag).ToList();
-        }
+        //public void BuildLCR()
+        //{
+        //    _route.Options = new RouteOptions();
+        //    _route.Options.SupplierOptions = _parentContext.GetLCROptions(_route.ServicesFlag).ToList();
+        //}
 
         //public bool TryAddOptionFromLCR(out RouteSupplierOption option)
         //{
@@ -194,7 +194,7 @@ namespace TOne.LCR.Business
         //        return false;
         //}
 
-        public void ExecuteOptionsActions(int? nbOfOptions, bool onlyImportantFilters)
+        public void ExecuteOptionsActions(bool retrieveFromLCR, int? nbOfOptions, bool onlyImportantFilters)
         {
             int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
 
@@ -213,18 +213,20 @@ namespace TOne.LCR.Business
             _route.Options.SupplierOptions = new List<RouteSupplierOption>();
             do
             {
-                RouteSupplierOption current;
+                RouteSupplierOption current = null;
                 if (qInitialOptions.Count > 0)
                     current = qInitialOptions.Dequeue();
-                else
+                else if (retrieveFromLCR)
                     current = _parentContext.GetNextOptionInLCR();
                 if (current == null)
+                    break;
+                if (!onlyImportantFilters && current.Rate > _route.Rate)
                     break;
                 RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this);
                 bool removeOption;
                 optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, current, out removeOption);
 
-                if (!removeOption || !current.IsBlocked)
+                if (!removeOption && !current.IsBlocked)
                     validOptions++;
                 if (!removeOption)
                     _route.Options.SupplierOptions.Add(current);

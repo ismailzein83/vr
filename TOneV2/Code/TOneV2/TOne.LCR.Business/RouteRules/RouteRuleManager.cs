@@ -20,7 +20,7 @@ namespace TOne.LCR.Business
         {
             ActionExecutionStep<BaseRouteAction> blockStep = new ActionExecutionStep<BaseRouteAction> { Action = new BlockRouteAction(), IsEndAction = true };
             ActionExecutionStep<BaseRouteAction> overrideStep = new ActionExecutionStep<BaseRouteAction> { Action = new OverrideRouteAction(), IsEndAction = true };
-            ActionExecutionStep<BaseRouteAction> buildLCRStep = new ActionExecutionStep<BaseRouteAction> { Action = new BuildLCRRouteAction() };
+            //ActionExecutionStep<BaseRouteAction> buildLCRStep = new ActionExecutionStep<BaseRouteAction> { Action = new BuildLCRRouteAction() };
             ActionExecutionStep<BaseRouteAction> priorityStep = new ActionExecutionStep<BaseRouteAction> { Action = new PriorityRouteAction() };
             ActionExecutionStep<BaseRouteAction> getTopOptionsStep = new ActionExecutionStep<BaseRouteAction> { Action = new GetTopOptionsRouteAction() };
             ActionExecutionStep<BaseRouteAction> checkNoOptionsStep = new ActionExecutionStep<BaseRouteAction> { Action = new CheckNoOptionsRouteAction() };
@@ -28,10 +28,10 @@ namespace TOne.LCR.Business
 
             ActionExecutionPath<BaseRouteAction> executionPath = new ActionExecutionPath<BaseRouteAction> { FirstStep = blockStep };
             blockStep.NextStep = overrideStep;
-            overrideStep.NextStep = buildLCRStep;
-            buildLCRStep.NextStep = priorityStep;
-            priorityStep.NextStep = getTopOptionsStep;
-            getTopOptionsStep.NextStep = checkNoOptionsStep;
+            overrideStep.NextStep = getTopOptionsStep;
+            getTopOptionsStep.NextStep = priorityStep;
+            //priorityStep.NextStep = getTopOptionsStep;
+            priorityStep.NextStep = checkNoOptionsStep;
             checkNoOptionsStep.NextStep = applyPercentageStep;
             return executionPath;
         }

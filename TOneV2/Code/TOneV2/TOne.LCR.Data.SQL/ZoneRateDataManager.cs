@@ -99,17 +99,18 @@ namespace TOne.LCR.Data.SQL
             DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
             //allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
             allSupplierZoneRates.RatesByZoneId = new Dictionary<int, RateInfo>();
-
+            List<RateInfo> zoneRates = new List<RateInfo>();
             ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier"),
                  (reader) =>
                  {
                      while (reader.Read())
                      {
-
-                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
-                         string carrierID = reader["SupplierID"] as string;
-                         decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
-                         short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
+                         var rate = new RateInfo
+                         {
+                             ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                             Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
+                             ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag")
+                         };
 
                          //ZoneRates supplierRates;
                          //if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
@@ -122,8 +123,11 @@ namespace TOne.LCR.Data.SQL
                          //if (!supplierRates.ZonesRates.ContainsKey(zoneID))
                          //    supplierRates.ZonesRates.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
 
-                         if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(zoneID))
-                             allSupplierZoneRates.RatesByZoneId.Add(zoneID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+                         if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(rate.ZoneId))
+                         {
+                             allSupplierZoneRates.RatesByZoneId.Add(rate.ZoneId, rate);
+                             zoneRates.Add(rate);
+                         }
                      }
 
                  },
@@ -135,7 +139,7 @@ namespace TOne.LCR.Data.SQL
                     dtPrm.Value = dtZoneIds;
                     cmd.Parameters.Add(dtPrm);
                 });
-
+            allSupplierZoneRates.OrderedRates = zoneRates.OrderBy(itm => itm.Rate).ToArray();
             return allSupplierZoneRates;
 
         }

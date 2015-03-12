@@ -117,11 +117,11 @@ namespace TOne.LCR.Data.SQL
                                                     CREATE TABLE [Route](
 	                                                   
 	                                                    [CustomerID] [varchar](5) NOT NULL,
-	                                                    [Code] [varchar](15) NULL,
+	                                                    [Code] [varchar](30) NULL,
 	                                                    [OurZoneID] [int] NULL,
 	                                                    [OurActiveRate] [decimal](18,5) NULL,
 	                                                    [OurServicesFlag] [smallint] NULL,
-	                                                    [Options] varchar(max)
+	                                                    [Options] varchar(500)
                                                     )
 
                                                     CREATE TYPE [SuppliersCodeInfoType] AS TABLE(

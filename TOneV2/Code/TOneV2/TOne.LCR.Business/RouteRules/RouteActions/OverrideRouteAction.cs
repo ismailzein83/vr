@@ -26,7 +26,7 @@ namespace TOne.LCR.Business
             RouteActionResult rslt = new RouteActionResult();
 
             BuildRouteFromOverrideOptions(context, overrideActionData.Options);
-            context.ExecuteOptionsActions(null, false);
+            context.ExecuteOptionsActions(false, null, false);
             if(context.Route.Options.SupplierOptions.Count == 0)
             {
                 switch(overrideActionData.NoOptionAction)
@@ -34,13 +34,13 @@ namespace TOne.LCR.Business
                     case OverrideRouteNoOptionAction.None:
                         break;
                     case OverrideRouteNoOptionAction.SwitchToLCR:
-                        rslt.NextActionType = typeof(BuildLCRRouteAction);
+                        rslt.NextActionType = typeof(GetTopOptionsRouteAction);
                         break;
                     case OverrideRouteNoOptionAction.BackupRoute:
                         if (overrideActionData.BackupOptions != null)
                         {
                             BuildRouteFromOverrideOptions(context, overrideActionData.BackupOptions);
-                            context.ExecuteOptionsActions(null, true);
+                            context.ExecuteOptionsActions(false, null, true);
                         }
                         break;
                 }

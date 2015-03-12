@@ -14,5 +14,11 @@ namespace TOne.LCR.Data
         void ApplyRouteDetailsToDB(Object preparedRouteDetails);
 
         void CreateIndexesOnTable();
+
+        object InitialiazeStreamForDBApply();
+
+        void WriteRouteToStream(RouteDetail routeDetail, object stream);
+
+        object FinishDBApplyStream(object stream);
     }
 }

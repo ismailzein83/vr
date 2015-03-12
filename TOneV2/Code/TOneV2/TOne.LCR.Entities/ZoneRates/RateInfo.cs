@@ -8,6 +8,8 @@ namespace TOne.LCR.Entities
 {
     public class RateInfo
     {
+        public int ZoneId { get; set; }
+
         public decimal Rate { get; set; }
 
         public short ServicesFlag { get; set; }

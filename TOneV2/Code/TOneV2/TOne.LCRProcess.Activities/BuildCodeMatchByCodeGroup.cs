@@ -81,17 +81,23 @@ namespace TOne.LCRProcess.Activities
 
         protected override void DoWork(BuildCodeMatchByCodeGroupInput inputArgument, AsyncActivityHandle handle)
         {
-
-            DateTime start = DateTime.Now;
-
-
             CodeList distinctCodesList = new CodeList(inputArgument.DistinctCodes);
-            int codeMatchCount = 0;
-
-            List<CodeMatch> codeMatches = new List<CodeMatch>();
-            int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
+            
+            //MemoryQueue<List<CodeMatch>> outputQueue = inputArgument.OutputQueue as MemoryQueue<List<CodeMatch>>;
+            //MemoryQueue<SingleDestinationCodeMatches> outputQueueForRouting = inputArgument.OutputQueueForRouting as MemoryQueue<SingleDestinationCodeMatches>;
+            //if(outputQueue != null)
+            //{
+            //    while (outputQueue.Count > 3)
+            //        System.Threading.Thread.Sleep(1000);
+            //}
+            //if (outputQueueForRouting != null)
+            //{
+            //    while (outputQueueForRouting.Count > 1000)
+            //        System.Threading.Thread.Sleep(1000);
+            //}
             foreach (var dCode in distinctCodesList.CodesWithPossibleMatches)
             {
+                List<CodeMatch> codeMatches = new List<CodeMatch>();
                 SingleDestinationCodeMatches singleDestinationCodeMatches = new SingleDestinationCodeMatches
                 {
                     RouteCode = dCode.Key,
@@ -124,18 +130,8 @@ namespace TOne.LCRProcess.Activities
                     while (supplierMatch == null && index < dCode.Value.Count);
                 }
                 inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
-                if (codeMatches.Count > bcpBatchSize)
-                {
-                    inputArgument.OutputQueue.Enqueue(codeMatches);
-                    codeMatchCount += codeMatches.Count;
-                    codeMatches = new List<CodeMatch>();
-                }
-            }
-
-            if (codeMatches.Count > 0)
                 inputArgument.OutputQueue.Enqueue(codeMatches);
-
-            codeMatchCount += codeMatches.Count;
+            }           
         }
     }
 }

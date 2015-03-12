@@ -79,6 +79,12 @@ namespace TOne.LCRProcess.Activities
                             }
                         }
                     });
+                    //MemoryQueue<RouteDetailBatch> outputQueue = inputArgument.OutputQueue as MemoryQueue<RouteDetailBatch>;
+                    // if (outputQueue != null)
+                    // {
+                    //     while (outputQueue.Count > 1000)
+                    //         System.Threading.Thread.Sleep(1000);
+                    // }
                 }
                 while (!ShouldStop(handle) && hasItem);
             });

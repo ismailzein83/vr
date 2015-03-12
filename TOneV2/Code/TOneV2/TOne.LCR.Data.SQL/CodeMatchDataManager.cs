@@ -12,6 +12,42 @@ namespace TOne.LCR.Data.SQL
 {
     public class CodeMatchDataManager : RoutingDataManager, ICodeMatchDataManager
     {
+        public class DBApplyPrepareInfo
+        {
+            public string FilePath { get; set; }
+            public System.IO.StreamWriter StreamWriter { get; set; }
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            string filePath = GetFilePathForBulkInsert();
+            return new DBApplyPrepareInfo
+            {
+                FilePath = filePath,
+                StreamWriter = new System.IO.StreamWriter(filePath)
+            };
+        }
+
+        public void WriteCodeMatchToStream(CodeMatch codeMatch, object stream)
+        {
+            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
+            prepareInfo.StreamWriter.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", codeMatch.Code, codeMatch.SupplierId, codeMatch.SupplierCode, codeMatch.SupplierCodeId, codeMatch.SupplierZoneId));
+        }
+
+        public object FinishDBApplyStream(object stream)
+        {
+            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
+            prepareInfo.StreamWriter.Close();
+            prepareInfo.StreamWriter.Dispose();
+            return new BulkInsertInfo
+            {
+                TableName = "CodeMatch",
+                DataFilePath = prepareInfo.FilePath,
+                TabLock = true,
+                FieldSeparator = '^'
+            };
+        }
+
         public Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches)
         {
             System.IO.StreamWriter wr = null;

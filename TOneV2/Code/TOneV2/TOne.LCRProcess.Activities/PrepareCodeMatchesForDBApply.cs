@@ -59,32 +59,71 @@ namespace TOne.LCRProcess.Activities
             int bcpBatchSize = ConfigParameterManager.Current.GetBCPBatchSize();
             ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
             dataManager.DatabaseId = inputArgument.RoutingDatabaseId;
-            List<CodeMatch> codeMatchesBatch = new List<CodeMatch>();
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+
+            System.Threading.Tasks.Parallel.For(0, 3, (i) =>
             {
-                bool hasItem = false;
-                do
+                object dbApplyStream = null;
+                int addedCodeMatchesToStream = 0;
+                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
+                    bool hasItems = false;
+                    do
+                    {
+                        hasItems = inputArgument.InputQueue.TryDequeue(
                         (codeMatches) =>
                         {
-                            codeMatchesBatch.AddRange(codeMatches);
-                            if (codeMatchesBatch.Count >= bcpBatchSize)
+                            if (dbApplyStream == null)
+                                dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+                            foreach (var cm in codeMatches)
                             {
-                                Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
+                                dataManager.WriteCodeMatchToStream(cm, dbApplyStream);
+                                addedCodeMatchesToStream++;
+                            }
+                            if (addedCodeMatchesToStream >= bcpBatchSize)
+                            {
+
+                                Object preparedCodeMatches = dataManager.FinishDBApplyStream(dbApplyStream);
                                 inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
-                                codeMatchesBatch = new List<CodeMatch>();
+                                dbApplyStream = null;
+                                addedCodeMatchesToStream = 0;
                             }
                         });
+                    } while (!ShouldStop(handle) && hasItems);
+                });
+                if (addedCodeMatchesToStream > 0)
+                {
+                    Object preparedCodeMatches = dataManager.FinishDBApplyStream(dbApplyStream);
+                    inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
                 }
-                while (!ShouldStop(handle) && hasItem);
-
             });
-            if (codeMatchesBatch.Count > 0)
-            {
-                Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
-                inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
-            }
+
+
+            //List<CodeMatch> codeMatchesBatch = new List<CodeMatch>();
+            //DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            //{
+            //    bool hasItem = false;
+            //    do
+            //    {
+            //        hasItem = inputArgument.InputQueue.TryDequeue(
+            //            (codeMatches) =>
+            //            {
+            //                codeMatchesBatch.AddRange(codeMatches);
+            //                if (codeMatchesBatch.Count >= bcpBatchSize)
+            //                {
+            //                    Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
+            //                    inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
+            //                    codeMatchesBatch = new List<CodeMatch>();
+            //                }
+            //            });
+            //    }
+            //    while (!ShouldStop(handle) && hasItem);
+
+            //});
+            //if (codeMatchesBatch.Count > 0)
+            //{
+            //    Object preparedCodeMatches = dataManager.PrepareCodeMatchesForDBApply(codeMatchesBatch);
+            //    inputArgument.OutputQueue.Enqueue(preparedCodeMatches);
+            //}
         }
     }
 }

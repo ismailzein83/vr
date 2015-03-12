@@ -12,5 +12,11 @@ namespace TOne.LCR.Data
         void ApplyCodeMatchesToDB(Object preparedCodeMatches);
 
         void CreateIndexesOnTable();
+
+        object InitialiazeStreamForDBApply();
+
+        void WriteCodeMatchToStream(CodeMatch codeMatch, object stream);
+
+        object FinishDBApplyStream(object stream);
     }
 }
