@@ -534,5 +534,40 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailyProfileNew");
         }
+    
+        public virtual int db_FillDailySubscriberValuesNew()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillDailySubscriberValuesNew");
+        }
+    
+        public virtual int db_FillHourlySubscriberValuesNew()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_FillHourlySubscriberValuesNew");
+        }
+    
+        public virtual int db_findSuspectionOccuranceNew(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId, string suspectionList, Nullable<int> minimumOccurance)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("fromDate", fromDate) :
+                new ObjectParameter("fromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("strategyId", strategyId) :
+                new ObjectParameter("strategyId", typeof(int));
+    
+            var suspectionListParameter = suspectionList != null ?
+                new ObjectParameter("SuspectionList", suspectionList) :
+                new ObjectParameter("SuspectionList", typeof(string));
+    
+            var minimumOccuranceParameter = minimumOccurance.HasValue ?
+                new ObjectParameter("MinimumOccurance", minimumOccurance) :
+                new ObjectParameter("MinimumOccurance", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_findSuspectionOccuranceNew", fromDateParameter, toDateParameter, strategyIdParameter, suspectionListParameter, minimumOccuranceParameter);
+        }
     }
 }

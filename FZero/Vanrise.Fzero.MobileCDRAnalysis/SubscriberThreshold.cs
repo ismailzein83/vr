@@ -17,21 +17,21 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int Id { get; set; }
         public Nullable<System.DateTime> DateDay { get; set; }
         public string SubscriberNumber { get; set; }
-        public Nullable<int> Criteria1 { get; set; }
-        public Nullable<int> Criteria2 { get; set; }
-        public Nullable<int> Criteria3 { get; set; }
-        public Nullable<int> Criteria4 { get; set; }
-        public Nullable<int> Criteria5 { get; set; }
-        public Nullable<int> Criteria6 { get; set; }
-        public Nullable<int> Criteria7 { get; set; }
-        public Nullable<int> Criteria8 { get; set; }
-        public Nullable<int> Criteria9 { get; set; }
-        public Nullable<int> Criteria10 { get; set; }
-        public Nullable<int> Criteria11 { get; set; }
-        public Nullable<int> Criteria12 { get; set; }
-        public Nullable<int> Criteria13 { get; set; }
-        public Nullable<int> Criteria14 { get; set; }
-        public Nullable<int> Criteria15 { get; set; }
+        public Nullable<decimal> Criteria1 { get; set; }
+        public Nullable<decimal> Criteria2 { get; set; }
+        public Nullable<decimal> Criteria3 { get; set; }
+        public Nullable<decimal> Criteria4 { get; set; }
+        public Nullable<decimal> Criteria5 { get; set; }
+        public Nullable<decimal> Criteria6 { get; set; }
+        public Nullable<decimal> Criteria7 { get; set; }
+        public Nullable<decimal> Criteria8 { get; set; }
+        public Nullable<decimal> Criteria9 { get; set; }
+        public Nullable<decimal> Criteria10 { get; set; }
+        public Nullable<decimal> Criteria11 { get; set; }
+        public Nullable<decimal> Criteria12 { get; set; }
+        public Nullable<decimal> Criteria13 { get; set; }
+        public Nullable<decimal> Criteria14 { get; set; }
+        public Nullable<decimal> Criteria15 { get; set; }
         public Nullable<int> SuspectionLevelId { get; set; }
         public Nullable<int> StrategyId { get; set; }
         public Nullable<int> PeriodId { get; set; }

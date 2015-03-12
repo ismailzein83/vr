@@ -672,21 +672,21 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="DateDay" Type="datetime" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
-          <Property Name="Criteria1" Type="int" />
-          <Property Name="Criteria2" Type="int" />
-          <Property Name="Criteria3" Type="int" />
-          <Property Name="Criteria4" Type="int" />
-          <Property Name="Criteria5" Type="int" />
-          <Property Name="Criteria6" Type="int" />
-          <Property Name="Criteria7" Type="int" />
-          <Property Name="Criteria8" Type="int" />
-          <Property Name="Criteria9" Type="int" />
-          <Property Name="Criteria10" Type="int" />
-          <Property Name="Criteria11" Type="int" />
-          <Property Name="Criteria12" Type="int" />
-          <Property Name="Criteria13" Type="int" />
-          <Property Name="Criteria14" Type="int" />
-          <Property Name="Criteria15" Type="int" />
+          <Property Name="Criteria1" Type="decimal" Scale="2" />
+          <Property Name="Criteria2" Type="decimal" Scale="2" />
+          <Property Name="Criteria3" Type="decimal" Scale="2" />
+          <Property Name="Criteria4" Type="decimal" Scale="2" />
+          <Property Name="Criteria5" Type="decimal" Scale="2" />
+          <Property Name="Criteria6" Type="decimal" Scale="2" />
+          <Property Name="Criteria7" Type="decimal" Scale="2" />
+          <Property Name="Criteria8" Type="decimal" Scale="2" />
+          <Property Name="Criteria9" Type="decimal" Scale="2" />
+          <Property Name="Criteria10" Type="decimal" Scale="2" />
+          <Property Name="Criteria11" Type="decimal" Scale="2" />
+          <Property Name="Criteria12" Type="decimal" Scale="2" />
+          <Property Name="Criteria13" Type="decimal" Scale="2" />
+          <Property Name="Criteria14" Type="decimal" Scale="2" />
+          <Property Name="Criteria15" Type="decimal" Scale="2" />
           <Property Name="SuspectionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="PeriodId" Type="int" />
@@ -1221,6 +1221,7 @@
           <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="db_FillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillDailySubscriberValuesNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyMobileProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_FillHourlyProfileNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -1228,7 +1229,15 @@
           <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="db_FillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_FillHourlySubscriberValuesNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="db_findSuspectionOccurance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="strategyId" Type="int" Mode="In" />
+          <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
+          <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
+        </Function>
+        <Function Name="db_findSuspectionOccuranceNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="strategyId" Type="int" Mode="In" />
@@ -1459,6 +1468,7 @@
           <FunctionImport Name="db_FillHourlySubscriberThresholds">
           <Parameter Name="StrategyId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="db_FillDailyProfileNew" />
           <EntitySet Name="CDRs" EntityType="Model.CDR" />
           <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
@@ -1632,7 +1642,15 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="db_FillDailyProfileNew" />
+          <FunctionImport Name="db_FillDailySubscriberValuesNew" />
+          <FunctionImport Name="db_FillHourlySubscriberValuesNew" />
+          <FunctionImport Name="db_findSuspectionOccuranceNew">
+            <Parameter Name="fromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="strategyId" Mode="In" Type="Int32" />
+            <Parameter Name="SuspectionList" Mode="In" Type="String" />
+            <Parameter Name="MinimumOccurance" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="db_GetReportedNumberNormalCDR_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2180,21 +2198,21 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="DateTime" Name="DateDay" Precision="3" />
           <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="Criteria1" />
-          <Property Type="Int32" Name="Criteria2" />
-          <Property Type="Int32" Name="Criteria3" />
-          <Property Type="Int32" Name="Criteria4" />
-          <Property Type="Int32" Name="Criteria5" />
-          <Property Type="Int32" Name="Criteria6" />
-          <Property Type="Int32" Name="Criteria7" />
-          <Property Type="Int32" Name="Criteria8" />
-          <Property Type="Int32" Name="Criteria9" />
-          <Property Type="Int32" Name="Criteria10" />
-          <Property Type="Int32" Name="Criteria11" />
-          <Property Type="Int32" Name="Criteria12" />
-          <Property Type="Int32" Name="Criteria13" />
-          <Property Type="Int32" Name="Criteria14" />
-          <Property Type="Int32" Name="Criteria15" />
+          <Property Type="Decimal" Name="Criteria1" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria2" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria3" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria4" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria5" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria6" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria7" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria8" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria9" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria10" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria11" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria12" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria13" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria14" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Criteria15" Precision="18" Scale="2" />
           <Property Type="Int32" Name="SuspectionLevelId" />
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Int32" Name="PeriodId" />
@@ -2814,6 +2832,7 @@
           <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValues" FunctionName="Model.Store.db_FillDailySubscriberValues" />
           <FunctionImportMapping FunctionImportName="db_FillHourlyProfileNew" FunctionName="Model.Store.db_FillHourlyProfileNew" />
           <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberThresholds" FunctionName="Model.Store.db_FillHourlySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="db_FillDailyProfileNew" FunctionName="Model.Store.db_FillDailyProfileNew" />
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="Model.CDR">
               <MappingFragment StoreEntitySet="CDR">
@@ -3439,7 +3458,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="db_FillDailyProfileNew" FunctionName="Model.Store.db_FillDailyProfileNew" />
+          <FunctionImportMapping FunctionImportName="db_FillDailySubscriberValuesNew" FunctionName="Model.Store.db_FillDailySubscriberValuesNew" />
+          <FunctionImportMapping FunctionImportName="db_FillHourlySubscriberValuesNew" FunctionName="Model.Store.db_FillHourlySubscriberValuesNew" />
+          <FunctionImportMapping FunctionImportName="db_findSuspectionOccuranceNew" FunctionName="Model.Store.db_findSuspectionOccuranceNew" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
