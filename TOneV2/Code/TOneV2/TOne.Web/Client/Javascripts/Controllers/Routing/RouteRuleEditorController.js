@@ -9,15 +9,7 @@
         $('.dropdown').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
-
-        var popoverTemplate = [
-        ].join('');
-
-        $scope.tooltip = {
-            title: 'fffff',
-            html: true,
-            template: 'popoverTemp.html'
-        };       
+        
         var dropdownHidingTimeoutHandler;
 
         $('.dropdown-custom').on('mouseenter', function () {
@@ -40,6 +32,9 @@
             e.preventDefault();
             e.stopPropagation();
         }
+        $scope.update = function (val,model) {            
+            $scope[model] = val;
+        }       
         $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
            {
                params: {
@@ -49,6 +44,12 @@
        .success(function (response) {
            $scope.customers = response;
        });
+        $scope.ruletype = { name: 'Select ..', url: '' }
+        $scope.templates = [  
+            { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', ctrl: 'RouteOverrideController' },
+            { name: 'Block Route', url: '' },
+            { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html' }
+        ]
         $scope.selectedCustomers = [];
         $scope.selectCustomer = function ($event, c) {
             $event.preventDefault();
@@ -82,51 +83,7 @@
                 label = label.substring(0, 20) + "..";
             return label;
         };
-        $scope.getSelectSuppliersText = function () {
-            var label;
-            if ($scope.selectedSuppliers.length == 0)
-                label = "Select Suppliers...";
-            else if ($scope.selectedSuppliers.length == 1)
-                label = $scope.selectedSuppliers[0].Name;
-            else if ($scope.selectedSuppliers.length == 2)
-                label = $scope.selectedSuppliers[0].Name + "," + $scope.selectedSuppliers[1].Name;
-            else if ($scope.selectedSuppliers.length == 3)
-                label = $scope.selectedSuppliers[0].Name + "," + $scope.selectedSuppliers[1].Name + "," + $scope.selectedSuppliers[2].Name;
-            else
-                label = $scope.selectedSuppliers.length + " Suppliers selected";
-            if (label.length > 21)
-                label = label.substring(0, 20) + "..";
-            return label;
-        };
-        
-        // 
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-          {
-              params: {
-                  carrierType: 2
-              }
-          })
-      .success(function (response) {
-          $scope.suppliers = response;
-      });
-        $scope.selectedSuppliers = [];
-        $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
-        $scope.selectSupplier = function ($event, s) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            var index = null;
-            try {
-                var index = $scope.selectedSuppliers.indexOf(s);
-            }
-            catch (e) {
-
-            }
-            if (index >= 0) {
-                $scope.selectedSuppliers.splice(index, 1);
-            }
-            else
-                $scope.selectedSuppliers.push(s);
-        };
+       
 
         $scope.selectedZones = [];
         $scope.Zones = [];
@@ -183,8 +140,7 @@
             else
                 $scope.selectedZones.push(s);
         };
-
-
+       // $scope.texttest = {label:''};
         $scope.findExsite = function (arr, value, attname) {
             var index = -1;
             for (var i = 0; i < arr.length; i++) {
@@ -195,3 +151,4 @@
             return index;
         }
     });
+

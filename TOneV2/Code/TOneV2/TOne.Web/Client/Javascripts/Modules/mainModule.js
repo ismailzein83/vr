@@ -7,6 +7,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     var protocol = pathArray[0];
     var host = pathArray[2];
     $scope.baseurl = protocol + '//' + host;
+    $scope.carrierAccountSelectionOption = 1;
     
 });
 angular.module('mainModule')
@@ -21,5 +22,13 @@ angular.module('mainModule')
     angular.extend($datepickerProvider.defaults, {
         dateFormat: 'dd/MM/yyyy',
         startWeek: 1
+    });
+})
+.config(function ($popoverProvider) {
+    angular.extend($popoverProvider.defaults, {
+        animation: 'am-flip-x',
+        trigger: 'hover',
+        autoClose:true,
+        delay: { show:1 , hide: 100000 }
     });
 })

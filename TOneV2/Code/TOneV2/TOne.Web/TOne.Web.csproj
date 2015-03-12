@@ -186,6 +186,8 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
@@ -195,8 +197,10 @@
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
+    <Content Include="Client\Libraries\Angular\angular-sanitize.js" />
     <Content Include="Client\Libraries\Angular\angular-strap.js" />
     <Content Include="Client\Libraries\Angular\angular-strap.tpl.js" />
+    <Content Include="Client\Libraries\Angular\angular-ui-switch.js" />
     <Content Include="Client\Libraries\Angular\angular.js" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.html" />
@@ -211,6 +215,8 @@
     <Content Include="Client\Libraries\Angular\ng-sortable.js" />
     <Content Include="Client\Libraries\Angular\sortable-old.js" />
     <Content Include="Client\Libraries\Angular\Sortable.js" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.css" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.js" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
@@ -429,6 +435,7 @@
     <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
+    <Content Include="Client\Styles\angular-ui-switch.css" />
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
@@ -436,6 +443,7 @@
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />
     <Content Include="Client\Templates\Views\vr-gridview-v1.html" />
     <Content Include="Client\Views\ChartPrototypes\AMChart.html" />
     <Content Include="Client\Views\ChartPrototypes\CanvasJSChart.html" />
@@ -444,7 +452,8 @@
     <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
-    <Content Include="Client\Views\Routing\popoverTemp.html" />
+    <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
+    <Content Include="popoverTemp.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
     <Content Include="Client\Views\TestView.html" />

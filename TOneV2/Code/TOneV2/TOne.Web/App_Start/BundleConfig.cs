@@ -37,9 +37,11 @@ namespace TOne.Web
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/Angular/angular.js",
                "~/Client/Libraries/Angular/angular-route.js",
+               "~/Client/Libraries/Angular/angular-sanitize.js",              
                 "~/Client/Libraries/Angular/angular-strap.js",
                "~/Client/Libraries/Angular/angular-strap.tpl.js",
               "~/Client/Libraries/Angular/sortable.js",
+               "~/Client/Libraries/Angular/angular-ui-switch.js",
               "~/Client/Libraries/Angular/ng-sortable.js"));
 
             //Bootstrap
