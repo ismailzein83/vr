@@ -39,7 +39,7 @@
                         <div class="dropdown">
                             <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='routetype' ng-init="routetype = 'Customer'">
                                 <!--<label style=" display: inline-block; padding:2px 5px;  position: absolute; left: 0; top: 0; height: 100%; line-height: 2; }">By</label>-->
-                                <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px;border-style: dashed;border-color: #BABABA; border-bottom-left-radius: 4px; padding: 5px; ">
+                                <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">
                                     By {{routetype}}<span style="float:right;top:8px;position:relative" class="caret"></span>
                                 </label>
                             </label>
@@ -76,7 +76,6 @@
                     </div>
                 </div>
                 <div class="col-lg-2  style-col">
-
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span style="float:left;margin:0px"> {{getSelectCustomerText()}}</span>
@@ -126,85 +125,23 @@
                 <div style="position:relative">
                     <div style="position:absolute;right:-10px;top:-16px;z-index:100">
                         <div class="dropdown">
-                            <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='zonetype' ng-init="zonetype = 'Zone'">
-                                <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px;border-style: dashed;border-color: #BABABA; border-bottom-left-radius: 4px; padding: 5px; ">
-                                    By {{zonetype}}<span style="float:right;top:8px;position:relative" class="caret"></span>
+                            <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='zonetype'>
+                                <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px; border-style: solid; border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">
+                                    By {{editortype.name}}<span style="float:right;top:8px;position:relative" class="caret"></span>
                                 </label>
                             </label>
                             <ul class="dropdown-menu dropdown-menu-custom menu-right" role="menu" aria-labelledby="dropdownZoneType" ng-mouseenter="muteaction($event);">
                                 <li role="presentation">
-                                    <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="zonetype = 'Zone'" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Zone</div>
-                                    </div>
-                                    <div class="mark-select " ng-mouseenter="muteaction($event);" ng-click="zonetype = 'Code'" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">Code</div>
+                                    <div ng-repeat="e in editorTemplates" class="mark-select " ng-mouseenter="muteaction($event);" ng-click="update(e,'editortype')" style="display: block;padding:2px; margin:2px; white-space: normal;">
+                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{e.name}}</div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2  style-col">
-                    <div class="dropdown dropdown-custom">
-                        <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption' ng-init="zoneSelectionOption = 1">
-                            {{zoneSelectionOption == 1 ? "  Zones: " : "  All Zones Except:"}}
-                        </label>
-                        <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuZo">
-                            <li role="presentation" ng-show="zoneSelectionOption != 1">
-                                <label class="item-menu hand-cursor" ng-click="zoneSelectionOption = 1">Zones</label>
-                            </li>
-                            <li role="presentation" ng-show="zoneSelectionOption != 2">
-                                <label class="item-menu hand-cursor" ng-click="zoneSelectionOption = 2"> All Zones Except</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2  style-col">
-
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
-                            <label style="float:left;margin:0px"> {{getSelectZoneText()}}</label>
-                            <span style="float:right;position:relative;top:10px" class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuZ" ng-class="selectedZones.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
-                            <li role="presentation" ng-click="muteAction($event)">
-                                <div style="display: inline-block; width: 220px;">
-                                    <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
-                                        <div class="inner-addon right-addon">
-                                            <i class="glyphicon icon-loader" ng-show="showloading"></i>
-                                            <input class="form-control input-sm" type="text" placeholder="Type 2 characters.." ng-model="filterzone" ng-keyup="searchZones()">
-                                        </div>
-                                    </div>
-                                    <div ng-show="filterzone.length < 2">Please type {{2 - filterzone.length}} character(s)..</div>
-                                    <div ng-show="showloading">Loading..</div>
-                                    <div style="height: 225px; overflow: auto; margin-top: 5px">
-                                        <div class="mark-select " ng-click="selectZone($event, c)" ng-attr-title="{{c.Name}}" ng-repeat="c in zones" style="display: block;padding:3px 2px 0px 2px; margin:2px; white-space: normal;" ng-class="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1 ?'selected':'' ">
-                                            <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                            <div style="display:inline-block;float:right" ng-show="findExsite(selectedZones, c.ZoneId, 'ZoneId') > -1 ">✔</div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="selectedZones.length > 0">
-                                    <div style="padding:5px ;">
-                                        Selected Zones:
-                                        <a href="" class="link" style="position: absolute; right: 5px;" ng-click="muteAction($event);selectedZones.length = 0">
-                                            Clear all
-                                            <i class="glyphicon glyphicon-trash hand-cursor "></i>
-                                        </a>
-                                    </div>
-                                    <div style="height: 225px; overflow: auto;padding-top:5px">
-                                        <span class="label custom-label" ng-repeat="obj in selectedZones">
-                                            {{obj.Name}}
-                                            <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectZone($event,obj)"></span>
-                                        </span>
-                                    </div>
-
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <div ng-include src="editortype.url">
+                </div>               
             </div>
             <div class="row style-row">
                 <div class="col-lg-2  style-col">

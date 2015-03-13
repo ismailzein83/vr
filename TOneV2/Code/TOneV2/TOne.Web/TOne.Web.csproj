@@ -186,6 +186,7 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
@@ -443,6 +444,11 @@
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />
     <Content Include="Client\Templates\Views\vr-gridview-v1.html" />
     <Content Include="Client\Views\ChartPrototypes\AMChart.html" />

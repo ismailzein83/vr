@@ -9,6 +9,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $scope.baseurl = protocol + '//' + host;
     $scope.carrierAccountSelectionOption = 1;
     
+    $scope.findExsite = function (arr, value, attname) {
+        var index = -1;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i][attname] == value) {
+                index = i
+            }
+        }
+        return index;
+    }
 });
 angular.module('mainModule')
 .config(function ($timepickerProvider) {

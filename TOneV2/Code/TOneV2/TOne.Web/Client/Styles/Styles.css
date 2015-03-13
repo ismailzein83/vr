@@ -117,7 +117,7 @@
     display:inline-block !important;
 }
 .panel-over-color{
-    border-color: transparent !important;
+    border:0px;
     background-color:#fff;
 }
 .action-bar{
@@ -153,7 +153,8 @@
 }
 .style-row{
     padding: 10px;
-    border-bottom: 1px dashed #BABABA;
+    border-bottom: 1px solid #F0F0F0;
+    
 } 
 .emptycol{
     display:none;
