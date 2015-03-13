@@ -77,21 +77,21 @@ function waitAlert(msg) {
     showAlertBootStrapMsg("attention", msg, true);
 }
 function hideWaitAlert() {
-    $(".attention").hide();
+    $(".attention").fadeOut('slow');
     $('#notification').html('');
 }
 function showAlertBootStrapMsg(type, msg, wait) {
     $('#notification').html('<div class="alert ' + type + '" style="display: none;"> ' + msg + '  <img src="images/alert/close.png" alt="" class="close" data-dismiss="alert" ></div>');
-    $("." + type).show('slow');
+    $("." + type).fadeIn('slow');
     if (!wait) {
         setTimeout(function () {
-            $("." + type).delay(500).hide('slow');
+            $("." + type).fadeOut('slow');
             $('#notification').html('');
         }, 7000);
     }
     else {
         setTimeout(function () {
-            $("." + type).delay(500).hide('slow');
+            $("." + type).fadeOut('slow');
             $('#notification').html('');
         }, wait);
 
