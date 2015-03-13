@@ -56,6 +56,7 @@
     <Compile Include="CellProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\CallsStatistics.cs" />
     <Compile Include="Classes\EmailReceiverType.cs" />
     <Compile Include="Classes\Import.cs" />
     <Compile Include="Classes\PredefinedColumn.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="Classes\SourceMapping.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserPermission.cs" />
-    <Compile Include="Classes\CallsStatistics.cs" />
     <Compile Include="ControlTable.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
