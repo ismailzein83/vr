@@ -149,23 +149,17 @@ namespace TOne.LCR.Business
             CodeMatch supplierCodeMatch;
             if (_parentContext.CodeMatchesBySupplierId.TryGetValue(supplierId, out supplierCodeMatch))
             {
-                //ZoneRates zoneRates;
-                //if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
-                //{
+                ZoneRates zoneRates;
+                if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
+                {
                     RateInfo rate;
-                    if (_parentContext.SupplierRates.RatesByZoneId.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
+                    if (zoneRates.ZonesRates.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
                     {
-                        routeOption = new RouteSupplierOption
-                        {
-                            SupplierId = supplierId,
-                            Percentage = percentage,
-                            SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-                            Rate = rate.Rate,
-                            ServicesFlag = rate.ServicesFlag
-                        };
+                        routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
+                        routeOption.Percentage = percentage;
                         return true;
                     }
-                //}
+                }
             }
             routeOption = null;
             return false;

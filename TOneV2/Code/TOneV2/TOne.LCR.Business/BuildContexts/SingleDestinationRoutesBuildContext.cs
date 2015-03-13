@@ -137,42 +137,92 @@ namespace TOne.LCR.Business
         int _ratesCount;
         //CodeMatch[] _codeMatches;
 
-        RouteSupplierOption[] _lcr;
+        #region Private Classes
+
+        public class RouteSupplierOptionComparer : IComparer<RouteSupplierOption>
+        {
+            public int Compare(RouteSupplierOption x, RouteSupplierOption y)
+            {
+                return Decimal.Compare(x.Rate, y.Rate);
+            }
+        }
+
+
+        #endregion
+
+        static RouteSupplierOptionComparer s_comparer = new RouteSupplierOptionComparer();
+        List<RouteSupplierOption> _unorderedLCR;
+        RouteSupplierOption[] _orderedLCR;
+        //RouteSupplierOption[] _lcr;
+        int _orderIndex = -1;
+        int _optionsCount;
 
         internal RouteSupplierOption GetNextOptionInLCR()
         {
-            if (_lcr == null)
+            if (_unorderedLCR == null)
             {
                 List<RouteSupplierOption> lstLCR = new List<RouteSupplierOption>();
                 if (_supplierRates != null)
                 {
                     foreach (var codeMatch in _singleDestinationCodeMatches.CodeMatchesByZoneId.Values)
                     {
-                        RateInfo rate;
-                        if (_supplierRates.RatesByZoneId.TryGetValue(codeMatch.SupplierZoneId, out rate))
+                        ZoneRates supplierZoneRates;
+                        if (_supplierRates.SuppliersZonesRates.TryGetValue(codeMatch.SupplierId, out supplierZoneRates))
                         {
-                            RouteSupplierOption option = new RouteSupplierOption
+                            RateInfo rate;
+                            if (supplierZoneRates.ZonesRates.TryGetValue(codeMatch.SupplierZoneId, out rate))
                             {
-                                SupplierId = codeMatch.SupplierId,
-                                SupplierZoneId = codeMatch.SupplierZoneId,
-                                Rate = rate.Rate,
-                                ServicesFlag = rate.ServicesFlag
-                            };
-                            lstLCR.Add(option);
+                                RouteSupplierOption option = new RouteSupplierOption(codeMatch.SupplierId, codeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
+                                lstLCR.Add(option);
+                            }
                         }
                     }
-                    _lcr = lstLCR.OrderBy(itm => itm.Rate).ToArray();
+                    _unorderedLCR = lstLCR;
+                    _optionsCount = _unorderedLCR.Count;
+                    _orderedLCR = new RouteSupplierOption[_optionsCount];
+
+                    //_lcr = lstLCR.ToArray();//.OrderBy(itm => itm.Rate).ToArray();
+                    //Array.Sort(_lcr, s_comparer);
                 }
             }
 
-            if (_lcr.Length > _retrievedOptionNextReturnedIndex)
+            if (_optionsCount > _retrievedOptionNextReturnedIndex)
             {
-                var option = _lcr[_retrievedOptionNextReturnedIndex].Clone();
-                _retrievedOptionNextReturnedIndex++;
-                return option;
+                if (_orderIndex < _retrievedOptionNextReturnedIndex)
+                {
+                    int unorderedCount = _unorderedLCR.Count;
+                    RouteSupplierOption minRateOption = null;// _unorderedLCR[0];
+                    foreach(var current in _unorderedLCR)
+                    {
+                        //var current = _unorderedLCR[i];
+                        if (minRateOption == null || current.Rate < minRateOption.Rate)
+                            minRateOption = current;
+                    }
+                    _unorderedLCR.Remove(minRateOption);
+                    _orderIndex++;
+                    _orderedLCR[_orderIndex] = minRateOption;
+                    _retrievedOptionNextReturnedIndex++;
+                    return minRateOption.Clone();
+                }
+                else
+                {
+                    var option = _orderedLCR[_retrievedOptionNextReturnedIndex].Clone();
+                    _retrievedOptionNextReturnedIndex++;
+                    return option;
+                }
             }
             else
                 return null;
+
+
+            //if (_lcr.Length > _retrievedOptionNextReturnedIndex)
+            //{
+            //    var option = _lcr[_retrievedOptionNextReturnedIndex].Clone();
+            //    _retrievedOptionNextReturnedIndex++;
+            //    return option;
+            //}
+            //else
+            //    return null;
 
 
             //if (_supplierRates == null || _supplierRates.OrderedRates == null)
