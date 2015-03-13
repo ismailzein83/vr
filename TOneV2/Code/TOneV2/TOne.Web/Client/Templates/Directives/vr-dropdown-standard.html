@@ -1,0 +1,43 @@
+﻿<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+        <span style="float:left;margin:0px"> {{ctrl.getSelectText()}}</span>
+        <span style="float:right;position:relative;top:10px" class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" ng-class="ctrl.selectedCustomers.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
+        <li role="presentation" ng-click="ctrl.muteAction($event)">
+
+
+            <div style="display: inline-block; width: 220px;">
+                <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                    <div class="inner-addon right-addon">
+                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.muteAction($event);ctrl.filtername= '' "></i>
+                        <input type="text" class="form-control input-sm" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
+                    </div>
+                </div>
+                <div style="height: 225px; overflow: auto; margin-top: 5px">
+                    <div class="mark-select " ng-click="ctrl.selectValue($event, c)" ng-repeat="c in ctrl.datasource track by $index  | filter:ctrl.filtername" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="ctrl.findExsite(ctrl.selectedCustomers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
+                        <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
+                        <div style="float:right" ng-show="ctrl.selectedCustomers.indexOf(c) > -1">✔</div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.selectedCustomers.length > 0">
+                <div style="padding:5px ;">
+                    Selected Customers:
+                    <a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.muteAction($event);ctrl.selectedCustomers.length = 0">
+                        Clear all
+                        <i class="glyphicon glyphicon-trash hand-cursor "></i>
+                    </a>
+                </div>
+                <div style="height: 225px; overflow: auto;padding-top:5px">
+                    <span class="label custom-label" ng-repeat="obj in ctrl.selectedCustomers">
+                        {{obj.Name}}
+                        <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.selectValue($event,obj)"></span>
+                    </span>
+                </div>
+
+            </div>
+        </li>
+    </ul>
+</div>

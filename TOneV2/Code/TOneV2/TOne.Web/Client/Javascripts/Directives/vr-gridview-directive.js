@@ -8,6 +8,17 @@ app.service('GridViewService', ['BaseDirService', function (BaseDirService) {
         return BaseDirService.directiveMainURL + 'vr-gridview-' + type + '.html';
     };
 
+    this.getObjectProperty = function (item, property) {
+        if (property && ('function' === typeof property)) {
+            return property(item);
+        }
+        var arr = property.split('.');
+        while (arr.length) {
+            item = item[arr.shift()];
+        }
+        return item;
+    };
+
 }]);
 
 
@@ -17,27 +28,61 @@ app.directive('vrGridview', ['GridViewService', function (GridViewService) {
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            gridoptions: '='
+            gridoptions: '=',
+            datasource:'='
         },
-        templateUrl: function (element, attrs) {
-            return GridViewService.dTemplate;
+        transclude: true,
+        controller: function () {
+            this.getObjectProperty = function (item, property) {
+                return GridViewService.getObjectProperty(item, property);
+            };
         },
+        template: "<div ng-transclude><h3>Heading</h3></div>",
+        controllerAs: 'ctrl',
+        bindToController: true,
+        //templateUrl: function (element, attrs) {
+        //    return GridViewService.dTemplate;
+        //},
         compile: function (tElement, attrs) {
-            var tr = angular.element(document.getElementById('trbody'));
-            var row = '';
-            if (attrs.columndefs == undefined) return;
-
-            angular.forEach(attrs.columndefs.split(','), function (item) {
-                row = row + '<td>{{item.' + item + '}}</td>';
-            });
-
-            tr.append(row);
+            console.log(tElement);
         }
     };
 
     return directiveDefinitionObject;
 
 }]);
+
+
+
+app.directive('vrGridCol', ['GridViewService', function (GridViewService) {
+
+    var directiveDefinitionObject = {
+        restrict: 'E',
+        scope: {
+            gridoptions: '=',
+            datasource:'='
+        },
+        controller: function () {
+            this.getObjectProperty = function (item, property) {
+                return GridViewService.getObjectProperty(item, property);
+            };
+        },
+        controllerAs: 'ctrl',
+        bindToController: true,
+        //templateUrl: function (element, attrs) {
+        //    return GridViewService.dTemplate;
+        //},
+        compile: function (tElement, attrs) {
+        }
+    };
+
+    return directiveDefinitionObject;
+
+}]);
+
+
+
+
 
 
 

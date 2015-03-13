@@ -1,10 +1,24 @@
 ﻿<table  class="ui table">
     <thead>
-        <th ng-repeat="n in gridoptions.header">{{n}}</th>
+        <th ng-if="definition.visible" ng-repeat="definition in ctrl.gridoptions.columnDefinition">{{definition.columnHeaderDisplayName}}</th>
     </thead>
     <tbody>
 
-        <tr id="trbody" ng-repeat="item in gridoptions.data"></tr>
+        <tr>
+            <td ng-if="definition.visible && definition.enFilter" ng-repeat="definition in ctrl.gridoptions.columnDefinition"><input type="text" class="input-sm form-control" ng-model="filters[definition.columnSearchProperty]" /></td>
+        </tr> 
+
+        <tr ng-repeat="item in ctrl.datasource">
+
+            <td ng-if="definition.visible && definition.templateUrl" ng-repeat="definition in ctrl.gridoptions.columnDefinition">
+                <ng-include src="definition.templateUrl"></ng-include>
+            </td>
+            <td ng-if="definition.visible  && !definition.templateUrl " ng-repeat="definition in ctrl.gridoptions.columnDefinition">
+                {{ ctrl.getObjectProperty(item, definition.columnKey) }}
+            </td>
+
+        </tr>
 
     </tbody>
+
 </table>

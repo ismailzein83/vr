@@ -1,20 +1,54 @@
-﻿<h1>Test View</h1>
-<vr-textbox type="standard" placeholder="Username" value="testviewCtrl.Input"></vr-textbox>
-<vr-textbox type="icon" placeholder="Search .." icon="circular search" value="testviewCtrl.Input"></vr-textbox>
-<vr-textbox type="icon" placeholder="Search .." icon="search" value="testviewCtrl.Input"></vr-textbox>
-<vr-textbox type="search" value="testviewCtrl.Input"></vr-textbox>
-<vr-textbox type="search" placeholder="Custom Place Holder" value="testviewCtrl.Input"></vr-textbox>
-<vr-textbox type="mail" value="testviewCtrl.Input"></vr-textbox>
+﻿<div class="container-fluid ">
 
-<vr-textbox type="button" value="testviewCtrl.Input" placeholder="Alert .. " buttontext="Alert" btn-click="testviewCtrl.alertMsg()"></vr-textbox>
-<br />
-{{testviewCtrl.Input}}
-<br />
+    <div class="row">
+        <h1>Test View</h1>
+    </div>
 
+    <div class="row">
 
+        <div class="col-md-2">
+            <vr-textbox label="Input" type="standard" placeholder="Username" value="testviewCtrl.Input"></vr-textbox>
+        </div>
+        <div class="col-md-2">
+            <vr-textbox type="icon" placeholder="Search .." icon="circular search" value="testviewCtrl.Input"></vr-textbox>
+            <vr-textbox type="icon" placeholder="Search .." icon="search" value="testviewCtrl.Input"></vr-textbox>
+        </div>
+        <div class="col-md-2">
+            <vr-textbox type="search" value="testviewCtrl.Input"></vr-textbox>
+            <vr-textbox type="search" placeholder="Custom Place Holder" value="testviewCtrl.Input"></vr-textbox>
+            <vr-textbox type="mail" value="testviewCtrl.Input"></vr-textbox>
+        </div>
 
-<vr-gridview gridoptions="testviewCtrl.gridOptions" columndefs="name,age">
+        <div class="col-md-2">
+            <vr-textbox type="button" value="testviewCtrl.Input" placeholder="Alert .. " buttontext="Alert" btn-click="testviewCtrl.alertMsg()"></vr-textbox>
+        </div>
 
-</vr-gridview>
+        <div class="col-md-2">
+            {{testviewCtrl.Input}}
+        </div>
+
+    </div>
+
+    <!--<div class="row">
+        <div class="col-lg-2">
+            
+            <span ng-repeat="c in testviewCtrl.customers"> {{c.t}}</span>
+
+        </div>
+    </div>-->
+
+    <div class="row">
+        <div class="col-lg-2">
+            <vr-dropdown datasource="testviewCtrl.customers"></vr-dropdown>
+        </div>
+    </div>
+
+    <!--<div class="=row">
+        <vr-gridview gridoptions="testviewCtrl.gridOptions" datasource="testviewCtrl.data">
+            <vr-grid-col> </vr-grid-col>
+        </vr-gridview>
+    </div>-->
+
+</div>
 
 

@@ -192,6 +192,7 @@
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
+    <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-gridview-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-textbox-directive.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
@@ -440,6 +441,7 @@
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
     <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
