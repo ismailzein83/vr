@@ -186,6 +186,8 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />

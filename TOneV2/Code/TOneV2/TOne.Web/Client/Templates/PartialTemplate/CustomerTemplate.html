@@ -1,3 +1,62 @@
-﻿<div >
-    Under construction
+﻿<div ng-controller="CustomerController">
+    <div class="col-lg-2  style-col">
+        <div class="dropdown dropdown-custom" id="dropdownMenuddl">
+            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption' ng-init="carrierAccountSelectionOption = 1">
+                {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
+            </label>
+            <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuCu">
+                <li role="presentation" ng-show="carrierAccountSelectionOption != 1">
+                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 1">Customers</label>
+                </li>
+                <li role="presentation" ng-show="carrierAccountSelectionOption != 2">
+                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 2">All Customers Except</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-2  style-col">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span style="float:left;margin:0px"> {{getSelectCustomerText()}}</span>
+                <span style="position:absolute;top:15px;right:5px" class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" ng-class="selectedCustomers.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
+                <li role="presentation" ng-click="muteAction($event)">
+
+
+                    <div style="display: inline-block; width: 220px;">
+                        <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
+                            <div class="inner-addon right-addon">
+                                <i class="glyphicon glyphicon-remove hand-cursor" ng-click="muteAction($event);filtername= '' "></i>
+                                <input type="text" class="form-control input-sm" ng-model="filtername" ng-click="muteAction($event)" />
+                            </div>
+                        </div>
+                        <div style="height: 225px; overflow: auto; margin-top: 5px">
+                            <div class="mark-select " ng-click="selectCustomer($event, c)" ng-repeat="c in customers  | filter:filtername" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedCustomers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
+                                <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
+                                <div style="float:right" ng-show="selectedCustomers.indexOf(c) > -1">✔</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="selectedCustomers.length > 0">
+                        <div style="padding:5px ;">
+                            Selected Customers:
+                            <a href="" class="link" style="position: absolute; right: 5px;" ng-click="muteAction($event);selectedCustomers.length = 0">
+                                Clear all
+                                <i class="glyphicon glyphicon-trash hand-cursor "></i>
+                            </a>
+                        </div>
+                        <div style="height: 225px; overflow: auto;padding-top:5px">
+                            <span class="label custom-label" ng-repeat="obj in selectedCustomers">
+                                {{obj.Name}}
+                                <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectCustomer($event,obj)"></span>
+                            </span>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>

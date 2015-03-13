@@ -55,40 +55,19 @@
             { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html' },
             { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html' }
         ]
+        $scope.typeTemplates = [
+           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
+           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
+        ]
         $scope.editortype = $scope.editorTemplates[0];
-        $scope.selectedCustomers = [];
-        $scope.selectCustomer = function ($event, c) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            var index = null;
-            try {
-                var index = $scope.selectedCustomers.indexOf(c);
-            }
-            catch (e) {
-
-            }
-            if (index >= 0) {
-                $scope.selectedCustomers.splice(index, 1);
-            }
-            else
-                $scope.selectedCustomers.push(c);
-        };
-        $scope.getSelectCustomerText = function () {
-            var label;
-            if ($scope.selectedCustomers.length == 0)
-                label = "Select Customers...";
-            else if( $scope.selectedCustomers.length == 1)
-                label = $scope.selectedCustomers[0].Name;
-            else if( $scope.selectedCustomers.length == 2)
-                label = $scope.selectedCustomers[0].Name + "," + $scope.selectedCustomers[1].Name;
-            else if ($scope.selectedCustomers.length == 3)
-                label = $scope.selectedCustomers[0].Name + "," + $scope.selectedCustomers[1].Name + "," + $scope.selectedCustomers[2].Name;
-            else
-                label = $scope.selectedCustomers.length + " Customers selected";
-            if (label.length > 21)
-                label = label.substring(0, 20) + "..";
-            return label;
-        };
+        $scope.routeTemplates = [
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
+        ]
+        $scope.routetype = $scope.routeTemplates[0];
+        
        
 
     });

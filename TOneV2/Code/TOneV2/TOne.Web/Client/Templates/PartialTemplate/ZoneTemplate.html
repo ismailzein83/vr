@@ -1,6 +1,6 @@
 ﻿<div ng-controller="ZoneController">
     <div class="col-lg-2  style-col">
-        <div class="dropdown dropdown-custom">
+        <div class="dropdown dropdown-custom" id="Zoneddl">
             <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption' ng-init="zoneSelectionOption = 1">
                 {{zoneSelectionOption == 1 ? "  Zones: " : "  All Zones Except:"}}
             </label>
@@ -16,9 +16,9 @@
     </div>
     <div class="col-lg-2  style-col">
         <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
-                <label style="float:left;margin:0px"> {{getSelectZoneText()}}</label>
-                <span style="float:right;position:relative;top:10px" class="caret"></span>
+            <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
+                <span style="float:left;margin:0px"> {{getSelectZoneText()}}</span>
+                <span style="position:absolute;top:15px;right:5px" class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuZ" ng-class="selectedZones.length == 0 ? 'single-col-checklist':'double-col-checklist' ">
                 <li role="presentation" ng-click="muteAction($event)">

@@ -1,9 +1,9 @@
 ﻿<div ng-controller="PriorityController">
     <div class="col-lg-2 style-col">
         <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenuS" data-toggle="dropdown" aria-expanded="true">
+            <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenuS" data-toggle="dropdown" aria-expanded="true">
                 <span style="float:left;margin:0px"> {{getSelectSuppliersText()}}</span>
-                <span style="float:right;position:relative;top:10px" class="caret"></span>
+                <span style="position:absolute;top:15px;right:5px" class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuS" ng-class="single-col-checklist">
                 <li role="presentation" ng-click="muteAction($event)">

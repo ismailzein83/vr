@@ -1,18 +1,18 @@
 ﻿appControllers.controller('ZoneController',
     function ZoneController($scope, $http) {
-        var dropdownHidingTimeoutHandler;
-        $('.dropdown').on('show.bs.dropdown', function (e) {
+        var dropdownHidingTimeoutHandlerz;
+        $('#Zoneddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
 
         //ADD SLIDEUP ANIMATION TO DROPDOWN //
-        $('.dropdown').on('hide.bs.dropdown', function (e) {
+        $('#Zoneddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
 
         $('.dropdown-custom').on('mouseenter', function () {
             var $this = $(this);
-            clearTimeout(dropdownHidingTimeoutHandler);
+            clearTimeout(dropdownHidingTimeoutHandlerz);
             if (!$this.hasClass('open')) {
                 $('.dropdown-toggle', $this).dropdown('toggle');
             }
@@ -20,7 +20,7 @@
 
         $('.dropdown-custom').on('mouseleave', function () {
             var $this = $(this);
-            dropdownHidingTimeoutHandler = setTimeout(function () {
+            dropdownHidingTimeoutHandlerz = setTimeout(function () {
                 if ($this.hasClass('open')) {
                     $('.dropdown-toggle', $this).dropdown('toggle');
                 }
