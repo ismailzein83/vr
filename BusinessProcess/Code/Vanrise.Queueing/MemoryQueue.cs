@@ -28,5 +28,13 @@ namespace Vanrise.Queueing
             else
                 return false;
         }
+
+        public int Count
+        {
+            get
+            {
+                return _queue.Count;
+            }
+        }
     }
 }
