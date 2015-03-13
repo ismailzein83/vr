@@ -46,7 +46,7 @@ appControllers.service('CarriersService', function ($http, $q,MainService) {
 
 });
 
-appControllers.controller('TestViewController', function ($scope,CarriersService) {
+appControllers.controller('TestViewController', function (CarriersService) {
 
         this.model = 'Test View model';
         this.Input = '123';

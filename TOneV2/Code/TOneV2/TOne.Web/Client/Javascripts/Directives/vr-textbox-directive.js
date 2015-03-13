@@ -1,8 +1,21 @@
 ﻿'use strict';
+app.service('BaseDirService', function ($http, MainService, $q) {
 
-app.service('BaseDirService', function () {
+    return ({
+        directiveMainURL: "../../Client/Templates/Directives/",
+        getObjectProperty: getObjectProperty
+    });
 
-    this.directiveMainURL = "../../Client/Templates/Directives/";
+    function getObjectProperty(item, property) {
+        if (property && ('function' === typeof property)) {
+            return property(item);
+        }
+        var arr = property.split('.');
+        while (arr.length) {
+            item = item[arr.shift()];
+        }
+        return item;
+    }
 
 });
 
@@ -39,20 +52,18 @@ app.service('TextBoxService', ['BaseDirService', function (BaseDirService) {
     }
     ];
 
+    this.setDefaultAttributes = function (attrs, obj) {
+        if (attrs.type.toLowerCase() == obj.name) {
+            if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
+            if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
+            if (attrs.label == undefined) attrs.$set("label", obj.dLabel);
+            if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dButtonText);
+        }
+        return attrs;
+    };
+
 
 }]);
-
-
-var defaultAttributes = function (attrs, obj) {
-    if (attrs.type.toLowerCase() == obj.name) {
-        if (attrs.icon == undefined) attrs.$set("icon", obj.dIcon);
-        if (attrs.placeholder == undefined) attrs.$set("placeholder", obj.dPlaceholder);
-        if (attrs.label == undefined) attrs.$set("label", obj.dLabel);
-        if (attrs.buttontext == undefined) attrs.$set("buttontext", obj.dButtonText);
-    }
-    return attrs;
-};
-
 
 app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
 
@@ -72,7 +83,7 @@ app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            TextBoxService.allDirective.forEach(function (item) { attrs = defaultAttributes(attrs, item); });
+            TextBoxService.allDirective.forEach(function (item) { attrs = TextBoxService.setDefaultAttributes(attrs, item); });
         },
         templateUrl: function (element, attrs) {
             return TextBoxService.getTemplateUrl(attrs.type);

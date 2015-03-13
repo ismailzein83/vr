@@ -29,18 +29,19 @@
 
     </div>
 
-    <!--<div class="row">
-        <div class="col-lg-2">
-            
-            <span ng-repeat="c in testviewCtrl.customers"> {{c.t}}</span>
-
-        </div>
-    </div>-->
-
     <div class="row">
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectlbl="Selected Customers:" 
+                         placeholder="Select Customers..." selectplaceholder="Customers selected"></vr-dropdown>
         </div>
+
+        <div class="col-lg-2">
+            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+        </div>
+
+        <!--<div class="col-lg-2">
+            <vr-dropdown datasourceurl="/api/BusinessEntity/GetCarriers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Customer"></vr-dropdown>
+        </div>-->
     </div>
 
     <!--<div class="=row">
