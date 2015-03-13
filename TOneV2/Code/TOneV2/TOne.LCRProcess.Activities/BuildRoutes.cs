@@ -17,10 +17,12 @@ namespace TOne.LCRProcess.Activities
         public ZoneCustomerRates CustomerZoneRates { get; set; }
 
         public SupplierZoneRates SupplierZoneRates { get; set; }
-        
+
         public BaseQueue<SingleDestinationCodeMatches> InputQueue { get; set; }
 
         public BaseQueue<RouteDetailBatch> OutputQueue { get; set; }
+
+        public List<RouteRule> RouteRules { get; set; }
     }
 
     #endregion
@@ -35,7 +37,10 @@ namespace TOne.LCRProcess.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<SingleDestinationCodeMatches>> InputQueue { get; set; }
-        
+
+        [RequiredArgument]
+        public InArgument<List<RouteRule>> RouteRules { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<RouteDetailBatch>> OutputQueue { get; set; }
 
@@ -46,6 +51,7 @@ namespace TOne.LCRProcess.Activities
                 CustomerZoneRates = this.CustomerZoneRates.Get(context),
                 SupplierZoneRates = this.SupplierZoneRates.Get(context),
                 InputQueue = this.InputQueue.Get(context),
+                RouteRules = this.RouteRules.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -60,14 +66,19 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(BuildRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             bool hasItem = false;
+            RouteRulesByActionDataType routeRulesByActionType = new RouteRulesByActionDataType();
+            RouteOptionRulesBySupplier routeOptionRulesBySupplier = new RouteOptionRulesBySupplier();
+
+            RouteManager routeManager = new RouteManager();
+            routeManager.StructureRulesForRouteBuild(inputArgument.RouteRules, out routeRulesByActionType, out routeOptionRulesBySupplier);
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 do
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((singleDestinationCodeMatches) =>
                     {
-                        using(var context = new SingleDestinationRoutesBuildContext(singleDestinationCodeMatches, 
-                            inputArgument.CustomerZoneRates, inputArgument.SupplierZoneRates, null, null))
+                        using (var context = new SingleDestinationRoutesBuildContext(singleDestinationCodeMatches,
+                            inputArgument.CustomerZoneRates, inputArgument.SupplierZoneRates, routeRulesByActionType, null))
                         {
                             var routes = context.BuildRoutes();
                             if (routes != null && routes.Count > 0)

@@ -69,6 +69,7 @@
       <AssemblyReference>TABS</AssemblyReference>
       <AssemblyReference>TOne.BusinessEntity.BProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
       <AssemblyReference>TOne.Caching</AssemblyReference>
       <AssemblyReference>TOne.Entities</AssemblyReference>
       <AssemblyReference>TOne.LCR.Entities</AssemblyReference>
@@ -157,6 +158,7 @@
         </Variable>
         <Variable x:TypeArguments="vq:BaseQueue(tle:SingleDestinationCodeMatches)" Name="queueCodeMatchesForRouting" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCodeMatchStats" />
+        <Variable x:TypeArguments="scg:List(tle:RouteRule)" Name="routeRules" />
       </Parallel.Variables>
       <tla:BuildCodeMatchByCodeGroup sap2010:WorkflowViewState.IdRef="BuildCodeMatchByCodeGroup_1">
         <tla:BuildCodeMatchByCodeGroup.DistinctCodes>
@@ -231,6 +233,33 @@
               </InArgument>
             </tla:GetSupplierZoneRates.ZoneIds>
           </tla:GetSupplierZoneRates>
+          <tla:GetRouteRules PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetRouteRules_1">
+            <tla:GetRouteRules.CodePrefix>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">CodePrefixGroup</mca:CSharpValue>
+              </InArgument>
+            </tla:GetRouteRules.CodePrefix>
+            <tla:GetRouteRules.EffectiveOn>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveTime</mca:CSharpValue>
+              </InArgument>
+            </tla:GetRouteRules.EffectiveOn>
+            <tla:GetRouteRules.IsFuture>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">IsFuture</mca:CSharpValue>
+              </InArgument>
+            </tla:GetRouteRules.IsFuture>
+            <tla:GetRouteRules.RouteRules>
+              <OutArgument x:TypeArguments="scg:List(tle:RouteRule)">
+                <mca:CSharpReference x:TypeArguments="scg:List(tle:RouteRule)">routeRules</mca:CSharpReference>
+              </OutArgument>
+            </tla:GetRouteRules.RouteRules>
+            <tla:GetRouteRules.ZoneIds>
+              <InArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">saleZoneIds</mca:CSharpValue>
+              </InArgument>
+            </tla:GetRouteRules.ZoneIds>
+          </tla:GetRouteRules>
         </Parallel>
         <tla:BuildRoutes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildRoutes_1">
           <tla:BuildRoutes.CustomerZoneRates>
@@ -253,6 +282,11 @@
               <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCodeMatchStats</mca:CSharpValue>
             </InArgument>
           </tla:BuildRoutes.PreviousActivityStatus>
+          <tla:BuildRoutes.RouteRules>
+            <InArgument x:TypeArguments="scg:List(tle:RouteRule)">
+              <mca:CSharpValue x:TypeArguments="scg:List(tle:RouteRule)">routeRules</mca:CSharpValue>
+            </InArgument>
+          </tla:BuildRoutes.RouteRules>
           <tla:BuildRoutes.SupplierZoneRates>
             <InArgument x:TypeArguments="tle:SupplierZoneRates">
               <mca:CSharpValue x:TypeArguments="tle:SupplierZoneRates">supplierZoneRates</mca:CSharpValue>
@@ -268,34 +302,35 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbCtRA5ACDgIBAVULVWsCAQ9dC11XAgECYQVnIAMB7gNoBZEBFAMBhQOSAQWHAhACASqIAgWOAiACARxkC2SRAQMB7wNrC2twAwHhA3ULdWkDAdQDcAtwWAMBxwN6C3poAwG6A4kBC4kBaQMBrQN/C39YAwGgA44BC44BaQMBkwOEAQuEAVIDAYYDlgENlgFvAgE8mwENmwFvAgEroQEHxQEnAwGNAsYBB4YCEgIBTYsCC4sCtAECAR2kAQ2kAWIDAfQCvQENvQF0AwHjArMBDbMBgAEDAdICqQENqQFaAwHBArgBDbgBkwEDAbACwgENwgFjAwGfAq4BDa4BVAMBjgLHAQnqARQDAaQB6wEJhQIbAgFOyAEL2AEmAwHZAdkBC+kBJgMBpQGCAg+CAmsDAZMB/QEP/QFuAwGCAfMBD/MBjQECAXH4AQ/4AYUBAgFg7gEP7gFrAgFP0AER0AFfAwH8AdUBEdUBZwMB6wHLARHLAXUDAdoB4QER4QF1AwHIAdwBEdwBXwMBtwHmARHmAWcDAaYB</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbDJSA7ICDgIBAVYLVmsCAQ9eC15XAgECYgVoIAMB7wRpBZIBFAMBhgSTAQWpAhACASqqAgWwAiACARxlC2WRAQMB8ARsC2xwAwHiBHYLdmkDAdUEcQtxWAMByAR7C3toAwG7BIoBC4oBaQMBrgSAAQuAAVgDAaEEjwELjwFpAwGUBIUBC4UBUgMBhwSXAQ2XAW8CAT2cAQ2cAW8CASujAQfHAScDAYcDyAEHqAISAgFPrQILrQK0AQIBHaYBDaYBYgMB9AO/AQ2/AXQDAeIDtQENtQGAAQMB0AOrAQ2rAVoDAb4DugENugGTAQMBrAPEAQ3EAWMDAZoDsAENsAFUAwGIA8kBCYcCFAMBvQGIAgmnAhsCAVDKAQvaASYDAdAC2wEL6wEmAwGZAuwBC4YCHwMBvgGkAg+kAmsDAasBmgIPmgJuAwGZAZACD5ACjQEDAYcBlQIPlQKFAQIBdZ8CD58CXAIBY4sCD4sCawIBUdIBEdIBXwMB9QLXARHXAWcDAeMCzQERzQF1AwHRAuMBEeMBdQMBvgLeARHeAV8DAawC6AER6AFnAwGaAvQBEfQBXgMBhwKDAhGDAmcDAfUB7wER7wFeAwHjAf4BEf4BcAMB0QH5ARH5AVgDAb8B</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="930,22" />
-      <sap2010:ViewStateData Id="GetCodes_2" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1170,22" />
+      <sap2010:ViewStateData Id="GetCodes_2" sap:VirtualizedContainerService.HintSize="1170,22" />
       <sap2010:ViewStateData Id="BuildCodeMatchByCodeGroup_1" sap:VirtualizedContainerService.HintSize="200,272" />
       <sap2010:ViewStateData Id="GetCustomerZoneRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSupplierZoneRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="BuildRoutes_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="GetRouteRules_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="BuildRoutes_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="816,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="930,318" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="930,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="952,628">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1170,318" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1170,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1192,628">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="992,708" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="1232,708" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

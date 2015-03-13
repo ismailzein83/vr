@@ -25,7 +25,10 @@ namespace TOne.LCR.Business
 
         public void SetMinSubCodeLength()
         {
-            this.MinSubCodeLength = this.RulesByMatchCodeAndSubCodes.Keys.Min(itm => itm.Length);
+            if (this.RulesByMatchCodeAndSubCodes.Count > 0)
+                this.MinSubCodeLength = this.RulesByMatchCodeAndSubCodes.Keys.Min(itm => itm.Length);
+            else
+                this.MinSubCodeLength = 0;
         }
 
         public Dictionary<int, List<RouteRule>> RulesByMatchZones { get; private set; }

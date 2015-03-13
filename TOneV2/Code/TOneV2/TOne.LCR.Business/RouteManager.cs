@@ -75,6 +75,8 @@ namespace TOne.LCR.Business
             routeOptionRules = new RouteOptionRulesBySupplier();
             foreach (var rule in rules)
             {
+                if (rule.ActionData == null)
+                    continue;
                 RouteRulesByActionDataType targetRules;
                 if (rule.Type == RouteRuleType.RouteRule)
                     targetRules = routeRules;

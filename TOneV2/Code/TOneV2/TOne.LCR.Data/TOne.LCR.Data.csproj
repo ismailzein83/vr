@@ -50,6 +50,7 @@
     <Compile Include="IRouteDetailDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
     <Compile Include="IRoutingDataManager.cs" />
+    <Compile Include="IRouteRulesDataManager.cs" />
     <Compile Include="IZoneInfoDataManager.cs" />
     <Compile Include="LCRDataManagerFactory.cs" />
     <Compile Include="ICodeMatchDataManager.cs" />

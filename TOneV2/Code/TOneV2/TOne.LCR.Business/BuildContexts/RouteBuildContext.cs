@@ -65,12 +65,12 @@ namespace TOne.LCR.Business
                 else
                 {
                     RouteRuleMatchFinder ruleFinder;
+                    bool done = false;
                     if (_parentContext.RouteRuleFindersByActionDataType != null 
                         && _parentContext.RouteRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
                     {
                         ruleFinder.GoToStart();
                         RouteRule rule;
-                        bool done = false;
                         while (!done && ruleFinder.GetNext(out rule))
                         {
                             if (rule.CarrierAccountSet.IsAccountIdIncluded(_route.CustomerID))
@@ -83,12 +83,10 @@ namespace TOne.LCR.Business
                                     currentStep = nextStep;
                                 }
                             }
-                        }
+                        }                        
                     }
-                    else
-                    {
+                    if (!done)
                         currentStep = currentStep.NextStep;
-                    }
                 }
             }
             while (currentStep != null);
@@ -97,14 +95,10 @@ namespace TOne.LCR.Business
         private bool CheckActionResult(RouteActionResult actionResult, ActionExecutionPath<BaseRouteAction> executionPath, ActionExecutionStep<BaseRouteAction> currentStep, out ActionExecutionStep<BaseRouteAction> nextStep, out object nextActionData)
         {
             nextActionData = null;
-            if (actionResult == null)
+            
+            if (actionResult == null || !actionResult.IsInvalid)
             {
-                nextStep = currentStep.NextStep;
-                return true;
-            }
-            if (!actionResult.IsInvalid)
-            {
-                if (actionResult.NextActionType != null)
+                if (actionResult != null && actionResult.NextActionType != null)
                 {
                     nextStep = executionPath.GetStep(actionResult.NextActionType);
                     if (nextStep == null)

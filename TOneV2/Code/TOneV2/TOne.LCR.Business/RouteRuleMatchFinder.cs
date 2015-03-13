@@ -72,6 +72,8 @@ namespace TOne.LCR.Business
                         while (matchRules == null && _nextParentCode.Length >= _routeRulesMatches.MinSubCodeLength)
                         {
                             _routeRulesMatches.RulesByMatchCodeAndSubCodes.TryGetValue(_nextParentCode, out matchRules);
+                            if (_nextParentCode.Length == 0)
+                                break;
                             _nextParentCode = _nextParentCode.Substring(0, _nextParentCode.Length - 1);
                         }
                         break;
@@ -84,10 +86,9 @@ namespace TOne.LCR.Business
                     case FinderStep.End:
                         return null;
                 }
-                if (matchRules != null)
-                    return matchRules;
-                else
-                    _currentSearchStep++;
+                _currentSearchStep++;
+                if (matchRules != null && matchRules.Count > 0)
+                    return matchRules;                    
             }
             return null;
         }

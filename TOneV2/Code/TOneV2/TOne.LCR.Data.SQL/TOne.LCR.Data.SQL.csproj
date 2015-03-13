@@ -56,6 +56,7 @@
     <Compile Include="CodePrefixGroupDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />
     <Compile Include="RouteDetailDataManager.cs" />
+    <Compile Include="RouteRulesDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
     <Compile Include="CodeMatchDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

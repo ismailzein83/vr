@@ -80,6 +80,7 @@
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GetCodes.cs" />
+    <Compile Include="GetRouteRules.cs" />
     <Compile Include="GetSupplierZoneRates.cs" />
     <Compile Include="GetCustomerZoneRates.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
