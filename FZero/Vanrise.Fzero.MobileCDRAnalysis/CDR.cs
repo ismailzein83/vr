@@ -42,7 +42,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Ignore { get; set; }
         public Nullable<bool> IsNormalized { get; set; }
     
-        public virtual Import Import { get; set; }
         public virtual SwitchProfile SwitchProfile { get; set; }
+        public virtual Import Import { get; set; }
+        public virtual SwitchProfile SwitchProfile1 { get; set; }
     }
 }

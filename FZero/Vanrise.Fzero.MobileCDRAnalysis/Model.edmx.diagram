@@ -4,91 +4,92 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0c0afd205ce94db9a4c530fae9060cc0" Name="Diagram1" ZoomLevel="66">
-        <EntityTypeShape EntityType="Model.CDR" Width="1.5" PointX="2.907585881141753" PointY="31.754759281759505" />
-        <EntityTypeShape EntityType="Model.CellProfile" Width="1.5" PointX="10.182663234967116" PointY="1.266730666750451" />
-        <EntityTypeShape EntityType="Model.ControlTable" Width="1.5" PointX="10.522538774890144" PointY="17.348687150212324" />
-        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="9.3074581647792165" PointY="1.5424191213876097" />
-        <EntityTypeShape EntityType="Model.delete_NumberProfile" Width="1.5" PointX="0.039997262898831279" PointY="2.9752946807887848" />
-        <EntityTypeShape EntityType="Model.delete_Peak_Hours" Width="1.5" PointX="11.797347446809219" PointY="25.991578591052246" />
-        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="3.9582046661331343" PointY="16.787183560797565" />
-        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="10.157445547244254" PointY="7.3938128088572119" />
-        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="3.0681951879841254" PointY="6.6813455404161219" />
-        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="6.0333972992531013" PointY="23.357679303436392" />
-        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="1.7128776096333178" PointY="4.6952361039329489" />
-        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="3.9623075127426106" PointY="7.2532647434870086" />
-        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="6.8243414605149724" PointY="22.4634768620429" />
-        <EntityTypeShape EntityType="Model.NormalizationRule" Width="1.5" PointX="8.56360593278129" PointY="12.684935367053811" />
-        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="9.7856229477495056" PointY="30.794164299403395" />
-        <EntityTypeShape EntityType="Model.OperationType" Width="1.5" PointX="5.0886638616624591" PointY="29.477376832383396" />
-        <EntityTypeShape EntityType="Model.Peak_Time" Width="1.5" PointX="8.5242978746650273" PointY="2.0921375165191187" />
-        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="5.8991634556554082" PointY="7.1202889117972408" />
-        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="4.7664594411693795" PointY="11.650412877858809" />
-        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="10.552749629389844" PointY="26.170890432862048" />
-        <EntityTypeShape EntityType="Model.Related_Criteria" Width="1.5" PointX="9.5280971645974066" PointY="18.064383276768208" />
-        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="4.9598911967873063" PointY="11.723650356625976" />
-        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="6.666601826747228" PointY="31.074522196815593" />
-        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="2.6382377029574653" PointY="14.855710900787129" />
-        <EntityTypeShape EntityType="Model.Set_CallClass" Width="1.5" PointX="5.3364798581863191" PointY="2.5145928275373732" />
-        <EntityTypeShape EntityType="Model.Set_CallType" Width="1.5" PointX="1.0564643745573537" PointY="26.34829309319532" />
-        <EntityTypeShape EntityType="Model.Set_SubType" Width="1.5" PointX="8.1073172856622" PointY="17.096182622525927" />
-        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="6.6954235037301775" PointY="3.0583262457783924" />
-        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="7.945727217917204" PointY="19.900503883091968" />
-        <EntityTypeShape EntityType="Model.Strategy_Min_Values" Width="1.5" PointX="5.6506825395164464" PointY="5.5966265376641537" />
-        <EntityTypeShape EntityType="Model.Strategy_Suspicion_Level" Width="1.5" PointX="9.9421517485483335" PointY="12.134953072357435" />
-        <EntityTypeShape EntityType="Model.StrategyPeriod" Width="1.5" PointX="2.7927842227708473" PointY="1.3124950683268231" />
-        <EntityTypeShape EntityType="Model.StrategyThreshold" Width="1.5" PointX="8.0270716436333363" PointY="1.9822163591078559" />
-        <EntityTypeShape EntityType="Model.Subscriber_Values" Width="1.5" PointX="1.222544096979566" PointY="8.4630749265025713" />
-        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="0.39603037964367788" PointY="19.966232547520768" />
-        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="10.006220362152076" PointY="28.531440956765525" />
-        <EntityTypeShape EntityType="Model.Switch_DatabaseConnections" Width="1.5" PointX="3.9527549482662021" PointY="21.918169031812887" />
-        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="11.231032574191239" PointY="18.50329034892064" />
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="8.8008223421875478" PointY="30.842503010687654" />
-        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="8.0533724520604011" PointY="19.123721697891" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="5.7855661203086219" PointY="7.9805715866296421" />
-        <EntityTypeShape EntityType="Model.vwDashboard" Width="1.5" PointX="11.42037090445886" PointY="23.580401699794642" />
-        <EntityTypeShape EntityType="Model.vwReportedNumber" Width="1.5" PointX="10.491347237718919" PointY="19.221477204571233" />
-        <EntityTypeShape EntityType="Model.vwReportedNumberNormalCDR" Width="1.5" PointX="2.946699026481574" PointY="5.6352783765808114" />
-        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="6.089128064964493" PointY="12.672776302636031" />
-        <AssociationConnector Association="Model.FK_CDR_Imports" />
-        <AssociationConnector Association="Model.FK_CDR_SwitchProfiles" />
-        <AssociationConnector Association="Model.FK_ControlTable_OperationType" />
-        <AssociationConnector Association="Model.FK_ControlTable_Periods" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_criteria_profile1" />
-        <AssociationConnector Association="Model.FK_Strategy_Min_Values_criteria_profile" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_criteria_profile" />
-        <AssociationConnector Association="Model.FK_StrategyThreshold_criteria_profile" />
-        <AssociationConnector Association="Model.FK_Subscriber_Values_criteria_profile" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailReceiverTypes" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailTemplates" />
-        <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
-        <AssociationConnector Association="Model.FK_Imports_ImportTypes" />
-        <AssociationConnector Association="Model.FK_Imports_Users" />
-        <AssociationConnector Association="Model.FK_NormalizationRules_SwitchProfiles" />
-        <AssociationConnector Association="Model.FK_Peak_time_Strategy" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_Periods" />
-        <AssociationConnector Association="Model.FK_Subscriber_Values_Periods" />
-        <AssociationConnector Association="Model.FK_SubscriberThresholds_Periods" />
-        <AssociationConnector Association="Model.FK_Permissions_Permissions" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Permissions" />
-        <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" />
-        <AssociationConnector Association="Model.FK_Related_Criteria_Strategy" />
-        <AssociationConnector Association="Model.FK_Report_ReportingStatus" />
-        <AssociationConnector Association="Model.FK_Report_Users" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Report" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Strategy" />
-        <AssociationConnector Association="Model.FK_SourceMappings_SwitchProfiles" />
-        <AssociationConnector Association="Model.FK_Strategy_Min_Values_Strategy" />
-        <AssociationConnector Association="Model.FK_Strategy_suspection_level_Strategy" />
-        <AssociationConnector Association="Model.FK_Strategy_Users" />
-        <AssociationConnector Association="Model.FK_StrategyPeriods_Strategy" />
-        <AssociationConnector Association="Model.FK_StrategyThreshold_Strategy" />
-        <AssociationConnector Association="Model.FK_Subscriber_Values_Strategy" />
-        <AssociationConnector Association="Model.FK_Strategy_suspection_level_suspection_level" />
-        <AssociationConnector Association="Model.FK_SubscriberThresholds_Suspection_Level" />
-        <AssociationConnector Association="Model.FK_Switch_DatabaseConnections_Switchs" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Users" />
+      <Diagram DiagramId="572ca103c26b4e54a2c981f227c10893" Name="Diagram1">
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CDR" Width="1.5" PointX="8.25" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CellProfile" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ControlTable" Width="1.5" PointX="8.25" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Criteria_Profile" Width="1.5" PointX="6" PointY="40.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_NumberProfile" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_Peak_Hours" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiver" Width="1.5" PointX="5.25" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiverType" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailTemplate" Width="1.5" PointX="3" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailToken" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Import" Width="1.5" PointX="3" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ImportType" Width="1.5" PointX="0.75" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalCDR" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalizationRule" Width="1.5" PointX="8.25" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NumberProfile" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.OperationType" Width="1.5" PointX="6" PointY="48.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Peak_Time" Width="1.5" PointX="5.25" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Period" Width="1.5" PointX="6" PointY="44.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Permission" Width="1.5" PointX="0.75" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.PredefinedColumn" Width="1.5" PointX="9" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Related_Criteria" Width="1.5" PointX="5.25" PointY="30.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Report" Width="1.5" PointX="6" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportDetail" Width="1.5" PointX="11.25" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportingStatu" Width="1.5" PointX="3.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallClass" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallType" Width="1.5" PointX="4.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_SubType" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SourceMapping" Width="1.5" PointX="11.25" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy" Width="1.5" PointX="3" PointY="32.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Min_Values" Width="1.5" PointX="5.25" PointY="36.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Width="1.5" PointX="11.25" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyPeriod" Width="1.5" PointX="8.25" PointY="33.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyThreshold" Width="1.5" PointX="8.25" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Subscriber_Values" Width="1.5" PointX="8.25" PointY="36.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SubscriberThreshold" Width="1.5" PointX="11.25" PointY="41.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Suspicion_Level" Width="1.5" PointX="9" PointY="41.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" Width="1.5" PointX="8.25" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SwitchProfile" Width="1.5" PointX="6" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.sysdiagram" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.UserPermission" Width="1.5" PointX="3" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.User" Width="1.5" PointX="0.75" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwDashboard" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumber" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumberNormalCDR" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwSuspectionAnalysi" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.ControlTable_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.ControlTable_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.EmailReceivers_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.EmailReceivers_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.EmailTemplates_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Imports_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Imports_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.NormalizationRules_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Peak_Time_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Permissions_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.UserPermissions_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.SourceMappings_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Related_Criteria_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Report_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Report_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.ReportDetails_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.ReportDetails_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.SourceMappings_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Strategy_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.UserPermissions_ibfk_2" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

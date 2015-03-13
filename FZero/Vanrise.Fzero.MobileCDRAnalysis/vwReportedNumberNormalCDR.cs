@@ -15,9 +15,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     public partial class vwReportedNumberNormalCDR
     {
         public int Id { get; set; }
-        public string A_Temp { get; set; }
-        public string In_Trunk { get; set; }
-        public string Switch { get; set; }
         public int ReportID { get; set; }
     }
 }
