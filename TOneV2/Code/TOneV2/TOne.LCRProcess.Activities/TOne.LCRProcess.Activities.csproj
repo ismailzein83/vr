@@ -79,7 +79,6 @@
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
-    <Compile Include="GetCodePrefixGroup.cs" />
     <Compile Include="GetCodes.cs" />
     <Compile Include="GetSupplierZoneRates.cs" />
     <Compile Include="GetCustomerZoneRates.cs" />

@@ -32,22 +32,6 @@ namespace TOne.LCR.Business
             }
         }
 
-        public CodeMatchesBySupplierId CodeMatchesBySupplierId
-        {
-            get
-            {
-                return _parentContext.CodeMatchesBySupplierId;
-            }
-        }
-
-        public SupplierZoneRates SupplierZoneRates
-        {
-            get
-            {
-                return _parentContext.SupplierRates;
-            }
-        }
-
         public RouteOptionRulesBySupplier RouteOptionsRules
         {
             get
@@ -163,6 +147,11 @@ namespace TOne.LCR.Business
             }
             routeOption = null;
             return false;
+        }
+
+        public RouteSupplierOption GetNextOptionInLCR()
+        {
+            return _parentContext.GetNextOptionInLCR();
         }
 
         //public void BuildLCR()

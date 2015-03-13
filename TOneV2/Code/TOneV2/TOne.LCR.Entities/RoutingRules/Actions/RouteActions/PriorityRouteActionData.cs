@@ -15,7 +15,7 @@ namespace TOne.LCR.Entities
     {
         public string SupplierId { get; set; }
 
-        public int Order { get; set; }
+        public int Priority { get; set; }
 
         public short? Percentage { get; set; }
 

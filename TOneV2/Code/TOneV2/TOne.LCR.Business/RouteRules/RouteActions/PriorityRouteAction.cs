@@ -21,52 +21,68 @@ namespace TOne.LCR.Business
             if (priorityActionData == null)
                 return InvalidActionData("actionData is null or it is not of type PriorityRouteActionData");
             if (priorityActionData.Options == null)
-                return InvalidActionData("priorityActionData.Options");
+                return InvalidActionData("priorityActionData.Options is null");
 
             var route = context.Route;
-            if (route.Options == null || route.Options.SupplierOptions == null)
+            bool hasOptions = route.Options != null && route.Options.SupplierOptions != null;
+            if (hasOptions)
             {
                 route.Options = new RouteOptions();
                 route.Options.SupplierOptions = new List<RouteSupplierOption>();
             }
 
-            foreach(var priorityOption in priorityActionData.Options.OrderBy(itm => itm.Order))
+            foreach(var priorityOption in priorityActionData.Options.OrderBy(itm => itm.Priority))
             {
-                if (priorityOption.Force)
+                RouteSupplierOption routeOption;
+                if (!TrySetOptionOrderFromRoute(context, priorityOption, out routeOption))
+                    TryAddOptionFromLCR(context, priorityOption, out routeOption);
+                if(routeOption != null)
                 {
-                    if (!TrySetOptionOrderFromRoute(context, priorityOption))
-                        TryAddOptionFromCodeMatches(context, priorityOption);
-                }
-                else
-                {
-                    TrySetOptionOrderFromRoute(context, priorityOption);
+                    routeOption.Priority = priorityOption.Priority;
+                    if (priorityOption.Percentage.HasValue)
+                        routeOption.Percentage = priorityOption.Percentage;
                 }
             }
 
             return null;
         }
 
-        private bool TryAddOptionFromCodeMatches(IRouteBuildContext context, PriorityOption priorityOption)
+        private bool TryAddOptionFromLCR(IRouteBuildContext context, PriorityOption priorityOption, out RouteSupplierOption routeOption)
         {
-            RouteSupplierOption routeOption;
-            if (context.TryBuildSupplierOption(priorityOption.SupplierId, priorityOption.Percentage, out routeOption))
-            {
-                InsertOptionAtPosition(priorityOption.Order, context.Route.Options.SupplierOptions, routeOption);
-                return true;
+            routeOption = null;
+            var routeOptions = context.Route.Options.SupplierOptions;
+            RouteSupplierOption current = context.GetNextOptionInLCR();
+            while(current != null)
+            {   
+                if (current.SupplierId == priorityOption.SupplierId)
+                {
+                    if (priorityOption.Force || context.Route.Rate >= current.Rate)
+                    {
+                        routeOption = current;
+                        InsertOptionAtPosition(priorityOption.Priority, context.Route.Options.SupplierOptions, routeOption);
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    routeOptions.Add(current);
+                current = context.GetNextOptionInLCR();
             }
+
             return false;
         }
 
-        private bool TrySetOptionOrderFromRoute(IRouteBuildContext context, PriorityOption priorityOption)
+        private bool TrySetOptionOrderFromRoute(IRouteBuildContext context, PriorityOption priorityOption, out RouteSupplierOption routeOption)
         {
             var routeOptions = context.Route.Options.SupplierOptions;
-            var option = routeOptions.FirstOrDefault(itm => itm.SupplierId == priorityOption.SupplierId);
-            if (option != null)
+            routeOption = routeOptions.FirstOrDefault(itm => itm.SupplierId == priorityOption.SupplierId);
+            if (routeOption != null)
             {
-                if (routeOptions.IndexOf(option) != priorityOption.Order)
+                if (routeOptions.IndexOf(routeOption) != priorityOption.Priority)
                 {
-                    routeOptions.Remove(option);
-                    InsertOptionAtPosition(priorityOption.Order, routeOptions, option);
+                    routeOptions.Remove(routeOption);
+                    InsertOptionAtPosition(priorityOption.Priority, routeOptions, routeOption);
                 }
 
                 return true;

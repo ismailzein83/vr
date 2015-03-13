@@ -29,7 +29,5 @@ namespace TOne.LCR.Entities
         public string RouteCode { get; set; }
 
         public CodeMatchesBySupplierId CodeMatchesBySupplierId { get; set; }
-
-        public CodeMatchesByZoneId CodeMatchesByZoneId { get; set; }
     }
 }

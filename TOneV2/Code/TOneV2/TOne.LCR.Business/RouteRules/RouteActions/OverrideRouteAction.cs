@@ -21,7 +21,7 @@ namespace TOne.LCR.Business
             if (overrideActionData == null)
                 return InvalidActionData("actionData is null or it is not of type OverrideRouteActionData");
             if (overrideActionData.Options == null)
-                return InvalidActionData("overrideActionData.Options");
+                return InvalidActionData("overrideActionData.Options is null");
 
             RouteActionResult rslt = new RouteActionResult();
 
@@ -34,7 +34,7 @@ namespace TOne.LCR.Business
                     case OverrideRouteNoOptionAction.None:
                         break;
                     case OverrideRouteNoOptionAction.SwitchToLCR:
-                        rslt.NextActionType = typeof(GetTopOptionsRouteAction);
+                        rslt.NextActionType = typeof(PriorityRouteActionData);
                         break;
                     case OverrideRouteNoOptionAction.BackupRoute:
                         if (overrideActionData.BackupOptions != null)

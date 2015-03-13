@@ -164,7 +164,7 @@ namespace TOne.LCR.Business
                 List<RouteSupplierOption> lstLCR = new List<RouteSupplierOption>();
                 if (_supplierRates != null)
                 {
-                    foreach (var codeMatch in _singleDestinationCodeMatches.CodeMatchesByZoneId.Values)
+                    foreach (var codeMatch in _singleDestinationCodeMatches.CodeMatchesBySupplierId.Values)
                     {
                         ZoneRates supplierZoneRates;
                         if (_supplierRates.SuppliersZonesRates.TryGetValue(codeMatch.SupplierId, out supplierZoneRates))

@@ -8,9 +8,8 @@ namespace TOne.LCR.Entities
         void BlockRoute();
         //void BuildLCR();
         RouteDetail Route { get; }
-        CodeMatchesBySupplierId CodeMatchesBySupplierId { get; }
-
-        SupplierZoneRates SupplierZoneRates { get; }
+       
+        RouteSupplierOption GetNextOptionInLCR();
 
         bool TryBuildSupplierOption(string supplierId, short? percentage, out RouteSupplierOption routeOption);
     }

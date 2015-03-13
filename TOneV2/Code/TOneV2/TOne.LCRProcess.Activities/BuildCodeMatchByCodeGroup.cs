@@ -101,13 +101,13 @@ namespace TOne.LCRProcess.Activities
                 SingleDestinationCodeMatches singleDestinationCodeMatches = new SingleDestinationCodeMatches
                 {
                     RouteCode = dCode.Key,
-                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId(),
-                    CodeMatchesByZoneId = new CodeMatchesByZoneId()
+                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId()
                 };
                 foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
                     Code supplierMatch = null;
                     int index = 0;
+                    int possibleMatchesCount = dCode.Value.Count;
                     do
                     {
                         string possibleMatch = dCode.Value[index];
@@ -122,15 +122,17 @@ namespace TOne.LCRProcess.Activities
                                 SupplierCodeId = supplierMatch.ID
                             };
                             singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
-                            singleDestinationCodeMatches.CodeMatchesByZoneId.Add(codeMatch.SupplierZoneId, codeMatch);
                             codeMatches.Add(codeMatch);
                         }
                         index++;
                     }
-                    while (supplierMatch == null && index < dCode.Value.Count);
+                    while (supplierMatch == null && index < possibleMatchesCount);
                 }
-                inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
-                inputArgument.OutputQueue.Enqueue(codeMatches);
+                if (codeMatches.Count > 0)
+                {
+                    inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
+                    inputArgument.OutputQueue.Enqueue(codeMatches);
+                }
             }           
         }
     }

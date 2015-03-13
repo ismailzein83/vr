@@ -28,10 +28,9 @@ namespace TOne.LCR.Business
 
             ActionExecutionPath<BaseRouteAction> executionPath = new ActionExecutionPath<BaseRouteAction> { FirstStep = blockStep };
             blockStep.NextStep = overrideStep;
-            overrideStep.NextStep = getTopOptionsStep;
-            getTopOptionsStep.NextStep = priorityStep;
-            //priorityStep.NextStep = getTopOptionsStep;
-            priorityStep.NextStep = checkNoOptionsStep;
+            overrideStep.NextStep = priorityStep;
+            priorityStep.NextStep = getTopOptionsStep;
+            getTopOptionsStep.NextStep = checkNoOptionsStep;
             checkNoOptionsStep.NextStep = applyPercentageStep;
             return executionPath;
         }
