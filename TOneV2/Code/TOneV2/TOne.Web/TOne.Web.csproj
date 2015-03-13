@@ -464,6 +464,13 @@
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
+    <Content Include="images\alert\attention.png" />
+    <Content Include="images\alert\close.png" />
+    <Content Include="images\alert\remove-small.png" />
+    <Content Include="images\alert\remove.png" />
+    <Content Include="images\alert\success.png" />
+    <Content Include="images\alert\update.png" />
+    <Content Include="images\alert\warning.png" />
     <Content Include="popoverTemp.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />

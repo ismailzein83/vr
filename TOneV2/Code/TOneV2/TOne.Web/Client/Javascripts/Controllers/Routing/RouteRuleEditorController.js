@@ -32,8 +32,15 @@
             e.preventDefault();
             e.stopPropagation();
         }
-        $scope.update = function (val,model) {            
-            $scope[model] = val;
+        $scope.update = function (val, model) {
+            if (model == 'routetype' && val.name != 'Customer') {
+                $scope[model] = $scope.routeTemplates[0];
+                showAlertBootStrapMsg('warning', 'This module is under construction.', 2000)
+            }
+            else {
+                $scope[model] = val;
+            }
+           
         }       
         $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
            {
@@ -55,12 +62,7 @@
             { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html' },
             { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html' }
         ]
-        $scope.typeTemplates = [
-           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
-           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
-        ]
-        $scope.editortype = $scope.editorTemplates[0];
+        $scope.editortype = $scope.editorTemplates[0];         
         $scope.routeTemplates = [
           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
@@ -71,4 +73,27 @@
        
 
     });
+function waitAlert(msg) {
+    showAlertBootStrapMsg("attention", msg, true);
+}
+function hideWaitAlert() {
+    $(".attention").hide();
+    $('#notification').html('');
+}
+function showAlertBootStrapMsg(type, msg, wait) {
+    $('#notification').html('<div class="alert ' + type + '" style="display: none;"> ' + msg + '  <img src="images/alert/close.png" alt="" class="close" data-dismiss="alert" ></div>');
+    $("." + type).show('slow');
+    if (!wait) {
+        setTimeout(function () {
+            $("." + type).delay(500).hide('slow');
+            $('#notification').html('');
+        }, 7000);
+    }
+    else {
+        setTimeout(function () {
+            $("." + type).delay(500).hide('slow');
+            $('#notification').html('');
+        }, wait);
 
+    }
+}
