@@ -343,8 +343,8 @@ namespace Vanrise.Data.SQL
             processBulkCopy.StartInfo = procStartInfo;
             processBulkCopy.Start();
             processBulkCopy.WaitForExit();
-            File.Delete(bulkInsertInfo.DataFilePath);
             string errorMessage = File.ReadAllText(errorFilePath);
+            File.Delete(bulkInsertInfo.DataFilePath);
             File.Delete(errorFilePath);
             if (!String.IsNullOrWhiteSpace(errorMessage))
                 throw new Exception(errorMessage);
