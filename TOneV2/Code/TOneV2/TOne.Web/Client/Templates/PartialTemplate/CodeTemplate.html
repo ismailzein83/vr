@@ -4,16 +4,16 @@
     </div>
     <div class="col-lg-2  style-col">
         <div>
-            <input class="form-control" type="text">
+            <input class="form-control" ng-model="code" type="text">
         </div>
         <div style="padding-top:5px">
-            <switch ng-model="subCodes" class="green"></switch>
+            <switch ng-model="subCodes" ng-init="false" class="green"></switch>
             <label class="control-label" style="padding-top:6px">With Sub Codes</label>           
         </div>
 
     </div>
     <div class="col-lg-2  style-col">
-        <label class="control-label" style="padding-top:6px">Exculded Codes</label>
+        <label class="control-label" style="padding-top:6px">Excluded Codes</label>
     </div>
     <div class="col-lg-2  style-col">
         <div class="dropdown" id="CodeListddl">

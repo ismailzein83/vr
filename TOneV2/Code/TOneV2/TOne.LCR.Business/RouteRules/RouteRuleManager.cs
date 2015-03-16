@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.LCR.Data;
 using TOne.LCR.Entities;
-
 namespace TOne.LCR.Business
 {
     public class RouteRuleManager
@@ -40,6 +40,12 @@ namespace TOne.LCR.Business
             return _routeOptionActionExecutionPath;
         }
 
+        public void SaveRouteRule(RouteRule rule)
+        {
+            IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
+            dataManager.SaveRouteRule(rule);
+        }
+
         static ActionExecutionPath<BaseRouteOptionAction> _routeOptionActionExecutionPath = BuildRouteOptionActionExecutionPath();
 
         private static ActionExecutionPath<BaseRouteOptionAction> BuildRouteOptionActionExecutionPath()
@@ -50,6 +56,7 @@ namespace TOne.LCR.Business
 
             return executionPath;
         }
+
 
         //public RuleActionExecutionPath GetExecutionPath()
         //{

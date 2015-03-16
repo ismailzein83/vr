@@ -1,6 +1,6 @@
 ﻿appControllers.controller('RouteRuleEditorController',
-    function RouteRuleEditorController($scope,$http) {
-       
+    function RouteRuleEditorController($scope,$http,notify) {
+        
         $('.dropdown').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
@@ -32,10 +32,12 @@
             e.preventDefault();
             e.stopPropagation();
         }
+      
         $scope.update = function (val, model) {
             if (model == 'routetype' && val.name != 'Customer') {
                 $scope[model] = $scope.routeTemplates[0];
-                showAlertBootStrapMsg('warning', 'This module is under construction.', 2000)
+                notify.closeAll();
+                notify({ message: 'This module is under construction.',classes:"alert alert-danger"});
             }
             else {
                 $scope[model] = val;
@@ -69,10 +71,28 @@
           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
         ]
         $scope.routetype = $scope.routeTemplates[0];
-        
+        $scope.subViewConnector = {}     
+        $scope.saveRule = function () {
+            var routeRule =
+                {
+                    CodeSet: $scope.subViewConnector.getCodeSet(),
+                    CarrierAccountSet: $scope.subViewConnector.getCarrierAccountSet(),
+                    ActionData: $scope.subViewConnector.getActionData(),
+                    Type: "RouteRule",
+                    BeginEffectiveDate: $scope.BEDDate,
+                    EndEffectiveDate: ($scope.EEDDate),
+                    Reason: $scope.Reason
+                };
+            $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
+                         routeRule)
+                     .success(function (response) {
+
+                     });
+        }
        
 
     });
+
 function waitAlert(msg) {
     showAlertBootStrapMsg("attention", msg, true);
 }

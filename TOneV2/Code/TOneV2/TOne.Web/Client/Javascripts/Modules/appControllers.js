@@ -1,2 +1,2 @@
 ﻿
-var appControllers = angular.module('appControllers', ['ng-sortable', 'ngSanitize', 'mgcrea.ngStrap', 'uiSwitch']);
+var appControllers = angular.module('appControllers', ['ng-sortable', 'ngSanitize', 'mgcrea.ngStrap', 'uiSwitch', 'cgNotify']);

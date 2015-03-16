@@ -42,11 +42,14 @@ namespace TOne.Web
                "~/Client/Libraries/Angular/angular-strap.tpl.js",
               "~/Client/Libraries/Angular/sortable.js",
                "~/Client/Libraries/Angular/angular-ui-switch.js",
+               "~/Client/Libraries/Angular/angular-notify.js",               
               "~/Client/Libraries/Angular/ng-sortable.js"));
 
             //Bootstrap
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.js", true));
+            bundles.Add(new StyleBundle("~/Content/Styles").IncludeDirectory(
+               "~/Client/Styles", "*.css", true));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
@@ -71,8 +74,7 @@ namespace TOne.Web
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
 
-            bundles.Add(new StyleBundle("~/Content/Styles").IncludeDirectory(
-               "~/Client/Styles", "*.css", true));
+            
         }
     }
 }

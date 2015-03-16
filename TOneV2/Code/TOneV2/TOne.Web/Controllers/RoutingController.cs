@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using TOne.LCR.Entities;
+using TOne.LCR.Business;
 
 namespace TOne.Web.Controllers
 {
@@ -19,6 +20,8 @@ namespace TOne.Web.Controllers
         [HttpPost]
         public void SaveRouteRule(RouteRule rule)
         {
+            RouteRuleManager manager = new RouteRuleManager();
+            manager.SaveRouteRule(rule);
 
         }
     }

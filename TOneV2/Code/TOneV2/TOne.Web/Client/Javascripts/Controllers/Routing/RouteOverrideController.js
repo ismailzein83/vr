@@ -1,5 +1,23 @@
 ﻿appControllers.controller('RouteOverrideController',
     function RouteOverrideController($scope, $http) {
+
+        $scope.subViewConnector.getActionData = function () {
+            return {
+                $type: "TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities",
+                Options: $scope.fillOptionsData()
+            }
+        }
+        $scope.fillOptionsData = function () {
+            var tab = [];
+            $.each($scope.selectedSuppliers, function (i, value) {
+                tab[i] = {
+                    SupplierId: value.CarrierAccountID,
+                    Percentage: value.Percentage
+                }
+
+            });
+            return tab;
+        }
         $scope.getSelectSuppliersText = function () {
             var label;
             if ($scope.selectedSuppliers.length == 0)

@@ -1,6 +1,27 @@
 ﻿appControllers.controller('PriorityController',
     function PriorityController($scope, $http) {
-        //$(".toggel").bootstrapSwitch();
+       
+        $scope.subViewConnector.getActionData = function () {
+            return {
+                $type: "TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities",
+                Options: $scope.fillOptionsData()
+            }
+        }
+        $scope.fillOptionsData = function () {
+            var tab = [];
+            $.each($scope.selectedSuppliers, function (i, value) {
+                tab[i] = {
+                    SupplierId: value.CarrierAccountID,
+                    Priority: ($scope.selectedSuppliers.length ) - i,
+                    Force:value.Force,
+                    Percentage: value.Percentage
+                }
+
+            });
+            return tab;
+        }
+
+       
         $scope.getSelectSuppliersText = function () {
             var label;
             if ($scope.selectedSuppliers.length == 0)

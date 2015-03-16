@@ -201,6 +201,7 @@
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
+    <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
     <Content Include="Client\Libraries\Angular\angular-sanitize.js" />
     <Content Include="Client\Libraries\Angular\angular-strap.js" />
@@ -440,6 +441,7 @@
     <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
     <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
+    <Content Include="Client\Styles\angular-notify.css" />
     <Content Include="Client\Styles\angular-ui-switch.css" />
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />

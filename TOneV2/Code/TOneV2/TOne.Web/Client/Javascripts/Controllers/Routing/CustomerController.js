@@ -1,5 +1,24 @@
 ﻿appControllers.controller('CustomerController',
     function CustomerController($scope, $http) {
+
+
+        $scope.subViewConnector.getCarrierAccountSet = function () {
+            return {
+                $type: "TOne.LCR.Entities.CustomerSelectionSet, TOne.LCR.Entities",
+                Customers: {
+                    SelectionOption: ($scope.carrierAccountSelectionOption == 1) ? "OnlyItems" : "AllExceptItems",
+                    SelectedValues: $scope.getSelectedValues()
+                }
+            }
+        }
+        $scope.getSelectedValues = function () {
+            var tab = [];
+            $.each($scope.selectedCustomers, function (i, value) {
+                tab[i] = value.CarrierAccountID;
+
+            });
+            return tab;
+        }
         var dropdownHidingTimeoutHandlerc;
         $('#dropdownMenuddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();

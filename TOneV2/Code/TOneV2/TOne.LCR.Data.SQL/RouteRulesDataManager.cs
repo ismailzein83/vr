@@ -9,6 +9,7 @@ using TOne.Data.SQL;
 using TOne.Entities;
 using TOne.LCR.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 
 namespace TOne.LCR.Data.SQL
 {
@@ -21,7 +22,19 @@ namespace TOne.LCR.Data.SQL
             routeRules.AddRange(GetOverrideRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
             return routeRules;
         }
-
+        public void SaveRouteRule(RouteRule rule)
+        {
+            object RouteRuleId ;
+            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId ,
+                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+                (int)rule.Type,
+                rule.BeginEffectiveDate,
+                rule.EndEffectiveDate,
+                rule.Reason,
+                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
+                );
+        }
         private List<RouteRule> GetBlockRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();

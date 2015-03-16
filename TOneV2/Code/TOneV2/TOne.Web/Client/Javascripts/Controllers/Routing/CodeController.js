@@ -1,5 +1,16 @@
 ﻿appControllers.controller('CodeController',
     function CodeController($scope, $http) {
+       
+        $scope.subViewConnector.getCodeSet = function () {
+            return {
+                $type: "TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities",
+                Code: $scope.code,
+                WithSubCodes: $scope.subCodes,
+                ExcludedCodes: $scope.codeList
+            };
+        };
+
+        //$scope.RouteRule.CodeSet = $scope.CodeSet;
         $('#CodeListddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
@@ -8,6 +19,7 @@
         $('#CodeListddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+        $scope.code = "";
         $scope.codeList = [];
         $scope.codeInpute ='';
         $scope.getCodes = function () {
@@ -27,6 +39,7 @@
             }
             else
                 label = $scope.codeList.length + " Codes selected";
+           // RouteRule.CodeSet.ExcludedCodes = $scope.codeList;
             return label;
         };
 
@@ -39,7 +52,7 @@
         $scope.addCode = function (e) {
             e.preventDefault();
             e.stopPropagation();
-            var valid = isNumber($scope.codeInpute);
+            var valid = $scope.isNumber($scope.codeInpute);
             if (valid) {
                 var index = null;
                 var index = $scope.codeList.indexOf($scope.codeInpute);
@@ -66,7 +79,3 @@
        
     });
 
-var numberReg = /^\d+$/;
-function isNumber(s) {
-    return String(s).search(numberReg) != -1
-}

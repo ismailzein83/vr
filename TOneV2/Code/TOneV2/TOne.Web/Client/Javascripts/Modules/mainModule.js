@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope) {
+.controller('mainCtrl', function mainCtrl($scope,notify) {
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
     var host = pathArray[2];
@@ -17,6 +17,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             }
         }
         return index;
+    }
+    var numberReg = /^\d+$/;
+    $scope.isNumber = function  (s) {
+        return String(s).search(numberReg) != -1
     }
 });
 angular.module('mainModule')
