@@ -10,6 +10,13 @@ namespace TOne.Web.Controllers
 {
     public class RoutingController : ApiController
     {
+        [HttpGet]
+        public string GetTest(string prm)
+        {
+            return prm + " returned";
+        }
+
+        [HttpPost]
         public void SaveRouteRule(RouteRule rule)
         {
 

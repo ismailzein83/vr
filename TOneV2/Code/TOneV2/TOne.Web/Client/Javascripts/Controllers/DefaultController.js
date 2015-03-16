@@ -1,21 +1,41 @@
 ﻿appControllers.controller('DefaultController',
-    function DefaultController($scope) {
+    function DefaultController($scope, $http) {
        
-        $scope.selectedCountries = [];
-        $scope.Countries = ['Arabic', 'Chinese', 'Danish','Spanish'];
         $scope.testModel = 'initial from default';
-        $scope.selectLanguage = function (language) {
-            var index = null;
-            try{
-                var index = $scope.selectedCountries.indexOf(language);
+
+        $scope.postMsg = function () {
+            $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
+          {
+              RouteRuleId: 4,
+              CodeSet: {
+                  $type: "TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities",
+                  Code: "5345",
+                  ExcludedCodes:["534","5346"]
+              },
+              CarrierAccountSet: {
+                  $type: "TOne.LCR.Entities.CustomerSelectionSet, TOne.LCR.Entities",
+                  Customers: {
+                      SelectionOption: "AllExceptItems",
+                      SelectedValues: ["C4444","4656"]
+                  }                 
+              },
+              ActionData: {
+                $type: "TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities",
+                NoOptionAction: "SwitchToLCR",
+                Options: [{
+                    SupplierId: "C555fd",
+                    Percentage:55
+                }, {
+                    SupplierId: "D543",
+                    Percentage: 5
+                }, {
+                    SupplierId: "G655",
+                    Percentage: 34
+                }]
             }
-            catch (e) {
-                
-            }
-            if (index >= 0 ){
-                $scope.selectedCountries.splice(index, 1);
-            }
-            else
-                 $scope.selectedCountries.push(language);
+          })
+      .success(function (response) {
+          
+      });
         };
     });
