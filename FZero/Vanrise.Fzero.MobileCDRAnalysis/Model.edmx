@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CDRAnalysisMobileModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CDRAnalysisMobileModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="CDRAnalysisMobileModelStoreContainer">
           <EntitySet Name="CDR" EntityType="CDRAnalysisMobileModel.Store.CDR" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="CellProfile" EntityType="CDRAnalysisMobileModel.Store.CellProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
@@ -1378,8 +1378,7 @@
       <EntityType Name="filesDAT">
         <Property Name="content" Type="varchar" />
       </EntityType>-->
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CDRAnalysisMobileModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
