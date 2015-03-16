@@ -83,6 +83,7 @@ appControllers.controller('TestViewController', function (CarriersService) {
         //DropDown
         var controller = this;
         this.customers;
+        this.selectedvalues;
         function loadRemoteData() {
             return CarriersService.getCustomers().then(function (customers) {
                 controller.customers = customers;

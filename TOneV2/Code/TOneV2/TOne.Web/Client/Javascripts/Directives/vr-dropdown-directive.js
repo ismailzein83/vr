@@ -10,18 +10,18 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         setDefaultAttributes: setDefaultAttributes
     });
 
-    function getSelectText(selectedValues, dlabel, labelMsg) {
+    function getSelectText(length, values, dlabel, labelMsg) {
         var label = "";
-        if (selectedValues.length == 0)
+        if (length == 0)
             label = dlabel;
-        else if (selectedValues.length == 1)
-            label = selectedValues[0];
-        else if (selectedValues.length == 2)
-            label = selectedValues[0] + "," + selectedValues[1];
-        else if (selectedValues.length == 3)
-            label = selectedValues[0] + "," + selectedValues[1] + "," + selectedValues[2];
+        else if (length == 1)
+            label = values[0];
+        else if (length == 2)
+            label = values[0] + "," + values[1];
+        else if (length == 3)
+            label = values[0] + "," + values[1] + "," + values[2];
         else
-            label = selectedValues.length + labelMsg;
+            label = length + labelMsg;
         if (label.length > 21)
             label = label.substring(0, 20) + "..";
         return label;
@@ -62,6 +62,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         restrict: 'E',
         scope: {
             datasource: '=',
+            selectedvalues: '=',
             datasourceurl: '@',
             datatextfield: '@',
             datavaluefield: '@',
@@ -77,9 +78,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             this.filtername = '';
 
             this.getDatasource = function () {
-                if (controller.datasource == undefined)
-                    return controller.datasource;
-
                 return controller.datasource;
             };
 
@@ -130,8 +128,14 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getSelectText = function () {
+                var selectedVal = [];
 
-                return DropdownService.getSelectText(controller.selectedValues, controller.placeholder, controller.selectplaceholder);
+                for (var i = 0 ; i < controller.selectedValues.length ; i++)
+                {
+                    selectedVal.push(controller.getObjectText(controller.selectedValues[i]));
+                    if (i == 2) break;
+                }
+                return DropdownService.getSelectText(controller.selectedValues.length,selectedVal, controller.placeholder, controller.selectplaceholder);
             };
 
             this.getUlClass = function () {
@@ -146,6 +150,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         },
         templateUrl: function (element, attrs) {
             return DropdownService.dTemplate;
+        },
+        link: function ($scope, element, attrs) {
+            $scope.selectedvalues = [];
         }
 
     };

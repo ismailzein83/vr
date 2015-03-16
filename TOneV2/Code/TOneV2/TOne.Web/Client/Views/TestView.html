@@ -31,19 +31,23 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectlbl="Selected Customers:" 
+            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectlbl="Selected Customers:"
                          placeholder="Select Customers..." selectplaceholder="Customers selected"></vr-dropdown>
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.customers" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
         </div>
 
         <!--<div class="col-lg-2">
             <vr-dropdown datasourceurl="/api/BusinessEntity/GetCarriers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Customer"></vr-dropdown>
         </div>-->
     </div>
-
+    <div class="row">
+        <div class="col-lg-2">
+            <span ng-repeat="c in testviewctrl.selectedcustomers">c.Name</span>
+        </div>
+    </div>
     <!--<div class="=row">
         <vr-gridview gridoptions="testviewCtrl.gridOptions" datasource="testviewCtrl.data">
             <vr-grid-col> </vr-grid-col>
