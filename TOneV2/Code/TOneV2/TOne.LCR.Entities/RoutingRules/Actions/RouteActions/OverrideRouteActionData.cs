@@ -22,5 +22,5 @@ namespace TOne.LCR.Entities
         public short? Percentage { get; set; }
     }
 
-    public enum OverrideRouteNoOptionAction { None, SwitchToLCR, BackupRoute}    
+    public enum OverrideRouteNoOptionAction { None = 0, SwitchToLCR = 1, BackupRoute = 2}    
 }

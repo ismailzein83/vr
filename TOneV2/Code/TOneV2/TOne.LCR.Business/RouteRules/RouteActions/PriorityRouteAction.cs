@@ -25,7 +25,7 @@ namespace TOne.LCR.Business
 
             var route = context.Route;
             bool hasOptions = route.Options != null && route.Options.SupplierOptions != null;
-            if (hasOptions)
+            if (!hasOptions)
             {
                 route.Options = new RouteOptions();
                 route.Options.SupplierOptions = new List<RouteSupplierOption>();

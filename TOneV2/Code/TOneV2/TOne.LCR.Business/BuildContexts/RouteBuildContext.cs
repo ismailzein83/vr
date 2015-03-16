@@ -61,6 +61,8 @@ namespace TOne.LCR.Business
                     ActionExecutionStep<BaseRouteAction> nextStep;
                     if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                         currentStep = nextStep;
+                    else
+                        currentStep = currentStep.NextStep;
                 }
                 else
                 {

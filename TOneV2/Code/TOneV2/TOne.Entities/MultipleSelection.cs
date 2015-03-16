@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Entities
 {
-    public enum MultipleSelectionOption { All, AllExceptItems, OnlyItems }
+    public enum MultipleSelectionOption { OnlyItems = 1, AllExceptItems = 2}
 
     public class MultipleSelection <T>
     {
@@ -18,7 +18,6 @@ namespace TOne.Entities
         {
             switch(this.SelectionOption)
             {
-                case MultipleSelectionOption.All: return true;
                 case MultipleSelectionOption.OnlyItems: return (SelectedValues != null && SelectedValues.Contains(value));
                 case MultipleSelectionOption.AllExceptItems: return (SelectedValues == null || !SelectedValues.Contains(value));
             }

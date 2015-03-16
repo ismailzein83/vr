@@ -7,7 +7,7 @@ using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public enum RouteRuleType { RouteRule, RouteOptionRule }
+    public enum RouteRuleType { RouteRule = 1, RouteOptionRule = 2 }
     public class RouteRule
     {
         public int RouteRuleId { get; set; }

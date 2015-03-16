@@ -62,6 +62,8 @@ namespace TOne.LCR.Business
                     ActionExecutionStep<BaseRouteOptionAction> nextStep;
                     if (CheckActionResult(actionResult, option, executionPath, currentStep, out nextStep, out removeOption))
                         currentStep = nextStep;
+                    else
+                        currentStep = currentStep.NextStep;
                 }
                 else
                 {
@@ -105,31 +107,30 @@ namespace TOne.LCR.Business
                 nextStep = currentStep.NextStep;
                 return true;
             }
-            if (!actionResult.IsInvalid)
+            if (actionResult == null || !actionResult.IsInvalid)
             {
-                //if (filterResult.Notify)
-                //    ;//TODO add to notification
-                if (actionResult.DontMatchRoute)
+                if (actionResult != null)
                 {
-                    nextStep = null;
-                    return false;
-                }
-                else if (actionResult.BlockOption || actionResult.RemoveOption)
-                {
-                    if (actionResult.RemoveOption
-                            || (actionResult.BlockOption && _removeBlockedOptions))
-                        removeOption = true;
-                    else if (actionResult.BlockOption)
-                        option.IsBlocked = true;
-                    nextStep = null;
-                }
-                else
-                {
-                    if (currentStep.IsEndAction)
+                    if (actionResult.DontMatchRoute)
+                    {
                         nextStep = null;
-                    else
-                        nextStep = currentStep.NextStep;
+                        return false;
+                    }
+                    else if (actionResult.BlockOption || actionResult.RemoveOption)
+                    {
+                        if (actionResult.RemoveOption
+                                || (actionResult.BlockOption && _removeBlockedOptions))
+                            removeOption = true;
+                        else if (actionResult.BlockOption)
+                            option.IsBlocked = true;
+                        nextStep = null;
+                    }
                 }
+                if (currentStep.IsEndAction)
+                    nextStep = null;
+                else
+                    nextStep = currentStep.NextStep;
+
 
                 return true;
             }

@@ -18,7 +18,6 @@ namespace TOne.LCR.Entities
             CodeSetMatch match = new CodeSetMatch();
             switch(this.ZoneIds.SelectionOption)
             {
-                case MultipleSelectionOption.All: 
                 case MultipleSelectionOption.AllExceptItems: 
                 match.IsMatchingAllZones = true; 
                 break;

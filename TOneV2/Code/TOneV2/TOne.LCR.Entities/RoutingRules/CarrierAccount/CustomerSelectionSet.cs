@@ -15,7 +15,6 @@ namespace TOne.LCR.Entities
         {
             switch(this.Customers.SelectionOption)
             {
-                case MultipleSelectionOption.All: return true;
                 case MultipleSelectionOption.AllExceptItems: return this.Customers.SelectedValues == null || !this.Customers.SelectedValues.Contains(accountId);
                 case MultipleSelectionOption.OnlyItems: return this.Customers.SelectedValues != null && this.Customers.SelectedValues.Contains(accountId);
             }
