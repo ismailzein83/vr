@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    return context.prGetEmails( DestinationEmail, FromDate, ToDate).ToList();
+                    //return context.prGetEmails( DestinationEmail, FromDate, ToDate).ToList();
                 }
             }
             catch (Exception err)
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                 using (MobileEntities context = new MobileEntities())
                 {
-                    context.prSendMail(profile_name, To, Subject, CC, Body, BCC);
+                    //context.prSendMail(profile_name, To, Subject, CC, Body, BCC);
                 }
             }
             catch (Exception err)
@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                 using (MobileEntities context = new MobileEntities())
                 {
-                    context.prSendMailWithAttachment(profile_name, To, Subject, CC, Body, AttachmentPath, BCC);
+                    //context.prSendMailWithAttachment(profile_name, To, Subject, CC, Body, AttachmentPath, BCC);
                 }
             }
             catch (Exception err)
@@ -67,7 +67,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                 using (MobileEntities context = new MobileEntities())
                 {
-                    context.prDeleteEmail(Ids);
+                    //context.prDeleteEmail(Ids);
                 }
             }
             catch (Exception err)
