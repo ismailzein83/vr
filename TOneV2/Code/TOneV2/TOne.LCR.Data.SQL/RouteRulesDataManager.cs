@@ -35,6 +35,14 @@ namespace TOne.LCR.Data.SQL
                 rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
                 );
         }
+
+        public List<RouteRule> GetAllRouteRule() {            
+            return GetItemsSP("[LCR].[sp_RouteRuleDefinition_GetAll]", RouteRuleMapper);
+        }
+        public RouteRule GetRouteRuleDetails(int RouteRuleId)
+        {
+            return GetItemSP("[LCR].[sp_RouteRuleDefinition_GetByRouteRuleId]", RouteRuleMapper, RouteRuleId);
+        }
         private List<RouteRule> GetBlockRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
@@ -190,6 +198,24 @@ namespace TOne.LCR.Data.SQL
             }
             dtZoneInfo.EndLoadData();
             return dtZoneInfo;
+        }
+
+        RouteRule RouteRuleMapper(IDataReader reader)
+        {
+            var routeRule = new RouteRule
+            {
+                RouteRuleId = (int)reader["RouteRuleId"],
+                CarrierAccountSet = reader["CarrierAccountSet"] != null ? (BaseCarrierAccountSet)Serializer.Deserialize(reader["CarrierAccountSet"] as string) : null,
+                CodeSet = reader["CodeSet"] != null ? (BaseCodeSet)Serializer.Deserialize(reader["CodeSet"] as string) : null,
+                ActionData = reader["ActionData"] != null ? (Object)Serializer.Deserialize(reader["ActionData"] as string) : null,
+                Type = (RouteRuleType)((int)reader["Type"]),
+                BeginEffectiveDate = (DateTime)reader["BeginEffectiveDate"],
+                EndEffectiveDate = (reader["EndEffectiveDate"] == System.DBNull.Value) ? (DateTime?)null : (DateTime)reader["EndEffectiveDate"],
+                Reason = reader["Reason"] as string
+
+            };
+
+            return routeRule;
         }
     }
 }

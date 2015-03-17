@@ -37,5 +37,10 @@ namespace TOne.LCR.Entities
         {
             return this.ExcludedCodes != null && this.ExcludedCodes.Contains(code);
         }
+
+        public override string Description
+        {
+            get { return String.Format("Zones: {0}", String.Join(",", ZoneIds.SelectedValues.Select<int, string>(itm => itm.ToString()))); }
+        }
     }
 }

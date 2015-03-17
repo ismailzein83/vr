@@ -43,7 +43,8 @@
                 <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor:default" ng-click="selectSupplier($event,item)"></i>
 
                 <div style="float: right">
-                    <switch ng-model="item.Force" ng-init="item.Force = false " class="green"></switch>
+                    {{item.Force}}
+                    <switch ng-model="item.Force" ng-init="item.Force = (item.Force)?item.Force:false " class="green"></switch>
                     <input type="text" class="form-control list-inpute list-inpute-float" ng-model="item.Percentage" size="3">
                 </div>
             </li>

@@ -46,6 +46,18 @@ namespace TOne.LCR.Business
             dataManager.SaveRouteRule(rule);
         }
 
+        public List<RouteRule> GetAllRouteRule()
+        {
+            IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
+            return dataManager.GetAllRouteRule();
+        }
+
+        public RouteRule GetRouteRuleDetails(int RouteRuleId)
+        {
+            IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
+            return dataManager.GetRouteRuleDetails(RouteRuleId);
+        }
+
         static ActionExecutionPath<BaseRouteOptionAction> _routeOptionActionExecutionPath = BuildRouteOptionActionExecutionPath();
 
         private static ActionExecutionPath<BaseRouteOptionAction> BuildRouteOptionActionExecutionPath()

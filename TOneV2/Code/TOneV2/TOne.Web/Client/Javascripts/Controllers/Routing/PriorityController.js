@@ -40,31 +40,21 @@
         };
 
         // 
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-          {
-              params: {
-                  carrierType: 2
-              }
-          })
-      .success(function (response) {
-          $scope.suppliers = response;
-      });
-        $scope.selectedSuppliers = [];
+      
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.selectSupplier = function ($event, s) {
             $event.preventDefault();
             $event.stopPropagation();
-           
-                var index = $scope.selectedSuppliers.indexOf(s);
-              
+
+            var index = $scope.selectedSuppliers.indexOf(s);
+
             if (index >= 0) {
                 $scope.selectedSuppliers.splice(index, 1);
             }
             else {
                 $scope.selectedSuppliers.push(s);
-                //setTimeout(function () { $(".toggel").bootstrapSwitch(); }, 10)
-                
             }
-                
+
         };
+       
     });

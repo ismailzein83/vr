@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using TOne.LCR.Entities;
 using TOne.LCR.Business;
+using TOne.Web.Models;
+using TOne.Web.ModelMappers;
 
 namespace TOne.Web.Controllers
 {
@@ -24,5 +26,23 @@ namespace TOne.Web.Controllers
             manager.SaveRouteRule(rule);
 
         }
+        [HttpGet]
+        public List<RouteRuleSummaryModel> GetAllRouteRule()
+        {
+            //System.Threading.Thread.Sleep(2000);
+            RouteRuleManager manager = new RouteRuleManager();
+            return Mappers.MapRouteRules(manager.GetAllRouteRule());
+
+        }
+
+        [HttpGet]
+        public RouteRule GetRouteRuleDetails(int RouteRuleId)
+        {
+           
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.GetRouteRuleDetails(RouteRuleId);
+
+        }
+        
     }
 }

@@ -15,7 +15,11 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/Routing/RouteRuleEditorOld.html',
             controller: 'RouteRuleEditorControllerOld'
         }).
-        when('/RouteRuleEditor', {
+        when('/RouteRuleManager', {
+            templateUrl: '/Client/Views/Routing/RouteRuleManager.html',
+            controller: 'RouteRuleManagerController'
+        }).
+        when('/RouteRuleEditor/:RouteRuleId', {
             templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
             controller: 'RouteRuleEditorController'
         }).

@@ -36,16 +36,7 @@
         };
 
         // 
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-          {
-              params: {
-                  carrierType: 2
-              }
-          })
-      .success(function (response) {
-          $scope.suppliers = response;
-      });
-        $scope.selectedSuppliers = [];
+        
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.selectSupplier = function ($event, s) {
             $event.preventDefault();

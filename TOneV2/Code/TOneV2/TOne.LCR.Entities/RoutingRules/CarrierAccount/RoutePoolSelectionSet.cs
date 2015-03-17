@@ -9,5 +9,10 @@ namespace TOne.LCR.Entities
     public class RoutePoolSelectionSet : BaseCarrierAccountSet
     {
         public int RoutePoolId { get; set; }
+
+        public override string Description
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

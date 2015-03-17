@@ -8,6 +8,7 @@ namespace TOne.LCR.Entities
 {
     public abstract class BaseCodeSet
     {
+        public abstract string Description { get; }
         public virtual CodeSetMatch GetMatch()
         {
             return null;

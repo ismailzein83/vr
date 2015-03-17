@@ -1,6 +1,24 @@
 ﻿appControllers.controller('CustomerController',
     function CustomerController($scope, $http) {
 
+        
+       // $scope.selectedCustomers = ;
+       //setTimeout(function () {
+       //     //alert($scope.routeRule)
+       //     if ($scope.routeRule != null) {
+       //         var tab = [];
+       //         $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
+       //             var existobj = $scope.findExsiteObj($scope.customers, value ,'CarrierAccountID')
+       //             if (existobj != null)
+       //                 tab[i] = existobj;
+
+       //         });
+       //         $scope.$apply(function () {                    
+       //             $scope.selectedCustomers = tab;
+       //         });
+       //     }
+       // }, 1000)
+
 
         $scope.subViewConnector.getCarrierAccountSet = function () {
             return {
@@ -19,6 +37,8 @@
             });
             return tab;
         }
+
+      
         var dropdownHidingTimeoutHandlerc;
         $('#dropdownMenuddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
@@ -44,7 +64,7 @@
                 }
             }, 150);
         });
-        $scope.selectedCustomers = [];
+       
         $scope.selectCustomer = function ($event, c) {
             $event.preventDefault();
             $event.stopPropagation();

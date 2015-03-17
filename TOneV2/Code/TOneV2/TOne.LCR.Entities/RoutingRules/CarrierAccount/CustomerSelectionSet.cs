@@ -20,5 +20,10 @@ namespace TOne.LCR.Entities
             }
             return false;
         }
+
+        public override string Description
+        {
+            get { return String.Format("Customers: {0}", String.Join(",", this.Customers.SelectedValues)); }
+        }
     }
 }

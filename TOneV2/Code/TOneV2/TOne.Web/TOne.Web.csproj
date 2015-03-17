@@ -146,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -176,6 +175,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelMappers\Mappers.cs" />
+    <Compile Include="Models\RouteRuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +190,7 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
@@ -221,6 +223,7 @@
     <Content Include="Client\Libraries\Angular\ng-sortable.js" />
     <Content Include="Client\Libraries\Angular\sortable-old.js" />
     <Content Include="Client\Libraries\Angular\Sortable.js" />
+    <Content Include="Client\Libraries\Angular\ui-grid.js" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.js" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
@@ -446,6 +449,8 @@
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Styles\ui-grid.css" />
+    <Content Include="Client\Styles\ui-grid.svg" />
     <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
     <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
@@ -466,6 +471,7 @@
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
+    <Content Include="Client\Views\Routing\RouteRuleManager.html" />
     <Content Include="images\alert\attention.png" />
     <Content Include="images\alert\close.png" />
     <Content Include="images\alert\remove-small.png" />
@@ -473,6 +479,7 @@
     <Content Include="images\alert\success.png" />
     <Content Include="images\alert\update.png" />
     <Content Include="images\alert\warning.png" />
+    <Content Include="images\loader-mask.gif" />
     <Content Include="popoverTemp.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
@@ -594,6 +601,9 @@
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Client\Styles\ui-grid.eot" />
+    <Content Include="Client\Styles\ui-grid.ttf" />
+    <Content Include="Client\Styles\ui-grid.woff" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>

@@ -3,7 +3,6 @@
 
 <div class="container-fluid ">
     <div class="panel panel-primary panel-over-color">
-
         <div class="panel-body">
             <div class="row style-row">
                 <div class="col-lg-12" style="text-align:center">
@@ -11,7 +10,7 @@
                         Customer Route Rule Editor
                     </h3>
                 </div>
-            </div>
+            </div>            
             <div class="row style-row">
                 <div class="col-lg-2  style-col">
                     <label class="control-label" style="padding-top:6px">Rule Type:</label>
@@ -37,7 +36,7 @@
                 <div style="position:relative">
                     <div style="position:absolute;right:-10px;top:-16px;z-index:101">
                         <div class="dropdown">
-                            <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='routetype' >
+                            <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='routetype'>
                                 <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">
                                     By {{routetype.name}}<span style="float:right;top:8px;position:relative" class="caret"></span>
                                 </label>
@@ -46,15 +45,15 @@
                                 <li role="presentation">
                                     <div ng-repeat="r in routeTemplates" class="mark-select " ng-mouseenter="muteaction($event);" ng-click="update(r,'routetype')" style="display: block;padding:2px; margin:2px; white-space: normal;">
                                         <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{r.name}}</div>
-                                    </div>                                   
+                                    </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div ng-include src="routetype.url">
-                </div>  
-               
+                </div>
+
             </div>
             <div class="row style-row">
                 <div style="position:relative">
@@ -76,7 +75,7 @@
                     </div>
                 </div>
                 <div ng-include src="editortype.url">
-                </div>               
+                </div>
             </div>
             <div class="row style-row">
                 <div class="col-lg-2  style-col">
@@ -98,7 +97,7 @@
                 <div class="col-lg-12  style-col">
                     <h4>{{ruletype.name}} Details:</h4>
                 </div>
-                <div ng-include src="ruletype.url">
+                <div ng-include src="ruletype.url" onload="onloadRuletype()">
 
                 </div>
             </div>
@@ -110,18 +109,28 @@
             </div>
             <div class="row pad-top-m">
                 <div class="col-lg-12 col-no-padding">
-                    <div class="action-bar">
-                        <div class="btn-group action-bar-left">
 
-                        </div>
-                        <div class="btn-group action-bar-right">
-                            <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Cancel<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-                            <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="saveRule()">Save<span style="padding-left:4px" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div id="notification"> </div>
 </div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <div class="row pad-top-m">
+            <div class="col-lg-12 col-no-padding">
+                <div class="action-bar">
+                    <div class="btn-group action-bar-left">
+
+                    </div>
+                    <div class="btn-group action-bar-right">
+                        <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Cancel<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                        <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="saveRule()">Save<span style="padding-left:4px" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>

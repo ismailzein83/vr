@@ -15,5 +15,10 @@ namespace TOne.LCR.Entities
         {
             return this.SupplierId == accountId;
         }
+
+        public override string Description
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

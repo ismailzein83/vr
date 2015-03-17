@@ -269,3 +269,50 @@ body{
 	padding-right: 4px;
 	cursor: pointer;
 }
+
+ /*ui-grid override*/
+.ui-grid {
+    border:none;
+}
+.ui-grid-cell-contents {   
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
+.ui-grid-header-canvas{
+     background-color:#829EBF;
+}
+.ui-grid-header-cell {
+  background-color:#829EBF;
+  color:#fff;
+  border:none;
+}
+.ui-grid-cell {
+    border:none;
+}
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: #E0E1E1;
+}
+
+ /*loader */
+.outer-loader{
+	background: #0C0C0C;
+	position: absolute;
+    height:100%;
+	top: 0px;
+	left: 0px;
+	opacity: 0.1;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; 
+	filter: alpha(opacity=10);
+	width: 100%;
+	z-index: 20000;
+}
+.loader {  
+    text-align:center;
+    position: absolute;
+    left: 50%;
+    z-index: 100;
+    top: 100px;
+}

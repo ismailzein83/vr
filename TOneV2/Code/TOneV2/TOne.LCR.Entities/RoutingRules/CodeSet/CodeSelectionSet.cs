@@ -25,5 +25,10 @@ namespace TOne.LCR.Entities
         {
             return this.ExcludedCodes != null && this.ExcludedCodes.Contains(code);
         }
+        
+        public override string Description
+        {
+            get { return String.Format("Code: {0}", Code); }
+        }        
     }
 }
