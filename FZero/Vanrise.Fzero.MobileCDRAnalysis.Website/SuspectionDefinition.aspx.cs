@@ -79,6 +79,22 @@ public partial class SuspectionDefinition : BasePage
     private void SetCaptions()
     {
         ((MasterPage)this.Master).PageHeaderTitle = "Suspicion Levels";
+        List<Criteria_Profile> criteria_Profiles = Criteria_Profile.GetAll();
+        lblCriteria1.Text = "Filter 1: (" + criteria_Profiles[0].Description + ")";
+        lblCriteria2.Text = "Filter 2: (" + criteria_Profiles[1].Description + ")";
+        lblCriteria3.Text = "Filter 3: (" + criteria_Profiles[2].Description + ")";
+        lblCriteria4.Text = "Filter 4: (" + criteria_Profiles[3].Description + ")";
+        lblCriteria5.Text = "Filter 5: (" + criteria_Profiles[4].Description + ")";
+        lblCriteria6.Text = "Filter 6: (" + criteria_Profiles[5].Description + ")";
+        lblCriteria7.Text = "Filter 7: (" + criteria_Profiles[6].Description + ")";
+        lblCriteria8.Text = "Filter 8: (" + criteria_Profiles[7].Description + ")";
+        lblCriteria9.Text = "Filter 9: (" + criteria_Profiles[8].Description + ")";
+        lblCriteria10.Text = "Filter 10: (" + criteria_Profiles[9].Description + ")";
+        lblCriteria11.Text = "Filter 11: (" + criteria_Profiles[10].Description + ")";
+        lblCriteria12.Text = "Filter 12: (" + criteria_Profiles[11].Description + ")";
+        lblCriteria13.Text = "Filter 13: (" + criteria_Profiles[12].Description + ")";
+        lblCriteria14.Text = "Filter 14: (" + criteria_Profiles[13].Description + ")";
+        lblCriteria15.Text = "Filter 15: (" + criteria_Profiles[14].Description + ")";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
@@ -313,22 +329,7 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria15.Checked = currentObject.CriteriaId15 == 1 ? true : false;
       
 
-        List<Criteria_Profile> criteria_Profiles = Criteria_Profile.GetAll();
-        lblCriteria1.Text = "Filter 1: ("+  criteria_Profiles[0].Description + ")";
-        lblCriteria2.Text = "Filter 2: (" + criteria_Profiles[1].Description + ")";
-        lblCriteria3.Text = "Filter 3: (" + criteria_Profiles[2].Description + ")";
-        lblCriteria4.Text = "Filter 4: (" + criteria_Profiles[3].Description + ")";
-        lblCriteria5.Text = "Filter 5: (" + criteria_Profiles[4].Description + ")";
-        lblCriteria6.Text = "Filter 6: (" + criteria_Profiles[5].Description + ")";
-        lblCriteria7.Text = "Filter 7: (" + criteria_Profiles[6].Description + ")";
-        lblCriteria8.Text = "Filter 8: (" + criteria_Profiles[7].Description + ")";
-        lblCriteria9.Text = "Filter 9: (" + criteria_Profiles[8].Description + ")";
-        lblCriteria10.Text = "Filter 10: (" + criteria_Profiles[9].Description + ")";
-        lblCriteria11.Text = "Filter 11: (" + criteria_Profiles[10].Description + ")";
-        lblCriteria12.Text = "Filter 12: (" + criteria_Profiles[11].Description + ")";
-        lblCriteria13.Text = "Filter 13: (" + criteria_Profiles[12].Description + ")";
-        lblCriteria14.Text = "Filter 14: (" + criteria_Profiles[13].Description + ")";
-        lblCriteria15.Text = "Filter 15: (" + criteria_Profiles[14].Description + ")";
+       
 
 
 
