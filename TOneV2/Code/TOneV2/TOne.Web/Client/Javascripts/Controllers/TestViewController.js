@@ -46,13 +46,13 @@ appControllers.service('CarriersService', function ($http, $q,MainService) {
 
 });
 
-appControllers.controller('TestViewController', function (CarriersService) {
+appControllers.controller('TestViewController', function ($scope,CarriersService) {
 
         this.model = 'Test View model';
         this.Input = '123';
         this.alertMsg = function () {
             alert(this.Input);
-        };
+        }
 
         var tableColumnDefinition = [
                   {
@@ -83,12 +83,29 @@ appControllers.controller('TestViewController', function (CarriersService) {
         //DropDown
         var controller = this;
         this.customers;
-        this.selectedvalues;
+        
         function loadRemoteData() {
             return CarriersService.getCustomers().then(function (customers) {
                 controller.customers = customers;
             });
         }
         loadRemoteData();
+        
+
+        $scope.selectedcustomers = [];
+        this.output = [];
+
+        this.selectedvalues = function (items) {
+            $scope.selectedcustomers = items;
+        }
+        
+        this.routes = [{ name: "Moroni", value: 50 },
+                { name: "Tiancum", value: 43 },
+                { name: "Jacob", value: 27 }];
+
+        this.selectedRoutes = function (items) {
+            console.log(items[0].name);
+        }
+        
         
 });

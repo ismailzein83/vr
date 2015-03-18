@@ -31,21 +31,23 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectlbl="Selected Customers:"
-                         placeholder="Select Customers..." selectplaceholder="Customers selected"></vr-dropdown>
+            <vr-dropdown type="multiple" datasource="testviewCtrl.customers" datatextfield="Name" datavaluefield="CarrierAccountID"
+                  entityname="Customer" onselectionchange="testviewCtrl.selectedvalues" output="testviewCtrl.output"></vr-dropdown>
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.routes" datatextfield="name" datavaluefield="value"
+                         entityname="Route" onselectionchange="testviewCtrl.selectedRoutes"></vr-dropdown>
         </div>
 
         <!--<div class="col-lg-2">
-            <vr-dropdown datasourceurl="/api/BusinessEntity/GetCarriers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Customer"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.customers" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
         </div>-->
+
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <span ng-repeat="c in testviewctrl.selectedcustomers">c.Name</span>
+            <span ng-repeat="c in testviewCtrl.output">{{c.Name}}</span>
         </div>
     </div>
     <!--<div class="=row">
