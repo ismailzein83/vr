@@ -8,7 +8,8 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         muteAction: muteAction,
         findExsite: findExsite,
         setDefaultAttributes: setDefaultAttributes,
-        getTemplateByType: getTemplateByType
+        getTemplateByType: getTemplateByType,
+        isSingleSelection: isSingleSelection
     });
 
     function getTemplateByType(type) {
@@ -65,6 +66,11 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         return attrs;
     };
 
+    function isSingleSelection(type) {
+        if (type == undefined || type == "" || type == "standard") return true;
+        return false;
+    }
+
 }]);
 
 app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (DropdownService, BaseDirService) {
@@ -92,7 +98,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             this.filtername = '';
 
             this.singleSelection = function () {
-                if (controller.type == undefined || controller.type == "" || controller.type == "standard") return true;
+                return DropdownService.isSingleSelection(controller.type);
             }
 
             this.getDatasource = function () {
@@ -142,16 +148,16 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                 controller.onselectionchange()(controller.selectedValues);
             };
 
-            this.clearFilter = function (e) {
-                controller.muteAction(e);
-                controller.filtername = '';
-            };
-
             this.clearAllSelected = function (e) {
                 controller.muteAction(e);
                 controller.selectedValues = [];
                 controller.selectedValues.length = 0;
                 controller.onselectionchange()(controller.selectedValues);
+            };
+
+            this.clearFilter = function (e) {
+                controller.muteAction(e);
+                controller.filtername = '';
             };
 
             this.getSelectText = function () {
