@@ -451,6 +451,7 @@
     <Content Include="Client\Styles\Styles.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
+    <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
     <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
