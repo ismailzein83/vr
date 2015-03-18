@@ -51,7 +51,24 @@ namespace TOne.BusinessEntity.Data.SQL
             return GetItemsSP("[BEntity].[sp_Zone_GetFilteredBySupplierId]", ZoneInfoMapper, supplierId, nameFilter);
          
         }
-        
+
+        public List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds)
+        {
+            DataTable dtZones = BuildZoneInfoTable(zonesIds);
+            List<ZoneInfo> zones = new List<ZoneInfo>();
+
+            GetItemsSPCmd("[BEntity].[sp_Zone_GetByZonesIds]",
+                   ZoneInfoMapper,
+                   (cmd) =>
+                   {
+                       var dtPrm = new SqlParameter("@ZonesIds", SqlDbType.Structured);
+                       dtPrm.Value = dtZones;
+                       cmd.Parameters.Add(dtPrm);
+                       
+                   });
+            return zones;
+
+        }
         #region Private Methods
 
         private ZoneInfo ZoneInfoMapper(IDataReader reader)
@@ -62,6 +79,22 @@ namespace TOne.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string
             };
         }
+
+        internal static DataTable BuildZoneInfoTable(IEnumerable<int> zonesIds)
+        {
+            DataTable dtZonwInfo = new DataTable();
+            dtZonwInfo.Columns.Add("ID", typeof(int));
+            dtZonwInfo.BeginLoadData();
+            foreach (var z in zonesIds)
+            {
+                DataRow dr = dtZonwInfo.NewRow();
+                dr["ID"] = z;
+                dtZonwInfo.Rows.Add(dr);
+            }
+            dtZonwInfo.EndLoadData();
+            return dtZonwInfo;
+        }
+
 
         #endregion
     }

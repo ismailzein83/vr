@@ -13,14 +13,46 @@
                 tab[i] = {
                     SupplierId: value.CarrierAccountID,
                     Priority: ($scope.selectedSuppliers.length ) - i,
-                    Force:value.Force,
+                    Force:(value.Force==true)?true:false,
                     Percentage: value.Percentage
                 }
 
             });
             return tab;
         }
+        $scope.selectedSuppliers = [];
+        $scope.suppliers = [];
+        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
+           {
+               params: {
+                   carrierType: 2
+               }
+           })
+           .success(function (response) {
+               $scope.suppliers = response;
+               $scope.selectedSuppliers.length = 0;
+               if ($scope.routeRule) {
+                   var tab = [];
+                   $.each($scope.routeRule.ActionData.Options, function (i, value) {
+                       var existobj = $scope.findExsiteObj($scope.suppliers, value.SupplierId, 'CarrierAccountID')
+                       if (existobj != null) {
+                           var existobj = $scope.findExsiteObj($scope.suppliers, value.SupplierId, 'CarrierAccountID')
+                           if (existobj != null) {
+                               tab[i] = {
+                                   CarrierAccountID: value.SupplierId,
+                                   Name: existobj.Name,
+                                   Force: value.Force,
+                                   Percentage: $scope.routeRule.ActionData.Options[i].Percentage,
+                                   Priority: value.Priority
+                               }
+                           }
+                       }
 
+                   });
+                   $scope.selectedSuppliers = tab;
+               }
+          });
+        
        
         $scope.getSelectSuppliersText = function () {
             var label;
@@ -38,9 +70,6 @@
                 label = label.substring(0, 20) + "..";
             return label;
         };
-
-        // 
-      
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.selectSupplier = function ($event, s) {
             $event.preventDefault();

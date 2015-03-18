@@ -190,6 +190,7 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
@@ -458,6 +459,7 @@
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
     <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />

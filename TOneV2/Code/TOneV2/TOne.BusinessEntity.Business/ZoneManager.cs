@@ -24,7 +24,10 @@ namespace TOne.BusinessEntity.Business
         {
             return GetZones("SYS", nameFilter);
         }
-
+        public List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds)
+        {
+            return _dataManager.GetZoneList(zonesIds);
+        }
         public List<ZoneInfo> GetZones(string supplierId, string nameFilter)
         {
             return _dataManager.GetZones(supplierId, nameFilter);

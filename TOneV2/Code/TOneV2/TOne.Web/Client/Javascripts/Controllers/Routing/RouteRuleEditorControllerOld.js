@@ -8,16 +8,7 @@
         });
         $('.menuddl').dropdown({
             on: 'hover'
-        });
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-           {
-               params: {
-                   carrierType:1
-               }
-           })
-       .success(function (response) {
-           $scope.customers = response;
-       });
+        });       
         $scope.selectedCustomers = [];
         $scope.selectCustomer = function ($event, c) {
             $event.preventDefault();

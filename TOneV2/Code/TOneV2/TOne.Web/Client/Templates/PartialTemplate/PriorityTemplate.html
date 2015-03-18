@@ -17,7 +17,7 @@
                         <div style="height: 225px; overflow: auto; margin-top: 5px">
                             <div class="mark-select " ng-click="selectSupplier($event, c)" ng-repeat="c in suppliers  | filter:filtersup" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedSuppliers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
                                 <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                <div style="float:right" ng-show="selectedSuppliers.indexOf(c) > -1">✔</div>
+                                <div style="float:right" ng-show="findExsite(selectedSuppliers, c.CarrierAccountID, 'CarrierAccountID' ) > -1">✔</div>
                             </div>
                         </div>
 
@@ -43,7 +43,6 @@
                 <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor:default" ng-click="selectSupplier($event,item)"></i>
 
                 <div style="float: right">
-                    {{item.Force}}
                     <switch ng-model="item.Force" ng-init="item.Force = (item.Force)?item.Force:false " class="green"></switch>
                     <input type="text" class="form-control list-inpute list-inpute-float" ng-model="item.Percentage" size="3">
                 </div>

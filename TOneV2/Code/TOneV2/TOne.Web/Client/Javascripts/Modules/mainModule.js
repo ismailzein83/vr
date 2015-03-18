@@ -18,6 +18,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         }
         return index;
     }
+    $scope.findExsiteObj = function (arr, value, attname) {
+        var obj = null;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i][attname] == value) {
+                obj = arr[i];
+            }
+        }
+        return obj;
+    }
     var numberReg = /^\d+$/;
     $scope.isNumber = function  (s) {
         return String(s).search(numberReg) != -1

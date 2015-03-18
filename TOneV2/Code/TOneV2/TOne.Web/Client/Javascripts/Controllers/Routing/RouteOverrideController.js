@@ -7,6 +7,36 @@
                 Options: $scope.fillOptionsData()
             }
         }
+        
+        $scope.selectedSuppliers = [];
+        $scope.suppliers = [];
+        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
+         {
+             params: {
+                 carrierType: 2
+             }
+             })
+            .success(function (response) {
+             $scope.suppliers = response;
+             if ($scope.routeRule) {
+                 var tab = [];
+                 $.each($scope.routeRule.ActionData.Options, function (i, value) {
+                     $scope.selectedSuppliers.length = 0;
+                     var existobj = $scope.findExsiteObj($scope.suppliers, value.SupplierId, 'CarrierAccountID')
+                     if (existobj != null) {
+                         tab[i] = {
+                             CarrierAccountID: value.SupplierId,
+                             Name: existobj.Name,
+                             Percentage: $scope.routeRule.ActionData.Options[i].Percentage
+                         }
+                     }
+
+                 });
+                 $scope.selectedSuppliers = tab;
+             }
+         });
+
+        
         $scope.fillOptionsData = function () {
             var tab = [];
             $.each($scope.selectedSuppliers, function (i, value) {
@@ -17,7 +47,7 @@
 
             });
             return tab;
-        }
+        }       
         $scope.getSelectSuppliersText = function () {
             var label;
             if ($scope.selectedSuppliers.length == 0)

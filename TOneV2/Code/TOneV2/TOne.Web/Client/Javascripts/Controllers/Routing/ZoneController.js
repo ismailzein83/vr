@@ -1,17 +1,45 @@
 ﻿appControllers.controller('ZoneController',
     function ZoneController($scope, $http) {
+        $scope.filterzone = '';
+        $scope.zones = [];
+        $scope.showloading = false;
+        $scope.selectedZones = [];
+        $scope.code = "";
+        $scope.codeList = [];
+        $scope.codeInpute = '';
+        if ($scope.routeRule != null && $scope.routeRule.CodeSet.ZoneIds != undefined) {
+            $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
+            $scope.zoneSelectionOption = $scope.routeRule.CodeSet.ZoneIds.SelectionOption;
+            $http.get($scope.baseurl + "/api/BusinessEntity/GetZoneList",
+              {
+                  params: {
+                      ZonesIds: $scope.routeRule.CodeSet.ZoneIds.SelectedValues
+                  }
+              })
+              .success(function (response) {
+                  $scope.selectedZones = response;
+
+              });
+
+        }
+        else {
+            $scope.zoneSelectionOption = 1;
+        }
+
+
+       
 
         $scope.subViewConnector.getCodeSet = function () {
             return {
                 $type: "TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities",
                 ZoneIds:{
                     SelectionOption: ($scope.zoneSelectionOption==1)?"OnlyItems":"AllExceptItems",
-                    SelectedValues: $scope.getsetctedoption()                   
+                    SelectedValues: $scope.getselectedoption()                   
                 },
                 ExcludedCodes: $scope.codeList
             };
         }
-        $scope.getsetctedoption =  function (){
+        $scope.getselectedoption = function () {
             var tab = [];
             $.each($scope.selectedZones, function (i, value) {
                 tab[i] = value.ZoneId;
@@ -45,7 +73,6 @@
                 }
             }, 150);
         });
-        $scope.selectedZones = [];
         $scope.getSelectZoneText = function () {
             var label;
             if ($scope.selectedZones.length == 0)
@@ -64,9 +91,7 @@
         };
 
         // zones live search
-        $scope.filterzone = '';
-        $scope.zones = [];
-        $scope.showloading = false;
+        
         $scope.searchZones = function () {
             $scope.zones.length = 0;
             if ($scope.filterzone.length > 1) {
@@ -107,9 +132,7 @@
         $('#CodeListddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
-        $scope.code = "";
-        $scope.codeList = [];
-        $scope.codeInpute = '';
+       
         $scope.getCodes = function () {
             var label = '';
             if ($scope.codeList.length == 0)

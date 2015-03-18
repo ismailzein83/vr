@@ -27,11 +27,16 @@ namespace TOne.Web.Controllers
 
         }
         [HttpGet]
-        public List<RouteRuleSummaryModel> GetAllRouteRule()
+        public IEnumerable<RouteRuleSummaryModel> GetAllRouteRule( int pageNumber, int pageSize)
         {
             //System.Threading.Thread.Sleep(2000);
+
             RouteRuleManager manager = new RouteRuleManager();
-            return Mappers.MapRouteRules(manager.GetAllRouteRule());
+            IEnumerable<RouteRuleSummaryModel> rows = Mappers.MapRouteRules(manager.GetAllRouteRule());
+            rows = rows.Skip((pageNumber) * pageSize).Take(pageSize);
+            return rows;
+           
+           // return Mappers.MapRouteRules(manager.GetAllRouteRule());
 
         }
 

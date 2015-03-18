@@ -1,85 +1,48 @@
 ﻿appControllers.controller('RouteRuleEditorController',
-    function RouteRuleEditorController($scope, $http, $routeParams, notify) {
+    function RouteRuleEditorController($scope, $http, $location,$routeParams, notify) {
         $scope.routeRule = null;
-        $scope.customers = [];  
-        $scope.selectedCustomers = [];
-        $scope.ruletype = { name: 'Select ..', url: '' };
         $scope.templates = [
-         { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html' },
-         
-         { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html' },
-        { name: 'Block Route', url: '' }
+            { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
+            { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
+            { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities' }
         ]
-
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-         {
-             params: {
-                 carrierType: 1
-             }
-         })
-         .success(function (response) {
-             $scope.customers = response;
-             if (typeof ($routeParams.RouteRuleId) != undefined) {
-                 $http.get($scope.baseurl + "/api/Routing/GetRouteRuleDetails",
-                 {
-                     params: {
-                         RouteRuleId: $routeParams.RouteRuleId
-                     }
-                 })
-                  .success(function (response) {
-                      $scope.routeRule = response;
-                      var tab = [];
-                      $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-                          var existobj = $scope.findExsiteObj($scope.customers, value, 'CarrierAccountID')
-                          if (existobj != null)
-                              tab[i] = existobj;
-
-                      });
-                      $scope.selectedCustomers = tab;
-                      $scope.BEDDate = $scope.routeRule.BeginEffectiveDate;
-                      $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
-                      $scope.Reason = $scope.routeRule.Reason;
-                      $scope.ruletype = null;
-                      //alert($scope.getRuletypeIndex($scope.routeRule.ActionData.$type))
-                      $scope.ruletype = $scope.templates[$scope.getRuletypeIndex($scope.routeRule.ActionData.$type)]
-                         // $scope.getRuletype($scope.routeRule.ActionData.$type)
-
-                  });
-             }
-         });
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-        {
-            params: {
-                carrierType: 2
-            }
+        $scope.editorTemplates = [
+            { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
+            { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
+        ]
+        $scope.routeTemplates = [
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
+        ]
+        if ($routeParams.RouteRuleId != 'undefined') {
+            $http.get($scope.baseurl + "/api/Routing/GetRouteRuleDetails",
+            {
+                params: {
+                    RouteRuleId: $routeParams.RouteRuleId
+                }
             })
-        .success(function (response) {
-            $scope.suppliers = response;
-        });
-        $scope.selectedSuppliers = [];
-        $scope.onloadRuletype = function () {
-            $scope.selectedSuppliers.length = 0;      
-            var tab = [];
-            $.each($scope.routeRule.ActionData.Options, function (i, value) {
-                var existobj = $scope.findExsiteObj($scope.suppliers, value.SupplierId, 'CarrierAccountID')
-                if (existobj != null) {
-                    //alert(value.Percentage + "//" + value.Force)
-                    //tab[i].Percentage = value.Percentage;
-                    //tab[i].Force = value.Force;
-                    tab[i] = {
-                        CarrierAccountID: value.SupplierId,
-                        Name: existobj.Name,
-                        Force: value.Force,
-                        Percentage: $scope.routeRule.ActionData.Options[i].Percentage,
-                        Priority: value.Priority,
+             .success(function (response) {
+                 $scope.routeRule = response;
+                 var tab = [];
+                 $scope.routetype = $scope.routeTemplates[0];                
+                 $scope.BEDDate = $scope.routeRule.BeginEffectiveDate;
+                 $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
+                 $scope.Reason = $scope.routeRule.Reason;
+                 $scope.ruletype = null;
+                 $scope.ruletype = $scope.templates[$scope.findExsite($scope.templates, $scope.routeRule.ActionData.$type, 'objectType')];
+                 $scope.editortype = null ;
+                 $scope.editortype = $scope.editorTemplates[$scope.findExsite($scope.editorTemplates, $scope.routeRule.CodeSet.$type, 'objectType')];
 
-
-                    }
-                }                      
-               
-            });
-            console.log(tab)
-            $scope.selectedSuppliers = tab;
+             });
+        }
+        else {
+            $scope.ruletype = { name: 'Select ..', url: '' };
+            $scope.editortype = $scope.editorTemplates[0];
+            $scope.routetype = $scope.routeTemplates[0];
+        }        
+       
+        $scope.onloadRuletype = function () {            
             
         }
         
@@ -125,28 +88,15 @@
                 $scope[model] = val;
             }
            
-        }       
-        
-        
-     
-        $scope.editorTemplates = [
-            { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html' },
-            { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html' }
-        ]
-        $scope.editortype = $scope.editorTemplates[0];         
-        $scope.routeTemplates = [
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
-        ]
-        $scope.routetype = $scope.routeTemplates[0];
-        $scope.subViewConnector = {}     
+        }  
+        $scope.subViewConnector = {};
         $scope.saveRule = function () {
+          
             var routeRule =
                 {
                     CodeSet: $scope.subViewConnector.getCodeSet(),
                     CarrierAccountSet: $scope.subViewConnector.getCarrierAccountSet(),
-                    ActionData: $scope.subViewConnector.getActionData(),
+                    ActionData:  $scope.subViewConnector.getActionData(),
                     Type: "RouteRule",
                     BeginEffectiveDate: $scope.BEDDate,
                     EndEffectiveDate: ($scope.EEDDate),
@@ -155,38 +105,14 @@
             $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
                          routeRule)
                      .success(function (response) {
-
+                       //  $location.path("/RouteRuleManager").replace();
                      });
         }
-        $scope.findExsiteObj = function (arr, value, attname) {
-            var obj = null;
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i][attname] == value) {
-                    obj = arr[i];
-                }
-            }
-            return obj;
-        }
+        $scope.cancel = function () {
+            $location.path("/RouteRuleManager").replace();
+        };
 
-        $scope.getRuletypeIndex = function (type) {
-
-            switch (type) {
-                case "TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities":
-                    return 0;
-                    break;
-                case "TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities":
-                    return 1;
-                    break;
-                case "TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities":
-                    return 2;
-                    break;
-
-                default:
-                    return 0;
-                    break;
-            }
-        }
-
+       
     });
 
 function waitAlert(msg) {

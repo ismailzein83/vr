@@ -2,23 +2,31 @@
     function CustomerController($scope, $http) {
 
         
-       // $scope.selectedCustomers = ;
-       //setTimeout(function () {
-       //     //alert($scope.routeRule)
-       //     if ($scope.routeRule != null) {
-       //         var tab = [];
-       //         $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-       //             var existobj = $scope.findExsiteObj($scope.customers, value ,'CarrierAccountID')
-       //             if (existobj != null)
-       //                 tab[i] = existobj;
+        $scope.customers = [];
+        $scope.selectedCustomers = [];
+        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
+         {
+             params: {
+                 carrierType: 1
+             }
+         })
+         .success(function (response) {
+             $scope.customers = response;          
+             if ($scope.routeRule != null) {
+                 var tab = [];
+                 $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
+                     var existobj = $scope.findExsiteObj($scope.customers, value, 'CarrierAccountID')
+                     if (existobj != null)
+                         tab[i] = existobj;
 
-       //         });
-       //         $scope.$apply(function () {                    
-       //             $scope.selectedCustomers = tab;
-       //         });
-       //     }
-       // }, 1000)
-
+                 });
+                 $scope.selectedCustomers = tab;
+                 $scope.carrierAccountSelectionOption = $scope.routeRule.CarrierAccountSet.Customers.SelectionOption;
+             }
+             else {
+                 $scope.carrierAccountSelectionOption = 1;
+             }
+         });
 
         $scope.subViewConnector.getCarrierAccountSet = function () {
             return {

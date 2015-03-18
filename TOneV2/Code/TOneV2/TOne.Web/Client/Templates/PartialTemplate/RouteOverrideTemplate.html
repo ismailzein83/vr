@@ -17,7 +17,7 @@
                         <div style="height: 225px; overflow: auto; margin-top: 5px">
                             <div class="mark-select " ng-click="selectSupplier($event, c)" ng-repeat="c in suppliers  | filter:filtersup" style="display: block; padding: 3px 2px 0px 2px; margin: 2px; white-space: normal;" ng-class="findExsite(selectedSuppliers, c.CarrierAccountID, 'CarrierAccountID') > -1 ?'selected':'' ">
                                 <div class="hand-cursor" style="display: inline-block; width:170px; white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{c.Name}}</div>
-                                <div style="float:right" ng-show="selectedSuppliers.indexOf(c) > -1">✔</div>
+                                <div style="float:right" ng-show=" findexsite(selectedsuppliers, c.CarrierAccountID, 'CarrierAccountID' ) > -1">✔</div>
                             </div>
                         </div>
 

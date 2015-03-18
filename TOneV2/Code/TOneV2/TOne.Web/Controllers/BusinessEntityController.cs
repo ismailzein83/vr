@@ -26,5 +26,12 @@ namespace TOne.Web.Controllers
             ZoneManager manager = new ZoneManager();
             return manager.GetSalesZones(nameFilter);
         }
+        [HttpGet]
+        public List<ZoneInfo> GetZoneList([FromUri]int[] zonesIds)
+        {
+            
+            ZoneManager manager = new ZoneManager();
+            return manager.GetZoneList(zonesIds);
+        }
     }
 }

@@ -207,7 +207,7 @@ namespace TOne.LCR.Data.SQL
                 RouteRuleId = (int)reader["RouteRuleId"],
                 CarrierAccountSet = reader["CarrierAccountSet"] != null ? (BaseCarrierAccountSet)Serializer.Deserialize(reader["CarrierAccountSet"] as string) : null,
                 CodeSet = reader["CodeSet"] != null ? (BaseCodeSet)Serializer.Deserialize(reader["CodeSet"] as string) : null,
-                ActionData = reader["ActionData"] != null ? (Object)Serializer.Deserialize(reader["ActionData"] as string) : null,
+                ActionData = (reader["ActionData"] == System.DBNull.Value)? null : (Object)Serializer.Deserialize(reader["ActionData"] as string) ,
                 Type = (RouteRuleType)((int)reader["Type"]),
                 BeginEffectiveDate = (DateTime)reader["BeginEffectiveDate"],
                 EndEffectiveDate = (reader["EndEffectiveDate"] == System.DBNull.Value) ? (DateTime?)null : (DateTime)reader["EndEffectiveDate"],
