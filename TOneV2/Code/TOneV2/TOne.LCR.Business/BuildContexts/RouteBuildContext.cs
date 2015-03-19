@@ -97,26 +97,35 @@ namespace TOne.LCR.Business
         private bool CheckActionResult(RouteActionResult actionResult, ActionExecutionPath<BaseRouteAction> executionPath, ActionExecutionStep<BaseRouteAction> currentStep, out ActionExecutionStep<BaseRouteAction> nextStep, out object nextActionData)
         {
             nextActionData = null;
-            
-            if (actionResult == null || !actionResult.IsInvalid)
+            nextStep = null;
+            if (actionResult != null && actionResult.IsInvalid)
             {
-                if (actionResult != null && actionResult.NextActionType != null)
-                {
-                    nextStep = executionPath.GetStep(actionResult.NextActionType);
-                    if (nextStep == null)
-                        throw new Exception(String.Format("Route Action Type '{0}' not found in execution path", actionResult.NextActionType));
-                    nextActionData = actionResult.NextActionData;
-                }
-                else if (currentStep.IsEndAction)
-                    nextStep = null;
-                else
-                    nextStep = currentStep.NextStep;
-                return true;
+                return false;
             }
             else
             {
-                nextStep = null;
-                return false;
+                bool nextStepSet = false;
+                if (actionResult != null)
+                {
+                    if (actionResult.NextActionType != null)
+                    {
+                        nextStep = executionPath.GetStep(actionResult.NextActionType);
+                        if (nextStep == null)
+                            throw new Exception(String.Format("Route Action Type '{0}' not found in execution path", actionResult.NextActionType));
+                        nextActionData = actionResult.NextActionData;
+                        nextStepSet = true;
+                    }
+                }
+
+                if (!nextStepSet)
+                {
+                    if (currentStep.IsEndAction)
+                        nextStep = null;
+                    else
+                        nextStep = currentStep.NextStep;
+                }
+
+                return true;
             }
         }
 
@@ -179,7 +188,7 @@ namespace TOne.LCR.Business
 
             RouteRuleManager ruleManager = new RouteRuleManager();
             var executionPath = ruleManager.GetRouteOptionActionExecutionPath();
-            //List<RouteSupplierOption> optionsToRemove = new List<RouteSupplierOption>();
+            
             int validOptions = 0;
             Queue<RouteSupplierOption> qInitialOptions = new Queue<RouteSupplierOption>();
             if (_route.Options != null && _route.Options.SupplierOptions != null)
@@ -201,13 +210,10 @@ namespace TOne.LCR.Business
                 if (current == null)
                     break;
 
-                if (!onlyImportantFilters && current.Rate > _route.Rate)
-                    break;
-
                 using (RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this))
                 {
                     bool removeOption;
-                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, current, out removeOption);
+                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, out removeOption);
                     if (!removeOption && !current.IsBlocked)
                         validOptions++;
                     if (!removeOption)

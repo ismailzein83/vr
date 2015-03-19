@@ -62,9 +62,11 @@ namespace TOne.LCR.Business
 
         private static ActionExecutionPath<BaseRouteOptionAction> BuildRouteOptionActionExecutionPath()
         {
+            ActionExecutionStep<BaseRouteOptionAction> checkRateStep = new ActionExecutionStep<BaseRouteOptionAction> { Action = new CheckRateOptionAtion(), IsEndAction = true };
             ActionExecutionStep<BaseRouteOptionAction> blockStep = new ActionExecutionStep<BaseRouteOptionAction> { Action = new BlockRouteOptionAction(), IsEndAction = true };
 
-            ActionExecutionPath<BaseRouteOptionAction> executionPath = new ActionExecutionPath<BaseRouteOptionAction> { FirstStep = blockStep };
+            ActionExecutionPath<BaseRouteOptionAction> executionPath = new ActionExecutionPath<BaseRouteOptionAction> { FirstStep = checkRateStep};
+            checkRateStep.NextStep = blockStep;
 
             return executionPath;
         }

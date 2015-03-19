@@ -89,30 +89,30 @@ namespace TOne.LCR.Business
                         continue;
                     }
 
-                    if (!routeOptionRules.Rules.TryGetValue(supplierSelectionSet.SupplierId, out targetRules))
+                    if (!routeOptionRules.TryGetValue(supplierSelectionSet.SupplierId, out targetRules))
                     {
                         targetRules = new RouteRulesByActionDataType();
-                        routeOptionRules.Rules.Add(supplierSelectionSet.SupplierId, targetRules);
+                        routeOptionRules.Add(supplierSelectionSet.SupplierId, targetRules);
                     }
                 }
 
                 Type ruleActionDataType = rule.ActionData.GetType();
                 RouteRuleMatches matches;
-                if (!targetRules.Rules.TryGetValue(ruleActionDataType, out matches))
+                if (!targetRules.TryGetValue(ruleActionDataType, out matches))
                 {
                     matches = new RouteRuleMatches();
-                    targetRules.Rules.Add(ruleActionDataType, matches);
+                    targetRules.Add(ruleActionDataType, matches);
                 }
                 AddRuleMatches(matches, rule);
             }
 
-            foreach (var ruleMatch in routeRules.Rules.Values)
+            foreach (var ruleMatch in routeRules.Values)
             {
                 ruleMatch.SetMinSubCodeLength();
             }
-            foreach (var supplierRules in routeOptionRules.Rules.Values)
+            foreach (var supplierRules in routeOptionRules.Values)
             {
-                foreach (var ruleMatch in supplierRules.Rules.Values)
+                foreach (var ruleMatch in supplierRules.Values)
                 {
                     ruleMatch.SetMinSubCodeLength();
                 }
@@ -160,22 +160,11 @@ namespace TOne.LCR.Business
         }
     }
 
-    public class RouteRulesByActionDataType
-    {
-        public RouteRulesByActionDataType()
-        {
-            this.Rules = new Dictionary<Type, RouteRuleMatches>();
-        }
-
-        public Dictionary<Type, RouteRuleMatches> Rules { get; private set; }
+    public class RouteRulesByActionDataType : Dictionary<Type, RouteRuleMatches>
+    {        
     }
 
-    public class RouteOptionRulesBySupplier
+    public class RouteOptionRulesBySupplier : Dictionary<string, RouteRulesByActionDataType>
     {
-        public RouteOptionRulesBySupplier()
-        {
-            Rules = new Dictionary<string, RouteRulesByActionDataType>();
-        }
-        public Dictionary<string, RouteRulesByActionDataType> Rules { get; private set; }
     }
 }

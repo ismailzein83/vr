@@ -47,32 +47,6 @@ namespace TOne.LCR.Business
             return null;
         }
 
-        private bool TryAddOptionFromLCR(IRouteBuildContext context, PriorityOption priorityOption, out RouteSupplierOption routeOption)
-        {
-            routeOption = null;
-            var routeOptions = context.Route.Options.SupplierOptions;
-            RouteSupplierOption current = context.GetNextOptionInLCR();
-            while(current != null)
-            {   
-                if (current.SupplierId == priorityOption.SupplierId)
-                {
-                    if (priorityOption.Force || context.Route.Rate >= current.Rate)
-                    {
-                        routeOption = current;
-                        InsertOptionAtPosition(priorityOption.Priority, context.Route.Options.SupplierOptions, routeOption);
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                else
-                    routeOptions.Add(current);
-                current = context.GetNextOptionInLCR();
-            }
-
-            return false;
-        }
-
         private bool TrySetOptionOrderFromRoute(IRouteBuildContext context, PriorityOption priorityOption, out RouteSupplierOption routeOption)
         {
             var routeOptions = context.Route.Options.SupplierOptions;
@@ -89,6 +63,36 @@ namespace TOne.LCR.Business
             }
             else
                 return false;
+        }
+
+        private bool TryAddOptionFromLCR(IRouteBuildContext context, PriorityOption priorityOption, out RouteSupplierOption routeOption)
+        {
+            routeOption = null;
+            var routeOptions = context.Route.Options.SupplierOptions;
+            RouteSupplierOption current = context.GetNextOptionInLCR();
+            while(current != null)
+            {
+                if (current.SupplierId == priorityOption.SupplierId)//match option found
+                {
+                    if (priorityOption.Force || context.Route.Rate >= current.Rate)
+                    {
+                        routeOption = current;
+                        InsertOptionAtPosition(priorityOption.Priority, context.Route.Options.SupplierOptions, routeOption);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else//if option not match with priority option, add it to the end of the list
+                {
+                    routeOptions.Add(current);
+                }
+                current = context.GetNextOptionInLCR();
+            }
+
+            return false;
         }
 
         private static void InsertOptionAtPosition(int position, List<RouteSupplierOption> routeOptions, RouteSupplierOption option)

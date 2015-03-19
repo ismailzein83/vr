@@ -45,22 +45,24 @@ namespace TOne.LCR.Business
 
         #region Private/Internal Methods
 
-        internal void ExecuteOptionActions(bool onlyImportantFilters, ActionExecutionPath<BaseRouteOptionAction> executionPath,
-            RouteSupplierOption option, out bool removeOption)
+        internal void ExecuteOptionActions(bool onlyImportantFilters, ActionExecutionPath<BaseRouteOptionAction> executionPath, out bool removeOption)
         {
             removeOption = false;
             ActionExecutionStep<BaseRouteOptionAction> currentStep = executionPath.FirstStep;
             do
             {
                 if (onlyImportantFilters && !currentStep.Action.IsImportant)
+                {
                     currentStep = currentStep.NextStep;
+                    continue;
+                }
 
                 Type actionDataType = currentStep.Action.GetActionDataType();
                 if (actionDataType == null)
                 {
                     RouteOptionActionResult actionResult = currentStep.Action.Execute(this, null);
                     ActionExecutionStep<BaseRouteOptionAction> nextStep;
-                    if (CheckActionResult(actionResult, option, executionPath, currentStep, out nextStep, out removeOption))
+                    if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out removeOption))
                         currentStep = nextStep;
                     else
                         currentStep = currentStep.NextStep;
@@ -69,13 +71,13 @@ namespace TOne.LCR.Business
                 {
                     RouteRulesByActionDataType optionRules;
                     bool done = false;
-                    if (_parentContext.RouteOptionsRules != null 
-                        && _parentContext.RouteOptionsRules.Rules.TryGetValue(option.SupplierId, out optionRules))
+                    if (_parentContext.RouteOptionsRules != null
+                        && _parentContext.RouteOptionsRules.TryGetValue(_routeOption.SupplierId, out optionRules))
                     {
                         RouteRuleMatches ruleMatches;
-                        if (optionRules.Rules.TryGetValue(actionDataType, out ruleMatches))
+                        if (optionRules.TryGetValue(actionDataType, out ruleMatches))
                         {
-                            RouteRuleMatchFinder ruleFinder = new RouteRuleMatchFinder(this.Route.Code, option.SupplierZoneId, ruleMatches);
+                            RouteRuleMatchFinder ruleFinder = new RouteRuleMatchFinder(this.Route.Code, _routeOption.SupplierZoneId, ruleMatches);
                             ruleFinder.GoToStart();
                             RouteRule rule;
 
@@ -83,7 +85,7 @@ namespace TOne.LCR.Business
                             {
                                 RouteOptionActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData);
                                 ActionExecutionStep<BaseRouteOptionAction> nextStep;
-                                if (CheckActionResult(actionResult, option, executionPath, currentStep, out nextStep, out removeOption))
+                                if (CheckActionResult(actionResult,  executionPath, currentStep, out nextStep, out removeOption))
                                 {
                                     done = true;
                                     currentStep = nextStep;
@@ -98,46 +100,41 @@ namespace TOne.LCR.Business
             while (currentStep != null);
         }
 
-        private bool CheckActionResult(RouteOptionActionResult actionResult, RouteSupplierOption option, ActionExecutionPath<BaseRouteOptionAction> executionPath,
+        private bool CheckActionResult(RouteOptionActionResult actionResult, ActionExecutionPath<BaseRouteOptionAction> executionPath,
             ActionExecutionStep<BaseRouteOptionAction> currentStep, out ActionExecutionStep<BaseRouteOptionAction> nextStep, out bool removeOption)
         {
             removeOption = false;
-            if (actionResult == null)
+            nextStep = null;
+            if (actionResult != null && (actionResult.IsInvalid || actionResult.NotMatchingTheRule))
             {
-                nextStep = currentStep.NextStep;
-                return true;
+                return false;
             }
-            if (actionResult == null || !actionResult.IsInvalid)
+            else
             {
+                bool nextStepSet = false;
                 if (actionResult != null)
                 {
-                    if (actionResult.DontMatchRoute)
-                    {
-                        nextStep = null;
-                        return false;
-                    }
-                    else if (actionResult.BlockOption || actionResult.RemoveOption)
+                    if (actionResult.BlockOption || actionResult.RemoveOption)
                     {
                         if (actionResult.RemoveOption
                                 || (actionResult.BlockOption && _removeBlockedOptions))
                             removeOption = true;
                         else if (actionResult.BlockOption)
-                            option.IsBlocked = true;
+                            _routeOption.IsBlocked = true;
                         nextStep = null;
+                        nextStepSet = true;
                     }
                 }
-                if (currentStep.IsEndAction)
-                    nextStep = null;
-                else
-                    nextStep = currentStep.NextStep;
 
+                if (!nextStepSet)
+                {
+                    if (currentStep.IsEndAction)
+                        nextStep = null;
+                    else
+                        nextStep = currentStep.NextStep;
+                }
 
                 return true;
-            }
-            else
-            {
-                nextStep = null;
-                return false;
             }
         }
 

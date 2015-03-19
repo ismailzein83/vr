@@ -62,21 +62,25 @@ namespace TOne.LCR.Data.SQL
                     while (reader.Read())
                     {
 
-                        int zoneID = GetReaderValue<int>(reader, "ZoneID");
-                        string carrierID = reader["CustomerID"] as string;
-                        decimal rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0;
-                        short servicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
+                        
+                        string customerId = reader["CustomerID"] as string;
+                        var rate = new RateInfo
+                        {
+                            ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                            Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
+                            ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag")
+                        };
 
                         CustomerRates customerRates;
-                        if (!allCustomerZoneRates.ZonesCustomersRates.TryGetValue(zoneID, out customerRates))
+                        if (!allCustomerZoneRates.ZonesCustomersRates.TryGetValue(rate.ZoneId, out customerRates))
                         {
                             customerRates = new CustomerRates();
                             customerRates.CustomersRates = new Dictionary<string, RateInfo>();
-                            allCustomerZoneRates.ZonesCustomersRates.Add(zoneID, customerRates);
+                            allCustomerZoneRates.ZonesCustomersRates.Add(rate.ZoneId, customerRates);
                         }
 
-                        if (!customerRates.CustomersRates.ContainsKey(carrierID))
-                            customerRates.CustomersRates.Add(carrierID, new RateInfo() { Rate = rate, ServicesFlag = servicesFlag });
+                        if (!customerRates.CustomersRates.ContainsKey(customerId))
+                            customerRates.CustomersRates.Add(customerId, rate);
                     }
 
                 },

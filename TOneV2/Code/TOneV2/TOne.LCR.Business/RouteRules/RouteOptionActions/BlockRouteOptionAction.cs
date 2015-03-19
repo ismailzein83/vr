@@ -9,6 +9,14 @@ namespace TOne.LCR.Business
 {
     public class BlockRouteOptionAction : BaseRouteOptionAction
     {
+        public override bool IsImportant
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override Type GetActionDataType()
         {
             return typeof(BlockRouteOptionActionData);
@@ -31,7 +39,7 @@ namespace TOne.LCR.Business
             else
                 return new RouteOptionActionResult
                 {
-                    DontMatchRoute = true
+                    NotMatchingTheRule = true
                 };
         }
     }

@@ -14,6 +14,7 @@ namespace TOne.LCR.Business
         FinderStep _currentSearchStep;
         List<RouteRule> _matchRules;
         int _nextReturnedIndex;
+        string _nextParentCode;
 
 
         string _code;
@@ -26,6 +27,8 @@ namespace TOne.LCR.Business
             _zoneId = zoneId;
             _routeRulesMatches = routeRulesMatches;
             _matchRules = new List<RouteRule>();
+            _currentSearchStep = FinderStep.MatchCodesList;
+            _nextParentCode = _code;
         }
 
         public bool GetNext(out RouteRule rule)
@@ -54,45 +57,43 @@ namespace TOne.LCR.Business
             }
         }
 
-        string _nextParentCode;
+        
         private List<RouteRule> GetNextList()
         {
-            while(_currentSearchStep < FinderStep.End)
+            List<RouteRule> matchRules = null;
+            switch (_currentSearchStep)
             {
-                List<RouteRule> matchRules = null;
-                switch (_currentSearchStep)
-                {
-                    case FinderStep.MatchCodesList:
-                        _routeRulesMatches.RulesByMatchCodes.TryGetValue(_code, out matchRules);
-                        break;
-                    case FinderStep.MatchCodeAndSubCodesList:
-                        if (_nextParentCode == null)
-                            _nextParentCode = _code;
-
-                        while (matchRules == null && _nextParentCode.Length >= _routeRulesMatches.MinSubCodeLength)
-                        {
-                            _routeRulesMatches.RulesByMatchCodeAndSubCodes.TryGetValue(_nextParentCode, out matchRules);
-                            if (_nextParentCode.Length == 0)
-                                break;
-                            _nextParentCode = _nextParentCode.Substring(0, _nextParentCode.Length - 1);
-                        }
-                        break;
-                    case FinderStep.MatchZonesList:
-                        _routeRulesMatches.RulesByMatchZones.TryGetValue(_zoneId, out matchRules);
-                        break;
-                    case FinderStep.MatchingAllZonesList:
-                        matchRules = _routeRulesMatches.RulesMatchingAllZones;
-                        break;
-                    case FinderStep.End:
-                        return null;
-                }
+                case FinderStep.MatchCodesList:
+                    _routeRulesMatches.RulesByMatchCodes.TryGetValue(_code, out matchRules);
                 _currentSearchStep++;
-                if (matchRules != null && matchRules.Count > 0)
-                    return matchRules;                    
-            }
-            return null;
-        }
+                    break;
+                case FinderStep.MatchCodeAndSubCodesList:
+                    while (matchRules == null && _nextParentCode.Length >= Math.Max(_routeRulesMatches.MinSubCodeLength, 1))
+                    {
+                        _routeRulesMatches.RulesByMatchCodeAndSubCodes.TryGetValue(_nextParentCode, out matchRules);
+                        _nextParentCode = _nextParentCode.Substring(0, _nextParentCode.Length - 1);
+                    }
 
+                    if (_nextParentCode.Length < Math.Max(_routeRulesMatches.MinSubCodeLength, 1))
+                        _currentSearchStep++;
+                    break;
+                case FinderStep.MatchZonesList:
+                    _routeRulesMatches.RulesByMatchZones.TryGetValue(_zoneId, out matchRules);
+                _currentSearchStep++;
+                    break;
+                case FinderStep.MatchingAllZonesList:
+                    matchRules = _routeRulesMatches.RulesMatchingAllZones;
+                _currentSearchStep++;
+                    break;
+                case FinderStep.End:
+                    return null;
+            }
+
+            if (matchRules != null && matchRules.Count > 0)
+                return matchRules;
+            else
+                return GetNextList();
+        }
       
         public void GoToStart()
         {

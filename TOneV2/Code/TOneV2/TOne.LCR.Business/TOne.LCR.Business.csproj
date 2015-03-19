@@ -61,6 +61,7 @@
     <Compile Include="RouteRules\RouteActions\OverrideRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\PriorityRouteAction.cs" />
     <Compile Include="RouteRules\RouteOptionActions\BlockRouteOptionAction.cs" />
+    <Compile Include="RouteRules\RouteOptionActions\CheckRateOptionAtion.cs" />
     <Compile Include="RouteRules\RouteRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>

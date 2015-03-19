@@ -47,7 +47,7 @@ namespace TOne.LCR.Entities
 
         public string ErrorMessage { get; set; }
 
-        public bool DontMatchRoute { get; set; }
+        public bool NotMatchingTheRule { get; set; }
 
         public bool RemoveOption { get; set; }
 

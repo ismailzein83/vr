@@ -190,11 +190,9 @@ namespace TOne.LCR.Business
             {
                 if (_orderIndex < _retrievedOptionNextReturnedIndex)
                 {
-                    int unorderedCount = _unorderedLCR.Count;
-                    RouteSupplierOption minRateOption = null;// _unorderedLCR[0];
-                    foreach(var current in _unorderedLCR)
+                    RouteSupplierOption minRateOption = null;
+                    foreach (var current in _unorderedLCR)
                     {
-                        //var current = _unorderedLCR[i];
                         if (minRateOption == null || current.Rate < minRateOption.Rate)
                             minRateOption = current;
                     }
@@ -212,8 +210,9 @@ namespace TOne.LCR.Business
                 }
             }
             else
+            {
                 return null;
-
+            }
 
             //if (_lcr.Length > _retrievedOptionNextReturnedIndex)
             //{
@@ -290,7 +289,7 @@ namespace TOne.LCR.Business
             _routeRuleFindersByActionDataType = new Dictionary<Type, RouteRuleMatchFinder>();
             if (_routeRules != null)
             {
-                foreach (var customerRuleEntry in _routeRules.Rules)
+                foreach (var customerRuleEntry in _routeRules)
                 {
                     _routeRuleFindersByActionDataType.Add(customerRuleEntry.Key, new RouteRuleMatchFinder(_singleDestinationCodeMatches.RouteCode, _saleZoneId, customerRuleEntry.Value));
                 }
