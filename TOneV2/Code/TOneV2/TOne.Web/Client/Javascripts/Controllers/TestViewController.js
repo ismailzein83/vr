@@ -94,6 +94,9 @@ appControllers.controller('TestViewController', function ($scope,CarriersService
 
         $scope.selectedcustomers = [];
         this.output = [];
+        
+        this.lstselectedcustomer = '';
+        this.lstselectedroute = '';
 
         this.selectedvalues = function (items) {
             $scope.selectedcustomers = items;
@@ -104,7 +107,8 @@ appControllers.controller('TestViewController', function ($scope,CarriersService
                 { name: "Jacob", value: 27 }];
 
         this.selectedRoutes = function (items) {
-            console.log(items[0].name);
+            if (items.length > 0)
+                console.log(items[items.length - 1].name);
         }
         
         

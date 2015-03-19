@@ -80,7 +80,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         restrict: 'E',
         scope: {
             datasource: '=',
-            datasourceurl: '@',
             datatextfield: '@',
             datavaluefield: '@',
             selectlbl: '@',
@@ -89,7 +88,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             entityname: '@',
             onselectionchange: '&',
             type: '@',
-            output:'='
+            selectedvalues: '=',
+            lastselectedvalue: '=',
+            multipleselection: '@'
         },
         controller: function () {
 
@@ -126,12 +127,12 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.selectValue = function (e, c) {
-                if (controller.singleSelection()) {
-                    controller.selectedValues = [];
-                    controller.selectedValues.length = 0;
-                    controller.selectedValues.push(c);
-                }
-                else {
+                //if (controller.singleSelection()) {
+                //    controller.selectedValues = [];
+                //    controller.selectedValues.length = 0;
+                //    controller.selectedValues.push(c);
+                //}
+                //else {
                     var index = null;
                     controller.muteAction(e);
                     try {
@@ -144,7 +145,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         controller.selectedValues.splice(index, 1);
                     else
                         controller.selectedValues.push(c);
-                }
+                //}
                 controller.onselectionchange()(controller.selectedValues);
             };
 
@@ -175,7 +176,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             this.getUlClass = function () {
                 return controller.selectedValues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
-
+    
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -194,13 +195,22 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             return {
                 pre: function ($scope, iElem, iAttrs,ctrl) {
                     $scope.refreshOutput = function () {
-                        if (ctrl.output == undefined) return;
-                        ctrl.output = [];
-                        ctrl.output.length = 0;
+
+                        if (ctrl.selectedvalues == undefined && ctrl.lastselectedvalue == undefined) return;
+
+                        if (ctrl.selectedvalues != undefined)
+                        {
+                            ctrl.selectedvalues = [];
+                            ctrl.selectedvalues.length = 0;
+                        }
+                        if (ctrl.lastselectedvalue != undefined)
+                            ctrl.lastselectedvalue = '';
+                        
                         angular.forEach(ctrl.selectedValues, function (value, key) {
                             if (typeof value !== 'undefined') {
                                 var temp = angular.copy(value);
-                                ctrl.output.push(temp);
+                                if (ctrl.lastselectedvalue != undefined)  ctrl.lastselectedvalue = temp;
+                                if (ctrl.selectedvalues != undefined) ctrl.selectedvalues.push(temp);
                             }
                         });
                     }
