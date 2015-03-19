@@ -31,10 +31,93 @@ namespace CallGeneratorServiceCLI
 
         public static List<SIP> LstSip = new List<SIP>();
 
-        //public static CAbtoPhone phone;
+        public static CAbtoPhone Generalphone = new CAbtoPhone();
         private CConfig config;
         
         internal static ServiceHost myServiceHost = null;
+
+        public static void Reconfigure(int i, string CallerId)
+        {
+            SipAccount spAccount = SipAccountRepository.Load(1);
+            //SIP s = new SIP();
+            WriteToEventLog("Reconfigure 1");
+            LstChanels[i].sip = new SIP();
+
+            WriteToEventLog("Reconfigure 11");
+
+            LstChanels[i].sip.phone = Generalphone;
+
+            //////////////////////////////////////////////////////////////////////////
+            //WriteToEventLog("Reconfigure 2 " +  " Port: " + LstChanels[i].sip.phone.Config.ListenPort.ToString());
+            //CConfig config;
+
+            //config = LstChanels[i].sip.phone.Config;
+
+            //config.ActivePlaybackDevice = "";
+            //config.ActiveNetworkInterface = "Ethernet-IPV4-192.168.22.12";
+
+            //if (config.RecordDeviceCount > 0)
+            //    config.ActiveRecordDevice = config.get_RecordDevice(0);
+
+            //config.LicenseUserId = ConfigurationManager.AppSettings["LicenseUserId"];
+            //config.LicenseKey = ConfigurationManager.AppSettings["LicenseKey"];
+
+            //config.StunServer = "";
+            //config.ListenPort = 5060;
+            //config.EchoCancelationEnabled = 1;
+            //config.NoiseReductionEnabled = 1;
+            //config.VolumeUpdateSubscribed = 1;
+            //config.DialToneEnabled = 1;
+            //config.MP3RecordingEnabled = 0;
+            //config.EncryptedCallEnabled = 0;
+            //config.AutoAnswerEnabled = 0;
+            //config.RingToneEnabled = 0;
+            //config.LocalAudioEnabled = 0;
+            //config.LocalTonesEnabled = 0;
+            //config.MixerFilePlayerEnabled = 1;
+            //config.SamplesPerSecond = 32000;
+            //config.AutoGainControlEnabled = 1;
+            //config.LogLevel = LogLevelType.eLogInfo;
+            //config.CallInviteTimeout = 60;
+            //config.UserAgent = "ABTO Video SIP SDK";
+            //config.CallerId = CallerId;
+            //config.RegDomain = CallerId;
+            //config.RegUser = CallerId;
+            //config.RegPass = spAccount.Password;
+            //config.RegAuthId = CallerId;
+            //config.RegExpire = 3000;
+
+            ////config.ExSipAccount_Add(sp.Server, sp.Login, sp.Password, sp.Username, sp.DisplayName, 300, 1, 0);
+            ////System.Threading.Thread.Sleep(1000);
+
+            //LstChanels[i].sip.SipId = spAccount.Id;
+            //LstChanels[i].sip.ConfigId = CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId;
+            //CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId++;
+            ////config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 1);
+            ////config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
+
+            //LstChanels[i].sip.phone.OnInitialized += new _IAbtoPhoneEvents_OnInitializedEventHandler(phone_OnInitialized);
+            //LstChanels[i].sip.phone.OnLineSwiched += new _IAbtoPhoneEvents_OnLineSwichedEventHandler(phone_OnLineSwiched);
+            //LstChanels[i].sip.phone.OnEstablishedCall += new _IAbtoPhoneEvents_OnEstablishedCallEventHandler(phone_OnEstablishedCall);
+            //LstChanels[i].sip.phone.OnClearedCall += new _IAbtoPhoneEvents_OnClearedCallEventHandler(phone_OnClearedCall);
+            //LstChanels[i].sip.phone.OnRegistered += new _IAbtoPhoneEvents_OnRegisteredEventHandler(phone_OnRegistered);
+            //LstChanels[i].sip.phone.OnUnRegistered += new _IAbtoPhoneEvents_OnUnRegisteredEventHandler(phone_OnUnRegistered);
+            //LstChanels[i].sip.phone.OnPlayFinished += new _IAbtoPhoneEvents_OnPlayFinishedEventHandler(phone_OnPlayFinished);
+            //LstChanels[i].sip.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
+            //LstChanels[i].sip.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
+            //LstChanels[i].sip.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
+
+            //LstChanels[i].sip.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
+            //LstChanels[i].sip.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
+            //LstChanels[i].sip.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
+            //WriteToEventLog("Reconfigure 3");
+            //LstChanels[i].sip.phone.ApplyConfig();
+            //WriteToEventLog("Reconfigure 4");
+            //LstChanels[i].sip.phone.Initialize();
+            //WriteToEventLog("Reconfigure 5");
+            //System.Threading.Thread.Sleep(1000);
+            ///////////////////////////////////////////////////////////////////////////////////////
+        }
 
         public void AddnewSIP(User user)
         {
@@ -110,6 +193,7 @@ namespace CallGeneratorServiceCLI
 
             LstSip.Add(s);
         }
+
         public void Configure()
         {
             try
@@ -123,7 +207,7 @@ namespace CallGeneratorServiceCLI
                 {
                     SIP s = new SIP();
 
-                    s.phone = new CAbtoPhone();
+                    s.phone = Generalphone;
                     config = s.phone.Config;
 
                     config.ActivePlaybackDevice = "";
@@ -160,7 +244,7 @@ namespace CallGeneratorServiceCLI
                     config.RegUser = sp.User.CallerId;
                     config.RegPass = sp.User.CallerId;
                     config.RegAuthId = sp.User.CallerId;
-                    config.RegExpire = 300;
+                    config.RegExpire = 3000;
 
                     //config.ExSipAccount_Add(sp.Server, sp.Login, sp.Password, sp.Username, sp.DisplayName, 300, 1, 0);
                     //System.Threading.Thread.Sleep(1000);
@@ -256,15 +340,15 @@ namespace CallGeneratorServiceCLI
 
         #region phone functions
 
-        void phone_OnTextMessageReceived(string address, string message)
+        public static void phone_OnTextMessageReceived(string address, string message)
         {
         }
 
-        void phone_OnTextMessageSentStatus(string address, string reason, int bSuccess)
+        public static void phone_OnTextMessageSentStatus(string address, string reason, int bSuccess)
         {
         }
 
-        void phone_OnRemoteAlerting2(int ConnectionId, int LineId, int responseCode, string reasonMsg)
+        public static void phone_OnRemoteAlerting2(int ConnectionId, int LineId, int responseCode, string reasonMsg)
         {
             //lock (_syncRoot)
             {
@@ -283,23 +367,23 @@ namespace CallGeneratorServiceCLI
                         if (GenCall != null)
                         {
                             //WriteToEventLog(" \r\n" + "GenCall : " + GenCall.Id);
-                            GenCall.Status = "3";
-                            GenCall.EndDate = DateTime.Now;
+                            GenCall.Status = "4";
+                            //GenCall.EndDate = DateTime.Now;
                             GenCall.ResponseCode = responseCode.ToString();
                             GeneratedCallRepository.Save(GenCall);
                         }
                         //else
                         //WriteToEventLog(" \r\n" + "GenCall NULL: " + GenCall);
 
-                        System.Threading.Thread.Sleep(5000);
-                        WriteToEventLog("LineId: " + LineId + " ConnectionId: " + ConnectionId);
-                        NewCallGenCLI.LstChanels[LineId].sip.phone.HangUp(ConnectionId);
+                        //System.Threading.Thread.Sleep(5000);
+                        //WriteToEventLog("LineId: " + LineId + " ConnectionId: " + ConnectionId);
+                        //NewCallGenCLI.LstChanels[LineId].sip.phone.HangUp(ConnectionId);
 
-                        LstChanels[c2.Id].Idle = true;
-                        LstChanels[c2.Id].StartDate = DateTime.MinValue;
-                        LstChanels[c2.Id].StartLastCall = DateTime.MinValue;
-                        LstChanels[c2.Id].GeneratedCallid = 0;
-                        LstChanels[c2.Id].ConnectionId = 0;
+                        //LstChanels[c2.Id].Idle = true;
+                        //LstChanels[c2.Id].StartDate = DateTime.MinValue;
+                        //LstChanels[c2.Id].StartLastCall = DateTime.MinValue;
+                        //LstChanels[c2.Id].GeneratedCallid = 0;
+                        //LstChanels[c2.Id].ConnectionId = 0;
                     }
                 }
                 catch (System.Exception ex)
@@ -315,7 +399,7 @@ namespace CallGeneratorServiceCLI
                     if (GenCall != null)
                     {
                         //WriteToEventLog(" \r\n" + "GenCall : " + GenCall.Id);
-                        GenCall.Status = "3";
+                        //GenCall.Status = "3";
                         GenCall.EndDate = DateTime.Now;
                         GenCall.ResponseCode = responseCode.ToString();
                         GeneratedCallRepository.Save(GenCall);
@@ -330,15 +414,48 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnPhoneNotify(string Msg)
+        public static void phone_OnPhoneNotify(string Msg)
         {
+            try
+            {
+                WriteToEventLog(" \r\n" + ("phone_OnPhoneNotify: Msg" + Msg.ToString()));
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+                WriteToEventLog(" \r\n" + (ex.ToString()));
+            }
         }
 
-        void phone_OnClearedConnection(int ConnectionId, int LineId)
+        public static void phone_OnClearedConnection(int ConnectionId, int LineId)
         {
             try
             {
                 WriteToEventLog(" \r\n" + ("phone_OnClearedConnection: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString()));
+
+                ChannelAllocation c = ChannelAllocation.GetCallServiceConnection(ConnectionId);
+                if (c == null)
+                    WriteToEventLog(" \r\n" + "c is null : ");
+                else
+                {
+                    WriteToEventLog(" \r\n" + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
+                    GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
+
+                    if (GenCall != null && c.GeneratedCallid != 0)
+                    {
+                        //LstChanels[c.Id].Idle = true;
+                        //LstChanels[c.Id].StartDate = DateTime.MinValue;
+                        //LstChanels[c.Id].StartLastCall = DateTime.MinValue;
+                        //LstChanels[c.Id].GeneratedCallid = 0;
+                        //LstChanels[c.Id].ConnectionId = 0;
+
+                        //WriteToEventLog( " \r\n" + "GenCall : " + GenCall.Id);
+                        //GenCall.Status = "6";
+                        GenCall.EndDate = DateTime.Now;
+                        //GenCall.ResponseCode = Status.ToString();
+                        GeneratedCallRepository.Save(GenCall);
+                    }
+                }
             }
             catch (System.Exception ex)
             {
@@ -347,11 +464,35 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnEstablishedConnection(string AddrFrom, string AddrTo, int ConnectionId, int LineId)
+        public static void phone_OnEstablishedConnection(string AddrFrom, string AddrTo, int ConnectionId, int LineId)
         {
             try
             {
                 WriteToEventLog(" \r\n" + ("phone_OnEstablishedConnection: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString() + " AddrFrom: " + AddrFrom.ToString() + " AddrTo: " + AddrTo));
+                
+                ChannelAllocation c = ChannelAllocation.GetCallServiceConnection(ConnectionId);
+                if (c == null)
+                    WriteToEventLog(" \r\n" + "c is null : ");
+                else
+                {
+                    WriteToEventLog(" \r\n" + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
+                    GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
+
+                    if (GenCall != null && c.GeneratedCallid != 0)
+                    {
+                        //LstChanels[c.Id].Idle = true;
+                        //LstChanels[c.Id].StartDate = DateTime.MinValue;
+                        //LstChanels[c.Id].StartLastCall = DateTime.MinValue;
+                        //LstChanels[c.Id].GeneratedCallid = 0;
+                        //LstChanels[c.Id].ConnectionId = 0;
+
+                        //WriteToEventLog( " \r\n" + "GenCall : " + GenCall.Id);
+                        GenCall.Status = "6";
+                        GenCall.EndDate = DateTime.Now;
+                        //GenCall.ResponseCode = Status.ToString();
+                        GeneratedCallRepository.Save(GenCall);
+                    }
+                }
             }
             catch (System.Exception ex)
             {
@@ -360,11 +501,24 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnPlayFinished(string Msg)
+        public static void phone_OnEstablishedCall(string Msg, int LineId)
+        {
+            try
+            {
+                WriteToEventLog(" \r\n" + ("phone_OnEstablishedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString()));
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+                WriteToEventLog(" \r\n" + (ex.ToString()));
+            }
+        }
+
+        public static void phone_OnPlayFinished(string Msg)
         {
         }
 
-        void phone_OnUnRegistered(string Msg)
+        public static void phone_OnUnRegistered(string Msg)
         {
             try
             {
@@ -377,21 +531,20 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnRegistered(string Msg)
+        public static void phone_OnRegistered(string Msg)
         {
             try
             {
-                //WriteToEventLog( " \r\n" + ("phone_OnRegistered: Msg" + Msg.ToString()));
+                WriteToEventLog( " \r\n" + ("phone_OnRegistered: Msg" + Msg.ToString()));
             }
             catch (System.Exception ex)
             {
                 Logger.LogException(ex);
                 WriteToEventLog(" \r\n" + (ex.ToString()));
             }
-
         }
 
-        void phone_OnClearedCall(string Msg, int Status, int LineId)
+        public static void phone_OnClearedCall(string Msg, int Status, int LineId)
         {
             lock (_syncRoot)
             {
@@ -413,8 +566,8 @@ namespace CallGeneratorServiceCLI
                         LstChanels[c.Id].ConnectionId = 0;
 
                         //WriteToEventLog( " \r\n" + "GenCall : " + GenCall.Id);
-                        GenCall.Status = "3";
-                        GenCall.EndDate = DateTime.Now;
+                        //GenCall.Status = "3";
+                        //GenCall.EndDate = DateTime.Now;
                         GenCall.ResponseCode = Status.ToString();
                         GeneratedCallRepository.Save(GenCall);
                     }
@@ -423,7 +576,7 @@ namespace CallGeneratorServiceCLI
 
 
                     // displayList(this, "Ophone_OnClearedCall on Line " + LineId);
-                    //WriteToEventLog(" \r\n" + ("phone_OnClearedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString() + " Status: " + Status.ToString()));
+                    WriteToEventLog(" \r\n" + ("phone_OnClearedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString() + " Status: " + Status.ToString()));
                 }
                 catch (System.Exception ex)
                 {
@@ -433,20 +586,7 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnEstablishedCall(string Msg, int LineId)
-        {
-            try
-            {
-                WriteToEventLog(" \r\n" + ("phone_OnEstablishedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString()));
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-                WriteToEventLog( " \r\n" + (ex.ToString()));
-            }
-        }
-
-        void phone_OnLineSwiched(int LineId)
+        public static void phone_OnLineSwiched(int LineId)
         {
             try
             {
@@ -459,7 +599,7 @@ namespace CallGeneratorServiceCLI
             }
         }
 
-        void phone_OnInitialized(string Msg)
+        public static void phone_OnInitialized(string Msg)
         {
             try
             {
@@ -474,7 +614,7 @@ namespace CallGeneratorServiceCLI
 
         #endregion
 
-        private void WriteToEventLog(string message)
+        private static void WriteToEventLog(string message)
         {
             string cs = "Service CallGen";
             EventLog elog = new EventLog();

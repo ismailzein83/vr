@@ -17,8 +17,8 @@ namespace CallGeneratorServiceCLI
         // Generated Call - Status
         // Status = 1 just on select the record from the database
         // Status = 2 directly before starting the call
-        // Status = 3 on phone_OnClearedCall function
-        // Status = 0 when the call is started without ending the call by the event in a time out = 2 minutes
+        // Status = 4 on phone_OnRemoteAlerting2 function 180 ringing
+        // Status = 0 when the call is started without ending the call by the event in a time out = 1 minutes
         
         System.Timers.Timer timer = new System.Timers.Timer(2000);
 
@@ -156,7 +156,7 @@ namespace CallGeneratorServiceCLI
             timer.Elapsed += OnTimedEvent;
         }
 
-        private static readonly object _syncRoot = new object();
+        private static readonly object _syncRoot2 = new object();
 
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
@@ -177,11 +177,26 @@ namespace CallGeneratorServiceCLI
                         NewCallGenCLI.LstChanels[i].startDate = DateTime.Now;
                         NewCallGenCLI.LstChanels[i].startLastCall = DateTime.Now;
 
-                        lock (_syncRoot)
+                        lock (_syncRoot2)
                         {
                             WriteToEventLogEx("SetCurrentLine: " + (NewCallGenCLI.LstChanels[i].id + 1).ToString());
 
-                            NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
+                            try
+                            {
+                                NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
+                            }
+                            catch(System.Exception exx)
+                            {
+                                WriteToEventLogEx("SetCurrentLine: " + exx.ToString());
+                                Logger.LogException(exx);
+                                SipAccount sp = SipAccountRepository.Load(1);
+                                WriteToEventLogEx("CallerId: " + sp.User.CallerId);
+
+                                NewCallGenCLI.Reconfigure(i, sp.User.CallerId);
+
+                                NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
+                            }
+                            
 
                             WriteToEventLogEx("CallerId: " + NewCallGenCLI.LstChanels[i].sip.phone.Config.CallerId);
                             //NewCallGenCLI.LstChanels[i].sip.phone.ApplyConfig();
@@ -206,7 +221,7 @@ namespace CallGeneratorServiceCLI
                             span = DateTime.Now - dt;
                         double totalSeconds = span.TotalSeconds;
 
-                        if (chanel.Idle == false && totalSeconds > 60)
+                        if (chanel.Idle == false && totalSeconds > 120)
                         {
                             //Reset the phone with this Id;
                             if (NewCallGenCLI.LstChanels[i].destinationNumber == "")
@@ -219,7 +234,7 @@ namespace CallGeneratorServiceCLI
                                 GeneratedCall CallGenEnd = GeneratedCallRepository.Load(NewCallGenCLI.LstChanels[i].generatedCallid);
                                 if (CallGenEnd != null)
                                 {
-                                    CallGenEnd.Status = "0";
+                                    CallGenEnd.Status = "-1";
                                     CallGenEnd.EndDate = DateTime.Now;
                                     bool tr = GeneratedCallRepository.Save(CallGenEnd);
                                 }
