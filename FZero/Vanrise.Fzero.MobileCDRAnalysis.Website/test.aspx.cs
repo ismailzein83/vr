@@ -17,7 +17,7 @@ public partial class test : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            // walid is testing source control
+            // walid is testing source control from laptop
 
             foreach (string path in Directory.GetFiles("C:\\", "*.dat"))
             {
