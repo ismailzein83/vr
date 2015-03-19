@@ -43,7 +43,7 @@
 											<label><input type="checkbox" checked data-column="2">Email</label>
 											<label><input type="checkbox" checked data-column="3">Creation Date</label>
                                             <label><input type="checkbox" checked data-column="4">Active</label>
-                                            <label><input type="checkbox" checked data-column="5">Roles</label>
+                                            <%--<label><input type="checkbox" checked data-column="5">Roles</label>--%>
 										</div>
 									</div>
 								</div>
@@ -79,9 +79,9 @@
                                 <th>
                                     Active
                                 </th>
-                                <th>
+                                <%--<th>
                                     Roles
-                                </th>
+                                </th>--%>
                                 <th>
                                     Edit
                                 </th>
@@ -112,10 +112,10 @@
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("IsActive") %>'></asp:Label>
                                         </td>
-                                        <td class="center">
-                                            <%--<a href="ManageUserRoles.aspx?<%#  QueryStringModule.Encrypt("paId="+ Eval("Id") )%>">
-                                        Roles</a>--%>
-                                        </td>
+                                        <%--<td class="center">
+                                            <a href="ManageUserRoles.aspx?<%#  QueryStringModule.Encrypt("paId="+ Eval("Id") )%>">
+                                        Roles</a>
+                                        </td>--%>
                                         <td class="center">
                                             <a class="edit" href="ManageUser.aspx?<%#  QueryStringModule.Encrypt("mId="+ Eval("Id") )%>">
                                                 Edit</a>

@@ -12,7 +12,7 @@
             <!-- BEGIN STYLE CUSTOMIZER -->
             <!-- END BEGIN STYLE CUSTOMIZER -->
             <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-            <h3 class="page-title">Test Call <small>Please choose an operator and a prefix</small>
+            <h3 class="page-title">Test Call <small>Please choose an operator and a route</small>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -38,7 +38,7 @@
                     <select class="span10 select2" tabindex="1" id="selectOperator" name="selectOperator">
                         <asp:Repeater ID="rptOperators" runat="server">
                             <ItemTemplate>
-                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Name") %> - <%# Eval("Country") %></option>
+                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Country") %> - <%# Eval("Name") %></option>
                             </ItemTemplate>
                         </asp:Repeater>
                     </select>
@@ -48,7 +48,7 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label">Prefix</label>
+                <label class="control-label">Route</label>
                 <div class="controls">
                     <select class="medium m-wrap" tabindex="1" name="selector2">
                         <asp:Repeater ID="rptCarriers" runat="server">
@@ -86,10 +86,10 @@
                         <thead>
                             <tr>
                                 <th class="span3">Name</th>
-                                <th class="span1">Prefix</th>
+                                <th class="span1">Route</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
-                                <th class="span2">Test Cli</th>
+                                <th class="span2">Caller ID</th>
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
                                  <th class="span1"></th>
@@ -150,8 +150,8 @@
                 if (msg.Status == "CLI DELIVERED")
                     statusClass = "label-success"
                 else
-                    if (msg.Status == "FAILED") statusClass = "label-warning"
-                        //statusClass = "label-inverse"
+                    if (msg.Status == "FAILED")
+                        statusClass = "label-warning"
                     else
                         if (msg.Status == "WAITING")
                             statusClass = "label-warning"
@@ -159,8 +159,11 @@
                             if (msg.Status == "ERROR")
                                 statusClass = "label-ERROR"
                             else
-                                if (msg.Status == "NO STATUS")
-                                    statusClass = "label-default"
+                                if (msg.Status == "FAS")
+                                    statusClass = "label-inverse"
+                                else
+                                    if (msg.Status == "NO STATUS")
+                                        statusClass = "label-default"
 
             var progressImg = "<img src=\"assets/img/input-spinner.gif\" />";
 
@@ -228,6 +231,7 @@
             
             $('#<%=lblError.ClientID %>').html('');
             $('#<%=lblSuccess.ClientID %>').html('');
+            $('#divError').css('visibility', 'hidden');
 
             var dl1 = $('select[name=selectOperator]').val();
             var dl2 = $('select[name=selector2]').val();
@@ -246,65 +250,75 @@
                     window.location = msg.Redirect;
                 }
                 
-                arrayRow.push(msg.Id);
-                addTable(msg);
 
-                if (Clicked == false) {
+                if (msg.isDone == false) {
+                    $('#divError').css('visibility', 'visible');
+                    $('#<%=lblError.ClientID %>').html('Sorry, you cant add a test call since your balance is empty');
 
-                    Clicked = true;
-                    
-                    resetTimer();
-                    timer = window.setInterval(function () {
+                }
+                else {
 
-                        var request1 = $.ajax({
-                            url: "HandlerGetTestOperator.ashx",
-                            contentType: "application/json; charset=utf-8",
-                            type: 'POST',
-                            cache: false,
-                            async: false,
-                            data: JSON.stringify([{ "id": arrayRow }])
-                        });
+                    arrayRow.push(msg.Id);
+                    addTable(msg);
 
-                        request1.fail(function (xhr, ajaxOptions, thrownError) {
-                            //$('#divSuccess').css('visibility', 'hidden');
-                            //$('#divError').css('visibility', 'visible');
-                            $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
+                    if (Clicked == false) {
+
+                        Clicked = true;
+
+                        resetTimer();
+                        timer = window.setInterval(function () {
+
+                            var request1 = $.ajax({
+                                url: "HandlerGetTestOperator.ashx",
+                                contentType: "application/json; charset=utf-8",
+                                type: 'POST',
+                                cache: false,
+                                async: false,
+                                data: JSON.stringify([{ "id": arrayRow }])
+                            });
+
+                            request1.fail(function (xhr, ajaxOptions, thrownError) {
+                                //$('#divSuccess').css('visibility', 'hidden');
+                                //$('#divError').css('visibility', 'visible');
+                                $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                             $('#<%=lblSuccess.ClientID %>').html('');
                             console.log('failll');
                             resetTimer();
 
-                    });
+                        });
 
                         request1.done(function (msg) {
 
-                        if (msg[0].needRedirect) {
-                            window.location = msg[0].Redirect;
-                        }
+                            if (msg[0].needRedirect) {
+                                window.location = msg[0].Redirect;
+                            }
 
-                        var successLblVal = $('#<%=lblSuccess.ClientID %>').html();
+                            var successLblVal = $('#<%=lblSuccess.ClientID %>').html();
 
-                            $('#myTable > tbody > tr').remove();
-                            var IsFinished = "true";
-                          
-                            $.each(msg, function (i, val) {
+                        $('#myTable > tbody > tr').remove();
+                        var IsFinished = "true";
 
-                                addTable(val);
-                                
-                                if (val.EndDate == null || val.EndDate == "") {
-                                    IsFinished = "false";
-                                    //rmvArrayElement(arrayRow, val.Id);
-                                }
-                            });
+                        $.each(msg, function (i, val) {
+
+                            addTable(val);
+
+                            if (val.EndDate == null || val.EndDate == "") {
+                                IsFinished = "false";
+                                //rmvArrayElement(arrayRow, val.Id);
+                            }
+                        });
 
                             //if (arrayRow.length == 0) {
-                            if (IsFinished == "true") {
-                                resetTimer();
-                                Clicked = false;
-                            }
-                    });
-                }, 3000);
+                        if (IsFinished == "true") {
+                            resetTimer();
+                            Clicked = false;
+                        }
+                        });
+                    }, 3000);
+                    }
 
                 }
+
             });
 
             request.fail(function (xhr, ajaxOptions, thrownError) {

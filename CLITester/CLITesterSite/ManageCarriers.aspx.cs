@@ -192,7 +192,7 @@ public partial class ManageCarriers : BasePage
         Carrier newCarrier = new Carrier();
 
         ActionLog action = new ActionLog();
-        action.ObjectId = Current.User.Id;
+        //action.ObjectId = Current.User.Id;
         action.ObjectType = "Carrier";
 
         if (String.IsNullOrEmpty(HdnId.Value))
@@ -220,8 +220,9 @@ public partial class ManageCarriers : BasePage
         newCarrier.ShortName = ShortName;
         CarrierRepository.Save(newCarrier);
 
+        action.ObjectId = newCarrier.Id;
         action.Description = Utilities.SerializeLINQtoXML<Carrier>(newCarrier);
-        
+        action.UserId = Current.User.User.Id;
         AuditRepository.Save(action);
 
         GetData();

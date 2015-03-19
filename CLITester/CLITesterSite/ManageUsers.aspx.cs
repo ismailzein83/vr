@@ -46,6 +46,7 @@ public partial class ManageUsers : BasePage
             ActionLog action = new ActionLog();
             action.ObjectId = id;
             action.ObjectType = "User";
+            action.UserId = Current.User.User.Id;
             //action.Description = Utilities.SerializeLINQtoXML<LoanProduct>(contractbidd);
             action.ActionType = (int)Enums.ActionType.Delete;
             AuditRepository.Save(action);

@@ -106,7 +106,7 @@
                                         </asp:Repeater>
                                     </select>
 
-                                    <select id="selectPrefix" class="span4 m-wrap" data-placeholder="Choose a prefix" tabindex="1">
+                                    <select id="selectPrefix" class="span4 m-wrap" data-placeholder="Choose a route" tabindex="1">
                                         <asp:Repeater ID="rptCarriers" runat="server">
                                             <ItemTemplate>
                                                 <option value='<%# Eval("Id") %>'><%# Eval("ShortName") %> - <%# Eval("Prefix") %></option>
@@ -128,7 +128,7 @@
                                     <tr>
                                         <th style="display: none;"></th>
                                         <th><i class="icon-briefcase"></i>Operator</th>
-                                        <th class="hidden-phone"><i class="icon-user"></i>Prefix</th>
+                                        <th class="hidden-phone"><i class="icon-user"></i>Route</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -173,8 +173,8 @@
                         <div class="btn-group span2">
                             <button class="btn green" id="addBtn" onclick="disableAddBtn(); emptyFields(); return false;">Add New <i class="icon-plus"></i></button>
                         </div>
-                          <div class="control-group span10 form-horizontal">
-                          </div>
+                        <div class="control-group span10 form-horizontal">
+                        </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
                         <thead>
@@ -228,12 +228,12 @@
                                             <%# Eval("OperatorPrefix") %>
                                         </td>
                                         <td class="center">
-                                               <asp:LinkButton class="delete" ID="lnkView"
+                                            <asp:LinkButton class="delete" ID="lnkView"
                                                 OnClick="btnView_Click" CommandArgument='<%# Eval("Id") %>' runat="server">View</asp:LinkButton>
                                         </td>
                                         <td class="center">
                                             <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + (((DateTime)Eval("SpecificTime")).ToString("HH:mm")) + "\""  %>  , <%#  "\"" + ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("OperatorPrefixId")  + "\""  %>  )'>Edit</a>
-<%--                                            <a href="#" runat="server" onserverclick="btnEdit_Click" onclick="disableAddBtn(); emptyFields();">Edit33</a>
+                                            <%--                                            <a href="#" runat="server" onserverclick="btnEdit_Click" onclick="disableAddBtn(); emptyFields();">Edit33</a>
 
                                             <asp:LinkButton ID="lnkEdit"
                                                 OnClick="btnEdit_Click" CommandArgument='<%# Eval("Id") %>' OnClientClick="disableAddBtn(); emptyFields();" runat="server">Edit</asp:LinkButton>--%>
@@ -256,74 +256,76 @@
         </div>
     </div>
 
-     <div class="row-fluid" id="viewDiv" runat="server">
+    <div class="row-fluid" id="viewDiv" runat="server">
 
         <div class="portlet box purple">
-                <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i>Schedule History</div>
-                    <div class="actions">
-                        <button class="btn black" id="btnClose" onclick="CloseLst(); return false;"><i class="icon-remove"></i> Close</button>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">
-                        <thead>
-                            <tr>
-                                <th visible="false" runat="server" id="th2">Id
-                                </th>
-                                <th>Name
-                                </th>
-                                <th>Schedule
-                                </th>
-                                <th>Creation Date
-                                </th>
-                                <th>End Date
-                                </th>
-                                 <th>Test Cli</th>
-                                <th>Received Cli
-                                </th>
-                                 <th>Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="table table-striped table-bordered table-advance table-hover">
-                            <asp:Repeater ID="rptHistory" runat="server">
-                                <ItemTemplate>
-                                    <tr class="odd gradeX">
-                                        <td runat="server" id="tdId" visible="false">
-                                            <asp:Label ID="Label0" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
-                                        </td>
-                                        <td class="highlight">
-                                            <div class='<%# Eval("Status") == null ? "none1" : (int)Eval("Status") == 1 ? "success" : "danger" %>'></div>&nbsp;
-                                            <asp:Label ID="Label6" runat="server" Text='<%# Eval("Operator.FullName") %>'></asp:Label>
-                                        </td>
-                                        <td>
-                                            <asp:Label ID="Label7" runat="server" Text='<%#  Eval("Schedule") == null ? " " : Eval("Schedule.DisplayName") %>'></asp:Label>
-                                        </td>
-                                        <td>
-                                            <asp:Label  ID="Label1" runat="server" Text='<%#  Eval("CreationDate") == null ? " " :  ((DateTime)Eval("CreationDate")).ToString("yyyy-MM-dd HH:mm:ss") %>'></asp:Label>
-                                        </td>
-                                        <td>
-                                            <asp:Label ID="Label2" runat="server" Text='<%#  Eval("EndDate") == null ? " " : ((DateTime)Eval("EndDate")).ToString("yyyy-MM-dd HH:mm:ss") %>'></asp:Label>
-                                        </td>
-                                        
-                                        <td>
-                                            <asp:Label ID="Label3" runat="server" Text='<%# Eval("TestCli") %>'></asp:Label>
-                                        </td>
-                                        
-                                        <td>
-                                            <asp:Label ID="Label4" runat="server" Text='<%# Eval("ReceivedCli") %>'></asp:Label>
-                                        </td>
-                                        <td>
-                                            <asp:Label ID="Label5" class='<%# Eval("Status") == null ? "label label-danger" : (int)Eval("Status") == 1 ? "label label-success" : "label label-important" %>' runat="server" Text='<%# Eval("Status") == null ? "No status" : (int)Eval("Status") == 1 ? "CLI Delivered" : "CLI not delivered" %>'></asp:Label>
-                                        </td>
-                                    </tr>
-                                </ItemTemplate>
-                            </asp:Repeater>
-                        </tbody>
-                    </table>
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Schedule History</div>
+                <div class="actions">
+                    <button class="btn black" id="btnClose" onclick="CloseLst(); return false;"><i class="icon-remove"></i>Close</button>
                 </div>
             </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">
+                    <thead>
+                        <tr>
+                            <th visible="false" runat="server" id="th2">Id
+                            </th>
+                            <th class="span3">Name
+                            </th>
+                            <th class="span2">Schedule
+                            </th>
+                            <th class="span3">Creation Date
+                            </th>
+                            <th class="span3">End Date
+                            </th>
+                            <th class="span2">Test Cli
+                            </th>
+                            <th class="span2">Received Cli
+                            </th>
+                            <th class="span2">Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table table-striped table-bordered table-advance table-hover">
+                        <asp:Repeater ID="rptHistory" runat="server">
+                            <ItemTemplate>
+                                <tr class="odd gradeX">
+                                    <td runat="server" id="tdId" visible="false">
+                                        <asp:Label ID="Label0" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
+                                    </td>
+                                    <td class="highlight">
+                                        <div class='<%# Eval("Status") == null ? "none1" : (int)Eval("Status") == 1 ? "success" : "danger" %>'></div>
+                                        &nbsp;
+                                            <asp:Label ID="Label6" runat="server" Text='<%# Eval("Operator.FullName") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label7" runat="server" Text='<%#  Eval("Schedule") == null ? " " : Eval("Schedule.DisplayName") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label1" runat="server" Text='<%#  Eval("CreationDate") == null ? " " :  ((DateTime)Eval("CreationDate")).ToString("yyyy-MM-dd HH:mm:ss") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label2" runat="server" Text='<%#  Eval("EndDate") == null ? " " : ((DateTime)Eval("EndDate")).ToString("yyyy-MM-dd HH:mm:ss") %>'></asp:Label>
+                                    </td>
+
+                                    <td>
+                                        <asp:Label ID="Label3" runat="server" Text='<%# Eval("TestCli") %>'></asp:Label>
+                                    </td>
+
+                                    <td>
+                                        <asp:Label ID="Label4" runat="server" Text='<%# Eval("ReceivedCli") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label5" class='<%# Eval("Status") == null ? "label label-danger" : (int)Eval("Status") == 1 ? "label label-success" : "label label-important" %>' runat="server" Text='<%# Eval("Status") == null ? "No status" : (int)Eval("Status") == 1 ? "CLI Delivered" : "CLI not delivered" %>'></asp:Label>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <!-- END PAGE CONTENT -->
 
@@ -378,7 +380,7 @@
                                + ' <thead>'
                                   + ' <tr>'
                                        + '<th class="span3"><i class="icon-briefcase"></i> Operator</th>'
-                                       + '<th class="hidden-phone"><i class="icon-user"></i> Prefix</th>'
+                                       + '<th class="hidden-phone"><i class="icon-user"></i> Route</th>'
                                     + '</tr>'
                                 + '</thead>'
                                 + '<tbody>';
@@ -489,7 +491,7 @@
         var handleTimePickers = function () {
 
             if (jQuery().timepicker) {
-               // $('.timepicker-default').timepicker();
+                // $('.timepicker-default').timepicker();
                 $('.timepicker-24').timepicker({
                     minuteStep: 1,
                     showSeconds: false,
@@ -593,15 +595,15 @@
             $('#<%=txtName.ClientID %>').val('');
             $('#txtDate').val('');
             $('#txtTime').val('');
-           
+
             $('#<%=HdTable.ClientID %>').val('');
-            
+
             clearValidationMsg();
             $("#addDiv").show();
         }
 
         var CloseLst = function () {
-            $("#viewDiv").hide(); 
+            $("#viewDiv").hide();
         }
 
         var editRow = function (id, name, occurs, SpecificTime, startDate, endDate, OperatorPrefix) {
@@ -619,7 +621,7 @@
             //    pp = "PM";
             //    hour = hour - 12;
             //}
-                
+
             //else
             //    pp = "AM";
 
@@ -631,7 +633,7 @@
 
             var mySplitResult = OperatorPrefix.split("$");
             var j = 0;
-            for (i = 0; i < (mySplitResult.length - 1) / 4; i++) { 
+            for (i = 0; i < (mySplitResult.length - 1) / 4; i++) {
                 addToTable2(mySplitResult[j], mySplitResult[j + 1], mySplitResult[j + 2], mySplitResult[j + 3]);
                 j = j + 4
             }

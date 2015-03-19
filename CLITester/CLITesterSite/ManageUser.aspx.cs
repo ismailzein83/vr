@@ -67,7 +67,8 @@ public partial class ManageUser : BasePage
         ActionLog action = new ActionLog();
         action.ObjectId = user.Id;
         action.ObjectType = "User";
-        action.Description = Utilities.SerializeLINQtoXML<User>(user);
+        action.UserId = Current.User.User.Id;
+        //action.Description = Utilities.SerializeLINQtoXML<User>(user);
         if (id == 0) // Add Operation - Action Log
             action.ActionType = (int)Enums.ActionType.Add;
         else // Edit Operation - Action Log

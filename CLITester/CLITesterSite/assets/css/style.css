@@ -2666,6 +2666,11 @@ System feeds
   margin-left:-75px;
 }
 
+.feeds .col3 {
+  float:left;
+  margin-left:-140px;
+}
+
 .feeds .col1 .cont {
   float:left;
   margin-right:75px;
@@ -2683,7 +2688,7 @@ System feeds
   padding: 7px;
 }
 
-.feeds .col1 .cont .cont-col2 {
+.feeds .col1 .cont .cont-col2  .cont-col3{
   float:left;
   width:100%;
 }
@@ -2696,6 +2701,13 @@ System feeds
 }
 
 .feeds .col2 .date {
+  padding: 4px 9px 4px 4px;
+  text-align: right;
+  font-style: italic;
+  color:#c1cbd0;
+}
+
+.feeds .col3 .date {
   padding: 4px 9px 4px 4px;
   text-align: right;
   font-style: italic;

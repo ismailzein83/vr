@@ -76,7 +76,7 @@
                                 <label class="control-label" for="lastName">
                                     Username<span class="required">*</span></label>
                                 <div class="controls">
-                                    <asp:TextBox ID="txtUserName" runat="server" CssClass="m-wrap span12" placeholder="UserName"></asp:TextBox>
+                                    <asp:TextBox ID="txtUserName" value="" runat="server" CssClass="m-wrap span12"  autocomplete="off" placeholder="UserName"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtUserName"
                                         ErrorMessage="Username Required" Display="Dynamic" Font-Bold="true"
                                         ForeColor="Red">
@@ -91,7 +91,7 @@
                                 <label class="control-label" for="firstName">
                                     Password<span class="required">*</span></label>
                                 <div class="controls">
-                                    <asp:TextBox ID="txtPassword" TextMode="Password" runat="server" CssClass="m-wrap span12"
+                                    <asp:TextBox ID="txtPassword" value=""  TextMode="Password"  autocomplete="off" runat="server" CssClass="m-wrap span12"
                                         placeholder="Password"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPassword"
                                          ErrorMessage="Password Required" Display="Dynamic" Font-Bold="true"

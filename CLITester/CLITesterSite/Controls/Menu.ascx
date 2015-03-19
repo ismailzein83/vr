@@ -66,6 +66,8 @@
                 <li><a href="ManageTestOperators.aspx">History Test Calls</a> </li>
                 <li runat="server" id="liSettings"><a href="ManageSettings.aspx">Settings</a> </li>
                 <li runat="server" id="licalls" ><a href="ManageTestCalls.aspx">Data Calls</a> </li>
+                <li runat="server" id="liLstTstOp" ><a href="ListOperators.aspx">List Operators</a> </li>
+                <li runat="server" id="liLstOnline" ><a href="ListOnlineOperators.aspx">List Online Operators</a> </li>
             </ul>
         </li>
         <%--<li><a href="javascript:;"><i class="icon-briefcase"></i><span class="title">Pages</span>

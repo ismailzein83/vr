@@ -114,6 +114,7 @@ public partial class ManageSchedules : BasePage
             action.ObjectType = "Schedule";
             //action.Description = Utilities.SerializeLINQtoXML<LoanProduct>(contractbidd);
             action.ActionType = (int)Enums.ActionType.Delete;
+            action.UserId = Current.User.User.Id;
             AuditRepository.Save(action);
             GetData();
         }
@@ -201,7 +202,6 @@ public partial class ManageSchedules : BasePage
         Schedule newSchedule = new Schedule();
 
         ActionLog action = new ActionLog();
-        action.ObjectId = Current.User.Id;
         action.ObjectType = "Schedule";
 
         if (String.IsNullOrEmpty(HdnId.Value))
@@ -299,6 +299,8 @@ public partial class ManageSchedules : BasePage
         if(log != null)
             ScheduleLogRepository.Delete(log.Id);
 
+        action.ObjectId = newSchedule.Id;
+        action.UserId = Current.User.User.Id;
         AuditRepository.Save(action);
 
         string words = HdTable.Value;

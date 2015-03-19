@@ -27,7 +27,7 @@
 	<!-- BEGIN PAGE LEVEL STYLES -->
 	<link href="assets/css/pages/login.css" rel="stylesheet" type="text/css"/>
 	<!-- END PAGE LEVEL STYLES -->
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="assets/img/favicon.ico" />
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -35,6 +35,7 @@
 	<!-- BEGIN LOGO -->
 	<div class="logo">
         <h1>
+            <img src="assets/img/logoCLI.png" />
             <span class="brand " style="color:white">CLI Tester
 		</span>
         </h1>

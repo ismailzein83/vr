@@ -18,6 +18,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
         {
             needRedirect = false;
             ErrorMessage = "";
+            isDone = true;
         }
         
         public string Id { get; set; }
@@ -31,6 +32,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
         public string Redirect { get; set; }
         public bool needRedirect { get; set; }
         public string ErrorMessage { get; set; }
+        public bool isDone { get; set; }
     }
     
     public void ProcessRequest(HttpContext context)
@@ -62,39 +64,62 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
 
             RequestTestCall resp = emplList[0];
 
+            ResponseTestOperator responseTestOp = new ResponseTestOperator();
+            
             int OperatorId = 0;
             int.TryParse(resp.id1, out OperatorId);
 
-            TestOperator testOp = new TestOperator();
-            testOp.UserId = Current.getCurrentUser(context).Id;
-            if (OperatorId != 0)
-                testOp.OperatorId = OperatorId;
+            int balance = 0;
+            int Requested = 0;
+            int ParentId = 0;
+            ParentId = UserRepository.GetParentId(Current.getCurrentUser(context).Id);
+            
+            balance = UserRepository.Load(Current.getCurrentUser(context).Id).Balance.Value;
 
-            testOp.NumberOfCalls = 1;
-            testOp.CreationDate = DateTime.Now;
-            testOp.CarrierPrefix = resp.id2;
-            //testOp.CarrierPrefix = "";
-            testOp.CallerId = Current.getCurrentUser(context).CallerId;
+            Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId);
 
-            bool saveB = TestOperatorRepository.Save(testOp);
+            if (balance - Requested > 0)
+            {
+                TestOperator testOp = new TestOperator();
+                testOp.UserId = Current.getCurrentUser(context).Id;
+                testOp.ParentUserId = ParentId;
+                
+                if (OperatorId != 0)
+                    testOp.OperatorId = OperatorId;
 
-            int TestOperatorId = testOp.Id;
+                testOp.NumberOfCalls = 1;
+                testOp.CreationDate = DateTime.Now;
+                testOp.CarrierPrefix = resp.id2;
+                //testOp.CarrierPrefix = "";
+                testOp.CallerId = Current.getCurrentUser(context).CallerId;
 
-            ResponseTestOperator responseTestOp = new ResponseTestOperator();
-            responseTestOp.Id = testOp.Id.ToString();
-            responseTestOp.CreationDate = testOp.CreationDate.ToString();
-            responseTestOp.EndDate = "";
-            responseTestOp.OperatorId = OperatorRepository.Load(testOp.OperatorId.Value).FullName;
-            responseTestOp.Prefix = testOp.CarrierPrefix;
-            responseTestOp.ReceivedCli = "";
-            responseTestOp.Status = "";
-            responseTestOp.TestCli = "";
-            responseTestOp.ErrorMessage = "";
+                bool saveB = TestOperatorRepository.Save(testOp);
 
-            context.Response.ContentType = "application/json";
-            context.Response.ContentEncoding = System.Text.Encoding.UTF8;
-            context.Response.Write(jsonSerializer.Serialize(responseTestOp));
+                int TestOperatorId = testOp.Id;
 
+                responseTestOp.Id = testOp.Id.ToString();
+                responseTestOp.CreationDate = testOp.CreationDate.ToString();
+                responseTestOp.EndDate = "";
+                responseTestOp.OperatorId = OperatorRepository.Load(testOp.OperatorId.Value).FullName;
+                responseTestOp.Prefix = testOp.CarrierPrefix;
+                responseTestOp.ReceivedCli = "";
+                responseTestOp.Status = "";
+                responseTestOp.TestCli = "";
+                responseTestOp.ErrorMessage = "";
+
+                context.Response.ContentType = "application/json";
+                context.Response.ContentEncoding = System.Text.Encoding.UTF8;
+                context.Response.Write(jsonSerializer.Serialize(responseTestOp));
+            }
+            else
+            {
+                responseTestOp.isDone = false;
+
+                context.Response.ContentType = "application/json";
+                context.Response.ContentEncoding = System.Text.Encoding.UTF8;
+                context.Response.Write(jsonSerializer.Serialize(responseTestOp));
+            }
+            
             //context.Response.ContentType = "text/plain";
             //context.Response.Write(TestOperatorId);
         }

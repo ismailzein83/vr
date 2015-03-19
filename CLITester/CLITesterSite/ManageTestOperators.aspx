@@ -49,7 +49,7 @@
                         <option value="aa">All</option>
                         <asp:Repeater ID="rptOperators" runat="server">
                             <ItemTemplate>
-                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Name") %> - <%# Eval("Country") %></option>
+                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Country") %> - <%# Eval("Name") %></option>
                             </ItemTemplate>
                         </asp:Repeater>
                     </select>
@@ -111,7 +111,7 @@
                                 <label>
                                     <input type="checkbox" checked data-column="3">Schedule</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="4">Test Cli</label>
+                                    <input type="checkbox" checked data-column="4">Caller ID</label>
                                 <label>
                                     <input type="checkbox" checked data-column="5">Received Cli</label>
                                 <label>
@@ -124,13 +124,13 @@
                     <table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Creation Date</th>
-                                <th>End Date</th>
-                                <th>Schedule</th>
-                                <th>Test Cli</th>
-                                <th>Received Cli</th>
-                                <th>Status</th>
+                                <th class="span3">Name</th>
+                                <th class="span3">Creation Date</th>
+                                <th class="span3">End Date</th>
+                                <th class="span2">Schedule</th>
+                                <th class="span2">Caller ID</th>
+                                <th class="span2">Received Cli</th>
+                                <th class="span2">Status</th>
                             </tr>
                         </thead>
                         <tbody class="table table-striped table-bordered table-advance table-hover">

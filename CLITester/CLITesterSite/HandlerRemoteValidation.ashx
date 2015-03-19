@@ -15,17 +15,13 @@ public class HandlerRemoteValidation : IHttpHandler, System.Web.SessionState.IRe
         }
         
         var jsonSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-        var jsonString = String.Empty;
-
-        context.Request.InputStream.Position = 0;
-        using (var inputStream = new System.IO.StreamReader(context.Request.InputStream))
-        {
-            jsonString = inputStream.ReadToEnd();
-        }
         
-        String text = jsonString.Split('=')[1].ToString();
-        bool b = true;
-        //bool b = !CarrierRepository.ExistShortName(text);
+        String text = context.Request.Form["ctl00$MainContent$txtShortName"].ToString();
+        int id = 0;
+        String ID = context.Request.Form["id"].ToString();
+        Int32.TryParse(ID, out id);
+        
+        bool b = !CarrierRepository.ExistShortName(text,id);
 
         string msg = b.ToString();
         if (b)

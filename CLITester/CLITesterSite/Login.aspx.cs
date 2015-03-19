@@ -39,23 +39,24 @@ public partial class Login : BasePage
                 {
                     Current.User = loggedUser;
 
-                    //ActionLog action = new ActionLog();
-                    //action.ActionType = (int)Enums.ActionType.Login;
-                    //action.Username = Current.User.Username;
-                    //action.LogDate = DateTime.Now;
-                    //action.ObjectId = user.Id;
-                    //action.ObjectType = "User";
-                    ////System.Net.IPHostEntry ipHostEntries = System.Net.Dns.GetHostEntry(Environment.MachineName);
-                    ////System.Net.IPAddress[] arrIpAddress = ipHostEntries.AddressList;
-                    ////action.RemoteAddress = Request.ServerVariables["REMOTE_ADDR"];
-                    ////action.IPAddress = arrIpAddress[arrIpAddress.Length - 1].ToString();
-                    ////action.ComputerName = System.Net.Dns.GetHostEntry(Request.ServerVariables["remote_addr"]).HostName;
+                    ActionLog action = new ActionLog();
+                    action.ActionType = (int)Enums.ActionType.Login;
+                    action.Username = Current.User.Username;
+                    action.LogDate = DateTime.Now;
+                    action.ObjectId = user.Id;
+                    action.ObjectType = "User";
+                    action.UserId = user.Id;
+                    //System.Net.IPHostEntry ipHostEntries = System.Net.Dns.GetHostEntry(Environment.MachineName);
+                    //System.Net.IPAddress[] arrIpAddress = ipHostEntries.AddressList;
+                    //action.RemoteAddress = Request.ServerVariables["REMOTE_ADDR"];
+                    //action.IPAddress = arrIpAddress[arrIpAddress.Length - 1].ToString();
+                    //action.ComputerName = System.Net.Dns.GetHostEntry(Request.ServerVariables["remote_addr"]).HostName;
 
                     //action.IPAddress = ActionClass.GetIPAddress();
                     //action.RemoteAddress = ActionClass.GetRemoteAddress();
                     //action.ComputerName = ActionClass.GetComputerName();
                     //action.Description = Utilities.SerializeLINQtoXML<User>(user);
-                    //AuditRepository.Save(action);
+                    AuditRepository.Save(action);
 
                     if (backto.Value != "")
                         Response.Redirect(CallGeneratorLibrary.Utilities.Config.SiteUrl + backto.Value);

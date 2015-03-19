@@ -139,6 +139,8 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                             responseTestOp.Status = "WAITING";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.ErrorMessage).ToString())
                             responseTestOp.Status = "ERROR";
+                        else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Phase).ToString())
+                            responseTestOp.Status = "FAS";
                         else
                             responseTestOp.Status = "NO STATUS";
 

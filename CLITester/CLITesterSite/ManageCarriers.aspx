@@ -48,7 +48,7 @@
                                 <label>
                                     <input type="checkbox" checked data-column="0">Name</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="1">Prefix</label>
+                                    <input type="checkbox" checked data-column="1">Route</label>
                                 <label>
                                     <input type="checkbox" checked data-column="2">Short Name</label>
                             </div>
@@ -94,7 +94,7 @@
                                 <th>Name
                                 </th>
 
-                                <th>Prefix
+                                <th>Route
                                 </th>
                                 <th>Short Name
                                 </th>
@@ -159,7 +159,7 @@
                             <button class="close" data-dismiss="alert"></button>
                             You have some form errors. Please check below.
                         </div>
-                        <asp:HiddenField ID="HdnId" runat="server" />
+                        <asp:HiddenField ID="HdnId" runat="server"/>
                         <div class="control-group">
                             <label class="control-label">Name<span class="required">*</span></label>
                             <div class="controls">
@@ -168,7 +168,7 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">Prefix<span class="required">*</span></label>
+                            <label class="control-label">Route<span class="required">*</span></label>
                             <div class="controls">
                                 <asp:TextBox ID="txtPrefix" onkeypress='return isNumber(event)' class="span8 m-wrap valDigits" data-required="1" runat="server"></asp:TextBox>
                             </div>
@@ -266,9 +266,33 @@
 
 
         jQuery(document).ready(function () {
+
             App.init();
             handleValidation1();
-
+            var form1 = $('#form_sample_1');
+            form1.find('.valStringRemote').each(function () {
+                $(this).rules('add', {
+                    required: true,
+                    minlength: 3,
+                    remote: {
+                        url: "HandlerRemoteValidation.ashx",
+                        type: "POST",
+                        cache: false,
+                        dataType: "json",
+                        data: {
+                            id: function () {
+                                return $('#<%=HdnId.ClientID %>').val();
+                            }
+                        },
+                        dataFilter: function (response) {
+                            return checkSuccess(response);
+                        }
+                    },
+                    messages: {
+                        remote: "Short Name Exist"
+                    }
+                });
+            });
 
             if (!jQuery().dataTable) {
                 return;
