@@ -72,6 +72,7 @@ namespace TOne.Web
             //Site
             bundles.Add(new ScriptBundle("~/bundles/Javascripts").IncludeDirectory(
                 "~/Client/Javascripts/Modules", "*.js", true).IncludeDirectory(
+                "~/Client/Javascripts/Services", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
 
