@@ -16,7 +16,18 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        try
+        {
+            DBConnect db = new DBConnect();
+            db.Load();
 
+        }
+        catch (Exception ex)
+        {
+            ErrorLog("OnTimedEvent() " + ex.Message);
+            ErrorLog("OnTimedEvent() " + ex.ToString());
+            ErrorLog("OnTimedEvent() " + ex.InnerException.ToString());
+        }
     }
 
 
@@ -40,18 +51,7 @@ public partial class _Default : System.Web.UI.Page
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            try
-            {
-                DBConnect db = new DBConnect();
-                     db.Load();
-
-            }
-            catch (Exception ex)
-            {
-                ErrorLog("OnTimedEvent() " + ex.Message);
-                ErrorLog("OnTimedEvent() " + ex.ToString());
-                ErrorLog("OnTimedEvent() " + ex.InnerException.ToString());
-            }
+          
           }
 
        
@@ -165,6 +165,7 @@ class DBConnect
         try
         {
             string query = "LOAD DATA INFILE './x1.DAT' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n'";
+            //string query = "LOAD DATA INFILE './x1.DAT' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n'";
 
             //open connection
             if (this.OpenConnection() == true)
