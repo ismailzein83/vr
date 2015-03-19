@@ -41,15 +41,12 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
         function loadRemoteData() {
             return CarriersService.getCustomers().then(function (customers) {
                 controller.customers = customers;
+            }, function (msg) {
+                console.log(msg);
             });
         }
         loadRemoteData();
         this.zones;
-        function loadOnDemand(text) {
-            //return ZonesService.getSalesZones(text).then(function (zones) {
-            //    controller.zones = zones;
-            //});
-        }
 
         $scope.selectedcustomers = [];
         this.output = [];
@@ -72,7 +69,6 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
 
         this.onsearch = function (text) {
             return ZonesService.getSalesZones(text);
-            //loadOnDemand(text);
         }
 
         

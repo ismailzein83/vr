@@ -4,7 +4,9 @@ app.service('BaseDirService', function () {
 
     return ({
         directiveMainURL: "../../Client/Templates/Directives/",
-        getObjectProperty: getObjectProperty
+        getObjectProperty: getObjectProperty,
+        muteAction: muteAction,
+        findExsite: findExsite
     });
 
     function getObjectProperty(item, property) {
@@ -16,6 +18,21 @@ app.service('BaseDirService', function () {
             item = item[arr.shift()];
         }
         return item;
+    }
+
+    function muteAction(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function findExsite(arr, value, attname) {
+        var index = -1;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i][attname] == value) {
+                index = i
+            }
+        }
+        return index;
     }
 
 });

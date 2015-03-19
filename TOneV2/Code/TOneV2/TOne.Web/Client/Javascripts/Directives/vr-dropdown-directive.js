@@ -23,7 +23,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             limitcharactercount:'@'
         },
         controller: function () {
-
             var controller = this;
             this.selectedValues = [];
             this.filtername = '';
@@ -50,11 +49,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.findExsite = function (item) {
-                return DropdownService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
+                return BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
             };
 
             this.muteAction = function (e) {
-                DropdownService.muteAction(e);
+                BaseDirService.muteAction(e);
             };
 
             this.selectValue = function (e, c) {
@@ -117,7 +116,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             attrs = DropdownService.setDefaultAttributes(attrs);
 
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.clearDatasource = function () {
                         if (ctrl.datasource == undefined) return;
                             ctrl.datasource =[];
@@ -131,6 +130,8 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             ctrl.onsearch() (ctrl.filtername).then(function (items) {
                                 ctrl.datasource = items;
                                 ctrl.showloading = false;
+                                }, function (msg) {
+                                    console.log(msg);
                             });
                         }
                     };
