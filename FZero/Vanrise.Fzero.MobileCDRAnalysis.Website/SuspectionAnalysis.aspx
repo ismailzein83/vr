@@ -170,9 +170,17 @@
 
 
 
-                            <asp:TemplateField HeaderText="Occurence/Period">
+                            <asp:TemplateField HeaderText="Occurrence_Day">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblNumberOfOccurance" runat="server" Text='<%#Eval("Number_of_Occurance").ToString() +"  Day(s) " %>'>
+                                    <asp:Label ID="lblOccurrence_Day" runat="server" Text='<%#Eval("Occurrence_Day").ToString() +"  Day(s) " %>'>
+                                        
+                                    </asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                             <asp:TemplateField HeaderText="Occurrence_Hour">
+                                <ItemTemplate>
+                                    <asp:Label ID="lblOccurrence_Hour" runat="server" Text='<%#Eval("Occurrence_Hour").ToString() +"  Hour(s) " %>'>
                                         
                                     </asp:Label>
                                 </ItemTemplate>

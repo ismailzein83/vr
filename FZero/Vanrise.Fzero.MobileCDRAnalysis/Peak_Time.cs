@@ -19,5 +19,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> StrategyId { get; set; }
     
         public virtual Strategy Strategy { get; set; }
+        public virtual Strategy Strategy1 { get; set; }
     }
 }

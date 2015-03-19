@@ -21,5 +21,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string UserPassword { get; set; }
     
         public virtual SwitchProfile SwitchProfile { get; set; }
+        public virtual SwitchProfile SwitchProfile1 { get; set; }
     }
 }

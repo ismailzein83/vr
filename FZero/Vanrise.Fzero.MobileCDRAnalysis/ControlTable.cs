@@ -27,9 +27,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Lastid { get; set; }
         public Nullable<int> PeriodId { get; set; }
         public Nullable<int> NumberOfProfileRecords { get; set; }
+        public Nullable<int> StrategyId { get; set; }
         public Nullable<int> NumberOfCalls { get; set; }
     
         public virtual OperationType OperationType { get; set; }
         public virtual Period Period { get; set; }
+        public virtual OperationType OperationType1 { get; set; }
+        public virtual Period Period1 { get; set; }
     }
 }

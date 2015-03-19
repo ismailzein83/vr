@@ -9,6 +9,7 @@ using Vanrise.Fzero.MobileCDRAnalysis.Providers;
 using Vanrise.CommonLibrary;
 using System.Data;
 using Telerik.Web.UI;
+using System.Configuration;
 
 public partial class SuspectionAnalysis : BasePage
 {
@@ -203,7 +204,7 @@ public partial class SuspectionAnalysis : BasePage
         DateTime? fromDate = dtpFromDate.SelectedDate;
         DateTime? toDate = dtpToDate.SelectedDate;
 
-        CurrentSuspectionList = SuspectionOccurance.GetList(strategyId, fromDate, toDate, st, minimumOccurance);
+        CurrentSuspectionList = SuspectionOccurance.GetList(strategyId, fromDate, toDate, st, minimumOccurance, ConfigurationManager.AppSettings["SQLType"]);
 
     }
     private void FillGrid()

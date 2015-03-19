@@ -5,47 +5,90 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="572ca103c26b4e54a2c981f227c10893" Name="Diagram1">
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CDR" Width="1.5" PointX="6.7262386431574068" PointY="2.419412122303346" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CellProfile" Width="1.5" PointX="3.8149612824502217" PointY="27.314951536857965" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ControlTable" Width="1.5" PointX="4.8476329431159577" PointY="19.20072671175037" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Criteria_Profile" Width="1.5" PointX="8.26336830121622" PointY="28.608930854410367" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_NumberProfile" Width="1.5" PointX="10.472717284445054" PointY="30.051315485523695" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_Peak_Hours" Width="1.5" PointX="8.3240495474655418" PointY="22.175854350522094" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiver" Width="1.5" PointX="5.6658673964747539" PointY="12.540101340292068" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiverType" Width="1.5" PointX="4.6952397230524756" PointY="6.5907314003402044" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailTemplate" Width="1.5" PointX="6.7806501308365963" PointY="10.181636502119543" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailToken" Width="1.5" PointX="4.7643880884928578" PointY="16.396972321158728" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Import" Width="1.5" PointX="8.7854025572470409" PointY="12.803407168389953" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ImportType" Width="1.5" PointX="8.5215292091115984" PointY="16.119127564187686" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalCDR" Width="1.5" PointX="5.91642055935991" PointY="13.925598300027474" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalizationRule" Width="1.5" PointX="2.0270269429437011" PointY="4.5481643250902017" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NumberProfile" Width="1.5" PointX="9.542312050956447" PointY="3.3230231717801759" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.OperationType" Width="1.5" PointX="5.5045246172251758" PointY="31.726850271097781" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Peak_Time" Width="1.5" PointX="1.6727990255098786" PointY="11.898573255119182" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Period" Width="1.5" PointX="8.3672043571095926" PointY="3.6346170174119141" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Permission" Width="1.5" PointX="7.499603662406841" PointY="4.5990281126457395" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.PredefinedColumn" Width="1.5" PointX="1.3145454196792772" PointY="2.3076673011796864" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Related_Criteria" Width="1.5" PointX="4.7216538101069876" PointY="8.3838394919335091" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Report" Width="1.5" PointX="11.324731969891458" PointY="6.4691284329021013" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportDetail" Width="1.5" PointX="7.2054721523101772" PointY="7.0601391676162084" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportingStatu" Width="1.5" PointX="11.946952007686232" PointY="14.001933789812929" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallClass" Width="1.5" PointX="5.5592481855113283" PointY="24.083325576075971" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallType" Width="1.5" PointX="10.189106834209108" PointY="26.549199653113821" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_SubType" Width="1.5" PointX="4.3632457705043475" PointY="28.802122755349671" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SourceMapping" Width="1.5" PointX="3.2646790795329395" PointY="5.1332292133631316" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy" Width="1.5" PointX="4.3857503367521566" PointY="26.054102522346238" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Min_Values" Width="1.5" PointX="4.3266862669618273" PointY="31.001422881615078" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Width="1.5" PointX="5.1732455739626877" PointY="17.48748447815305" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyPeriod" Width="1.5" PointX="1.1860370194474408" PointY="24.6042229200733" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyThreshold" Width="1.5" PointX="5.7647186898462088" PointY="22.470615188810328" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Subscriber_Values" Width="1.5" PointX="6.6431463559359063" PointY="3.2104064688134968" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SubscriberThreshold" Width="1.5" PointX="8.3353336454999329" PointY="8.886022244061353" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Suspicion_Level" Width="1.5" PointX="6.9719206127207354" PointY="13.482705569585182" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" Width="1.5" PointX="2.5035682686155516" PointY="10.397367601467934" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SwitchProfile" Width="1.5" PointX="1.4272108103275349" PointY="15.043900660725264" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.sysdiagram" Width="1.5" PointX="5.4765457182547754" PointY="16.254949458062161" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.UserPermission" Width="1.5" PointX="10.839200684260204" PointY="8.71698232401022" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.User" Width="1.5" PointX="5.275147354824071" PointY="23.403471391370275" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_CDR_Imports" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_CDR_SwitchProfiles" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_ControlTable_OperationType" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_ControlTable_Periods" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile1" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Strategy_Min_Values_criteria_profile" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_EmailReceivers_EmailReceiverTypes" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_EmailReceivers_EmailTemplates" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_EmailTemplates_Users" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Imports_ImportTypes" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Imports_Users" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_NormalizationRules_SwitchProfiles" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Peak_time_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_StrategyPeriods_Periods" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Subscriber_Values_Periods" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Permissions_Permissions" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_UserPermissions_Permissions" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_SourceMappings_PredefinedColumns" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Related_Criteria_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Report_ReportingStatus" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Report_Users" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_ReportDetails_Report" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_ReportDetails_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_SourceMappings_SwitchProfiles" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Strategy_Min_Values_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Strategy_suspection_level_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Strategy_Users" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_StrategyPeriods_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Strategy_suspection_level_suspection_level" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_Switch_DatabaseConnections_Switchs" />
+        <AssociationConnector Association="CDRAnalysisMobileModel.FK_UserPermissions_Users" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CDR" Width="1.5" PointX="11.758724558986129" PointY="0.057894900468129153" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.CellProfile" Width="1.5" PointX="6.9360146349929348" PointY="27.460469243796762" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ControlTable" Width="1.5" PointX="0.26415434864543114" PointY="9.4168186082583" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Criteria_Profile" Width="1.5" PointX="0.89670887072417371" PointY="22.6005834595303" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_NumberProfile" Width="1.5" PointX="7.3271668810989548" PointY="20.677647644969472" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.delete_Peak_Hours" Width="1.5" PointX="1.2949832926015292" PointY="13.424578300409289" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiver" Width="1.5" PointX="0.46222308485872254" PointY="19.170374163971456" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailReceiverType" Width="1.5" PointX="1.1996891112996679" PointY="22.357538606206671" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailTemplate" Width="1.5" PointX="3.6424910573486664" PointY="4.0667846668822616" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.EmailToken" Width="1.5" PointX="9.6804670941459321" PointY="26.322406185009704" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Import" Width="1.5" PointX="2.8949815942416812" PointY="31.575577944319498" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ImportType" Width="1.5" PointX="2.0482467813641985" PointY="11.206068819019045" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalCDR" Width="1.5" PointX="7.340221035918324" PointY="31.321574508827911" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NormalizationRule" Width="1.5" PointX="8.93206101885627" PointY="31.110313206496794" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.NumberProfile" Width="1.5" PointX="11.266496434466212" PointY="26.024130952555748" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.OperationType" Width="1.5" PointX="10.888912757341243" PointY="6.9050560178724378" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Peak_Time" Width="1.5" PointX="2.6561487459839084" PointY="6.1133509157753325" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Period" Width="1.5" PointX="4.2665432506550776" PointY="15.64463610185526" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Permission" Width="1.5" PointX="5.5690335098509838" PointY="1.1848492776904485" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.PredefinedColumn" Width="1.5" PointX="5.4420668880651082" PointY="5.6548922684299257" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Related_Criteria" Width="1.5" PointX="1.839083718992343" PointY="10.387908999988767" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Report" Width="1.5" PointX="5.3132117787903228" PointY="22.562900836841624" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportDetail" Width="1.5" PointX="11.585887513861939" PointY="29.500205724267385" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.ReportingStatu" Width="1.5" PointX="4.2274692432151495" PointY="14.183410025287145" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallClass" Width="1.5" PointX="3.77403273981718" PointY="18.714924463403843" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_CallType" Width="1.5" PointX="8.0895583182990372" PointY="14.105631045115009" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Set_SubType" Width="1.5" PointX="6.7684232419209653" PointY="19.823189848951618" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SourceMapping" Width="1.5" PointX="6.77477745095956" PointY="31.781020879643513" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy" Width="1.5" PointX="9.97346380631135" PointY="7.28997020762878" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Min_Values" Width="1.5" PointX="2.9574549305054614" PointY="1.3828370875599036" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Width="1.5" PointX="6.5992459592405925" PointY="3.2809104487676688" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyPeriod" Width="1.5" PointX="9.20872236285765" PointY="25.514980730374802" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.StrategyThreshold" Width="1.5" PointX="8.8652051095223072" PointY="28.548232762398307" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Subscriber_Values" Width="1.5" PointX="2.3780681166695747" PointY="27.119243977181263" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SubscriberThreshold" Width="1.5" PointX="2.9223470608342192" PointY="19.55453486161052" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Suspicion_Level" Width="1.5" PointX="2.8150434674765186" PointY="8.5284602085726622" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" Width="1.5" PointX="8.08297736201574" PointY="20.15968664929256" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.SwitchProfile" Width="1.5" PointX="8.0318186003862966" PointY="29.332041917989049" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.sysdiagram" Width="1.5" PointX="6.527629950329489" PointY="14.899090580129572" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.UserPermission" Width="1.5" PointX="4.6163882932702025" PointY="22.073717038181478" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.User" Width="1.5" PointX="7.5181211975953177" PointY="9.6354193583295764" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwDashboard" Width="1.5" PointX="7.8923347126191175" PointY="11.329066028506061" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumber" Width="1.5" PointX="1.6694907889093695" PointY="14.931469641128308" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumberNormalCDR" Width="1.5" PointX="7.8209727647811977" PointY="19.259873473672137" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwSuspectionAnalysi" Width="1.5" PointX="7.51772914245619" PointY="11.596427788770026" />
         <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_1" />
         <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_2" />
         <AssociationConnector Association="CDRAnalysisMobileModel.CDR_ibfk_3" />
@@ -125,11 +168,7 @@
         <AssociationConnector Association="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" />
         <AssociationConnector Association="CDRAnalysisMobileModel.FK_UserPermissions_Users" />
         <AssociationConnector Association="CDRAnalysisMobileModel.UserPermissions_ibfk_2" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwDashboard" Width="1.5" PointX="8.1463134363974969" PointY="1.3628398931412211" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumber" Width="1.5" PointX="3.0570268552084583" PointY="20.129532659486649" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportedNumberNormalCDR" Width="1.5" PointX="7.5343230811573214" PointY="7.658674646010005" />
-        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwSuspectionAnalysi" Width="1.5" PointX="1.1972858911367532" PointY="17.179315738929116" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

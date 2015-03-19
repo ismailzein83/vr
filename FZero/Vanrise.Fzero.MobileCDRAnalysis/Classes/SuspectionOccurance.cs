@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data.Entity.Infrastructure;
 using Vanrise.CommonLibrary;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient ;
+using System.Configuration;
 
 
 
@@ -23,7 +25,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string LastReport { get; set; }
 
 
-        public static List<vwSuspectionAnalysi> GetList(int strategyId, DateTime? fromDate, DateTime? toDate, string suspectionList, int minimumOccurance)
+        public static List<vwSuspectionAnalysi> GetList(int strategyId, DateTime? fromDate, DateTime? toDate, string suspectionList, int minimumOccurance, string SQLType)
         {
             List<vwSuspectionAnalysi> suspectionOccurance = new List<vwSuspectionAnalysi>();
          
@@ -33,13 +35,34 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
 
-                    var _fromDate = new SqlParameter("@fromDate", fromDate);
-                    var _toDate = new SqlParameter("@ToDate", toDate);
-                    var _strategyId = new SqlParameter("@strategyId", strategyId);
-                    var _suspectionList = new SqlParameter("@SuspectionList", suspectionList);
-                    var _minimumOccurance = new SqlParameter("@MinimumOccurance", minimumOccurance);
 
-                    suspectionOccurance = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwSuspectionAnalysi>("db_findSuspectionOccurance @fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance", _fromDate, _toDate, _strategyId, _suspectionList, _minimumOccurance).ToList();
+                    if (SQLType == "MySQL")
+                    {
+                        MySqlParameter MySQL_fromDate = new MySqlParameter("@fromDate", fromDate);
+                        MySqlParameter MySQL_toDate = new MySqlParameter("@ToDate", toDate);
+                        MySqlParameter MySQL_strategyId = new MySqlParameter("@strategyId", strategyId);
+                        MySqlParameter MySQL_suspectionList = new MySqlParameter("@SuspectionList", suspectionList);
+                        MySqlParameter MySQL_minimumOccurance = new MySqlParameter("@MinimumOccurance", minimumOccurance);
+
+                        suspectionOccurance = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwSuspectionAnalysi>("call prfindSuspicionOccurrence (@fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance)", MySQL_fromDate, MySQL_toDate, MySQL_strategyId, MySQL_suspectionList, MySQL_minimumOccurance).ToList();
+
+
+                    }
+
+                    else
+                    {
+                        SqlParameter SQL_fromDate = new SqlParameter("@fromDate", fromDate);
+                        SqlParameter SQL_toDate = new SqlParameter("@ToDate", toDate);
+                        SqlParameter SQL_strategyId = new SqlParameter("@strategyId", strategyId);
+                        SqlParameter SQL_suspectionList = new SqlParameter("@SuspectionList", suspectionList);
+                        SqlParameter SQL_minimumOccurance = new SqlParameter("@MinimumOccurance", minimumOccurance);
+
+                        suspectionOccurance = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwSuspectionAnalysi>("prfindSuspicionOccurrence @fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance", SQL_fromDate, SQL_toDate, SQL_strategyId, SQL_suspectionList, SQL_minimumOccurance).ToList();
+
+                    }
+                    
+                   
+
                  
                 }
             }
