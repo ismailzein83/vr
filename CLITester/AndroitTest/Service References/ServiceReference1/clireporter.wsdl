@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetMMCandMNC">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMMCandMNCResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMMCandMNCResult" type="tns:ArrayOfCountryCarrier" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCountryCarrier">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CountryCarrier" nillable="true" type="tns:CountryCarrier" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CountryCarrier">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="carrier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mcc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mnc" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ServiceAuthHeader" type="tns:ServiceAuthHeader" />
+      <s:complexType name="ServiceAuthHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="GetCLI">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CallID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCLIResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCLIResult" type="tns:Call" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Call">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="callID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CLI" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StartTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EndTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="carrier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="RequestForCall">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MCC" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MNC" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DateTimeC" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RequestForCallResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RequestForCallResult" type="tns:NumberID" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="NumberID">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="mobileNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Callid" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorStatus" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ArrayOfCountryCarrier" nillable="true" type="tns:ArrayOfCountryCarrier" />
+      <s:element name="Call" nillable="true" type="tns:Call" />
+      <s:element name="NumberID" nillable="true" type="tns:NumberID" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetMMCandMNCSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMMCandMNC" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMMCandMNCResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCServiceAuthHeader">
+    <wsdl:part name="ServiceAuthHeader" element="tns:ServiceAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetCLISoapIn">
+    <wsdl:part name="parameters" element="tns:GetCLI" />
+  </wsdl:message>
+  <wsdl:message name="GetCLISoapOut">
+    <wsdl:part name="parameters" element="tns:GetCLIResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCLIServiceAuthHeader">
+    <wsdl:part name="ServiceAuthHeader" element="tns:ServiceAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallSoapIn">
+    <wsdl:part name="parameters" element="tns:RequestForCall" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallSoapOut">
+    <wsdl:part name="parameters" element="tns:RequestForCallResponse" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallServiceAuthHeader">
+    <wsdl:part name="ServiceAuthHeader" element="tns:ServiceAuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCountryCarrier" />
+  </wsdl:message>
+  <wsdl:message name="GetCLIHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="CallID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCLIHttpGetOut">
+    <wsdl:part name="Body" element="tns:Call" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="MCC" type="s:string" />
+    <wsdl:part name="MNC" type="s:string" />
+    <wsdl:part name="DateTimeC" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpGetOut">
+    <wsdl:part name="Body" element="tns:NumberID" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMMCandMNCHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCountryCarrier" />
+  </wsdl:message>
+  <wsdl:message name="GetCLIHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="CallID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCLIHttpPostOut">
+    <wsdl:part name="Body" element="tns:Call" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="MCC" type="s:string" />
+    <wsdl:part name="MNC" type="s:string" />
+    <wsdl:part name="DateTimeC" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpPostOut">
+    <wsdl:part name="Body" element="tns:NumberID" />
+  </wsdl:message>
+  <wsdl:portType name="clireporterSoap">
+    <wsdl:operation name="GetMMCandMNC">
+      <wsdl:input message="tns:GetMMCandMNCSoapIn" />
+      <wsdl:output message="tns:GetMMCandMNCSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <wsdl:input message="tns:GetCLISoapIn" />
+      <wsdl:output message="tns:GetCLISoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallSoapIn" />
+      <wsdl:output message="tns:RequestForCallSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="clireporterHttpGet">
+    <wsdl:operation name="GetMMCandMNC">
+      <wsdl:input message="tns:GetMMCandMNCHttpGetIn" />
+      <wsdl:output message="tns:GetMMCandMNCHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <wsdl:input message="tns:GetCLIHttpGetIn" />
+      <wsdl:output message="tns:GetCLIHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallHttpGetIn" />
+      <wsdl:output message="tns:RequestForCallHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="clireporterHttpPost">
+    <wsdl:operation name="GetMMCandMNC">
+      <wsdl:input message="tns:GetMMCandMNCHttpPostIn" />
+      <wsdl:output message="tns:GetMMCandMNCHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <wsdl:input message="tns:GetCLIHttpPostIn" />
+      <wsdl:output message="tns:GetCLIHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallHttpPostIn" />
+      <wsdl:output message="tns:RequestForCallHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="clireporterSoap" type="tns:clireporterSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMMCandMNC">
+      <soap:operation soapAction="http://tempuri.org/GetMMCandMNC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetMMCandMNCServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <soap:operation soapAction="http://tempuri.org/GetCLI" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetCLIServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <soap:operation soapAction="http://tempuri.org/RequestForCall" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:RequestForCallServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="clireporterSoap12" type="tns:clireporterSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMMCandMNC">
+      <soap12:operation soapAction="http://tempuri.org/GetMMCandMNC" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetMMCandMNCServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <soap12:operation soapAction="http://tempuri.org/GetCLI" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetCLIServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <soap12:operation soapAction="http://tempuri.org/RequestForCall" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:RequestForCallServiceAuthHeader" part="ServiceAuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="clireporterHttpGet" type="tns:clireporterHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetMMCandMNC">
+      <http:operation location="/GetMMCandMNC" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <http:operation location="/GetCLI" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <http:operation location="/RequestForCall" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="clireporterHttpPost" type="tns:clireporterHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetMMCandMNC">
+      <http:operation location="/GetMMCandMNC" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCLI">
+      <http:operation location="/GetCLI" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestForCall">
+      <http:operation location="/RequestForCall" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="clireporter">
+    <wsdl:port name="clireporterSoap" binding="tns:clireporterSoap">
+      <soap:address location="http://idsdemo.me/CLIReporter/clireporter.asmx" />
+    </wsdl:port>
+    <wsdl:port name="clireporterSoap12" binding="tns:clireporterSoap12">
+      <soap12:address location="http://idsdemo.me/CLIReporter/clireporter.asmx" />
+    </wsdl:port>
+    <wsdl:port name="clireporterHttpGet" binding="tns:clireporterHttpGet">
+      <http:address location="http://idsdemo.me/CLIReporter/clireporter.asmx" />
+    </wsdl:port>
+    <wsdl:port name="clireporterHttpPost" binding="tns:clireporterHttpPost">
+      <http:address location="http://idsdemo.me/CLIReporter/clireporter.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
