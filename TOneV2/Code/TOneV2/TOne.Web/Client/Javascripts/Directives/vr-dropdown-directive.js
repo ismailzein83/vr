@@ -57,14 +57,16 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
     }
 
     function setDefaultAttributes(attrs) {
-        
+
+        if(attrs.limitcharactercount == undefined) attrs.$set("limitcharactercount", "4");
+        if (attrs.limitplaceholder == undefined) attrs.$set("limitplaceholder", "Type "+attrs.limitcharactercount+" characters..");
         if (attrs.entityname == undefined) return attrs;
         if (attrs.selectlbl == undefined) attrs.$set("selectlbl", "Selected "+attrs.entityname+ " :");
         if (attrs.placeholder == undefined) attrs.$set("placeholder", "Select " + attrs.entityname + "...");
         if (attrs.selectplaceholder == undefined) attrs.$set("selectplaceholder", attrs.entityname + " selected");
-
+        
         return attrs;
-    };
+    }
 
     function isSingleSelection(type) {
         if (type == undefined || type == "" || type == "standard") return true;
@@ -90,17 +92,21 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             type: '@',
             selectedvalues: '=',
             lastselectedvalue: '=',
-            multipleselection: '@'
+            multipleselection: '@',
+            onsearch: '&',
+            limitplaceholder: '@',
+            limitcharactercount:'@'
         },
         controller: function () {
 
             var controller = this;
             this.selectedValues = [];
             this.filtername = '';
+            this.showloading = false;
 
             this.singleSelection = function () {
                 return DropdownService.isSingleSelection(controller.type);
-            }
+            };
 
             this.getDatasource = function () {
                 return controller.datasource;
@@ -127,12 +133,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.selectValue = function (e, c) {
-                //if (controller.singleSelection()) {
-                //    controller.selectedValues = [];
-                //    controller.selectedValues.length = 0;
-                //    controller.selectedValues.push(c);
-                //}
-                //else {
                     var index = null;
                     controller.muteAction(e);
                     try {
@@ -145,7 +145,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         controller.selectedValues.splice(index, 1);
                     else
                         controller.selectedValues.push(c);
-                //}
                 controller.onselectionchange()(controller.selectedValues);
             };
 
@@ -193,7 +192,24 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             attrs = DropdownService.setDefaultAttributes(attrs);
 
             return {
-                pre: function ($scope, iElem, iAttrs,ctrl) {
+                pre: function ($scope, iElem, iAttrs, ctrl) {
+                    $scope.clearDatasource = function () {
+                        if (ctrl.datasource == undefined) return;
+                            ctrl.datasource =[];
+                            ctrl.datasource.length = 0;
+                    };
+
+                    $scope.search = function () {
+                        $scope.clearDatasource();
+                        if (ctrl.filtername.length > (ctrl.limitcharactercount -1)) {
+                            ctrl.showloading = true;
+                            ctrl.onsearch() (ctrl.filtername).then(function (items) {
+                                ctrl.datasource = items;
+                                ctrl.showloading = false;
+                            });
+                        }
+                    };
+
                     $scope.refreshOutput = function () {
 
                         if (ctrl.selectedvalues == undefined && ctrl.lastselectedvalue == undefined) return;

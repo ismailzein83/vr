@@ -3,12 +3,25 @@
 appControllers.service('MainService', function () {
     
     return ({
-        getBaseURL: getBaseURL
+        getBaseURL: getBaseURL,
+        handleError: handleError,
+        handleSuccess: handleSuccess
     });
 
     function getBaseURL(){
         var pathArray = location.href.split('/');
         return pathArray[0] + '//' + pathArray[2];
+    }
+
+    function handleError(response) {
+        if (!angular.isObject(response.data) || !response.data.message) {
+            return ($q.reject("An unknown error occurred."));
+        }
+        return ($q.reject(response.data.message));
+    }
+
+    function handleSuccess(response) {
+        return (response.data);
     }
 
 });
@@ -30,23 +43,37 @@ appControllers.service('CarriersService', function ($http, $q,MainService) {
                 carrierType: 1
             }
         });
-        return (request.then(handleSuccess, handleError));
+        return (request.then(MainService.handleSuccess, MainService.handleError));
     }
 
-    function handleError(response) {
-        if (!angular.isObject(response.data) || !response.data.message) {
-            return ($q.reject("An unknown error occurred."));
-        }
-        return ($q.reject(response.data.message));
-    }
+    
 
-    function handleSuccess(response) {
-        return (response.data);
+});
+
+
+appControllers.service('ZonesService', function ($http, $q, MainService) {
+
+    return ({
+        getSalesZones: getSalesZones
+    });
+
+    function getSalesZones(filterzone) {
+
+        var getSalesZonesURL = MainService.getBaseURL() + "/api/BusinessEntity/GetSalesZones";
+
+        var request = $http({
+            method: "get",
+            url: getSalesZonesURL,
+            params: {
+                nameFilter: filterzone
+            }
+        });
+        return (request.then(MainService.handleSuccess, MainService.handleError));
     }
 
 });
 
-appControllers.controller('TestViewController', function ($scope,CarriersService) {
+appControllers.controller('TestViewController', function ($scope, CarriersService, ZonesService) {
 
         this.model = 'Test View model';
         this.Input = '123';
@@ -90,7 +117,12 @@ appControllers.controller('TestViewController', function ($scope,CarriersService
             });
         }
         loadRemoteData();
-        
+        this.zones;
+        function loadOnDemand(text) {
+            //return ZonesService.getSalesZones(text).then(function (zones) {
+            //    controller.zones = zones;
+            //});
+        }
 
         $scope.selectedcustomers = [];
         this.output = [];
@@ -110,6 +142,12 @@ appControllers.controller('TestViewController', function ($scope,CarriersService
             if (items.length > 0)
                 console.log(items[items.length - 1].name);
         }
+
+        this.onsearch = function (text) {
+            return ZonesService.getSalesZones(text);
+            //loadOnDemand(text);
+        }
+
         
         
 });
