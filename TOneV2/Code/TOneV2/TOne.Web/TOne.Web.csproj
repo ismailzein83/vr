@@ -205,9 +205,11 @@
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\carrier-service.js" />
     <Content Include="Client\Javascripts\Services\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
     <Content Include="Client\Libraries\Angular\angular-sanitize.js" />

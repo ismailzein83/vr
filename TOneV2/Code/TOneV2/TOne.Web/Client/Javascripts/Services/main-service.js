@@ -25,3 +25,21 @@ app.service('MainService', function ($q) {
     }
 
 });
+
+app.service('HttpService', function ($http, MainService) {
+
+    return ({
+        get: get
+    });
+
+    function get(url, params) {
+
+        var request = $http({
+            method: "get",
+            url: url,
+            params: params
+        });
+        return (request.then(MainService.handleSuccess, MainService.handleError));
+    }
+
+});

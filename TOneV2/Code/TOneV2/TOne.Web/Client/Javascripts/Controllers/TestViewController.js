@@ -1,51 +1,5 @@
 ﻿'use strict'
 
-appControllers.service('CarriersService', function ($http, $q,MainService) {
-
-    return ({
-        getCustomers: getCustomers
-    });
-
-    function getCustomers() {
-
-        var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/GetCarriers";
-
-        var request = $http({
-            method: "get",
-            url: getCarriersURL,
-            params: {
-                carrierType: 1
-            }
-        });
-        return (request.then(MainService.handleSuccess, MainService.handleError));
-    }
-
-    
-
-});
-
-appControllers.service('ZonesService', function ($http, $q, MainService) {
-
-    return ({
-        getSalesZones: getSalesZones
-    });
-
-    function getSalesZones(filterzone) {
-
-        var getSalesZonesURL = MainService.getBaseURL() + "/api/BusinessEntity/GetSalesZones";
-
-        var request = $http({
-            method: "get",
-            url: getSalesZonesURL,
-            params: {
-                nameFilter: filterzone
-            }
-        });
-        return (request.then(MainService.handleSuccess, MainService.handleError));
-    }
-
-});
-
 appControllers.controller('TestViewController', function ($scope, CarriersService, ZonesService) {
 
         this.model = 'Test View model';
