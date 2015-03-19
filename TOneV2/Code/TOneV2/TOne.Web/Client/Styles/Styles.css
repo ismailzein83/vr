@@ -316,3 +316,6 @@ body{
     z-index: 100;
     top: 100px;
 }
+.grid-class{
+    height : 100% !important;
+}

@@ -1,37 +1,50 @@
 ﻿appControllers.controller('RouteRuleManagerController',
     function RouteRuleManagerController($scope, $location, $http) {
         $scope.last = false;
+        var pageSize = 20;
         $scope.gridOptionsRouteRule = {
-           // data: 'myData',
             enableHorizontalScrollbar: 0,
-            enableVerticalScrollbar: 1,
-            infiniteScrollPercentage :100,
-            enableSelection: true,
+            enableVerticalScrollbar: 2,
+            infiniteScrollPercentage :25,
+            enableSelection: true,           
             columnDefs: [
-              { name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40 },
-              { name: 'Code Set', field: 'CodeSetDescription', height: 40, width: 100 },
-              { name: 'Action', field: 'ActionDescription', height: 40, width: 100 },
-              { name: 'Type', field: 'TypeDescription', height: 40, width: 100 },
-              { name: 'Begin Effective Date', field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170 },
-              { name: 'End Effective Date', field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170 },
-              { name: 'Reason', field: 'Reason', height: 40 }
-            ]
-            ,
-            //paginationPageSizes: [10, 25, 50, 75],
-            //paginationPageSize: 10,
+              {
+                  name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false,
+                  cellTooltip   : function (row, col) {
+                        return  row.entity.CarrierAccountDescription ;
+                    }
+              },
+              { name: 'Code Set',enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 100, enableHiding: false },
+              { name: 'Action desc', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
+              { name: 'Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100 },
+              { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
+              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
+              { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false }
+
+            ],
+            enableColumnResizing: true,
+            enableSorting: false,
             appScopeProvider: {
                 onDblClick: function (row) {
                     $location.path("/RouteRuleEditor/" + row.entity.RouteRuleId).replace();
                 }
-            },
-            rowTemplate: '<div ng-dblclick=\"grid.appScope.onDblClick(row)\"   ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell hand-cursor" ui-grid-cell></div>'
+            }
 
         };
+        $scope.gridOptionsRouteRule.columnDefs[$scope.gridOptionsRouteRule.columnDefs.length] = {
+            name: 'Action',
+            enableColumnMenu: false,
+            height: 40,
+            enableHiding: false,
+            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.onDblClick(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
+        }
+
+
         var page = 0;
         var pageUp = 0;
         var getData = function(data, page) {
             var res = [];
-            for (var i = (page * 20); i < (page + 1) * 20 && i < data.length; ++i) {
+            for (var i = (page * pageSize) ; i < (page + 1) * pageSize && i < data.length; ++i) {
                 res.push(data[i]);
             }
             return res;
@@ -39,9 +52,13 @@
  
         var getDataUp = function(data, page) {
             var res = [];
-            for (var i = data.length - (page * 20) - 1; (data.length - i) < ((page + 1) * 20) && (data.length - i) > 0; --i) {
-                data[i].id = -(data.length - data[i].id)
-                res.push(data[i]);
+            for (var i = data.length - (page * pageSize) - 1; (data.length - i) < ((page + 1) * pageSize) && (data.length - i) > 0; --i) {
+                try{
+                    data[i].id = -(data.length - data[i].id)
+                    res.push(data[i]);
+                }
+                catch (e){}
+               
             }
             return res;
         };
@@ -50,7 +67,7 @@
             {
                 params: {
                     pageNumber: page,
-                    pageSize:20
+                    pageSize: pageSize
                 }
             })
           .success(function(data) {
@@ -60,27 +77,26 @@
  
         $scope.gridOptionsRouteRule.onRegisterApi = function(gridApi){
             gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
-               // alert($scope.last)
-                //if ($scope.last) {
+                if (!$scope.last) {
 
                     $http.get('/api/Routing/GetAllRouteRule',
                     {
                         params: {
                             pageNumber: page,
-                            pageSize: 20
+                            pageSize: pageSize
                         }
                     })
                   .success(function (data) {
                       $scope.gridOptionsRouteRule.data = $scope.gridOptionsRouteRule.data.concat(data);
                       ++page;
                       gridApi.infiniteScroll.dataLoaded();
-                      $scope.last = (data.length < 20) ? false : true;
+                      $scope.last = (data.length < pageSize) ? true : false;
                   })
                   .error(function () {
                       gridApi.infiniteScroll.dataLoaded();
                   });
 
-              //  }
+                }
                 
             });
             gridApi.infiniteScroll.on.needLoadMoreDataTop($scope,function(){
@@ -88,7 +104,7 @@
                     {
                         params: {
                             pageNumber: page,
-                            pageSize:20
+                            pageSize: pageSize
                         }
                     })
                   .success(function(data) {

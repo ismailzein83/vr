@@ -373,6 +373,8 @@
     <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
+    <Content Include="Client\Styles\jquery-ui.css" />
+    <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
     <Content Include="Client\Libraries\Semantic -old2\semantic.min.css" />
     <Content Include="Client\Libraries\Semantic -old2\semantic.min.js" />
     <Content Include="Client\Libraries\Semantic\components\accordion.css" />
