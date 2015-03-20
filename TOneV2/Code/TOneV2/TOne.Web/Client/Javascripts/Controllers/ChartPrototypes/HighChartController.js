@@ -1,33 +1,56 @@
 ﻿appControllers.controller('HighChartController',
-    function HighChartController($scope, $http) {
+    function HighChartController($scope, $http, AnalyticsAPIService) {
 
-        $scope.model = "HighChartController";
-        $scope.data = [];
-        
-        $scope.getData = function () {
-            $http.get($scope.baseurl + "/api/Analytics/GetTopNDestinations",
-           {
-               params: {
-                   fromDate: '2014-04-28',
-                   toDate: '2014-04-29',
-                   from: 1,
-                   to: 10,
-                   topCount: 10,
-                   showSupplier: 'Y',
-                   groupByCodeGroup: 'Y'
-               }
-           })
-       .success(function (response) {
-           $scope.data.length = 0;
-           angular.forEach(response, function (item) {
-               item.selected = true;
-               $scope.data.push(item)
-           });
-       });
-        };
-        $scope.getData();
-        var isFirstTimeCodeGroup = true;
-        $scope.loadChart = function () {
+        defineScopeObjects();
+        defineScopeMethods();
+        load();
+
+        var dynamicChartSeries = [];
+
+        function defineScopeObjects() {
+            $scope.model = "HighChartController";
+            $scope.data = [];            
+            $scope.data2 = [];
+        }
+
+        function defineScopeMethods() {
+        }
+
+        function load()
+        {
+            getData();
+
+            setTimeout(function () {
+                loadChart();
+            }, 600);
+            
+            $http.get($scope.baseurl + "/api/ChartTest/GetLatestValues",
+              {
+              })
+          .success(function (response) {
+
+              for (var i = 0; i < response.length; i++) {
+                  var ser = {
+                      name: "Serie " + i,
+                      data: []
+                  };
+
+                  var time = (new Date()).getTime(),
+                            j;
+
+                  for (j = -500; j <= 0; j += 1) {
+                      ser.data.push({
+                          x: time + j * 1000,
+                          y: null
+                      });
+                  }
+                  dynamicChartSeries.push(ser);
+              }
+              loadDynamicChart();
+          });
+        }
+
+        function loadChart() {
             var series = [];
             var barSeriers = [
                 {
@@ -92,7 +115,7 @@
                                 console.log(e);
                                 console.log(e.point.index);
                                 console.log($scope.data[e.point.index].OurZoneID);
-                                $scope.selectCodeGroup($scope.data[e.point.index].OurZoneID);
+                                selectCodeGroup($scope.data[e.point.index].OurZoneID);
                             }
                         }
                 }]
@@ -127,106 +150,75 @@
                 },
                 series: barSeriers
             });
-        };
+        }
 
-        $scope.data2 = [];
-        var isFirstTime = true;
-        $scope.selectCodeGroup = function (codeGroup) {
-            $http.get($scope.baseurl + "/api/Analytics/GetTopNDestinations",
-          {
-              params: {
-                  fromDate: '2014-04-28',
-                  toDate: '2014-04-29',
-                  from: 1,
-                  to: 10,
-                  topCount: 10,
-                  showSupplier: 'Y',
-                  codeGroup: codeGroup
-              }
-          })
-      .success(function (response) {
-          $scope.data2.length = 0;
-          angular.forEach(response, function (item) {
-              $scope.data2.push(item)
-          });
+        function getData() {
+            AnalyticsAPIService.GetTopNDestinations('2014-04-28', '2014-04-29', 1, 10, 10, 'Y', 'Y')
+       .then(function (response) {
+           $scope.data.length = 0;
+           angular.forEach(response, function (item) {
+               item.selected = true;
+               $scope.data.push(item)
+           });
+       }).catch(function (error) {
+           alert('error: ' + error);
+       });
+        }
 
-          var series = [];
-          angular.forEach($scope.data2, function (item) {
-              series.push({
-                  name: item.ZoneName,
-                  y: item.Attempts
-              });
-          });
+        function selectCodeGroup(codeGroup) {
+            AnalyticsAPIService.GetTopNDestinations('2014-04-28', '2014-04-29', 1, 10, 10, 'Y', undefined, codeGroup)
+           .then(function (response) {
+               $scope.data2.length = 0;
+               angular.forEach(response, function (item) {
+                   $scope.data2.push(item)
+               });
 
-
-          $('#container2').highcharts({
-              chart: {
-                  type: 'pie',
-                  options3d: {
-                      enabled: true,
-                      alpha: 35,
-                      beta: 0
-                  }
-              },
-              title: {
-                  text: 'Zone Attempts'
-              },
-              plotOptions: {
-                  pie: {
-                      allowPointSelect: true,
-                      cursor: 'pointer',
-                      depth: 35,
-                      dataLabels: {
-                          enabled: true,
-                          format: '{point.name}'
-                      }
-                  }
-              },
-              yAxis: {
-                  title: {
-                      text: 'Attempts'
-                  }
-              },
-              series: [{
-                  name: 'Attempts',
-                  data: series
-              }]
-          });
-      });
-        };
-
-        setTimeout(function () {
-            $scope.loadChart();
-        }, 600);
-        var dynamicChartSeries = [];
-        $http.get($scope.baseurl + "/api/ChartTest/GetLatestValues",
-          {
-          })
-      .success(function (response) {
-          
-          for (var i = 0; i < response.length; i++)
-          {
-              var ser = {
-                  name: "Serie " + i,
-                  data: []
-              };
-
-              var time = (new Date()).getTime(),
-                        j;
-
-              for (j = -500; j <= 0; j += 1) {
-                  ser.data.push({
-                      x: time + j * 1000,
-                      y: null
-                  });
-              }
-              dynamicChartSeries.push(ser);
-          }
-          $scope.loadDynamicChart();
-      });
+               var series = [];
+               angular.forEach($scope.data2, function (item) {
+                   series.push({
+                       name: item.ZoneName,
+                       y: item.Attempts
+                   });
+               });
 
 
-        $scope.loadDynamicChart = function () {
+               $('#container2').highcharts({
+                   chart: {
+                       type: 'pie',
+                       options3d: {
+                           enabled: true,
+                           alpha: 35,
+                           beta: 0
+                       }
+                   },
+                   title: {
+                       text: 'Zone Attempts'
+                   },
+                   plotOptions: {
+                       pie: {
+                           allowPointSelect: true,
+                           cursor: 'pointer',
+                           depth: 35,
+                           dataLabels: {
+                               enabled: true,
+                               format: '{point.name}'
+                           }
+                       }
+                   },
+                   yAxis: {
+                       title: {
+                           text: 'Attempts'
+                       }
+                   },
+                   series: [{
+                       name: 'Attempts',
+                       data: series
+                   }]
+               });
+           });
+        }
+
+        function loadDynamicChart() {
             Highcharts.setOptions({
                 global: {
                     useUTC: false
@@ -244,9 +236,9 @@
                             // set up the updating of the chart each second
                             var dynSeries = this.series;
                             setInterval(function () {
-                                
+
                                 $http.get($scope.baseurl + "/api/ChartTest/GetLatestValues",
-          {              
+          {
           })
       .success(function (response) {
           for (var i = 0; i < response.length; i++) {
@@ -259,7 +251,7 @@
           }
       });
 
-                               
+
                             }, 2000);
                         }
                     }
@@ -281,7 +273,7 @@
                         color: '#808080'
                     }]
                 },
-                tooltip: {                    
+                tooltip: {
                     shared: true
                 },
                 legend: {

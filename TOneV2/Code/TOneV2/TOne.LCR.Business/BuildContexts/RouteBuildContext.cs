@@ -50,7 +50,7 @@ namespace TOne.LCR.Business
             ActionExecutionPath<BaseRouteAction> executionPath = ruleManager.GetRouteActionExecutionPath();
             ActionExecutionStep<BaseRouteAction> currentStep = executionPath.FirstStep;
             object nextActionData = null;
-            do
+            while (currentStep != null)
             {
                 Type actionDataType = currentStep.Action.GetActionDataType();
                 if (actionDataType == null || nextActionData != null)
@@ -91,7 +91,6 @@ namespace TOne.LCR.Business
                         currentStep = currentStep.NextStep;
                 }
             }
-            while (currentStep != null);
         }
 
         private bool CheckActionResult(RouteActionResult actionResult, ActionExecutionPath<BaseRouteAction> executionPath, ActionExecutionStep<BaseRouteAction> currentStep, out ActionExecutionStep<BaseRouteAction> nextStep, out object nextActionData)

@@ -51,11 +51,6 @@ namespace TOne.LCR.Entities
         public bool IsBlocked { get; set; }
 
         public int Priority { get; set; }
-
-        public RouteSupplierOption Clone()
-        {
-            return this.MemberwiseClone() as RouteSupplierOption;
-        }
     }    
 
     public class OptionInfo

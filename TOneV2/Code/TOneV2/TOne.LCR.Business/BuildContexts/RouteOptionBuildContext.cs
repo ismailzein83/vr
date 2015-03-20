@@ -49,7 +49,7 @@ namespace TOne.LCR.Business
         {
             removeOption = false;
             ActionExecutionStep<BaseRouteOptionAction> currentStep = executionPath.FirstStep;
-            do
+            while(currentStep != null)
             {
                 if (onlyImportantFilters && !currentStep.Action.IsImportant)
                 {
@@ -97,7 +97,6 @@ namespace TOne.LCR.Business
                         currentStep = currentStep.NextStep;
                 }
             }
-            while (currentStep != null);
         }
 
         private bool CheckActionResult(RouteOptionActionResult actionResult, ActionExecutionPath<BaseRouteOptionAction> executionPath,

@@ -6,16 +6,27 @@ app.service('BaseAPIService', function ($http, $q) {
         post: post
     });
 
-    var _pathArray = location.href.split('/');
-    var _protocol = pathArray[0];
-    var _host = pathArray[2];
-    var _baseurl = protocol + '//' + host;
+    function get(url, params, options) {
+        var deferred = $q.defer();
 
-    function get(url, options) {
+        var urlParameters;
+        if (params)
+            urlParameters = {
+                params: params
+            };
         
+        $http.get(url, urlParameters)
+            .success(function (response, status, headers, config) {
+                deferred.resolve(response);
+            })
+            .error(function (data, status, headers, config) {
+                console(data);
+                deferred.reject(data);
+            });
+        return deferred.promise;
     }
 
-    function post(url, options) {
+    function post(url, data, options) {
 
     }
 
