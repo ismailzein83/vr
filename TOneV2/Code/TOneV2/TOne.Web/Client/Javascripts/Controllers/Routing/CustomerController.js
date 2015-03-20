@@ -1,6 +1,9 @@
 ﻿appControllers.controller('CustomerController',
     function CustomerController($scope, $http) {
-
+        
+        $scope.isvalidCompCus = function () {           
+            return ( $scope.selectedCustomers.length > 0) ? "" : "required-inpute";
+        }
         
         $scope.customers = [];
         $scope.selectedCustomers = [];

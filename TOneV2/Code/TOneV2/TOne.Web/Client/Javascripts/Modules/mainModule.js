@@ -28,9 +28,38 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         return obj;
     }
     var numberReg = /^\d+$/;
-    $scope.isNumber = function  (s) {
+    $scope.isNumber = function (s) {
         return String(s).search(numberReg) != -1
+    };
+    $scope.dateToString = function (date) {
+        var dateString = '';
+        if (date) {
+            try{
+                var day = "" + (parseInt(date.getDate()));
+                if (day.length == 1)
+                    dateString += "0" + day;
+                else
+                    dateString += day;
+                var month = "" + (parseInt(date.getMonth()) + 1);
+                if (month.length == 1)
+                    dateString += "/0" + month;
+                else
+                    dateString += "/" + month;
+                dateString += "/" + date.getFullYear();
+            }
+            catch (e) {
+
+            }
+           
+        }
+        return dateString;
     }
+    var dateReg = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/((199\d)|([2-9]\d{3}))$/;
+    $scope.isDate = function (s) {
+        var res = String(s).search(dateReg) != -1
+        return res;
+    }
+
 });
 angular.module('mainModule')
 .config(function ($timepickerProvider) {

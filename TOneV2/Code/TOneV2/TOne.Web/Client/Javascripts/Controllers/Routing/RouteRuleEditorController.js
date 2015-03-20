@@ -1,11 +1,32 @@
 ﻿appControllers.controller('RouteRuleEditorController',
     function RouteRuleEditorController($scope, $http, $location, $routeParams, notify) {
-
+        $scope.BEDDate = "";
+        $scope.ruletype = "";
         $scope.isvalidcomp = function (model) {
-            return ($scope[model].url != '') ? "" : "required-inpute";
+            var s = "required-inpute";
+            if ($scope[model] != undefined) {
+                s = ($scope[model].url != '') ? "" : "required-inpute";
+            }
+            return s;
+        }
+        $scope.isvalidcompDate = function (model) {
+            var s = "required-inpute";
+            if ($scope[model] != undefined && $scope[model]!="") {
+                var d = $scope.dateToString($scope[model]);
+                s = ($scope.isDate(d)) ? "" : "required-inpute";
+            }
+            return s ;
+           
 
         }
+        $scope.subViewConnector = {};
+        $scope.validateForm = function () {
+            var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
+            return ($scope.ruletype.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || (obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+        }
+        
         $scope.routeRule = null;
+       
         $scope.templates = [
             { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
             { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
@@ -30,8 +51,9 @@
              .success(function (response) {
                  $scope.routeRule = response;
                  var tab = [];
-                 $scope.routetype = $scope.routeTemplates[0];                
-                 $scope.BEDDate = $scope.routeRule.BeginEffectiveDate;
+                 $scope.routetype = $scope.routeTemplates[0];
+                // alert($scope.routeRule.BeginEffectiveDate);
+                 $scope.BEDDate =$scope.routeRule.BeginEffectiveDate;
                  $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
                  $scope.Reason = $scope.routeRule.Reason;
                  $scope.ruletype = null;
@@ -94,7 +116,7 @@
             }
            
         }  
-        $scope.subViewConnector = {};
+        
         $scope.saveRule = function () {
           
             var routeRule =

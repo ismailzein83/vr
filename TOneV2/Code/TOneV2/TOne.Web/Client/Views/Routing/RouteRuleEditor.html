@@ -15,7 +15,7 @@
                                     </div>
                                     <div class="btn-group action-bar-right">
                                         <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="cancel()">Cancel<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-                                        <button style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="saveRule()">Save<span style="padding-left:4px" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                                        <button ng-disabled="validateForm()" style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="saveRule()">Save<span style="padding-left:4px" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                     <label class="control-label" style="padding-top:6px">Begin Effective Date:</label>
                 </div>
                 <div class="col-lg-2  style-col">
-                    <input size="10" class="form-control" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+                    <input size="10" class="form-control" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-class="isvalidcompDate('BEDDate')">
                 </div>
                 <div class="col-lg-2  style-col">
                     <label class="control-label" style="padding-top:6px">End Effective Date:</label>

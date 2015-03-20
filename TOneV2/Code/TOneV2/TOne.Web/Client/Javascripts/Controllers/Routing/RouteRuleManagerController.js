@@ -78,7 +78,6 @@
         $scope.showf = true;
         $scope.toggelFilter = function () {
             $('.ui-grid-header-canvas').height(($scope.showf == true) ? 30 : 60);
-           // $scope.divStyleChange($scope.numberoflines);
             $scope.showf = !$scope.showf;
         }
         $scope.toggelFilter();
