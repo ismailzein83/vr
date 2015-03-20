@@ -41,8 +41,11 @@ namespace TOne.CDRProcess.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (CDR) =>
                         {
-                            Object preparedInvalidCDRs = dataManager.PrepareInvalidCDRsForDBApply(CDR.InvalidCDRs);
-                            dataManager.ApplyInvalidCDRsToDB(preparedInvalidCDRs);
+                            if (CDR.InvalidCDRs != null)
+                            {
+                                Object preparedInvalidCDRs = dataManager.PrepareInvalidCDRsForDBApply(CDR.InvalidCDRs);
+                                dataManager.ApplyInvalidCDRsToDB(preparedInvalidCDRs);
+                            }
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
