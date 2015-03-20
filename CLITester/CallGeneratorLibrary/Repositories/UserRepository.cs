@@ -3,11 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Linq;
+using System.Diagnostics;
 
 namespace CallGeneratorLibrary.Repositories
 {
     public class UserRepository
     {
+        public static void DecreaseBalance(int userId)
+        {
+            User u = Load(userId);
+            if (u.ParentId != null)
+            {
+                User uparent = Load(u.ParentId.Value);
+                if (uparent.Balance > 0)
+                {
+                    uparent.Balance = uparent.Balance - 1;
+                    Save(uparent);
+                }
+            }
+            else
+            {
+                if (u.Balance > 0)
+                {
+                    u.Balance = u.Balance - 1;
+                    Save(u);
+                }
+            }
+        }
+
+        public static int GetParentId(int userId)
+        {
+            User u = Load(userId);
+            if (u.ParentId == null)
+            {
+                return u.Id;
+            }
+            else
+            {
+                return u.ParentId.Value;
+            }
+        }
+
+        public static string GetName(int userId)
+        {
+            string s = "";
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    s = context.Users.Where(l => l.Id == userId).FirstOrDefault<User>().Name;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
+            return s;
+        }
+
         public static List<User> GetSubUsers(int userId)
         {
             List<User> users = new List<User>();
@@ -323,7 +378,8 @@ namespace CallGeneratorLibrary.Repositories
                     _User.LastName = user.LastName;
                     _User.MobileNumber = user.MobileNumber;
                     _User.WebsiteURL = user.WebsiteURL;
-                    _User.IsChangedCallerId = user.IsChangedCallerId;
+                    _User.ParentId = user.ParentId;
+                    _User.Balance = user.Balance;
                     context.SubmitChanges();
                 }
             }

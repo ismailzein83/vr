@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CallGeneratorLibrary.Utilities;
 using System.Diagnostics;
+using System.Data.Linq;
 
 namespace CallGeneratorLibrary.Repositories
 {
@@ -18,6 +19,30 @@ namespace CallGeneratorLibrary.Repositories
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
                     logs = context.ActionLogs.ToList<ActionLog>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+
+            return logs;
+        }
+
+        public static List<ActionLogFeed> GetActionLogs(int userId, string ObjectType)
+        {
+            List<ActionLogFeed> logs = new List<ActionLogFeed>();
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    logs = context.GetActionLogs1(ObjectType, userId).GetResult<ActionLogFeed>().ToList<ActionLogFeed>();
+                    //DataLoadOptions options = new DataLoadOptions();
+                    //options.LoadWith<ActionLog>(c => c.User);
+                    //context.LoadOptions = options;
+
+                    //logs = context.ActionLogs.Where(l => l.LogDate.Value.Month == DateTime.Now.Month && l.UserId == userId).ToList<ActionLog>();
                 }
             }
             catch (System.Exception ex)

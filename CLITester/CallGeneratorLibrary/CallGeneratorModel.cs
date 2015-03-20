@@ -29,5 +29,13 @@ namespace CallGeneratorLibrary
             IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status, userId);
             return ((IMultipleResults)(result.ReturnValue));
         }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.GetActionLogs")]
+        [ResultType(typeof(ActionLogFeed))]
+        public IMultipleResults GetActionLogs1([System.Data.Linq.Mapping.ParameterAttribute(Name = "ObjectType", DbType = "NVarChar(200)")] string objectType, [System.Data.Linq.Mapping.ParameterAttribute(Name = "UserId", DbType = "Int")] System.Nullable<int> userId)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectType, userId);
+            return ((IMultipleResults)(result.ReturnValue));
+        }
     }
 }

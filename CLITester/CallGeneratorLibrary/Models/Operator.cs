@@ -15,7 +15,7 @@ namespace CallGeneratorLibrary
             {
                 if (fullname == "")
                 {
-                    fullname = this.Name + " - " + this.Country;
+                    fullname = this.Country + " - " + this.Name;
                 }
 
                 return fullname;

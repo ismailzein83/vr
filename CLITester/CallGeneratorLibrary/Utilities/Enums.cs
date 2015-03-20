@@ -37,7 +37,9 @@ namespace CallGeneratorLibrary.Utilities
             Modify = 2,
             Delete = 3,
             Login = 4,
-            Logout = 5
+            Logout = 5,
+            ScheduleDone = 6,
+            ScheduleFailed = 7
         }
         public enum Datatype
         {
@@ -95,7 +97,8 @@ namespace CallGeneratorLibrary.Utilities
             [Description("CLI Not Valid")]
             Waiting = 3,
             Expired = 4,
-            Failed = 5
+            Failed = 5,
+            Phase = 6
         }
 
     }

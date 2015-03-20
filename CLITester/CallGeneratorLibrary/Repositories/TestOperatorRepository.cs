@@ -67,6 +67,7 @@ namespace CallGeneratorLibrary.Repositories
             }
             return Total;
         }
+
         public static int GetCLIDeliv(int userId)
         {
             int Total = 0;
@@ -84,6 +85,7 @@ namespace CallGeneratorLibrary.Repositories
             }
             return Total;
         }
+
         public static int GetCLINonDeliv(int userId)
         {
             int Total = 0;
@@ -101,6 +103,28 @@ namespace CallGeneratorLibrary.Repositories
             }
             return Total;
         }
+
+        public static int GetMapCountry(int? status, int userId, int OperatorId)
+        {
+            int Total = 0;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    if (status == null)
+                        Total = context.TestOperators.Where(l => l.CreationDate.Value.Month == DateTime.Now.Month && l.UserId == userId && l.OperatorId == OperatorId).Count();
+                    else
+                        Total = context.TestOperators.Where(l => l.CreationDate.Value.Month == DateTime.Now.Month && l.Status == status && l.UserId == userId && l.OperatorId == OperatorId).Count();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return Total;
+        }
+
         public static int GetPercentage(string prefix, int? status, int userId)
         {
             int Total = 0;
@@ -179,7 +203,6 @@ namespace CallGeneratorLibrary.Repositories
             return LstScheduleNumbers;
         }
 
-
         public static TestOperator Load(int TestOperatorId)
         {
             TestOperator log = new TestOperator();
@@ -203,6 +226,7 @@ namespace CallGeneratorLibrary.Repositories
 
             return log;
         }
+
         public static List<TestOperator> GetTestOperatorsByUserId(int userId)
         {
             List<TestOperator> LstOperators = new List<TestOperator>();
@@ -330,7 +354,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<TestOperator>(c => c.User);
                     context.LoadOptions = options;
 
-                    LstOperators = context.TestOperators.Where(x =>  x.EndDate == null && x.Requested == true).ToList<TestOperator>();
+                    LstOperators = context.TestOperators.Where(x => x.EndDate == null && x.Requested == true).ToList<TestOperator>();
                 }
             }
             catch (System.Exception ex)
@@ -340,6 +364,26 @@ namespace CallGeneratorLibrary.Repositories
             }
             return LstOperators;
         }
+
+        public static int  GetRequestedTestOperatorsByUser(int ParentUserId)
+        {
+            //List<TestOperator> LstOperators = new List<TestOperator>();
+            int count = 0;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    count = context.TestOperators.Where(x => x.EndDate == null && x.ParentUserId == ParentUserId).ToList<TestOperator>().Count;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return count;
+        }
+
 
         public static bool Save(TestOperator testOperator)
         {
@@ -394,6 +438,7 @@ namespace CallGeneratorLibrary.Repositories
                     look.CallerId = testOperator.CallerId;
                     look.ErrorMessage = testOperator.ErrorMessage;
                     look.Requested = testOperator.Requested;
+                    look.ParentUserId = testOperator.ParentUserId;
                     context.SubmitChanges();
                     success = true;
                 }

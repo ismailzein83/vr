@@ -153,17 +153,47 @@ namespace CallGeneratorLibrary.Utilities
                                     NewLog.Frequency++;
                                     ScheduleLogRepository.Save(NewLog);
                                     List<ScheduleOperator> LstShcOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(schedule.Id);
-                                    foreach (ScheduleOperator SchOp in LstShcOp)
+
+                                    int balance = 0;
+                                    int Requested = 0;
+                                    int ParentId = 0;
+                                    ParentId = UserRepository.GetParentId(schedule.UserId.Value);
+
+                                    balance = UserRepository.Load(schedule.UserId.Value).Balance.Value;
+
+                                    Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId);
+
+                                    if (balance - Requested >= LstShcOp.Count)
                                     {
-                                        TestOperator testOp = new TestOperator();
-                                        testOp.UserId = schedule.UserId;
-                                        testOp.OperatorId = SchOp.OperatorId;
-                                        testOp.NumberOfCalls = 1;
-                                        testOp.CreationDate = DateTime.Now;
-                                        testOp.CarrierPrefix = SchOp.Carrier.Prefix;
-                                        testOp.CallerId = schedule.User.CallerId;
-                                        testOp.ScheduleId = schedule.Id;
-                                        bool saveB = TestOperatorRepository.Save(testOp);
+                                        foreach (ScheduleOperator SchOp in LstShcOp)
+                                        {
+                                            TestOperator testOp = new TestOperator();
+                                            testOp.UserId = schedule.UserId;
+                                            testOp.ParentUserId = ParentId;
+                                            testOp.OperatorId = SchOp.OperatorId;
+                                            testOp.NumberOfCalls = 1;
+                                            testOp.CreationDate = DateTime.Now;
+                                            testOp.CarrierPrefix = SchOp.Carrier.Prefix;
+                                            testOp.CallerId = schedule.User.CallerId;
+                                            testOp.ScheduleId = schedule.Id;
+                                            bool saveB = TestOperatorRepository.Save(testOp);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        NewLog.EndDate = DateTime.Now;
+                                        ScheduleLogRepository.Save(NewLog);
+
+                                        //Schedule Log finished => Send Email
+                                        //WriteToEventLogEx("DONEE " + schedule.User.Id);
+                                        while (SendFailureEmail(schedule.User, NewLog) == false) ;
+
+                                        ActionLog action = new ActionLog();
+                                        action.ObjectId = schedule.Id;
+                                        action.ObjectType = "Schedule";
+                                        action.ActionType = (int)Enums.ActionType.ScheduleFailed;
+                                        action.UserId = 0;
+                                        AuditRepository.Save(action);
                                     }
                                 }
                             }
@@ -175,6 +205,13 @@ namespace CallGeneratorLibrary.Utilities
                                 //Schedule Log finished => Send Email
                                 //WriteToEventLogEx("DONEE " + schedule.User.Id);
                                 while(SendEmail2(schedule.User, NewLog) == false);
+                                
+                                ActionLog action = new ActionLog();
+                                action.ObjectId = schedule.Id;
+                                action.ObjectType = "Schedule";
+                                action.ActionType = (int)Enums.ActionType.ScheduleDone;
+                                action.UserId = 0;
+                                AuditRepository.Save(action);
                             }
                         }
                     }
@@ -333,7 +370,7 @@ namespace CallGeneratorLibrary.Utilities
             }
         }
 
-        private static bool SendEmail2(User member,ScheduleLog s)
+        private static bool SendEmail2(User member, ScheduleLog s)
         {
             try
             {
@@ -470,10 +507,10 @@ namespace CallGeneratorLibrary.Utilities
                     else
                         ss = "CLI not delivered";
 
-                   // WriteToEventLogEx("member.Email " + member.Email.ToString());
+                    // WriteToEventLogEx("member.Email " + member.Email.ToString());
                     EmailBody.Append("<tr><td>" + opname + "</td><td>" + scname + "</td><td>" + creadate + "</td><td>" + enddate + "</td><td>" + tstCli + "</td><td>" + recCli + "</td><td>" + ss + "</td></tr>");
                 }
-                
+
                 EmailBody.Append("</table></td></tr>");
 
                 //EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Password = " + member.Password + "</td></tr>");
@@ -492,7 +529,7 @@ namespace CallGeneratorLibrary.Utilities
                     objMail.To.Add(member.Email);
 
                     string strEmailFrom = ConfigurationSettings.AppSettings["SendingEmail"];
-                    
+
                     objMail.From = new MailAddress(strEmailFrom, "CLI Tester");
                     objMail.Subject = "CLITester - Schedule done";
                     objMail.Body = EmailBody.ToString();
@@ -511,6 +548,57 @@ namespace CallGeneratorLibrary.Utilities
                     return true;
                 }
                 return false;
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx("ex " + ex.ToString());
+                return false;
+            }
+        }
+
+        private static bool SendFailureEmail(User member,ScheduleLog s)
+        {
+            try
+            {
+                StringBuilder EmailBody = new StringBuilder();
+                EmailBody.Append("<table cellspacing='0' cellpadding='0'>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 13pt; font-weight: bold'>CLITester Website</td></tr>");
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Dear&nbsp;" + member.Name + ",</td></tr>");
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>The Schedule cannot be done since your balance is empty:</td></tr>");
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>For more information, don't hesitate to contact us.</td></tr>");
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+                EmailBody.Append("<tr><td>&nbsp;</td></tr>");
+                EmailBody.Append("<tr><td style='font-family: Arial; font-size: 11pt'>Thanks,</td></tr>");
+                EmailBody.Append("<tr><td><a style='font-family: Arial; font-size: 11pt' href='http://www.vanrise.com'>www.vanrise.com</a> Team</td></tr>");
+                EmailBody.Append("</table>");
+
+                MailMessage objMail = new MailMessage();
+
+                objMail.To.Add(member.Email);
+
+                string strEmailFrom = ConfigurationSettings.AppSettings["SendingEmail"];
+                    
+                objMail.From = new MailAddress(strEmailFrom, "CLI Tester");
+                objMail.Subject = "CLITester - Schedule Failed";
+                objMail.Body = EmailBody.ToString();
+                objMail.IsBodyHtml = true;
+                objMail.Priority = MailPriority.High;
+
+                SmtpClient smtp = new SmtpClient(ConfigurationSettings.AppSettings["SmtpServer"], 587);
+                smtp.Host = ConfigurationSettings.AppSettings["SmtpServer"];
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(strEmailFrom, "passwordQ1");
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+
+                smtp.Send(objMail);
+                return true;
             }
             catch(System.Exception ex) {
                 WriteToEventLogEx("ex " + ex.ToString());

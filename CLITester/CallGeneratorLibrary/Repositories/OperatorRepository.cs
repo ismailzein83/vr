@@ -36,7 +36,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    LstOperators = context.Operators.ToList<Operator>();
+                    LstOperators = context.Operators.OrderBy(x => x.Country).ToList<Operator>();
                 }
             }
             catch (System.Exception ex)
@@ -55,6 +55,25 @@ namespace CallGeneratorLibrary.Repositories
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
                     LstOperators = context.Operators.Where(x => (name == "" || x.Name.Contains(name)) && ( country == "" || x.Country.Contains(country))).ToList<Operator>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return LstOperators;
+        }
+
+
+        public static List<Operator> GetOperatorMap(string countryCode)
+        {
+            List<Operator> LstOperators = new List<Operator>();
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    LstOperators = context.Operators.Where(x => (countryCode == "" || x.CountryPicture == countryCode)).ToList<Operator>();
                 }
             }
             catch (System.Exception ex)

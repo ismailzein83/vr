@@ -16,6 +16,26 @@ namespace CallGeneratorLibrary.Repositories
 
     public class ScheduleRepository
     {
+        public static string GetName(int ScheduleId)
+        {
+            string s = "";
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    s = context.Schedules.Where(l => l.Id == ScheduleId).FirstOrDefault<Schedule>().DisplayName;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+
+            return s;
+        }
+
         public static Schedule Load(int ScheduleId)
         {
             Schedule log = new Schedule();

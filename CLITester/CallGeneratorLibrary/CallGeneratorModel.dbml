@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FraudTest" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=FraudTest;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTestConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=FraudTest;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.SipStatus" Member="SipStatus">
     <Type Name="SipStatus">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -48,20 +48,6 @@
       <Column Name="StatusId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="SipStatus_CallEntryDetail" Member="SipStatus" ThisKey="StatusId" OtherKey="Id" Type="SipStatus" IsForeignKey="true" />
       <Association Name="CallEntry_CallEntryDetail" Member="CallEntry" ThisKey="CallEntriesId" OtherKey="Id" Type="CallEntry" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ActionLog" Member="ActionLogs">
-    <Type Name="ActionLog">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Username" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ObjectType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="ObjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="RemoteAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ComputerName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.ScheduleWeekDays" Member="ScheduleWeekDays">
@@ -394,28 +380,6 @@
       <Association Name="Schedule_ScheduleLog" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
-  <Table Name="dbo.TestOperators" Member="TestOperators">
-    <Type Name="TestOperator">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="NumberOfCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TestCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ReceivedCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CarrierPrefix" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="CallerId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ErrorMessage" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Requested" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="TestOperator_MontyCall" Member="MontyCalls" ThisKey="Id" OtherKey="TestOperatorId" Type="MontyCall" />
-      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
-      <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
-      <Association Name="Operator_TestOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="" Member="DataCalls">
     <Type Name="DataCalls">
       <Column Name="Id" Type="System.Int32" CanBeNull="true" />
@@ -468,6 +432,7 @@
       <Association Name="User_Carrier" Member="Carriers" ThisKey="Id" OtherKey="CustomerId" Type="Carrier" />
       <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
       <Association Name="User_SipAccount" Member="SipAccounts" ThisKey="Id" OtherKey="UserId" Type="SipAccount" />
+      <Association Name="User_ActionLog" Member="ActionLogs" ThisKey="Id" OtherKey="UserId" Type="ActionLog" />
       <Association Name="User_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="UserId" Type="TestOperator" />
     </Type>
   </Table>
@@ -510,6 +475,57 @@
       <Column Name="ServiceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="GeneratedCall_MontyCall" Member="GeneratedCall" ThisKey="CallEntryId" OtherKey="Id" Type="GeneratedCall" IsForeignKey="true" />
       <Association Name="TestOperator_MontyCall" Member="TestOperator" ThisKey="TestOperatorId" OtherKey="Id" Type="TestOperator" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ActionLog" Member="ActionLogs">
+    <Type Name="ActionLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ObjectType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ObjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RemoteAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ComputerName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="User_ActionLog" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="ActionLogFeeds">
+    <Type Name="ActionLogFeed">
+      <Column Name="Id" Type="System.Int32" CanBeNull="true" />
+      <Column Name="ActionType" Type="System.Int32" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="ObjectType" Type="System.String" CanBeNull="false" />
+      <Column Name="ObjectId" Type="System.Int32" CanBeNull="true" />
+      <Column Name="IPAddress" Type="System.String" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestOperators" Member="TestOperators">
+    <Type Name="TestOperator">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NumberOfCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TestCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceivedCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CarrierPrefix" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CallerId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ErrorMessage" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Requested" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ParentUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="TestOperator_MontyCall" Member="MontyCalls" ThisKey="Id" OtherKey="TestOperatorId" Type="MontyCall" />
+      <Association Name="Operator_TestOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
+      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
+      <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetRolePages" Method="GetRolePages">
@@ -570,5 +586,19 @@
     <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
     <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
     <Return Type="object" />
+  </Function>
+  <Function Name="dbo.GetActionLogs" Method="GetActionLogs">
+    <Parameter Name="ObjectType" Parameter="objectType" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GetActionLogsResult">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ObjectType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ObjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </ElementType>
   </Function>
 </Database>
