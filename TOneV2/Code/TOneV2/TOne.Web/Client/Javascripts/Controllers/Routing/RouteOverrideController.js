@@ -73,7 +73,7 @@
             $event.stopPropagation();
             var index = null;
             try {
-                var index = $scope.selectedSuppliers.indexOf(s);
+                var index = $scope.findExsite($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
             }
             catch (e) {
 

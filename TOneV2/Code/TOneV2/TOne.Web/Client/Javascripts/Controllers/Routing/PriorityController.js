@@ -75,7 +75,7 @@
             $event.preventDefault();
             $event.stopPropagation();
 
-            var index = $scope.selectedSuppliers.indexOf(s);
+            var index = $scope.findExsite($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
 
             if (index >= 0) {
                 $scope.selectedSuppliers.splice(index, 1);

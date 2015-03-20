@@ -1,5 +1,10 @@
 ﻿appControllers.controller('RouteRuleEditorController',
-    function RouteRuleEditorController($scope, $http, $location,$routeParams, notify) {
+    function RouteRuleEditorController($scope, $http, $location, $routeParams, notify) {
+
+        $scope.isvalidcomp = function (model) {
+            return ($scope[model].url != '') ? "" : "required-inpute";
+
+        }
         $scope.routeRule = null;
         $scope.templates = [
             { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
@@ -105,7 +110,8 @@
             $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
                          routeRule)
                      .success(function (response) {
-                       //  $location.path("/RouteRuleManager").replace();
+                         notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
+                         $location.path("/RouteRuleManager").replace();
                      });
         }
         $scope.cancel = function () {

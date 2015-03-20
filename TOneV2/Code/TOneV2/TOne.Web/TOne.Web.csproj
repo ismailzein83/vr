@@ -484,6 +484,7 @@
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\header-template.html" />
     <Content Include="Client\Views\Routing\RouteRuleManager.html" />
     <Content Include="images\alert\attention.png" />
     <Content Include="images\alert\close.png" />

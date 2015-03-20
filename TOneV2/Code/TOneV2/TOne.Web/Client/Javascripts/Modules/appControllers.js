@@ -1,5 +1,5 @@
 ﻿
-var appControllers = angular.module('appControllers', ['ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.grid.resizeColumns', 'ng-sortable', 'ngSanitize', 'mgcrea.ngStrap', 'uiSwitch', 'cgNotify']);
+var appControllers = angular.module('appControllers', ['ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.grid.resizeColumns', 'ng-sortable', 'ngSanitize', 'mgcrea.ngStrap', 'uiSwitch', 'cgNotify',  'ui.grid.autoResize']);
 appControllers.directive('resizable', function () {
     return {
         restrict: 'A',
