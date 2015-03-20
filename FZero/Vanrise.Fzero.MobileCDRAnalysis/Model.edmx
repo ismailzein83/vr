@@ -40,6 +40,7 @@
           <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.Store.StrategyPeriods" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="StrategyThreshold" EntityType="CDRAnalysisMobileModel.Store.StrategyThreshold" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Store.Subscriber_Values" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Store.Subscriber_ValuesNew" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholds" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="CDRAnalysisMobile" />
@@ -836,6 +837,19 @@
           <Property Name="CriteriaID" Type="int" />
         </EntityType>
         <EntityType Name="Subscriber_Values">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="CriteriaId" Type="int" />
+          <Property Name="StrategyId" Type="int" />
+          <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PeriodId" Type="int" />
+        </EntityType>
+        <EntityType Name="Subscriber_ValuesNew">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -2037,6 +2051,7 @@
           <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.StrategyPeriod" />
           <EntitySet Name="StrategyThresholds" EntityType="CDRAnalysisMobileModel.StrategyThreshold" />
           <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Subscriber_Values" />
+          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Subscriber_ValuesNew" />
           <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.SubscriberThreshold" />
           <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Suspicion_Level" />
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" />
@@ -2939,6 +2954,19 @@
           <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" FromRole="Subscriber_Values" ToRole="Period" />
           <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy" FromRole="Subscriber_Values" ToRole="Strategy" />
           <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Subscriber_Values" ToRole="Strategy" />
+        </EntityType>
+        <EntityType Name="Subscriber_ValuesNew">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FromDate" />
+          <Property Type="DateTime" Name="ToDate" />
+          <Property Type="Int32" Name="CriteriaId" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Decimal" Name="Value" />
+          <Property Type="Int32" Name="PeriodId" />
         </EntityType>
         <EntityType Name="SubscriberThreshold">
           <Key>
@@ -4538,6 +4566,20 @@
           <EntitySetMapping Name="Subscriber_Values">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.Subscriber_Values">
               <MappingFragment StoreEntitySet="Subscriber_Values">
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriber_ValuesNew">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.Subscriber_ValuesNew">
+              <MappingFragment StoreEntitySet="Subscriber_ValuesNew">
                 <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
