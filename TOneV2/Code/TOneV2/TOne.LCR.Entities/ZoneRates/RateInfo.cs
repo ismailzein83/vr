@@ -13,5 +13,7 @@ namespace TOne.LCR.Entities
         public decimal Rate { get; set; }
 
         public short ServicesFlag { get; set; }
+
+        public int PriceListId { get; set; }
     }
 }

@@ -7,8 +7,6 @@ namespace TOne.LCR.Data
 {
     public interface ICodeMatchDataManager : IDataManager, IRoutingDataManager
     {
-        Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches);
-
         void ApplyCodeMatchesToDB(Object preparedCodeMatches);
 
         void CreateIndexesOnTable();

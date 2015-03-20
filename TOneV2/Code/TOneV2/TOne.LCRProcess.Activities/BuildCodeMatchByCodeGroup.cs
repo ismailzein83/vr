@@ -29,6 +29,8 @@ namespace TOne.LCRProcess.Activities
         public BaseQueue<SingleDestinationCodeMatches> OutputQueueForRouting { get; set; }
 
         public SuppliersCodes SuppliersCodes { get; set; }
+
+        public SupplierZoneRates SupplierZoneRates { get; set; }
     }
 
     public class BuildCodeMatchByCodeGroup : BaseAsyncActivity<BuildCodeMatchByCodeGroupInput>
@@ -46,6 +48,9 @@ namespace TOne.LCRProcess.Activities
 
         [RequiredArgument]
         public InArgument<SuppliersCodes> SupplierCodes { get; set; }
+
+        [RequiredArgument]
+        public InArgument<SupplierZoneRates> SupplierZoneRates { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<List<CodeMatch>>> OutputQueue { get; set; }
@@ -71,6 +76,7 @@ namespace TOne.LCRProcess.Activities
             return new BuildCodeMatchByCodeGroupInput
             {
                 SuppliersCodes = this.SupplierCodes.Get(context),
+                SupplierZoneRates = this.SupplierZoneRates.Get(context),
                 DistinctCodes = this.DistinctCodes.Get(context),
                 EffectiveTime = this.EffectiveTime.Get(context),
                 IsFuture = this.IsFuture.Get(context),
@@ -121,7 +127,17 @@ namespace TOne.LCRProcess.Activities
                                 SupplierZoneId = supplierMatch.ZoneId,
                                 SupplierCodeId = supplierMatch.ID
                             };
-                            singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                            if (String.Compare(codeMatch.SupplierId, "SYS", true) == 0)
+                                singleDestinationCodeMatches.SysCodeMatch = codeMatch;
+                            else
+                            {
+                                RateInfo rate;
+                                if (inputArgument.SupplierZoneRates.RatesByZoneId.TryGetValue(supplierMatch.ZoneId, out rate))
+                                {
+                                    codeMatch.SupplierRate = rate;
+                                    singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                                }
+                            }
                             codeMatches.Add(codeMatch);
                         }
                         index++;
@@ -130,7 +146,8 @@ namespace TOne.LCRProcess.Activities
                 }
                 if (codeMatches.Count > 0)
                 {
-                    inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
+                    if (singleDestinationCodeMatches.SysCodeMatch != null)
+                        inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
                     inputArgument.OutputQueue.Enqueue(codeMatches);
                 }
             }           

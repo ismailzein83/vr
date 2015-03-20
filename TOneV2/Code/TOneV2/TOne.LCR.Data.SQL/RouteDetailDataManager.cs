@@ -62,7 +62,7 @@ namespace TOne.LCR.Data.SQL
         {
             DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
             prepareInfo.StreamWriter.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
-                           routeDetail.Options != null ? Serialize2(routeDetail.Options) : null);
+                           routeDetail.Options != null ? Serialize(routeDetail.Options) : null);
         }
 
         public object FinishDBApplyStream(object stream)
@@ -78,37 +78,7 @@ namespace TOne.LCR.Data.SQL
                 FieldSeparator = '^'
             };
         }
-
-        public object PrepareRouteDetailsForDBApply(List<RouteDetail> routeDetails)
-        {
-            System.IO.StreamWriter wr = null;
-            string filePath = GetFilePathForBulkInsert();
-            try
-            {
-                using (wr = new System.IO.StreamWriter(filePath))
-                {
-                    foreach (var rd in routeDetails)
-                    {
-                        wr.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", rd.CustomerID, rd.Code, rd.SaleZoneId, rd.Rate, rd.ServicesFlag,
-                            rd.Options != null ? Serialize(rd.Options) : null);
-                    }
-                }
-            }
-            finally
-            {
-                if (wr != null)
-                    wr.Dispose();
-            }
-            
-            return new BulkInsertInfo
-            {
-                TableName = "Route",
-                DataFilePath = filePath,
-                TabLock = true,
-                FieldSeparator = '^'
-            };
-        }
-
+        
         public void ApplyRouteDetailsToDB(Object preparedRouteDetails)
         {
             InsertBulkToTable(preparedRouteDetails as BulkInsertInfo);

@@ -101,6 +101,8 @@ namespace TOne.LCR.Data.SQL
                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
                         bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
                         string options = reader["Options"] as string;
+                        if (options == null)
+                            continue;
                         string excludedCodes = reader["ExcludedCodes"] as string;
                         bool isBlock = reader["IsBlock"] as string == "Y" ? true : false;
                         MultipleSelection<string> customers = new MultipleSelection<string>();

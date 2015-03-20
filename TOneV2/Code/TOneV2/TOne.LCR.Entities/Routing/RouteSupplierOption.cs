@@ -19,14 +19,19 @@ namespace TOne.LCR.Entities
         }
 
         public RouteSupplierOption(string supplierId, int supplierZoneId, decimal rate, short serviceFlag)
-        {
-            Info = new OptionInfo
+            : this(new OptionInfo
             {
                 SupplierId = supplierId,
                 SupplierZoneId = supplierZoneId,
                 Rate = rate,
                 ServicesFlag = serviceFlag
-            };
+            })
+        {
+        }
+
+        public RouteSupplierOption(OptionInfo optionInfo)
+        {
+            Info = optionInfo;
         }
 
 

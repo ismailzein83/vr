@@ -112,7 +112,10 @@ namespace TOne.LCR.Data.SQL
 	                                                    [SupplierID] [varchar](5) NOT NULL,
 	                                                    [SupplierCode] [varchar](30) NOT NULL,
 	                                                    [SupplierCodeID] [bigint] NOT NULL,
-	                                                    [SupplierZoneID] [int] NOT NULL
+	                                                    [SupplierZoneID] [int] NOT NULL,
+	                                                    [SupplierRate] float NULL,
+	                                                    [ServicesFlag] [smallint] NULL,
+	                                                    [PriceListID] [int] NULL
                                                     )
                                                     CREATE TABLE [Route](
 	                                                   

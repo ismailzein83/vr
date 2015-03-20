@@ -9,8 +9,6 @@ namespace TOne.LCR.Data
 {
     public interface IRouteDetailDataManager : IRoutingDataManager, IDataManager
     {
-        Object PrepareRouteDetailsForDBApply(List<RouteDetail> routeDetails);
-
         void ApplyRouteDetailsToDB(Object preparedRouteDetails);
 
         void CreateIndexesOnTable();

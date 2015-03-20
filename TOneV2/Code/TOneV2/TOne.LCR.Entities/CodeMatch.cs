@@ -12,6 +12,8 @@ namespace TOne.LCR.Entities
         public string SupplierCode { get; set; }
         public long SupplierCodeId { get; set; }
         public int SupplierZoneId { get; set; }
+
+        public RateInfo SupplierRate { get; set; }
     }
 
     public class CodeMatchesBySupplierId : Dictionary<string, CodeMatch>
@@ -27,6 +29,8 @@ namespace TOne.LCR.Entities
     public class SingleDestinationCodeMatches
     {
         public string RouteCode { get; set; }
+
+        public CodeMatch SysCodeMatch { get; set; }
 
         public CodeMatchesBySupplierId CodeMatchesBySupplierId { get; set; }
     }

@@ -70,6 +70,7 @@
     <Folder Include="LCR\Stored Procedures\" />
     <Folder Include="Analytics\" />
     <Folder Include="Analytics\Stored Procedures\" />
+    <Folder Include="LCR\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetCaclulatedZoneRates.sql" />
@@ -103,5 +104,15 @@
     <Build Include="BEntity\Stored Procedures\sp_Commission_GetCommissions.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Code_GetDistinctCodePrefixes.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Code_GetByCodePrefixGroupForActiveSuppliers.sql" />
+    <Build Include="LCR\Tables\RouteRuleDefinition.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetOverrideRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetBlockRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_Insert.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_GetByRouteRuleId.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RouteRuleDefinition_GetAll.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetFilteredBySupplierId.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetByZonesIds.sql" />
+    <Build Include="LCR\User Defined Types\IntIDType.sql" />
+    <Build Include="BEntity\User Defined Types\IntIDType.sql" />
   </ItemGroup>
 </Project>

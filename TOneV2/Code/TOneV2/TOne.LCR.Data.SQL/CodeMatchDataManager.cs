@@ -31,7 +31,10 @@ namespace TOne.LCR.Data.SQL
         public void WriteCodeMatchToStream(CodeMatch codeMatch, object stream)
         {
             DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
-            prepareInfo.StreamWriter.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", codeMatch.Code, codeMatch.SupplierId, codeMatch.SupplierCode, codeMatch.SupplierCodeId, codeMatch.SupplierZoneId));
+            prepareInfo.StreamWriter.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", 
+                codeMatch.Code, codeMatch.SupplierId, codeMatch.SupplierCode, codeMatch.SupplierCodeId, codeMatch.SupplierZoneId, 
+                codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.Rate : null, codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.ServicesFlag : null,
+                codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.PriceListId : null));
         }
 
         public object FinishDBApplyStream(object stream)
@@ -43,35 +46,6 @@ namespace TOne.LCR.Data.SQL
             {
                 TableName = "CodeMatch",
                 DataFilePath = prepareInfo.FilePath,
-                TabLock = true,
-                FieldSeparator = '^'
-            };
-        }
-
-        public Object PrepareCodeMatchesForDBApply(List<CodeMatch> codeMatches)
-        {
-            System.IO.StreamWriter wr = null;
-            string filePath = GetFilePathForBulkInsert();
-            try
-            {
-                using (wr = new System.IO.StreamWriter(filePath))
-                {
-                    foreach (var cm in codeMatches)
-                    {
-                        wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", cm.Code, cm.SupplierId, cm.SupplierCode, cm.SupplierCodeId, cm.SupplierZoneId));
-                    }
-                }
-            }
-            finally
-            {
-                if (wr != null)
-                    wr.Dispose();
-            }
-
-            return new BulkInsertInfo
-            {
-                TableName = "CodeMatch",
-                DataFilePath = filePath,
                 TabLock = true,
                 FieldSeparator = '^'
             };

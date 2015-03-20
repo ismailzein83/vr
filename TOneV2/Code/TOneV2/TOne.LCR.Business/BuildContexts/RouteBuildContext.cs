@@ -138,16 +138,12 @@ namespace TOne.LCR.Business
             CodeMatch supplierCodeMatch;
             if (_parentContext.CodeMatchesBySupplierId.TryGetValue(supplierId, out supplierCodeMatch))
             {
-                ZoneRates zoneRates;
-                if (_parentContext.SupplierRates.SuppliersZonesRates.TryGetValue(supplierId, out zoneRates))
+                RateInfo rate;
+                if (_parentContext.SupplierRates.RatesByZoneId.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
                 {
-                    RateInfo rate;
-                    if (zoneRates.ZonesRates.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
-                    {
-                        routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
-                        routeOption.Percentage = percentage;
-                        return true;
-                    }
+                    routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
+                    routeOption.Percentage = percentage;
+                    return true;
                 }
             }
             routeOption = null;

@@ -68,7 +68,8 @@ namespace TOne.LCR.Data.SQL
                         {
                             ZoneId = GetReaderValue<int>(reader, "ZoneID"),
                             Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
-                            ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag")
+                            ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                            PriceListId = GetReaderValue<int>(reader, "PriceListID")
                         };
 
                         CustomerRates customerRates;
@@ -101,8 +102,8 @@ namespace TOne.LCR.Data.SQL
         {
             SupplierZoneRates allSupplierZoneRates = new SupplierZoneRates();
             DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
-            allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
-            //allSupplierZoneRates.RatesByZoneId = new Dictionary<int, RateInfo>();
+            //allSupplierZoneRates.SuppliersZonesRates = new Dictionary<string, ZoneRates>();
+            allSupplierZoneRates.RatesByZoneId = new Dictionary<int, RateInfo>();
             List<RateInfo> zoneRates = new List<RateInfo>();
             ExecuteReaderText(string.Format(query_GetZoneRates, "Supplier"),
                  (reader) =>
@@ -113,25 +114,26 @@ namespace TOne.LCR.Data.SQL
                          {
                              ZoneId = GetReaderValue<int>(reader, "ZoneID"),
                              Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
-                             ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag")
+                             ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                             PriceListId = GetReaderValue<int>(reader, "PriceListID")
                          };
-                         string carrierID = reader["SupplierID"] as string;
-                         ZoneRates supplierRates;
-                         if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
-                         {
-                             supplierRates = new ZoneRates();
-                             supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
-                             allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
-                         }
-
-                         if (!supplierRates.ZonesRates.ContainsKey(rate.ZoneId))
-                             supplierRates.ZonesRates.Add(rate.ZoneId, rate);
-
-                         //if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(rate.ZoneId))
+                         //string carrierID = reader["SupplierID"] as string;
+                         //ZoneRates supplierRates;
+                         //if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
                          //{
-                         //    allSupplierZoneRates.RatesByZoneId.Add(rate.ZoneId, rate);
-                         //    zoneRates.Add(rate);
+                         //    supplierRates = new ZoneRates();
+                         //    supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
+                         //    allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
                          //}
+
+                         //if (!supplierRates.ZonesRates.ContainsKey(rate.ZoneId))
+                         //    supplierRates.ZonesRates.Add(rate.ZoneId, rate);
+
+                         if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(rate.ZoneId))
+                         {
+                             allSupplierZoneRates.RatesByZoneId.Add(rate.ZoneId, rate);
+                             zoneRates.Add(rate);
+                         }
                      }
 
                  },
@@ -173,6 +175,7 @@ namespace TOne.LCR.Data.SQL
 	                                       ,zr.[{0}ID]
                                            ,zr.[NormalRate]
                                            ,zr.[ServicesFlag]
+                                            ,zr.PriceListID
                                       FROM  [{0}ZoneRate] zr
                                         JOIN @ZoneList z ON z.ID = zr.ZoneID
                                         order by zr.ZoneID";
