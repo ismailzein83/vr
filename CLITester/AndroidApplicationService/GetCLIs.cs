@@ -69,21 +69,21 @@ namespace AndroidApplicationService
                                 //Check the call entries
                                 if (GenEnd.EndDate != null)
                                 {
-                                    // Check if the Call is failed // don't check the result from Android Service //480 removed
-                                    if ((GenEnd.ResponseCode == "408") || 
-                                        (GenEnd.ResponseCode == "486") || 
-                                        (GenEnd.ResponseCode == "503") || 
-                                        (GenEnd.ResponseCode == "487"))
+                                    // Check if the Call is failed // don't check the result from Android Service //480 - 487 removed
+                                    if ((GenEnd.ResponseCode == "408" && GenEnd.Status != "4" && GenEnd.Status != "6") ||
+                                        (GenEnd.ResponseCode == "404" && GenEnd.Status != "4" && GenEnd.Status != "6") ||
+                                        (GenEnd.ResponseCode == "503" && GenEnd.Status != "4" && GenEnd.Status != "6"))
+                                        //(GenEnd.ResponseCode == "487" && GenEnd.Status != "4" && GenEnd.Status != "6"))
                                     {
                                         testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
                                         if (GenEnd.ResponseCode == "408")
                                             testoperators[i].ErrorMessage = "408 - Request Timeout";
-                                        if (GenEnd.ResponseCode == "486")
-                                            testoperators[i].ErrorMessage = "486 - Busy Here";
+                                        if (GenEnd.ResponseCode == "404")
+                                            testoperators[i].ErrorMessage = "404 - Not Found";
                                         if (GenEnd.ResponseCode == "503")
                                             testoperators[i].ErrorMessage = "503 - Service Unavailable";
-                                        if (GenEnd.ResponseCode == "487")
-                                            testoperators[i].ErrorMessage = "487 - Request Terminated";
+                                        //if (GenEnd.ResponseCode == "487")
+                                        //    testoperators[i].ErrorMessage = "487 - Request Terminated";
                                         testoperators[i].EndDate = DateTime.Now;
                                         testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Failed;
                                         TestOperatorRepository.Save(testoperators[i]);
@@ -101,9 +101,30 @@ namespace AndroidApplicationService
                                         //WriteToEventLog("Response RequestId " +  m.RequestId +"  CLI : " + resp2.CLI + " status " + resp2.status);
                                         if (resp2.status == "1")//Success
                                         {
+                                            /// Result done (Delivered or Not delivered) => decrease the balance
+                                            ///
+                                            UserRepository.DecreaseBalance(testoperators[i].User.Id);
+                                            ///
+
                                             testoperators[i].EndDate = DateTime.Now;
                                             testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
-                                            testoperators[i].ReceivedCli = resp2.CLI;
+                                            string RecCLi = resp2.CLI;
+
+                                            if (resp2.CLI.Length > 4)
+                                            {
+                                                if (RecCLi.Substring(0, 4) == "0000")
+                                                {
+                                                    int lenn = resp2.CLI.Length;
+                                                    lenn = lenn - 2;
+                                                    testoperators[i].ReceivedCli = resp2.CLI.Substring(2, lenn);
+                                                }
+                                                else
+                                                    testoperators[i].ReceivedCli = resp2.CLI;
+                                            }
+                                            else
+                                            {
+                                                testoperators[i].ReceivedCli = resp2.CLI;
+                                            }
 
                                             //Check without zeroes
                                             string TestCli1 = testoperators[i].TestCli.Substring(0, 2);
@@ -111,9 +132,9 @@ namespace AndroidApplicationService
 
                                             if (testoperators[i].ReceivedCli.Length > 2)
                                             {
-                                                RecCli1 = testoperators[i].ReceivedCli.Substring(0, 2);    
+                                                RecCli1 = testoperators[i].ReceivedCli.Substring(0, 2);
                                             }
-                                            
+
                                             if ((TestCli1 == "00" && RecCli1 == "00") || (TestCli1 != "00" && RecCli1 != "00"))
                                             {
                                                 if (testoperators[i].TestCli == testoperators[i].ReceivedCli)
@@ -140,7 +161,7 @@ namespace AndroidApplicationService
                                                         {
                                                             RecCli2 = testoperators[i].ReceivedCli.Substring(2);
                                                         }
-                                                        
+
                                                         if (testoperators[i].TestCli == RecCli2)
                                                             testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid;
                                                         else
@@ -162,10 +183,41 @@ namespace AndroidApplicationService
                                         }
                                         else if (resp2.status == "-1")//Expired
                                         {
+                                            if (GenEnd.Status == "6")
+                                            {
+                                                testoperators[i].ErrorMessage = "FAS";
+                                                testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Phase;
+                                            }
+                                            else
+                                            {
+                                                if (
+                                                    //(GenEnd.ResponseCode == "408") ||
+                                                    (GenEnd.ResponseCode == "486") ||
+                                                   // (GenEnd.ResponseCode == "503") ||
+                                                    (GenEnd.ResponseCode == "487"))
+                                                {
+                                                    //testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
+                                                    //if (GenEnd.ResponseCode == "408")
+                                                    //    testoperators[i].ErrorMessage = "408 - Request Timeout";
+                                                    if (GenEnd.ResponseCode == "486")
+                                                        testoperators[i].ErrorMessage = "486 - Busy Here";
+                                                    //if (GenEnd.ResponseCode == "503")
+                                                    //    testoperators[i].ErrorMessage = "503 - Service Unavailable";
+                                                    if (GenEnd.ResponseCode == "487")
+                                                        testoperators[i].ErrorMessage = "487 - Request Terminated";
+                                                    //testoperators[i].EndDate = DateTime.Now;
+                                                    testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Failed;
+                                                    //TestOperatorRepository.Save(testoperators[i]);
+                                                }
+                                                else
+                                                {
+                                                    testoperators[i].ErrorMessage = "Expired";
+                                                    testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired;
+                                                }
+                                            }
                                             testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
-                                            testoperators[i].ErrorMessage = "Expired";
                                             testoperators[i].EndDate = DateTime.Now;
-                                            testoperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired;
+
                                             TestOperatorRepository.Save(testoperators[i]);
                                             //h = true;
                                         }
