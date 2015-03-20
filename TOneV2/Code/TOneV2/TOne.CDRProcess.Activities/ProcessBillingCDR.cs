@@ -134,8 +134,8 @@ namespace TOne.CDRProcess.Activities
                                 CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(CDR));
                         }
 
-                        inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);
-                        inputArgument.OutputInvalidCDRQueue.Enqueue(CDRInvalids);
+                        if(CDRMains.MainCDRs.Count > 0) inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);
+                        if (CDRInvalids.InvalidCDRs.Count > 0) inputArgument.OutputInvalidCDRQueue.Enqueue(CDRInvalids);
 
                     });
                 }
