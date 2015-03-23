@@ -119,7 +119,11 @@ namespace TOne.LCR.Business
                                 || (actionResult.BlockOption && _removeBlockedOptions))
                             removeOption = true;
                         else if (actionResult.BlockOption)
-                            _routeOption.IsBlocked = true;
+                        {
+                            if (_routeOption.Setting == null)
+                                _routeOption.Setting = new OptionSetting();
+                            _routeOption.Setting.IsBlocked = true;
+                        }
                         nextStep = null;
                         nextStepSet = true;
                     }

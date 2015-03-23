@@ -151,33 +151,29 @@ namespace TOne.LCR.Business
         
         RouteSupplierOption[] _orderedLCR;
         //RouteSupplierOption[] _lcr;
-        int _orderIndex = -1;
         int _optionsCount;
-        Dictionary<int, CodeMatch> _codeMatches;
+        IEnumerator<CodeMatch> _orderedCodeMatchEnumerator;
+        //Dictionary<int, CodeMatch> _codeMatches;
 
         internal RouteSupplierOption GetNextOptionInLCR()
         {
            if(_orderedLCR == null)
            {
-               _codeMatches = new Dictionary<int, CodeMatch>();
-               foreach (var codeMatchEntry in _singleDestinationCodeMatches.CodeMatchesBySupplierId)
-                   _codeMatches.Add(codeMatchEntry.Value.SupplierZoneId, codeMatchEntry.Value);
-               _optionsCount = _codeMatches.Count;
+               _orderedCodeMatchEnumerator = _singleDestinationCodeMatches.OrderedCodeMatches.GetEnumerator();
+               //_codeMatches = new Dictionary<int, CodeMatch>();
+               //foreach (var codeMatchEntry in _singleDestinationCodeMatches.CodeMatchesBySupplierId)
+               //    _codeMatches.Add(codeMatchEntry.Value.SupplierZoneId, codeMatchEntry.Value);
+               _optionsCount = _singleDestinationCodeMatches.OrderedCodeMatches.Count;
                _orderedLCR = new RouteSupplierOption[_optionsCount];
            }
 
             if (_optionsCount > _retrievedOptionNextReturnedIndex)
             {
-                RouteSupplierOption nextOption = null;
-                if (_orderIndex < _retrievedOptionNextReturnedIndex)
+                RouteSupplierOption nextOption = _orderedLCR[_retrievedOptionNextReturnedIndex]; 
+                if(nextOption == null)
                 {
-                    CodeMatch minRateCodeMatch = null;
-                    foreach (var current in _codeMatches)
-                    {
-                        if (minRateCodeMatch == null || current.Value.SupplierRate.Rate < minRateCodeMatch.SupplierRate.Rate)
-                            minRateCodeMatch = current.Value;
-                    }
-                    _codeMatches.Remove(minRateCodeMatch.SupplierZoneId);
+                    _orderedCodeMatchEnumerator.MoveNext();
+                    CodeMatch minRateCodeMatch = _orderedCodeMatchEnumerator.Current;                    
                     var optionInfo = new OptionInfo
                     {
                         SupplierId = minRateCodeMatch.SupplierId,
@@ -186,13 +182,9 @@ namespace TOne.LCR.Business
                         ServicesFlag = minRateCodeMatch.SupplierRate.ServicesFlag
                     };
                     nextOption = new RouteSupplierOption(optionInfo);
-                    _orderIndex++;
-                    _orderedLCR[_orderIndex] = nextOption;
+                    _orderedLCR[_retrievedOptionNextReturnedIndex] = nextOption;
                 }
-                else
-                {
-                    nextOption = _orderedLCR[_retrievedOptionNextReturnedIndex];
-                }
+                
                 _retrievedOptionNextReturnedIndex++;
                 return new RouteSupplierOption(nextOption.Info);
             }

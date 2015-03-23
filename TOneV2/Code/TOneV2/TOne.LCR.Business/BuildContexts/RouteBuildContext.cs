@@ -141,7 +141,8 @@ namespace TOne.LCR.Business
                 if (_parentContext.SupplierRates.RatesByZoneId.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
                 {
                     routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
-                    routeOption.Percentage = percentage;
+                    routeOption.Setting = new OptionSetting();
+                    routeOption.Setting.Percentage = percentage;
                     return true;
                 }
             }
@@ -205,11 +206,14 @@ namespace TOne.LCR.Business
                 if (current == null)
                     break;
 
+                if (!onlyImportantFilters && current.Rate > _route.Rate)
+                    break;
+
                 using (RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this))
                 {
                     bool removeOption;
                     optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, out removeOption);
-                    if (!removeOption && !current.IsBlocked)
+                    if (!removeOption && (current.Setting == null || !current.Setting.IsBlocked))
                         validOptions++;
                     if (!removeOption)
                         _route.Options.SupplierOptions.Add(current);

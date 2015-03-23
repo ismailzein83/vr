@@ -15,8 +15,7 @@ BEGIN
 		CASE WHEN ro.Code = '*ALL*' THEN NULL ELSE ro.Code END Code,
 		ro.IncludeSubCodes,
 		CASE WHEN ro.Code != '*ALL*' THEN NULL ELSE ro.OurZoneID END ZoneID,
-		ISNULL(ro.RouteOptions, ro.BlockedSuppliers) Options,
-		CASE WHEN ro.RouteOptions IS NULL THEN 'Y' ELSE 'N' END IsBlock,
+		ro.RouteOptions,
 		ro.BeginEffectiveDate,
 		ro.EndEffectiveDate,
 		ro.IsEffective,
@@ -25,7 +24,7 @@ BEGIN
 	FROM
 		RouteOverride ro 
 	    Left JOIN @ZoneIds z ON ro.OurZoneID = z.ID  
-	    WHERE ro.RouteOptions != 'BLK' OR ro.RouteOptions IS NULL--AND ro.RouteOptions IS NOT NULL
+	    WHERE ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL
 	    AND(z.ID IS NOT NULL OR ro.Code LIKE @CodePrefix + '%' OR @CodePrefix LIKE ro.Code + '%')
 		AND 
 			(

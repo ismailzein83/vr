@@ -12,8 +12,10 @@ namespace TOne.LCR.Entities
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(OptionInfo),
                 "SupplierId", "SupplierZoneId", "Rate", "ServicesFlag");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(OptionSetting),
+                "Percentage", "IsBlocked", "Priority");
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RouteSupplierOption),
-                "Info", "Percentage", "IsBlocked", "Priority");
+                "Info", "Setting");
             //Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RouteSupplierOption),
             //    "SupplierId", "SupplierZoneId", "Rate", "ServicesFlag", "Percentage", "IsBlocked", "Priority");
         }
@@ -31,26 +33,28 @@ namespace TOne.LCR.Entities
 
         public RouteSupplierOption(OptionInfo optionInfo)
         {
-            Info = optionInfo;
+            _info = optionInfo;
         }
 
 
+        private OptionInfo _info;
 
-        public OptionInfo Info { get; set; }
+        public OptionInfo Info
+        {
+            get { return _info; }
+            set { _info = value; }
+        }
 
-        public string SupplierId { get { return Info.SupplierId; } }
+        public string SupplierId { get { return _info.SupplierId; } }
 
-        public int SupplierZoneId { get { return Info.SupplierZoneId; } }
+        public int SupplierZoneId { get { return _info.SupplierZoneId; } }
 
-        public decimal Rate { get { return Info.Rate; } }
+        public decimal Rate { get { return _info.Rate; } }
 
-        public short ServicesFlag { get { return Info.ServicesFlag; } }
-       
-        public Int16? Percentage { get; set; }
+        public short ServicesFlag { get { return _info.ServicesFlag; } }
 
-        public bool IsBlocked { get; set; }
+        public OptionSetting Setting { get; set; }
 
-        public int Priority { get; set; }
     }    
 
     public class OptionInfo
@@ -63,5 +67,14 @@ namespace TOne.LCR.Entities
 
         public short ServicesFlag { get; set; }
 
+    }
+
+    public class OptionSetting
+    {
+        public Int16? Percentage { get; set; }
+
+        public bool IsBlocked { get; set; }
+
+        public int Priority { get; set; }
     }
 }

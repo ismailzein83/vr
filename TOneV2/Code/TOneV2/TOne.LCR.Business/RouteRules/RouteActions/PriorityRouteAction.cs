@@ -38,9 +38,11 @@ namespace TOne.LCR.Business
                     TryAddOptionFromLCR(context, priorityOption, out routeOption);
                 if(routeOption != null)
                 {
-                    routeOption.Priority = priorityOption.Priority;
+                    if (routeOption.Setting == null)
+                        routeOption.Setting = new OptionSetting();
+                    routeOption.Setting.Priority = priorityOption.Priority;
                     if (priorityOption.Percentage.HasValue)
-                        routeOption.Percentage = priorityOption.Percentage;
+                        routeOption.Setting.Percentage = priorityOption.Percentage;
                 }
             }
 

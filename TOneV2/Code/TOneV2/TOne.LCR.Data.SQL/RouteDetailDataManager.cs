@@ -36,7 +36,10 @@ namespace TOne.LCR.Data.SQL
             {
                 foreach (var o in routeOptions.SupplierOptions)
                 {
-                    str.AppendFormat("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, o.Percentage, o.Priority, o.IsBlocked, o.ServicesFlag);
+                    str.AppendFormat("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, 
+                        o.Setting != null ? o.Setting.Percentage : null,
+                        o.Setting != null ?  (object)o.Setting.Priority : null,  o.Setting != null ?  (object)o.Setting.IsBlocked : null, 
+                        o.ServicesFlag);
                 }
             }
             return str.ToString();

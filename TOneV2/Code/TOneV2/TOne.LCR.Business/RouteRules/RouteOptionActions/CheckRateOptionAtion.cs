@@ -18,7 +18,7 @@ namespace TOne.LCR.Business
         }
         public override RouteOptionActionResult Execute(IRouteOptionBuildContext context, object actionData)
         {
-            if (context.Route.Rate < context.RouteOption.Rate)
+            if (Decimal.Compare(context.Route.Rate, context.RouteOption.Rate) < 0)
                 return new RouteOptionActionResult { RemoveOption = true };
             else
                 return null;

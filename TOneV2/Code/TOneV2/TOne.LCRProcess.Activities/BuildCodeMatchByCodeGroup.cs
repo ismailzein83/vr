@@ -107,7 +107,8 @@ namespace TOne.LCRProcess.Activities
                 SingleDestinationCodeMatches singleDestinationCodeMatches = new SingleDestinationCodeMatches
                 {
                     RouteCode = dCode.Key,
-                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId()
+                    CodeMatchesBySupplierId = new CodeMatchesBySupplierId(),
+                    OrderedCodeMatches= new List<CodeMatch>()
                 };
                 foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
@@ -136,6 +137,20 @@ namespace TOne.LCRProcess.Activities
                                 {
                                     codeMatch.SupplierRate = rate;
                                     singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                                    decimal rateValue = rate.Rate;
+                                    bool isAddedToOrderedList = false;
+                                    for (int i = 0; i < singleDestinationCodeMatches.OrderedCodeMatches.Count; i++)
+                                    {
+                                        decimal currentRate = singleDestinationCodeMatches.OrderedCodeMatches[i].SupplierRate.Rate;
+                                        if (currentRate >= rateValue)
+                                        {
+                                            singleDestinationCodeMatches.OrderedCodeMatches.Insert(i, codeMatch);
+                                            isAddedToOrderedList = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!isAddedToOrderedList)
+                                        singleDestinationCodeMatches.OrderedCodeMatches.Add(codeMatch);
                                 }
                             }
                             codeMatches.Add(codeMatch);

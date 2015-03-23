@@ -107,6 +107,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.RuntimeService", "TOne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.Runtime", "TOne.Runtime\TOne.Runtime.csproj", "{EC7F81ED-E6E7-458C-B090-80B6E63DDB18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0E59C264-D69A-4109-B33E-71E1460C2F5B}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 42
@@ -1120,5 +1125,8 @@ Global
 		{584101E7-A41E-4BAB-9CC8-32CE70ADBC8C} = {679B5004-FEF1-435D-99C0-8EDCBCFFD1B4}
 		{BDC9694F-88B7-492D-9865-304E774A5776} = {679B5004-FEF1-435D-99C0-8EDCBCFFD1B4}
 		{776BB39B-81DA-466C-B247-3616CA61A66D} = {679B5004-FEF1-435D-99C0-8EDCBCFFD1B4}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

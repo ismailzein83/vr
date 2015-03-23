@@ -32,7 +32,7 @@ namespace TOne.LCR.Business
 
                     if (options[index] != option)
                         isDefaultOrder = false;
-                    if (option.Percentage.HasValue)
+                    if (option.Setting != null && option.Setting.Percentage.HasValue)
                         isDefaultPercentage = false;
                     index++;
                 }
@@ -58,7 +58,7 @@ namespace TOne.LCR.Business
                                 percentagesOptionBuilder = new StringBuilder();
                             else
                                 percentagesOptionBuilder.Append(',');
-                            percentagesOptionBuilder.Append(option.Percentage);
+                            percentagesOptionBuilder.Append(option.Setting != null ? option.Setting.Percentage : null);
                         }
                     }
                     if (!isDefaultOrder)
