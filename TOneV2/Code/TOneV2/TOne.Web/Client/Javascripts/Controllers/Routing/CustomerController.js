@@ -4,6 +4,19 @@
         $scope.isvalidCompCus = function () {           
             return ( $scope.selectedCustomers.length > 0) ? "" : "required-inpute";
         }
+
+
+
+        $scope.initErrortooltip = function (){
+            var showmsg = false;
+            if ($scope.showt == true) {
+                if ($scope.selectedCustomers.length == 0) {
+                    $scope.msg = "please select at least one Customer.";
+                    showmsg = true;
+                }
+            }
+            return showmsg;
+        }
         
         $scope.customers = [];
         $scope.selectedCustomers = [];
@@ -59,7 +72,14 @@
         $('#dropdownMenuddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+        $('#dropdownCust').on('show.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        });
 
+        //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('#dropdownCust').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        });
         $('.dropdown-custom').on('mouseenter', function () {
             var $this = $(this);
             clearTimeout(dropdownHidingTimeoutHandlerc);

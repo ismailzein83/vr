@@ -1,6 +1,5 @@
 ﻿appControllers.controller('RouteRuleManagerController',
     function RouteRuleManagerController($scope, $location, $http, $timeout, uiGridConstants) {
-
         $('.dropdown').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
@@ -20,44 +19,45 @@
        
         $scope.last = false;
         var pageSize = 40;
-        var temp =  '<div ng-class="{ \'sortable\': sortable }">' +
-                   '<div class="ui-grid-vertical-bar">&nbsp;</div>' +
-                   '<div class="ui-grid-cell-contents" col-index="renderIndex">' +
-                   '<span>' +
-                   '{{col.displayName}}' +
-                   '</span>' +
-                   '</div>' +
-                   '<div class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false" class="ui-grid-column-menu-button" ng-click="toggleMenu($event)">' +
-                   '<i class="ui-grid-icon-angle-down">&nbsp;</i>' +
-                   '</div>' +
-                   '<div ng-show="grid.appScope.showf" class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
-                   '<input type="text" class="ui-grid-filter-input" ng-model="colFilter.term" />' +
-                   '<div class="ui-grid-filter-button" ng-click="colFilter.term = null">' +
-                   '<i class="ui-grid-icon-cancel" ng-show="!!colFilter.term">&nbsp;</i>' + 
-                   '</div>' +
-                   '</div>' +
-                   '</div>';
+        //var temp =  '<div ng-class="{ \'sortable\': sortable }">' +
+        //           '<div class="ui-grid-vertical-bar">&nbsp;</div>' +
+        //           '<div class="ui-grid-cell-contents" col-index="renderIndex">' +
+        //           '<span>' +
+        //           '{{col.displayName}}' +
+        //           '</span>' +
+        //           '</div>' +
+        //           '<div class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false" class="ui-grid-column-menu-button" ng-click="toggleMenu($event)">' +
+        //           '<i class="ui-grid-icon-angle-down">&nbsp;</i>' +
+        //           '</div>' +
+        //           '<div ng-show="grid.appScope.showf" class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
+        //           '<input type="text" class="ui-grid-filter-input" ng-model="colFilter.term" />' +
+        //           '<div class="ui-grid-filter-button" ng-click="colFilter.term = null">' +
+        //           '<i class="ui-grid-icon-cancel" ng-show="!!colFilter.term">&nbsp;</i>' + 
+        //           '</div>' +
+        //           '</div>' +
+        //           '</div>';
         $scope.gridOptionsRouteRule = {
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 2,
             infiniteScrollPercentage: 20,
-             //minRowsToShow:10,
-            enableFiltering: true,
-           // enableSelection: true,
+            enableFiltering: false,
             columnDefs: [
               {
                   name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false,
                   cellTooltip   : function (row, col) {
                         return  row.entity.CarrierAccountDescription ;
-                  },  headerCellTemplate: temp
+                  },
+                  filter: {
+                      condition: uiGridConstants.filter.CONTAINS,
+                      placeholder: 'contains'
+                  }
               },
-              
-              { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 100, enableHiding: false, headerCellTemplate: temp },
-              { name: 'Action desc', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false, headerCellTemplate: temp },
-              { name: 'Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100, headerCellTemplate: temp },
-              { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false, headerCellTemplate: temp },
-              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false, headerCellTemplate: temp },
-              { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false, headerCellTemplate: temp},
+              { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 100, enableHiding: false},
+              { name: 'Action desc', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false},
+              { name: 'Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100},
+              { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false},
+              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
+              { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false},
             ],
             enableColumnResizing: true,
             enableSorting: false,
@@ -75,12 +75,9 @@
         $scope.onDblClick=  function (row) {
          $location.path("/RouteRuleEditor/" + row.entity.RouteRuleId).replace();
        }
-        $scope.showf = true;
-        $scope.toggelFilter = function () {
-            $('.ui-grid-header-canvas').height(($scope.showf == true) ? 30 : 60);
-            $scope.showf = !$scope.showf;
-        }
-        $scope.toggelFilter();
+       
+     
+        //$scope.toggelFilter();
         var page = 0;
         var pageUp = 0;
         var getData = function(data, page) {
@@ -152,5 +149,11 @@
       
         $scope.AddNewRoute = function () {
             $location.path("/RouteRuleEditor/undefined").replace();
+        }
+        $scope.toggelFilter = function () {
+            $scope.gridOptionsRouteRule.enableFiltering = !$scope.gridOptionsRouteRule.enableFiltering;
+            $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            $('.ui-grid-header-canvas').height(($scope.gridOptionsRouteRule.enableFiltering == true) ? 60 : 30);
+
         }
     });

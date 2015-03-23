@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="col-lg-2  style-col">
-        <div class="dropdown">
+        <div class="dropdown" id="dropdownCust" ng-mouseenter="showt=true" ng-mouseleave="showt=false">
             <button ng-class="isvalidCompCus()" class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span style="float:left;margin:0px"> {{getSelectCustomerText()}}</span>
                 <span style="position:absolute;top:15px;right:5px" class="caret"></span>
@@ -57,6 +57,7 @@
                     </div>
                 </li>
             </ul>
+            <div class="tooltip-error" ng-show="initErrortooltip()">{{msg}}</div>
         </div>
     </div>
 </div>

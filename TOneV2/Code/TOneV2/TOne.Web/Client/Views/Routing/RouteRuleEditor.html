@@ -22,14 +22,14 @@
                         </div>
                     </div>
                 </nav>
-            </div>            
+            </div>
             <div class="row style-row">
                 <div class="col-lg-2  style-col">
                     <label class="control-label" style="padding-top:6px">Rule Type:</label>
                 </div>
                 <div class="col-lg-2 style-col">
 
-                    <div class="dropdown" >
+                    <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" ng-class="isvalidcomp('ruletype')" style="width:100%;position:relative" type="button" id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
                             <span style="float: left; margin: 0px; ">{{ruletype.name}}</span>
                             <span style="position:absolute;top:15px;right:5px" class="caret"></span>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-include src="routetype.url" >
+                <div ng-include src="routetype.url">
                 </div>
 
             </div>
@@ -93,14 +93,17 @@
                 <div class="col-lg-2  style-col">
                     <label class="control-label" style="padding-top:6px">Begin Effective Date:</label>
                 </div>
-                <div class="col-lg-2  style-col">
-                    <input size="10" class="form-control" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-class="isvalidcompDate('BEDDate')">
+                <div class="col-lg-2  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                        <input size="10" name="d.testdate"class="form-control" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-class="isvalidcompDate('BEDDate')">
+                        <div class="tooltip-error" ng-show="initErrortooltipBED()">{{msgd}}</div>
+                    </div>
                 </div>
                 <div class="col-lg-2  style-col">
                     <label class="control-label" style="padding-top:6px">End Effective Date:</label>
                 </div>
                 <div class="col-lg-2  style-col">
-                    <input size="10" class="form-control" data-min-date="{{BEDDate}}" ng-model="EEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
+                    <input size="10" class="form-control" data-min-date="{{BEDDate}}" ng-model="EEDDate" data-autoclose="1" placeholder="Date" data-date-format="dd/MM/yyyy" bs-datepicker type="text">
                 </div>
             </div>
 

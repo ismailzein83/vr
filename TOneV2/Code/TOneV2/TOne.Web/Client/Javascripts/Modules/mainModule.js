@@ -34,7 +34,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $scope.dateToString = function (date) {
         var dateString = '';
         if (date) {
-            try{
+         
                 var day = "" + (parseInt(date.getDate()));
                 if (day.length == 1)
                     dateString += "0" + day;
@@ -46,18 +46,40 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 else
                     dateString += "/" + month;
                 dateString += "/" + date.getFullYear();
-            }
-            catch (e) {
-
-            }
-           
         }
         return dateString;
     }
     var dateReg = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/((199\d)|([2-9]\d{3}))$/;
     $scope.isDate = function (s) {
-        var res = String(s).search(dateReg) != -1
+        var d = "";       
+        if (s && (s instanceof Date)) {
+            var d = $scope.dateToString(s);
+        }
+        else d = s;
+        var res = String(d).search(dateReg) != -1;
         return res;
+    }
+    $scope.testDate = function (s) {
+        var res;
+        var d = "";
+        if (s == '' ||  s == null  ) {
+            return 0
+        }
+        else if (s != '' || s==undefined) {
+           // alert(s)
+            if (s && (s instanceof Date)) {
+                var d = $scope.dateToString(s);
+            }
+            else d = s;
+            var test = String(d).search(dateReg) != -1;
+            if (test)
+                return 1;
+            else
+                return 2
+        }
+
+            
+       
     }
 
 });

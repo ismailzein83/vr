@@ -56,7 +56,16 @@
         $('#Zoneddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+        $('#dropdownZones').on('show.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        });
 
+        //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('#dropdownZones').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        });
+
+        
         $('.dropdown-custom').on('mouseenter', function () {
             var $this = $(this);
             clearTimeout(dropdownHidingTimeoutHandlerz);

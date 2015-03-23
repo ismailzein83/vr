@@ -1,6 +1,13 @@
 ﻿appControllers.controller('PriorityController',
     function PriorityController($scope, $http) {
-       
+        $('#dropdownSup').on('show.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        });
+
+        //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('#dropdownSup').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        })
         $scope.subViewConnector.getActionData = function () {
             return {
                 $type: "TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities",

@@ -12,17 +12,39 @@
         $scope.isvalidcompDate = function (model) {
             var s = "required-inpute";
             if ($scope[model] != undefined && $scope[model]!="") {
-                var d = $scope.dateToString($scope[model]);
+                var d = $scope[model];
                 s = ($scope.isDate(d)) ? "" : "required-inpute";
             }
             return s ;
            
 
         }
+
+        
+        $scope.initErrortooltipBED = function () {
+          
+            if ($scope.showtd == true) {
+                if (!$scope.isDate($scope.BEDDate)) {
+                    var msg = "" ;
+                    if (typeof ($scope.BEDDate) == "object" || typeof ($scope.BEDDate) == "string")
+                        msg = "Begin Effective Date is required.";
+                    if (typeof ($scope.BEDDate) == "undefined")
+                        msg = "Begin Effective Date has an invalide format.";
+
+                    $scope.msgd = msg
+
+                    return true;
+                }
+            }
+            else
+                return false
+
+        }
         $scope.subViewConnector = {};
         $scope.validateForm = function () {
             var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
-            return ($scope.ruletype.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || (obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+             
+            return ($scope.ruletype.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
         }
         
         $scope.routeRule = null;
@@ -52,8 +74,7 @@
                  $scope.routeRule = response;
                  var tab = [];
                  $scope.routetype = $scope.routeTemplates[0];
-                // alert($scope.routeRule.BeginEffectiveDate);
-                 $scope.BEDDate =$scope.routeRule.BeginEffectiveDate;
+                 $scope.BEDDate = new Date($scope.routeRule.BeginEffectiveDate);
                  $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
                  $scope.Reason = $scope.routeRule.Reason;
                  $scope.ruletype = null;
