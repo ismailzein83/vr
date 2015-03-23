@@ -18,11 +18,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             this.CDRs = new HashSet<CDR>();
             this.CDRs1 = new HashSet<CDR>();
-            this.CDRs2 = new HashSet<CDR>();
             this.NormalizationRules = new HashSet<NormalizationRule>();
-            this.NormalizationRules1 = new HashSet<NormalizationRule>();
             this.SourceMappings = new HashSet<SourceMapping>();
-            this.SourceMappings1 = new HashSet<SourceMapping>();
         }
     
         public int Id { get; set; }
@@ -31,12 +28,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual ICollection<CDR> CDRs { get; set; }
         public virtual ICollection<CDR> CDRs1 { get; set; }
-        public virtual ICollection<CDR> CDRs2 { get; set; }
         public virtual ICollection<NormalizationRule> NormalizationRules { get; set; }
-        public virtual ICollection<NormalizationRule> NormalizationRules1 { get; set; }
         public virtual ICollection<SourceMapping> SourceMappings { get; set; }
-        public virtual ICollection<SourceMapping> SourceMappings1 { get; set; }
         public virtual Switch_DatabaseConnections Switch_DatabaseConnections { get; set; }
-        public virtual Switch_DatabaseConnections Switch_DatabaseConnections1 { get; set; }
     }
 }

@@ -21,7 +21,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual EmailReceiverType EmailReceiverType { get; set; }
         public virtual EmailTemplate EmailTemplate { get; set; }
-        public virtual EmailReceiverType EmailReceiverType1 { get; set; }
-        public virtual EmailTemplate EmailTemplate1 { get; set; }
     }
 }

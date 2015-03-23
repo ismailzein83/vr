@@ -45,7 +45,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual SwitchProfile SwitchProfile { get; set; }
         public virtual Import Import { get; set; }
         public virtual SwitchProfile SwitchProfile1 { get; set; }
-        public virtual Import Import1 { get; set; }
-        public virtual SwitchProfile SwitchProfile2 { get; set; }
     }
 }
