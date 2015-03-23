@@ -178,7 +178,7 @@ namespace TOne.LCR.Business
         //        return false;
         //}
 
-        public void ExecuteOptionsActions(bool retrieveFromLCR, int? nbOfOptions, bool onlyImportantFilters)
+        public void ExecuteOptionsActions(bool retrieveFromLCR, int? nbOfOptions)
         {
             int maxOptions = nbOfOptions.HasValue ? nbOfOptions.Value : int.MaxValue;
 
@@ -206,13 +206,14 @@ namespace TOne.LCR.Business
                 if (current == null)
                     break;
 
-                if (!onlyImportantFilters && current.Rate > _route.Rate)
+                if ((current.Setting == null || !current.Setting.IgnoreRateCheck)
+                    && current.Rate > _route.Rate)
                     break;
 
                 using (RouteOptionBuildContext optionBuildContext = new RouteOptionBuildContext(current, this))
                 {
                     bool removeOption;
-                    optionBuildContext.ExecuteOptionActions(onlyImportantFilters, executionPath, out removeOption);
+                    optionBuildContext.ExecuteOptionActions(executionPath, out removeOption);
                     if (!removeOption && (current.Setting == null || !current.Setting.IsBlocked))
                         validOptions++;
                     if (!removeOption)

@@ -31,14 +31,6 @@ namespace TOne.LCR.Entities
                 ErrorMessage = invalidMessage
             };
         }
-
-        public virtual bool IsImportant
-        {
-            get
-            {
-                return true;
-            }
-        }
     }
 
     public class RouteOptionActionResult

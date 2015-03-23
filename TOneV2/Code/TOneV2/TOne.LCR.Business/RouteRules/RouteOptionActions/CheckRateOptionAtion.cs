@@ -9,13 +9,6 @@ namespace TOne.LCR.Business
 {
     class CheckRateOptionAtion : BaseRouteOptionAction
     {
-        public override bool IsImportant
-        {
-            get
-            {
-                return false;
-            }
-        }
         public override RouteOptionActionResult Execute(IRouteOptionBuildContext context, object actionData)
         {
             if (Decimal.Compare(context.Route.Rate, context.RouteOption.Rate) < 0)

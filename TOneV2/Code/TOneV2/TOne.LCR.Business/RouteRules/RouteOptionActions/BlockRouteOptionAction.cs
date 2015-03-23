@@ -9,14 +9,6 @@ namespace TOne.LCR.Business
 {
     public class BlockRouteOptionAction : BaseRouteOptionAction
     {
-        public override bool IsImportant
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override Type GetActionDataType()
         {
             return typeof(BlockRouteOptionActionData);

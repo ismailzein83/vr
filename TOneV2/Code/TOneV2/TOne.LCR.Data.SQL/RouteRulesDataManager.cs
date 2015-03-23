@@ -20,29 +20,11 @@ namespace TOne.LCR.Data.SQL
             List<RouteRule> routeRules = new List<RouteRule>();
             routeRules.AddRange(GetBlockRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
             routeRules.AddRange(GetOverrideRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
+            routeRules.AddRange(GetPriorityRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
+
             return routeRules;
         }
-        public void SaveRouteRule(RouteRule rule)
-        {
-            object RouteRuleId ;
-            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId ,
-                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
-                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
-                (int)rule.Type,
-                rule.BeginEffectiveDate,
-                rule.EndEffectiveDate,
-                rule.Reason,
-                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
-                );
-        }
 
-        public List<RouteRule> GetAllRouteRule() {            
-            return GetItemsSP("[LCR].[sp_RouteRuleDefinition_GetAll]", RouteRuleMapper);
-        }
-        public RouteRule GetRouteRuleDetails(int RouteRuleId)
-        {
-            return GetItemSP("[LCR].[sp_RouteRuleDefinition_GetByRouteRuleId]", RouteRuleMapper, RouteRuleId);
-        }
         private List<RouteRule> GetBlockRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
@@ -85,6 +67,92 @@ namespace TOne.LCR.Data.SQL
                 );
             return routeRules;
         }
+        public void SaveRouteRule(RouteRule rule)
+        {
+            object RouteRuleId;
+            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
+                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+                (int)rule.Type,
+                rule.BeginEffectiveDate,
+                rule.EndEffectiveDate,
+                rule.Reason,
+                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
+                );
+        }
+
+        public List<RouteRule> GetAllRouteRule()
+        {
+            return GetItemsSP("[LCR].[sp_RouteRuleDefinition_GetAll]", RouteRuleMapper);
+        }
+        public RouteRule GetRouteRuleDetails(int RouteRuleId)
+        {
+            return GetItemSP("[LCR].[sp_RouteRuleDefinition_GetByRouteRuleId]", RouteRuleMapper, RouteRuleId);
+        }
+        private List<RouteRule> GetPriorityRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
+        {
+            List<RouteRule> routeRules = new List<RouteRule>();
+            DataTable dtZoneIds = BuildZoneIdsTable(lstZoneIds);
+            ExecuteReaderSPCmd("[LCR].[sp_RoutingRules_GetPriorityRules]",
+                (reader) =>
+                {
+                    string currentCustomer = null;
+                    string currentCode = null;
+                    List<PriorityOption> priorityOptions = null;
+                    while (reader.Read())
+                    {
+                        PriorityOption priorityOption = new PriorityOption()
+                        {
+                            SupplierId = reader["SupplierID"] as string,
+                            Percentage = GetReaderValue<byte>(reader, "Percentage"),
+                            Priority = GetReaderValue<byte>(reader, "Priority"),
+                            Force = GetReaderValue<byte>(reader, "Type") == 1 ? true : false
+                        };
+
+                        string customerID = reader["CustomerID"] as string;
+                        string code = reader["Code"] as string;
+
+                        if (currentCode != code || currentCustomer != customerID)
+                        {
+
+                            //TODO Create RouteRule
+
+                            currentCode = code;
+                            currentCustomer = customerID;
+                            RouteRule rule = new RouteRule();
+                            MultipleSelection<string> customers = new MultipleSelection<string>();
+                            customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+                            customers.SelectedValues = new List<string>();
+                            customers.SelectedValues.Add(currentCustomer);
+                            rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+                            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+                            priorityOptions = new List<PriorityOption>();
+                            rule.ActionData = new PriorityRouteActionData() { Options = priorityOptions };
+                            rule.CodeSet = GetBaseCodeSet(currentCode, 0, (reader["IncludeSubCodes"] as string) == "Y", reader["ExcludedCodes"] as string);
+                            rule.Type = RouteRuleType.RouteRule;
+                            rule.Reason = reader["Reason"] as string;
+                            routeRules.Add(rule);
+
+                        }
+
+                        priorityOptions.Add(priorityOption);
+
+                    }
+                },
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneIds", SqlDbType.Structured);
+                    dtPrm.TypeName = "LCR.IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                }
+                );
+            return routeRules;
+        }
 
         private List<RouteRule> GetOverrideRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
@@ -100,11 +168,8 @@ namespace TOne.LCR.Data.SQL
                         string code = reader["Code"] as string;
                         int zoneID = GetReaderValue<int>(reader, "ZoneID");
                         bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
-                        string options = reader["Options"] as string;
-                        if (options == null)
-                            continue;
+                        string options = reader["RouteOptions"] as string;
                         string excludedCodes = reader["ExcludedCodes"] as string;
-                        bool isBlock = reader["IsBlock"] as string == "Y" ? true : false;
                         MultipleSelection<string> customers = new MultipleSelection<string>();
                         customers.SelectionOption = MultipleSelectionOption.OnlyItems;
                         customers.SelectedValues = new List<string>();
@@ -114,7 +179,7 @@ namespace TOne.LCR.Data.SQL
                         rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
                         rule.Reason = reader["Reason"] as string;
                         rule.Type = RouteRuleType.RouteRule;
-                        rule.ActionData = GetOverrideActionData(options, isBlock);
+                        rule.ActionData = GetOverrideActionData(options);
 
                         rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
                         routeRules.Add(rule);
@@ -134,35 +199,22 @@ namespace TOne.LCR.Data.SQL
             return routeRules;
         }
 
-        private OverrideRouteActionData GetOverrideActionData(string options, bool isBlock)
+        private OverrideRouteActionData GetOverrideActionData(string options)
         {
             OverrideRouteActionData optionData = new OverrideRouteActionData();
-            if (isBlock)
+            optionData.Options = new List<OverrideOption>();
+            string[] supplierOptions = options.Split('|');
+            foreach (string option in supplierOptions)
             {
+                string[] supplierDetail = option.Split(',');
+                string supplierid = supplierDetail[0];
+                short percentage = 0;
+                if (supplierDetail.Length > 1)
+                    percentage = string.IsNullOrEmpty(supplierDetail[1]) ? (short)0 : Convert.ToInt16(supplierDetail[1]);
+                OverrideOption overrideOption = new OverrideOption() { SupplierId = supplierid, Percentage = percentage };
+                optionData.Options.Add(overrideOption);
+            }
 
-                optionData.BackupOptions = new List<OverrideOption>();
-                string[] supplierOptions = options.Split('|');
-                foreach (string option in supplierOptions)
-                {
-                    OverrideOption overrideOption = new OverrideOption() { SupplierId = option, Percentage = null };
-                    optionData.BackupOptions.Add(overrideOption);
-                }
-            }
-            else
-            {
-                optionData.Options = new List<OverrideOption>();
-                string[] supplierOptions = options.Split('|');
-                foreach (string option in supplierOptions)
-                {
-                    string[] supplierDetail = option.Split(',');
-                    string supplierid = supplierDetail[0];
-                    short percentage = 0;
-                    if (supplierDetail.Length > 1)
-                        percentage = string.IsNullOrEmpty(supplierDetail[1]) ? (short)0 : Convert.ToInt16(supplierDetail[1]);
-                    OverrideOption overrideOption = new OverrideOption() { SupplierId = supplierid, Percentage = percentage };
-                    optionData.Options.Add(overrideOption);
-                }
-            }
             return optionData;
         }
 
@@ -209,7 +261,7 @@ namespace TOne.LCR.Data.SQL
                 RouteRuleId = (int)reader["RouteRuleId"],
                 CarrierAccountSet = reader["CarrierAccountSet"] != null ? (BaseCarrierAccountSet)Serializer.Deserialize(reader["CarrierAccountSet"] as string) : null,
                 CodeSet = reader["CodeSet"] != null ? (BaseCodeSet)Serializer.Deserialize(reader["CodeSet"] as string) : null,
-                ActionData = (reader["ActionData"] == System.DBNull.Value)? null : (Object)Serializer.Deserialize(reader["ActionData"] as string) ,
+                ActionData = (reader["ActionData"] == System.DBNull.Value) ? null : (Object)Serializer.Deserialize(reader["ActionData"] as string),
                 Type = (RouteRuleType)((int)reader["Type"]),
                 BeginEffectiveDate = (DateTime)reader["BeginEffectiveDate"],
                 EndEffectiveDate = (reader["EndEffectiveDate"] == System.DBNull.Value) ? (DateTime?)null : (DateTime)reader["EndEffectiveDate"],

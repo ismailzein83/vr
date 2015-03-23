@@ -45,17 +45,12 @@ namespace TOne.LCR.Business
 
         #region Private/Internal Methods
 
-        internal void ExecuteOptionActions(bool onlyImportantFilters, ActionExecutionPath<BaseRouteOptionAction> executionPath, out bool removeOption)
+        internal void ExecuteOptionActions(ActionExecutionPath<BaseRouteOptionAction> executionPath, out bool removeOption)
         {
             removeOption = false;
             ActionExecutionStep<BaseRouteOptionAction> currentStep = executionPath.FirstStep;
             while(currentStep != null)
-            {
-                if (onlyImportantFilters && !currentStep.Action.IsImportant)
-                {
-                    currentStep = currentStep.NextStep;
-                    continue;
-                }
+            {               
 
                 Type actionDataType = currentStep.Action.GetActionDataType();
                 if (actionDataType == null)

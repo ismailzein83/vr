@@ -25,8 +25,8 @@ namespace TOne.LCR.Business
 
             RouteActionResult rslt = new RouteActionResult();
 
-            BuildRouteFromOverrideOptions(context, overrideActionData.Options);
-            context.ExecuteOptionsActions(false, null, false);
+            BuildRouteFromOverrideOptions(context, overrideActionData.Options, false);
+            context.ExecuteOptionsActions(false, null);
             if(context.Route.Options.SupplierOptions.Count == 0)
             {
                 switch(overrideActionData.NoOptionAction)
@@ -39,8 +39,8 @@ namespace TOne.LCR.Business
                     case OverrideRouteNoOptionAction.BackupRoute:
                         if (overrideActionData.BackupOptions != null)
                         {
-                            BuildRouteFromOverrideOptions(context, overrideActionData.BackupOptions);
-                            context.ExecuteOptionsActions(false, null, true);
+                            BuildRouteFromOverrideOptions(context, overrideActionData.BackupOptions, true);
+                            context.ExecuteOptionsActions(false, null);
                         }
                         break;
                 }
@@ -48,7 +48,7 @@ namespace TOne.LCR.Business
             return rslt;
         }
 
-        void BuildRouteFromOverrideOptions(IRouteBuildContext context, List<OverrideOption> overrideOptions)
+        void BuildRouteFromOverrideOptions(IRouteBuildContext context, List<OverrideOption> overrideOptions, bool ignoreRateCheck)
         {
             var route = context.Route;
             route.Options = new RouteOptions();
@@ -57,7 +57,15 @@ namespace TOne.LCR.Business
             {
                 RouteSupplierOption routeOption;
                 if (context.TryBuildSupplierOption(overrideOption.SupplierId, overrideOption.Percentage, out routeOption))
+                {
+                    if(ignoreRateCheck)
+                    {
+                        if (routeOption.Setting == null)
+                            routeOption.Setting = new OptionSetting();
+                        routeOption.Setting.IgnoreRateCheck = true;
+                    }
                     route.Options.SupplierOptions.Add(routeOption);
+                }
             }
         }
     }

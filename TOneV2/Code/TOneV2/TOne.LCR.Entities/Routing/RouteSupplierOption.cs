@@ -76,5 +76,7 @@ namespace TOne.LCR.Entities
         public bool IsBlocked { get; set; }
 
         public int Priority { get; set; }
+
+        public bool IgnoreRateCheck { get; set; }
     }
 }

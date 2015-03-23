@@ -41,6 +41,8 @@ namespace TOne.LCR.Business
                     if (routeOption.Setting == null)
                         routeOption.Setting = new OptionSetting();
                     routeOption.Setting.Priority = priorityOption.Priority;
+                    if (priorityOption.Force)
+                        routeOption.Setting.IgnoreRateCheck = true;
                     if (priorityOption.Percentage.HasValue)
                         routeOption.Setting.Percentage = priorityOption.Percentage;
                 }

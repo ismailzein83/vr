@@ -4,7 +4,7 @@ namespace TOne.LCR.Entities
 {
     public interface IRouteBuildContext
     {
-        void ExecuteOptionsActions(bool retrieveFromLCR, int? nbOfOptions, bool onlyImportantFilters);
+        void ExecuteOptionsActions(bool retrieveFromLCR, int? nbOfOptions);
         void BlockRoute();
         //void BuildLCR();
         RouteDetail Route { get; }

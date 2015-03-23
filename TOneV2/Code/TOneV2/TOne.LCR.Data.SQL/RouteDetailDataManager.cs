@@ -65,7 +65,7 @@ namespace TOne.LCR.Data.SQL
         {
             DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
             prepareInfo.StreamWriter.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
-                           routeDetail.Options != null ? Serialize(routeDetail.Options) : null);
+                           routeDetail.Options != null ? Serialize2(routeDetail.Options) : null);
         }
 
         public object FinishDBApplyStream(object stream)
