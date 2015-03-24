@@ -105,7 +105,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         bindToController: true,
         compile: function (element, attrs) {
 
-            console.log(angular.element(element.children()[0]));
             angular.element(element.children()[0]).on('show.bs.dropdown', function (e) {
                 $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
             });
