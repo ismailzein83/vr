@@ -63,10 +63,9 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
                 { name: "Jacob", value: 27 }];
     
         this.selectedRoutes = function (items, item,data) {
-
-            controller.lstselectedroute = { name: "Jacob", value: 27 };
-            console.log(item);
-
+           console.log(data[0]);
+           controller.lstselectedroute = data[0]; //{ name: "Jacob", value: 27 };
+            
             //if (items.length > 0)
             //    console.log(items[items.length - 1].name);
             

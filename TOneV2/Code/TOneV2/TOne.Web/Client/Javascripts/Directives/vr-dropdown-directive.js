@@ -107,7 +107,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getLastSelectedValue = function () {
-
                 if (controller.lastselectedvalue !== undefined){
                     var x = controller.getObjectText(controller.lastselectedvalue);
                     if (x == undefined) return controller.getObjectText(controller.datasource[0]);
@@ -176,9 +175,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         
 
                         if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                            var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
-                            ctrl.lastselectedvalue = item;
-                            if (item !== undefined) ctrl.selectValue(null, item);
+                            var item = ctrl.onselectionchange() (ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
+                            if (item !== undefined) {
+                                ctrl.lastselectedvalue = item;
+                                ctrl.selectValue(null, item);
+                            }
 
                         }
                             
