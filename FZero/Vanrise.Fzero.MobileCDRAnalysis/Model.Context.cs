@@ -40,7 +40,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
+        public DbSet<NumberProfileNew> NumberProfileNews { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
+        public DbSet<Peak_Hoursold> Peak_Hoursold { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
@@ -59,7 +61,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<StrategyPeriod> StrategyPeriods { get; set; }
         public DbSet<StrategyThreshold> StrategyThresholds { get; set; }
         public DbSet<Subscriber_Values> Subscriber_Values { get; set; }
-        public DbSet<Subscriber_ValuesNew> Subscriber_ValuesNew { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }

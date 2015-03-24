@@ -21,8 +21,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int CreatedBy { get; set; }
     
         public virtual Permission Permission { get; set; }
-        public virtual Permission Permission1 { get; set; }
         public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
     }
 }

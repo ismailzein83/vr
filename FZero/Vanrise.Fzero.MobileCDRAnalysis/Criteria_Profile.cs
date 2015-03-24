@@ -22,12 +22,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             this.StrategyPeriods = new HashSet<StrategyPeriod>();
             this.StrategyThresholds = new HashSet<StrategyThreshold>();
             this.Subscriber_Values = new HashSet<Subscriber_Values>();
-            this.Related_Criteria2 = new HashSet<Related_Criteria>();
-            this.Related_Criteria3 = new HashSet<Related_Criteria>();
-            this.Strategy_Min_Values1 = new HashSet<Strategy_Min_Values>();
-            this.StrategyPeriods1 = new HashSet<StrategyPeriod>();
-            this.StrategyThresholds1 = new HashSet<StrategyThreshold>();
-            this.Subscriber_Values1 = new HashSet<Subscriber_Values>();
         }
     
         public int Id { get; set; }
@@ -39,11 +33,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
         public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
         public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
-        public virtual ICollection<Related_Criteria> Related_Criteria2 { get; set; }
-        public virtual ICollection<Related_Criteria> Related_Criteria3 { get; set; }
-        public virtual ICollection<Strategy_Min_Values> Strategy_Min_Values1 { get; set; }
-        public virtual ICollection<StrategyPeriod> StrategyPeriods1 { get; set; }
-        public virtual ICollection<StrategyThreshold> StrategyThresholds1 { get; set; }
-        public virtual ICollection<Subscriber_Values> Subscriber_Values1 { get; set; }
     }
 }
