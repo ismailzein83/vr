@@ -466,6 +466,7 @@
     <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
+    <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-ondemand.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
