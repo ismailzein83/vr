@@ -52,7 +52,7 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
         this.output = [];
         
         this.lstselectedcustomer = '';
-        this.lstselectedroute = '';
+        
 
         this.selectedvalues = function (items) {
             $scope.selectedcustomers = items;
@@ -62,12 +62,14 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
                 { name: "Tiancum", value: 43 },
                 { name: "Jacob", value: 27 }];
 
+        this.lstselectedroute = { name: "Jacob", value: 27 };
+
         this.selectedRoutes = function (items,item) {
-            if (items.length > 0)
-                console.log(items[items.length - 1].name);
-            console.log(item);
-            if (item.name == "Tiancum")
-                return { name: "Jacob", value: 27 };
+            //if (items.length > 0)
+            //    console.log(items[items.length - 1].name);
+            //console.log(item);
+            //if (item.name == "Tiancum")
+            //    return { name: "Jacob", value: 27 };
         }
 
         this.onsearch = function (text) {

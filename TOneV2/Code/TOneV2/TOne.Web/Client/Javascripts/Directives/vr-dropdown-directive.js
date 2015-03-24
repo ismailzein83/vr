@@ -91,7 +91,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getSelectText = function () {
-
+                
                 var selectedVal = [];
 
                 for (var i = 0 ; i < controller.selectedValues.length ; i++) {
@@ -107,8 +107,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getLastSelectedValue = function () {
-                if (controller.selectedValues.length > 0)
-                    return controller.getObjectText(controller.selectedValues[controller.selectedValues.length -1]);
+                
+                if (controller.lastselectedvalue !== undefined)
+                    return controller.getObjectText(controller.lastselectedvalue);
                 else
                     return controller.getObjectText(controller.datasource[0]);
             };
