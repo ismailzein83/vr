@@ -19,10 +19,17 @@ namespace Vanrise.Queueing
         public override bool TryDequeue(Action<T> processItem)
         {
             T item;
-            if (_queue.TryPeek(out item))
+            if (_queue.TryDequeue(out item))
             {
-                processItem(item);
-                _queue.TryDequeue(out item);
+                try
+                {
+                    processItem(item);
+                }
+                catch
+                {
+                    _queue.Enqueue(item);//enqueue the item again if not processed
+                    throw;
+                }                
                 return true;
             }
             else
