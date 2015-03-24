@@ -10,15 +10,15 @@ namespace TOne.Entities
     {
         [ConfigParameterName(DefaultValue="03:00:00")]
         DropOldRoutingDatabasesInterval = 1,
-        [ConfigParameterName(DefaultValue = "500000")]
+        [ConfigParameterName(DefaultValue = "1000000")]
         BCPBatchSize = 2,
-        [ConfigParameterName(DefaultValue = "50000")]
+        [ConfigParameterName(DefaultValue = "100000")]
         LoadZoneBatchSize = 3,
-        [ConfigParameterName(DefaultValue = "50000")]
+        [ConfigParameterName(DefaultValue = "100000")]
         LoadCalculatedRatesBatchSize = 4,
-        [ConfigParameterName(DefaultValue = "3")]
+        [ConfigParameterName(DefaultValue = "2")]
         RoutingCodePrefixLength = 5,
-        [ConfigParameterName(DefaultValue = "500000")]
+        [ConfigParameterName(DefaultValue = "1000000")]
         RouteBCPBatchSize = 6
     }
 
