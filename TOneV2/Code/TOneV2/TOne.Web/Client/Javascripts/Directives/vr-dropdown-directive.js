@@ -170,10 +170,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             }
                         });
 
-                        if(typeof (ctrl.onselectionchange()) !== "undefined") {
+                        if (typeof (ctrl.onselectionchange()) !== "undefined") {
 
-                            var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue);
-                            if(item !== undefined) ctrl.selectValue(null, item);
+                            var item = ctrl.onselectionchange()(ctrl.datasource, ctrl.selectedValues, ctrl.lastselectedvalue);
+                            ctrl.lastselectedvalue = item;
+                            if (item !== undefined) ctrl.selectValue(null, item);
 
                         }
                             
