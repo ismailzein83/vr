@@ -57,22 +57,26 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.selectValue = function (e, item) {
-                if (! controller.singleSelection()) {
-                    controller.muteAction(e);
-                }
-                
-                var index = null;
-                    
-                try {
-                    var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
-                }
-                catch (e) {
-
-                }
-                if (index >= 0)
-                    controller.selectedValues.splice(index, 1);
-                else
+                if (controller.singleSelection()) {
+                    controller.selectedValues = [];
+                    controller.selectedValues.length = 0;
                     controller.selectedValues.push(item);
+                }
+                else {
+                    controller.muteAction(e);
+                    var index = null;
+
+                    try {
+                        var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
+                    }
+                    catch (e) {
+
+                    }
+                    if (index >= 0)
+                        controller.selectedValues.splice(index, 1);
+                    else
+                        controller.selectedValues.push(item);
+                }
             };
 
             this.clearAllSelected = function (e) {
