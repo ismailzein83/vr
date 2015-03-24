@@ -12,26 +12,15 @@ namespace TOne.LCR.Data.SQL
 {
     public class CodeMatchDataManager : RoutingDataManager, ICodeMatchDataManager
     {
-        public class DBApplyPrepareInfo
-        {
-            public string FilePath { get; set; }
-            public System.IO.StreamWriter StreamWriter { get; set; }
-        }
-
         public object InitialiazeStreamForDBApply()
         {
-            string filePath = GetFilePathForBulkInsert();
-            return new DBApplyPrepareInfo
-            {
-                FilePath = filePath,
-                StreamWriter = new System.IO.StreamWriter(filePath)
-            };
+            return base.InitializeStreamForBulkInsert();
         }
 
         public void WriteCodeMatchToStream(CodeMatch codeMatch, object stream)
         {
-            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
-            prepareInfo.StreamWriter.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", 
+            StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", 
                 codeMatch.Code, codeMatch.SupplierId, codeMatch.SupplierCode, codeMatch.SupplierCodeId, codeMatch.SupplierZoneId, 
                 codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.Rate : null, codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.ServicesFlag : null,
                 codeMatch.SupplierRate != null ? (object)codeMatch.SupplierRate.PriceListId : null));
@@ -39,13 +28,12 @@ namespace TOne.LCR.Data.SQL
 
         public object FinishDBApplyStream(object stream)
         {
-            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
-            prepareInfo.StreamWriter.Close();
-            prepareInfo.StreamWriter.Dispose();
-            return new BulkInsertInfo
+            StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
             {
                 TableName = "CodeMatch",
-                DataFilePath = prepareInfo.FilePath,
+                Stream = streamForBulkInsert,
                 TabLock = true,
                 FieldSeparator = '^'
             };
@@ -58,7 +46,7 @@ namespace TOne.LCR.Data.SQL
 
         public void ApplyCodeMatchesToDB(Object preparedCodeMatches)
         {
-            InsertBulkToTable(preparedCodeMatches as BulkInsertInfo);
+            InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
         }
 
         #region Private Methods

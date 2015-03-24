@@ -36,7 +36,7 @@ namespace TOne.LCR.Data.SQL
             {
                 foreach (var o in routeOptions.SupplierOptions)
                 {
-                    str.AppendFormat("{0}^{1}^{2}^{3}^{4}^{5}^{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, 
+                    str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}|", o.SupplierId, o.SupplierZoneId, o.Rate, 
                         o.Setting != null ? o.Setting.Percentage : null,
                         o.Setting != null ?  (object)o.Setting.Priority : null,  o.Setting != null ?  (object)o.Setting.IsBlocked : null, 
                         o.ServicesFlag);
@@ -45,38 +45,26 @@ namespace TOne.LCR.Data.SQL
             return str.ToString();
         }
 
-        public class DBApplyPrepareInfo
-        {
-            public string FilePath { get; set; }
-            public System.IO.StreamWriter StreamWriter { get; set; }
-        }
-
         public object InitialiazeStreamForDBApply()
         {
-            string filePath = GetFilePathForBulkInsert();
-            return new DBApplyPrepareInfo
-            {
-                FilePath = filePath,
-                StreamWriter = new System.IO.StreamWriter(filePath)
-            };
+            return base.InitializeStreamForBulkInsert();
         }
 
         public void WriteRouteToStream(RouteDetail routeDetail, object stream)
         {
-            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
-            prepareInfo.StreamWriter.WriteLine("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
+            StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
                            routeDetail.Options != null ? Serialize2(routeDetail.Options) : null);
         }
 
         public object FinishDBApplyStream(object stream)
         {
-            DBApplyPrepareInfo prepareInfo = stream as DBApplyPrepareInfo;
-            prepareInfo.StreamWriter.Close();
-            prepareInfo.StreamWriter.Dispose();
-            return new BulkInsertInfo
+            StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
             {
                 TableName = "Route",
-                DataFilePath = prepareInfo.FilePath,
+                Stream = streamForBulkInsert,
                 TabLock = true,
                 FieldSeparator = '^'
             };
@@ -84,7 +72,7 @@ namespace TOne.LCR.Data.SQL
         
         public void ApplyRouteDetailsToDB(Object preparedRouteDetails)
         {
-            InsertBulkToTable(preparedRouteDetails as BulkInsertInfo);
+            InsertBulkToTable(preparedRouteDetails as BaseBulkInsertInfo);
         }
 
         public void CreateIndexesOnTable()
