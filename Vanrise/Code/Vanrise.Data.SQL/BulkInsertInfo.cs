@@ -5,15 +5,37 @@ using System.Text;
 
 namespace Vanrise.Data.SQL
 {
-    public class BulkInsertInfo
+    public abstract class BaseBulkInsertInfo
     {
         public string TableName { get; set; }
-        public string DataFilePath { get; set; }
 
         public bool TabLock { get; set; }
 
         public bool KeepIdentity { get; set; }
 
         public char FieldSeparator { get; set; }
+
+        public abstract string GetDataFilePath();
     }
+
+    public class StreamBulkInsertInfo : BaseBulkInsertInfo
+    {
+        public StreamForBulkInsert Stream { get; set; }
+
+        public override string GetDataFilePath()
+        {
+            return Stream.FilePath;
+        }
+    }
+
+    public class BulkInsertInfo : BaseBulkInsertInfo
+    {
+        public string DataFilePath { get; set; }
+
+        public override string GetDataFilePath()
+        {
+            return DataFilePath;
+        }
+    }
+
 }

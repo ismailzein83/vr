@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="BaseSQLDataManager.cs" />
     <Compile Include="BulkInsertInfo.cs" />
+    <Compile Include="StreamForBulkInsert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

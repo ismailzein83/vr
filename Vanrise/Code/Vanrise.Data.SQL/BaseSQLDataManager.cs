@@ -279,7 +279,7 @@ namespace Vanrise.Data.SQL
 
         #endregion
 
-        #region DataTable
+        #region Bulk Insert
 
         protected void WriteDataTableToDB(DataTable table, SqlBulkCopyOptions options, bool withBatchSize = true)
         {
@@ -301,17 +301,26 @@ namespace Vanrise.Data.SQL
             table.Dispose();
         }
 
+        protected StreamForBulkInsert InitializeStreamForBulkInsert()
+        {
+            string filePath = GetFilePathForBulkInsert();
+            return new StreamForBulkInsert(filePath);
+        }
+
+
         protected string GetFilePathForBulkInsert()
         {
             return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
         }
 
-        protected void InsertBulkToTable(BulkInsertInfo bulkInsertInfo)
+        protected void InsertBulkToTable(BaseBulkInsertInfo bulkInsertInfo)
         {
             if (bulkInsertInfo == null)
                 throw new ArgumentNullException("bulkInsertInfo");
-            if (String.IsNullOrEmpty(bulkInsertInfo.DataFilePath))
-                throw new ArgumentNullException("bulkInsertInfo.DataFilePath");
+            
+            string dataFilePath = bulkInsertInfo.GetDataFilePath();
+            if (String.IsNullOrEmpty(dataFilePath))
+                throw new ArgumentNullException("bulkInsertInfo.GetDataFilePath()");
             if (String.IsNullOrEmpty(bulkInsertInfo.TableName))
                 throw new ArgumentNullException("bulkInsertInfo.TableName");
             if(bulkInsertInfo.FieldSeparator == default(char))
@@ -321,7 +330,7 @@ namespace Vanrise.Data.SQL
 
             string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
-            StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000", bulkInsertInfo.TableName, bulkInsertInfo.DataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
+            StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000", bulkInsertInfo.TableName, dataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
             
             if (connStringBuilder.IntegratedSecurity)
                 args.Append(" -T");
@@ -344,7 +353,7 @@ namespace Vanrise.Data.SQL
             processBulkCopy.Start();
             processBulkCopy.WaitForExit();
             string errorMessage = File.ReadAllText(errorFilePath);
-            File.Delete(bulkInsertInfo.DataFilePath);
+            File.Delete(dataFilePath);
             File.Delete(errorFilePath);
             if (!String.IsNullOrWhiteSpace(errorMessage))
                 throw new Exception(errorMessage);
