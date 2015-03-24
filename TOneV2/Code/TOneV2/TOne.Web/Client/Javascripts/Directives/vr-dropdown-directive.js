@@ -99,7 +99,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                     selectedVal.push(controller.getObjectText(controller.selectedValues[i]));
                     if (i == 2) break;
                 }
-                return DropdownService.getSelectText(controller.singleSelection(),controller.selectedValues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                var s = DropdownService.getSelectText(controller.singleSelection(), controller.selectedValues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                console.log("Lbl : " + s);
+                return s;
             };
 
             this.getUlClass = function () {
