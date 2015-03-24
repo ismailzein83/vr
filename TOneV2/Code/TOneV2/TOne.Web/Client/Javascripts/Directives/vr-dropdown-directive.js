@@ -130,10 +130,10 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                $scope.clearDatasource = function () {
-                    if (ctrl.datasource == undefined) return;
-                        ctrl.datasource =[];
-                        ctrl.datasource.length = 0;
+                    $scope.clearDatasource = function () {
+                        if (ctrl.datasource == undefined) return;
+                            ctrl.datasource =[];
+                            ctrl.datasource.length = 0;
                     };
 
                     $scope.search = function () {
@@ -145,8 +145,8 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                                 ctrl.showloading = false;
                                 }, function (msg) {
                                     console.log(msg);
-                        });
-            }
+                            });
+                        }
                     };
 
                     $scope.refreshOutput = function () {
@@ -169,8 +169,13 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             }
                         });
 
-                        if (typeof (ctrl.onselectionchange()) !== "undefined")
-                            ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue);
+                        if(typeof (ctrl.onselectionchange()) !== "undefined") {
+
+                            var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue);
+                            if(item !== undefined) ctrl.selectValue(null, item);
+
+                        }
+                            
             }
     }
             }

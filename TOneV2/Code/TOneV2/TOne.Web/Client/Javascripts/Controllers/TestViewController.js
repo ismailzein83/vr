@@ -66,6 +66,8 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
             if (items.length > 0)
                 console.log(items[items.length - 1].name);
             console.log(item);
+            if (item.name == "Tiancum")
+                return { name: "Jacob", value: 27 };
         }
 
         this.onsearch = function (text) {
