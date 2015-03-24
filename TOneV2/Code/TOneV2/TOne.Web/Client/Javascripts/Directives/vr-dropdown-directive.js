@@ -105,11 +105,12 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         bindToController: true,
         compile: function (element, attrs) {
 
-            $('.dropdown').on('show.bs.dropdown', function (e) {
+            console.log(angular.element(element.children()[0]));
+            angular.element(element.children()[0]).on('show.bs.dropdown', function (e) {
                 $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
             });
 
-            $('.dropdown').on('hide.bs.dropdown', function (e) {
+            angular.element(element.children()[0]).on('hide.bs.dropdown', function (e) {
                 $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
             });
 
