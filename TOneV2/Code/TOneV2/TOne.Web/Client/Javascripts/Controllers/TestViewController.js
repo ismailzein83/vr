@@ -62,9 +62,10 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
                 { name: "Tiancum", value: 43 },
                 { name: "Jacob", value: 27 }];
 
-        this.selectedRoutes = function (items) {
+        this.selectedRoutes = function (items,item) {
             if (items.length > 0)
                 console.log(items[items.length - 1].name);
+            console.log(item);
         }
 
         this.onsearch = function (text) {

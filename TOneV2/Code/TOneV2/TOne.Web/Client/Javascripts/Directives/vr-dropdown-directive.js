@@ -166,12 +166,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                                 var temp = angular.copy(value);
                                 if (ctrl.lastselectedvalue != undefined) ctrl.lastselectedvalue = temp;
                                 if (ctrl.selectedvalues != undefined) ctrl.selectedvalues.push(temp);
-                    }
-                    });
-
+                            }
+                        });
 
                         if (typeof (ctrl.onselectionchange()) !== "undefined")
-                            ctrl.onselectionchange() (ctrl.selectedValues);
+                            ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue);
             }
     }
             }
