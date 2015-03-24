@@ -18,7 +18,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
 
         if (singleSelection) {
             if (length > 0)
-                return values[0];
+                return values[length-1];
             else
                 return dlabel;
         }
@@ -36,6 +36,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
             label = length + labelMsg;
         if (label.length > 21)
             label = label.substring(0, 20) + "..";
+
         return label;
     }
 

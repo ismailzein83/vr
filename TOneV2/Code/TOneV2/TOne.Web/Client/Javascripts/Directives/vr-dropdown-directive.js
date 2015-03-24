@@ -57,26 +57,28 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.selectValue = function (e, item) {
-                    var index = null;
+                if (! controller.singleSelection()) {
                     controller.muteAction(e);
-                    try {
-                        var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
-                    }
-                    catch (e) {
+                }
+                
+                var index = null;
+                    
+                try {
+                    var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
+                }
+                catch (e) {
 
-                    }
-                    if (index >= 0)
-                        controller.selectedValues.splice(index, 1);
-                    else
-                        controller.selectedValues.push(item);
-                controller.onselectionchange()(controller.selectedValues);
+                }
+                if (index >= 0)
+                    controller.selectedValues.splice(index, 1);
+                else
+                    controller.selectedValues.push(item);
             };
 
             this.clearAllSelected = function (e) {
                 controller.muteAction(e);
                 controller.selectedValues = [];
                 controller.selectedValues.length = 0;
-                controller.onselectionchange()(controller.selectedValues);
             };
 
             this.clearFilter = function (e) {
@@ -155,6 +157,10 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                                 if (ctrl.selectedvalues != undefined) ctrl.selectedvalues.push(temp);
                             }
                         });
+
+                        
+                        if (typeof(ctrl.onselectionchange()) !== "undefined" )
+                            ctrl.onselectionchange()(ctrl.selectedValues);
                     }
                 }
             }
