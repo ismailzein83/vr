@@ -53,7 +53,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
     }
 
     function isSingleSelection(type) {
-        if (type == undefined || type == "" || type == "standard") return true;
+        if (type == undefined || type == "" || type == "standard" || type == "menu") return true;
         return false;
     }
 
