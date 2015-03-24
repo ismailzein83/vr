@@ -33,7 +33,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         else if (length == 3)
             label = values[0] + "," + values[1] + "," + values[2];
         else
-            label = length + labelMsg;
+            label = length +" "+ labelMsg;
         if (label.length > 21)
             label = label.substring(0, 20) + "..";
 
