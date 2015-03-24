@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ITPCDATATestingModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="ITPCDATATestingModelStoreContainer">
+          <EntitySet Name="GeneratedCalls" EntityType="ITPCDATATestingModel.Store.GeneratedCalls" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="GeneratedCalls">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CaseID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SourceID" Type="int" Nullable="false" />
+          <Property Name="MobileOperatorID" Type="int" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="PriorityID" Type="int" />
+          <Property Name="ReportingStatusID" Type="int" Nullable="false" />
+          <Property Name="DurationInSeconds" Type="int" Nullable="false" />
+          <Property Name="MobileOperatorFeedbackID" Type="int" />
+          <Property Name="a_number" Type="varchar" MaxLength="20" />
+          <Property Name="b_number" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CLI" Type="varchar" MaxLength="20" />
+          <Property Name="OriginationNetwork" Type="varchar" MaxLength="50" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="AssignedBy" Type="int" />
+          <Property Name="ReportID" Type="int" />
+          <Property Name="AttemptDateTime" Type="datetime2" Nullable="false" Precision="0" />
+          <Property Name="LevelOneComparisonDateTime" Type="datetime2" Precision="0" />
+          <Property Name="LevelTwoComparisonDateTime" Type="datetime2" Precision="0" />
+          <Property Name="FeedbackDateTime" Type="datetime2" Precision="0" />
+          <Property Name="AssignmentDateTime" Type="datetime2" Precision="0" />
+          <Property Name="ImportID" Type="int" />
+          <Property Name="ReportingStatusChangedBy" Type="int" />
+          <Property Name="Level1Comparison" Type="bit" />
+          <Property Name="Level2Comparison" Type="bit" />
+          <Property Name="ToneFeedbackID" Type="int" />
+          <Property Name="FeedbackNotes" Type="varchar" MaxLength="5000" />
+        </EntityType>
+        <Function Name="FillReceivedCalls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LevelTwoCompare" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TruncateGeneratedCalls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ITPCDATATestingModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" p1:LazyLoadingEnabled="true">
+          <FunctionImport Name="FillReceivedCalls" />
+          <FunctionImport Name="LevelTwoCompare" />
+          <FunctionImport Name="TruncateGeneratedCalls" />
+          <EntitySet Name="GeneratedCalls" EntityType="ITPCDATATestingModel.GeneratedCall" />
+        </EntityContainer>
+        <EntityType Name="GeneratedCall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="CaseID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SourceID" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorID" />
+          <Property Type="Int32" Name="StatusID" Nullable="false" />
+          <Property Type="Int32" Name="PriorityID" />
+          <Property Type="Int32" Name="ReportingStatusID" Nullable="false" />
+          <Property Type="Int32" Name="DurationInSeconds" Nullable="false" />
+          <Property Type="Int32" Name="MobileOperatorFeedbackID" />
+          <Property Type="String" Name="a_number" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="b_number" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CLI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OriginationNetwork" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="AssignedTo" />
+          <Property Type="Int32" Name="AssignedBy" />
+          <Property Type="Int32" Name="ReportID" />
+          <Property Type="DateTime" Name="AttemptDateTime" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="LevelOneComparisonDateTime" Precision="0" />
+          <Property Type="DateTime" Name="LevelTwoComparisonDateTime" Precision="0" />
+          <Property Type="DateTime" Name="FeedbackDateTime" Precision="0" />
+          <Property Type="DateTime" Name="AssignmentDateTime" Precision="0" />
+          <Property Type="Int32" Name="ImportID" />
+          <Property Type="Int32" Name="ReportingStatusChangedBy" />
+          <Property Type="Boolean" Name="Level1Comparison" />
+          <Property Type="Boolean" Name="Level2Comparison" />
+          <Property Type="Int32" Name="ToneFeedbackID" />
+          <Property Type="String" Name="FeedbackNotes" MaxLength="5000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ITPCDATATestingModelStoreContainer" CdmEntityContainer="Entities">
+          <FunctionImportMapping FunctionImportName="FillReceivedCalls" FunctionName="ITPCDATATestingModel.Store.FillReceivedCalls" />
+          <FunctionImportMapping FunctionImportName="LevelTwoCompare" FunctionName="ITPCDATATestingModel.Store.LevelTwoCompare" />
+          <FunctionImportMapping FunctionImportName="TruncateGeneratedCalls" FunctionName="ITPCDATATestingModel.Store.TruncateGeneratedCalls" />
+          <EntitySetMapping Name="GeneratedCalls">
+            <EntityTypeMapping TypeName="ITPCDATATestingModel.GeneratedCall">
+              <MappingFragment StoreEntitySet="GeneratedCalls">
+                <ScalarProperty Name="FeedbackNotes" ColumnName="FeedbackNotes" />
+                <ScalarProperty Name="ToneFeedbackID" ColumnName="ToneFeedbackID" />
+                <ScalarProperty Name="Level2Comparison" ColumnName="Level2Comparison" />
+                <ScalarProperty Name="Level1Comparison" ColumnName="Level1Comparison" />
+                <ScalarProperty Name="ReportingStatusChangedBy" ColumnName="ReportingStatusChangedBy" />
+                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
+                <ScalarProperty Name="AssignmentDateTime" ColumnName="AssignmentDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="LevelTwoComparisonDateTime" ColumnName="LevelTwoComparisonDateTime" />
+                <ScalarProperty Name="LevelOneComparisonDateTime" ColumnName="LevelOneComparisonDateTime" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="AssignedBy" ColumnName="AssignedBy" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="OriginationNetwork" ColumnName="OriginationNetwork" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="a_number" ColumnName="a_number" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="MobileOperatorID" ColumnName="MobileOperatorID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

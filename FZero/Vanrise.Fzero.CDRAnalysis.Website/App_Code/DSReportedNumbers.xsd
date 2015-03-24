@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DSReportedNumbers" targetNamespace="http://tempuri.org/DSReportedNumbers.xsd" xmlns:mstns="http://tempuri.org/DSReportedNumbers.xsd" xmlns="http://tempuri.org/DSReportedNumbers.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CDRAnalysisConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CDRAnalysisConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CDRAnalysisConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vw_ReportedNumberTableAdapter" GeneratorDataComponentClassName="vw_ReportedNumberTableAdapter" Name="vw_ReportedNumber" UserDataComponentName="vw_ReportedNumberTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CDRAnalysisConnectionString (Web.config)" DbObjectName="CDRAnalysis.dbo.vw_ReportedNumber" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        CLI, Date_Day, OriginatedVolume, TerminatedVolume, NumberofAttempts, CountDistinctCalledParties, ReportID, MonthYear
+FROM            vw_ReportedNumber</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="CLI" DataSetColumn="CLI" />
+              <Mapping SourceColumn="Date_Day" DataSetColumn="Date_Day" />
+              <Mapping SourceColumn="OriginatedVolume" DataSetColumn="OriginatedVolume" />
+              <Mapping SourceColumn="TerminatedVolume" DataSetColumn="TerminatedVolume" />
+              <Mapping SourceColumn="NumberofAttempts" DataSetColumn="NumberofAttempts" />
+              <Mapping SourceColumn="CountDistinctCalledParties" DataSetColumn="CountDistinctCalledParties" />
+              <Mapping SourceColumn="ReportID" DataSetColumn="ReportID" />
+              <Mapping SourceColumn="MonthYear" DataSetColumn="MonthYear" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vw_ReportedNumberNormalCDRTableAdapter" GeneratorDataComponentClassName="vw_ReportedNumberNormalCDRTableAdapter" Name="vw_ReportedNumberNormalCDR" UserDataComponentName="vw_ReportedNumberNormalCDRTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CDRAnalysisConnectionString (Web.config)" DbObjectName="CDRAnalysis.dbo.vw_ReportedNumberNormalCDR" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        Id, A_Temp, In_Trunk, Switch, ReportID
+FROM            vw_ReportedNumberNormalCDR</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Id" DataSetColumn="Id" />
+              <Mapping SourceColumn="A_Temp" DataSetColumn="A_Temp" />
+              <Mapping SourceColumn="In_Trunk" DataSetColumn="In_Trunk" />
+              <Mapping SourceColumn="Switch" DataSetColumn="Switch" />
+              <Mapping SourceColumn="ReportID" DataSetColumn="ReportID" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DSReportedNumbers" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="False" msprop:Generator_DataSetName="DSReportedNumbers" msprop:Generator_UserDSName="DSReportedNumbers">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="vw_ReportedNumber" msprop:Generator_TableClassName="vw_ReportedNumberDataTable" msprop:Generator_TableVarName="tablevw_ReportedNumber" msprop:Generator_TablePropName="vw_ReportedNumber" msprop:Generator_RowDeletingName="vw_ReportedNumberRowDeleting" msprop:Generator_RowChangingName="vw_ReportedNumberRowChanging" msprop:Generator_RowEvHandlerName="vw_ReportedNumberRowChangeEventHandler" msprop:Generator_RowDeletedName="vw_ReportedNumberRowDeleted" msprop:Generator_UserTableName="vw_ReportedNumber" msprop:Generator_RowChangedName="vw_ReportedNumberRowChanged" msprop:Generator_RowEvArgName="vw_ReportedNumberRowChangeEvent" msprop:Generator_RowClassName="vw_ReportedNumberRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CLI" msprop:Generator_ColumnVarNameInTable="columnCLI" msprop:Generator_ColumnPropNameInRow="CLI" msprop:Generator_ColumnPropNameInTable="CLIColumn" msprop:Generator_UserColumnName="CLI" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="30" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Date_Day" msprop:Generator_ColumnVarNameInTable="columnDate_Day" msprop:Generator_ColumnPropNameInRow="Date_Day" msprop:Generator_ColumnPropNameInTable="Date_DayColumn" msprop:Generator_UserColumnName="Date_Day" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OriginatedVolume" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnOriginatedVolume" msprop:Generator_ColumnPropNameInRow="OriginatedVolume" msprop:Generator_ColumnPropNameInTable="OriginatedVolumeColumn" msprop:Generator_UserColumnName="OriginatedVolume" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TerminatedVolume" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnTerminatedVolume" msprop:Generator_ColumnPropNameInRow="TerminatedVolume" msprop:Generator_ColumnPropNameInTable="TerminatedVolumeColumn" msprop:Generator_UserColumnName="TerminatedVolume" type="xs:int" minOccurs="0" />
+              <xs:element name="NumberofAttempts" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNumberofAttempts" msprop:Generator_ColumnPropNameInRow="NumberofAttempts" msprop:Generator_ColumnPropNameInTable="NumberofAttemptsColumn" msprop:Generator_UserColumnName="NumberofAttempts" type="xs:int" minOccurs="0" />
+              <xs:element name="CountDistinctCalledParties" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCountDistinctCalledParties" msprop:Generator_ColumnPropNameInRow="CountDistinctCalledParties" msprop:Generator_ColumnPropNameInTable="CountDistinctCalledPartiesColumn" msprop:Generator_UserColumnName="CountDistinctCalledParties" type="xs:int" minOccurs="0" />
+              <xs:element name="ReportID" msprop:Generator_ColumnVarNameInTable="columnReportID" msprop:Generator_ColumnPropNameInRow="ReportID" msprop:Generator_ColumnPropNameInTable="ReportIDColumn" msprop:Generator_UserColumnName="ReportID" type="xs:int" />
+              <xs:element name="MonthYear" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnMonthYear" msprop:Generator_ColumnPropNameInRow="MonthYear" msprop:Generator_ColumnPropNameInTable="MonthYearColumn" msprop:Generator_UserColumnName="MonthYear" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="9" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="vw_ReportedNumberNormalCDR" msprop:Generator_TableClassName="vw_ReportedNumberNormalCDRDataTable" msprop:Generator_TableVarName="tablevw_ReportedNumberNormalCDR" msprop:Generator_TablePropName="vw_ReportedNumberNormalCDR" msprop:Generator_RowDeletingName="vw_ReportedNumberNormalCDRRowDeleting" msprop:Generator_RowChangingName="vw_ReportedNumberNormalCDRRowChanging" msprop:Generator_RowEvHandlerName="vw_ReportedNumberNormalCDRRowChangeEventHandler" msprop:Generator_RowDeletedName="vw_ReportedNumberNormalCDRRowDeleted" msprop:Generator_UserTableName="vw_ReportedNumberNormalCDR" msprop:Generator_RowChangedName="vw_ReportedNumberNormalCDRRowChanged" msprop:Generator_RowEvArgName="vw_ReportedNumberNormalCDRRowChangeEvent" msprop:Generator_RowClassName="vw_ReportedNumberNormalCDRRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" minOccurs="0" />
+              <xs:element name="A_Temp" msprop:Generator_ColumnVarNameInTable="columnA_Temp" msprop:Generator_ColumnPropNameInRow="A_Temp" msprop:Generator_ColumnPropNameInTable="A_TempColumn" msprop:Generator_UserColumnName="A_Temp" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="In_Trunk" msprop:Generator_ColumnVarNameInTable="columnIn_Trunk" msprop:Generator_ColumnPropNameInRow="In_Trunk" msprop:Generator_ColumnPropNameInTable="In_TrunkColumn" msprop:Generator_UserColumnName="In_Trunk" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="5" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Switch" msprop:Generator_ColumnVarNameInTable="columnSwitch" msprop:Generator_ColumnPropNameInRow="Switch" msprop:Generator_ColumnPropNameInTable="SwitchColumn" msprop:Generator_UserColumnName="Switch" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="30" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ReportID" msprop:Generator_ColumnVarNameInTable="columnReportID" msprop:Generator_ColumnPropNameInRow="ReportID" msprop:Generator_ColumnPropNameInTable="ReportIDColumn" msprop:Generator_UserColumnName="ReportID" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:vw_ReportedNumber" />
+      <xs:field xpath="mstns:ReportID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

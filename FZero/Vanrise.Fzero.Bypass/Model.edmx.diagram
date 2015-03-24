@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="05c52f6c890c45e4a9b8a1dd780df1e9" Name="Diagram1" ZoomLevel="66">
+        <EntityTypeShape EntityType="Model.ActionType" Width="1.5" PointX="3" PointY="31.75" />
+        <EntityTypeShape EntityType="Model.ApplicationUser" Width="1.5" PointX="5.25" PointY="42.375" />
+        <EntityTypeShape EntityType="Model.AppType" Width="1.5" PointX="3.75" PointY="12.875" />
+        <EntityTypeShape EntityType="Model.Carrier" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.CasesLog" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="Model.ChangeType" Width="1.5" PointX="0.75" PointY="4.875" />
+        <EntityTypeShape EntityType="Model.Client" Width="1.5" PointX="0.75" PointY="23.25" />
+        <EntityTypeShape EntityType="Model.EmailCC" Width="1.5" PointX="10.5" PointY="24.625" />
+        <EntityTypeShape EntityType="Model.Email" Width="1.5" PointX="7.5" PointY="37.625" />
+        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="5.25" PointY="38.125" />
+        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model.GeneratedCall" Width="1.5" PointX="7.5" PointY="23.375" />
+        <EntityTypeShape EntityType="Model.GMT" Width="1.5" PointX="5.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.Import" Width="1.5" PointX="7.5" PointY="42.375" />
+        <EntityTypeShape EntityType="Model.ImportType" Width="1.5" PointX="5.25" PointY="45.75" />
+        <EntityTypeShape EntityType="Model.LoggedAction" Width="1.5" PointX="5.25" PointY="29.625" />
+        <EntityTypeShape EntityType="Model.MobileOperatorFeedback" Width="1.5" PointX="0.75" PointY="7.25" />
+        <EntityTypeShape EntityType="Model.MobileOperator" Width="1.5" PointX="5.25" PointY="25.25" />
+        <EntityTypeShape EntityType="Model.OriginationNetwork" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="6" PointY="12.125" />
+        <EntityTypeShape EntityType="Model.PredefinedColumn" Width="1.5" PointX="8.25" PointY="49.75" />
+        <EntityTypeShape EntityType="Model.PredefinedColumnsforRelatedNumber" Width="1.5" PointX="8.25" PointY="35.25" />
+        <EntityTypeShape EntityType="Model.Priority" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.RecievedCall" Width="1.5" PointX="10.75" PointY="31.625" />
+        <EntityTypeShape EntityType="Model.RecievedEmail" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.RecommendedAction" Width="1.5" PointX="5.25" PointY="48.75" />
+        <EntityTypeShape EntityType="Model.RelatedNumberMapping" Width="1.5" PointX="10.5" PointY="27.5" />
+        <EntityTypeShape EntityType="Model.RelatedNumber" Width="1.5" PointX="9.75" PointY="46.5" />
+        <EntityTypeShape EntityType="Model.ReportingStatus" Width="1.5" PointX="0.75" PointY="1.75" />
+        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="7.5" PointY="46.125" />
+        <EntityTypeShape EntityType="Model.SourceKind" Width="1.5" PointX="6" PointY="16.625" />
+        <EntityTypeShape EntityType="Model.SourceMapping" Width="1.5" PointX="10.5" PointY="41.75" />
+        <EntityTypeShape EntityType="Model.Source" Width="1.5" PointX="8.25" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.SourceType" Width="1.5" PointX="6" PointY="18.875" />
+        <EntityTypeShape EntityType="Model.Status" Width="1.5" PointX="0.75" PointY="9.625" />
+        <EntityTypeShape EntityType="Model.SwitchProfile" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.SysParameter" Width="1.5" PointX="5.25" PointY="21.25" />
+        <EntityTypeShape EntityType="Model.ToneFeedback" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="8.25" PointY="31.375" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="3" PointY="24.5" />
+        <EntityTypeShape EntityType="Model.ValueType" Width="1.5" PointX="3" PointY="21.875" />
+        <EntityTypeShape EntityType="Model.WebsiteMenu" Width="1.5" PointX="8.25" PointY="12.125" />
+        <EntityTypeShape EntityType="Model.View_Origination" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.ViewSummary" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.vwAllCase" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.vwCLI" Width="1.5" PointX="6.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model.vwCount" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model.vwFraudCase" Width="1.5" PointX="12.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model.vwRepeatedCase" Width="1.5" PointX="12.75" PointY="8.75" />
+        <AssociationConnector Association="Model.FK_LoggedActions_Actions" />
+        <AssociationConnector Association="Model.FK_Administrators_Users" />
+        <AssociationConnector Association="Model.FK_Imports_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_Reports_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_SourceMappings_ApplicationUsers" />
+        <AssociationConnector Association="Model.FK_SourceMappings_ApplicationUsers1" />
+        <AssociationConnector Association="Model.FK_Permissions_AppType" />
+        <AssociationConnector Association="Model.FK_CasesLogs_ChangeTypes" />
+        <AssociationConnector Association="Model.FK_CasesLogs_MobileOperatorFeedbacks" />
+        <AssociationConnector Association="Model.FK_CasesLogs_ReportingStatuses" />
+        <AssociationConnector Association="Model.FK_CasesLogs_Statuses" />
+        <AssociationConnector Association="Model.FK_EmailCCs_Clients" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Clients" />
+        <AssociationConnector Association="Model.FK_Users_Clients" />
+        <AssociationConnector Association="Model.FK_EmailCCs_MobileOperators" />
+        <AssociationConnector Association="Model.FK_Emails_EmailTemplates" />
+        <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
+        <AssociationConnector Association="Model.FK_GeneratedCalls_MobileOperators" />
+        <AssociationConnector Association="Model.FK_Imports_ImportTypes" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Imports" />
+        <AssociationConnector Association="Model.FK_LoggedActions_Users" />
+        <AssociationConnector Association="Model.FK_Customers_Users" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_MobileOperators" />
+        <AssociationConnector Association="Model.FK_RelatedNumberMappings_MobileOperators" />
+        <AssociationConnector Association="Model.FK_CustomerPermissions_Permissions" />
+        <AssociationConnector Association="Model.FK_Permissions_Permissions" />
+        <AssociationConnector Association="Model.FK_WebsiteMenus_Permissions" />
+        <AssociationConnector Association="Model.FK_SourceMappings_PredefinedColumns" />
+        <AssociationConnector Association="Model.FK_RelatedNumberMappings_PredefinedColumnsforRelatedNumbers" />
+        <AssociationConnector Association="Model.FK_RecievedCalls_Sources" />
+        <AssociationConnector Association="Model.FK_Reports_RecommendedActions" />
+        <AssociationConnector Association="Model.FK_RelatedNumberSourceMappings_Sources" />
+        <AssociationConnector Association="Model.FK_RelatedNumbers_Reports" />
+        <AssociationConnector Association="Model.FK_Sources_SourceKinds" />
+        <AssociationConnector Association="Model.FK_SourceMappings_Sources" />
+        <AssociationConnector Association="Model.FK_Sources_SourceTypes" />
+        <AssociationConnector Association="Model.FK_SysParameters_ValueTypes" />
+        <AssociationConnector Association="Model.FK_SystemParameters_Users" />
+        <AssociationConnector Association="Model.FK_CustomerPermissions_Customers" />
+        <AssociationConnector Association="Model.FK_UserPermissions_Users" />
+        <AssociationConnector Association="Model.FK_WebsiteMenus_WebsiteMenus" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

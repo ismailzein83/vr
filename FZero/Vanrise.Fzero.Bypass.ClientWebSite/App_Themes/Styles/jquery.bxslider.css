@@ -1,0 +1,141 @@
+.bx-wrapper {
+	padding: 0px; position: relative;
+}
+.bx-wrapper img {
+	width: 100%; display: block;
+}
+.bxslider {
+	left: 1px; margin-left: -1px; position: relative;
+}
+.bx-wrapper .bx-viewport {
+	background: none; padding: 0px;
+}
+.bx-wrapper .bx-pager {
+	width: 100%; bottom: -30px; display: none; position: absolute;
+}
+.bx-wrapper .bx-controls-auto {
+	width: 100%; bottom: -30px; display: none; position: absolute;
+}
+.bx-wrapper .bx-loading {
+	background: url("images/bx_loader.gif") no-repeat center rgb(255, 255, 255); left: 0px; top: 0px; width: 100%; height: 100%; position: absolute; z-index: 2000; min-height: 50px;
+}
+.bx-wrapper .bx-pager {
+	text-align: center; color: rgb(102, 102, 102); padding-top: 20px; font-family: Arial; font-size: 0.85em; font-weight: bold;
+}
+.bx-wrapper .bx-pager .bx-pager-item {
+	display: inline-block;
+}
+.bx-wrapper .bx-controls-auto .bx-controls-auto-item {
+	display: inline-block;
+}
+.bx-wrapper .bx-default-pager.bx-pager a {
+	background: rgb(102, 102, 102); margin: 0px 5px; outline: 0px; border-radius: 5px; width: 10px; height: 10px; text-indent: -9999px; display: block; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+}
+.bx-wrapper .bx-default-pager.bx-pager a:hover {
+	background: rgb(0, 0, 0);
+}
+.bx-wrapper .bx-default-pager.bx-pager a.active {
+	background: rgb(0, 0, 0);
+}
+.bx-wrapper .bx-prev {
+	background: url("images/left.png") no-repeat; left: -74px;
+}
+.bx-wrapper .bx-next {
+	background: url("images/right.png") no-repeat; left: -50px;
+}
+.bx-wrapper .bx-prev:hover {
+	background: url("images/left-hover.png") no-repeat;
+}
+.bx-wrapper .bx-next:hover {
+	background: url("images/right-hover.png") no-repeat;
+}
+.bx-wrapper .bx-controls-direction a {
+	outline: 0px; border-radius: 50px; top: 4px; width: 24px; height: 24px; text-indent: -9999px; position: absolute; z-index: 9;
+}
+.bx-wrapper .bx-controls-direction a.disabled {
+	display: none;
+}
+.bx-wrapper .bx-controls-auto {
+	text-align: center;
+}
+.bx-wrapper .bx-controls-auto .bx-start {
+	background: url("images/controls.png") no-repeat -86px -11px; margin: 0px 3px; outline: 0px; width: 10px; height: 11px; text-indent: -9999px; display: block;
+}
+.bx-wrapper .bx-controls-auto .bx-start:hover {
+	background-position: -86px 0px;
+}
+.bx-wrapper .bx-controls-auto .active.bx-start {
+	background-position: -86px 0px;
+}
+.bx-wrapper .bx-controls-auto .bx-stop {
+	background: url("images/controls.png") no-repeat -86px -44px; margin: 0px 3px; outline: 0px; width: 9px; height: 11px; text-indent: -9999px; display: block;
+}
+.bx-wrapper .bx-controls-auto .bx-stop:hover {
+	background-position: -86px -33px;
+}
+.bx-wrapper .bx-controls-auto .active.bx-stop {
+	background-position: -86px -33px;
+}
+.bx-wrapper .bx-has-pager.bx-has-controls-auto.bx-controls .bx-pager {
+	width: 80%; text-align: left;
+}
+.bx-wrapper .bx-has-pager.bx-has-controls-auto.bx-controls .bx-controls-auto {
+	width: 35px; right: 0px;
+}
+.bx-wrapper .bx-caption {
+	background: rgba(80, 80, 80, 0.75); left: 0px; width: 100%; bottom: 0px; position: absolute;
+}
+.bx-wrapper .bx-caption span {
+	padding: 10px; color: rgb(255, 255, 255); font-family: Arial; font-size: 0.85em; display: block;
+}
+.recent-work ul.bxslider li b {
+	color: rgb(101, 101, 101); font-size: 13px; font-style: normal; font-weight: 200;
+}
+.recent-work ul.bxslider li em {
+	overflow: hidden; display: block; position: relative;
+}
+.recent-work ul.bxslider li strong {
+	color: rgb(0, 0, 0); font-size: 16px; font-weight: 300; display: block;
+}
+.recent-work ul.bxslider li:hover b {
+	color: rgb(255, 255, 255);
+}
+.recent-work ul.bxslider li:hover strong {
+	color: rgb(255, 255, 255);
+}
+.recent-work ul.bxslider li a.bxslider-block {
+	background: rgb(252, 252, 252); padding: 10px; display: block;
+}
+.recent-work ul.bxslider li:hover a.bxslider-block {
+	background: #7B1126; transition:0.9s; -webkit-transition: all 0.9s ease; -moz-transition: all 0.9s ease; -o-transition: all 0.9s ease;
+}
+.recent-work ul.bxslider li i.icon-hover-1 {
+	background: url("../../img/black-opacity.png") !important; padding: 16px 30px 16px 18px; border-radius: 50%; top: 50%; color: rgb(255, 255, 255); font-size: 16px; margin-top: -1.5em; position: absolute;
+}
+.recent-work ul.bxslider li i.icon-hover-2 {
+	background: url("../../img/black-opacity.png") !important; padding: 16px 30px 16px 18px; border-radius: 50%; top: 50%; color: rgb(255, 255, 255); font-size: 16px; margin-top: -1.5em; position: absolute;
+}
+.recent-work ul.bxslider li i.icon-hover-1:hover {
+	color: #7B1126;
+}
+.recent-work ul.bxslider li i.icon-hover-2:hover {
+	color: #7B1126;
+}
+.recent-work ul.bxslider li i.icon-hover-1 {
+	left: -100px;
+}
+.recent-work ul.bxslider li i.icon-hover-2 {
+	right: -100px;
+}
+.recent-work ul.bxslider li:hover i.icon-hover-1 {
+	left: 30%;
+}
+.recent-work ul.bxslider li:hover i.icon-hover-2 {
+	right: 30%;
+}
+.recent-work ul.bxslider li:hover i.icon-hover-1 {
+	transition:0.6s; -webkit-transition: all 0.6s ease; -moz-transition: all 0.6s ease; -o-transition: all 0.6s ease;
+}
+.recent-work ul.bxslider li:hover i.icon-hover-2 {
+	transition:0.6s; -webkit-transition: all 0.6s ease; -moz-transition: all 0.6s ease; -o-transition: all 0.6s ease;
+}
