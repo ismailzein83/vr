@@ -56,11 +56,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                 BaseDirService.muteAction(e);
             };
 
-            this.selectValue = function (e, c) {
+            this.selectValue = function (e, item) {
                     var index = null;
                     controller.muteAction(e);
                     try {
-                        var index = controller.selectedValues.indexOf(c);
+                        var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
                     }
                     catch (e) {
 
@@ -68,7 +68,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                     if (index >= 0)
                         controller.selectedValues.splice(index, 1);
                     else
-                        controller.selectedValues.push(c);
+                        controller.selectedValues.push(item);
                 controller.onselectionchange()(controller.selectedValues);
             };
 
