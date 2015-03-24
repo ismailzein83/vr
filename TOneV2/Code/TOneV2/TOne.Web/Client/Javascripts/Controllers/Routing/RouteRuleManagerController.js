@@ -148,7 +148,7 @@
        
       
         $scope.AddNewRoute = function () {
-            $location.path("/RouteRuleEditor/undefined").replace();
+            $location.path("/RouteRuleEditor2/undefined").replace();
         }
         $scope.toggelFilter = function () {
             $scope.gridOptionsRouteRule.enableFiltering = !$scope.gridOptionsRouteRule.enableFiltering;

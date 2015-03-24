@@ -1,8 +1,12 @@
-﻿appControllers.controller('RouteRuleEditorController',
-    function RouteRuleEditorController($scope, $http, $location, $routeParams, notify) {
+﻿appControllers.controller('RouteRuleEditorController2',
+    function RouteRuleEditorController2($scope, $http, $location, $routeParams, notify) {
         $scope.BEDDate = "";
+        $scope.lstselectedtemp = "";
         $scope.EEDDate = "";
         $scope.ruletype = "";
+        $scope.selectedtemp = function (items) {
+            console.log(items)
+        }
         $scope.isvalidcomp = function (model) {
             var s = "required-inpute";
             if ($scope[model] != undefined) {
@@ -83,7 +87,7 @@
             { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
         ]
         $scope.routeTemplates = [
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
         ]

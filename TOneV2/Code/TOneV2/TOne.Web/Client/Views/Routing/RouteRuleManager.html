@@ -2,7 +2,7 @@
     <div class="panel panel-primary panel-over-color">
         <div class="panel-body">
             <div class="row ">
-                <div class="col-lg-12" style="text-align:center">
+                <div class="col-lg-12 text-center" >
                     <h3>
                         Customer Route Rule Management
                     </h3>
@@ -12,28 +12,28 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-top col-no-padding">
                     <div class="action-bar">
                         <div class="btn-group action-bar-left">
-                            <label style="display: inline-block; color: #fff; padding:5px 0px 0px 5px;">Visible Rows:</label>
-                            <div class="dropdown" style="display:inline-block">
-                                <label class=" dropdown-toggle hand-cursor" style="width:50px;position:relative;float:none;color:#fff" type="button" id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
-                                    <span style="margin: 0px; ">{{numberoflines}}</span>
+                            <label class="action-bar-label">Visible Rows:</label>
+                            <div class="dropdown action-bar-ddl">
+                                <label class=" dropdown-toggle hand-cursor action-bar-ddl-label"  id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
+                                    <span class="no-margin" >{{numberoflines}}</span>
                                 </label>
-                                <ul class="dropdown-menu " style="width:50px;min-width:50px" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="muteaction($event);">
+                                <ul class="dropdown-menu action-bar-ddl-ul" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="muteaction($event);">
                                     <li role="presentation">
-                                        <div class="mark-select " ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">10</div>
+                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);" >
+                                            <div class="hand-cursor action-bar-ddl-inner-item" >10</div>
                                         </div>
-                                        <div class="mark-select " ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                            <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">20</div>
+                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);" >
+                                            <div class ="hand-cursor action-bar-ddl-inner-item">20</div>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                            <button ng-class="gridOptionsRouteRule.enableFiltering==true?'':'toggle-Icon'" style="border-radius: 0px; border-color: transparent; background-color: transparent; color: #FFF;" type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="toggelFilter()"><span style="padding-left:4px" class="glyphicon glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
+                            <button class="btn btn-default btncustom action-bar-btn-icon" ng-class="gridOptionsRouteRule.enableFiltering==true?'':'toggle-Icon'"  type="button" aria-label="Left Align" ng-click="toggelFilter()"><span style="padding-left:4px" class="glyphicon glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
 
 
                         </div>
                         <div class="btn-group action-bar-right">
-                            <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF;float:none " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-default btncustom btncustom action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
 
                         </div>
                     </div>

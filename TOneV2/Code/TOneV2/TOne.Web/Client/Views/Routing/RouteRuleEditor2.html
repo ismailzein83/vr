@@ -28,20 +28,8 @@
                     <label class="control-label" style="padding-top:6px">Rule Type:</label>
                 </div>
                 <div class="col-lg-2 style-col">
-
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" ng-class="isvalidcomp('ruletype')" style="width:100%;position:relative" type="button" id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
-                            <span style="float: left; margin: 0px; ">{{ruletype.name}}</span>
-                            <span style="position:absolute;top:15px;right:5px" class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-custom" style="width:100%" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="muteaction($event);">
-                            <li role="presentation">
-                                <div ng-repeat="temp in templates" class="mark-select " ng-click="update(temp,'ruletype')" ng-mouseenter="muteaction($event);" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                    <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{temp.name}}</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <vr-dropdown datasource="templates" datatextfield="name" datavaluefield="objectType"
+                                 entityname="" type="standard" lastselectedvalue="ruletype"></vr-dropdown>
                 </div>
             </div>
             <div class="row style-row">

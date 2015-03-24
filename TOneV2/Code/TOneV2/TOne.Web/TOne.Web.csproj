@@ -188,9 +188,11 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
@@ -381,6 +383,7 @@
     <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
+    <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
     <Content Include="Client\Libraries\Semantic -old2\semantic.min.css" />
@@ -460,6 +463,7 @@
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
@@ -469,6 +473,7 @@
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
@@ -486,6 +491,7 @@
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\header-template.html" />
+    <Content Include="Client\Views\Routing\RouteRuleEditor2.html" />
     <Content Include="Client\Views\Routing\RouteRuleManager.html" />
     <Content Include="images\alert\attention.png" />
     <Content Include="images\alert\close.png" />
