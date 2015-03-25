@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.options.selectedvalues.length > 0">
+            <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.isSelectedGroup()">
                 <div style="padding:5px ;">
                     {{ctrl.selectlbl}}
                     <a href="" class="link" style="position: absolute; right: 5px;" ng-click="clearAllSelected($event); ">

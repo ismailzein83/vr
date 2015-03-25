@@ -37,7 +37,7 @@
         </div>
         <div class="col-lg-2">
             <span >Selected Values : </span>
-            <span ng-repeat="c in testviewCtrl.output">{{c.Name}}</span>
+            <span ng-repeat="c in testviewCtrl.optionsZone.selectedvalues">{{c.Name}}</span>
         </div>
         <div class="col-lg-2">
             <span>Last Customer Selected Value : </span>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+            <vr-dropdown  options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span> Selected Customer Value : </span>

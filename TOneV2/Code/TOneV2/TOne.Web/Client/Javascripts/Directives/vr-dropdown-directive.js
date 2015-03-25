@@ -75,7 +75,14 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getUlClass = function () {
+                if (controller.options.selectedgroup !== undefined && !controller.options.selectedgroup) return 'single-col-checklist';
                 return controller.options.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
+            };
+
+            this.isSelectedGroup = function() {
+                if (controller.options.selectedgroup !== undefined && !controller.options.selectedgroup) return false;
+                if (controller.options.selectedvalues.length > 0) return true;
+                return false;
             };
 
             this.getLastSelectedValue = function () {

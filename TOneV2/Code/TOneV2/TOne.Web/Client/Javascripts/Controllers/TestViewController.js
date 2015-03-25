@@ -1,6 +1,6 @@
 ﻿'use strict'
 
-appControllers.controller('TestViewController', function ($scope, CarriersService, ZonesService) {
+var TestViewController = function ($scope, CarriersService, ZonesService) {
 
     this.model = 'Test View model';
     this.Input = '123';
@@ -101,4 +101,8 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
 
 
 
-});
+}
+
+TestViewController.$inject = ['$scope', 'CarriersService', 'ZonesService'];
+
+appControllers.controller('TestViewController', TestViewController);
