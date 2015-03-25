@@ -2,10 +2,24 @@
     function RouteRuleEditorController2($scope, $http, $location, $routeParams, notify) {
         $scope.BEDDate = "";
         var ctrl = this;
+        ctrl.optionsRouteType = {
+            selectedvalues: [],
+            datasource: [],
+            lastselectedvalue: ''
+        };
+        ctrl.optionsEditorType = {
+            selectedvalues: [],
+            datasource: [],
+            lastselectedvalue: ''
+        };
+        ctrl.optionsRuleType = {
+            selectedvalues: [],
+            datasource: [],
+            lastselectedvalue: ""
+        };
         ctrl.routetype = null;
-        $scope.lstselectedtemp = "";
         $scope.EEDDate = "";
-        $scope.ruletype = "";
+        ctrl.optionsRouteType.lastselectedvalue = "";
         $scope.selectedtemp = function (items) {
             console.log(items)
         }
@@ -74,28 +88,27 @@
         $scope.validateForm = function () {
             var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
              
-            return ($scope.ruletype.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+            return (ctrl.optionsRouteType.lastselectedvalue.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
         }
         
         $scope.routeRule = null;
        
-        $scope.templates = [
+       ctrl.optionsRouteType.datasource = [
             { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
             { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
             { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities' }
         ]
        
-        $scope.editorTemplates = [
+       ctrl.optionsEditorType.datasource = [
             { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate2.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
             { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
         ]
-        ctrl.routeTemplates = [
+        ctrl.optionsRuleType.datasource = [
           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html'}
         ]
 
-        console.log(ctrl.routeTemplates[0])
         if ($routeParams.RouteRuleId != 'undefined') {
             $http.get($scope.baseurl + "/api/Routing/GetRouteRuleDetails",
             {
@@ -106,19 +119,19 @@
              .success(function (response) {
                  $scope.routeRule = response;
                  var tab = [];
-                 ctrl.routetype = ctrl.routeTemplates[0];
+                 ctrl.optionsRuleType.lastselectedvalue = ctrl.optionsRuleType.datasource[0]; 
                  $scope.BEDDate = new Date($scope.routeRule.BeginEffectiveDate);
                  $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
                  $scope.Reason = $scope.routeRule.Reason;
-                 $scope.ruletype = null;
-                 $scope.ruletype = $scope.templates[$scope.findExsite($scope.templates, $scope.routeRule.ActionData.$type, 'objectType')];
-                 $scope.editortype = null ;
-                 $scope.editortype = $scope.editorTemplates[$scope.findExsite($scope.editorTemplates, $scope.routeRule.CodeSet.$type, 'objectType')];
+                 ctrl.optionsRouteType.lastselectedvalue = null;
+                 ctrl.optionsRouteType.lastselectedvalue = ctrl.optionsRouteType.datasource[$scope.findExsite(ctrl.optionsRouteType.datasource, $scope.routeRule.ActionData.$type, 'objectType')];
+                 ctrl.optionsEditorType.lastselectedvalue = null;
+                 ctrl.optionsEditorType.lastselectedvalue = ctrl.optionsEditorType.datasource[$scope.findExsite(ctrl.optionsEditorType.datasource, $scope.routeRule.CodeSet.$type, 'objectType')];
 
              });
         }
         else {
-            $scope.ruletype = { name: 'Select ..', url: '' };
+            ctrl.optionsRouteType.lastselectedvalue = { name: 'Select ..', url: '' };
             $scope.editortype = $scope.editorTemplates[0];
             ctrl.routetype = ctrl.routeTemplates[0];
         }        
@@ -175,7 +188,7 @@
               
                 notify.closeAll();
                 notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
-                return ctrl.routeTemplates[0];
+                return ctrl.optionsRuleType.datasource[0];
             }
         }
         $scope.saveRule = function () {

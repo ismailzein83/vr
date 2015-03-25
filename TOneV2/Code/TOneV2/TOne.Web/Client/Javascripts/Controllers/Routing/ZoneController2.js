@@ -1,7 +1,11 @@
 ﻿appControllers.controller('ZoneController2',
     function ZoneController2($scope, $http, ZonesService) {
         $scope.filterzone = '';
-        $scope.zones = [];
+        $scope.optionsZones = {
+            selectedvalues: [],
+            datasource: []
+        };
+        //$scope.optionsZones.datasource = [];
         $scope.showloading = false;
         $scope.selectedZones = [];
         $scope.code = "";
@@ -17,7 +21,7 @@
                   }
               })
               .success(function (response) {
-                  $scope.selectedZones = response;
+                  $scope.optionsZones.selectedvalues = response;
 
               });
 
@@ -37,7 +41,7 @@
         }
         $scope.getselectedoption = function () {
             var tab = [];
-            $.each($scope.selectedZones, function (i, value) {
+            $.each($scope.optionsZones.selectedvalues, function (i, value) {
                 tab[i] = value.ZoneId;
                            
             });
@@ -76,9 +80,6 @@
         $scope.searchZones = function (text) {
             return ZonesService.getSalesZones(text);
         }
-
-
-        
 
         $('#CodeListddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();

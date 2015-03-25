@@ -1,5 +1,6 @@
 ﻿appControllers.controller('RouteRuleManagerController',
     function RouteRuleManagerController($scope, $location, $http, $timeout, uiGridConstants) {
+       
         $('.dropdown').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
@@ -14,6 +15,7 @@
             $scope.numberoflines = n;
             var h = ((n + 2) * 30) + ($scope.showf==true?0:30);
             angular.element(document.getElementsByClassName('gridroute')[0]).css('height', h + 'px');
+            $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
 
         }
        
@@ -41,6 +43,8 @@
             enableVerticalScrollbar: 2,
             infiniteScrollPercentage: 20,
             enableFiltering: false,
+            saveFocus: false,
+            saveScroll: true,
             columnDefs: [
               {
                   name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false,
@@ -63,6 +67,7 @@
             enableSorting: false,
 
         };
+        $scope.state = {};
         $scope.gridOptionsRouteRule.columnDefs[$scope.gridOptionsRouteRule.columnDefs.length] = {
             name: 'Action',
             enableColumnMenu: false,
@@ -72,12 +77,14 @@
             cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.onDblClick(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
         }
         $scope.filter = {};
-        $scope.onDblClick=  function (row) {
-         $location.path("/RouteRuleEditor2/" + row.entity.RouteRuleId).replace();
+        $scope.onDblClick = function (row) {
+         
+            $location.path("/RouteRuleEditor2/" + row.entity.RouteRuleId).replace();
+           
        }
        
      
-        //$scope.toggelFilter();
+        
         var page = 0;
         var pageUp = 0;
         var getData = function(data, page) {

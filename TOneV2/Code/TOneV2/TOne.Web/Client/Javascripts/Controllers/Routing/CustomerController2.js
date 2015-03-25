@@ -2,7 +2,7 @@
     function CustomerController2($scope, $http) {
         
         $scope.isvalidCompCus = function () {           
-            return ( $scope.selectedCustomers.length > 0) ? "" : "required-inpute";
+            return ( $scope.optionsCustomers.selectedvalues.length > 0) ? "" : "required-inpute";
         }
 
         $scope.initErrortooltip = function (){
@@ -15,9 +15,12 @@
             }
             return showmsg;
         }
-        
-        $scope.customers = [];
-        $scope.selectedCustomers = [];
+        $scope.optionsCustomers = {
+            selectedvalues: [],
+            datasource: []
+        };
+       
+        $scope.optionsCustomers.selectedvalues = [];
         $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
          {
              params: {
@@ -25,16 +28,16 @@
              }
          })
          .success(function (response) {
-             $scope.customers = response;          
+             $scope.optionsCustomers.datasource = response;          
              if ($scope.routeRule != null) {
                  var tab = [];
                  $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-                     var existobj = $scope.findExsiteObj($scope.customers, value, 'CarrierAccountID')
+                     var existobj = $scope.findExsiteObj($scope.optionsCustomers.datasource, value, 'CarrierAccountID')
                      if (existobj != null)
                          tab[i] = existobj;
 
                  });
-                 $scope.selectedCustomers = tab;
+                 $scope.optionsCustomers.selectedvalues = tab;
                  $scope.carrierAccountSelectionOption = $scope.routeRule.CarrierAccountSet.Customers.SelectionOption;
              }
              else {
@@ -53,7 +56,7 @@
         }
         $scope.getSelectedValues = function () {
             var tab = [];
-            $.each($scope.selectedCustomers, function (i, value) {
+            $.each($scope.optionsCustomers.selectedvalues, function (i, value) {
                 tab[i] = value.CarrierAccountID;
 
             });
