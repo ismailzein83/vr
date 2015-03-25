@@ -125,8 +125,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         else {
                             ctrl.muteAction(e);
                             ctrl.lastselectedvalue = item;
-                            console.log(ctrl.selectedvalues);
-                            console.log(item);
                             var index = null;
                             try {
                                 index = BaseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
