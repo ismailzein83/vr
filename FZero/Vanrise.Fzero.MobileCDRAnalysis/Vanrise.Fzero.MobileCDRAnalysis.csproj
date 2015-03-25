@@ -34,21 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data.Entity.EF5, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\MySql.Data.Entity.EF5.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Web, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\MySql.Web.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -265,6 +250,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.dll.config" />
     <None Include="Dependencies\MySql.Data.Entity.EF5.dll.refresh" />
     <None Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -291,12 +277,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\log4net.dll" />
+    <Content Include="bin\Debug\log4net.xml" />
+    <Content Include="bin\Debug\Telerik.Web.UI.dll" />
+    <Content Include="bin\Debug\Telerik.Web.UI.xml" />
+    <Content Include="bin\Debug\Vanrise.CommonLibrary.dll" />
+    <Content Include="bin\Debug\Vanrise.CommonLibrary.pdb" />
+    <Content Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.dll" />
+    <Content Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.pdb" />
+    <Content Include="Dependencies\EntityFramework.dll" />
+    <Content Include="Dependencies\EntityFramework.xml" />
     <Content Include="Dependencies\MySql.Data.dll" />
     <Content Include="Dependencies\MySql.Data.Entity.EF5.dll" />
     <Content Include="Dependencies\MySql.Web.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
