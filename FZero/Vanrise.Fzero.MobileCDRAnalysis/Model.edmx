@@ -1387,6 +1387,56 @@
         <Function Name="prGetUnNormalizedCGPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="prMapping" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'CDRAnalysisMobile.CDR_DAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="CDR_DAT">
+        <Property Name="Source_Type" Type="varchar" MaxLength="10" />
+        <Property Name="Source_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Source_File" Type="varchar" MaxLength="70" />
+        <Property Name="Record_Type" Type="varchar" MaxLength="2" />
+        <Property Name="Call_Type" Type="varchar" MaxLength="3" />
+        <Property Name="IMEI" Type="varchar" MaxLength="20" />
+        <Property Name="IMEI14" Type="varchar" MaxLength="14" />
+        <Property Name="Entity" Type="varchar" MaxLength="20" />
+        <Property Name="Served_MSISDN" Type="varchar" MaxLength="20" />
+        <Property Name="Sub_Type" Type="varchar" MaxLength="10" />
+        <Property Name="SERVED_MSRN" Type="varchar" MaxLength="20" />
+        <Property Name="SERVED_MSRN_CC" Type="varchar" MaxLength="3" />
+        <Property Name="Destination" Type="varchar" MaxLength="20" />
+        <Property Name="Destination_CC" Type="varchar" MaxLength="3" />
+        <Property Name="StartTime_String" Type="varchar" MaxLength="8" />
+        <Property Name="StartTime" Type="varchar" MaxLength="14" />
+        <Property Name="Duration" Type="varchar" MaxLength="5" />
+        <Property Name="Volume_Unit" Type="varchar" MaxLength="7" />
+        <Property Name="Basic_Service" Type="varchar" MaxLength="5" />
+        <Property Name="Cell_ID" Type="varchar" MaxLength="22" />
+        <Property Name="Cause_Of_Termination" Type="varchar" MaxLength="50" />
+        <Property Name="Third_Party" Type="varchar" MaxLength="20" />
+        <Property Name="Service_Center_Address" Type="varchar" MaxLength="50" />
+        <Property Name="Out_TGRP_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Inc_TRGP_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Call_Class" Type="varchar" MaxLength="10" />
+        <Property Name="CP_Desc" Type="varchar" MaxLength="50" />
+        <Property Name="Call_Ref_Num" Type="varchar" MaxLength="30" />
+        <Property Name="Camel_Ref_Num" Type="varchar" MaxLength="50" />
+        <Property Name="Opt_Route_Ind" Type="varchar" MaxLength="1" />
+        <Property Name="Zero_Duration" Type="varchar" MaxLength="1" />
+        <Property Name="Starttime_Month" Type="varchar" MaxLength="2" />
+        <Property Name="Starttime_Day" Type="varchar" MaxLength="2" />
+        <Property Name="Pulses" Type="varchar" MaxLength="3" />
+        <Property Name="Up_Vol" Type="varchar" MaxLength="10" />
+        <Property Name="Down_Vol" Type="varchar" MaxLength="10" />
+        <Property Name="Multiparty_Call" Type="varchar" MaxLength="1" />
+        <Property Name="Latitude" Type="varchar" MaxLength="9" />
+        <Property Name="Longitude" Type="varchar" MaxLength="9" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'CDRAnalysisMobile.filesDAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="filesDAT">
+        <Property Name="content" Type="varchar" />
+      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
