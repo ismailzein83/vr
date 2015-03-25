@@ -194,6 +194,7 @@
     <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
@@ -479,6 +480,7 @@
     <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />

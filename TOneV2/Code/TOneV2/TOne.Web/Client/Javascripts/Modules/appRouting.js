@@ -25,7 +25,8 @@ appRouting.config(['$routeProvider',
         }).
         when('/RouteRuleEditor2/:RouteRuleId', {
             templateUrl: '/Client/Views/Routing/RouteRuleEditor2.html',
-            controller: 'RouteRuleEditorController2'
+            controller: 'RouteRuleEditorController2',
+            controllerAs: 'RouteRuleEditorController2'
         }).
         when('/ZingChart', {
             templateUrl: '/Client/Views/ChartPrototypes/ZingChart.html',

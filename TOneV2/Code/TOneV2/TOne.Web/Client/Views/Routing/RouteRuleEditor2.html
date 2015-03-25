@@ -33,27 +33,10 @@
                 </div>
             </div>
             <div class="row style-row">
-                <div style="position:relative">
-                    <div style="position:absolute;right:-10px;top:-16px;z-index:101">
-                        <div class="dropdown">
-                            <label id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true" ng-model='routetype'>
-                                <label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px; border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">
-                                    By {{routetype.name}}<span style="float:right;top:8px;position:relative" class="caret"></span>
-                                </label>
-                            </label>
-                            <ul class="dropdown-menu dropdown-menu-custom menu-right" role="menu" aria-labelledby="dropdownMenuType" ng-mouseenter="muteaction($event);">
-                                <li role="presentation">
-                                    <div ng-repeat="r in routeTemplates" class="mark-select " ng-mouseenter="muteaction($event);" ng-click="update(r,'routetype')" style="display: block;padding:2px; margin:2px; white-space: normal;">
-                                        <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{r.name}}</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div ng-include src="routetype.url">
-                </div>
-
+                <vr-dropdown type="menu" datasource="RouteRuleEditorController2.routeTemplates" datatextfield="name" datavaluefield="name"
+                             onselectionchange="update2" lastselectedvalue="RouteRuleEditorController2.routetype"></vr-dropdown>
+                <div ng-include src="RouteRuleEditorController2.routetype.url">
+                </div> 
             </div>
             <div class="row style-row">
                 <div style="position:relative">

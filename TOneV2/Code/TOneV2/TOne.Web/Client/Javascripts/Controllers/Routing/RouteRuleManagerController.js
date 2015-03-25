@@ -73,7 +73,7 @@
         }
         $scope.filter = {};
         $scope.onDblClick=  function (row) {
-         $location.path("/RouteRuleEditor/" + row.entity.RouteRuleId).replace();
+         $location.path("/RouteRuleEditor2/" + row.entity.RouteRuleId).replace();
        }
        
      

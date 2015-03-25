@@ -1,6 +1,8 @@
 ﻿appControllers.controller('RouteRuleEditorController2',
     function RouteRuleEditorController2($scope, $http, $location, $routeParams, notify) {
         $scope.BEDDate = "";
+        var ctrl = this;
+        ctrl.routetype = null;
         $scope.lstselectedtemp = "";
         $scope.EEDDate = "";
         $scope.ruletype = "";
@@ -82,15 +84,18 @@
             { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
             { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities' }
         ]
+       
         $scope.editorTemplates = [
-            { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
+            { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate2.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
             { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
         ]
-        $scope.routeTemplates = [
+        ctrl.routeTemplates = [
           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html'}
         ]
+
+        console.log(ctrl.routeTemplates[0])
         if ($routeParams.RouteRuleId != 'undefined') {
             $http.get($scope.baseurl + "/api/Routing/GetRouteRuleDetails",
             {
@@ -101,7 +106,7 @@
              .success(function (response) {
                  $scope.routeRule = response;
                  var tab = [];
-                 $scope.routetype = $scope.routeTemplates[0];
+                 ctrl.routetype = ctrl.routeTemplates[0];
                  $scope.BEDDate = new Date($scope.routeRule.BeginEffectiveDate);
                  $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
                  $scope.Reason = $scope.routeRule.Reason;
@@ -115,7 +120,7 @@
         else {
             $scope.ruletype = { name: 'Select ..', url: '' };
             $scope.editortype = $scope.editorTemplates[0];
-            $scope.routetype = $scope.routeTemplates[0];
+            ctrl.routetype = ctrl.routeTemplates[0];
         }        
        
         $scope.onloadRuletype = function () {            
@@ -156,7 +161,7 @@
       
         $scope.update = function (val, model) {
             if (model == 'routetype' && val.name != 'Customer') {
-                $scope[model] = $scope.routeTemplates[0];
+                $scope[model] = { "name": 'Customer', "url": '/Client/Templates/PartialTemplate/CustomerTemplate2.html' };
                 notify.closeAll();
                 notify({ message: 'This module is under construction.',classes:"alert alert-danger"});
             }
@@ -165,7 +170,14 @@
             }
            
         }  
-        
+        $scope.update2 = function (data,items,last) {
+            if (last.name != 'Customer') {  
+              
+                notify.closeAll();
+                notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
+                return ctrl.routeTemplates[0];
+            }
+        }
         $scope.saveRule = function () {
           
             var routeRule =
