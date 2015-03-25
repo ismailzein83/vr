@@ -49,13 +49,14 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
     this.zones;
 
     $scope.selectedcustomers = [];
-
-    //ZonesService.getSalesZones("Lebanon").then(function (items) {
-    //    //controller.output = items;
-    //    // console.log(controller.output[0]);
-    //}, function (msg) {
-    //    console.log(msg);
-    //});
+    this.output = [];
+    ZonesService.getSalesZones("Lebanon").then(function (items) {
+        controller.output = items;
+        console.log(controller.output[0]);
+        console.log(controller.output.length);
+    }, function (msg) {
+        console.log(msg);
+    });
 
 
     this.lstselectedcustomer = '';

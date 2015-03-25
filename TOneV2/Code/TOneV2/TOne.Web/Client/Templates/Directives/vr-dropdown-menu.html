@@ -10,7 +10,7 @@
             </label>
             <ul class="dropdown-menu dropdown-menu-custom menu-right" role="menu" aria-labelledby="dropdownMenuType" ng-mouseenter="ctrl.muteaction($event);">
                 <li role="presentation">
-                    <div ng-repeat="c in ctrl.getDatasource()" class="mark-select " ng-mouseenter="ctrl.muteaction($event);" ng-click="ctrl.selectValue($event, c); refreshOutput();"
+                    <div ng-repeat="c in ctrl.getDatasource()" class="mark-select " ng-mouseenter="ctrl.muteaction($event);" ng-click="selectValue($event, c);"
                          style="display: block;padding:2px; margin:2px; white-space: normal;">
                         <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{ctrl.getObjectText(c)}}</div>
                     </div>

@@ -24,8 +24,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         },
         controller: function () {
             var controller = this;
-            if (this.selectedvalues !== undefined) this.selectedValues = this.selectedvalues;
-            else this.selectedValues = [];
 
             this.filtername = '';
             this.showloading = false;
@@ -51,40 +49,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.findExsite = function (item) {
-                return BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
+                return BaseDirService.findExsite(controller.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
             };
 
             this.muteAction = function (e) {
                 BaseDirService.muteAction(e);
-            };
-
-            this.selectValue = function (e, item) {
-                if (controller.singleSelection()) {
-                    controller.selectedValues = [];
-                    controller.selectedValues.length = 0;
-                    controller.selectedValues.push(item);
-                }
-                else {
-                    controller.muteAction(e);
-                    var index = null;
-
-                    try {
-                        var index = BaseDirService.findExsite(controller.selectedValues, controller.getObjectValue(item), controller.datavaluefield);
-                    }
-                    catch (e) {
-
-                    }
-                    if (index >= 0)
-                        controller.selectedValues.splice(index, 1);
-                    else
-                        controller.selectedValues.push(item);
-                }
-            };
-
-            this.clearAllSelected = function (e) {
-                controller.muteAction(e);
-                controller.selectedValues = [];
-                controller.selectedValues.length = 0;
             };
 
             this.clearFilter = function (e) {
@@ -96,16 +65,16 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                 
                 var selectedVal = [];
 
-                for (var i = 0 ; i < controller.selectedValues.length ; i++) {
-                    selectedVal.push(controller.getObjectText(controller.selectedValues[i]));
+                for (var i = 0 ; i < controller.selectedvalues.length ; i++) {
+                    selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
                     if (i == 2) break;
                 }
-                var s = DropdownService.getSelectText(controller.singleSelection(), controller.selectedValues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                var s = DropdownService.getSelectText(controller.singleSelection(), controller.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
                 return s;
             };
 
             this.getUlClass = function () {
-                return controller.selectedValues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
+                return controller.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
 
             this.getLastSelectedValue = function () {
@@ -141,6 +110,50 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             ctrl.datasource.length = 0;
                     };
 
+                    $scope.clearAllSelected = function (e) {
+                        ctrl.muteAction(e);
+                        ctrl.selectedvalues = [];
+                        ctrl.selectedvalues.length = 0;
+                    };
+                    var selectval = function (e, item) {
+                        if (ctrl.singleSelection()) {
+                            ctrl.lastselectedvalue = item;
+                            ctrl.selectedvalues = [];
+                            ctrl.selectedvalues.length = 0;
+                            ctrl.selectedvalues.push(item);
+                        }
+                        else {
+                            ctrl.muteAction(e);
+                            ctrl.lastselectedvalue = item;
+                            console.log(ctrl.selectedvalues);
+                            console.log(item);
+                            var index = null;
+                            try {
+                                index = BaseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                            }
+                            catch (e) {
+
+                            }
+                            if (index >= 0)
+                                ctrl.selectedvalues.splice(index, 1);
+                            else
+                                ctrl.selectedvalues.push(item);
+                        }
+                    };
+                    $scope.selectValue = function (e, item) {
+                        
+                        selectval(e, item);
+
+                        if (typeof (ctrl.onselectionchange()) !== "undefined") {
+                            var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
+                            if (item !== undefined) {
+                                ctrl.lastselectedvalue = item;
+                                selectval(null, item);
+                            }
+
+                        }
+                    };
+
                     $scope.search = function () {
                         $scope.clearDatasource();
                         if (ctrl.filtername.length > (ctrl.limitcharactercount -1)) {
@@ -154,38 +167,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         }
                     };
 
-                    $scope.refreshOutput = function () {
-
-                        if (ctrl.selectedvalues == undefined && ctrl.lastselectedvalue == undefined) return;
-
-                        if (ctrl.selectedvalues != undefined)
-                        {
-                            ctrl.selectedvalues =[];
-                            ctrl.selectedvalues.length = 0;
-                        }
-                        if (ctrl.lastselectedvalue != undefined)
-                            ctrl.lastselectedvalue = '';
-
-                        angular.forEach(ctrl.selectedValues, function (value, key) {
-                            if (typeof value !== 'undefined') {
-                                var temp = angular.copy(value);
-                                if (ctrl.lastselectedvalue != undefined) ctrl.lastselectedvalue = temp;
-                                if (ctrl.selectedvalues != undefined) ctrl.selectedvalues.push(temp);
-                            }
-                        });
-
-                        
-
-                        if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                            var item = ctrl.onselectionchange() (ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
-                            if (item !== undefined) {
-                                ctrl.lastselectedvalue = item;
-                                ctrl.selectValue(null, item);
-                            }
-
-                        }
-                            
-            }
     }
             }
         },
