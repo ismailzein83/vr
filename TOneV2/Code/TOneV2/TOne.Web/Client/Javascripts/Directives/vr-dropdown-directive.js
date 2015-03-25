@@ -141,11 +141,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
                     $scope.selectValue = function (e, item) {
                         selectval(e, item);
-                        $scope.lastselectedvalue = item;
+                        ctrl.lastselectedvalue = item;
                             if (typeof (ctrl.onselectionchange()) !== "undefined") {
                                     var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
                                     if (item !== undefined) {
-                                        $scope.lastselectedvalue = item;
+                                        ctrl.lastselectedvalue = item;
                                         selectval(null, item);
                                     }
 

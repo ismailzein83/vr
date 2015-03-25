@@ -40,14 +40,17 @@
             <span ng-repeat="c in testviewCtrl.output">{{c.Name}}</span>
         </div>
         <div class="col-lg-2">
-            <span>Last Selected Value : </span>
+            <span>Last Customer Selected Value : </span>
             <span>{{testviewCtrl.lstselectedcustomer.Name}}</span>
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.customers" lastselectedvalue="testviewCtrl.lstselectedcustomer" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
         </div>
-
+        <div class="col-lg-2">
+            <span> Selected Customer Value : </span>
+            <span ng-repeat="c in testviewCtrl.selectedCustomers">{{c.Name}}</span>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-2">
@@ -55,7 +58,7 @@
                          entityname="Route" onselectionchange="testviewCtrl.selectedRoutes" lastselectedvalue="testviewCtrl.lstselectedroute"></vr-dropdown> 
         </div>
         <div class="col-lg-2">
-            <span>Last Selected Value : </span>
+            <span>Last Route Selected Value : </span>
             <span>{{testviewCtrl.lstselectedroute.name}}</span>
         </div>
     </div>

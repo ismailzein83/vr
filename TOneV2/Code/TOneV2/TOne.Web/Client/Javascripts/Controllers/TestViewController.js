@@ -58,7 +58,6 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
         console.log(msg);
     });
 
-
     this.lstselectedcustomer = "";
     this.lstselectedroute = "";
 
