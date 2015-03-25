@@ -64,7 +64,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             this.getSelectText = function () {
                 
                 var selectedVal = [];
-
+                if (controller.selectedvalues == undefined) controller.selectedvalues = [];
                 for (var i = 0 ; i < controller.selectedvalues.length ; i++) {
                     selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
                     if (i == 2) break;
