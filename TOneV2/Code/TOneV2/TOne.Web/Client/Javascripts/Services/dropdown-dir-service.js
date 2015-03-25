@@ -14,14 +14,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         return BaseDirService.directiveMainURL + 'vr-dropdown-' + type + '.html';
     }
 
-    function getSelectText(singleSelection, length, values, dlabel, labelMsg) {
-
-        if (singleSelection) {
-            if (length > 0)
-                return values[length-1];
-            else
-                return dlabel;
-        }
+    function getSelectText(length, values, dlabel, labelMsg) {
 
         var label = "";
         if (length == 0)

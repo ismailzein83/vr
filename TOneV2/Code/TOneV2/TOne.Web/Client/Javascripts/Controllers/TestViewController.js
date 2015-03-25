@@ -49,12 +49,11 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
         datasource: [],
         lastselectedvalue: ''
     };
-
+    this.options.lastselectedvalue = { $type: "TOne.BusinessEntity.Entities.CarrierInfo, TOne.BusinessEntity.Entities", CarrierAccountID: "C097", Name: "TEST (test02)", $$hashKey: "object:25" }
     function loadRemoteData() {
         return CarriersService.getCustomers().then(function (customers) {
-            //controller.customers = customers;
             controller.options.datasource = customers;
-
+            //console.log(customers[0]);
         }, function (msg) {
             console.log(msg);
         });

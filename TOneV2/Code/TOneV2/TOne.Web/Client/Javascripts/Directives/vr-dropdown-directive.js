@@ -57,16 +57,20 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.getSelectText = function () {
-                var selectedVal =[];
-                if (controller.options.selectedvalues == undefined) {
-                    var s = DropdownService.getSelectText(controller.singleSelection(), 0, selectedVal, controller.placeholder, controller.selectplaceholder);
-                    return s;
+
+                if (controller.singleSelection()) {
+                    if (controller.options.lastselectedvalue !== undefined || controller.options.lastselectedvalue !== '') {
+                        return controller.getObjectText(controller.options.lastselectedvalue);
                     }
+                    return controller.placeholder;
+                }
+                
+                var selectedVal =[];
                 for (var i = 0; i < controller.options.selectedvalues.length; i++) {
                     selectedVal.push(controller.getObjectText(controller.options.selectedvalues[i]));
                     if (i == 2) break;
                     }
-                var s = DropdownService.getSelectText(controller.singleSelection(), controller.options.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                var s = DropdownService.getSelectText( controller.options.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
                 return s;
             };
 
