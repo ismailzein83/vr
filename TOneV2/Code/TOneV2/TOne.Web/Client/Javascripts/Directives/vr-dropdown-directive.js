@@ -24,7 +24,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         },
         controller: function () {
             var controller = this;
-            this.selectedValues = [];
+            if (this.selectedvalues !== undefined) this.selectedValues = this.selectedvalues;
+            else this.selectedValues = [];
+
             this.filtername = '';
             this.showloading = false;
 
