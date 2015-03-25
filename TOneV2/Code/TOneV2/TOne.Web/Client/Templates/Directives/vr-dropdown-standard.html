@@ -5,7 +5,7 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-custom" style="width:100%" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
         <li role="presentation">
-            <div ng-repeat="c in ctrl.getDatasource()" class="mark-select " ng-click="selectValue($event, c);" 
+            <div ng-repeat="c in ctrl.datasource" class="mark-select " ng-click="selectValue($event, c);"
                  ng-mouseenter="ctrl.muteaction($event);" style="display: block;padding:2px; margin:2px; white-space: normal;">
                 <div class="hand-cursor" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{ctrl.getObjectText(c)}}</div>
             </div>

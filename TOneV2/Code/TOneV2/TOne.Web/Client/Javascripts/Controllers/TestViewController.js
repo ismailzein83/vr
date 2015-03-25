@@ -59,8 +59,8 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
     });
 
 
-    this.lstselectedcustomer = '';
-    this.lstselectedroute = '';
+    this.lstselectedcustomer = "";
+    this.lstselectedroute = "";
 
     this.selectedvalues = function (items) {
         $scope.selectedcustomers = items;

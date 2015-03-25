@@ -10,6 +10,7 @@ app.service('BaseDirService', function () {
     });
 
     function getObjectProperty(item, property) {
+        if (item == undefined) return item;
         if (property && ('function' === typeof property)) {
             return property(item);
         }
