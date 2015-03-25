@@ -167,6 +167,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\BIController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\ChartTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -201,6 +202,7 @@
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
+    <Content Include="Client\Javascripts\Directives\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-gridview-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-textbox-directive.js" />
@@ -209,8 +211,10 @@
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
+    <Content Include="Client\Javascripts\Services\APIServices\BIAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
+    <Content Include="Client\Javascripts\Services\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Services\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
@@ -241,6 +245,7 @@
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\NewFolder1\grouped-categories.js" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-0.12.1.min.js" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-tpls-0.12.1.min.js" />
@@ -384,6 +389,8 @@
     <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
+    <Content Include="Client\Modules\BI\Controllers\Dashboards\TopManagementDashboardController.js" />
+    <Content Include="Client\Modules\BI\Views\Dashboards\TopManagementDashboard.html" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
@@ -467,6 +474,7 @@
     <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
+    <Content Include="Client\Templates\Directives\vr-chart.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-ondemand.html" />
@@ -552,6 +560,22 @@
     <ProjectReference Include="..\TOne.Analytics.Entities\TOne.Analytics.Entities.csproj">
       <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
       <Name>TOne.Analytics.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BI.Business\TOne.BI.Business.csproj">
+      <Project>{8ad4159c-2a7f-4755-bc06-c0bff17bd953}</Project>
+      <Name>TOne.BI.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BI.Data.SQL\TOne.BI.Data.SQL.csproj">
+      <Project>{4b8aaf35-6c33-4245-a26b-a4b0885a5ae2}</Project>
+      <Name>TOne.BI.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BI.Data\TOne.BI.Data.csproj">
+      <Project>{04248290-1d49-4ae5-a5ca-d4fb9bc82e10}</Project>
+      <Name>TOne.BI.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BI.Entities\TOne.BI.Entities.csproj">
+      <Project>{91757f60-1a2b-4413-8d27-26b637a03cb4}</Project>
+      <Name>TOne.BI.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>

@@ -56,6 +56,9 @@ namespace TOne.Web
                 "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.png", true));
 
+            bundles.Add(new ScriptBundle("~/bundles/highchart").IncludeDirectory(
+               "~/Client/Libraries/Charts/HichChart", "*.js", true));
+
             //Semantic
             //bundles.Add(new ScriptBundle("~/bundles/Semantic").IncludeDirectory(
             //    "~/Client/Libraries/Semantic", "*.js", true));
@@ -74,6 +77,7 @@ namespace TOne.Web
                 "~/Client/Javascripts/Modules", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Services", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BI/Controllers", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
 
             

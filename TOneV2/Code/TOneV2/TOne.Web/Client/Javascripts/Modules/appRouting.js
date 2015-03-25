@@ -52,6 +52,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Views/ChartPrototypes/AMChart.html',
             controller: 'AMChartController'
         }).
+        when('/BI/TopManagementDashboard', {
+            templateUrl: '/Client/Modules/BI/Views/Dashboards/TopManagementDashboard.html',
+            controller: 'TopManagementDashboardController'
+        }).
         otherwise({
             redirectTo: '/default'
         });
