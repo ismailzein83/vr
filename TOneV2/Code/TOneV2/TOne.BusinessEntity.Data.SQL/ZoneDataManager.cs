@@ -55,9 +55,8 @@ namespace TOne.BusinessEntity.Data.SQL
         public List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds)
         {
             DataTable dtZones = BuildZoneInfoTable(zonesIds);
-            List<ZoneInfo> zones = new List<ZoneInfo>();
 
-            GetItemsSPCmd("[BEntity].[sp_Zone_GetByZonesIds]",
+             return GetItemsSPCmd("[BEntity].[sp_Zone_GetByZonesIds]",
                    ZoneInfoMapper,
                    (cmd) =>
                    {
@@ -66,7 +65,7 @@ namespace TOne.BusinessEntity.Data.SQL
                        cmd.Parameters.Add(dtPrm);
                        
                    });
-            return zones;
+           
 
         }
         #region Private Methods
