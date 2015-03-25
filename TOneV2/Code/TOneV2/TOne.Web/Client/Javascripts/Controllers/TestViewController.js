@@ -38,9 +38,23 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
     var controller = this;
     this.customers;
 
+    this.options = {
+        selectedvalues: [],
+        datasource: [],
+        lastselectedvalue: ''
+    };
+
+    this.optionsZone = {
+        selectedvalues: [],
+        datasource: [],
+        lastselectedvalue: ''
+    };
+
     function loadRemoteData() {
         return CarriersService.getCustomers().then(function (customers) {
-            controller.customers = customers;
+            //controller.customers = customers;
+            controller.options.datasource = customers;
+
         }, function (msg) {
             console.log(msg);
         });
@@ -49,17 +63,17 @@ appControllers.controller('TestViewController', function ($scope, CarriersServic
     this.zones;
 
     $scope.selectedcustomers = [];
-    this.output = [];
+    
     ZonesService.getSalesZones("Lebanon").then(function (items) {
-        controller.output = items;
-        console.log(controller.output[0]);
-        console.log(controller.output.length);
+        controller.optionsZone.selectedvalues = items;
     }, function (msg) {
         console.log(msg);
     });
 
-    this.lstselectedcustomer = "";
-    this.lstselectedroute = "";
+    
+
+    this.lstselectedcustomer = '';
+    this.lstselectedroute = '';
 
     this.selectedvalues = function (items) {
         $scope.selectedcustomers = items;

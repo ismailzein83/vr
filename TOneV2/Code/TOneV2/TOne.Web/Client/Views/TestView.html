@@ -31,9 +31,9 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <vr-dropdown type="ondemand" datasource="testviewCtrl.zones" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone" onselectionchange="testviewCtrl.selectedvalues" 
-                         selectedvalues="testviewCtrl.output" lastselectedvalue="testviewCtrl.lstselectedcustomer"></vr-dropdown>
+            
+            <vr-dropdown type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" onselectionchange="testviewCtrl.selectedvalues"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span >Selected Values : </span>
@@ -41,26 +41,26 @@
         </div>
         <div class="col-lg-2">
             <span>Last Customer Selected Value : </span>
-            <span>{{testviewCtrl.lstselectedcustomer.Name}}</span>
+            <span>{{testviewCtrl.options.lstselectedcustomer.Name}}</span>
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown datasource="testviewCtrl.customers" lastselectedvalue="testviewCtrl.lstselectedcustomer" selectedvalues="testviewCtrl.selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
+            <vr-dropdown datasource="testviewCtrl.customers" options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span> Selected Customer Value : </span>
-            <span ng-repeat="c in testviewCtrl.selectedCustomers">{{c.Name}}</span>
+            <span ng-repeat="c in testviewCtrl.options.selectedCustomers">{{c.Name}}</span>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-2">
-            <vr-dropdown type="menu" datasource="testviewCtrl.routes" datatextfield="name" datavaluefield="value"
-                         entityname="Route" onselectionchange="testviewCtrl.selectedRoutes" lastselectedvalue="testviewCtrl.lstselectedroute"></vr-dropdown> 
+            <!--<vr-dropdown type="menu" datasource="testviewCtrl.routes" datatextfield="name" datavaluefield="value"
+                         entityname="Route" onselectionchange="testviewCtrl.selectedRoutes" lastselectedvalue="testviewCtrl.lstselectedroute"></vr-dropdown>--> 
         </div>
-        <div class="col-lg-2">
+        <!--<div class="col-lg-2">
             <span>Last Route Selected Value : </span>
             <span>{{testviewCtrl.lstselectedroute.name}}</span>
-        </div>
+        </div>-->
     </div>
     <!--<div class="=row">
         <vr-gridview gridoptions="testviewCtrl.gridOptions" datasource="testviewCtrl.data">

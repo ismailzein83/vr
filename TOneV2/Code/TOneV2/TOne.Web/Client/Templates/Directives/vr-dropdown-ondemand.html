@@ -27,7 +27,7 @@
                 </div>
 
             </div>
-            <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.selectedvalues.length > 0">
+            <div style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; height: 260px; overflow: auto; white-space:normal" ng-show="ctrl.options.selectedvalues.length > 0">
                 <div style="padding:5px ;">
                     {{ctrl.selectlbl}}
                     <a href="" class="link" style="position: absolute; right: 5px;" ng-click="clearAllSelected($event);  ">
@@ -36,7 +36,7 @@
                     </a>
                 </div>
                 <div style="height: 225px; overflow: auto;padding-top:5px">
-                    <span class="label custom-label" ng-repeat="obj in ctrl.selectedvalues">
+                    <span class="label custom-label" ng-repeat="obj in ctrl.options.selectedvalues">
                         {{ctrl.getObjectText(obj)}}
                         <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectValue($event,obj); "></span> 
                     </span>

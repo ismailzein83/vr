@@ -6,9 +6,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
         restrict: 'E',
         scope: {
-            datasource: '=',
-            selectedvalues: '=',
-            lastselectedvalue: '=',
+            options:'=',
             datatextfield: '@',
             datavaluefield: '@',
             selectlbl: '@',
@@ -46,7 +44,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             };
 
             this.findExsite = function (item) {
-                return BaseDirService.findExsite(controller.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
+                return BaseDirService.findExsite(controller.options.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
             };
 
             this.muteAction = function (e) {
@@ -60,30 +58,30 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
             this.getSelectText = function () {
                 var selectedVal =[];
-                if (controller.selectedvalues == undefined) {
+                if (controller.options.selectedvalues == undefined) {
                     var s = DropdownService.getSelectText(controller.singleSelection(), 0, selectedVal, controller.placeholder, controller.selectplaceholder);
                     return s;
                     }
-                for (var i = 0; i < controller.selectedvalues.length; i++) {
-                    selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
+                for (var i = 0; i < controller.options.selectedvalues.length; i++) {
+                    selectedVal.push(controller.getObjectText(controller.options.selectedvalues[i]));
                     if (i == 2) break;
                     }
-                var s = DropdownService.getSelectText(controller.singleSelection(), controller.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                var s = DropdownService.getSelectText(controller.singleSelection(), controller.options.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
                 return s;
             };
 
             this.getUlClass = function () {
-                return controller.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
+                return controller.options.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
 
             this.getLastSelectedValue = function () {
-                if (controller.lastselectedvalue !== undefined){
-                    var x = controller.getObjectText(controller.lastselectedvalue);
-                    if (x == undefined) return controller.getObjectText(controller.datasource[0]);
+                if (controller.options.lastselectedvalue !== undefined){
+                    var x = controller.getObjectText(controller.options.lastselectedvalue);
+                    if (x == undefined) return controller.getObjectText(controller.options.datasource[0]);
                     else return x;
                 }
                 else
-                    return controller.getObjectText(controller.datasource[0]);
+                    return controller.getObjectText(controller.options.datasource[0]);
             };
 
             },
@@ -104,48 +102,48 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     $scope.clearDatasource = function () {
-                        if (ctrl.datasource == undefined) return;
-                            ctrl.datasource =[];
-                            ctrl.datasource.length = 0;
+                        if (ctrl.options.datasource == undefined) return;
+                            ctrl.options.datasource =[];
+                            ctrl.options.datasource.length = 0;
                     };
 
                     $scope.clearAllSelected = function (e) {
                         ctrl.muteAction(e);
-                        ctrl.selectedvalues = [];
-                        ctrl.selectedvalues.length = 0;
+                        ctrl.options.selectedvalues = [];
+                        ctrl.options.selectedvalues.length = 0;
                     };
 
                     var selectval = function (e, item) {
                         
                         if (ctrl.singleSelection()) {
                             
-                                ctrl.selectedvalues =[];
-                                            ctrl.selectedvalues.length = 0;
-                                            ctrl.selectedvalues.push(item);
+                                ctrl.options.selectedvalues =[];
+                                            ctrl.options.selectedvalues.length = 0;
+                                            ctrl.options.selectedvalues.push(item);
                                 }
                                 else {
                                             ctrl.muteAction(e);
                                             var index = null;
                                             try {
-                                                index = BaseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                                                index = BaseDirService.findExsite(ctrl.options.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
                                 }
                                             catch (ex) {
 
                                 }
                                             if (index >= 0)
-                                                ctrl.selectedvalues.splice(index, 1);
+                                                ctrl.options.selectedvalues.splice(index, 1);
                                 else
-                                                ctrl.selectedvalues.push(item);
+                                                ctrl.options.selectedvalues.push(item);
                             }
                             };
 
                     $scope.selectValue = function (e, item) {
                         selectval(e, item);
-                        ctrl.lastselectedvalue = item;
+                        ctrl.options.lastselectedvalue = item;
                             if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                                    var item = ctrl.onselectionchange()(ctrl.selectedValues, ctrl.lastselectedvalue, ctrl.datasource);
+                                    var item = ctrl.onselectionchange()(ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
                                     if (item !== undefined) {
-                                        ctrl.lastselectedvalue = item;
+                                        ctrl.options.lastselectedvalue = item;
                                         selectval(null, item);
                                     }
 
@@ -157,7 +155,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                         if (ctrl.filtername.length > (ctrl.limitcharactercount -1)) {
                             ctrl.showloading = true;
                             ctrl.onsearch() (ctrl.filtername).then(function (items) {
-                                ctrl.datasource = items;
+                                ctrl.options.datasource = items;
                                 ctrl.showloading = false;
                                 }, function (msg) {
                                     console.log(msg);
