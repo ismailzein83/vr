@@ -41,6 +41,10 @@ var TestViewController = function (CarriersService, ZonesService) {
             lastselectedvalue: ''
         };
 
+        ctrl.validationOptions = {
+            required : true
+        };
+
         //ctrl.options.lastselectedvalue = { CarrierAccountID: "C097", Name: "TEST (test02)" };
     }
 

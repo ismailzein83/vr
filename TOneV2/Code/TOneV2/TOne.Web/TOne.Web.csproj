@@ -208,6 +208,7 @@
     <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-gridview-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-textbox-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-validation.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
@@ -221,6 +222,7 @@
     <Content Include="Client\Javascripts\Services\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
