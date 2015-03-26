@@ -35,7 +35,7 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
 
     function setDefaultAttributes(attrs) {
 
-        if (attrs.limitcharactercount == undefined) attrs.$set("limitcharactercount", "4");
+        if (attrs.limitcharactercount == undefined) attrs.$set("limitcharactercount", "2");
         if (attrs.limitplaceholder == undefined) attrs.$set("limitplaceholder", "Type " + attrs.limitcharactercount + " characters..");
         if (attrs.entityname == undefined) return attrs;
         if (attrs.selectlbl == undefined) attrs.$set("selectlbl", "Selected " + attrs.entityname + " :");

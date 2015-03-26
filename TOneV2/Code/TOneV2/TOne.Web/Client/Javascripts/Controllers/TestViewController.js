@@ -1,108 +1,67 @@
 ﻿'use strict'
 
-var TestViewController = function ($scope, CarriersService, ZonesService) {
+var TestViewController = function (CarriersService, ZonesService) {
 
-    this.model = 'Test View model';
-    this.Input = '123';
-    this.alertMsg = function () {
-        alert(this.Input);
+    var ctrl = this;
+    load();
+    loadZone();
+    loadCarriers();
+
+    ctrl.alertMsg = function () {
+        alert(ctrl.Input);
     }
 
-    var tableColumnDefinition = [
-              {
-                  columnHeaderDisplayName: 'Name',
-                  columnKey: 'name',
-                  visible: true,
-                  templateUrl: '/Client/Templates/Views/vr-gridview-v1.html',
-                  enFilter: true,
-                  columnSearchProperty: 'name'
-              },
-              {
-                  columnHeaderDisplayName: 'Age',
-                  columnKey: 'age',
-                  visible: true,
-                  enFilter: true,
-                  columnSearchProperty: 'age'
-              }
-    ];
+    ctrl.selectedRoutes = function (items, item, data) {
 
-    this.data = [{ name: "Moroni", age: 50 },
-            { name: "Tiancum", age: 43 },
-            { name: "Jacob", age: 27 }];
+    }
 
-    this.gridOptions = {
-        columnDefinition: tableColumnDefinition
-    };
+    ctrl.onsearch = function (text) {
+        return ZonesService.getSalesZones(text);
+    }
+    
+    function load() {
+        ctrl.model = 'Test View model';
+        ctrl.Input = '123';
+        ctrl.data = [{ name: "Moroni", age: 50 },
+                    { name: "Tiancum", age: 43 },
+                    { name: "Jacob", age: 27 }];
 
-    //DropDown
-    var controller = this;
-    this.customers;
+        ctrl.routes = [{ name: "Moroni", value: 50 },
+            { name: "Tiancum", value: 43 },
+            { name: "Jacob", value: 27 }];
 
-    this.options = {
-        selectedvalues: [],
-        datasource: [],
-        lastselectedvalue: ''
-    };
+        ctrl.options = {
+            selectedvalues: [],
+            datasource: []
+        };
 
-    this.optionsZone = {
-        selectedvalues: [],
-        datasource: [],
-        lastselectedvalue: ''
-    };
-    this.options.lastselectedvalue = { $type: "TOne.BusinessEntity.Entities.CarrierInfo, TOne.BusinessEntity.Entities", CarrierAccountID: "C097", Name: "TEST (test02)", $$hashKey: "object:25" }
-    function loadRemoteData() {
-        return CarriersService.getCustomers().then(function (customers) {
-            controller.options.datasource = customers;
-            //console.log(customers[0]);
+        ctrl.optionsZone = {
+            selectedvalues: [],
+            datasource: [],
+            lastselectedvalue: ''
+        };
+
+        //ctrl.options.lastselectedvalue = { CarrierAccountID: "C097", Name: "TEST (test02)" };
+    }
+
+    function loadZone() {
+        ZonesService.getSalesZones("Lebanon").then(function (items) {
+            ctrl.optionsZone.selectedvalues = items;
         }, function (msg) {
             console.log(msg);
         });
     }
-    loadRemoteData();
-    this.zones;
 
-    $scope.selectedcustomers = [];
+    function loadCarriers() {
+        return CarriersService.getCustomers().then(function (customers) {
+            ctrl.options.datasource = customers;
+        }, function (msg) {
+            console.log(msg);
+        });
+    }
     
-    ZonesService.getSalesZones("Lebanon").then(function (items) {
-        controller.optionsZone.selectedvalues = items;
-    }, function (msg) {
-        console.log(msg);
-    });
-
-    
-
-    this.lstselectedcustomer = '';
-    this.lstselectedroute = '';
-
-    this.selectedvalues = function (items) {
-        $scope.selectedcustomers = items;
-    }
-
-    this.routes = [{ name: "Moroni", value: 50 },
-            { name: "Tiancum", value: 43 },
-            { name: "Jacob", value: 27 }];
-
-    controller.lstselectedroute = controller.routes[2];//{ name: "Jacob", value: 27 };
-
-    this.selectedRoutes = function (items, item, data) {
-
-        //if (items.length > 0)
-        //    console.log(items[items.length - 1].name);
-
-        //if (item.name == "Tiancum")
-        //    return { name: "Jacob", value: 27 };
-
-        //return controller.routes[1];
-    }
-
-    this.onsearch = function (text) {
-        return ZonesService.getSalesZones(text);
-    }
-
-
-
 }
 
-TestViewController.$inject = ['$scope', 'CarriersService', 'ZonesService'];
+TestViewController.$inject = [ 'CarriersService', 'ZonesService'];
 
 appControllers.controller('TestViewController', TestViewController);

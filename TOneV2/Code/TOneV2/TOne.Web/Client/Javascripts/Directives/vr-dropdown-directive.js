@@ -60,7 +60,9 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
                 if (controller.singleSelection()) {
                     if (controller.options.lastselectedvalue !== undefined || controller.options.lastselectedvalue !== '') {
-                        return controller.getObjectText(controller.options.lastselectedvalue);
+                        var x = controller.getObjectText(controller.options.lastselectedvalue);
+                        if(x !== undefined)
+                            return x;
                     }
                     return controller.placeholder;
                 }
