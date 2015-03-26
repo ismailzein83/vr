@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.BI.Entities
 {
-    public enum MeasureType
+    public class TimeValuesRecord : BaseTimeDimensionRecord
     {
-        DurationInMinutes = 0,
-        Sale = 1,
-        Cost = 2,
-        Profit = 3
+        public Decimal[] Values { get; set; }
     }
 }

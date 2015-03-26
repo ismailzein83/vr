@@ -1,5 +1,6 @@
-﻿<select ng-options="itm as itm.name for itm in timeDimensionTypes"
-        ng-model="selectedTimeDimensionType" ng-change="updateCharts()"></select>
+﻿
+<select ng-options="itm as itm.name for itm in dateTimeFilters"
+        ng-model="selectedDateTimeFilter" ng-change="updateCharts()"></select>
 
 <select ng-options="itm as itm.name for itm in measureTypes"
         ng-model="selectedMeasureType" ng-change="updateCharts()"></select>
@@ -7,6 +8,8 @@
 
 <select ng-options="itm as itm.name for itm in topCounts"
         ng-model="selectedTopCount" ng-change="updateCharts()"></select>
+<label><input type="checkbox" ng-model="showLegendsWithValues" ng-change="updateCharts()" />Show Legends & Values</label>
+
 
 <div></div>
 <vr-chart data-on-ready="chartTopDestinationsReady" style="display:inline-block"></vr-chart>

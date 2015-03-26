@@ -60,6 +60,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/BI/Views/Dashboards/SeniorManagementDashboard.html',
             controller: 'SeniorManagementDashboardController'
         }).
+        when('/BI/ZoneDetails/:ZoneId/:ZoneName', {
+            templateUrl: '/Client/Modules/BI/Views/Reports/ZoneDetails.html',
+            controller: 'ZoneDetailsController'
+        }).
         otherwise({
             redirectTo: '/default'
         });

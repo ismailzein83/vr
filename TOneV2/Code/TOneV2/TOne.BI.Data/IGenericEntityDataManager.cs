@@ -12,5 +12,7 @@ namespace TOne.BI.Data
     {
         IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount);
         IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityValue, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate);
+
+        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes);
     }
 }

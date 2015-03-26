@@ -1,5 +1,5 @@
 ﻿appControllers.controller('SeniorManagementDashboardController',
-    function SeniorManagementDashboardController($scope, BIAPIService) {
+    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -9,10 +9,10 @@
 
 
             $scope.testModel = 'SeniorManagementDashboardController';
-            $scope.timeDimensionTypes = [{ name: "Daily", value: 0, fromDate: '2012-1-2', toDate: '2012-2-28' },
-            { name: "Weekly", value: 1, fromDate: '2012-1-2', toDate: '2012-04-28' },
-            { name: "Monthly", value: 2, fromDate: '2012-1-2', toDate: '2013-12-31' },
-            { name: "Yearly", value: 3, fromDate: '2012-1-2', toDate: '2014-1-1' }, ];
+            $scope.dateTimeFilters = [{ name: "Today", value: 0, fromDate: '2012-1-2', toDate: '2012-1-3' },
+            { name: "WTD", value: 1, fromDate: '2012-1-2', toDate: '2012-02-9' },
+            { name: "MTD", value: 2, fromDate: '2012-1-2', toDate: '2013-2-2' },
+            { name: "YTD", value: 3, fromDate: '2011-1-2', toDate: '2014-1-1' }, ];
 
             $scope.measureTypes = [{ name: "Duration In Minutes", value: 0 },
             { name: "Sale", value: 1 },
@@ -32,6 +32,18 @@
 
             $scope.chartTopDestinationsReady = function (api) {
                 chartTopDestinationsAPI = api;
+                chartTopDestinationsAPI.onDataItemClicked = function (zoneItem) {
+                    console.log("/BI/ZoneDetails/" + zoneItem.EntityId);
+                    $scope.$root.$apply(function () {
+                        $scope.zoneId = zoneItem.EntityId;
+                        $scope.zoneName = zoneItem.EntityName;
+                        addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneDetails.html', show: false });
+                        addModal.$promise.then(addModal.show);
+                        //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
+                    });
+                   
+                    console.log('not gone');
+                };
                 updateTopDestinationsChart();
             };
 
@@ -53,7 +65,7 @@
         }
 
         function load() {
-            $scope.selectedTimeDimensionType = $scope.timeDimensionTypes[0];
+            $scope.selectedDateTimeFilter = $scope.dateTimeFilters[0];
             $scope.selectedMeasureType = $scope.measureTypes[0];
             $scope.selectedTopCount = $scope.topCounts[1];
         }
@@ -82,14 +94,15 @@
         function updateTopChart(chartAPI, entityType, chartSettings) {
            
             chartAPI.showLoader();
-            BIAPIService.GetTopEntities(entityType, $scope.selectedMeasureType.value, $scope.selectedTimeDimensionType.fromDate, $scope.selectedTimeDimensionType.toDate, $scope.selectedTopCount.value)
+            BIAPIService.GetTopEntities(entityType, $scope.selectedMeasureType.value, $scope.selectedDateTimeFilter.fromDate, $scope.selectedDateTimeFilter.toDate, $scope.selectedTopCount.value)
                 .then(function (response) {
 
                     var chartData = response;
                     var chartDefinition = {
                         type: "pie",
                         title: chartSettings.chartTitle,
-                        yAxisTitle: "Value"
+                        yAxisTitle: "Value",
+                        showLegendsWithValues: $scope.showLegendsWithValues
                     };
 
                     var seriesDefinitions = [{

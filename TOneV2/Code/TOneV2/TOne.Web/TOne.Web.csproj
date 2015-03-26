@@ -251,7 +251,38 @@
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
     <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\NewFolder1\grouped-categories.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\adapters\standalone-framework.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\adapters\standalone-framework.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\highcharts-more.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\broken-axis.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\broken-axis.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\canvas-tools.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\canvas-tools.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\data.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\data.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\drilldown.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\drilldown.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\exporting.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\exporting.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\funnel.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\funnel.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\heatmap.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\heatmap.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\no-data-to-display.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\no-data-to-display.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\solid-gauge.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\solid-gauge.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\treemap.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\treemap.src.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\Plugins\grouped-categories.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-blue.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-green.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-unica.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\gray.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\grid-light.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\grid.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\sand-signika.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\skies.js" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-0.12.1.min.js" />
     <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-tpls-0.12.1.min.js" />
@@ -682,7 +713,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2880</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

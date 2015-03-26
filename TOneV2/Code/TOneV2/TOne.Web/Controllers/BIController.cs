@@ -29,10 +29,16 @@ namespace TOne.Web.Controllers
             return manager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount);
         }
 
-        public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityValue, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
+        public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityId, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetEntityMeasureValues(entityType, entityValue, measureType, timeDimensionType, fromDate, toDate);
+            return manager.GetEntityMeasureValues(entityType, entityId, measureType, timeDimensionType, fromDate, toDate);
+        }
+
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] MeasureType[] measureTypes)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            return manager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
         }
     }
 }

@@ -4,7 +4,9 @@ app.service('BIAPIService', function (BaseAPIService) {
     return ({
         GetProfit: GetProfit,
         GetTopZonesByDuration: GetTopZonesByDuration,
-        GetTopEntities: GetTopEntities
+        GetTopEntities: GetTopEntities,
+        GetEntityMeasureValues: GetEntityMeasureValues,
+        GetEntityMeasuresValues: GetEntityMeasuresValues
     });
 
     function GetProfit(timeDimensionType, fromDate, toDate) {       
@@ -34,6 +36,30 @@ app.service('BIAPIService', function (BaseAPIService) {
                 fromDate: fromDate,
                 toDate: toDate,
                 topCount: topCount
+            });
+    }
+    
+    function GetEntityMeasureValues(entityType, entityValue, measureType, timeDimensionType, fromDate, toDate) {
+        return BaseAPIService.get("/api/BI/GetEntityMeasureValues",
+            {
+                entityType: entityType,
+                entityValue: entityValue,
+                measureType: measureType,
+                timeDimensionType: timeDimensionType,
+                fromDate: fromDate,
+                toDate: toDate
+            });
+    }
+
+    function GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes) {
+        return BaseAPIService.get("/api/BI/GetEntityMeasuresValues",
+            {
+                entityType: entityType,
+                entityId: entityId,
+                timeDimensionType: timeDimensionType,
+                fromDate: fromDate,
+                toDate: toDate,
+                measureTypes: measureTypes
             });
     }
 

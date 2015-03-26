@@ -16,10 +16,16 @@ namespace TOne.BI.Business
             return dataManager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount);
         }
 
-        public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityValue, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
+        public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityId, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            return dataManager.GetEntityMeasureValues(entityType, entityValue, measureType, timeDimensionType, fromDate, toDate);
+            return dataManager.GetEntityMeasureValues(entityType, entityId, measureType, timeDimensionType, fromDate, toDate);
+        }
+
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes)
+        {
+            IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
+            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
         }
     }
 }

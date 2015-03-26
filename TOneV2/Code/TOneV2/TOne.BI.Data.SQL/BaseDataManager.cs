@@ -171,12 +171,18 @@ namespace TOne.BI.Data.SQL
 
         #region Query Builders
 
-        protected string BuildQuery(string columnsPart, string rowsPart, string filtersPart)
+        protected string BuildQuery(string columnsPart, string rowsPart, string filtersPart, string expressionsPart = null)
         {
-            return string.Format(@"select {{{0}}} ON COLUMNS,                                
+            string query = string.Format(@"select {{{0}}} ON COLUMNS,                                
                                     {1} ON ROWS
                                     FROM [{2}]
                                     WHERE {3}", columnsPart, rowsPart, CubeName, filtersPart);
+
+            if (!String.IsNullOrEmpty(expressionsPart))
+                return String.Format(@"WITH {0}
+                                        {1}", expressionsPart, query);
+            else
+                return query;
         }
 
         protected string BuildQueryColumnsPart(params string[] columnNames)

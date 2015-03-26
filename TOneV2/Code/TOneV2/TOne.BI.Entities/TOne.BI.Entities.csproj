@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeDimensionType.cs" />
     <Compile Include="TimeDimensionValueRecord.cs" />
+    <Compile Include="TimeValuesRecord.cs" />
     <Compile Include="ZoneValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

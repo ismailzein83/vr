@@ -74,9 +74,26 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                             cursor: 'pointer',
                             depth: 35,
                             dataLabels: {
-                                enabled: true,
+                                enabled: !chartDefinition.showLegendsWithValues,
                                 format: '{point.name}'
-                            }
+                            },
+                            showInLegend: true,
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                        layout: 'vertical',
+                        align: 'right',
+                        //width: chartDefinition.showLegendsWithValues ? 220 : 10,
+                        verticalAlign: 'top',
+                        y: 15,
+                        borderWidth: 0,
+                        useHTML: true,
+                        labelFormatter: function () {
+                            if (chartDefinition.showLegendsWithValues)
+                                return '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">' + this.y.toFixed(2) + '</span></div>';
+                            else
+                                return '<div style="width:10px" title="' + this.name + '">' + (this.name != null && this.name.length > 2 ? this.name.substring(0, 2) : this.name) + '</div>';
                         }
                     },
                     yAxis: {
