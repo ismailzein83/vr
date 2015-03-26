@@ -127,8 +127,7 @@
             }
         }
         $scope.saveRule = function () {
-            var routeRule =
-                {
+            var routeRule = {
                     CodeSet: $scope.subViewConnector.getCodeSet(),
                     CarrierAccountSet: $scope.subViewConnector.getCarrierAccountSet(),
                     ActionData: $scope.subViewConnector.getActionData(),
@@ -136,13 +135,13 @@
                     BeginEffectiveDate: $scope.BEDDate,
                     EndEffectiveDate: ($scope.EEDDate),
                     Reason: $scope.Reason
-                };
-            $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
-                         routeRule)
-                        .success(function (response) {
-                            notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
-                            $location.path("/RouteRuleManager").replace();
-                        });
+            };
+            RoutingService.saveRouteRule(routeRule)
+            .then(function (response) {             
+                notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
+                $location.path("/RouteRuleManager").replace();
+            })
+
         }
         $scope.cancel = function () {
             $location.path("/RouteRuleManager").replace();

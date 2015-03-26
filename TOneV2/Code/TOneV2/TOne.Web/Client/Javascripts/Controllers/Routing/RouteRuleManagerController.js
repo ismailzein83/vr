@@ -1,8 +1,9 @@
-﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingService) {
+﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingService, $modal) {
     var pageSize = 40;
     var page = 0;
     var pageUp = 0;
     var last = false;
+    var addModal = null ;
 
     defineScopeObjects();
     defineScopeMethods();
@@ -11,6 +12,7 @@
     function defineScopeObjects() {
         $scope.numberoflines = 10;
         $scope.isloadingdata = false;
+        
         var last = false;
         $scope.gridOptionsRouteRule = {
             enableHorizontalScrollbar: 0,
@@ -49,6 +51,7 @@
             enableHiding: false,
             cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.onDblClick(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
         }
+        addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: false });
 
     }
     function defineScopeMethods() {
@@ -106,7 +109,9 @@
 
         };
         $scope.AddNewRoute = function () {
-            $location.path("/RouteRuleEditor2/undefined").replace();
+            //$location.path("/RouteRuleEditor2/undefined").replace();
+            addModal.$promise.then(addModal.show);
+
         }
         $scope.toggelFilter = function () {
             $scope.gridOptionsRouteRule.enableFiltering = !$scope.gridOptionsRouteRule.enableFiltering;
@@ -136,7 +141,7 @@
     
 
 }
-RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants','RoutingService'];
+RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants','RoutingService','$modal'];
 
 appControllers.controller('RouteRuleManagerController', RouteRuleManagerController)
 

@@ -29,7 +29,8 @@ app.service('MainService', function ($q) {
 app.service('HttpService', function ($http, MainService) {
 
     return ({
-        get: get
+        get: get,
+        post:post
     });
 
     function get(url, params) {
@@ -38,6 +39,16 @@ app.service('HttpService', function ($http, MainService) {
             method: "get",
             url: url,
             params: params
+        });
+        return (request.then(MainService.handleSuccess, MainService.handleError));
+    }
+
+    function post(url, data) {
+
+        var request = $http({
+            method: "post",
+            url: url,
+            data: data
         });
         return (request.then(MainService.handleSuccess, MainService.handleError));
     }
