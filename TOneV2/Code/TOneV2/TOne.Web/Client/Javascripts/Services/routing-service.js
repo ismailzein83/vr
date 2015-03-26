@@ -3,26 +3,21 @@ var RoutingService = function (HttpService, MainService) {
 
     return ({
         getAllRouteRule:getAllRouteRule,
-        getRouteRuleDetails: getRouteRuleDetails,
-        saveRouteRule: saveRouteRule
+        getRouteRuleDetails: getRouteRuleDetails
     });
 
 
-    function getAllRouteRule() {
+    function getAllRouteRule(page, pageSize) {
 
         var getRoutingURL = MainService.getBaseURL() + "/api/routing/GetAllRouteRule";
-        return HttpService.get(getRoutingURL);
+        return HttpService.get(getRoutingURL, {pageNumber: page,pageSize: pageSize});
     }
     function getRouteRuleDetails(RouteRuleId) {
 
         var getRoutingURL = MainService.getBaseURL() + "/api/routing/GetRouteRuleDetails";
-        return HttpService.get(getRoutingURL, RouteRuleId);
+        return HttpService.get(getRoutingURL, { RouteRuleId: RouteRuleId });
     }
-    function saveRouteRule(routeRule) {
-
-        var getRoutingURL = MainService.getBaseURL() + "/api/routing/SaveRouteRule";
-        return HttpService.get(getRoutingURL, routeRule);
-    }
+    
 }
 RoutingService.$inject = ['HttpService', 'MainService'];
-app.service('RoutingService', RoutingService);
+appControllers.service('RoutingService', RoutingService);
