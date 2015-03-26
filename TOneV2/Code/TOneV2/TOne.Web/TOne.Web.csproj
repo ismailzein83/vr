@@ -215,6 +215,7 @@
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BIAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\routing-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
     <Content Include="Client\Javascripts\Services\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Services\dropdown-dir-service.js" />

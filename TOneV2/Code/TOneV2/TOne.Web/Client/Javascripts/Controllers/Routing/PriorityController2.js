@@ -1,5 +1,5 @@
 ﻿appControllers.controller('PriorityController2',
-    function PriorityController2($scope, $http) {
+    function PriorityController2($scope, $http, CarriersService) {
        
         $scope.subViewConnector.getActionData = function () {
             return {
@@ -25,34 +25,30 @@
             datasource: [],
             selectedgroup: false
         };
-        $http.get($scope.baseurl + "/api/BusinessEntity/GetCarriers",
-           {
-               params: {
-                   carrierType: 2
-               }
-           })
-           .success(function (response) {
-               $scope.optionsSuppliers.datasource = response;
-               $scope.optionsSuppliers.selectedvalues.length = 0;
-               if ($scope.routeRule) {
-                   var tab = [];
-                   $.each($scope.routeRule.ActionData.Options, function (i, value) {
-                       var existobj = $scope.findExsiteObj($scope.optionsSuppliers.datasource, value.SupplierId, 'CarrierAccountID')
-                       if (existobj != null) {
-                               tab[i] = {
-                                   CarrierAccountID: value.SupplierId,
-                                   Name: existobj.Name,
-                                   Force: value.Force,
-                                   Percentage: $scope.routeRule.ActionData.Options[i].Percentage,
-                                   Priority: value.Priority
-                               }
-                       }
-
-                   });
-                   $scope.optionsSuppliers.selectedvalues = tab;
-               }
-          });
         
+        CarriersService.getSuppliers()
+            .then(function (response) {
+                $scope.optionsSuppliers.datasource = response;
+                $scope.optionsSuppliers.selectedvalues.length = 0;
+                if ($scope.routeRule) {
+                    var tab = [];
+                    $.each($scope.routeRule.ActionData.Options, function (i, value) {
+                        var existobj = $scope.findExsiteObj($scope.optionsSuppliers.datasource, value.SupplierId, 'CarrierAccountID')
+                        if (existobj != null) {
+                            tab[i] = {
+                                CarrierAccountID: value.SupplierId,
+                                Name: existobj.Name,
+                                Force: value.Force,
+                                Percentage: $scope.routeRule.ActionData.Options[i].Percentage,
+                                Priority: value.Priority
+                            }
+                        }
+
+                    });
+                    $scope.optionsSuppliers.selectedvalues = tab;
+                }
+
+         })
       
         $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.selectSupplier = function ($event, s) {

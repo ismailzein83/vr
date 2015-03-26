@@ -1,30 +1,20 @@
 ﻿appControllers.controller('ZoneController2',
     function ZoneController2($scope, $http, ZonesService) {
-        $scope.filterzone = '';
         $scope.optionsZones = {
             selectedvalues: [],
             datasource: []
         };
-        //$scope.optionsZones.datasource = [];
-        $scope.showloading = false;
-        $scope.selectedZones = [];
         $scope.code = "";
         $scope.codeList = [];
         $scope.codeInpute = '';
         if ($scope.routeRule != null && $scope.routeRule.CodeSet.ZoneIds != undefined) {
             $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
             $scope.zoneSelectionOption = $scope.routeRule.CodeSet.ZoneIds.SelectionOption;
-            $http.get($scope.baseurl + "/api/BusinessEntity/GetZoneList",
-              {
-                  params: {
-                      ZonesIds: $scope.routeRule.CodeSet.ZoneIds.SelectedValues
-                  }
-              })
-              .success(function (response) {
+            ZonesService.getZoneList($scope.routeRule.CodeSet.ZoneIds.SelectedValues)
+              .then(function (response) {
                   $scope.optionsZones.selectedvalues = response;
 
-              });
-
+              })           
         }
         else {
             $scope.zoneSelectionOption = 1;

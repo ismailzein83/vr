@@ -29,20 +29,20 @@
                 </div>
                 <div class="col-lg-2 style-col">
                     <vr-dropdown datatextfield="name" datavaluefield="objectType"
-                                 entityname="" type="standard" options="RouteRuleEditorController2.optionsRouteType"></vr-dropdown>
+                                 entityname="" type="standard" options="optionsRouteType"></vr-dropdown>
                 </div>
             </div>
             <div class="row style-row">
                 <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
-                             onselectionchange="update2" options="RouteRuleEditorController2.optionsRuleType"></vr-dropdown>
-                <div ng-include src="RouteRuleEditorController2.optionsRuleType.lastselectedvalue.url">
+                             onselectionchange="update2" options="optionsRuleType"></vr-dropdown>
+                <div ng-include src="optionsRuleType.lastselectedvalue.url">
                 </div> 
             </div>
             <div class="row style-row">             
                 <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
-                             options="RouteRuleEditorController2.optionsEditorType"></vr-dropdown>
+                             options="optionsEditorType"></vr-dropdown>
 
-                <div ng-include src=" RouteRuleEditorController2.optionsEditorType.lastselectedvalue.url">
+                <div ng-include src=" optionsEditorType.lastselectedvalue.url">
                 </div>
             </div>
             <div class="row style-row">
@@ -67,11 +67,11 @@
             </div>
 
 
-            <div class="row style-row" ng-show="RouteRuleEditorController2.optionsRouteType.lastselectedvalue.name != 'Block Route' && RouteRuleEditorController2.optionsRouteType.lastselectedvalue.url!='' " style="min-height:200px">
+            <div class="row style-row" ng-show="optionsRouteType.lastselectedvalue.name != 'Block Route' && optionsRouteType.lastselectedvalue.url!='' " style="min-height:200px">
                 <div class="col-lg-12  style-col">
-                    <h4>{{RouteRuleEditorController2.optionsRouteType.lastselectedvalue.name}} Details:</h4>
+                    <h4>{{optionsRouteType.lastselectedvalue.name}} Details:</h4>
                 </div>
-                <div ng-include src="RouteRuleEditorController2.optionsRouteType.lastselectedvalue.url">
+                <div ng-include src="optionsRouteType.lastselectedvalue.url">
 
                 </div>
             </div>
