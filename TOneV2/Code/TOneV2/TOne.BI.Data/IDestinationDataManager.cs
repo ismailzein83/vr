@@ -8,8 +8,8 @@ using TOne.BI.Entities;
 
 namespace TOne.BI.Data
 {
-    public interface ISalesDataManager : IDataManager
+    public interface IDestinationDataManager : IDataManager
     {
-        IEnumerable<ProfitInfo> GetProfit(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate);
+        IEnumerable<ZoneValue> GetTopZonesByDuration(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, int topCount);
     }
 }

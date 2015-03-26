@@ -14,89 +14,94 @@
             { name: "Monthly", value: 2, fromDate: '2012-1-2', toDate: '2013-12-31' },
             { name: "Yearly", value: 3, fromDate: '2012-1-2', toDate: '2014-1-1' }, ];
 
-            $scope.profit = [];
+            $scope.measureTypes = [{ name: "Duration In Minutes", value: 0 },
+            { name: "Sale", value: 1 },
+            { name: "Cost", value: 2 }
+            ];
+
+            $scope.topCounts = [{ name: "5", value: 5 },
+           { name: "10", value: 10 },
+           { name: "15", value: 15 }
+            ];
 
         }
-
+        var chartTopDestinationsAPI;
+        var chartTopCustomersAPI;
+        var chartTopSuppliersAPI;
         function defineScopeMethods() {
 
-            $scope.chartSaleCostProfitReady = function (api) {
-                $scope.chartSaleCostProfitAPI = api;
-                updateProfitChart();
+            $scope.chartTopDestinationsReady = function (api) {
+                chartTopDestinationsAPI = api;
+                updateTopDestinationsChart();
             };
 
-            $scope.chartProfitReady = function (api) {
-                $scope.chartProfitAPI = api;
-                updateProfitChart();
+            $scope.chartTopCustomersReady = function (api) {
+                chartTopCustomersAPI = api;
+                updateTopCustomersChart();
             };
 
-            $scope.updateChart = function () {
-                updateProfitChart();
+            $scope.chartTopSuppliersReady = function (api) {
+                chartTopSuppliersAPI = api
+                updateTopSuppliersChart();
+            };
+
+            $scope.updateCharts = function () {
+                updateTopDestinationsChart();
+                updateTopCustomersChart();
+                updateTopSuppliersChart();
             };
         }
 
         function load() {
             $scope.selectedTimeDimensionType = $scope.timeDimensionTypes[0];
-
+            $scope.selectedMeasureType = $scope.measureTypes[0];
+            $scope.selectedTopCount = $scope.topCounts[1];
         }
 
-        function updateProfitChart() {
+        function updateTopDestinationsChart() {
+            updateTopChart(chartTopDestinationsAPI, 0, {
+                chartTitle: "TOP DESTINATIONS",
+                seriesTitle: "Top Destinations"
+            });
+        }
 
-            if ($scope.chartSaleCostProfitAPI == undefined)
-                return;
+        function updateTopCustomersChart() {
+            updateTopChart(chartTopCustomersAPI, 1, {
+                chartTitle: "TOP CUSTOMERS",
+                seriesTitle: "Top Customers"
+            });
+        }
 
-            if ($scope.chartProfitAPI == undefined)
-                return;
+        function updateTopSuppliersChart() {
+            updateTopChart(chartTopSuppliersAPI, 2, {
+                chartTitle: "TOP SUPPLIERS",
+                seriesTitle: "Top Suppliers"
+            });
+        }
 
-            $scope.profit.length = 0;
-            $scope.chartSaleCostProfitAPI.showLoader();
-            $scope.chartProfitAPI.showLoader();
-
-            BIAPIService.GetProfit($scope.selectedTimeDimensionType.value, $scope.selectedTimeDimensionType.fromDate, $scope.selectedTimeDimensionType.toDate)
+        function updateTopChart(chartAPI, entityType, chartSettings) {
+           
+            chartAPI.showLoader();
+            BIAPIService.GetTopEntities(entityType, $scope.selectedMeasureType.value, $scope.selectedTimeDimensionType.fromDate, $scope.selectedTimeDimensionType.toDate, $scope.selectedTopCount.value)
                 .then(function (response) {
 
-                    angular.forEach(response, function (item) {
-                        $scope.profit.push(item);
-                    });
-
-                    var chartData = $scope.profit;
+                    var chartData = response;
                     var chartDefinition = {
-                        type: "column",
-                        title: "Cost/Sale/Profit",
+                        type: "pie",
+                        title: chartSettings.chartTitle,
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition = { fieldName: "TimeValue", groupFieldName: "TimeGroupName" };
+
                     var seriesDefinitions = [{
-                        title: "COST",
-                        fieldName: "Cost"
-                    }, {
-                        title: "SALE",
-                        fieldName: "Sale"
-                    }, {
-                        title: "PROFIT",
-                        fieldName: "Profit",
-                        type: "spline"
-                    }
-                    ];
+                        title: chartSettings.seriesTitle,
+                        titleFieldName: "EntityName",
+                        valueFieldName: "Value"
+                    }];
 
-                    $scope.chartSaleCostProfitAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-
-                    var chartDefinition2 = {
-                        type: "column",
-                        title: "Profit",
-                        yAxisTitle: "Value"
-                    };
-                    var xAxisDefinition2 = { fieldName: "TimeValue", groupFieldName: "TimeGroupName" };
-                    var seriesDefinitions2 = [{
-                        title: "PROFIT",
-                        fieldName: "Profit"
-                    }
-                    ];
-                    $scope.chartProfitAPI.renderChart(chartData, chartDefinition2, seriesDefinitions2, xAxisDefinition2);
+                    chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
                 })
                 .finally(function () {
-                    $scope.chartSaleCostProfitAPI.hideLoader();
-                    $scope.chartProfitAPI.hideLoader();
+                    chartAPI.hideLoader();
                 });
         }
 

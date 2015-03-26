@@ -65,16 +65,16 @@
                         title: "Cost/Sale/Profit",
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition = { fieldName: "TimeValue", groupFieldName: "TimeGroupName" };
+                    var xAxisDefinition = { titleFieldName: "TimeValue", groupFieldName: "TimeGroupName" };
                     var seriesDefinitions = [{
                         title: "COST",
-                        fieldName: "Cost"
+                        valueFieldName: "Cost"
                     }, {
                         title: "SALE",
-                        fieldName: "Sale"
+                        valueFieldName: "Sale"
                     }, {
                         title: "PROFIT",
-                        fieldName: "Profit",
+                        valueFieldName: "Profit",
                         type: "spline"
                     }
                     ];
@@ -86,10 +86,10 @@
                         title: "Profit",
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition2 = { fieldName: "TimeValue", groupFieldName: "TimeGroupName" };
+                    var xAxisDefinition2 = { titleFieldName: "TimeValue", groupFieldName: "TimeGroupName" };
                     var seriesDefinitions2 = [{
                         title: "PROFIT",
-                        fieldName: "Profit"
+                        valueFieldName: "Profit"
                     }
                     ];
                     $scope.chartProfitAPI.renderChart(chartData, chartDefinition2, seriesDefinitions2, xAxisDefinition2);

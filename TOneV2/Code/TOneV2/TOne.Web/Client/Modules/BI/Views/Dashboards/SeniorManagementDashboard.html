@@ -1,1 +1,14 @@
-﻿{{testModel}}
+﻿<select ng-options="itm as itm.name for itm in timeDimensionTypes"
+        ng-model="selectedTimeDimensionType" ng-change="updateCharts()"></select>
+
+<select ng-options="itm as itm.name for itm in measureTypes"
+        ng-model="selectedMeasureType" ng-change="updateCharts()"></select>
+
+
+<select ng-options="itm as itm.name for itm in topCounts"
+        ng-model="selectedTopCount" ng-change="updateCharts()"></select>
+
+<div></div>
+<vr-chart data-on-ready="chartTopDestinationsReady" style="display:inline-block"></vr-chart>
+<vr-chart data-on-ready="chartTopCustomersReady" style="display:inline-block"></vr-chart>
+<vr-chart data-on-ready="chartTopSuppliersReady" style="display:inline-block"></vr-chart>

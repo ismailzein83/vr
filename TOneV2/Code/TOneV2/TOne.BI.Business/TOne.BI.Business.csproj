@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DestinationManager.cs" />
+    <Compile Include="GenericEntityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesManager.cs" />
   </ItemGroup>

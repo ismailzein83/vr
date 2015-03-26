@@ -396,8 +396,10 @@
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
     <Content Include="Client\Modules\BI\Controllers\Dashboards\SeniorManagementDashboardController.js" />
     <Content Include="Client\Modules\BI\Controllers\Dashboards\TopManagementDashboardController.js" />
+    <Content Include="Client\Modules\BI\Controllers\Reports\ZoneDetailsController.js" />
     <Content Include="Client\Modules\BI\Views\Dashboards\SeniorManagementDashboard.html" />
     <Content Include="Client\Modules\BI\Views\Dashboards\TopManagementDashboard.html" />
+    <Content Include="Client\Modules\BI\Views\Reports\ZoneDetails.html" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />

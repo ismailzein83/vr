@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDataManager.cs" />
+    <Compile Include="Columns.cs" />
+    <Compile Include="DestinationDataManager.cs" />
+    <Compile Include="GenericEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesDataManager.cs" />
   </ItemGroup>

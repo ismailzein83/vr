@@ -20,7 +20,7 @@ app.service('BaseAPIService', function ($http, $q) {
                 deferred.resolve(response);
             })
             .error(function (data, status, headers, config) {
-                console(data);
+                console.log(data);
                 deferred.reject(data);
             });
         return deferred.promise;

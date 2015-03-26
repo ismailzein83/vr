@@ -56,8 +56,10 @@ namespace TOne.Web
                 "~/Client/Libraries/Bootstrap", "*.css", true).IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.png", true));
 
-            bundles.Add(new ScriptBundle("~/bundles/highchart").IncludeDirectory(
-               "~/Client/Libraries/Charts/HichChart", "*.js", true));
+            bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
+               "~/Client/Libraries/Charts/HichChart/highcharts.js",
+               "~/Client/Libraries/Charts/HichChart/highcharts-3d.js",
+               "~/Client/Libraries/Charts/HichChart/NewFolder1/grouped-categories.js"));
 
             //Semantic
             //bundles.Add(new ScriptBundle("~/bundles/Semantic").IncludeDirectory(
