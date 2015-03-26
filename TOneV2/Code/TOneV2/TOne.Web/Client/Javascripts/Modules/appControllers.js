@@ -11,7 +11,8 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'mgcrea.ngStrap',
     'uiSwitch',
     'cgNotify',
-    'ui.grid.autoResize']);
+    'ui.grid.autoResize'
+]);
 appControllers.directive('resizable', function () {
     return {
         restrict: 'A',

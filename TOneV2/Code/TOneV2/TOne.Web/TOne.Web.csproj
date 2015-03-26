@@ -224,6 +224,7 @@
     <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
     <Content Include="Client\Javascripts\Services\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
+    <Content Include="Client\Libraries\Angular\angular-animate.js" />
     <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
     <Content Include="Client\Libraries\Angular\angular-sanitize.js" />
@@ -664,6 +665,7 @@
     <Content Include="Client\Styles\ui-grid.eot" />
     <Content Include="Client\Styles\ui-grid.ttf" />
     <Content Include="Client\Styles\ui-grid.woff" />
+    <Content Include="Client\Libraries\Angular\angular-animate.min.js.map" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>
