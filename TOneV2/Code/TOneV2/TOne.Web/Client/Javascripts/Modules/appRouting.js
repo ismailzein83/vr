@@ -56,6 +56,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/BI/Views/Dashboards/TopManagementDashboard.html',
             controller: 'TopManagementDashboardController'
         }).
+        when('/BI/SeniorManagementDashboard', {
+            templateUrl: '/Client/Modules/BI/Views/Dashboards/SeniorManagementDashboard.html',
+            controller: 'SeniorManagementDashboardController'
+        }).
         otherwise({
             redirectTo: '/default'
         });

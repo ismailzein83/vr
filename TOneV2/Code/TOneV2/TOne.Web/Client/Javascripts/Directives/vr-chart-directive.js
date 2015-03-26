@@ -7,20 +7,21 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
 
         restrict: 'E',
         scope: {
-            api: '='
+            onReady: '='
         },
         controller: function ($scope, $element) {
-            var controller = this;
+            //var controller = this;
             
-            controller.api.showLoader = function () {
+            var api = {};
+            api.showLoader = function () {
                 $scope.isLoading = true;
             };
 
-            controller.api.hideLoader = function () {
+            api.hideLoader = function () {
                 $scope.isLoading = false;
             };
 
-            controller.api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition) {
+            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition) {
                 var xAxis = [];
                 var series = [];
                 angular.forEach(seriesDefinitions, function (sDef) {
@@ -95,9 +96,11 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                     },
                 });
             };
+            if ($scope.onReady && typeof ($scope.onReady) == 'function')
+                $scope.onReady(api);
         },
-        controllerAs: 'ctrl',
-        bindToController: true,
+        //controllerAs: 'ctrl',
+        //bindToController: true,
         compile: function (element, attrs) {
                         
             return {

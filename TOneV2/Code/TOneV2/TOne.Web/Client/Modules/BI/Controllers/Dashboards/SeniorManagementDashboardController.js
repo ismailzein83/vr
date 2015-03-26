@@ -1,5 +1,5 @@
-﻿appControllers.controller('TopManagementDashboardController',
-    function TopManagementDashboardController($scope, BIAPIService) {
+﻿appControllers.controller('SeniorManagementDashboardController',
+    function SeniorManagementDashboardController($scope, BIAPIService) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -8,7 +8,7 @@
         function defineScopeObjects() {
 
 
-            $scope.testModel = 'TopManagementDashboardController';
+            $scope.testModel = 'SeniorManagementDashboardController';
             $scope.timeDimensionTypes = [{ name: "Daily", value: 0, fromDate: '2012-1-2', toDate: '2012-2-28' },
             { name: "Weekly", value: 1, fromDate: '2012-1-2', toDate: '2012-04-28' },
             { name: "Monthly", value: 2, fromDate: '2012-1-2', toDate: '2013-12-31' },
@@ -37,7 +37,7 @@
 
         function load() {
             $scope.selectedTimeDimensionType = $scope.timeDimensionTypes[0];
-            
+
         }
 
         function updateProfitChart() {
@@ -47,7 +47,7 @@
 
             if ($scope.chartProfitAPI == undefined)
                 return;
-            
+
             $scope.profit.length = 0;
             $scope.chartSaleCostProfitAPI.showLoader();
             $scope.chartProfitAPI.showLoader();

@@ -1,4 +1,4 @@
 ﻿<select ng-options="itm as itm.name for itm in timeDimensionTypes"
         ng-model="selectedTimeDimensionType" ng-change="updateChart()"></select>
-<vr-chart api="chartSaleCostProfitAPI"></vr-chart>
-<vr-chart api="chartProfitAPI"></vr-chart>
+<vr-chart data-on-ready="chartSaleCostProfitReady" ></vr-chart>
+<vr-chart data-on-ready="chartProfitReady"></vr-chart>
