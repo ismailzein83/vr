@@ -56,9 +56,9 @@
                 if (!$scope.isDate($scope.BEDDate)) {
                     var msg = "" ;
                     if (typeof ($scope.BEDDate) == "object" || typeof ($scope.BEDDate) == "string")
-                        msg = "Begin Effective Date is required.";
+                        msg = "Date is required.";
                     if (typeof ($scope.BEDDate) == "undefined")
-                        msg = "Begin Effective Date has an invalide format.";
+                        msg = "Invalide format.";
 
                     $scope.msgd = msg
 
@@ -73,7 +73,7 @@
             if ($scope.showtde == true) {
                     var msg = "";                   
                     if (typeof ($scope.EEDDate) == "undefined") {
-                        msg = "Begin Effective Date has an invalide format.";
+                        msg = "Invalide format.";
                         $scope.msged = msg
                         return true;
                     }
@@ -94,8 +94,8 @@
         $scope.routeRule = null;
        
        ctrl.optionsRouteType.datasource = [
-            { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
-            { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
+            { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate2.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
+            { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate2.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
             { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities' }
         ]
        

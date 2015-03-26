@@ -356,7 +356,7 @@ input.ui-grid-filter-input[type="text"] {
     border-radius: 4px;
     font-size: 10px;
     width:auto;
-    min-width:200px;
+    min-width:100px;
     -webkit-opacity: 0.25;
   -webkit-transition: all 3s ease;
   -moz-transition: all 3s ease;
