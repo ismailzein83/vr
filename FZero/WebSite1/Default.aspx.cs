@@ -27,9 +27,7 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            ErrorLog("OnTimedEvent() " + ex.Message);
-            ErrorLog("OnTimedEvent() " + ex.ToString());
-            ErrorLog("OnTimedEvent() " + ex.InnerException.ToString());
+           
         }
     }
 
@@ -38,25 +36,7 @@ public partial class _Default : System.Web.UI.Page
 
      
 
-        private void ErrorLog(string message)
-        {
-            string cs = "GOIPtoFMS";
-            EventLog elog = new EventLog();
-            if (!EventLog.SourceExists(cs))
-            {
-                EventLog.CreateEventSource(cs, cs);
-            }
-            elog.Source = cs;
-            elog.EnableRaisingEvents = true;
-            elog.WriteEntry(message);
-        }
-
-
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-          
-          }
-
+        
        
 
     
@@ -94,9 +74,7 @@ class DBConnect
         }
         catch (Exception ex)
         {
-            ErrorLog("DBConnect() " + ex.Message);
-            ErrorLog("DBConnect() " + ex.ToString());
-            ErrorLog("DBConnect() " + ex.InnerException.ToString());
+           
         }
 
     }
@@ -136,9 +114,7 @@ class DBConnect
         }
         catch (MySqlException ex)
         {
-            ErrorLog("OpenConnection() " + ex.Message);
-            ErrorLog("OpenConnection() " + ex.ToString());
-            ErrorLog("OpenConnection() " + ex.InnerException.ToString());
+           
             return false;
         }
     }
@@ -153,9 +129,7 @@ class DBConnect
         }
         catch (MySqlException ex)
         {
-            ErrorLog("CloseConnection() " + ex.Message);
-            ErrorLog("CloseConnection() " + ex.ToString());
-            ErrorLog("CloseConnection() " + ex.InnerException.ToString());
+           
             return false;
         }
     }
@@ -167,14 +141,15 @@ class DBConnect
 
         try
         {
-            string query = "LOAD DATA INFILE './x1.DAT' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n'";
             //string query = "LOAD DATA INFILE './x1.DAT' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n'";
+            string query = "LOAD DATA INFILE './x1.DAT' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n';del './x1.DAT';";
 
             //open connection
             if (this.OpenConnection() == true)
             {
                 //create command and assign the query and connection from the constructor
                 MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.CommandTimeout = 0;
                 //Execute command
                 cmd.ExecuteNonQuery();
                 //close connection
@@ -183,235 +158,13 @@ class DBConnect
         }
         catch (MySqlException ex)
         {
-            ErrorLog("Load() " + ex.Message);
-            ErrorLog("Load() " + ex.ToString());
-            ErrorLog("Load() " + ex.InnerException.ToString());
+         
         }
 
 
     }
 
 
-    //Insert statement
-    public void Insert(int NewLastCallID, int NewLastCallFailedID)
-    {
-
-        try
-        {
-            string query = "INSERT INTO sentcalls ( LastCallID, LastCallFailedID) VALUES( '" + NewLastCallID.ToString() + "','" + NewLastCallFailedID.ToString() + "')";
-
-            //open connection
-            if (this.OpenConnection() == true)
-            {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Execute command
-                cmd.ExecuteNonQuery();
-                //close connection
-                this.CloseConnection();
-            }
-        }
-        catch (MySqlException ex)
-        {
-            ErrorLog("Insert() " + ex.Message);
-            ErrorLog("Insert() " + ex.ToString());
-            ErrorLog("Insert() " + ex.InnerException.ToString());
-        }
-
-
-    }
-
-
-    //Select statement
-    public List<string>[] SelectCalls(int LastCallID)
-    {
-        NewLastCallID = LastCallID;
-        string querycalls = "SELECT   a.id_call as ID,  IFNULL(c.Name,'') as ClientName,  a.id_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, a.duration , IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         calls as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix      left outer join clients as c on    a.id_Client = c.ID where id_call>" + LastCallID.ToString();
-
-        //Create a list to store the result
-        List<string>[] listcalls = new List<string>[10];
-        listcalls[0] = new List<string>();
-        listcalls[1] = new List<string>();
-        listcalls[2] = new List<string>();
-        listcalls[3] = new List<string>();
-        listcalls[4] = new List<string>();
-        listcalls[5] = new List<string>();
-        listcalls[6] = new List<string>();
-        listcalls[7] = new List<string>();
-        listcalls[8] = new List<string>();
-        listcalls[9] = new List<string>();
-
-        //Open connection
-        if (this.OpenConnection() == true)
-        {
-            //Create Command
-            MySqlCommand cmd = new MySqlCommand(querycalls, connection);
-            cmd.CommandTimeout = 600000;
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-
-
-            //Read the data and store them in the list
-            while (dataReader.Read())
-            {
-                listcalls[0].Add(dataReader["ID"] + "");
-                listcalls[1].Add(dataReader["id_call"] + "");
-                listcalls[2].Add(dataReader["caller_id"] + "");
-                listcalls[3].Add(dataReader["called_number"] + "");
-                listcalls[4].Add(dataReader["call_start"] + "");
-                listcalls[5].Add(dataReader["duration"] + "");
-                listcalls[6].Add(dataReader["Origination"] + "");
-                listcalls[7].Add(dataReader["RouteID"] + "");
-                listcalls[8].Add(dataReader["ClientName"] + "");
-                listcalls[9].Add(dataReader["Type"] + "");
-            }
-            if (listcalls[0].LastOrDefault() != null)
-                NewLastCallID = int.Parse(listcalls[0].Last());
-            //close Data Reader
-            dataReader.Close();
-
-
-
-
-            //close Connection
-            this.CloseConnection();
-
-            //return list to be displayed
-            return listcalls;
-        }
-        else
-        {
-            return listcalls;
-        }
-    }
-
-
-    //Select statement
-    public List<string>[] SelectCallsFailed(int LastCallFailedID)
-    {
-        NewLastCallFailedID = LastCallFailedID;
-        string querycallsfailed = "SELECT     a.id_failed_call as ID, IFNULL(c.Name,'') as ClientName, a.id_failed_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, 0 as duration,  IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         callsfailed as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix       left outer join clients as c on    a.id_Client = c.ID  where id_failed_call>" + LastCallFailedID.ToString();
-
-        //Create a list to store the result
-        List<string>[] list_failedcalls = new List<string>[10];
-        list_failedcalls[0] = new List<string>();
-        list_failedcalls[1] = new List<string>();
-        list_failedcalls[2] = new List<string>();
-        list_failedcalls[3] = new List<string>();
-        list_failedcalls[4] = new List<string>();
-        list_failedcalls[5] = new List<string>();
-        list_failedcalls[6] = new List<string>();
-        list_failedcalls[7] = new List<string>();
-        list_failedcalls[8] = new List<string>();
-        list_failedcalls[9] = new List<string>();
-
-        //Open connection
-        if (this.OpenConnection() == true)
-        {
-            //Create Command
-            MySqlCommand cmdfailed = new MySqlCommand(querycallsfailed, connection);
-            cmdfailed.CommandTimeout = 600000;
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReaderfailed = cmdfailed.ExecuteReader();
-            //Read the data and store them in the list
-            while (dataReaderfailed.Read())
-            {
-                list_failedcalls[0].Add(dataReaderfailed["ID"] + "");
-                list_failedcalls[1].Add(dataReaderfailed["id_failed_call"] + "");
-                list_failedcalls[2].Add(dataReaderfailed["caller_id"] + "");
-                list_failedcalls[3].Add(dataReaderfailed["called_number"] + "");
-                list_failedcalls[4].Add(dataReaderfailed["call_start"] + "");
-                list_failedcalls[5].Add(dataReaderfailed["duration"] + "");
-                list_failedcalls[6].Add(dataReaderfailed["Origination"] + "");
-                list_failedcalls[7].Add(dataReaderfailed["RouteID"] + "");
-                list_failedcalls[8].Add(dataReaderfailed["ClientName"] + "");
-                list_failedcalls[9].Add(dataReaderfailed["Type"] + "");
-            }
-            if (list_failedcalls[0].LastOrDefault() != null)
-                NewLastCallFailedID = int.Parse(list_failedcalls[0].Last());
-            //close Data Reader
-            dataReaderfailed.Close();
-
-            //close Connection
-            this.CloseConnection();
-
-            //return list to be displayed
-            return list_failedcalls;
-        }
-        else
-        {
-            return list_failedcalls;
-        }
-    }
-
-    //Last statement
-    public int LastCallID()
-    {
-        string query = "SELECT LastCallID FROM sentcalls ORDER BY ID DESC Limit 1";
-        int LastCallID = 0;
-
-        //Open connection
-        if (this.OpenConnection() == true)
-        {
-            //Create Command
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            //Read the data and store them in the list
-            if (dataReader.Read())
-            {
-                LastCallID = int.Parse(dataReader["LastCallID"].ToString());
-            }
-
-            //close Data Reader
-            dataReader.Close();
-
-            //close Connection
-            this.CloseConnection();
-
-            return LastCallID;
-
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    //Last statement
-    public int LastCallFailedID()
-    {
-        string query = "SELECT LastCallFailedID FROM sentcalls ORDER BY ID DESC Limit 1";
-        int LastCallFailedID = 0;
-
-        //Open connection
-        if (this.OpenConnection() == true)
-        {
-            //Create Command
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            //Read the data and store them in the list
-            if (dataReader.Read())
-            {
-                LastCallFailedID = int.Parse(dataReader["LastCallFailedID"].ToString());
-            }
-
-
-            //close Data Reader
-            dataReader.Close();
-
-            //close Connection
-            this.CloseConnection();
-
-            return LastCallFailedID;
-
-        }
-        else
-        {
-            return 0;
-        }
-    }
 
 
     public void SendMail(string ToAddress, string subject, string Name, string Content, string AttachmentLink, string Url, IList<string> ToBccAddresses)
@@ -522,9 +275,7 @@ class DBConnect
         }
         catch (Exception ex)
         {
-            ErrorLog("SendMail " + ex.Message);
-            ErrorLog("SendMail " + ex.InnerException.ToString());
-            ErrorLog("SendMail " + ex.ToString());
+          
         }
 
 
