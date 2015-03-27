@@ -1,5 +1,6 @@
 ﻿
 var appControllers = angular.module('appControllers', ['ui.grid',
+    'ngAnimate',
     'ui.grid.saveState',
     'ui.grid.edit',
     'ui.grid.pagination',
