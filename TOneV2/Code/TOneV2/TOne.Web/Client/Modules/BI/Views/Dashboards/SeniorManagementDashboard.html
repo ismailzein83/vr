@@ -1,17 +1,45 @@
-﻿
-<select ng-options="itm as itm.name for itm in dateTimeFilters"
-        ng-model="selectedDateTimeFilter" ng-change="updateCharts()"></select>
+﻿<div class="container-fluid ">
+    <div class="panel panel-primary panel-over-color">
+        <div class="panel-body">
+            <div class="row style-row">
+                <div class="col-lg-2 style-col">
+                    <label class="control-label">Date Period:</label>
+                    <vr-dropdown datatextfield="name" datavaluefield="value"
+                                 entityname="" type="standard" options="dateTimeFilterOption" data-onselectionchange="updateCharts"></vr-dropdown>
+                </div>
+                <div class="col-lg-2 style-col">
+                    <label class="control-label">Measure:</label>
+                    <vr-dropdown datatextfield="Description" datavaluefield="Value"
+                                 entityname="" type="standard" options="optionsMeasureTypes" data-onselectionchange="updateCharts"></vr-dropdown>
+                </div>
+                <div class="col-lg-2 style-col">
+                    <label class="control-label">Top:</label>
+                    <vr-dropdown datatextfield="value" datavaluefield="value"
+                                 entityname="" type="standard" options="optionTopCounts" data-onselectionchange="updateCharts"></vr-dropdown>
+                </div>
+                    <div class="col-lg-2 style-col">    
+                        <div class="control-label">&nbsp;</div>                    
+                        <label class="control-label" style="padding-top:6px">
+                            <input type="checkbox" ng-model="showLegendsWithValues" ng-change="updateCharts()" />Show Legends & Values
+                        </label>
+                    </div>
 
-<select ng-options="itm as itm.name for itm in measureTypes"
-        ng-model="selectedMeasureType" ng-change="updateCharts()"></select>
 
+                </div>
 
-<select ng-options="itm as itm.name for itm in topCounts"
-        ng-model="selectedTopCount" ng-change="updateCharts()"></select>
-<label><input type="checkbox" ng-model="showLegendsWithValues" ng-change="updateCharts()" />Show Legends & Values</label>
-
-
-<div></div>
-<vr-chart data-on-ready="chartTopDestinationsReady" style="display:inline-block"></vr-chart>
-<vr-chart data-on-ready="chartTopCustomersReady" style="display:inline-block"></vr-chart>
-<vr-chart data-on-ready="chartTopSuppliersReady" style="display:inline-block"></vr-chart>
+            <div class="row style-row">
+                <div class="col-lg-4 style-col">
+                    <vr-chart data-on-ready="chartTopDestinationsReady" style="display:inline-block"></vr-chart>
+                </div>
+            </div>
+            <div class="row style-row">
+                <div class="col-lg-4 style-col">
+                    <vr-chart data-on-ready="chartTopCustomersReady" style="display:inline-block"></vr-chart>
+                </div>
+                <div class="col-lg-4 style-col">
+                    <vr-chart data-on-ready="chartTopSuppliersReady" style="display:inline-block"></vr-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

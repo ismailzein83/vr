@@ -1,4 +1,32 @@
-﻿<select ng-options="itm as itm.name for itm in timeDimensionTypes"
-        ng-model="selectedTimeDimensionType" ng-change="updateChart()"></select>
-<vr-chart data-on-ready="chartSaleCostProfitReady" ></vr-chart>
-<vr-chart data-on-ready="chartProfitReady"></vr-chart>
+﻿
+
+
+
+<div class="container-fluid ">
+    <div class="panel panel-primary panel-over-color">
+        <div class="panel-body">
+            <div class="row style-row">
+
+                <div class="col-lg-2 style-col">
+                    <label class="control-label">Grouped By:</label>
+                    <vr-dropdown datatextfield="name" datavaluefield="value"
+                                 entityname="" type="standard" options="timeDimensionTypesOption" onselectionchange="updateChart"></vr-dropdown>
+                </div>
+
+               
+            </div>
+
+            <div class="row style-row">
+                <div class="col-lg-12 style-col">
+                    <vr-chart data-on-ready="chartSaleCostProfitReady"></vr-chart>
+                </div>
+            </div>
+
+            <div class="row style-row">
+                <div class="col-lg-12 style-col">
+                    <vr-chart data-on-ready="chartProfitReady"></vr-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,11 +8,13 @@
         function defineScopeObjects() {
 
 
-            $scope.testModel = 'TopManagementDashboardController';
-            $scope.timeDimensionTypes = [{ name: "Daily", value: 0, fromDate: '2012-1-2', toDate: '2012-2-28' },
+            $scope.testModel = 'TopManagementDashboardController';           
+            $scope.timeDimensionTypesOption = {
+                datasource: [{ name: "Daily", value: 0, fromDate: '2012-1-2', toDate: '2012-2-28' },
             { name: "Weekly", value: 1, fromDate: '2012-1-2', toDate: '2012-04-28' },
             { name: "Monthly", value: 2, fromDate: '2012-1-2', toDate: '2013-12-31' },
-            { name: "Yearly", value: 3, fromDate: '2012-1-2', toDate: '2014-1-1' }, ];
+            { name: "Yearly", value: 3, fromDate: '2012-1-2', toDate: '2014-1-1' }, ]
+            };
 
             $scope.profit = [];
 
@@ -36,7 +38,7 @@
         }
 
         function load() {
-            $scope.selectedTimeDimensionType = $scope.timeDimensionTypes[0];
+            $scope.timeDimensionTypesOption.lastselectedvalue = $scope.timeDimensionTypesOption.datasource[0];
             
         }
 
@@ -51,8 +53,8 @@
             $scope.profit.length = 0;
             $scope.chartSaleCostProfitAPI.showLoader();
             $scope.chartProfitAPI.showLoader();
-
-            BIAPIService.GetProfit($scope.selectedTimeDimensionType.value, $scope.selectedTimeDimensionType.fromDate, $scope.selectedTimeDimensionType.toDate)
+            var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
+            BIAPIService.GetProfit(selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate)
                 .then(function (response) {
 
                     angular.forEach(response, function (item) {

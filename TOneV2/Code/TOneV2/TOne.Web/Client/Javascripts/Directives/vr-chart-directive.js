@@ -135,10 +135,13 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
 
                 angular.forEach(chartData, function (dataItem) {
 
+                    var xValue = dataItem[xAxisDefinition.titleFieldName];
+                    if (xAxisDefinition.isDate)
+                        xValue = dateFormat((new Date(xValue)), "dd-mmm-yy");// new Date(xValue);
                     if (xAxisDefinition.groupFieldName != 'undefined' && xAxisDefinition.groupFieldName != null) {
                         var groupName = dataItem[xAxisDefinition.groupFieldName];
                         if (groupName == null) {
-                            xAxis.push(dataItem[xAxisDefinition.titleFieldName]);
+                            xAxis.push(xValue);
                         }
                         else {
                             var group = null;
@@ -153,49 +156,69 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                                 };
                                 xAxis.push(group);
                             }
-                            group.categories.push(dataItem[xAxisDefinition.titleFieldName]);
+                            group.categories.push(xValue);
                         }
                     }
                     else {
-                        xAxis.push(dataItem[xAxisDefinition.titleFieldName]);
+                        xAxis.push(xValue);
                     }
+
                     for (var i = 0; i < series.length; i++) {
                         series[i].data.push(dataItem[seriesDefinitions[i].valueFieldName]);
                     }
                 });
 
+                var chartSettings = {
+                    options3d: {
+                        enabled: false,
+                        alpha: 10,
+                        beta: 10,
+                        depth: 0,
+                        viewDistance: 25
+                    }
+                };
 
+                var titleSettings = {
+                    text: chartDefinition.title
+                };
+
+                var plotOptionsSettings = {
+                    column: {
+                        depth: 25
+                    }
+                };
+
+                var xAxisSettings = {
+                    categories: xAxis
+                };
+
+                //if (xAxisDefinition.isDate) {
+                //    xAxisSettings.type = 'datetime';
+                //    //xAxisSettings.dateTimeLabelFormats = {
+                //    //    day: '%e-%b-%Y'
+                //    //};
+                //}
+
+                var yAxisSettings = {
+                    title: {
+                        text: chartDefinition.yAxisTitle
+                    }
+                };
+
+                var seriesSettings = series;
+
+                var tooltipSettings = {
+                    shared: true
+                };
 
                 chartObj = $element.find('#divChart').highcharts({
-                    chart: {
-                        options3d: {
-                            enabled: false,
-                            alpha: 10,
-                            beta: 10,
-                            depth: 0,
-                            viewDistance: 25
-                        }
-                    },
-                    title: {
-                        text: chartDefinition.title
-                    },
-                    plotOptions: {
-                        column: {
-                            depth: 25
-                        }
-                    },
-                    xAxis: {
-                        categories: xAxis
-                    },
-                    yAxis: {
-                        title: {
-                            text: chartDefinition.yAxisTitle
-                        }
-                    },
-                    series: series,
-                    tooltip: {
-                        shared: true
-                    },
+                    chart: chartSettings,
+                    title: titleSettings,
+                    plotOptions: plotOptionsSettings,
+                    xAxis: xAxisSettings,
+                    yAxis: yAxisSettings,
+                    series: seriesSettings,
+                    tooltip: tooltipSettings,
                 });
             };
 

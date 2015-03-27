@@ -21,7 +21,8 @@
                 datasource: [
                 { name: "5", value: "5" },
                 { name: "10", value: "10" },
-                { name: "15", value: "15" }
+                { name: "15", value: "15" },
+                { name: "20", value: "25" }
                 ]
             };
 
@@ -37,9 +38,9 @@
                 chartTopDestinationsAPI = api;
                 chartTopDestinationsAPI.onDataItemClicked = function (zoneItem) {
                    
-                    var zoneId = zoneItem.EntityId;
-                    var zoneName = zoneItem.EntityName;
-                    getAndShowZone(zoneId, zoneName);
+                    $scope.selectedZoneId = zoneItem.EntityId;
+                    $scope.selectedZoneName = zoneItem.EntityName;
+                    getAndShowZone();
                 };
                 getAndShowTopDestination();
             };
@@ -50,6 +51,10 @@
             
             $scope.filterChanged = function () {
                 getAndShowTopDestination();
+            };
+
+            $scope.updateZone = function () {
+                getAndShowZone();
             };
         }
 
@@ -74,6 +79,7 @@
 
             if (chartZoneReadyAPI)
                 chartZoneReadyAPI.hideChart();
+            $scope.isZoneVisible = false;
 
             $scope.otherMeasuresDescriptions.length = 0;
             var moreMeasures = [];
@@ -112,7 +118,7 @@
                 });
         }
 
-        function getAndShowZone(zoneId, zoneName)
+        function getAndShowZone2(zoneId, zoneName)
         {
             chartZoneReadyAPI.showLoader();
             BIAPIService.GetEntityMeasureValues(0, zoneId, $scope.optionsMeasureTypes.lastselectedvalue.Value, 0, $scope.fromDate, $scope.toDate)
@@ -124,7 +130,10 @@
                     title: zoneName,
                     yAxisTitle: $scope.optionsMeasureTypes.lastselectedvalue.Description
                 };
-                var xAxisDefinition = { titleFieldName: "Time"};
+                var xAxisDefinition = {
+                    titleFieldName: "Time",
+                    isDate: true
+                };
                 var seriesDefinitions = [{
                     title: $scope.optionsMeasureTypes.lastselectedvalue.Description,
                     valueFieldName: "Value"
@@ -138,10 +147,59 @@
             });;
         }
 
+        function getAndShowZone() {
+            var measures = [];
+            angular.forEach($scope.optionsMeasureTypes.datasource, function (measure) {
+                if (measure.selected)
+                    measures.push(measure);
+            });
+            
+
+            var measureValues = [];
+            angular.forEach(measures, function (m) {
+                measureValues.push(m.Value);
+            });
+            chartZoneReadyAPI.showLoader();
+            BIAPIService.GetEntityMeasuresValues(0, $scope.selectedZoneId, 0, $scope.fromDate, $scope.toDate, measureValues)
+            .then(function (response) {
+                var chartData = response;
+                angular.forEach(chartData, function (dataItem) {
+                    for(i=0;i<measures.length;i++)
+                    {
+                        dataItem[measures[i].Description.replace(" ", "_")] = dataItem.Values[i];
+                    }
+                });
+
+                var chartDefinition = {
+                    type: "spline",
+                    title: $scope.selectedZoneName,
+                    yAxisTitle: $scope.optionsMeasureTypes.lastselectedvalue.Description
+                };
+                var xAxisDefinition = {
+                    titleFieldName: "Time",
+                    isDate: true
+                };
+                var seriesDefinitions = [];
+                angular.forEach(measures, function (measure) {
+                    seriesDefinitions.push({
+                        title: measure.Description,
+                        valueFieldName: measure.Description.replace(" ", "_")
+                    });
+                });
+
+                chartZoneReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+                $scope.isZoneVisible = true;
+            })
+            .finally(function () {
+                chartZoneReadyAPI.hideLoader();
+            });;
+        }
+
         function getMeasureTypes()
         {
             BIAPIService.GetMeasureTypeList().then(function (response) {
                 angular.forEach(response, function (itm) {
+                    itm.selected = true;
                     $scope.optionsMeasureTypes.datasource.push(itm);
                 });
                 

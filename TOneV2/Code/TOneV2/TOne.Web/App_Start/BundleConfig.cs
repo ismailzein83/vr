@@ -49,6 +49,10 @@ namespace TOne.Web
              
               ));
 
+            //Helpers
+            bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
+               "~/Client/Libraries/Helpers", "*.js", true));
+
             //Bootstrap
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.js", true));
@@ -61,10 +65,14 @@ namespace TOne.Web
 
             bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
                "~/Client/Libraries/Charts/HichChart/highcharts.js",
-               "~/Client/Libraries/Charts/HichChart/highcharts-3d.js",
-               "~/Client/Libraries/Charts/HichChart/Plugins/grouped-categories.js",
-               "~/Client/Libraries/Charts/HichChart/themes/grid-light.js"
-              ));
+               "~/Client/Libraries/Charts/HichChart/highcharts-3d.js").IncludeDirectory(
+                "~/Client/Libraries/Charts/HichChart/adapters", "*.js", true).IncludeDirectory(
+                "~/Client/Libraries/Charts/HichChart/modules", "*.js", true).IncludeDirectory(
+                "~/Client/Libraries/Charts/HichChart/Plugins", "*.js", true));
+
+            //,
+            //   "~/Client/Libraries/Charts/HichChart/themes/grid-light.js"
+
 
             //Semantic
             //bundles.Add(new ScriptBundle("~/bundles/Semantic").IncludeDirectory(

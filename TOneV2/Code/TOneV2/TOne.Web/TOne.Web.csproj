@@ -426,6 +426,7 @@
     <Content Include="Client\Libraries\Charts\HichChart\highcharts-3d.js" />
     <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
+    <Content Include="Client\Libraries\Helpers\DateFormat.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
     <Content Include="Client\Modules\BI\Controllers\Dashboards\SeniorManagementDashboardController.js" />
     <Content Include="Client\Modules\BI\Controllers\Dashboards\TopManagementDashboardController.js" />

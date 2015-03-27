@@ -9,20 +9,24 @@
 
 
             $scope.testModel = 'SeniorManagementDashboardController';
-            $scope.dateTimeFilters = [{ name: "Today", value: 0, fromDate: '2012-1-2', toDate: '2012-1-3' },
+            $scope.dateTimeFilterOption = {
+                datasource: [{ name: "Today", value: 0, fromDate: '2012-1-2', toDate: '2012-1-3' },
             { name: "WTD", value: 1, fromDate: '2012-1-2', toDate: '2012-02-9' },
             { name: "MTD", value: 2, fromDate: '2012-1-2', toDate: '2013-2-2' },
-            { name: "YTD", value: 3, fromDate: '2011-1-2', toDate: '2014-1-1' }, ];
+            { name: "YTD", value: 3, fromDate: '2011-1-2', toDate: '2014-1-1' }]
+            };
 
-            $scope.measureTypes = [{ name: "Duration In Minutes", value: 0 },
-            { name: "Sale", value: 1 },
-            { name: "Cost", value: 2 }
-            ];
+            $scope.optionsMeasureTypes = {
+                datasource: []
+            };
 
-            $scope.topCounts = [{ name: "5", value: 5 },
-           { name: "10", value: 10 },
-           { name: "15", value: 15 }
-            ];
+            $scope.optionTopCounts = {
+                datasource: [{ value: 5 },
+               {value: 10 },
+               { value: 15 },
+               { value: 20 }
+                ]
+            };
 
         }
         var chartTopDestinationsAPI;
@@ -58,16 +62,20 @@
             };
 
             $scope.updateCharts = function () {
-                updateTopDestinationsChart();
-                updateTopCustomersChart();
-                updateTopSuppliersChart();
+                updateCharts();
             };
         }
 
         function load() {
-            $scope.selectedDateTimeFilter = $scope.dateTimeFilters[0];
-            $scope.selectedMeasureType = $scope.measureTypes[0];
-            $scope.selectedTopCount = $scope.topCounts[1];
+            getMeasureTypes();
+            $scope.dateTimeFilterOption.lastselectedvalue = $scope.dateTimeFilterOption.datasource[0];
+            $scope.optionTopCounts.lastselectedvalue = $scope.optionTopCounts.datasource[1];
+        }
+
+        function updateCharts() {
+            updateTopDestinationsChart();
+            updateTopCustomersChart();
+            updateTopSuppliersChart();
         }
 
         function updateTopDestinationsChart() {
@@ -92,9 +100,15 @@
         }
 
         function updateTopChart(chartAPI, entityType, chartSettings) {
-           
+            if (!chartAPI)
+                return;
+            var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
+            if (measureType == undefined || measureType == null || measureType.length == 0)
+                return;
+
             chartAPI.showLoader();
-            BIAPIService.GetTopEntities(entityType, $scope.selectedMeasureType.value, $scope.selectedDateTimeFilter.fromDate, $scope.selectedDateTimeFilter.toDate, $scope.selectedTopCount.value)
+            var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
+            BIAPIService.GetTopEntities(entityType, measureType.Value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value)
                 .then(function (response) {
 
                     var chartData = response;
@@ -118,4 +132,17 @@
                 });
         }
 
+
+        function getMeasureTypes() {
+            BIAPIService.GetMeasureTypeList().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    itm.selected = true;
+                    $scope.optionsMeasureTypes.datasource.push(itm);
+                });
+
+                $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
+
+                updateCharts();
+            });
+        }
     });

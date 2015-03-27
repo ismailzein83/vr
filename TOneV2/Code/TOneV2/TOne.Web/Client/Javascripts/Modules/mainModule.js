@@ -82,6 +82,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
        
     }
 
+   
+
 });
 angular.module('mainModule')
 .config(function ($timepickerProvider) {

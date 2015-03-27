@@ -270,24 +270,30 @@ namespace TOne.BI.Data.SQL
 
         protected void FillTimeCaptions(BaseTimeDimensionRecord record, IDataReader reader, TimeDimensionType timeDimensionType)
         {
-            int year = Convert.ToInt32(reader[GetRowColumnToRead(DateTimeColumns.YEAR)]);
+            int year;
+            if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.YEAR)] as string, out year))
+                return;
             int month = 1;
             int day = 1;
             switch (timeDimensionType)
             {
                 case TimeDimensionType.Daily:
-                    month = Convert.ToInt32(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)]);
-                    day = Convert.ToInt32(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)]);
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                        return;
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)] as string, out day))
+                        return;
                     record.TimeGroupName = String.Format("{0}-{1}", GetMonthDescription(month), year);
                     record.TimeValue = String.Format("{0}", day);
                     break;
                 case TimeDimensionType.Weekly:
-                    month = Convert.ToInt32(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)]);
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                        return;
                     record.TimeGroupName = String.Format("{0}-{1}", GetMonthDescription(month), year);
                     record.TimeValue = String.Format("Week {0}", reader[GetRowColumnToRead(DateTimeColumns.WEEKOFMONTH)]);
                     break;
                 case TimeDimensionType.Monthly:
-                    month = Convert.ToInt32(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)]);
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                        return;
                     record.TimeGroupName = String.Format("{0}", year);
                     record.TimeValue = String.Format("{0}", GetMonthDescription(month));
                     break;
