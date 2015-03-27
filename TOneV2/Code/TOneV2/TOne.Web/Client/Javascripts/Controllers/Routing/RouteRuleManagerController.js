@@ -51,7 +51,7 @@
             enableHiding: false,
             cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.onDblClick(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
         }
-        addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: false });
+        addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: false, backdrop:true });
 
     }
     function defineScopeMethods() {
