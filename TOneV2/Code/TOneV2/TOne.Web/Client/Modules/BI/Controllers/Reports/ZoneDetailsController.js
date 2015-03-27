@@ -16,6 +16,63 @@
 
             $scope.data = [];
             $scope.columns = ["Total Duration", "Sale", "Cost", "Profit", "Successful Attempts", "ACD", "PDD"];
+
+            $scope.gridOptionsZoneDetails = {
+                enableHorizontalScrollbar: 0,
+                enableVerticalScrollbar: 2,
+                infiniteScrollPercentage: 20,
+                enableFiltering: false,
+                saveFocus: false,
+                saveScroll: true,
+                enableColumnResizing: true,
+                enableSorting: false,
+
+            };
+            $scope.gridOptionsZoneDetails.columnDefs = [];
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Time',
+                cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.TimeGroupName}} <span ng-hide="row.entity.TimeGroupName == null">-</span> {{row.entity.TimeValue}}  </div>'
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Total Duration',
+                field: 'Values[0]',
+                cellFilter: "number:2"
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Sale',
+                field: 'Values[1]',
+                cellFilter: "number:2"
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Cost',
+                field: 'Values[2]',
+                cellFilter: "number:2"
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Profit',
+                field: 'Values[3]',
+                cellFilter: "number:2"
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'Successful Attempts',
+                field: 'Values[4]',
+                cellFilter: "number:2"
+
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'ACD',
+                field: 'Values[5]',
+                cellFilter: "number:2"
+
+            }
+            $scope.gridOptionsZoneDetails.columnDefs[$scope.gridOptionsZoneDetails.columnDefs.length] = {
+                name: 'PDD',
+                field: 'Values[6]',
+                cellFilter: "number:2"
+
+            }
+           
+
         }
 
         function defineScopeMethods() {
@@ -36,6 +93,7 @@
             BIAPIService.GetEntityMeasuresValues(0, zoneId, $scope.selectedTimeDimensionType.value,
                 $scope.selectedTimeDimensionType.fromDate, $scope.selectedTimeDimensionType.toDate, measureTypes)
             .then(function (response) {
+                $scope.gridOptionsZoneDetails.data = response;
                 angular.forEach(response, function (itm) {
                     $scope.data.push(itm);
                 });

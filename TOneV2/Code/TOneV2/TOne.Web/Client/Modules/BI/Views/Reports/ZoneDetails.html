@@ -2,7 +2,7 @@
 <select ng-options="itm as itm.name for itm in timeDimensionTypes"
         ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
 <div></div>
-<div style="height:400px;overflow:auto;display:inline-block">
+<!--<div style="height:400px;overflow:auto;display:inline-block">
     <table>
         <thead>
             <tr>
@@ -18,4 +18,6 @@
         </tbody>
 
     </table>
-</div>
+</div>-->
+
+<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails"></div>

@@ -109,8 +109,8 @@
 
         };
         $scope.AddNewRoute = function () {
-            //$location.path("/RouteRuleEditor2/undefined").replace();
-            addModal.$promise.then(addModal.show);
+            $location.path("/RouteRuleEditor2/undefined").replace();
+           // addModal.$promise.then(addModal.show);
 
         }
         $scope.toggelFilter = function () {

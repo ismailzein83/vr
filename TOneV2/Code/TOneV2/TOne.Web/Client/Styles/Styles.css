@@ -426,3 +426,28 @@ input.ui-grid-filter-input[type="text"] {
 .tooltip-error.ng-hide {
     opacity: 0;
 }
+#custom  {
+  border: 0px ;
+   
+}
+#custom .ui-grid-header-cell {
+     border: 0px ;
+}
+#custom .ui-grid-header-canvas {
+    background-color: #fff;
+}
+#custom .ui-grid-header-cell {
+    font-size  : 12px;
+    color: #000;
+    border: medium none;
+}
+#custom .ui-grid-cell {    
+    border-bottom: 1px solid #D4D4D4;
+    border-right: 0px solid #D4D4D4;   
+}
+#custom .ui-grid-row:nth-child(odd) .ui-grid-cell {
+  background-color: #fff;
+}
+#custom .ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: #fff;
+}
