@@ -11,6 +11,9 @@ namespace TOne.BI.Entities
         DurationInMinutes = 0,
         Sale = 1,
         Cost = 2,
-        Profit = 3
+        Profit = 3,
+        SuccessfulAttempts = 4,
+        ACD = 5,
+        PDD = 6
     }
 }

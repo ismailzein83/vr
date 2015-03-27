@@ -33,16 +33,16 @@
             $scope.chartTopDestinationsReady = function (api) {
                 chartTopDestinationsAPI = api;
                 chartTopDestinationsAPI.onDataItemClicked = function (zoneItem) {
-                    console.log("/BI/ZoneDetails/" + zoneItem.EntityId);
-                    $scope.$root.$apply(function () {
+                   
+                    //$scope.$root.$apply(function () {
                         $scope.zoneId = zoneItem.EntityId;
                         $scope.zoneName = zoneItem.EntityName;
-                        addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneDetails.html', show: false });
-                        addModal.$promise.then(addModal.show);
+                       var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true });
+                      //  addModal.$promise.then(addModal.show);
                         //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
-                    });
+                    //});
                    
-                    console.log('not gone');
+                   
                 };
                 updateTopDestinationsChart();
             };

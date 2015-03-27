@@ -1,5 +1,5 @@
 ﻿
-app.service('BaseAPIService', function ($http, $q) {
+app.service('BaseAPIService', function ($http, $q, notify) {
 
     return ({
         get: get,
@@ -21,6 +21,11 @@ app.service('BaseAPIService', function ($http, $q) {
             })
             .error(function (data, status, headers, config) {
                 console.log(data);
+                notify.closeAll();
+                notify({ message: 'Error Occured while getting data!', classes: "alert alert-danger" });
+                setTimeout(function () {
+                    notify.closeAll();
+                }, 3000);
                 deferred.reject(data);
             });
         return deferred.promise;

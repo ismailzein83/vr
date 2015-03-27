@@ -9,18 +9,41 @@ namespace TOne.BI.Data.SQL
 {
     public class GenericEntityDataManager : BaseDataManager, IGenericEntityDataManager
     {
-        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount)
+        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount, params MeasureType[] moreMeasures)
         {
             List<GenericEntityRecord> rslt = new List<GenericEntityRecord>();
-            string expressionsPart;
-            string measureColumn = GetMeasureColumn(measureType, out expressionsPart);
+            StringBuilder expressionPartsBuilder = new StringBuilder();
+            string measureColExp;
+            string measureColumn = GetMeasureColumn(measureType, out measureColExp);
+            if (measureColExp != null)
+                expressionPartsBuilder.AppendLine(measureColExp);
             string entityIdColumn;
             string entityNameColumn;                
             GetEntityColumns(entityType, out entityIdColumn, out entityNameColumn);
-            string columnsPart = BuildQueryColumnsPart(measureColumn);
+            string[] moreColumnsNames = null;
+            if(moreMeasures != null && moreMeasures.Length > 0)
+            {
+                moreColumnsNames = new string[moreMeasures.Length];
+                for (int i = 0; i < moreMeasures.Length; i++)
+                {
+                    string exp;
+                    moreColumnsNames[i] = GetMeasureColumn(moreMeasures[i], out exp);
+                    expressionPartsBuilder.AppendLine(exp);
+                }
+            }
+            string[] allColumnNames = new string[moreColumnsNames != null ? moreColumnsNames.Length + 1 : 1];
+            allColumnNames[0] = measureColumn;
+            if(moreColumnsNames != null)
+            {
+                for (int i = 0; i < moreColumnsNames.Length; i++)
+                {
+                    allColumnNames[i + 1] = moreColumnsNames[i];
+                }
+            }
+            string columnsPart = BuildQueryColumnsPart(allColumnNames);
             string rowsPart = BuildQueryTopRowsPart(measureColumn, topCount, entityIdColumn, entityNameColumn);
             string filtersPart = GetDateFilter(fromDate, toDate);
-            string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
+            string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionPartsBuilder.ToString());
 
             ExecuteReaderMDX(query, (reader) =>
             {
@@ -33,6 +56,15 @@ namespace TOne.BI.Data.SQL
                         EntityType = entityType,
                         Value = Convert.ToDecimal(reader[measureColumn])
                     };
+                    if(moreColumnsNames != null && moreColumnsNames.Length > 0)
+                    {
+                        entityValue.MoreValues = new Decimal[moreColumnsNames.Length];
+                        for (int i = 0; i < moreColumnsNames.Length; i++)
+                        {
+                            entityValue.MoreValues[i] = Convert.ToDecimal(reader[moreColumnsNames[i]]);
+                        }
+
+                    }
                     rslt.Add(entityValue);
                 }
             });
@@ -125,6 +157,12 @@ namespace TOne.BI.Data.SQL
                 case MeasureType.Profit:
                     queryExpression = string.Format(@"MEMBER {0} AS ({1} - {2})", MeasureColumns.PROFIT, MeasureColumns.SALE, MeasureColumns.COST);
                     return MeasureColumns.PROFIT;
+                case MeasureType.SuccessfulAttempts:
+                    return MeasureColumns.SUCCESSFUL_ATTEMPTS;
+                case MeasureType.ACD:
+                    return MeasureColumns.ACD;
+                case MeasureType.PDD:
+                    return MeasureColumns.PDD;
             }
             return null;
         }

@@ -11,7 +11,8 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
         },
         controller: function ($scope, $element) {
             var controller = this;
-            
+            var chartObj;
+
             var api = {};
             api.showLoader = function () {
                 $scope.isLoading = true;
@@ -19,6 +20,11 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
 
             api.hideLoader = function () {
                 $scope.isLoading = false;
+            };
+
+            api.hideChart = function () {
+                if ($element.find('#divChart').highcharts() != undefined)
+                    $element.find('#divChart').highcharts().destroy();
             };
 
             var currentChartData;
@@ -158,7 +164,9 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                     }
                 });
 
-                $element.find('#divChart').highcharts({
+
+
+                chartObj = $element.find('#divChart').highcharts({
                     chart: {
                         options3d: {
                             enabled: false,

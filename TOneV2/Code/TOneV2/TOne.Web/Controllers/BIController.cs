@@ -6,11 +6,26 @@ using System.Net.Http;
 using System.Web.Http;
 using TOne.BI.Business;
 using TOne.BI.Entities;
+using TOne.Web.Models;
 
 namespace TOne.Web.Controllers
 {
     public class BIController : ApiController
     {
+        public IEnumerable<BIMeasureTypeModel> GetMeasureTypeList()
+        {
+            List<BIMeasureTypeModel> rslt = new List<BIMeasureTypeModel>();
+            foreach(int val in Enum.GetValues(typeof(MeasureType)))
+            {
+                rslt.Add(new BIMeasureTypeModel
+                {
+                    Value = val.ToString(),
+                    Description = ((MeasureType)val).ToString()
+                });
+            }
+
+            return rslt;
+        }
         public IEnumerable<ProfitInfo> GetProfit(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {
             SalesManager manager = new SalesManager();
@@ -23,10 +38,10 @@ namespace TOne.Web.Controllers
             return manager.GetTopZonesByDuration(timeDimensionType, fromDate, toDate, topCount);
         }
 
-        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount)
+        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount, [FromUri] MeasureType[] moreMeasures)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount);
+            return manager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount, moreMeasures);
         }
 
         public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityId, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)

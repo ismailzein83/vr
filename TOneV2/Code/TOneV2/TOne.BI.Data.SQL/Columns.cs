@@ -27,6 +27,12 @@ namespace TOne.BI.Data.SQL
         public const string DURATION_IN_MINUTES = "[Measures].[Duration In Minutes]";
 
         public const string PROFIT = "[Measures].[Profit_CALC]";
+
+        public const string SUCCESSFUL_ATTEMPTS = "[Measures].[SuccessfulAttempts]";
+
+        public const string ACD = "[Measures].[ACD]";
+
+        public const string PDD = "[Measures].[PDD]";
     }
 
     internal class SaleZoneColumns

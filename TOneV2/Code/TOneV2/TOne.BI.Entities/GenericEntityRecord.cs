@@ -21,5 +21,7 @@ namespace TOne.BI.Entities
         public EntityType EntityType { get; set; }
 
         public Decimal Value { get; set; }
+
+        public Decimal[] MoreValues { get; set; }
     }
 }

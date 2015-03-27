@@ -10,10 +10,10 @@ namespace TOne.BI.Business
 {
     public class GenericEntityManager
     {
-        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount)
+        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount, params MeasureType[] moreMeasures)
         {
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
-            return dataManager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount);
+            return dataManager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount, moreMeasures);
         }
 
         public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityId, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)

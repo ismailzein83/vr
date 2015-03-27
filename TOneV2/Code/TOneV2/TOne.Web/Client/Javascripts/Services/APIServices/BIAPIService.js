@@ -6,7 +6,8 @@ app.service('BIAPIService', function (BaseAPIService) {
         GetTopZonesByDuration: GetTopZonesByDuration,
         GetTopEntities: GetTopEntities,
         GetEntityMeasureValues: GetEntityMeasureValues,
-        GetEntityMeasuresValues: GetEntityMeasuresValues
+        GetEntityMeasuresValues: GetEntityMeasuresValues,
+        GetMeasureTypeList: GetMeasureTypeList
     });
 
     function GetProfit(timeDimensionType, fromDate, toDate) {       
@@ -28,22 +29,23 @@ app.service('BIAPIService', function (BaseAPIService) {
             });
     }
 
-    function GetTopEntities(entityType, measureType, fromDate, toDate, topCount) {
+    function GetTopEntities(entityType, measureType, fromDate, toDate, topCount, moreMeasures) {
         return BaseAPIService.get("/api/BI/GetTopEntities",
             {
                 entityType: entityType,
                 measureType: measureType,
                 fromDate: fromDate,
                 toDate: toDate,
-                topCount: topCount
+                topCount: topCount,
+                moreMeasures: moreMeasures
             });
     }
     
-    function GetEntityMeasureValues(entityType, entityValue, measureType, timeDimensionType, fromDate, toDate) {
+    function GetEntityMeasureValues(entityType, entityId, measureType, timeDimensionType, fromDate, toDate) {
         return BaseAPIService.get("/api/BI/GetEntityMeasureValues",
             {
                 entityType: entityType,
-                entityValue: entityValue,
+                entityId: entityId,
                 measureType: measureType,
                 timeDimensionType: timeDimensionType,
                 fromDate: fromDate,
@@ -60,6 +62,13 @@ app.service('BIAPIService', function (BaseAPIService) {
                 fromDate: fromDate,
                 toDate: toDate,
                 measureTypes: measureTypes
+            });
+    }
+
+    function GetMeasureTypeList() {
+        return BaseAPIService.get("/api/BI/GetMeasureTypeList",
+            {
+               
             });
     }
 
