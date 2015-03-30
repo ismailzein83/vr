@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace TOne.BI.Entities
 {
+    public enum TimeDimensionType
+    {
+        Yearly = 0,
+        Monthly = 1,
+        Weekly = 2,
+        Daily = 3,
+        Hourly = 4
+    }
+
     public enum MeasureType
     {
         DurationInMinutes = 0,
@@ -15,5 +24,12 @@ namespace TOne.BI.Entities
         SuccessfulAttempts = 4,
         ACD = 5,
         PDD = 6
+    }
+
+    public enum EntityType
+    {
+        SaleZone = 0,
+        Customer = 1,
+        Supplier = 2
     }
 }

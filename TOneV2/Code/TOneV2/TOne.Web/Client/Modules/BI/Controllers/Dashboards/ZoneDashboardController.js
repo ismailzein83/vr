@@ -82,17 +82,15 @@
             $scope.isZoneVisible = false;
 
             $scope.otherMeasuresDescriptions.length = 0;
-            var moreMeasures = [];
+            var measures = [];
             angular.forEach($scope.optionsMeasureTypes.datasource, function (itm) {
-                if (itm != $scope.optionsMeasureTypes.lastselectedvalue) {
-                    moreMeasures.push(itm.Value);
-                    $scope.otherMeasuresDescriptions.push(itm.Description);
-                }
+                measures.push(itm.Value);
+                $scope.otherMeasuresDescriptions.push(itm.Description);
             });
 
             $scope.topDestinationData.length = 0
             chartTopDestinationsAPI.showLoader();
-            BIAPIService.GetTopEntities(0, measureType.Value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, moreMeasures)
+            BIAPIService.GetTopEntities(0, measureType.Value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.topDestinationData.push(itm);
@@ -107,8 +105,8 @@
 
                 var seriesDefinitions = [{
                     title: measureType.Description,
-                    titleFieldName: "EntityName",
-                    valueFieldName: "Value"
+                    titlePath: "EntityName",
+                    valuePath: "Values[0]"
                 }];
 
                 chartTopDestinationsAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
@@ -116,35 +114,6 @@
                 .finally(function () {
                     chartTopDestinationsAPI.hideLoader();
                 });
-        }
-
-        function getAndShowZone2(zoneId, zoneName)
-        {
-            chartZoneReadyAPI.showLoader();
-            BIAPIService.GetEntityMeasureValues(0, zoneId, $scope.optionsMeasureTypes.lastselectedvalue.Value, 0, $scope.fromDate, $scope.toDate)
-            .then(function (response) {
-                var chartData = response;
-
-                var chartDefinition = {
-                    type: "spline",
-                    title: zoneName,
-                    yAxisTitle: $scope.optionsMeasureTypes.lastselectedvalue.Description
-                };
-                var xAxisDefinition = {
-                    titleFieldName: "Time",
-                    isDate: true
-                };
-                var seriesDefinitions = [{
-                    title: $scope.optionsMeasureTypes.lastselectedvalue.Description,
-                    valueFieldName: "Value"
-                }
-                ];
-                chartZoneReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-
-            })
-            .finally(function () {
-                chartZoneReadyAPI.hideLoader();
-            });;
         }
 
         function getAndShowZone() {
@@ -162,13 +131,7 @@
             chartZoneReadyAPI.showLoader();
             BIAPIService.GetEntityMeasuresValues(0, $scope.selectedZoneId, 0, $scope.fromDate, $scope.toDate, measureValues)
             .then(function (response) {
-                var chartData = response;
-                angular.forEach(chartData, function (dataItem) {
-                    for(i=0;i<measures.length;i++)
-                    {
-                        dataItem[measures[i].Description.replace(" ", "_")] = dataItem.Values[i];
-                    }
-                });
+                var chartData = response;                
 
                 var chartDefinition = {
                     type: "spline",
@@ -176,16 +139,18 @@
                     yAxisTitle: $scope.optionsMeasureTypes.lastselectedvalue.Description
                 };
                 var xAxisDefinition = {
-                    titleFieldName: "Time",
+                    titlePath: "Time",
                     isDate: true
                 };
                 var seriesDefinitions = [];
-                angular.forEach(measures, function (measure) {
+                for (var i = 0; i < measures.length; i++)
+                {
+                    var measure = measures[i];
                     seriesDefinitions.push({
                         title: measure.Description,
-                        valueFieldName: measure.Description.replace(" ", "_")
+                        valuePath: "Values[" + i + "]"
                     });
-                });
+                }
 
                 chartZoneReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
                 $scope.isZoneVisible = true;

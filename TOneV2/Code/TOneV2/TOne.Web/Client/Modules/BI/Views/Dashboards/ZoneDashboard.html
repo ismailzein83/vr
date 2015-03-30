@@ -61,15 +61,13 @@
                     <thead>
                         <tr>
                             <th style="width:250px">Zone Name</th>
-                            <th style="width:150px">{{optionsMeasureTypes.lastselectedvalue.Description}}</th>
                             <th style="width:150px" ng-repeat="header in otherMeasuresDescriptions"> {{header}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="dataItem in topDestinationData">
                             <td> {{dataItem.EntityName}}</td>
-                            <td >{{dataItem.Value | number:2}}</td>
-                            <td ng-repeat="value in dataItem.MoreValues track by $index">{{value | number:2}}</td>
+                            <td ng-repeat="value in dataItem.Values track by $index">{{value | number:2}}</td>
                         </tr>
                     </tbody>
 

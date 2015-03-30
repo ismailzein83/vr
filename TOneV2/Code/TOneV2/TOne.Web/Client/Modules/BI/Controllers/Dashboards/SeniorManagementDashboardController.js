@@ -108,10 +108,13 @@
 
             chartAPI.showLoader();
             var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
-            BIAPIService.GetTopEntities(entityType, measureType.Value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value)
+            BIAPIService.GetTopEntities(entityType, measureType.Value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.Value])
                 .then(function (response) {
-
-                    var chartData = response;
+                    var chartData = [];
+                    angular.forEach(response, function (item) {
+                        chartData.push(item);
+                    });
+                    
                     var chartDefinition = {
                         type: "pie",
                         title: chartSettings.chartTitle,
@@ -121,8 +124,8 @@
 
                     var seriesDefinitions = [{
                         title: chartSettings.seriesTitle,
-                        titleFieldName: "EntityName",
-                        valueFieldName: "Value"
+                        titlePath: "EntityName",
+                        valuePath: "Values[0]"
                     }];
 
                     chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);

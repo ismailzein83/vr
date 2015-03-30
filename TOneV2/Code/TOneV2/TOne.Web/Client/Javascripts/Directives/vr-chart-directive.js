@@ -54,9 +54,12 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                 angular.forEach(chartData, function (dataItem) {
                     for (var i = 0; i < series.length; i++) {
                         var sDef = seriesDefinitions[i];
+                        var titleValue = eval('dataItem.' + sDef.titlePath);
+                        var yValue = eval('dataItem.' + sDef.valuePath);
+
                         series[i].data.push({
-                            name: dataItem[seriesDefinitions[i].titleFieldName],
-                            y: dataItem[seriesDefinitions[i].valueFieldName]
+                            name: titleValue,
+                            y: yValue 
                         }
                             );
                     }
@@ -90,7 +93,6 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                         enabled: true,
                         layout: 'vertical',
                         align: 'right',
-                        //width: chartDefinition.showLegendsWithValues ? 220 : 10,
                         verticalAlign: 'top',
                         y: 15,
                         borderWidth: 0,
@@ -135,11 +137,11 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
 
                 angular.forEach(chartData, function (dataItem) {
 
-                    var xValue = dataItem[xAxisDefinition.titleFieldName];
+                    var xValue = eval('dataItem.' + xAxisDefinition.titlePath);
                     if (xAxisDefinition.isDate)
                         xValue = dateFormat((new Date(xValue)), "dd-mmm-yy");// new Date(xValue);
-                    if (xAxisDefinition.groupFieldName != 'undefined' && xAxisDefinition.groupFieldName != null) {
-                        var groupName = dataItem[xAxisDefinition.groupFieldName];
+                    if (xAxisDefinition.groupNamePath != 'undefined' && xAxisDefinition.groupNamePath != null) {
+                        var groupName = eval('dataItem.' + xAxisDefinition.groupNamePath);
                         if (groupName == null) {
                             xAxis.push(xValue);
                         }
@@ -164,7 +166,10 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                     }
 
                     for (var i = 0; i < series.length; i++) {
-                        series[i].data.push(dataItem[seriesDefinitions[i].valueFieldName]);
+                        var sDef = seriesDefinitions[i];
+                        
+                        var yValue = eval('dataItem.' + sDef.valuePath);
+                        series[i].data.push(yValue);
                     }
                 });
 
@@ -191,13 +196,6 @@ app.directive('vrChart', ['ChartDirService', function (ChartDirService) {
                 var xAxisSettings = {
                     categories: xAxis
                 };
-
-                //if (xAxisDefinition.isDate) {
-                //    xAxisSettings.type = 'datetime';
-                //    //xAxisSettings.dateTimeLabelFormats = {
-                //    //    day: '%e-%b-%Y'
-                //    //};
-                //}
 
                 var yAxisSettings = {
                     title: {

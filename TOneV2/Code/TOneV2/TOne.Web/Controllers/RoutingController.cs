@@ -8,9 +8,11 @@ using TOne.LCR.Entities;
 using TOne.LCR.Business;
 using TOne.Web.Models;
 using TOne.Web.ModelMappers;
+using System.Web.Http.Controllers;
 
 namespace TOne.Web.Controllers
 {
+    [CustomJSONTypeHandlingAttribure]
     public class RoutingController : ApiController
     {
         [HttpGet]
@@ -50,4 +52,16 @@ namespace TOne.Web.Controllers
         }
         
     }
+
+    public class CustomJSONTypeHandlingAttribure : Attribute, IControllerConfiguration
+    {
+      public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
+        {
+            controllerSettings.Formatters.Clear();
+            var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
+            jsonFormatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Objects;
+            controllerSettings.Formatters.Add(jsonFormatter);
+        }
+    }
+
 }

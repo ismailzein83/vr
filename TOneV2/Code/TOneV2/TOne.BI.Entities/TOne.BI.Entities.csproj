@@ -44,14 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTimeDimensionRecord.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="GenericEntityRecord.cs" />
-    <Compile Include="MeasureType.cs" />
-    <Compile Include="ProfitInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeDimensionType.cs" />
-    <Compile Include="TimeDimensionValueRecord.cs" />
     <Compile Include="TimeValuesRecord.cs" />
-    <Compile Include="ZoneValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,34 +26,23 @@ namespace TOne.Web.Controllers
 
             return rslt;
         }
-        public IEnumerable<ProfitInfo> GetProfit(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
-        {
-            SalesManager manager = new SalesManager();
-            return manager.GetProfit(timeDimensionType, fromDate, toDate);
-        }
 
-        public IEnumerable<ZoneValue> GetTopZonesByDuration(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, int topCount)
-        {
-            DestinationManager manager = new DestinationManager();
-            return manager.GetTopZonesByDuration(timeDimensionType, fromDate, toDate, topCount);
-        }
-
-        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType measureType, DateTime fromDate, DateTime toDate, int topCount, [FromUri] MeasureType[] moreMeasures)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] MeasureType[] measureTypes)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetTopEntities(entityType, measureType, fromDate, toDate, topCount, moreMeasures);
-        }
-
-        public IEnumerable<TimeDimensionValueRecord> GetEntityMeasureValues(EntityType entityType, string entityId, MeasureType measureType, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
-        {
-            GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetEntityMeasureValues(entityType, entityId, measureType, timeDimensionType, fromDate, toDate);
+            return manager.GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypes);
         }
 
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, [FromUri] MeasureType[] measureTypes)
         {
             GenericEntityManager manager = new GenericEntityManager();
             return manager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
+        }
+
+        public IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType topByMeasureType, DateTime fromDate, DateTime toDate, int topCount, [FromUri] MeasureType[] moreMeasures)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            return manager.GetTopEntities(entityType, topByMeasureType, fromDate, toDate, topCount, moreMeasures);
         }
     }
 }

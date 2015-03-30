@@ -49,8 +49,6 @@
     <Compile Include="BIDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGenericEntityDataManager.cs" />
-    <Compile Include="IDestinationDataManager.cs" />
-    <Compile Include="ISalesDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

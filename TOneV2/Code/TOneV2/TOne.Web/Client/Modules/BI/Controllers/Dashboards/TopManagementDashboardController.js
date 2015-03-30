@@ -1,5 +1,5 @@
 ﻿appControllers.controller('TopManagementDashboardController',
-    function TopManagementDashboardController($scope, BIAPIService) {
+    function TopManagementDashboardController($scope, BIAPIService, BIUtilitiesService) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -10,10 +10,10 @@
 
             $scope.testModel = 'TopManagementDashboardController';           
             $scope.timeDimensionTypesOption = {
-                datasource: [{ name: "Daily", value: 0, fromDate: '2012-1-2', toDate: '2012-2-28' },
-            { name: "Weekly", value: 1, fromDate: '2012-1-2', toDate: '2012-04-28' },
-            { name: "Monthly", value: 2, fromDate: '2012-1-2', toDate: '2013-12-31' },
-            { name: "Yearly", value: 3, fromDate: '2012-1-2', toDate: '2014-1-1' }, ]
+                datasource: [{ name: "Daily", value: 3, fromDate: '2012-1-2', toDate: '2012-2-28' },
+            { name: "Weekly", value: 2, fromDate: '2012-1-2', toDate: '2012-04-28' },
+            { name: "Monthly", value: 1, fromDate: '2012-1-2', toDate: '2013-12-31' },
+            { name: "Yearly", value: 0, fromDate: '2012-1-2', toDate: '2014-1-1' }, ]
             };
 
             $scope.profit = [];
@@ -54,9 +54,9 @@
             $scope.chartSaleCostProfitAPI.showLoader();
             $scope.chartProfitAPI.showLoader();
             var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
-            BIAPIService.GetProfit(selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate)
+            BIAPIService.GetMeasureValues(selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate, [1, 2, 3])
                 .then(function (response) {
-
+                    BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate);
                     angular.forEach(response, function (item) {
                         $scope.profit.push(item);
                     });
@@ -67,17 +67,17 @@
                         title: "Cost/Sale/Profit",
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition = { titleFieldName: "TimeValue", groupFieldName: "TimeGroupName" };
-                    var seriesDefinitions = [{
-                        title: "COST",
-                        valueFieldName: "Cost"
-                    }, {
-                        title: "SALE",
-                        valueFieldName: "Sale"
-                    }, {
+                    var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
+                    var seriesDefinitions = [ {
                         title: "PROFIT",
-                        valueFieldName: "Profit",
+                        valuePath: "Values[2]",
                         type: "spline"
+                    },{
+                        title: "SALE",
+                        valuePath: "Values[0]"
+                    }, {
+                        title: "COST",
+                        valuePath: "Values[1]"
                     }
                     ];
 
@@ -88,10 +88,10 @@
                         title: "Profit",
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition2 = { titleFieldName: "TimeValue", groupFieldName: "TimeGroupName" };
+                    var xAxisDefinition2 = { titlePath: "TimeValue", groupNamePath: "TimeGroupName" };
                     var seriesDefinitions2 = [{
                         title: "PROFIT",
-                        valueFieldName: "Profit"
+                        valuePath: "Values[2]"
                     }
                     ];
                     $scope.chartProfitAPI.renderChart(chartData, chartDefinition2, seriesDefinitions2, xAxisDefinition2);

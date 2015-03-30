@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BI.Entities
 {
-    public enum EntityType
-    {
-        SaleZone = 0,
-        Customer = 1,
-        Supplier = 2
-    }
+    
     public class GenericEntityRecord
     {
         public string EntityId { get; set; }
@@ -20,8 +15,6 @@ namespace TOne.BI.Entities
 
         public EntityType EntityType { get; set; }
 
-        public Decimal Value { get; set; }
-
-        public Decimal[] MoreValues { get; set; }
+        public Decimal[] Values { get; set; }
     }
 }
