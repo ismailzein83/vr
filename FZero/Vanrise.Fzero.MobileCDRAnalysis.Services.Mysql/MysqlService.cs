@@ -1,34 +1,12 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.ServiceProcess;
 using System.Timers;
-using System.Xml.Linq;
-using MySql.Data.MySqlClient;
-using Vanrise.CommonLibrary;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using Chilkat;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Timers;
-using System.Xml.Linq;
-using MySql.Data.MySqlClient;
-using MySql.Data;
 
 
 namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
@@ -45,14 +23,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (Exception ex)
             {
-                ErrorLog("MysqlService() " + ex.Message);
+                ErrorLogger("MysqlService() " + ex.Message);
             }
 
         }
 
-        private void ErrorLog(string message)
+        private void ErrorLogger(string message)
         {
-            string cs = "GOIPtoFMS";
+            string cs = "CDRAnalysisMobile";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {
@@ -69,7 +47,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             try
             {
                 base.RequestAdditionalTime(int.Parse(System.Configuration.ConfigurationManager.AppSettings["RequestAdditionalTime"].ToString()));
-                Debugger.Launch(); // launch and attach debugger
+                //Debugger.Launch(); // launch and attach debugger
 
                 // Create a timer with a ten second interval.
                 aTimer = new System.Timers.Timer(int.Parse(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"].ToString()));// 60 minutes
@@ -82,9 +60,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (Exception ex)
             {
-                ErrorLog("OnStart() " + ex.Message);
-                ErrorLog("OnStart() " + ex.ToString());
-                ErrorLog("OnStart() " + ex.InnerException.ToString());
+                ErrorLogger("OnStart() " + ex.Message);
+                ErrorLogger("OnStart() " + ex.ToString());
+                ErrorLogger("OnStart() " + ex.InnerException.ToString());
             }
 
         }
@@ -103,7 +81,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 bool success = sftp.UnlockComponent("Anything for 30-day trial");
                 if (success != true)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
@@ -116,22 +94,22 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 //  The hostname may be a hostname or IP address.
                 int port;
                 string hostname;
-                hostname = "10.10.10.53";
+                hostname = System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString();
                 port = 22;
                 success = sftp.Connect(hostname, port);
                 if (success != true)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
                 //  Authenticate with the SSH server.  Chilkat SFTP supports
                 //  both password-based authenication as well as public-key
                 //  authentication.  This example uses password authenication.
-                success = sftp.AuthenticatePw("root", "P@ssw0rd");
+                success = sftp.AuthenticatePw(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
                 if (success != true)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
@@ -139,7 +117,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 success = sftp.InitializeSftp();
                 if (success != true)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
@@ -150,10 +128,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 //  A path component of ".." refers to the parent directory,
                 //  and "." refers to the current directory.
                 string handle;
-                handle = sftp.OpenDir("/var/mysql/5.1/data");
+                handle = sftp.OpenDir(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
                 if (handle == null)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
@@ -162,7 +140,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 dirListing = sftp.ReadDir(handle);
                 if (dirListing == null)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
@@ -171,7 +149,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 int n = dirListing.NumFilesAndDirs;
                 if (n == 0)
                 {
-                    ErrorLog("No entries found in this directory." + "/n");
+                    ErrorLogger("No entries found in this directory." + "/n");
                 }
                 else
                 {
@@ -183,10 +161,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
                         if (!fileObj.IsDirectory && fileObj.Filename.ToUpper().Contains(".DAT"))
                         {
-                            ErrorLog(fileObj.Filename);
-                            ErrorLog(fileObj.FileType);
-                            ErrorLog("Size in bytes: " + Convert.ToString(fileObj.Size32));
-                            ErrorLog("----");
+                            //ErrorLogger(fileObj.Filename);
+                            //ErrorLogger(fileObj.FileType);
+                            //ErrorLogger("Size in bytes: " + Convert.ToString(fileObj.Size32));
+                            //ErrorLogger("----");
 
                             DBConnect db = new DBConnect();
                             db.Load(fileObj.Filename);
@@ -195,12 +173,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
 
                             //  Rename the file or directory:
-                            success = sftp.RenameFileOrDir("/var/mysql/5.1/data/" + fileObj.Filename, "/var/mysql/5.1/data/" + fileObj.Filename.Replace(".DAT", ".old"));
+                            success = sftp.RenameFileOrDir(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Filename, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Filename.Replace(".DAT", ".old"));
 
 
                             if (success == false)
                             {
-                                ErrorLog(sftp.LastErrorText + "/n");
+                                ErrorLogger(sftp.LastErrorText + "/n");
                                 return;
                             }
 
@@ -217,18 +195,18 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 success = sftp.CloseHandle(handle);
                 if (success != true)
                 {
-                    ErrorLog(sftp.LastErrorText + "/n");
+                    ErrorLogger(sftp.LastErrorText + "/n");
                     return;
                 }
 
-                ErrorLog("Success." + "/n");
+                //ErrorLogger("Success." + "/n");
 
             }
             catch (Exception ex)
             {
-                ErrorLog("OnTimedEvent() " + ex.Message);
-                ErrorLog("OnTimedEvent() " + ex.ToString());
-                ErrorLog("OnTimedEvent() " + ex.InnerException.ToString());
+                ErrorLogger("OnTimedEvent() " + ex.Message);
+                ErrorLogger("OnTimedEvent() " + ex.ToString());
+                ErrorLogger("OnTimedEvent() " + ex.InnerException.ToString());
             }
 
 
@@ -254,7 +232,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
         private void ErrorLog(string message)
         {
-            string cs = "GOIPtoFMS";
+            string cs = "CDRAnalysisMobile";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {
@@ -362,125 +340,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             {
 
             }
-
-
-        }
-
-
-
-
-        public void SendMail(string ToAddress, string subject, string Name, string Content, string AttachmentLink, string Url, IList<string> ToBccAddresses)
-        {
-
-            try
-            {
-
-
-
-                // Gmail Address from where you send the mail
-                var fromAddress = System.Configuration.ConfigurationManager.AppSettings["FromMail"].ToString();
-                // any address where the email will be sending
-                var toAddress = ToAddress;
-                //Password of your gmail address
-
-
-
-
-                string fromPassword = System.Configuration.ConfigurationManager.AppSettings["FromMailPassword"].ToString();
-                // Passing the values and make a email formate to display
-                string body = "Dear " + Name + ",<br/>";
-                body += "<br/>" + Content + "<br/>";
-
-                if (Url != string.Empty)
-                {
-                    body += "<a href=\"" + Url + "\" target=\"_blank\">Check it!</a> ";
-                }
-
-
-                string htmlBody = "<html><body><table style=\"border: 1px solid #9FB2C7;  width:650px\"> <tr> <td bgcolor=\"#E2EBF5\"  style=\"height: 40px; padding:3px 3px 3px 3px;   color: white;  font-size: xx-large;\"   ><img src=\"cid:Pic1\"></td> </tr>  <tr> <td   bgcolor=\"#FFFFFF\" style=\"height: 15px;  padding:8px 8px 8px 8px;   color: #25313F;  font-size: 13px;\"  >" + body + "</td>   </tr>  <tr>    <td bgcolor=\"#9FB2C7\" style=\"height: 20px;  padding:2px 2px 2px 2px; color: white;  font-size: 12px;\">Fzero Copyright &#9400;</td>   </tr>   </table></body></html>";
-                //string htmlBody = "<html><body><h1>Picture</h1><br><img src=\"cid:Pic1\"></body></html>";
-                AlternateView avHtml = AlternateView.CreateAlternateViewFromString
-                    (htmlBody, null, MediaTypeNames.Text.Html);
-
-
-                System.Net.Mime.ContentType mimeType = new System.Net.Mime.ContentType("text/html");
-
-                // smtp settings
-                var smtp = new System.Net.Mail.SmtpClient();
-                {
-                    smtp.Host = System.Configuration.ConfigurationManager.AppSettings["host"].ToString();
-                    smtp.Port = int.Parse(System.Configuration.ConfigurationManager.AppSettings["port"]);
-                    smtp.EnableSsl = bool.Parse(System.Configuration.ConfigurationManager.AppSettings["EnableSsl"].ToString());
-                    smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-
-
-
-                    NetworkCredential networkCredential = new NetworkCredential();
-                    networkCredential.UserName = fromAddress;
-                    networkCredential.Password = fromPassword;
-                    //networkCredential.Domain = fromAddress;
-
-                    smtp.Credentials = networkCredential;
-                    smtp.Timeout = 20000000;
-
-                }
-
-
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.From = new MailAddress(fromAddress);
-
-                if (toAddress != null)
-                {
-                    mailMessage.To.Add(new MailAddress(toAddress));
-                }
-
-
-
-
-
-
-                if (ToBccAddresses != null)
-                {
-                    foreach (string bcc in ToBccAddresses)
-                    {
-                        mailMessage.Bcc.Add(new MailAddress(bcc));
-                    }
-                }
-
-
-
-                mailMessage.Subject = subject;
-                mailMessage.Body = htmlBody;
-                mailMessage.Priority = MailPriority.High;
-                //mailMessage.IsBodyHtml = true;
-
-
-
-                mailMessage.AlternateViews.Add(avHtml);
-
-
-
-                if (AttachmentLink != string.Empty)
-                {
-                    mailMessage.Attachments.Add(new System.Net.Mail.Attachment(AttachmentLink));
-                }
-
-
-                // Passing values to smtp object
-                //smtp.SendAsync(mailMessage,null);
-
-                if (mailMessage.To.Count > 0 || mailMessage.Bcc.Count > 0)
-                {
-                    smtp.Send(mailMessage);
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-
 
 
         }
