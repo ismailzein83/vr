@@ -169,37 +169,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		SlnRelativePath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebSite1(2)", "http://localhost:47074", "{F486B9F3-554E-4190-9AE5-EDB5B5F3DFA2}"
-	ProjectSection(WebsiteProperties) = preProject
-		SccProjectName = "SAK"
-		SccAuxPath = "SAK"
-		SccLocalPath = "SAK"
-		SccProvider = "SAK"
-		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_47074"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\Users\Walid\Desktop\WebSite1\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_47074\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_47074"
-		Release.AspNetCompiler.PhysicalPath = "..\..\Users\Walid\Desktop\WebSite1\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_47074\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "..\..\Users\Walid\Desktop\WebSite1\"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Vanrise.CommonLibrary\\Vanrise.CommonLibrary.csproj
 		SccProjectName1 = Vanrise.CommonLibrary
@@ -277,11 +251,6 @@ Global
 		SccProjectName22 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccLocalPath22 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccProjectEnlistmentChoice22 = 2
-		SccWebProject23 = true
-		SccProjectUniqueName23 = http://localhost:47074
-		SccProjectName23 = WebSite1
-		SccLocalPath23 = ..\\..\\Users\\Walid\\Desktop\\WebSite1
-		SccProjectEnlistmentChoice23 = 2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -376,10 +345,6 @@ Global
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{F486B9F3-554E-4190-9AE5-EDB5B5F3DFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F486B9F3-554E-4190-9AE5-EDB5B5F3DFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F486B9F3-554E-4190-9AE5-EDB5B5F3DFA2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{F486B9F3-554E-4190-9AE5-EDB5B5F3DFA2}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
