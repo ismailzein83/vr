@@ -11,15 +11,17 @@
     @*@Styles.Render("~/Content/Semantic")*@
     @Styles.Render("~/Content/Styles")
 
-    
+
 
 </head>
-<body ng-controller="mainCtrl">
+<body ng-controller="mainCtrl">   
+
+  
     <a href="#/Default">Default</a> |
-    <a href="#/TestView">Test View</a> | 
-    <a href="#/RouteRuleManager">Route Rule Manager</a> | 
-    @*<a href="#/RouteRuleEditor">Route Rule Editor</a> |*@ 
-    <a href="#/ZingChart">Zing Chart</a> | 
+    <a href="#/TestView">Test View</a> |
+    <a href="#/RouteRuleManager">Route Rule Manager</a> |
+    @*<a href="#/RouteRuleEditor">Route Rule Editor</a> |*@
+    <a href="#/ZingChart">Zing Chart</a> |
     <a href="#/HighChart">HighChart</a> |
     <a href="#/HighChartSparkline">HighChart Sparkline</a> |
     <a href="#/FusionChart">Fusion Chart</a> |
@@ -28,7 +30,10 @@
     <a href="#/BI/TopManagementDashboard">BI - TopManagementDashboard</a> |
     <a href="#/BI/SeniorManagementDashboard">BI - SeniorManagementDashboard</a> |
     <a href="#/BI/ZoneDashboard">BI - Destination Dashboard</a>
-    <div class="col-md-12" ng-view></div>
+    <div class="col-lg-12" ng-view>
+
+    </div>
+
 </body>
 @Scripts.Render("~/bundles/helpers")
 @Scripts.Render("~/bundles/JQuery")

@@ -1,7 +1,4 @@
-﻿<h3>Zone Name: {{zoneName}}</h3>
-<select ng-options="itm as itm.name for itm in timeDimensionTypes"
-        ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
-<div></div>
+﻿
 <!--<div style="height:400px;overflow:auto;display:inline-block">
     <table>
         <thead>
@@ -20,4 +17,28 @@
     </table>
 </div>-->
 
-<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails"></div>
+
+    <div class="panel panel-primary panel-over-color">
+        <div class="panel-body">
+            <div class="row style-row">
+                <div class="col-md-2 col-lg-2 style-col">
+                    <h4>Zone Name: {{zoneName}}</h4>
+                    <select ng-options="itm as itm.name for itm in timeDimensionTypes"
+                            ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
+
+                </div>
+                
+            </div>
+
+            <div class="row style-row">
+                <div class="col-lg-12 col-md-12   style-col">
+                    <div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" ></div>
+                </div>
+               
+            </div>
+            
+        </div>
+    </div>
+
+
+

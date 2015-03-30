@@ -46,7 +46,6 @@ namespace TOne.Web
                "~/Client/Libraries/Angular/angular-ui-switch.js",
                "~/Client/Libraries/Angular/angular-notify.js",               
               "~/Client/Libraries/Angular/ng-sortable.js"
-             
               ));
 
             //Helpers

@@ -553,6 +553,7 @@
     <Content Include="images\alert\update.png" />
     <Content Include="images\alert\warning.png" />
     <Content Include="images\loader-mask.gif" />
+    <Content Include="images\menu-normal.png" />
     <Content Include="popoverTemp.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
