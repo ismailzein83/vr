@@ -11,6 +11,24 @@ using System.Timers;
 using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using Vanrise.CommonLibrary;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using Chilkat;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Timers;
+using System.Xml.Linq;
+using MySql.Data.MySqlClient;
+using MySql.Data;
 
 
 namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
@@ -76,67 +94,134 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
             try
             {
-                if (HttpHelper.CheckInternetConnection("smtp.gmail.com", 587))
+                //  Important: It is helpful to send the contents of the
+                //  sftp.LastErrorText property when requesting support.
+
+                Chilkat.SFtp sftp = new Chilkat.SFtp();
+
+                //  Any string automatically begins a fully-functional 30-day trial.
+                bool success = sftp.UnlockComponent("Anything for 30-day trial");
+                if (success != true)
                 {
-                    DBConnect db = new DBConnect();
-                    List<string>[] listcalls = new List<string>[0];
-                    List<string>[] listcallsfailed = new List<string>[0];
-
-                    listcalls = db.SelectCalls(db.LastCallID());
-                    listcallsfailed = db.SelectCallsFailed(db.LastCallFailedID());
-
-
-                    if (listcalls[0].Count() > 0 || listcallsfailed[0].Count() > 0)
-                    {
-                        XElement root = new XElement("CDRs");
-                        List<XElement> cdrs = new List<XElement>();
-
-                        for (int i = 0; i < listcalls[0].Count(); i++)
-                        {
-                            XElement cdr;
-                            List<XElement> elements = new List<XElement>();
-                            elements.Add(new XElement("ID", listcalls[1][i]));
-                            elements.Add(new XElement("caller_id", listcalls[2][i]));
-                            elements.Add(new XElement("called_number", listcalls[3][i]));
-                            elements.Add(new XElement("call_start", listcalls[4][i]));
-                            elements.Add(new XElement("duration", listcalls[5][i]));
-                            elements.Add(new XElement("Origination", listcalls[6][i]));
-                            elements.Add(new XElement("RouteID", listcalls[7][i]));
-                            elements.Add(new XElement("ClientName", listcalls[8][i]));
-                            elements.Add(new XElement("Type", listcalls[9][i]));
-                            cdr = new XElement("CDR", elements);
-                            cdrs.Add(cdr);
-                        }
-
-
-                        for (int i = 0; i < listcallsfailed[0].Count(); i++)
-                        {
-                            XElement cdr;
-                            List<XElement> elements = new List<XElement>();
-                            elements.Add(new XElement("ID", listcallsfailed[1][i]));
-                            elements.Add(new XElement("caller_id", listcallsfailed[2][i]));
-                            elements.Add(new XElement("called_number", listcallsfailed[3][i]));
-                            elements.Add(new XElement("call_start", listcallsfailed[4][i]));
-                            elements.Add(new XElement("duration", listcallsfailed[5][i]));
-                            elements.Add(new XElement("Origination", listcallsfailed[6][i]));
-                            elements.Add(new XElement("RouteID", listcallsfailed[7][i]));
-                            elements.Add(new XElement("ClientName", listcallsfailed[8][i]));
-                            elements.Add(new XElement("Type", listcallsfailed[9][i]));
-                            cdr = new XElement("CDR", elements);
-                            cdrs.Add(cdr);
-                        }
-
-
-
-                        XElement xmlTree1 = new XElement("CDRs", cdrs);
-                        Random r = new Random();
-                        string Path = ConfigurationManager.AppSettings["XmlPath"] + "GOIPFile" + r.Next().ToString() + ".xml";
-                        new XDocument(xmlTree1).Save(Path);
-
-                        db.Insert(db.NewLastCallID, db.NewLastCallFailedID);
-                        db.SendMail(System.Configuration.ConfigurationManager.AppSettings["ToAddress"].ToString(), "Mysql Calls", "Administrator", "Please find attached XML of Calls", Path, string.Empty, null);
-                    }
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
                 }
+
+                //  Set some timeouts, in milliseconds:
+                sftp.ConnectTimeoutMs = 5000;
+                sftp.IdleTimeoutMs = 10000;
+
+                //  Connect to the SSH server.
+                //  The standard SSH port = 22
+                //  The hostname may be a hostname or IP address.
+                int port;
+                string hostname;
+                hostname = "10.10.10.53";
+                port = 22;
+                success = sftp.Connect(hostname, port);
+                if (success != true)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                //  Authenticate with the SSH server.  Chilkat SFTP supports
+                //  both password-based authenication as well as public-key
+                //  authentication.  This example uses password authenication.
+                success = sftp.AuthenticatePw("root", "P@ssw0rd");
+                if (success != true)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                //  After authenticating, the SFTP subsystem must be initialized:
+                success = sftp.InitializeSftp();
+                if (success != true)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                //  Open a directory on the server...
+                //  Paths starting with a slash are "absolute", and are relative
+                //  to the root of the file system. Names starting with any other
+                //  character are relative to the user's default directory (home directory).
+                //  A path component of ".." refers to the parent directory,
+                //  and "." refers to the current directory.
+                string handle;
+                handle = sftp.OpenDir("/var/mysql/5.1/data");
+                if (handle == null)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                //  Download the directory listing:
+                Chilkat.SFtpDir dirListing = null;
+                dirListing = sftp.ReadDir(handle);
+                if (dirListing == null)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                //  Iterate over the files.
+                int i;
+                int n = dirListing.NumFilesAndDirs;
+                if (n == 0)
+                {
+                    ErrorLog("No entries found in this directory." + "/n");
+                }
+                else
+                {
+                    for (i = 0; i <= n - 1; i++)
+                    {
+                        Chilkat.SFtpFile fileObj = null;
+                        fileObj = dirListing.GetFileObject(i);
+
+
+                        if (!fileObj.IsDirectory && fileObj.Filename.ToUpper().Contains(".DAT"))
+                        {
+                            ErrorLog(fileObj.Filename);
+                            ErrorLog(fileObj.FileType);
+                            ErrorLog("Size in bytes: " + Convert.ToString(fileObj.Size32));
+                            ErrorLog("----");
+
+                            DBConnect db = new DBConnect();
+                            db.Load(fileObj.Filename);
+
+
+
+
+                            //  Rename the file or directory:
+                            success = sftp.RenameFileOrDir("/var/mysql/5.1/data/" + fileObj.Filename, "/var/mysql/5.1/data/" + fileObj.Filename.Replace(".DAT", ".old"));
+
+
+                            if (success == false)
+                            {
+                                ErrorLog(sftp.LastErrorText + "/n");
+                                return;
+                            }
+
+                        }
+
+
+
+
+                    }
+
+                }
+
+                //  Close the directory
+                success = sftp.CloseHandle(handle);
+                if (success != true)
+                {
+                    ErrorLog(sftp.LastErrorText + "/n");
+                    return;
+                }
+
+                ErrorLog("Success." + "/n");
 
             }
             catch (Exception ex)
@@ -189,9 +274,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (Exception ex)
             {
-                ErrorLog("DBConnect() " + ex.Message);
-                ErrorLog("DBConnect() " + ex.ToString());
-                ErrorLog("DBConnect() " + ex.InnerException.ToString());
+
             }
 
         }
@@ -231,9 +314,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (MySqlException ex)
             {
-                ErrorLog("OpenConnection() " + ex.Message);
-                ErrorLog("OpenConnection() " + ex.ToString());
-                ErrorLog("OpenConnection() " + ex.InnerException.ToString());
+
                 return false;
             }
         }
@@ -248,26 +329,29 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (MySqlException ex)
             {
-                ErrorLog("CloseConnection() " + ex.Message);
-                ErrorLog("CloseConnection() " + ex.ToString());
-                ErrorLog("CloseConnection() " + ex.InnerException.ToString());
+
                 return false;
             }
         }
 
+
         //Insert statement
-        public void Insert(int NewLastCallID, int NewLastCallFailedID)
+        public void Load(string FileName)
         {
 
             try
             {
-                string query = "INSERT INTO sentcalls ( LastCallID, LastCallFailedID) VALUES( '" + NewLastCallID.ToString() + "','" + NewLastCallFailedID.ToString() + "')";
+
+                //string query = "LOAD DATA INFILE './"+FileName+"' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n';";
+
+                string query = "drop table if exists filesDAT; create table filesDAT(content varchar(1000)); ALTER TABLE filesDAT CONVERT TO CHARACTER SET utf8 COLLATE utf8_persian_ci; LOAD DATA INFILE './" + FileName + "' INTO TABLE filesDAT CHARACTER SET UTF8  LINES TERMINATED BY '\n'; INSERT INTO NormalCDR (  MSISDN,                                  IMSI ,                                ConnectDateTime ,                                Destination  ,                               DurationInSeconds ,                               Call_Class  ,                                Call_Type  ,                              Sub_Type   ,                              IMEI  ,                              BTS_Id   ,                                            Cell_Id  ,                                Up_Volume  ,                                Down_Volume ,                                 Cell_Latitude  ,                              Cell_Longitude  ,                              In_Trunk  ,                               Out_Trunk  )    select               trim(substr(content, 146, 20)) MSISDN,   trim(substr(content, 126, 20)) IMSI,  trim(substr(content, 222, 14)) ConnectDateTime,  trim(substr(content, 199, 20)) Destination,  trim(substr(content, 236, 5)) DurationInSeconds,  trim(substr(content, 435, 10)) Call_Class,   trim(substr(content, 103, 3)) Call_Type,  trim(substr(content, 166, 10)) Sub_Type,  trim(substr(content, 106, 20)) IMEI, left(trim(substr(content, 253, 22)), char_length(trim(substr(content, 253, 22)))-1)  BTS_Id,  trim(substr(content, 253, 22)) Cell_Id,   trim(substr(content, 589, 10)) Up_Volume,   trim(substr(content, 599, 10)) Down_Volume,   trim(substr(content, 610, 9)) Cell_Latitude,  trim(substr(content, 619, 9)) Cell_Longitude,  trim(substr(content, 415, 20)) In_Trunk,  trim(substr(content, 395, 20)) Out_Trunk from filesDAT ; ";
 
                 //open connection
                 if (this.OpenConnection() == true)
                 {
                     //create command and assign the query and connection from the constructor
                     MySqlCommand cmd = new MySqlCommand(query, connection);
+                    cmd.CommandTimeout = 0;
                     //Execute command
                     cmd.ExecuteNonQuery();
                     //close connection
@@ -276,205 +360,13 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (MySqlException ex)
             {
-                ErrorLog("Insert() " + ex.Message);
-                ErrorLog("Insert() " + ex.ToString());
-                ErrorLog("Insert() " + ex.InnerException.ToString());
+
             }
 
 
         }
 
 
-        //Select statement
-        public List<string>[] SelectCalls(int LastCallID)
-        {
-            NewLastCallID = LastCallID;
-            string querycalls = "SELECT   a.id_call as ID,  IFNULL(c.Name,'') as ClientName,  a.id_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, a.duration , IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         calls as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix      left outer join clients as c on    a.id_Client = c.ID where id_call>" + LastCallID.ToString();
-
-            //Create a list to store the result
-            List<string>[] listcalls = new List<string>[10];
-            listcalls[0] = new List<string>();
-            listcalls[1] = new List<string>();
-            listcalls[2] = new List<string>();
-            listcalls[3] = new List<string>();
-            listcalls[4] = new List<string>();
-            listcalls[5] = new List<string>();
-            listcalls[6] = new List<string>();
-            listcalls[7] = new List<string>();
-            listcalls[8] = new List<string>();
-            listcalls[9] = new List<string>();
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(querycalls, connection);
-                cmd.CommandTimeout = 600000;
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
-                {
-                    listcalls[0].Add(dataReader["ID"] + "");
-                    listcalls[1].Add(dataReader["id_call"] + "");
-                    listcalls[2].Add(dataReader["caller_id"] + "");
-                    listcalls[3].Add(dataReader["called_number"] + "");
-                    listcalls[4].Add(dataReader["call_start"] + "");
-                    listcalls[5].Add(dataReader["duration"] + "");
-                    listcalls[6].Add(dataReader["Origination"] + "");
-                    listcalls[7].Add(dataReader["RouteID"] + "");
-                    listcalls[8].Add(dataReader["ClientName"] + "");
-                    listcalls[9].Add(dataReader["Type"] + "");
-                }
-                if (listcalls[0].LastOrDefault() != null)
-                    NewLastCallID = int.Parse(listcalls[0].Last());
-                //close Data Reader
-                dataReader.Close();
-
-
-
-
-                //close Connection
-                this.CloseConnection();
-
-                //return list to be displayed
-                return listcalls;
-            }
-            else
-            {
-                return listcalls;
-            }
-        }
-
-
-        //Select statement
-        public List<string>[] SelectCallsFailed(int LastCallFailedID)
-        {
-            NewLastCallFailedID = LastCallFailedID;
-            string querycallsfailed = "SELECT     a.id_failed_call as ID, IFNULL(c.Name,'') as ClientName, a.id_failed_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, 0 as duration,  IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         callsfailed as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix       left outer join clients as c on    a.id_Client = c.ID  where id_failed_call>" + LastCallFailedID.ToString();
-
-            //Create a list to store the result
-            List<string>[] list_failedcalls = new List<string>[10];
-            list_failedcalls[0] = new List<string>();
-            list_failedcalls[1] = new List<string>();
-            list_failedcalls[2] = new List<string>();
-            list_failedcalls[3] = new List<string>();
-            list_failedcalls[4] = new List<string>();
-            list_failedcalls[5] = new List<string>();
-            list_failedcalls[6] = new List<string>();
-            list_failedcalls[7] = new List<string>();
-            list_failedcalls[8] = new List<string>();
-            list_failedcalls[9] = new List<string>();
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmdfailed = new MySqlCommand(querycallsfailed, connection);
-                cmdfailed.CommandTimeout = 600000;
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReaderfailed = cmdfailed.ExecuteReader();
-                //Read the data and store them in the list
-                while (dataReaderfailed.Read())
-                {
-                    list_failedcalls[0].Add(dataReaderfailed["ID"] + "");
-                    list_failedcalls[1].Add(dataReaderfailed["id_failed_call"] + "");
-                    list_failedcalls[2].Add(dataReaderfailed["caller_id"] + "");
-                    list_failedcalls[3].Add(dataReaderfailed["called_number"] + "");
-                    list_failedcalls[4].Add(dataReaderfailed["call_start"] + "");
-                    list_failedcalls[5].Add(dataReaderfailed["duration"] + "");
-                    list_failedcalls[6].Add(dataReaderfailed["Origination"] + "");
-                    list_failedcalls[7].Add(dataReaderfailed["RouteID"] + "");
-                    list_failedcalls[8].Add(dataReaderfailed["ClientName"] + "");
-                    list_failedcalls[9].Add(dataReaderfailed["Type"] + "");
-                }
-                if (list_failedcalls[0].LastOrDefault() != null)
-                    NewLastCallFailedID = int.Parse(list_failedcalls[0].Last());
-                //close Data Reader
-                dataReaderfailed.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                //return list to be displayed
-                return list_failedcalls;
-            }
-            else
-            {
-                return list_failedcalls;
-            }
-        }
-
-        //Last statement
-        public int LastCallID()
-        {
-            string query = "SELECT LastCallID FROM sentcalls ORDER BY ID DESC Limit 1";
-            int LastCallID = 0;
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                //Read the data and store them in the list
-                if (dataReader.Read())
-                {
-                    LastCallID = int.Parse(dataReader["LastCallID"].ToString());
-                }
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                return LastCallID;
-
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        //Last statement
-        public int LastCallFailedID()
-        {
-            string query = "SELECT LastCallFailedID FROM sentcalls ORDER BY ID DESC Limit 1";
-            int LastCallFailedID = 0;
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //Create Command
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                //Read the data and store them in the list
-                if (dataReader.Read())
-                {
-                    LastCallFailedID = int.Parse(dataReader["LastCallFailedID"].ToString());
-                }
-
-
-                //close Data Reader
-                dataReader.Close();
-
-                //close Connection
-                this.CloseConnection();
-
-                return LastCallFailedID;
-
-            }
-            else
-            {
-                return 0;
-            }
-        }
 
 
         public void SendMail(string ToAddress, string subject, string Name, string Content, string AttachmentLink, string Url, IList<string> ToBccAddresses)
@@ -585,9 +477,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
             }
             catch (Exception ex)
             {
-                ErrorLog("SendMail " + ex.Message);
-                ErrorLog("SendMail " + ex.InnerException.ToString());
-                ErrorLog("SendMail " + ex.ToString());
+
             }
 
 
