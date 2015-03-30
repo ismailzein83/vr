@@ -169,9 +169,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		SlnRelativePath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{230AC805-9EDB-4D49-AB03-A8C10A58613D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -251,6 +253,9 @@ Global
 		SccProjectName22 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccLocalPath22 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccProjectEnlistmentChoice22 = 2
+		SccProjectUniqueName23 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj
+		SccProjectName23 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
+		SccLocalPath23 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -345,6 +350,10 @@ Global
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{230AC805-9EDB-4D49-AB03-A8C10A58613D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{230AC805-9EDB-4D49-AB03-A8C10A58613D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{230AC805-9EDB-4D49-AB03-A8C10A58613D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{230AC805-9EDB-4D49-AB03-A8C10A58613D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
