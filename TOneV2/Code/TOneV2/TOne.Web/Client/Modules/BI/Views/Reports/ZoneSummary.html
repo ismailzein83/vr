@@ -23,7 +23,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="dataItem in data">
-                                    <td> {{dataItem.TimeGroupName}} <span ng-hide="dataItem.TimeGroupName == null">-</span> {{dataItem.TimeValue}}</td>
+                                    <td> {{dataItem.dateTimeValue}}</td>
                                     <td ng-repeat="value in dataItem.Values">{{value | number:2}}</td>
                                 </tr>
                             </tbody>

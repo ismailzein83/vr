@@ -1,5 +1,5 @@
 ﻿appControllers.controller('TopManagementDashboardController',
-    function TopManagementDashboardController($scope, BIAPIService, BIUtilitiesService) {
+    function TopManagementDashboardController($scope, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -8,13 +8,25 @@
         function defineScopeObjects() {
 
 
-            $scope.testModel = 'TopManagementDashboardController';           
+            $scope.testModel = 'TopManagementDashboardController';
+           
             $scope.timeDimensionTypesOption = {
-                datasource: [{ name: "Daily", value: 3, fromDate: '2012-1-2', toDate: '2012-2-28' },
-            { name: "Weekly", value: 2, fromDate: '2012-1-2', toDate: '2012-04-28' },
-            { name: "Monthly", value: 1, fromDate: '2012-1-2', toDate: '2013-12-31' },
-            { name: "Yearly", value: 0, fromDate: '2012-1-2', toDate: '2014-1-1' }, ]
+                datasource: []
             };
+
+            for (prop in BITimeDimensionTypeEnum) {
+                var obj = {
+                    name: BITimeDimensionTypeEnum[prop].description,
+                    value: BITimeDimensionTypeEnum[prop].value
+                };
+                $scope.timeDimensionTypesOption.datasource.push(obj);
+                if (obj.value == BITimeDimensionTypeEnum.Daily.value)
+                    $scope.timeDimensionTypesOption.lastselectedvalue = obj;
+            }
+            
+
+            $scope.fromDate = '2012-01-02';
+            $scope.toDate = '2012-04-28';
 
             $scope.profit = [];
 
@@ -38,8 +50,6 @@
         }
 
         function load() {
-            $scope.timeDimensionTypesOption.lastselectedvalue = $scope.timeDimensionTypesOption.datasource[0];
-            
         }
 
         function updateProfitChart() {
@@ -54,9 +64,11 @@
             $scope.chartSaleCostProfitAPI.showLoader();
             $scope.chartProfitAPI.showLoader();
             var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
-            BIAPIService.GetMeasureValues(selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate, [1, 2, 3])
+            var fromDate = $scope.fromDate;
+            var toDate = $scope.toDate;
+            BIAPIService.GetMeasureValues(selectedTimeDimension.value, fromDate, toDate, [1, 2, 3])
                 .then(function (response) {
-                    BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension.value, selectedTimeDimension.fromDate, selectedTimeDimension.toDate);
+                    BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension.value, fromDate, toDate);
                     angular.forEach(response, function (item) {
                         $scope.profit.push(item);
                     });
@@ -88,7 +100,7 @@
                         title: "Profit",
                         yAxisTitle: "Value"
                     };
-                    var xAxisDefinition2 = { titlePath: "TimeValue", groupNamePath: "TimeGroupName" };
+                    var xAxisDefinition2 = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
                     var seriesDefinitions2 = [{
                         title: "PROFIT",
                         valuePath: "Values[2]"

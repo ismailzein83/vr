@@ -10,8 +10,6 @@ namespace TOne.BI.Entities
     {
         public DateTime Time { get; set; }
 
-        public string TimeValue { get; set; }
-
-        public string TimeGroupName { get; set; }
+        public int WeekNumber { get; set; }
     }
 }

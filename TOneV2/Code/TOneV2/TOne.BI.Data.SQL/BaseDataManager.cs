@@ -251,14 +251,16 @@ namespace TOne.BI.Data.SQL
         {
             switch (timeDimensionType)
             {
-                case TimeDimensionType.Daily:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.DAYOFMONTH);
-                case TimeDimensionType.Weekly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.WEEKOFMONTH);
-                case TimeDimensionType.Monthly:
-                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR);
                 case TimeDimensionType.Yearly:
                     return BuildQueryRowsPart(DateTimeColumns.YEAR);
+                case TimeDimensionType.Monthly:
+                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR);
+                case TimeDimensionType.Weekly:
+                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.WEEKOFMONTH);
+                case TimeDimensionType.Daily:
+                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.DAYOFMONTH);
+                case TimeDimensionType.Hourly:
+                    return BuildQueryRowsPart(DateTimeColumns.YEAR, DateTimeColumns.MONTHOFYEAR, DateTimeColumns.DAYOFMONTH, DateTimeColumns.HOUR);
             }
             return null;
         }
@@ -275,33 +277,39 @@ namespace TOne.BI.Data.SQL
                 return;
             int month = 1;
             int day = 1;
+            int hour = 0;
             switch (timeDimensionType)
             {
+                case TimeDimensionType.Yearly:
+                    break;
+                case TimeDimensionType.Monthly:
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                        return;
+                    break;
+                case TimeDimensionType.Weekly:
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                        return;
+                    int week;
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.WEEKOFMONTH)] as string, out week))
+                        return;
+                    record.WeekNumber = week;
+                    break;
                 case TimeDimensionType.Daily:
                     if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
                         return;
                     if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)] as string, out day))
                         return;
-                    record.TimeGroupName = String.Format("{0}-{1}", GetMonthDescription(month), year);
-                    record.TimeValue = String.Format("{0}", day);
                     break;
-                case TimeDimensionType.Weekly:
+                case TimeDimensionType.Hourly:
                     if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
                         return;
-                    record.TimeGroupName = String.Format("{0}-{1}", GetMonthDescription(month), year);
-                    record.TimeValue = String.Format("Week {0}", reader[GetRowColumnToRead(DateTimeColumns.WEEKOFMONTH)]);
-                    break;
-                case TimeDimensionType.Monthly:
-                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.DAYOFMONTH)] as string, out day))
                         return;
-                    record.TimeGroupName = String.Format("{0}", year);
-                    record.TimeValue = String.Format("{0}", GetMonthDescription(month));
-                    break;
-                case TimeDimensionType.Yearly:
-                    record.TimeValue = String.Format("{0}", year);
+                    if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.HOUR)] as string, out hour))
+                        return;
                     break;
             }
-            record.Time = new DateTime(year, month, day);
+            record.Time = new DateTime(year, month, day, hour, 0, 0);
         }
 
         protected string GetDateFilter(DateTime fromDate, DateTime toDate)

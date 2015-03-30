@@ -11,13 +11,15 @@ namespace TOne.BI.Data.SQL
     {
         public const string DATE = "[Date].[Date]";
 
-        public const string DAYOFMONTH = "[Date].[Day Of Month]";
-
-        public const string WEEKOFMONTH = "[Date].[Week Of Month]";
+        public const string YEAR = "[Date].[Year]";
 
         public const string MONTHOFYEAR = "[Date].[Month Of Year]";
 
-        public const string YEAR = "[Date].[Year]";
+        public const string WEEKOFMONTH = "[Date].[Week Of Month]";
+
+        public const string DAYOFMONTH = "[Date].[Day Of Month]";
+
+        public const string HOUR = "[Time].[Hour]";
     }
 
     internal class MeasureColumns

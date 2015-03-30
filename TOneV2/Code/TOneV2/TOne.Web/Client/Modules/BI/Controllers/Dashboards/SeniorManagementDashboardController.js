@@ -1,5 +1,5 @@
 ﻿appControllers.controller('SeniorManagementDashboardController',
-    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService) {
+    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -19,6 +19,15 @@
             $scope.optionsMeasureTypes = {
                 datasource: []
             };
+
+            for (prop in BIMeasureTypeEnum) {
+                var obj = {
+                    name: BIMeasureTypeEnum[prop].description,
+                    value: BIMeasureTypeEnum[prop].value
+                };
+                $scope.optionsMeasureTypes.datasource.push(obj);
+            }
+           
 
             $scope.optionTopCounts = {
                 datasource: [{ value: 5 },
@@ -41,6 +50,9 @@
                     //$scope.$root.$apply(function () {
                         $scope.zoneId = zoneItem.EntityId;
                         $scope.zoneName = zoneItem.EntityName;
+                        var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
+                        $scope.fromDate = selectedDateTimeFilter.fromDate;
+                        $scope.toDate = selectedDateTimeFilter.toDate;
                        var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true });
                       //  addModal.$promise.then(addModal.show);
                         //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
@@ -67,7 +79,7 @@
         }
 
         function load() {
-            getMeasureTypes();
+            $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
             $scope.dateTimeFilterOption.lastselectedvalue = $scope.dateTimeFilterOption.datasource[0];
             $scope.optionTopCounts.lastselectedvalue = $scope.optionTopCounts.datasource[1];
         }
@@ -79,21 +91,21 @@
         }
 
         function updateTopDestinationsChart() {
-            updateTopChart(chartTopDestinationsAPI, 0, {
+            updateTopChart(chartTopDestinationsAPI, BIEntityTypeEnum.SaleZone.value, {
                 chartTitle: "TOP DESTINATIONS",
                 seriesTitle: "Top Destinations"
             });
         }
 
         function updateTopCustomersChart() {
-            updateTopChart(chartTopCustomersAPI, 1, {
+            updateTopChart(chartTopCustomersAPI, BIEntityTypeEnum.Customer.value, {
                 chartTitle: "TOP CUSTOMERS",
                 seriesTitle: "Top Customers"
             });
         }
 
         function updateTopSuppliersChart() {
-            updateTopChart(chartTopSuppliersAPI, 2, {
+            updateTopChart(chartTopSuppliersAPI, BIEntityTypeEnum.Supplier.value, {
                 chartTitle: "TOP SUPPLIERS",
                 seriesTitle: "Top Suppliers"
             });
@@ -108,7 +120,7 @@
 
             chartAPI.showLoader();
             var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
-            BIAPIService.GetTopEntities(entityType, measureType.Value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.Value])
+            BIAPIService.GetTopEntities(entityType, measureType.value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.value])
                 .then(function (response) {
                     var chartData = [];
                     angular.forEach(response, function (item) {
@@ -133,19 +145,5 @@
                 .finally(function () {
                     chartAPI.hideLoader();
                 });
-        }
-
-
-        function getMeasureTypes() {
-            BIAPIService.GetMeasureTypeList().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    itm.selected = true;
-                    $scope.optionsMeasureTypes.datasource.push(itm);
-                });
-
-                $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
-
-                updateCharts();
-            });
         }
     });

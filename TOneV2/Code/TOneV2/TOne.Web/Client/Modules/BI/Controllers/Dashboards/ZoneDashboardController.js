@@ -1,5 +1,5 @@
 ﻿appControllers.controller('ZoneDashboardController',
-    function ZoneDashboardController($scope, BIAPIService) {
+    function ZoneDashboardController($scope, BIAPIService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -12,10 +12,17 @@
 
            
             $scope.optionsMeasureTypes = {
-                selectedvalues: [],
-                datasource: [],
-                lastselectedvalue: ''
+                datasource: []
             };
+
+            for (prop in BIMeasureTypeEnum) {
+                var obj = {
+                    name: BIMeasureTypeEnum[prop].description,
+                    value: BIMeasureTypeEnum[prop].value,
+                    selected: true
+                };
+                $scope.optionsMeasureTypes.datasource.push(obj);
+            }
 
             $scope.optionsTopCount = {
                 datasource: [
@@ -60,13 +67,13 @@
 
         function load() {
             initializeValues();
-            getMeasureTypes();
         }
 
         function initializeValues()
         {
-            $scope.fromDate = '2012-1-2';
-            $scope.toDate = '2012-3-1';
+            $scope.fromDate = '2012-01-02';
+            $scope.toDate = '2012-03-01';
+            $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
         }
 
@@ -84,13 +91,13 @@
             $scope.otherMeasuresDescriptions.length = 0;
             var measures = [];
             angular.forEach($scope.optionsMeasureTypes.datasource, function (itm) {
-                measures.push(itm.Value);
-                $scope.otherMeasuresDescriptions.push(itm.Description);
+                measures.push(itm.value);
+                $scope.otherMeasuresDescriptions.push(itm.name);
             });
 
             $scope.topDestinationData.length = 0
             chartTopDestinationsAPI.showLoader();
-            BIAPIService.GetTopEntities(0, measureType.Value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
+            BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.topDestinationData.push(itm);
@@ -122,21 +129,22 @@
                 if (measure.selected)
                     measures.push(measure);
             });
-            
+            if (measures.length == 0) {
+                return;
+            }
 
             var measureValues = [];
             angular.forEach(measures, function (m) {
-                measureValues.push(m.Value);
+                measureValues.push(m.value);
             });
             chartZoneReadyAPI.showLoader();
-            BIAPIService.GetEntityMeasuresValues(0, $scope.selectedZoneId, 0, $scope.fromDate, $scope.toDate, measureValues)
+            BIAPIService.GetEntityMeasuresValues(BIEntityTypeEnum.SaleZone.value, $scope.selectedZoneId, BITimeDimensionTypeEnum.Daily.value, $scope.fromDate, $scope.toDate, measureValues)
             .then(function (response) {
                 var chartData = response;                
 
                 var chartDefinition = {
                     type: "spline",
-                    title: $scope.selectedZoneName,
-                    yAxisTitle: $scope.optionsMeasureTypes.lastselectedvalue.Description
+                    title: $scope.selectedZoneName
                 };
                 var xAxisDefinition = {
                     titlePath: "Time",
@@ -147,7 +155,7 @@
                 {
                     var measure = measures[i];
                     seriesDefinitions.push({
-                        title: measure.Description,
+                        title: measure.name,
                         valuePath: "Values[" + i + "]"
                     });
                 }
@@ -159,19 +167,4 @@
                 chartZoneReadyAPI.hideLoader();
             });;
         }
-
-        function getMeasureTypes()
-        {
-            BIAPIService.GetMeasureTypeList().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    itm.selected = true;
-                    $scope.optionsMeasureTypes.datasource.push(itm);
-                });
-                
-                $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
-
-                getAndShowTopDestination();
-            });
-        }
-
     });

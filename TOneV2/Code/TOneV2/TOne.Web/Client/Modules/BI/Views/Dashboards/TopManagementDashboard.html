@@ -12,7 +12,19 @@
                     <vr-dropdown datatextfield="name" datavaluefield="value"
                                  entityname="" type="standard" options="timeDimensionTypesOption" onselectionchange="updateChart"></vr-dropdown>
                 </div>
+                <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                    <label class="control-label">From:</label>
+                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                        <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="updateChart()">
+                    </div>
+                </div>
 
+                <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                    <label class="control-label">To:</label>
+                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                        <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="updateChart()">
+                    </div>
+                </div>
                
             </div>
 

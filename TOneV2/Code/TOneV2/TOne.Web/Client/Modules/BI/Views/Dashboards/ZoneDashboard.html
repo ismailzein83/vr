@@ -6,7 +6,7 @@
                 
                 <div class="col-lg-2 style-col">
                     <label class="control-label">Measure:</label>
-                    <vr-dropdown datatextfield="Description" datavaluefield="Value"
+                    <vr-dropdown datatextfield="name" datavaluefield="value"
                                  entityname="" type="standard" options="optionsMeasureTypes" onselectionchange="filterChanged"></vr-dropdown>
                 </div>
                 
@@ -50,7 +50,7 @@
                         <div ng-repeat="itm in optionsMeasureTypes.datasource">
                             <label class="control-label" style="padding-top:6px">
                                 <input type="checkbox" ng-model="itm.selected" ng-change="updateZone()" />
-                                {{itm.Description}}
+                                {{itm.name}}
                                
                             </label>
                         </div>
