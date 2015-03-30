@@ -12,8 +12,7 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'mgcrea.ngStrap',
     'uiSwitch',
     'cgNotify',
-    'ui.grid.autoResize',
-    'shoppinpal.mobile-menu'
+    'ui.grid.autoResize'
 ]);
 appControllers.directive('resizable', function () {
     return {
