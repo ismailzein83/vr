@@ -511,6 +511,7 @@
     <Content Include="Client\Styles\angular-ui-switch.css" />
     <Content Include="Client\Styles\loader.gif" />
     <Content Include="Client\Styles\ng-sortable.style.css" />
+    <Content Include="Client\Styles\simple-sidebar.css" />
     <Content Include="Client\Styles\Styles.css" />
     <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />

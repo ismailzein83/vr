@@ -2,7 +2,42 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope,notify) {
+.controller('mainCtrl', function mainCtrl($scope, notify) {
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $scope.menuItemsCurrent = -1;
+    $scope.setIndex = function (i) {
+        if ($scope.menuItemsCurrent == i) {
+            $scope.menuItemsCurrent = -1;
+        }
+        else
+        $scope.menuItemsCurrent = i;
+    }
+    
+    $scope.menuItems = [
+        {name:"Routing",location:'',childs:[
+            { name: "Rule Mangment", location: '' },
+            { name: "Route Mangment", location: '#/RouteRuleManager' }
+        ]
+        },
+        {
+            name: "BI", location: '', childs: [
+               { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' }
+            ]
+        },
+        {
+            name: "NOC", location: '', childs: [
+               { name: "Zone Monitor", location: '' }
+            ]
+        },
+        {
+            name: "test3", location: '#/Default', childs: []
+    }
+
+    ]
+
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
     var host = pathArray[2];

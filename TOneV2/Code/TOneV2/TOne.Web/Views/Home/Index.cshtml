@@ -14,25 +14,155 @@
 
 
 </head>
-<body ng-controller="mainCtrl">   
+<body ng-controller="mainCtrl">
 
-  
-    <a href="#/Default">Default</a> |
-    <a href="#/TestView">Test View</a> |
-    <a href="#/RouteRuleManager">Route Rule Manager</a> |
-    @*<a href="#/RouteRuleEditor">Route Rule Editor</a> |*@
-    <a href="#/ZingChart">Zing Chart</a> |
-    <a href="#/HighChart">HighChart</a> |
-    <a href="#/HighChartSparkline">HighChart Sparkline</a> |
-    <a href="#/FusionChart">Fusion Chart</a> |
-    <a href="#/CanvasJSChart">CanvasJS Chart</a> |
-    <a href="#/AMChart">AM Chart</a> |
-    <a href="#/BI/TopManagementDashboard">BI - TopManagementDashboard</a> |
-    <a href="#/BI/SeniorManagementDashboard">BI - SeniorManagementDashboard</a> |
-    <a href="#/BI/ZoneDashboard">BI - Destination Dashboard</a>
-    <div class="col-lg-12" ng-view>
+    <header class="navbar navbar-static-top navbar-inverse" id="top" role="banner">
+        <div class="container">
+
+            <nav class="collapse navbar-collapse bs-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#menu-toggle" class="btn btn-link toggle-menu" id="menu-toggle"></a>
+                    </li>
+
+                </ul>
+
+            </nav>
+        </div>
+    </header>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div ng-repeat="item in menuItems" class="panel panel-default">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" data-parent="#accordion" ng-if="item.childs.length > 0">
+                            <span class=" hand-cursor" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index)">{{item.name}} </span>
+                            <span class=" hand-cursor  toggel" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}">
+
+                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size:10px" ng-click="setIndex($index)"></span>
+
+                            </span>
+                        </span>
+                        <span ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                            <a class="menulink" ng-href="{{item.location}}">{{item.name}}</a>
+                        </span>
+
+
+                    </div>
+
+                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
+                        <div class="panel-body">
+                            <ul class="nav">
+                                <li ng-repeat="c in item.childs"><a ng-href="{{c.location}}">{{c.name}}</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12" style="padding-left: 30px;" ng-view>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- /#page-content-wrapper -->
+        </div>
+
 
     </div>
+    @*@*<ng-slide-push-menu position="left" id="menu" button-icon-class="glyphicon glyphicon-cog">
+
+            @*<div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Bi</span>
+                            <span class="collapsed toggel" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <span class="glyphicon glyphicon glyphicon-plus " style="font-size:10px" ng-click="toggleClass($event)">  </span>
+                            </span>
+
+                        </div>
+
+
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <ul class="nav">
+                                    <li><a href="#/BI/TopManagementDashboard">Top Management Dashboard</a> </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Noc</span>
+                            <span class="collapsed toggel" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <span class="glyphicon glyphicon glyphicon-plus " style="font-size:10px" ng-click="toggleClass($event)">  </span>
+                            </span>
+                        </div>
+
+
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <ul class="nav">
+                                    <li><a href="">Zone Monitor</a> </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span>Other</span>
+                            <span class="collapsed toggel" data-toggle="collapse" data-parent="#accordion" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <span class="glyphicon glyphicon glyphicon-plus " style="font-size:10px" ng-click="toggleClass($event)">  </span>
+                            </span>
+                        </div>
+
+
+                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-body">
+                                <ul class="nav">
+                                    <li><a href="#/Default">Default</a></li>
+                                    <li><a href="#/TestView">Test View</a></li>
+                                    <li><a href="#/RouteRuleManager">Route Rule Manager</a></li>
+                                    <li><a href="#/ZingChart">Zing Chart</a></li>
+                                    <li><a href="#/HighChart">HighChart</a></li>
+                                    <li><a href="#/HighChartSparkline">HighChart Sparkline</a></li>
+                                    <li><a href="#/FusionChart">Fusion Chart</a> </li>
+                                    <li><a href="#/CanvasJSChart">CanvasJS Chart</a></li>
+                                    <li><a href="#/BI/TopManagementDashboard">TopManagementDashboard</a></li>
+                                    <li><a href="#/BI/SeniorManagementDashboard">SeniorManagementDashboard</a></li>
+                                    <li><a href="#/BI/ZoneDashboard">Destination Dashboard</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </ng-slide-push-menu>*@
+
+
+    @*<div style="position:relative">
+        <div class="btn-vertical" style="position:absolute">
+            <a ng-push-menu="menu" class="toggle-menu" ng-init="tmenu=true" ng-click="tmenu=!tmenu "></a>
+            <ul class="nav nav-sidebar" ng-show="tmenu==true" style=" position: absolute;top:28px">
+                <li><a style="padding: 10px 7px;" href=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
+                <li><a style="padding: 10px 7px;" href=""><span class="glyphicon glyphicon-glass" aria-hidden="true"></span></a></li>
+                <li><a style="padding: 10px 7px;" href=""><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></a></li>
+                <li><a style="padding: 10px 7px;" href=""><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+            </ul>
+
+        </div>
+    *@
+
 
 </body>
 @Scripts.Render("~/bundles/helpers")
