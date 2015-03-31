@@ -513,3 +513,15 @@ input.ui-grid-filter-input[type="text"] {
      float:right;
      font-size:10px;
 }
+.menulink{
+    color:#000;
+    text-decoration:none !important;
+}
+.menulink:hover{
+    color:#000;
+    text-decoration:none;
+}
+.menulink:active{
+    color:#000;
+    text-decoration:none;
+}
