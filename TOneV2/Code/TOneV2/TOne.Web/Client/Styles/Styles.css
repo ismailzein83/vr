@@ -447,7 +447,7 @@ input.ui-grid-filter-input[type="text"] {
     border-bottom: 1px solid #D4D4D4;
     border-right: 0px solid #D4D4D4;   
     font-size: 12px;
-    margin-top: 3px;
+    /*margin-top: 3px;*/
     color: #616f77;
 }
 #custom .ui-grid-row:nth-child(odd) .ui-grid-cell {
@@ -493,4 +493,23 @@ input.ui-grid-filter-input[type="text"] {
   color: #428bca;
   border-bottom: 3px solid #428bca !important;
   padding-bottom: 4px;
+}
+.toggle-menu {
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: url("../../images/menu-normal.png") no-repeat;
+  background-size: 100% 100%;
+}
+.btn-vertical {
+    width: 28px;
+    height: 100%;
+    top: 0px;
+    z-index: 1000;
+    position: fixed;
+    top: 0px;
+}
+.toggel{
+     float:right;
+     font-size:10px;
 }
