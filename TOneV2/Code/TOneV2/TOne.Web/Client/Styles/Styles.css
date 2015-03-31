@@ -457,7 +457,7 @@ input.ui-grid-filter-input[type="text"] {
   background-color: #fff;
 }
 #custom .ui-grid-cell-contents {
-    padding: 2px;
+    
     box-sizing: border-box;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -486,6 +486,8 @@ input.ui-grid-filter-input[type="text"] {
    display: inline-block;
    
 }
+
+
 .span-summary{
     font-size:11px
 }

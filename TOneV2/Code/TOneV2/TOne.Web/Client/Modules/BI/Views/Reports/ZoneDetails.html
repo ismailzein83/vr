@@ -31,13 +31,21 @@
 
         <div class="row style-row">
             <div class="col-lg-12 col-md-12   style-col">
-                <div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" ui-grid-expandable ui-grid-auto-resize ng-style="gridStyle"></div>
+                <div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" ui-grid-expandable ui-grid-auto-resize ng-style="getGridHeight(gridOptionsZoneDetails)"></div>
             </div>
                
         </div>
             
     </div>
 </div>
+<style>
 
+    .ui-grid-expandable-buttons-cell {
+        background-color: #829EBF !important;
+        border: none !important;
+        cursor: pointer !important;
+        height: 100% !important;
+    }
+</style>
 
 

@@ -97,16 +97,17 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum) {
         switch (timeDimensionType) {
             case BITimeDimensionTypeEnum.Yearly.value:
                 dateTimeValue.setFullYear(dateTimeValue.getFullYear() + 1);
+                dateTimeValue.setDate(dateTimeValue.getDate() - 1);
                 return dateTimeValue;
             case BITimeDimensionTypeEnum.Monthly.value:
                 dateTimeValue.setMonth(dateTimeValue.getMonth() + 1);
                 dateTimeValue.setDate(dateTimeValue.getDate() - 1);
                 return dateTimeValue;
             case BITimeDimensionTypeEnum.Weekly.value:
-                dateTimeValue.setDate(dateTimeValue.getDate() + 7);
+                dateTimeValue.setDate(dateTimeValue.getDate() + 6);
                 return dateTimeValue;
             case BITimeDimensionTypeEnum.Daily.value:
-                dateTimeValue.setDate(dateTimeValue.getDate() + 1);
+                //dateTimeValue.setDate(dateTimeValue.getDate() + 1);
                 return dateTimeValue;
         }
     }

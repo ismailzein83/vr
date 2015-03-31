@@ -17,14 +17,17 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     }
     
     $scope.menuItems = [
-        {name:"Routing",location:'',childs:[
-            { name: "Rule Mangment", location: '' },
-            { name: "Route Mangment", location: '#/RouteRuleManager' }
-        ]
+        {
+            name: "Routing", location: '', childs: [
+               { name: "Rule Management", location: '#/RouteRuleManager' },
+               { name: "Route Manager", location: '' }
+            ]
         },
         {
             name: "BI", location: '', childs: [
-               { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' }
+               { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' },
+                { name: "Senior Management Dashboard", location: '#/BI/SeniorManagementDashboard' },
+                { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' }
             ]
         },
         {
@@ -33,10 +36,18 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             ]
         },
         {
-            name: "test3", location: '#/Default', childs: []
-    }
-
-    ]
+            name: "Others", location: '', childs: [
+               { name: "Default", location: '#/Default' },
+                { name: "Test View", location: '#/TestView' },
+                { name: "ZingChart", location: '#/ZingChart' },
+                { name: "HighChart", location: '#/HighChart' },
+                { name: "HighChartSparkline", location: '#/HighChartSparkline' },
+                { name: "FusionChart", location: '#/FusionChart' },
+                { name: "CanvasJSChart", location: '#/CanvasJSChart' },
+                { name: "AMChart", location: '#/AMChart' }
+            ]
+        }
+    ];
 
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];

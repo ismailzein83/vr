@@ -1,9 +1,10 @@
 ﻿appControllers.controller('ZoneDetailsController',
-    function ZoneDetailsController($scope, $routeParams, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
+    function ZoneDetailsController($scope, $routeParams, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
 
         var zoneId;
         var maxTimeDimension = 0;
         var currentDimensionValue;
+        var gridMainAPI;
 
         defineScopeObjects();
         defineScopeMethods();
@@ -41,9 +42,21 @@
         }
 
         function defineGrid(gridOption) {
-            
+
+            gridOption.getHeight = function () {
+                var rowHeight = 30; // your row height
+                var headerHeight = 30; // your header height
+                height = (gridOption.data.length * rowHeight + headerHeight);                
+                if (gridOption.subGridOptions != undefined) {
+                    height += gridOption.subGridOptions.getHeight();
+                }
+
+                return height;
+            };
+
             gridOption.enableHorizontalScrollbar = 0;
-            gridOption.enableVerticalScrollbar = 0;
+            gridOption.enableVerticalScrollbar = 2;
+            //gridOption.minRowsToShow = 30;
             gridOption.infiniteScrollPercentage = 20;
             gridOption.enableFiltering = false;
             gridOption.saveFocus = false;
@@ -52,33 +65,29 @@
             gridOption.enableSorting = false;
             gridOption.data = [];
 
-            gridOption.getHeight = function () {
-                var rowHeight = 30; // your row height
-                var headerHeight = 30; // your header height
-                height = (gridOption.data.length * rowHeight + headerHeight);
-                if (gridOption.subGridOptions != undefined)
-                    height += gridOption.subGridOptions.getHeight();
-                return height;
-            };
+            
 
-            if (gridOption.timeDimensionValue == undefined || (gridOption.timeDimensionValue + 1) < maxTimeDimension)
+            if (gridOption.timeDimensionValue == undefined || gridOption.timeDimensionValue  < maxTimeDimension)
             {
                 gridOption.expandableRowTemplate = '/Client/Templates/Grid/ExpandableRowGridTemplate.html';
                 //gridOption.expandableRowHeight = 150;
                 gridOption.onRegisterApi = function (gridApi) {
-                    //  gridApi = api;
+                    if (gridMainAPI == undefined)
+                        gridMainAPI = gridApi;
                     gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
                       
                         if (row.isExpanded) {
                             
                             row.entity.subGridOptions = {};
-                            
+                            row.entity.getGridHeight = $scope.getGridHeight;
+                            gridOption.subGridOptions = row.entity.subGridOptions;
+                            gridOption.subGridOptions.timeDimensionValue = gridOption.timeDimensionValue + 1;
                             defineGrid(row.entity.subGridOptions);
                             
                            
                             var toDate = BIUtilitiesService.getNextDate(gridOption.timeDimensionValue, row.entity);
-                            console.log('from date ' + row.entity.Time + ' to date ' + toDate);
-                            getData(row.entity.subGridOptions, gridOption.timeDimensionValue + 1, row.entity.Time, toDate);
+
+                            getData(row.entity.subGridOptions, gridOption.subGridOptions.timeDimensionValue, row.entity.Time, toDate);
 
                         }
                     });
@@ -139,8 +148,12 @@
             };
 
             $scope.getGridHeight = function (gridOptions) {
+                var height = gridOptions.getHeight();
+                if (height > 1000)
+                    height = 1000;
+                
                 return {
-                    height: gridOptions.getHeight() + "px"
+                    height: height + "px"
                 };
             };
 
@@ -182,8 +195,10 @@
                     gridOption.data.push(itm);
                 });
 
-                
-                
+                //if (gridOption == $scope.gridOptionsZoneDetails) {
+                //    angular.element(document.getElementsByClassName('gridrouteMain')[0]).css('height', gridOption.getHeight() + 'px');
+                //    gridMainAPI.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
+                //}
             });
         }
 
