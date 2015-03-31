@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 aTimer.Interval = int.Parse(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"].ToString());// 60 minutes
                 aTimer.Enabled = true;
                 GC.KeepAlive(aTimer);
-                OnTimedEvent(null, null);
+                //OnTimedEvent(null, null);
             }
             catch (Exception ex)
             {

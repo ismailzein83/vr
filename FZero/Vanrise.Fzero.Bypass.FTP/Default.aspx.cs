@@ -50,7 +50,7 @@ public partial class _Default : System.Web.UI.Page
         //  The hostname may be a hostname or IP address.
         int port;
         string hostname;
-        hostname = "10.10.10.53";
+        hostname = "192.168.110.241";
         port = 22;
         success = sftp.Connect(hostname, port);
         if (success != true)
