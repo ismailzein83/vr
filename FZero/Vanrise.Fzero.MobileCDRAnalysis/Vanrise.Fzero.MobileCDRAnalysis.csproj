@@ -303,7 +303,6 @@
     <Content Include="bin\Debug\Vanrise.CommonLibrary.dll" />
     <Content Include="bin\Debug\Vanrise.CommonLibrary.pdb" />
     <Content Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.dll" />
-    <Content Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.pdb" />
     <Content Include="Dependencies\EntityFramework.dll" />
     <Content Include="Dependencies\EntityFramework.xml" />
     <Content Include="Dependencies\MySql.Data.dll" />
