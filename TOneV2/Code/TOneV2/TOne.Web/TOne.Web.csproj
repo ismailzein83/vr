@@ -527,6 +527,7 @@
     <Content Include="Client\Templates\Grid\ExpandableRowGridTemplate.html" />
     <Content Include="Client\Templates\Grid\HeaderTemplate.html" />
     <Content Include="Client\Templates\Grid\ProgressCellTemplate.html" />
+    <Content Include="Client\Templates\Grid\RowTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CustomerTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\PriorityTemplate2.html" />
