@@ -4,7 +4,8 @@
 app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum) {
 
     return ({
-        fillDateTimeProperties: fillDateTimeProperties
+        fillDateTimeProperties: fillDateTimeProperties,
+        getNextDate: getNextDate
     });
 
     function fillDateTimeProperties(data, timeDimensionType, fromDateString, toDateString, dontFillGroup) {
@@ -67,7 +68,7 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum) {
         switch (timeDimensionType) {
             case BITimeDimensionTypeEnum.Yearly.value:
                 return false;
-            case BITimeDimensionTypeEnum.Monthly:
+            case BITimeDimensionTypeEnum.Monthly.value:
                 if (toDate.getFullYear() - fromDate.getFullYear() > 4)
                     return true;
                 else
@@ -87,6 +88,26 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum) {
                     return true;
                 else
                     return false;
+        }
+    }
+
+    function getNextDate(timeDimensionType, timeRecord) {
+        var dateTimeValue = new Date(timeRecord.Time);
+        
+        switch (timeDimensionType) {
+            case BITimeDimensionTypeEnum.Yearly.value:
+                dateTimeValue.setFullYear(dateTimeValue.getFullYear() + 1);
+                return dateTimeValue;
+            case BITimeDimensionTypeEnum.Monthly.value:
+                dateTimeValue.setMonth(dateTimeValue.getMonth() + 1);
+                dateTimeValue.setDate(dateTimeValue.getDate() - 1);
+                return dateTimeValue;
+            case BITimeDimensionTypeEnum.Weekly.value:
+                dateTimeValue.setDate(dateTimeValue.getDate() + 7);
+                return dateTimeValue;
+            case BITimeDimensionTypeEnum.Daily.value:
+                dateTimeValue.setDate(dateTimeValue.getDate() + 1);
+                return dateTimeValue;
         }
     }
 

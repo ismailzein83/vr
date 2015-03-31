@@ -7,13 +7,15 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'ui.grid.selection',
     'ui.grid.infiniteScroll',
     'ui.grid.resizeColumns',
+    'ui.grid.expandable',
+    'ui.grid.autoResize',
     'ng-sortable',
     'ngSanitize',
     'mgcrea.ngStrap',
     'uiSwitch',
     'cgNotify',
-    'ui.grid.autoResize',
-    'slidePushMenu'
+    'ui.grid.autoResize'//,
+    //'slidePushMenu'
 ]);
 appControllers.directive('resizable', function () {
     return {

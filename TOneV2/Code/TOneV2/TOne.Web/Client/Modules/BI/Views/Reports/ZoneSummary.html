@@ -13,23 +13,7 @@
                     <h3>Zone Name: {{zoneName}}</h3>
                     <select ng-options="itm as itm.name for itm in timeDimensionTypes"
                             ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
-                    <div style="height:400px;overflow:auto">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:150px">Time</th>
-                                    <th style="width:150px" ng-repeat="header in columns"> {{header}}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="dataItem in data">
-                                    <td> {{dataItem.dateTimeValue}}</td>
-                                    <td ng-repeat="value in dataItem.Values">{{value | number:2}}</td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
+                    <div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" style="height:400px"></div>
                     <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
                 </div>
 

@@ -524,6 +524,9 @@
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Templates\Grid\ExpandableRowGridTemplate.html" />
+    <Content Include="Client\Templates\Grid\HeaderTemplate.html" />
+    <Content Include="Client\Templates\Grid\ProgressCellTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CustomerTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\PriorityTemplate2.html" />

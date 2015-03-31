@@ -1,0 +1,20 @@
+﻿<div ng-class="{ 'sortable': sortable }" class="header-custom" ng-click="grid.appScope.toggleHeader($event)">
+
+
+    <div class="ui-grid-cell-contents" col-index="renderIndex">
+
+        <span>
+
+            {{col.displayName}}
+
+        </span>
+
+    </div>
+    <div class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false" class="ui-grid-column-menu-button" ng-click="toggleMenu($event)">
+
+        <i class="ui-grid-icon-angle-down">&nbsp;</i>
+
+    </div>
+
+</div>
+                

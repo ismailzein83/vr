@@ -293,6 +293,7 @@ namespace TOne.BI.Data.SQL
                     if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.WEEKOFMONTH)] as string, out week))
                         return;
                     record.WeekNumber = week;
+                    day = (week - 1) * 7 + 1;
                     break;
                 case TimeDimensionType.Daily:
                     if (!int.TryParse(reader[GetRowColumnToRead(DateTimeColumns.MONTHOFYEAR)] as string, out month))
