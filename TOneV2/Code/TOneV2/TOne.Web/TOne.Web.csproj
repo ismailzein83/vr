@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="ModelMappers\Mappers.cs" />
     <Compile Include="Models\BIMeasureTypeModel.cs" />
+    <Compile Include="Models\EnumModel.cs" />
     <Compile Include="Models\RouteRuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -432,6 +433,8 @@
     <Content Include="Client\Modules\BI\Views\Dashboards\ZoneDashboard.html" />
     <Content Include="Client\Modules\BI\Views\Reports\ZoneDetails.html" />
     <Content Include="Client\Modules\BI\Views\Reports\ZoneSummary.html" />
+    <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitor.html" />
+    <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitorController.js" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />

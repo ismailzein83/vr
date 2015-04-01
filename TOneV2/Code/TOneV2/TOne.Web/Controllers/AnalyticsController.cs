@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using TOne.Analytics.Business;
+using TOne.Analytics.Entities;
+using TOne.Web.Models;
 
 namespace TOne.Web.Controllers
 {
@@ -15,6 +17,8 @@ namespace TOne.Web.Controllers
         {
             _analyticsManager = new AnalyticsManager() ;
         }
+
+        #region Mobile
 
         [HttpGet]
         public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinations(DateTime fromDate, DateTime toDate, int from, int to, string sortOrder = "DESC"
@@ -83,5 +87,32 @@ namespace TOne.Web.Controllers
         {
             return _analyticsManager.GetSummary(day, day.AddDays(1));
         }
+
+        #endregion
+
+        #region Traffic Statistic
+
+        public IEnumerable<EnumModel> GetTrafficStatisticMeasureList()
+        {
+            List<EnumModel> rslt = new List<EnumModel>();
+            foreach (int val in Enum.GetValues(typeof(TrafficStatisticMeasures)))
+            {
+                rslt.Add(new EnumModel
+                {
+                    Value = val,
+                    Description = ((TrafficStatisticMeasures)val).ToString()
+                });
+            }
+
+            return rslt;
+        }
+
+        public BigResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(string tempTableKey, [FromUri] TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        {
+            TrafficStatisticManager manager = new TrafficStatisticManager();
+            return manager.GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
+        }
+
+        #endregion
     }
 }

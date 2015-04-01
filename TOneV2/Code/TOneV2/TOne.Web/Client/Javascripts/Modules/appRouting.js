@@ -68,6 +68,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/BI/Views/Reports/ZoneDetails.html',
             controller: 'ZoneDetailsController'
         }).
+        when('/NOC/ZoneMonitor', {
+            templateUrl: '/Client/Modules/NOC/Views/Traffic Statistics/ZoneMonitor.html',
+            controller: 'ZoneMonitorController'
+        }).
         otherwise({
             redirectTo: '/default'
         });

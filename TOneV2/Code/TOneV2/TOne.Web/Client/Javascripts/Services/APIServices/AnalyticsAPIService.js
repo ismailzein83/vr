@@ -2,7 +2,9 @@
 app.service('AnalyticsAPIService', function (BaseAPIService) {
 
     return ({
-        GetTopNDestinations: GetTopNDestinations
+        GetTopNDestinations: GetTopNDestinations,
+        GetTrafficStatisticMeasureList: GetTrafficStatisticMeasureList,
+        GetTrafficStatisticSummary: GetTrafficStatisticSummary
     });
 
     function GetTopNDestinations(fromDate, toDate, from, to, topCount, showSupplier, groupByCodeGroup, codeGroup) {
@@ -18,6 +20,28 @@ app.service('AnalyticsAPIService', function (BaseAPIService) {
                 codeGroup: codeGroup
             }
            );
+    }
+
+    function GetTrafficStatisticMeasureList() {
+        return BaseAPIService.get("/api/Analytics/GetTrafficStatisticMeasureList",
+            {
+            }
+           );
+    }
+
+    function GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending) {
+        return BaseAPIService.get("/api/Analytics/GetTrafficStatisticSummary",
+           {
+               tempTableKey: tempTableKey,
+               groupKeys: groupKeys,
+               from: from,
+               to: to,
+               fromRow: fromRow,
+               toRow: toRow,
+               orderBy: orderBy,
+               isDescending: isDescending
+           }
+          );
     }
 
 });

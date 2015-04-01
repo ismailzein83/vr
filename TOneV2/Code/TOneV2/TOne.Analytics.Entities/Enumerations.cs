@@ -22,5 +22,34 @@ namespace TOne.Analytics.Entities
         Negative = -1
     }
 
-   
+    public enum TrafficStatisticGroupKeys
+    {
+        Switch = 0,
+        PortIn = 1,
+        PortOut = 2,
+        CustomerId = 3,
+        OurZone = 4,
+        OriginatingZoneId = 5,
+        SupplierId = 6,
+        SupplierZoneId = 7
+    }
+
+    public enum TrafficStatisticMeasures
+    {
+        FirstCDRAttempt = 0,
+        LastCDRAttempt = 1,
+        Attempts = 2,
+        DeliveredAttempts = 3,
+        SuccessfulAttempts = 4,
+        DurationsInSeconds = 5,
+        PDDInSeconds = 6,
+        MaxDurationInSeconds = 7,
+        UtilizationInSeconds = 8,
+        NumberOfCalls = 9,
+        DeliveredNumberOfCalls = 10,
+        PGAD = 11//,
+        //CeiledDuration = 12,
+        //ReleaseSourceAParty = 13
+    }
+
 }

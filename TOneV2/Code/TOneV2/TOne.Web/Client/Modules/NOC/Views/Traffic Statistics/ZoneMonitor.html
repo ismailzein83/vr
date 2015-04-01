@@ -1,0 +1,70 @@
+﻿
+<div class="panel panel-primary panel-over-color">
+    <div class="panel-body">
+        <div class="row style-row">
+
+            <div class="col-lg-2 style-col">
+                <label class="control-label">Measure:</label>
+                <vr-dropdown datatextfield="description" datavaluefield="value"
+                             entityname="" type="standard" options="optionsMeasureTypes" ></vr-dropdown>
+            </div>
+
+            <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                <label class="control-label">From:</label>
+                <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                    <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" >
+                </div>
+            </div>
+
+            <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                <label class="control-label">To:</label>
+                <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                    <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" >
+                </div>
+            </div>
+
+            <div class="col-lg-1 style-col">
+                <label class="control-label">Top:</label>
+                <vr-dropdown datatextfield="description" datavaluefield="value"
+                             entityname="" type="standard" options="optionsTopCount" ></vr-dropdown>
+            </div>
+
+            <div class="col-lg-2 style-col">
+                <div class="control-label">&nbsp;</div>
+                <label class="control-label" style="padding-top:6px">
+                    <input type="checkbox" ng-model="showValuesOnLegends" ng-change="filterChanged()" />
+                    Show Values with Legends
+                </label>
+            </div>
+            <div class="col-lg-1 style-col">
+                <input type="button" value="Issue" ng-click="getData()" />
+            </div>
+        </div>
+
+        <div class="row style-row">
+            <div class="col-lg-5 style-col">
+                <vr-chart data-on-ready="chartZonesReady" style="display:inline-block"></vr-chart>
+            </div>
+            <div class="col-lg-5 style-col">
+                <vr-chart data-on-ready="chartZoneReady" style="display:inline-block"></vr-chart>
+            </div>
+            <div ng-show="isZoneVisible">
+                <div ng-repeat="itm in optionsMeasureTypes.datasource">
+                    <label class="control-label" style="padding-top:6px">
+                        <input type="checkbox" ng-model="itm.selected" ng-change="updateZone()" />
+                        {{itm.name}}
+
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row style-row">
+            <div class="col-lg-12 col-md-12   style-col">
+                <!--<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" ui-grid-expandable ui-grid-auto-resize ng-style="getGridHeight(gridOptionsZoneDetails)"></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

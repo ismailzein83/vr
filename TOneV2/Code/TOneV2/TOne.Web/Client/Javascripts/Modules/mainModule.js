@@ -58,7 +58,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         },
         {
             name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
-               { name: "Zone Monitor", location: '' }
+               { name: "Zone Monitor", location: '#/NOC/ZoneMonitor' }
             ]
         },
         {

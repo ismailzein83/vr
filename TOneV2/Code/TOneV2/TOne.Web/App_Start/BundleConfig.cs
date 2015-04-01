@@ -96,6 +96,7 @@ namespace TOne.Web
                 "~/Client/Modules/BI/Constants", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BI/Services", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BI/Controllers", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/NOC/Views", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
 
             

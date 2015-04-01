@@ -43,15 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlertView.cs" />
-    <Compile Include="CarrierRateView.cs" />
-    <Compile Include="CarrierSummaryView.cs" />
+    <Compile Include="BigResult.cs" />
+    <Compile Include="Mobile\AlertView.cs" />
+    <Compile Include="Mobile\CarrierRateView.cs" />
+    <Compile Include="Mobile\CarrierSummaryView.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="ProfitByWeekDayView.cs" />
+    <Compile Include="Mobile\ProfitByWeekDayView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TopCustomersView.cs" />
-    <Compile Include="TopNDestinationView.cs" />
-    <Compile Include="TrafficSummaryView.cs" />
+    <Compile Include="Mobile\TopCustomersView.cs" />
+    <Compile Include="Mobile\TopNDestinationView.cs" />
+    <Compile Include="TrafficStatisticGroupSummary.cs" />
+    <Compile Include="Mobile\TrafficSummaryView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

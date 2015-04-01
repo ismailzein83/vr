@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyticsDataManager.cs" />
+    <Compile Include="TrafficStatisticDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Analytics.Data\TOne.Analytics.Data.csproj">
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
       <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
