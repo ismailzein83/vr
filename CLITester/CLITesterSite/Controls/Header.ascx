@@ -5,7 +5,7 @@
 	<div class="navbar-inner">
 		<div class="container-fluid">
 			<!-- BEGIN LOGO -->
-			<a class="brand" href="default.aspx" style="color:white">&nbsp;&nbsp;&nbsp;<i class="icon-home"></i>&nbsp;CLI Tester
+			<a class="brand" href="default.aspx" style="color:white">&nbsp;&nbsp;&nbsp;<i class="icon-home"></i>&nbsp;Vanrise&nbsp;CLI Tester
 			<%--<img src="assets/img/logo.png" alt="logo" />--%>
 			</a>
 			<!-- END LOGO -->

@@ -23,7 +23,7 @@ namespace CallGeneratorLibrary
                         List<ScheduleOperator> lstOp = new List<ScheduleOperator>();
                         lstOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(this.Id);
                         foreach (ScheduleOperator op in lstOp)
-                            operatorprefixId += op.OperatorId + "$" + op.Operator.FullName + "$" + op.CarrierId + "$" + op.Carrier.ShortName + " - " + op.Carrier.Prefix + "$";
+                            operatorprefixId += op.OperatorId + "$" + op.Operator.FullName + "$" + op.CarrierId + "$" + op.Carrier.ShortName + " - " + op.Carrier.Prefix + "$" + op.Frequency + "$";
                     }
 
                     return operatorprefixId;
@@ -47,7 +47,7 @@ namespace CallGeneratorLibrary
                         List<ScheduleOperator> lstOp = new List<ScheduleOperator>();
                         lstOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(this.Id);
                         foreach (ScheduleOperator op in lstOp)
-                            operatorprefix += op.Operator.FullName + "$" + op.Carrier.ShortName + " - " + op.Carrier.Prefix + "!";
+                            operatorprefix += op.Operator.FullName + "$" + op.Carrier.ShortName + " - " + op.Carrier.Prefix + "$" + op.Frequency + "!";
                     }
 
                     return operatorprefix;

@@ -194,10 +194,18 @@ public partial class ManageSchedules : BasePage
 
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        if (String.IsNullOrEmpty(txtOccurs.Text) || String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtTime.Value) || String.IsNullOrEmpty(txtDate.Value))
+        divSuccess.Visible = false;
+        divError.Visible = false;
+        lblError.Text = "";
+        lblSuccess.Text = "";
+
+        if (
+            //String.IsNullOrEmpty(txtOccurs.Text) ||
+            String.IsNullOrEmpty(txtName.Text) || String.IsNullOrEmpty(txtTime.Value) || String.IsNullOrEmpty(txtDate.Value))
         {
             return;
         }
+        
 
         Schedule newSchedule = new Schedule();
 
@@ -225,12 +233,22 @@ public partial class ManageSchedules : BasePage
         }
         List<ScheduleOperator> lstOperators = new List<ScheduleOperator>();
         int ind = txtTime.Value.IndexOf(':');
+        int ind1 = txtTime1.Value.IndexOf(':');
 
         int hour = 0;
+        int hour1 = 0;
+        
         Int32.TryParse(txtTime.Value.Substring(0, ind).ToString(), out hour);
+
+        if (ind1 > 0)
+            Int32.TryParse(txtTime1.Value.Substring(0, ind1).ToString(), out hour1);
         //int len = txtTime.Value.Length;
         int minutes = 0;
+        int minutes1 = 0;
         Int32.TryParse(txtTime.Value.Substring(ind + 1, 2).ToString(), out minutes);
+
+        if (ind1 > 0)
+            Int32.TryParse(txtTime1.Value.Substring(ind1 + 1, 2).ToString(), out minutes1);
 
         //int len = txtTime.Value.Length;
 
@@ -245,99 +263,149 @@ public partial class ManageSchedules : BasePage
         //        hour = 0;
 
         DateTime d = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minutes, 0);
+        DateTime d1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour1, minutes1, 0);
 
-        int i = txtDate.Value.IndexOf("t");
-        string endDate = txtDate.Value.Substring(i + 3);
-        string fromDate = txtDate.Value.Substring(0, i - 1);
+        bool error = false;
 
-        string[] wordsDateF = fromDate.Split('-');
-
-        string fromdayS = wordsDateF[0];
-        string frommonthS = wordsDateF[1];
-        string fromyearS = wordsDateF[2];
-        
-        int fromday = 0;
-        Int32.TryParse(fromdayS, out fromday);
-
-        int frommonth = 0;
-        Int32.TryParse(frommonthS, out frommonth);
-
-        int fromyear = 0;
-        Int32.TryParse(fromyearS, out fromyear);
-
-        DateTime fromdateD = new DateTime(fromyear, frommonth, fromday, 0, 0, 0);
-
-        string[] wordsDateE = endDate.Split('-');
-
-        string todayS = wordsDateE[0];
-        string tomonthS = wordsDateE[1];
-        string toyearS = wordsDateE[2];
-
-        int today = 0;
-        Int32.TryParse(todayS, out today);
-
-        int tomonth = 0;
-        Int32.TryParse(tomonthS, out tomonth);
-
-        int toyear = 0;
-        Int32.TryParse(toyearS, out toyear);
-
-        DateTime todateD = new DateTime(toyear, tomonth, today, 0, 0, 0);
-
-
-        int ratio = 0;
-        Int32.TryParse(txtOccurs.Text, out ratio);
-
-        newSchedule.DisplayName = txtName.Text;
-        newSchedule.OccursEvery = ratio;
-        newSchedule.SpecificTime = d;
-        newSchedule.StartDate = fromdateD;
-        newSchedule.EndDate = todateD;
-        ScheduleRepository.Save(newSchedule);
-        //action.Description = Utilities.SerializeLINQtoXML<Carrier>(newCarrier);
-        ScheduleLog log = ScheduleLogRepository.GetLastLog(newSchedule.Id);
-        if(log != null)
-            ScheduleLogRepository.Delete(log.Id);
-
-        action.ObjectId = newSchedule.Id;
-        action.UserId = Current.User.User.Id;
-        AuditRepository.Save(action);
-
-        string words = HdTable.Value;
-
-        string[] split = words.Split(new Char[] { ' ', ';' });
-
-        foreach (string s in split)
+        if (ind1 > 0)
         {
-
-            if (s.Trim() != "")
+            TimeSpan span = new TimeSpan();
+            if (d > d1)
+                span = d - d1;
+            else
+                span = d1 - d;
+            if (span.TotalHours < 2)
             {
-                string[] split2 = s.Split(new Char[] { '~' });
-                int OpId = 0;
-                Int32.TryParse(split2[0], out OpId);
-
-                int PreId = 0;
-                Int32.TryParse(split2[1], out PreId);
-               
-                ScheduleOperator op = new ScheduleOperator();
-                op.ScheduleId = newSchedule.Id;
-                op.OperatorId = OpId;
-                op.CarrierId = PreId;
-                lstOperators.Add(op);
+                SetError("Difference between 2 times should be at least 2 hours");
+                error = true;
+                return;
             }
         }
 
-        ScheduleOperatorRepository.DeleteAll(newSchedule.Id);
-        foreach (ScheduleOperator schop in lstOperators)
+        if (error == false)
         {
-            ScheduleOperatorRepository.Save(schop);
+            int i = txtDate.Value.IndexOf("t");
+            string endDate = txtDate.Value.Substring(i + 3);
+            string fromDate = txtDate.Value.Substring(0, i - 1);
+
+            string[] wordsDateF = fromDate.Split('-');
+
+            string fromdayS = wordsDateF[0];
+            string frommonthS = wordsDateF[1];
+            string fromyearS = wordsDateF[2];
+
+            int fromday = 0;
+            Int32.TryParse(fromdayS, out fromday);
+
+            int frommonth = 0;
+            Int32.TryParse(frommonthS, out frommonth);
+
+            int fromyear = 0;
+            Int32.TryParse(fromyearS, out fromyear);
+
+            DateTime fromdateD = new DateTime(fromyear, frommonth, fromday, 0, 0, 0);
+
+            string[] wordsDateE = endDate.Split('-');
+
+            string todayS = wordsDateE[0];
+            string tomonthS = wordsDateE[1];
+            string toyearS = wordsDateE[2];
+
+            int today = 0;
+            Int32.TryParse(todayS, out today);
+
+            int tomonth = 0;
+            Int32.TryParse(tomonthS, out tomonth);
+
+            int toyear = 0;
+            Int32.TryParse(toyearS, out toyear);
+
+            DateTime todateD = new DateTime(toyear, tomonth, today, 0, 0, 0);
+
+
+            int ratio = 0;
+            //Int32.TryParse(txtOccurs.Text, out ratio);
+
+            newSchedule.DisplayName = txtName.Text;
+            newSchedule.OccursEvery = ratio;
+            if (ind1 > 0)
+            {
+                if (d < d1)
+                {
+                    newSchedule.SpecificTime = d;
+                    newSchedule.SpecificTime1 = d1;
+                }
+                else
+                {
+                    newSchedule.SpecificTime = d1;
+                    newSchedule.SpecificTime1 = d;
+                }
+            }
+            else
+            {
+                newSchedule.SpecificTime = d;
+                newSchedule.SpecificTime1 = null;
+            }
+            
+
+            newSchedule.StartDate = fromdateD;
+            newSchedule.EndDate = todateD;
+            ScheduleRepository.Save(newSchedule);
+            //action.Description = Utilities.SerializeLINQtoXML<Carrier>(newCarrier);
+            ScheduleLog log = ScheduleLogRepository.GetLastLog(newSchedule.Id);
+            if (log != null)
+                ScheduleLogRepository.Delete(log.Id);
+
+            action.ObjectId = newSchedule.Id;
+            action.UserId = Current.User.User.Id;
+            AuditRepository.Save(action);
+
+            string words = HdTable.Value;
+
+            string[] split = words.Split(new Char[] { ' ', ';' });
+
+            foreach (string s in split)
+            {
+
+                if (s.Trim() != "")
+                {
+                    string[] split2 = s.Split(new Char[] { '~' });
+                    int OpId = 0;
+                    Int32.TryParse(split2[0], out OpId);
+
+                    int PreId = 0;
+                    Int32.TryParse(split2[1], out PreId);
+
+                    int Count = 0;
+                    Int32.TryParse(split2[2], out Count);
+
+                    ScheduleOperator op = new ScheduleOperator();
+                    op.ScheduleId = newSchedule.Id;
+                    op.OperatorId = OpId;
+                    op.CarrierId = PreId;
+                    op.Frequency = Count;
+                    lstOperators.Add(op);
+                }
+            }
+
+            int maximumRatio = 0;
+            ScheduleOperatorRepository.DeleteAll(newSchedule.Id);
+            foreach (ScheduleOperator schop in lstOperators)
+            {
+                if (schop.Frequency >= maximumRatio)
+                    maximumRatio = schop.Frequency.Value;
+                ScheduleOperatorRepository.Save(schop);
+            }
+
+            Schedule ss = new Schedule();
+            ss = ScheduleRepository.Load(newSchedule.Id);
+
+            ss.OccursEvery = maximumRatio;
+            ScheduleRepository.Save(ss);
+
+            //SendEmail(Current.User.User);
+            GetData();
         }
-
-
-
-
-        SendEmail(Current.User.User);
-        GetData();
     }
 
     private void SetActionPermission()

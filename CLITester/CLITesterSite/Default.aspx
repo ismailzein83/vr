@@ -129,7 +129,7 @@
                         </table>
                     </div>
                 </div>
-                <a class="more" href="#">View more <i class="m-icon-swapright m-icon-white"></i>
+                <a class="more" href="ManageTestOperators.aspx">View more <i class="m-icon-swapright m-icon-white"></i>
                 </a>
             </div>
         </div>
@@ -156,7 +156,7 @@
             <!-- BEGIN PORTLET-->
             <div class="portlet solid bordered light-grey">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-bar-chart"></i>Statistics demo</div>
+                    <div class="caption"><i class="icon-bar-chart"></i>Statistics users</div>
                 </div>
                 <div class="portlet-body">
                     <div id="site_statistics2_loading">
@@ -207,7 +207,6 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab_1_1" data-toggle="tab">Schedule</a></li>
                             <li><a href="#tab_1_2" data-toggle="tab">Activities</a></li>
-                            <%--<li><a href="#tab_1_3" data-toggle="tab">Recent Users</a></li>--%>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1_1">
@@ -239,366 +238,6 @@
 
                                             </ItemTemplate>
                                         </asp:Repeater>
-                                        <%--	<li>
-															<a href="#">
-																<div class="col1">
-																	<div class="cont">
-																		<div class="cont-col1">
-																			<div class="label label-success">                        
-																				<i class="icon-bell"></i>
-																			</div>
-																		</div>
-																		<div class="cont-col2">
-																			<div class="desc">
-																				New version v1.4 just lunched!   
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col2">
-																	<div class="date">
-																		20 mins
-																	</div>
-																</div>
-															</a>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-important">                      
-																			<i class="icon-bolt"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			Database server #12 overloaded. Please fix the issue.                      
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	24 mins
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	30 mins
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-success">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	40 mins
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-warning">                        
-																			<i class="icon-plus"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New user registered.                
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	1.5 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-success">                        
-																			<i class="icon-bell-alt"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			Web server hardware needs to be upgraded. 
-																			<span class="label label-inverse label-mini">Overdue</span>             
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	2 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label">                       
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	3 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-warning">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	5 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	18 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label">                       
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	21 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	22 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label">                       
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	21 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	22 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label">                       
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	21 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	22 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label">                       
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	21 hours
-																</div>
-															</div>
-														</li>
-														<li>
-															<div class="col1">
-																<div class="cont">
-																	<div class="cont-col1">
-																		<div class="label label-info">                        
-																			<i class="icon-bullhorn"></i>
-																		</div>
-																	</div>
-																	<div class="cont-col2">
-																		<div class="desc">
-																			New order received. Please take care of it.                 
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col2">
-																<div class="date">
-																	22 hours
-																</div>
-															</div>
-														</li>--%>
                                     </ul>
                                 </div>
                             </div>
@@ -631,162 +270,9 @@
 
                                             </ItemTemplate>
                                         </asp:Repeater>
-                                        <%--                  <li>
-                                            <a href="#">
-                                                <div class="col1">
-                                                    <div class="cont">
-                                                        <div class="cont-col1">
-                                                            <div class="label label-success">
-                                                                <i class="icon-bell"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="cont-col2">
-                                                            <div class="desc">
-                                                                New order received 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col2">
-                                                    <div class="date">
-                                                        10 mins
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>--%>
                                     </ul>
                                 </div>
                             </div>
-                            <%--  <div class="tab-pane" id="tab_1_3">
-                                <div class="scroller" style="height: 290px" data-always-visible="1" data-rail-visible1="1">
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Robert Nilson</a>
-                                                    <span class="label label-success">Approved</span>
-                                                </div>
-                                                <div>29 Jan 2013 10:45AM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-info">Pending</span>
-                                                </div>
-                                                <div>19 Jan 2013 10:45AM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Eric Kim</a>
-                                                    <span class="label label-info">Pending</span>
-                                                </div>
-                                                <div>19 Jan 2013 12:45PM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-important">In progress</span>
-                                                </div>
-                                                <div>19 Jan 2013 11:55PM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Eric Kim</a>
-                                                    <span class="label label-info">Pending</span>
-                                                </div>
-                                                <div>19 Jan 2013 12:45PM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-important">In progress</span>
-                                                </div>
-                                                <div>19 Jan 2013 11:55PM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div><a href="#">Eric Kim</a> <span class="label label-info">Pending</span></div>
-                                                <div>19 Jan 2013 12:45PM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-important">In progress</span>
-                                                </div>
-                                                <div>19 Jan 2013 11:55PM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div><a href="#">Eric Kim</a> <span class="label label-info">Pending</span></div>
-                                                <div>19 Jan 2013 12:45PM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-important">In progress</span>
-                                                </div>
-                                                <div>19 Jan 2013 11:55PM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Eric Kim</a>
-                                                    <span class="label label-info">Pending</span>
-                                                </div>
-                                                <div>19 Jan 2013 12:45PM</div>
-                                            </div>
-                                        </div>
-                                        <div class="span6 user-info">
-                                            <img alt="" src="assets/img/avatar.png" />
-                                            <div class="details">
-                                                <div>
-                                                    <a href="#">Lisa Miller</a>
-                                                    <span class="label label-important">In progress</span>
-                                                </div>
-                                                <div>19 Jan 2013 11:55PM</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>--%>
                         </div>
                     </div>
                     <!--END TABS-->
@@ -797,10 +283,6 @@
     </div>
     <div class="clearfix"></div>
 
-    <%--    <div id="myModal" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-        
-    </div>--%>
-
     <div id="ajax-modal" class="modal hide fade" tabindex="-1">
 
         <div class="modal-body">
@@ -809,14 +291,6 @@
                 </thead>
                 <tbody>
                 </tbody>
-                <%--                                <tfoot>
-                                        <tr>
-                        <th><i class="icon-briefcase"></i> Prefix</th>
-                        <th class="hidden-phone"><i class="icon-phone"></i> Delivered</th>
-                        <th class="hidden-phone"><i class="icon-phone"></i> Not Delivered</th>
-                        <th class="hidden-phone"><i class="icon-phone"></i> Total</th>
-                    </tr>
-                </tfoot>--%>
             </table>
         </div>
         <div class="modal-footer">
@@ -854,383 +328,138 @@
 
     <script>
 
-        var initCharts = function () {
-            if (!jQuery.plot) {
-                return;
-            }
+        function showTooltip( x, y,  yy, id) {
+            $('<div id="' + id + '" class="chart-tooltip"><div class="date"><\/div><div class="label label-info">' + yy + '<\/div><\/div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y - 50,
+                left: x - 40,
+                border: '0px solid #ccc',
+                padding: '2px 6px',
+                'background-color': '#fff',
+            }).appendTo("body").fadeIn(200);
+        }
 
-            function showTooltip(title, x, y, contents, xx, yy) {
-                $('<div id="tooltip" class="chart-tooltip"><div class="date"><\/div><div class="label label-info">' + yy + '<\/div><\/div>').css({
-                    position: 'absolute',
-                    display: 'none',
-                    top: y - 50,
-                    left: x - 40,
-                    border: '0px solid #ccc',
-                    padding: '2px 6px',
-                    'background-color': '#fff',
-                }).appendTo("body").fadeIn(200);
-            }
+        function getArray(msg) {
+            var arr = Object.keys(msg).map(function (k) {
+                return [msg[k].ChartId, msg[k].Total];
+            });
+            return arr;
+        }
 
-            function randValue() {
-                return (Math.floor(Math.random() * (1 + 50 - 20))) + 10;
-            }
-
-            if ($('#site_statistics').size() != 0) {
+        function loadChart(id, urlHandler) {
+            if ($('#' + id).size() != 0) {
 
                 var request = $.ajax({
-                    url: "HandlerGetChartCalls.ashx?status=2",
+                    url: urlHandler,
                     contentType: "application/json; charset=utf-8",
                     type: 'POST',
                     cache: false,
                     async: false
                 });
 
-                request.fail(function (xhr, ajaxOptions, thrownError) {
-
-                });
-
                 request.done(function (msg) {
 
-                    var request2 = $.ajax({
-                        url: "HandlerGetChartCalls.ashx?status=1",
-                        contentType: "application/json; charset=utf-8",
-                        type: 'POST',
-                        cache: false,
-                        async: false
-                    });
+                    console.log(msg);
 
-                    request2.done(function (msg2) {
+                    var graphs = [];
+                    var i = 0;
 
-                        $('#site_statistics_loading').hide();
-                        $('#site_statistics_content').show();
+                    $('#' + id + '_loading').hide();
+                    $('#' + id + '_content').show();
 
-                        var arr = Object.keys(msg).map(function (k) {
-                            return [msg[k].ChartId, msg[k].Total];
+                    for (var i = 0; i < msg.length; i++) {
+                        arrData = msg[i];
+                        var lbl = '';
+                        if (arrData.length > 0)
+                            lbl = arrData[0].label;
+
+                        graphs.push({
+                            data: getArray(arrData),
+                            label: lbl
                         });
-
-                        var arr2 = Object.keys(msg2).map(function (k) {
-                            return [msg2[k].ChartId, msg2[k].Total];
-                        });
+                    }
 
 
-                        var plot_statistics = $.plot($("#site_statistics"), [{
-                            data: arr,
-                            label: "Not Delivered"
-                        }, {
-                            data: arr2,
-                            label: "Delivered"
-                        }
-                        ], {
-                            series: {
-                                lines: {
-                                    show: true,
-                                    lineWidth: 2,
-                                    fill: true,
-                                    fillColor: {
-                                        colors: [{
-                                            opacity: 0.05
-                                        }, {
-                                            opacity: 0.01
-                                        }
-                                        ]
+                    console.log(graphs);
+
+                    var plot_statistics = $.plot($('#' + id), graphs, {
+                        series: {
+                            lines: {
+                                show: true,
+                                lineWidth: 2,
+                                fill: true,
+                                fillColor: {
+                                    colors: [{
+                                        opacity: 0.05
+                                    }, {
+                                        opacity: 0.01
                                     }
-                                },
-                                points: {
-                                    show: true
-                                },
-                                shadowSize: 2
-                            },
-                            grid: {
-                                hoverable: true,
-                                clickable: true,
-                                tickColor: "#eee",
-                                borderWidth: 0
-                            },
-                            colors: ["#d12610", "#52e136", "#52e136"],
-                            xaxis: {
-                                ticks: 31,
-                                tickDecimals: 0
-                            },
-                            yaxis: {
-                                ticks: 11,
-                                tickDecimals: 0
-                            }
-                        });
-
-                        var previousPoint = null;
-                        $("#site_statistics").bind("plothover", function (event, pos, item) {
-                            $("#x").text(pos.x.toFixed(2));
-                            $("#y").text(pos.y.toFixed(2));
-                            if (item) {
-                                if (previousPoint != item.dataIndex) {
-                                    previousPoint = item.dataIndex;
-
-                                    $("#tooltip").remove();
-                                    var x = item.datapoint[0].toFixed(2),
-                                        y = item.datapoint[1].toFixed(2);
-
-                                    showTooltip('24 Jan 2013', item.pageX, item.pageY, x + " = " + y, x, y);
+                                    ]
                                 }
-                            } else {
-                                $("#tooltip").remove();
-                                previousPoint = null;
-                            }
-                        });
+                            },
+                            points: {
+                                show: true
+                            },
+                            shadowSize: 2
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true,
+                            tickColor: "#eee",
+                            borderWidth: 0
+                        },
+                        xaxis: {
+                            ticks: 31,
+                            tickDecimals: 0
+                        },
+                        yaxis: {
+                            ticks: 11,
+                            tickDecimals: 0
+                        }
                     });
+
+
+                    var previousPoint = null;
+                    var tooltipId = 'tooltip' + id;
+
+                    $('#' + id).bind("plothover", function (event, pos, item) {
+                        
+                        if (item) {
+                            if (previousPoint != item.dataIndex) {
+                                previousPoint = item.dataIndex;
+
+                                $('#' + tooltipId).remove();
+                                var x = item.datapoint[0].toFixed(2),
+                                    y = item.datapoint[1].toFixed(2);
+
+                                showTooltip( item.pageX, item.pageY, y, tooltipId);
+                            }
+                        } else {
+                            $('#' + tooltipId).remove();
+                            previousPoint = null;
+                        }
+                    });
+
                 });
+
             }
         }
 
+    </script>
 
+    <script>
 
+        var initCharts = function () {
 
-
-
-
-
-
-
-
-        ////////////////////
-        var initCharts2 = function () {
             if (!jQuery.plot) {
                 return;
             }
 
-            var data = [];
-            var totalPoints = 250;
-
-            // random data generator for plot charts
-
-            function getRandomData() {
-                if (data.length > 0) data = data.slice(1);
-                // do a random walk
-                while (data.length < totalPoints) {
-                    var prev = data.length > 0 ? data[data.length - 1] : 50;
-                    var y = prev + Math.random() * 10 - 5;
-                    if (y < 0) y = 0;
-                    if (y > 100) y = 100;
-                    data.push(y);
-                }
-                // zip the generated y values with the x values
-                var res = [];
-                for (var i = 0; i < data.length; ++i) res.push([i, data[i]])
-                return res;
-            }
-
-            function showTooltip(title, x, y, contents) {
-                $('<div id="tooltip2" class="chart-tooltip"><div class="date">' + title + '<\/div><div class="label label-success">CTR: ' + x / 10 + '%<\/div><div class="label label-important">Imp: ' + x * 12 + '<\/div><\/div>').css({
-                    position: 'absolute',
-                    display: 'none',
-                    top: y - 100,
-                    width: 75,
-                    left: x - 40,
-                    border: '0px solid #ccc',
-                    padding: '2px 6px',
-                    'background-color': '#fff',
-                }).appendTo("body").fadeIn(200);
-            }
-
-            function randValue() {
-                return (Math.floor(Math.random() * (1 + 50 - 20))) + 10;
-            }
-
-            var pageviews = [
-                [1, randValue()],
-                [2, randValue()],
-                [3, 2 + randValue()],
-                [4, 3 + randValue()],
-                [5, 5 + randValue()],
-                [6, 10 + randValue()],
-                [7, 15 + randValue()],
-                [8, 20 + randValue()],
-                [9, 25 + randValue()],
-                [10, 30 + randValue()],
-                [11, 35 + randValue()],
-                [12, 25 + randValue()],
-                [13, 15 + randValue()],
-                [14, 20 + randValue()],
-                [15, 45 + randValue()],
-                [16, 50 + randValue()],
-                [17, 65 + randValue()],
-                [18, 70 + randValue()],
-                [19, 85 + randValue()],
-                [20, 80 + randValue()],
-                [21, 75 + randValue()],
-                [22, 80 + randValue()],
-                [23, 75 + randValue()],
-                [24, 70 + randValue()],
-                [25, 65 + randValue()],
-                [26, 75 + randValue()],
-                [27, 80 + randValue()],
-                [28, 85 + randValue()],
-                [29, 90 + randValue()],
-                [30, 95 + randValue()]
-            ];
-
-            var visitors = [
-                [1, randValue() - 5],
-                [2, randValue() - 5],
-                [3, randValue() - 5],
-                [4, 6 + randValue()],
-                [5, 5 + randValue()],
-                [6, 20 + randValue()],
-                [7, 25 + randValue()],
-                [8, 36 + randValue()],
-                [9, 26 + randValue()],
-                [10, 38 + randValue()],
-                [11, 39 + randValue()],
-                [12, 50 + randValue()],
-                [13, 51 + randValue()],
-                [14, 12 + randValue()],
-                [15, 13 + randValue()],
-                [16, 14 + randValue()],
-                [17, 15 + randValue()],
-                [18, 15 + randValue()],
-                [19, 16 + randValue()],
-                [20, 17 + randValue()],
-                [21, 18 + randValue()],
-                [22, 19 + randValue()],
-                [23, 20 + randValue()],
-                [24, 21 + randValue()],
-                [25, 14 + randValue()],
-                [26, 24 + randValue()],
-                [27, 25 + randValue()],
-                [28, 26 + randValue()],
-                [29, 27 + randValue()],
-                [30, 31 + randValue()]
-            ];
-
-            if ($('#site_statistics2').size() != 0) {
-
-                $('#site_statistics2_loading').hide();
-                $('#site_statistics2_content').show();
-
-                var plot_statistics = $.plot($("#site_statistics2"), [{
-                    data: pageviews,
-                    label: "Label 1"
-                }, {
-                    data: visitors,
-                    label: "Label 2"
-                }
-                ], {
-                    series: {
-                        lines: {
-                            show: true,
-                            lineWidth: 2,
-                            fill: true,
-                            fillColor: {
-                                colors: [{
-                                    opacity: 0.05
-                                }, {
-                                    opacity: 0.01
-                                }
-                                ]
-                            }
-                        },
-                        points: {
-                            show: true
-                        },
-                        shadowSize: 2
-                    },
-                    grid: {
-                        hoverable: true,
-                        clickable: true,
-                        tickColor: "#eee",
-                        borderWidth: 0
-                    },
-                    colors: ["#d12610", "#37b7f3", "#52e136"],
-                    xaxis: {
-                        ticks: 11,
-                        tickDecimals: 0
-                    },
-                    yaxis: {
-                        ticks: 11,
-                        tickDecimals: 0
-                    }
-                });
-
-                var previousPoint = null;
-                $("#site_statistics2").bind("plothover", function (event, pos, item) {
-                    $("#x").text(pos.x.toFixed(2));
-                    $("#y").text(pos.y.toFixed(2));
-                    if (item) {
-                        if (previousPoint != item.dataIndex) {
-                            previousPoint = item.dataIndex;
-
-                            $("#tooltip2").remove();
-                            var x = item.datapoint[0].toFixed(2),
-                                y = item.datapoint[1].toFixed(2);
-
-                            showTooltip('24 Jan 2013', item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
-                        }
-                    } else {
-                        $("#tooltip2").remove();
-                        previousPoint = null;
-                    }
-                });
-            }               
-
-            if ($('#load_statistics2').size() != 0) {
-                //server load
-                $('#load_statistics2_loading').hide();
-                $('#load_statistics2_content').show();
-        
-                var updateInterval = 30;
-                var plot_statistics = $.plot($("#load_statistics2"), [getRandomData()], {
-                    series: {
-                        shadowSize: 1
-                    },
-                    lines: {
-                        show: true,
-                        lineWidth: 0.2,
-                        fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 0.1
-                            }, {
-                                opacity: 1
-                            }
-                            ]
-                        }
-                    },
-                    yaxis: {
-                        min: 0,
-                        max: 100,
-                        tickFormatter: function (v) {
-                            return v + "%";
-                        }
-                    },
-                    xaxis: {
-                        show: false
-                    },
-                    colors: ["#e14e3d"],
-                    grid: {
-                        tickColor: "#a8a3a3",
-                        borderWidth: 0
-                    }
-                });
-                
-                function statisticsUpdate() {
-                    plot_statistics.setData([getRandomData()]);
-                    plot_statistics.draw();
-                    setTimeout(statisticsUpdate, updateInterval);
-                
-                }
-                
-                statisticsUpdate();
-
-                $('#load_statistics2').bind("mouseleave", function () {
-                    $("#tooltip2").remove();
-                });
-            }
+            loadChart("site_statistics", "HandlerGetChartCalls.ashx?status=2");
+            loadChart("site_statistics2", "HandlerGetChartCalls.ashx?status=1");
 
         }
-
-
-
-
-
 
     </script>
 
@@ -1363,6 +592,9 @@
                     $('#region_statistics_loading').hide();
                     $('#region_statistics_content').show();
 
+                    $('#region_statistics2_loading').hide();
+                    $('#region_statistics2_content').show();
+
                 },
 
             };
@@ -1376,7 +608,6 @@
         jQuery(document).ready(function () {
             App.init();
             initCharts();
-            initCharts2();
             Index.init();
             Index.initJQVMAP(); // init index page's custom scripts
             UIModals();

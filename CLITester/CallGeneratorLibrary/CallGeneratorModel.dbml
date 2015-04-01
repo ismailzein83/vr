@@ -27,8 +27,8 @@
       <Column Name="CallerId" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
       <Column Name="TransactionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="CallSession_CallEntry" Member="CallEntries" ThisKey="SessionId" OtherKey="SessionId" Type="CallEntry" />
-      <Association Name="Schedule_CallSession" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
       <Association Name="SipAccount_CallSession" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" />
+      <Association Name="Schedule_CallSession" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Exceptions" Member="Exceptions">
@@ -167,45 +167,6 @@
       <Association Name="User_Carrier" Member="User" ThisKey="CustomerId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Schedules" Member="Schedules">
-    <Type Name="Schedule">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="DisplayName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Frequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="TimeFrequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MonthDay" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="OccursEvery" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SpecificTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="StartDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="SipAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="TotalNumbers" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RatioOfCalls" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Schedule_CallSession" Member="CallSessions" ThisKey="Id" OtherKey="ScheduleId" Type="CallSession" />
-      <Association Name="Schedule_ScheduleWeekDay" Member="ScheduleWeekDays" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleWeekDay" />
-      <Association Name="Schedule_ScheduleNumber" Member="ScheduleNumbers" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleNumber" />
-      <Association Name="Schedule_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleOperator" />
-      <Association Name="Schedule_ScheduleGroup" Member="ScheduleGroups" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleGroup" />
-      <Association Name="Schedule_ScheduleLog" Member="ScheduleLogs" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleLog" />
-      <Association Name="Schedule_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="ScheduleId" Type="TestOperator" />
-      <Association Name="SipAccount_Schedule" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="User_Schedule" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ScheduleOperators" Member="ScheduleOperators">
-    <Type Name="ScheduleOperator">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CarrierId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Carrier_ScheduleOperator" Member="Carrier" ThisKey="CarrierId" OtherKey="Id" Type="Carrier" IsForeignKey="true" />
-      <Association Name="Schedule_ScheduleOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
-      <Association Name="Operator_ScheduleOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.TestNumbers" Member="TestNumbers">
     <Type Name="TestNumber">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -228,8 +189,8 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Schedule_ScheduleGroup" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="TestNumberGroup_ScheduleGroup" Member="TestNumberGroup" ThisKey="GroupId" OtherKey="Id" Type="TestNumberGroup" IsForeignKey="true" />
+      <Association Name="Schedule_ScheduleGroup" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.[Log]" Member="Logs">
@@ -362,8 +323,8 @@
       <Column Name="Codecs" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="SipAccount_CallSession" Member="CallSessions" ThisKey="Id" OtherKey="SipAccountId" Type="CallSession" />
-      <Association Name="SipAccount_Schedule" Member="Schedules" ThisKey="Id" OtherKey="SipAccountId" Type="Schedule" />
       <Association Name="SipAccount_GeneratedCall" Member="GeneratedCalls" ThisKey="Id" OtherKey="SipAccountId" Type="GeneratedCall" />
+      <Association Name="SipAccount_Schedule" Member="Schedules" ThisKey="Id" OtherKey="SipAccountId" Type="Schedule" />
       <Association Name="User_SipAccount" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
@@ -430,14 +391,14 @@
       <Column Name="Balance" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="User_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="UserId" Type="UserRole" />
       <Association Name="User_Carrier" Member="Carriers" ThisKey="Id" OtherKey="CustomerId" Type="Carrier" />
-      <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
       <Association Name="User_SipAccount" Member="SipAccounts" ThisKey="Id" OtherKey="UserId" Type="SipAccount" />
       <Association Name="User_ActionLog" Member="ActionLogs" ThisKey="Id" OtherKey="UserId" Type="ActionLog" />
       <Association Name="User_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="UserId" Type="TestOperator" />
+      <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
     </Type>
   </Table>
   <Table Name="" Member="TestOperatorHistories">
-    <Type Name="TestOperatorHistory">
+    <Type Name="TestOperatorHistory" Id="ID6">
       <Column Name="Name" Type="System.String" CanBeNull="true" />
       <Column Name="CreationDate" Type="System.DateTime" CanBeNull="true" />
       <Column Name="EndDate" Type="System.DateTime" CanBeNull="true" />
@@ -446,6 +407,7 @@
       <Column Name="ReceivedCli" Type="System.String" CanBeNull="true" />
       <Column Name="RowCount" Type="System.Int32" CanBeNull="true" />
       <Column Name="Status" Type="System.Int32" CanBeNull="true" />
+      <Column Name="Route" Type="System.String" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.Operators" Member="Operators">
@@ -458,8 +420,8 @@
       <Column Name="CountryPicture" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="ServiceAndroid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="ServiceMonty" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="Operator_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="OperatorId" Type="ScheduleOperator" />
       <Association Name="Operator_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="OperatorId" Type="TestOperator" />
+      <Association Name="Operator_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="OperatorId" Type="ScheduleOperator" />
     </Type>
   </Table>
   <Table Name="dbo.MontyCalls" Member="MontyCalls">
@@ -524,8 +486,60 @@
       <Column Name="ParentUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="TestOperator_MontyCall" Member="MontyCalls" ThisKey="Id" OtherKey="TestOperatorId" Type="MontyCall" />
       <Association Name="Operator_TestOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
-      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
       <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ScheduleOperators" Member="ScheduleOperators">
+    <Type Name="ScheduleOperator">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CarrierId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Frequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Carrier_ScheduleOperator" Member="Carrier" ThisKey="CarrierId" OtherKey="Id" Type="Carrier" IsForeignKey="true" />
+      <Association Name="Operator_ScheduleOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
+      <Association Name="Schedule_ScheduleOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OperatorLogs" Member="OperatorLogs">
+    <Type Name="OperatorLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="MCC" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="MNC" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Country" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="IsOnline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Schedules" Member="Schedules">
+    <Type Name="Schedule">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DisplayName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Frequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TimeFrequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MonthDay" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OccursEvery" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SpecificTime" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="SipAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="TotalNumbers" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RatioOfCalls" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SpecificTime1" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Association Name="Schedule_CallSession" Member="CallSessions" ThisKey="Id" OtherKey="ScheduleId" Type="CallSession" />
+      <Association Name="Schedule_ScheduleWeekDay" Member="ScheduleWeekDays" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleWeekDay" />
+      <Association Name="Schedule_ScheduleNumber" Member="ScheduleNumbers" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleNumber" />
+      <Association Name="Schedule_ScheduleGroup" Member="ScheduleGroups" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleGroup" />
+      <Association Name="Schedule_ScheduleLog" Member="ScheduleLogs" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleLog" />
+      <Association Name="Schedule_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="ScheduleId" Type="TestOperator" />
+      <Association Name="Schedule_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleOperator" />
+      <Association Name="SipAccount_Schedule" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="User_Schedule" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetRolePages" Method="GetRolePages">
@@ -579,14 +593,6 @@
       <Column Name="TotalCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.GetTestOperators" Method="GetTestOperators" IsComposable="true">
-    <Parameter Name="StartDate" Parameter="startDate" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="EndDate" Parameter="endDate" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="OperatorId" Parameter="operatorId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
-    <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
-    <Return Type="object" />
-  </Function>
   <Function Name="dbo.GetActionLogs" Method="GetActionLogs">
     <Parameter Name="ObjectType" Parameter="objectType" Type="System.String" DbType="NVarChar(200)" />
     <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
@@ -600,5 +606,13 @@
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </ElementType>
+  </Function>
+  <Function Name="dbo.GetTestOperators" Method="GetTestOperators">
+    <Parameter Name="StartDate" Parameter="startDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="EndDate" Parameter="endDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="OperatorId" Parameter="operatorId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID6" />
   </Function>
 </Database>

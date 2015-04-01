@@ -12,11 +12,54 @@ namespace CallGeneratorLibrary.Repositories
     {
         public int ChartId { get; set; }
         public int Total { get; set; }
+        public string label { get; set; }
     }
 
     public class TestOperatorRepository
     {
+
+        public static String GetLabel(int status)
+        {
+            if (status == 1) return "Delivered"; else return "Not Delivered";
+        }
+
         public static List<ChartCall> GetChartCalls(int status, int userId)
+        {
+            List<ChartCall> LstChartCalls = new List<ChartCall>();
+            List<ChartCalls> LstOp = new List<ChartCalls>();
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    LstOp = context.GetChartTotals1(status, userId).GetResult<ChartCalls>().ToList<ChartCalls>();
+                    String lbl = GetLabel(status);
+                    for (int i = 1; i <= 31; i++)
+                    {
+                        ChartCall c = new ChartCall();
+                        c.ChartId = i;
+                        c.Total = 0;
+                        c.label = lbl;
+                        foreach (ChartCalls cc in LstOp)
+                        {
+                            if (cc.CreationDate.Value.Day == i)
+                            {
+                                c.Total = cc.TotalCalls.Value;
+                                break;
+                            }
+                        }
+                        LstChartCalls.Add(c);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return LstChartCalls;
+        }
+
+        public static List<ChartCall> GetChartCallsUser(int status, int userId)
         {
             List<ChartCall> LstChartCalls = new List<ChartCall>();
             List<ChartCalls> LstOp = new List<ChartCalls>();

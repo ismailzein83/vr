@@ -46,7 +46,7 @@
                         <a href="javascript:;" class="reload"></a>
                         <a href="javascript:;" class="remove"></a>--%>
                     </div>
-                </div>
+                </div>   
                 <div class="portlet-body" style="display: block;">
                     <div class="span6">
 
@@ -64,30 +64,42 @@
                                 </div>
                             </div>
 
-                            <div class="control-group">
+<%--                            <div class="control-group">
                                 <label class="control-label span2">Ratio<span class="required">*</span></label>
                                 <div class="controls">
                                     <asp:TextBox ID="txtOccurs" onkeypress='return isNumber(event)' class="span6 m-wrap valDigits2" data-required="1" runat="server"></asp:TextBox>
                                 </div>
-                            </div>
+                            </div>--%>
 
                             <div class="control-group">
                                 <label class="control-label span2">Date<span class="required">*</span></label>
                                 <div class="controls">
                                     <div class="input-prepend">
                                         <span class="add-on"><i class="icon-calendar"></i></span>
-                                        <input id="txtDate" runat="server" type="text" class="m-wrap date-range span12 valStringR" data-required="1" readonly>
+                                        <input id="txtDate" runat="server" type="text" class="m-wrap date-range span12 valStringR" data-required="1" readonly />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label span2">Time<span class="required">*</span></label>
+                                <label class="control-label span2">Time 1<span class="required">*</span></label>
                                 <div class="controls">
                                     <div class="input-prepend bootstrap-timepicker-component">
                                         <span class="add-on"><i class="icon-time"></i></span>
-                                        <input class="m-wrap m-ctrl-small timepicker-24 span12 valStringR" type="text" data-required="1" id="txtTime" runat="server">
+                                        <input class="m-wrap m-ctrl-small timepicker-24 span12 valTimeR" type="text" data-required="1" id="txtTime" runat="server" />
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label span2">Time 2<span class="required"></span></label>
+                                <div class="controls">
+                                    <div class="input-prepend bootstrap-timepicker-component">
+                                        <span class="add-on"><i class="icon-time"></i></span>
+                                        <input class="m-wrap m-ctrl-small timepicker-24 span12 valTime" type="text" data-required="1" id="txtTime1" runat="server" />
+                                        
+                                    </div>
+                                    <span class="help-block">Difference between times should be at least 2 hours</span>
                                 </div>
                             </div>
                         </div>
@@ -101,19 +113,21 @@
                                     <select name="" id="selectOperator" class="span5 select2">
                                         <asp:Repeater ID="rptOperators" runat="server">
                                             <ItemTemplate>
-                                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Name") %> - <%# Eval("Country") %></option>
+                                                <option value='<%# Eval("CountryPicture") %>~<%# Eval("Id") %>'><%# Eval("Country") %> - <%# Eval("Name") %></option>
                                             </ItemTemplate>
                                         </asp:Repeater>
                                     </select>
 
-                                    <select id="selectPrefix" class="span4 m-wrap" data-placeholder="Choose a route" tabindex="1">
+                                    <select id="selectPrefix" class="span3 select2 m-wrap" data-placeholder="Choose a route" tabindex="1">
                                         <asp:Repeater ID="rptCarriers" runat="server">
                                             <ItemTemplate>
                                                 <option value='<%# Eval("Id") %>'><%# Eval("ShortName") %> - <%# Eval("Prefix") %></option>
                                             </ItemTemplate>
                                         </asp:Repeater>
-                                    </select>
-
+                                    </select>                                    
+                                    
+                                    <input id="txtCount" onkeypress='return isNumber(event)'  class="span2 m-wrap" placeholder="Count" data-placeholder="Count" data-required="1" ></input>
+                                   
                                     <a class="btn green span1" onclick="addToTable()"><i class="icon-plus"></i></a>
                                 </div>
                             </div>
@@ -127,8 +141,9 @@
                                 <thead>
                                     <tr>
                                         <th style="display: none;"></th>
-                                        <th><i class="icon-briefcase"></i>Operator</th>
-                                        <th class="hidden-phone"><i class="icon-user"></i>Route</th>
+                                        <th><i class="icon-briefcase"></i> Operator</th>
+                                        <th class="hidden-phone"><i class="icon-user"></i> Route</th>
+                                        <th class="hidden-phone"><i class="icon-refresh"></i> Count</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -183,13 +198,15 @@
                                 </th>
                                 <th>Name
                                 </th>
-                                <th>Ratio
-                                </th>
+                                <%--<th>Ratio
+                                </th>--%>
                                 <th>Start Date
                                 </th>
                                 <th>End Date
                                 </th>
-                                <th>Time
+                                <th>Time 1
+                                </th>
+                                <th>Time 2
                                 </th>
                                 <th style="display: none;">OperatorPrefix
                                 </th>
@@ -211,9 +228,9 @@
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("DisplayName") %>'></asp:Label>
                                         </td>
-                                        <td>
+                                      <%--  <td>
                                             <asp:Label ID="Label6" runat="server" Text='<%# Eval("OccursEvery") %>'></asp:Label>
-                                        </td>
+                                        </td>--%>
                                         <td>
                                             <asp:Label ID="Label1" runat="server" Text='<%# Eval("StartDate", "{0:dd/MM/yyyy}") %>'></asp:Label>
                                         </td>
@@ -223,7 +240,9 @@
                                         <td>
                                             <asp:Label ID="Label3" runat="server" Text='<%# Eval("SpecificTime", "{0:HH:mm}") %>'></asp:Label>
                                         </td>
-
+                                        <td>
+                                            <asp:Label ID="Label8" runat="server" Text='<%# Eval("SpecificTime1", "{0:HH:mm}") %>'></asp:Label>
+                                        </td>
                                         <td style="display: none;">
                                             <%# Eval("OperatorPrefix") %>
                                         </td>
@@ -232,7 +251,7 @@
                                                 OnClick="btnView_Click" CommandArgument='<%# Eval("Id") %>' runat="server">View</asp:LinkButton>
                                         </td>
                                         <td class="center">
-                                            <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + (((DateTime)Eval("SpecificTime")).ToString("HH:mm")) + "\""  %>  , <%#  "\"" + ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("OperatorPrefixId")  + "\""  %>  )'>Edit</a>
+                                            <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + (((DateTime)Eval("SpecificTime")).ToString("HH:mm")) + "\""  %> , <%# "\"" + Eval("SpecificTime1") + "\""  %>  , <%#  "\"" + ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("OperatorPrefixId")  + "\""  %>  )'>Edit</a>
                                             <%--                                            <a href="#" runat="server" onserverclick="btnEdit_Click" onclick="disableAddBtn(); emptyFields();">Edit33</a>
 
                                             <asp:LinkButton ID="lnkEdit"
@@ -246,7 +265,6 @@
                                     </tr>
                                 </ItemTemplate>
                             </asp:Repeater>
-
                         </tbody>
                     </table>
                 </div>
@@ -350,9 +368,25 @@
 
     <!-- BEGIN TABLE  SCRIPTS -->
     <script>
+       
+
+  
+
         function isNumber(evt) {
+
+            var tval = $('#txtCount').val(),
+                tlength = tval.length,
+                set = 2,
+                remain = parseInt(set - tlength);
+
+            $('#txtCount').text(remain);
+            if (remain <= 0 && evt.which !== 0 && evt.charCode !== 0) {
+                $('#txtCount').val((tval).substring(0, tlength - 1))
+            }
+
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
+
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
             }
@@ -380,7 +414,8 @@
                                + ' <thead>'
                                   + ' <tr>'
                                        + '<th class="span3"><i class="icon-briefcase"></i> Operator</th>'
-                                       + '<th class="hidden-phone"><i class="icon-user"></i> Route</th>'
+                                       + '<th class="span3"><i class="icon-user"></i> Route</th>'
+                                       + '<th class="hidden-phone"><i class="icon-refresh"></i> Count</th>'
                                     + '</tr>'
                                 + '</thead>'
                                 + '<tbody>';
@@ -388,8 +423,8 @@
                     if (rows[i] != '') {
                         var row = rows[i].split('$');
                         console.log(row);
-                        if (row[0] != '' || row[1] != '' || row[1] != null || row[0] != null) {
-                            sOut += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td></tr>';
+                        if (row[0] != '' || row[1] != '' || row[2] != '' || row[1] != null || row[2] != null || row[0] != null) {
+                            sOut += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
                         }
                     }
                 }
@@ -506,10 +541,26 @@
                 if (!state.id) return state.text; // optgroup
                 return "<img class='flag' src='assets/img/flags/" + state.id.toLowerCase().split('~')[0] + ".png'/>&nbsp;&nbsp;" + state.text;
             }
+
+            function format2(state) {
+                if (!state.id) return state.text; // optgroup
+                return state.text;
+            }
+
+            
             $("#selectOperator").select2({
                 allowClear: true,
                 formatResult: format,
                 formatSelection: format,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+
+            $("#selectPrefix").select2({
+                allowClear: true,
+                formatResult: format2,
+                formatSelection: format2,
                 escapeMarkup: function (m) {
                     return m;
                 }
@@ -522,6 +573,7 @@
     <script>
 
         var arrayRow = [];
+        var arrayRow2 = [];
 
         function removeA(arr) {
             var what, a = arguments, L = a.length, ax;
@@ -537,40 +589,59 @@
         var addToTable = function () {
             var operator = $('#selectOperator').find(":selected").text();
             var prefix = $('#selectPrefix').find(":selected").text();
-
+            var count = $('#txtCount').val();
             var operatorId = $('#selectOperator').find(":selected").val().split('~')[1];
             var prefixId = $('#selectPrefix').find(":selected").val();
-            var row = operatorId + '~' + prefixId;
-            if ($.inArray(row, arrayRow) !== -1) {
+            var row = operatorId + '~' + prefixId + '~' + count;
+            var row2 = operatorId + '~' + prefixId;
+
+            if ($.inArray(row2, arrayRow2) !== -1) {
                 return false;
             }
-
+            if (count == '')
+                count = 1;
             $('#myTable > tbody').append('<tr>' +
                                 '<td style="display:none;">' + row + '</td>' +
+                                '<td style="display:none;">' + row2 + '</td>' +
                                 '<td>' + operator + '</td>' +
                                 '<td>' + prefix + '</td>' +
+                                '<td>' + count + '</td>' +
                                 '<td><a href="#" class="btn mini black  pull-right deleteRow" ><i class="icon-trash"></i> Remove</a></td></tr>');
             arrayRow.push(row);
+            arrayRow2.push(row2);
+            $('#txtCount').val('');
         }
 
-        var addToTable2 = function (operatorId, operator, prefixId, prefix) {
-            var row = operatorId + '~' + prefixId;
-            if ($.inArray(row, arrayRow) !== -1) {
+        var addToTable2 = function (operatorId, operator, prefixId, prefix, count) {
+            var row = operatorId + '~' + prefixId + '~' + count;
+            var row2 = operatorId + '~' + prefixId;
+
+            if ($.inArray(row2, arrayRow2) !== -1) {
                 return false;
             }
 
+            if (count == '')
+                count = 1;
+
             $('#myTable > tbody').append('<tr>' +
                                 '<td style="display:none;">' + row + '</td>' +
+                                '<td style="display:none;">' + row2 + '</td>' +
                                 '<td>' + operator + '</td>' +
                                 '<td>' + prefix + '</td>' +
+                                '<td>' + count + '</td>' +
                                 '<td><a href="#" class="btn mini black  pull-right deleteRow" ><i class="icon-trash"></i> Remove</a></td></tr>');
             arrayRow.push(row);
+            arrayRow2.push(row2);
         }
 
         $(".deleteRow").live('click', function (event) {
             var firstTd = $(this).parent().parent().children("td:first").html();
-            console.log(firstTd);
+            
+            console.log('first:: ' + firstTd);
+            var secondTd = $(this).parent().parent().children().eq(1).html();
+            console.log('sec:: ' + secondTd);
             removeA(arrayRow, firstTd);
+            removeA(arrayRow2, secondTd);
 
             $(this).parent().parent().remove();
 
@@ -587,14 +658,18 @@
             $('#addBtn').removeAttr('disabled');
             $('#myTable > tbody > tr').remove();
             arrayRow = [];
+            arrayRow2 = [];
         }
 
         var emptyFields = function () {
             $('#<%=HdnId.ClientID %>').val('');
-            $('#<%=txtOccurs.ClientID %>').val('');
+            //$('#<=txtOccurs.ClientID %>').val('');
+            $('#txtCount').val('');
+            
             $('#<%=txtName.ClientID %>').val('');
             $('#txtDate').val('');
             $('#txtTime').val('');
+            $('#txtTime1').val('');
 
             $('#<%=HdTable.ClientID %>').val('');
 
@@ -606,16 +681,24 @@
             $("#viewDiv").hide();
         }
 
-        var editRow = function (id, name, occurs, SpecificTime, startDate, endDate, OperatorPrefix) {
-
+        var editRow = function (id, name, occurs, SpecificTime, SpecificTime1, startDate, endDate, OperatorPrefix) {
+            
             emptyFields();
             $('#<%=HdnId.ClientID %>').val(id);
             $('#<%=txtName.ClientID %>').val(name);
-            $('#<%=txtOccurs.ClientID %>').val(occurs);
+            //$('#<=txtOccurs.ClientID %>').val(occurs);
             var st = SpecificTime;
+            var st1 = SpecificTime1;
 
-            var hour = SpecificTime.substring(0, SpecificTime.indexOf(':'));
+            var hour = SpecificTime.substring(SpecificTime.indexOf(':') -2, SpecificTime.indexOf(':'));
             var min = st.substring(st.indexOf(':') + 1, st.indexOf(':') + 3);
+            console.log(SpecificTime1);
+            if (SpecificTime1 != "") {
+            }
+            var hour1 = SpecificTime1.substr(SpecificTime1.indexOf(':') -2 , 2);
+            
+            var min1 = st1.substring(st1.indexOf(':') + 1, st1.indexOf(':') + 3);
+            console.log(min1);
             //var pp = '';
             //if (hour >= 12) {
             //    pp = "PM";
@@ -626,32 +709,40 @@
             //    pp = "AM";
 
             //var pp = st.substring(st.indexOf(' ') + 1, st.indexOf(' ') + 3);
-            //$('#<%=txtTime.ClientID %>').val(hour + ":" + min + " " + pp);
+            //$('#<txtTime.ClientID %>').val(hour + ":" + min + " " + pp);
             $('#<%=txtTime.ClientID %>').val(hour + ":" + min);
+            $('#<%=txtTime1.ClientID %>').val(hour1 + ":" + min1);
+
             $('#<%=txtDate.ClientID %>').val(startDate + " to " + endDate);
             $('.date-range').setDate();
 
             var mySplitResult = OperatorPrefix.split("$");
-            var j = 0;
-            for (i = 0; i < (mySplitResult.length - 1) / 4; i++) {
-                addToTable2(mySplitResult[j], mySplitResult[j + 1], mySplitResult[j + 2], mySplitResult[j + 3]);
-                j = j + 4
+            var j = 0; 
+            for (i = 0; i < (mySplitResult.length - 1) / 5; i++) {
+                addToTable2(mySplitResult[j], mySplitResult[j + 1], mySplitResult[j + 2], mySplitResult[j + 3], mySplitResult[j + 4]);
+                j = j + 5;
             }
         }
 
         var getSchedules = function () {
             var value = '';
+            console.log('asdsad ');
             $("#myTable > tbody > tr").each(function () {
                 value = value + ';' + $(this).find('td:eq(0)').text();
             });
-
+            
             $('#<%=HdTable.ClientID %>').val(value);
-            if (value == ';') {
-                $("#form_sample_1").valid();
-                return false;
-            }
+            console.log('TEST ' + value);
+
+            //if (value == '') {
+            //    $("#form_sample_1").valid();
+            //    return false;
+            //}
             return true;
         }
+
+
+
 
 
         jQuery(document).ready(function () {

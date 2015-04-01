@@ -26,7 +26,8 @@ namespace CallGeneratorLibrary.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;User ID=sa;Password=vanrise@cce$$;Initial Catalog=FraudTest2;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LENOVO\\SQL2008R2;Initial Catalog=FraudTest;Persist Security Info=True" +
+            ";User ID=sa;Password=lenovo")]
         public string FraudTest2ConnectionString {
             get {
                 return ((string)(this["FraudTest2ConnectionString"]));

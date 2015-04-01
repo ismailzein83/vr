@@ -80,12 +80,12 @@ public partial class Default : BasePage
             LstStat.OrderBy(l => l.percentage);
             if (LstStat.Count >= 1)
             {
-                lblBest1.Text = LstStat[0].Prefix + " " + LstStat[0].percentage.ToString("#00.00");
+                lblBest1.Text = "[" + LstStat[0].Prefix  + "]" + " " + LstStat[0].percentage.ToString("#00.00");
                 //lblWorst1.Text = LstStat[0].Prefix + " " + LstStat[0].percentageW.ToString();
             }
             if (LstStat.Count > 1)
             {
-                lblBest2.Text = LstStat[1].Prefix + " " + LstStat[1].percentage.ToString("#00.00");
+                lblBest2.Text = "[" + LstStat[1].Prefix + "]" + " " + LstStat[1].percentage.ToString("#00.00");
                 //lblWorst2.Text = LstStat[1].Prefix + " " + LstStat[1].percentageW.ToString();
             }
 
@@ -93,12 +93,12 @@ public partial class Default : BasePage
             if (LstStat.Count >= 1)
             {
                 //lblBest1.Text = LstStat[0].Prefix + " " + LstStat[0].percentage.ToString();
-                lblWorst1.Text = LstStat[0].Prefix + " " + LstStat[0].percentageW.ToString("#00.00");
+                lblWorst1.Text = "[" + LstStat[0].Prefix + "]" + " " + LstStat[0].percentageW.ToString("#00.00");
             }
             if (LstStat.Count > 1)
             {
                 //lblBest2.Text = LstStat[1].Prefix + " " + LstStat[1].percentage.ToString();
-                lblWorst2.Text = LstStat[1].Prefix + " " + LstStat[1].percentageW.ToString("#00.00");
+                lblWorst2.Text = "[" + LstStat[1].Prefix + "]" + " " + LstStat[1].percentageW.ToString("#00.00");
             }
 
             /////////////////////////////////////////////////////////////////////////////////////////////////

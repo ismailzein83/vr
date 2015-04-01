@@ -535,7 +535,7 @@ namespace CallGeneratorServiceCLI
         {
             try
             {
-                WriteToEventLog( " \r\n" + ("phone_OnRegistered: Msg" + Msg.ToString()));
+                //WriteToEventLog( " \r\n" + ("phone_OnRegistered: Msg" + Msg.ToString()));
             }
             catch (System.Exception ex)
             {

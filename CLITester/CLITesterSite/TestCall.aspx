@@ -4,6 +4,15 @@
     <%--<link href="assets/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />--%>
     <link rel="stylesheet" type="text/css" href="assets/plugins/select2/select2_metro.css" />
     <link rel="stylesheet" type="text/css" href="assets/plugins/jquery-multi-select/css/multi-select-metro.css" />
+    <style>
+
+        .hideTd{
+
+        display: none
+
+        }
+
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <!-- BEGIN PAGE HEADER-->
@@ -23,7 +32,7 @@
                 <li>
                     <a href="#">Test Call</a>
                 </li>
-              
+
             </ul>
             <!-- END PAGE TITLE & BREADCRUMB-->
         </div>
@@ -50,13 +59,16 @@
             <div class="control-group">
                 <label class="control-label">Route</label>
                 <div class="controls">
-                    <select class="medium m-wrap" tabindex="1" name="selector2">
+                    <%--selectPrefix--%>
+
+                    <select id="selectPrefix" name="selectPrefix" class="medium m-wrap" data-placeholder="Choose a route" tabindex="1">
                         <asp:Repeater ID="rptCarriers" runat="server">
                             <ItemTemplate>
                                 <option value='<%# Eval("Prefix") %>'><%# Eval("ShortName") %> - <%# Eval("Prefix") %></option>
                             </ItemTemplate>
                         </asp:Repeater>
                     </select>
+
                 </div>
             </div>
 
@@ -77,9 +89,9 @@
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-weibo"></i>Test Call</div>
                     <div class="tools">
-                        
-					    <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
-					</div>
+
+                        <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
+                    </div>
                 </div>
                 <div class="portlet-body">
                     <table id="myTable" class="table table-hover">
@@ -92,14 +104,12 @@
                                 <th class="span2">Caller ID</th>
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
-                                 <th class="span1"></th>
                                 <th class="span3">Message</th>
-                               
+                                <th class="span1"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                
                             </tr>
                         </tbody>
                     </table>
@@ -117,10 +127,10 @@
             <asp:Label ID="lblSuccess" runat="server"></asp:Label>
         </div>
         <div id="divError" style="visibility: hidden" class="alert alert-error">
-                <button class="close" data-dismiss="alert"></button>
-                <strong>Failure!</strong>
-                <asp:Label ID="lblError" runat="server"></asp:Label>
-            </div>
+            <button class="close" data-dismiss="alert"></button>
+            <strong>Failure!</strong>
+            <asp:Label ID="lblError" runat="server"></asp:Label>
+        </div>
     </div>
 
     <!-- END PAGE CONTENT-->
@@ -131,7 +141,7 @@
     <script>
         var arrayRow = [];
 
-        var rmvArrayElement = function (array,item) {
+        var rmvArrayElement = function (array, item) {
             var index = array.indexOf(item);
             if (index > -1) {
                 array.splice(index, 1);
@@ -187,6 +197,7 @@
                 msg.ErrorMessage = "";
 
             $('#myTable > tbody').append('<tr>' +
+                                 '<td class="hideTd">' + msg.idOp + '</td>' +
                               '<td>' + msg.OperatorId + '</td>' +
                               '<td>' + msg.Prefix + '</td>' +
                               '<td>' + msg.CreationDate + '</td>' +
@@ -194,8 +205,11 @@
                               '<td>' + msg.TestCli + '</td>' +
                               '<td>' + msg.ReceivedCli + '</td>' +
                               '<td><span class="label ' + statusClass + '  " >' + msg.Status + '</span></td>' +
+                              '<td>' + msg.ErrorMessage + '</td>' +
                               '<td>' + progressImg + '</td>' +
-                              '<td>' + msg.ErrorMessage + '</td>');
+                              '<td class="hideTd">' + msg.Id + '</td>' +
+                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
+                              '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td>');
         }
 
         var Clicked = false;
@@ -206,11 +220,12 @@
             a_onClick();
         });
 
+
         $('#LnkClear').bind('click', function (e) {
             e.preventDefault();
             aClear_onClick();
         });
-        
+
         function resetTimer() {
             window.clearInterval(timer);
             timer = null;
@@ -226,30 +241,24 @@
 
         }
 
-        
-        function a_onClick() {
-            
+
+        function testCall(idOperator, idPrefix) {
             $('#<%=lblError.ClientID %>').html('');
             $('#<%=lblSuccess.ClientID %>').html('');
             $('#divError').css('visibility', 'hidden');
 
-            var dl1 = $('select[name=selectOperator]').val();
-            var dl2 = $('select[name=selector2]').val();
-            var res = dl1.split("~");
             var request = $.ajax({
                 url: "HandlerTestOperator.ashx",
                 contentType: "application/json; charset=utf-8",
                 type: 'POST',
                 cache: false,
-                data: JSON.stringify([{ "id1": res[1], "id2": dl2 }])
+                data: JSON.stringify([{ "id1": idOperator, "id2": idPrefix }])
             });
-
 
             request.done(function (msg) {
                 if (msg.needRedirect) {
                     window.location = msg.Redirect;
                 }
-                
 
                 if (msg.isDone == false) {
                     $('#divError').css('visibility', 'visible');
@@ -257,7 +266,7 @@
 
                 }
                 else {
-
+                    msg.idOp = idOperator;
                     arrayRow.push(msg.Id);
                     addTable(msg);
 
@@ -267,6 +276,8 @@
 
                         resetTimer();
                         timer = window.setInterval(function () {
+
+                            if (arrayRow.length == 0) { aClear_onClick(); return;}
 
                             var request1 = $.ajax({
                                 url: "HandlerGetTestOperator.ashx",
@@ -281,40 +292,40 @@
                                 //$('#divSuccess').css('visibility', 'hidden');
                                 //$('#divError').css('visibility', 'visible');
                                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
-                            $('#<%=lblSuccess.ClientID %>').html('');
-                            console.log('failll');
-                            resetTimer();
+                                $('#<%=lblSuccess.ClientID %>').html('');
+                                console.log('failll');
+                                resetTimer();
 
-                        });
+                            });
 
-                        request1.done(function (msg) {
+                            request1.done(function (msg) {
 
-                            if (msg[0].needRedirect) {
-                                window.location = msg[0].Redirect;
-                            }
+                                if (msg[0].needRedirect) {
+                                    window.location = msg[0].Redirect;
+                                }
 
-                            var successLblVal = $('#<%=lblSuccess.ClientID %>').html();
+                                var successLblVal = $('#<%=lblSuccess.ClientID %>').html();
 
-                        $('#myTable > tbody > tr').remove();
-                        var IsFinished = "true";
+                                $('#myTable > tbody > tr').remove();
+                                var IsFinished = "true";
 
-                        $.each(msg, function (i, val) {
+                                $.each(msg, function (i, val) {
+                                    val.idOp = idOperator;
+                                    addTable(val);
 
-                            addTable(val);
+                                    if (val.EndDate == null || val.EndDate == "") {
+                                        IsFinished = "false";
+                                        //rmvArrayElement(arrayRow, val.Id);
+                                    }
+                                });
 
-                            if (val.EndDate == null || val.EndDate == "") {
-                                IsFinished = "false";
-                                //rmvArrayElement(arrayRow, val.Id);
-                            }
-                        });
-
-                            //if (arrayRow.length == 0) {
-                        if (IsFinished == "true") {
-                            resetTimer();
-                            Clicked = false;
-                        }
-                        });
-                    }, 3000);
+                                //if (arrayRow.length == 0) {
+                                if (IsFinished == "true") {
+                                    resetTimer();
+                                    Clicked = false;
+                                }
+                            });
+                        }, 3000);
                     }
 
                 }
@@ -327,14 +338,40 @@
                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                 $('#<%=lblSuccess.ClientID %>').html('');
 
-                $('select[name=selectOperator]').removeAttr('disabled');
-                $('select[name=selector2]').removeAttr('disabled');
-                $('#LinkTestCall').removeClass('disabled');
+                //$('select[name=selectOperator]').removeAttr('disabled');
+                //$('select[name=selectPrefix]').removeAttr('disabled');
+                //$('#LinkTestCall').removeClass('disabled');
 
                 //isClick = true;
 
             });
+
+
         }
+
+        function a_onClick() {
+
+            var dl1 = $('select[name=selectOperator]').val();
+            var dl2 = $('select[name=selectPrefix]').val();
+            var res = dl1.split("~");
+            testCall(res[1], dl2);
+        }
+
+
+        $('#myTable').delegate('a.testCall', 'click', function (e) {
+
+            var opId = $('td:first-child', $(this).parents('tr')).html();
+            var prefix = $('td:nth-child(3)', $(this).parents('tr')).html();
+
+            testCall(opId, prefix);
+        });
+
+        $('#myTable').delegate('a.clearCall', 'click', function (e) {
+
+            var id = $('td:nth-child(11)', $(this).parents('tr')).html();
+            $(this).parents('tr').remove();
+            rmvArrayElement(arrayRow, id);
+        });
 
         var handleSelect2Modal = function () {
 
@@ -343,10 +380,24 @@
                 return "<img class='flag' src='assets/img/flags/" + state.id.toLowerCase().split('~')[0] + ".png'/>&nbsp;&nbsp;" + state.text;
             }
 
+            function format2(state) {
+                if (!state.id) return state.text; // optgroup
+                return state.text;
+            }
+
             $("#selectOperator").select2({
                 allowClear: true,
                 formatResult: format,
                 formatSelection: format,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+
+            $("#selectPrefix").select2({
+                allowClear: true,
+                formatResult: format2,
+                formatSelection: format2,
                 escapeMarkup: function (m) {
                     return m;
                 }

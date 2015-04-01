@@ -72,8 +72,18 @@ namespace CallGeneratorLibrary.Utilities
                                 }
                                 else
                                 {
-                                    currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
-                                                lastRunDate.Hour, lastRunDate.Minute, lastRunDate.Second).AddDays(1);
+                                    if (lastRunDate.Hour < schedule.SpecificTime1.Value.Hour)
+                                    {
+                                        currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                            schedule.SpecificTime1.Value.Hour, schedule.SpecificTime1.Value.Minute, schedule.SpecificTime1.Value.Second);
+                                    }
+                                    else
+                                    {
+                                        currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                                    schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second).AddDays(1);
+                                    }
+                                    //currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                    //            lastRunDate.Hour, lastRunDate.Minute, lastRunDate.Second).AddDays(1);
                                 }
 
                                 currentSchedule = new ScheduleLog();
@@ -102,8 +112,6 @@ namespace CallGeneratorLibrary.Utilities
                         else
                         {
                             ScheduleLog NewLog = ScheduleLogRepository.Load(log.Id);
-
-
 
                             DateTime dt = new DateTime(
                                 schedule.SpecificTime.Value.Date.Year, schedule.SpecificTime.Value.Date.Month, schedule.SpecificTime.Value.Date.Day,
@@ -167,16 +175,19 @@ namespace CallGeneratorLibrary.Utilities
                                     {
                                         foreach (ScheduleOperator SchOp in LstShcOp)
                                         {
-                                            TestOperator testOp = new TestOperator();
-                                            testOp.UserId = schedule.UserId;
-                                            testOp.ParentUserId = ParentId;
-                                            testOp.OperatorId = SchOp.OperatorId;
-                                            testOp.NumberOfCalls = 1;
-                                            testOp.CreationDate = DateTime.Now;
-                                            testOp.CarrierPrefix = SchOp.Carrier.Prefix;
-                                            testOp.CallerId = schedule.User.CallerId;
-                                            testOp.ScheduleId = schedule.Id;
-                                            bool saveB = TestOperatorRepository.Save(testOp);
+                                            if (SchOp.Frequency < NewLog.Frequency)
+                                            {
+                                                TestOperator testOp = new TestOperator();
+                                                testOp.UserId = schedule.UserId;
+                                                testOp.ParentUserId = ParentId;
+                                                testOp.OperatorId = SchOp.OperatorId;
+                                                testOp.NumberOfCalls = 1;
+                                                testOp.CreationDate = DateTime.Now;
+                                                testOp.CarrierPrefix = SchOp.Carrier.Prefix;
+                                                testOp.CallerId = schedule.User.CallerId;
+                                                testOp.ScheduleId = schedule.Id;
+                                                bool saveB = TestOperatorRepository.Save(testOp);
+                                            }
                                         }
                                     }
                                     else

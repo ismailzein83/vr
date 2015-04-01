@@ -1,4 +1,4 @@
-﻿<%@ WebHandler Language="C#" Class="HandlerGetChartCalls" %>
+﻿<%@ WebHandler Language="C#" Class="HandlerGetChartUserCalls" %>
 
 using System;
 using System.Web;
@@ -11,20 +11,18 @@ public class HandlerGetChartCalls : IHttpHandler, System.Web.SessionState.IRequi
     
     public void ProcessRequest (HttpContext context) {
 
-        String status = context.Request.QueryString["status"];
+        String status = context.Request.QueryString["userId"];
         
         var jsonSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
         var jsonString = String.Empty;
-
-        List<List<ChartCall>> LstChartCall = new List<List<ChartCall>>();
+        
+        List<ChartCall> LstChartCall = new List<ChartCall>();
 
         int statusId = 0;
 
         Int32.TryParse(status, out statusId);
 
-        LstChartCall.Add(TestOperatorRepository.GetChartCalls(1, Current.getCurrentUser(context).Id));
-        LstChartCall.Add(TestOperatorRepository.GetChartCalls(2, Current.getCurrentUser(context).Id));
-        
+        LstChartCall = TestOperatorRepository.GetChartCallsUser(statusId, Current.getCurrentUser(context).Id);
         context.Response.ContentType = "application/json";
         context.Response.ContentEncoding = System.Text.Encoding.UTF8;
         context.Response.Write(jsonSerializer.Serialize(LstChartCall));

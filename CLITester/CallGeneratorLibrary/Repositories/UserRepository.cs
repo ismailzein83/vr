@@ -380,6 +380,7 @@ namespace CallGeneratorLibrary.Repositories
                     _User.WebsiteURL = user.WebsiteURL;
                     _User.ParentId = user.ParentId;
                     _User.Balance = user.Balance;
+                    _User.IsChangedCallerId = user.IsChangedCallerId;
                     context.SubmitChanges();
                 }
             }

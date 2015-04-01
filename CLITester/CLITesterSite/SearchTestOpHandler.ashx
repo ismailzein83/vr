@@ -60,7 +60,7 @@ public class SearchTestOpHandler : IHttpHandler, System.Web.SessionState.IRequir
             iTotalRecords = RowCount,
             iTotalDisplayRecords = RowCount,
             aaData = data
-            .Select(p => new[] { p.Name , p.CreationDate.ToString(), p.EndDate == null ? "" : p.EndDate.ToString(), p.DisplayName == null ? "" : p.DisplayName, p.TestCli == null ? "" : p.TestCli, p.ReceivedCli == null ? "" : p.ReceivedCli,
+            .Select(p => new[] { p.Name , p.Route, p.CreationDate.ToString(), p.EndDate == null ? "" : p.EndDate.ToString(), p.DisplayName == null ? "" : p.DisplayName, p.TestCli == null ? "" : p.TestCli, p.ReceivedCli == null ? "" : p.ReceivedCli,
                 p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLIValid ? "<span class='label label-success'>CLI DELIVERED</span>" :
                 p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid ? "<span class='label label-important'>CLI NOT DELIVERED</span>" :
                 p.Status == (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired ? "<span class='label label-inverse'>EXPIRED</span>" :

@@ -125,6 +125,7 @@
                         <thead>
                             <tr>
                                 <th class="span3">Name</th>
+                                <th class="span2">Route</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
                                 <th class="span2">Schedule</th>

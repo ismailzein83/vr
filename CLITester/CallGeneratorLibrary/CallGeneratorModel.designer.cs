@@ -81,12 +81,6 @@ namespace CallGeneratorLibrary
     partial void InsertCarrier(Carrier instance);
     partial void UpdateCarrier(Carrier instance);
     partial void DeleteCarrier(Carrier instance);
-    partial void InsertSchedule(Schedule instance);
-    partial void UpdateSchedule(Schedule instance);
-    partial void DeleteSchedule(Schedule instance);
-    partial void InsertScheduleOperator(ScheduleOperator instance);
-    partial void UpdateScheduleOperator(ScheduleOperator instance);
-    partial void DeleteScheduleOperator(ScheduleOperator instance);
     partial void InsertTestNumber(TestNumber instance);
     partial void UpdateTestNumber(TestNumber instance);
     partial void DeleteTestNumber(TestNumber instance);
@@ -129,6 +123,15 @@ namespace CallGeneratorLibrary
     partial void InsertTestOperator(TestOperator instance);
     partial void UpdateTestOperator(TestOperator instance);
     partial void DeleteTestOperator(TestOperator instance);
+    partial void InsertScheduleOperator(ScheduleOperator instance);
+    partial void UpdateScheduleOperator(ScheduleOperator instance);
+    partial void DeleteScheduleOperator(ScheduleOperator instance);
+    partial void InsertOperatorLog(OperatorLog instance);
+    partial void UpdateOperatorLog(OperatorLog instance);
+    partial void DeleteOperatorLog(OperatorLog instance);
+    partial void InsertSchedule(Schedule instance);
+    partial void UpdateSchedule(Schedule instance);
+    partial void DeleteSchedule(Schedule instance);
     #endregion
 		
 		public CallGeneratorModelDataContext() : 
@@ -297,22 +300,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<Schedule> Schedules
-		{
-			get
-			{
-				return this.GetTable<Schedule>();
-			}
-		}
-		
-		public System.Data.Linq.Table<ScheduleOperator> ScheduleOperators
-		{
-			get
-			{
-				return this.GetTable<ScheduleOperator>();
-			}
-		}
-		
 		public System.Data.Linq.Table<TestNumber> TestNumbers
 		{
 			get
@@ -465,6 +452,30 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
+		public System.Data.Linq.Table<ScheduleOperator> ScheduleOperators
+		{
+			get
+			{
+				return this.GetTable<ScheduleOperator>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OperatorLog> OperatorLogs
+		{
+			get
+			{
+				return this.GetTable<OperatorLog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Schedule> Schedules
+		{
+			get
+			{
+				return this.GetTable<Schedule>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRolePages")]
 		public ISingleResult<Page> GetRolePages([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleId", DbType="NVarChar(255)")] string roleId)
 		{
@@ -514,17 +525,18 @@ namespace CallGeneratorLibrary
 			return ((ISingleResult<GetChartTotalsResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetTestOperators", IsComposable=true)]
-		public object GetTestOperators([global::System.Data.Linq.Mapping.ParameterAttribute(Name="StartDate", DbType="DateTime")] System.Nullable<System.DateTime> startDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="EndDate", DbType="DateTime")] System.Nullable<System.DateTime> endDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OperatorId", DbType="Int")] System.Nullable<int> operatorId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayStart", DbType="Int")] System.Nullable<int> displayStart, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayLength", DbType="Int")] System.Nullable<int> displayLength)
-		{
-			return ((object)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), startDate, endDate, operatorId, displayStart, displayLength).ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetActionLogs")]
 		public ISingleResult<GetActionLogsResult> GetActionLogs([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectType", DbType="NVarChar(200)")] string objectType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectType, userId);
 			return ((ISingleResult<GetActionLogsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetTestOperators")]
+		public ISingleResult<TestOperatorHistory> GetTestOperators([global::System.Data.Linq.Mapping.ParameterAttribute(Name="StartDate", DbType="DateTime")] System.Nullable<System.DateTime> startDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="EndDate", DbType="DateTime")] System.Nullable<System.DateTime> endDate, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OperatorId", DbType="Int")] System.Nullable<int> operatorId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayStart", DbType="Int")] System.Nullable<int> displayStart, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DisplayLength", DbType="Int")] System.Nullable<int> displayLength)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), startDate, endDate, operatorId, displayStart, displayLength);
+			return ((ISingleResult<TestOperatorHistory>)(result.ReturnValue));
 		}
 	}
 	
@@ -806,9 +818,9 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<CallEntry> _CallEntries;
 		
-		private EntityRef<Schedule> _Schedule;
-		
 		private EntityRef<SipAccount> _SipAccount;
+		
+		private EntityRef<Schedule> _Schedule;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -837,8 +849,8 @@ namespace CallGeneratorLibrary
 		public CallSession()
 		{
 			this._CallEntries = new EntitySet<CallEntry>(new Action<CallEntry>(this.attach_CallEntries), new Action<CallEntry>(this.detach_CallEntries));
-			this._Schedule = default(EntityRef<Schedule>);
 			this._SipAccount = default(EntityRef<SipAccount>);
+			this._Schedule = default(EntityRef<Schedule>);
 			OnCreated();
 		}
 		
@@ -1043,40 +1055,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_CallSession", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
-		public Schedule Schedule
-		{
-			get
-			{
-				return this._Schedule.Entity;
-			}
-			set
-			{
-				Schedule previousValue = this._Schedule.Entity;
-				if (((previousValue != value) 
-							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Schedule.Entity = null;
-						previousValue.CallSessions.Remove(this);
-					}
-					this._Schedule.Entity = value;
-					if ((value != null))
-					{
-						value.CallSessions.Add(this);
-						this._ScheduleId = value.Id;
-					}
-					else
-					{
-						this._ScheduleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Schedule");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_CallSession", Storage="_SipAccount", ThisKey="SipAccountId", OtherKey="Id", IsForeignKey=true)]
 		public SipAccount SipAccount
 		{
@@ -1107,6 +1085,40 @@ namespace CallGeneratorLibrary
 						this._SipAccountId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("SipAccount");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_CallSession", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
+		public Schedule Schedule
+		{
+			get
+			{
+				return this._Schedule.Entity;
+			}
+			set
+			{
+				Schedule previousValue = this._Schedule.Entity;
+				if (((previousValue != value) 
+							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Schedule.Entity = null;
+						previousValue.CallSessions.Remove(this);
+					}
+					this._Schedule.Entity = value;
+					if ((value != null))
+					{
+						value.CallSessions.Add(this);
+						this._ScheduleId = value.Id;
+					}
+					else
+					{
+						this._ScheduleId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Schedule");
 				}
 			}
 		}
@@ -3845,939 +3857,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Schedules")]
-	public partial class Schedule : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _DisplayName;
-		
-		private System.Nullable<int> _Frequency;
-		
-		private System.Nullable<int> _TimeFrequency;
-		
-		private System.Nullable<int> _MonthDay;
-		
-		private System.Nullable<int> _OccursEvery;
-		
-		private System.Nullable<System.DateTime> _SpecificTime;
-		
-		private System.Nullable<System.DateTime> _StartDate;
-		
-		private System.Nullable<System.DateTime> _EndDate;
-		
-		private System.Nullable<int> _SipAccountId;
-		
-		private System.Nullable<System.Guid> _CreatedBy;
-		
-		private System.Nullable<System.DateTime> _CreationDate;
-		
-		private System.Nullable<int> _TotalNumbers;
-		
-		private System.Nullable<decimal> _RatioOfCalls;
-		
-		private System.Nullable<int> _UserId;
-		
-		private EntitySet<CallSession> _CallSessions;
-		
-		private EntitySet<ScheduleWeekDay> _ScheduleWeekDays;
-		
-		private EntitySet<ScheduleNumber> _ScheduleNumbers;
-		
-		private EntitySet<ScheduleOperator> _ScheduleOperators;
-		
-		private EntitySet<ScheduleGroup> _ScheduleGroups;
-		
-		private EntitySet<ScheduleLog> _ScheduleLogs;
-		
-		private EntitySet<TestOperator> _TestOperators;
-		
-		private EntityRef<SipAccount> _SipAccount;
-		
-		private EntityRef<User> _User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnDisplayNameChanging(string value);
-    partial void OnDisplayNameChanged();
-    partial void OnFrequencyChanging(System.Nullable<int> value);
-    partial void OnFrequencyChanged();
-    partial void OnTimeFrequencyChanging(System.Nullable<int> value);
-    partial void OnTimeFrequencyChanged();
-    partial void OnMonthDayChanging(System.Nullable<int> value);
-    partial void OnMonthDayChanged();
-    partial void OnOccursEveryChanging(System.Nullable<int> value);
-    partial void OnOccursEveryChanged();
-    partial void OnSpecificTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnSpecificTimeChanged();
-    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnStartDateChanged();
-    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnEndDateChanged();
-    partial void OnSipAccountIdChanging(System.Nullable<int> value);
-    partial void OnSipAccountIdChanged();
-    partial void OnCreatedByChanging(System.Nullable<System.Guid> value);
-    partial void OnCreatedByChanged();
-    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreationDateChanged();
-    partial void OnTotalNumbersChanging(System.Nullable<int> value);
-    partial void OnTotalNumbersChanged();
-    partial void OnRatioOfCallsChanging(System.Nullable<decimal> value);
-    partial void OnRatioOfCallsChanged();
-    partial void OnUserIdChanging(System.Nullable<int> value);
-    partial void OnUserIdChanged();
-    #endregion
-		
-		public Schedule()
-		{
-			this._CallSessions = new EntitySet<CallSession>(new Action<CallSession>(this.attach_CallSessions), new Action<CallSession>(this.detach_CallSessions));
-			this._ScheduleWeekDays = new EntitySet<ScheduleWeekDay>(new Action<ScheduleWeekDay>(this.attach_ScheduleWeekDays), new Action<ScheduleWeekDay>(this.detach_ScheduleWeekDays));
-			this._ScheduleNumbers = new EntitySet<ScheduleNumber>(new Action<ScheduleNumber>(this.attach_ScheduleNumbers), new Action<ScheduleNumber>(this.detach_ScheduleNumbers));
-			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
-			this._ScheduleGroups = new EntitySet<ScheduleGroup>(new Action<ScheduleGroup>(this.attach_ScheduleGroups), new Action<ScheduleGroup>(this.detach_ScheduleGroups));
-			this._ScheduleLogs = new EntitySet<ScheduleLog>(new Action<ScheduleLog>(this.attach_ScheduleLogs), new Action<ScheduleLog>(this.detach_ScheduleLogs));
-			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
-			this._SipAccount = default(EntityRef<SipAccount>);
-			this._User = default(EntityRef<User>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DisplayName", DbType="VarChar(500)")]
-		public string DisplayName
-		{
-			get
-			{
-				return this._DisplayName;
-			}
-			set
-			{
-				if ((this._DisplayName != value))
-				{
-					this.OnDisplayNameChanging(value);
-					this.SendPropertyChanging();
-					this._DisplayName = value;
-					this.SendPropertyChanged("DisplayName");
-					this.OnDisplayNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Int")]
-		public System.Nullable<int> Frequency
-		{
-			get
-			{
-				return this._Frequency;
-			}
-			set
-			{
-				if ((this._Frequency != value))
-				{
-					this.OnFrequencyChanging(value);
-					this.SendPropertyChanging();
-					this._Frequency = value;
-					this.SendPropertyChanged("Frequency");
-					this.OnFrequencyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeFrequency", DbType="Int")]
-		public System.Nullable<int> TimeFrequency
-		{
-			get
-			{
-				return this._TimeFrequency;
-			}
-			set
-			{
-				if ((this._TimeFrequency != value))
-				{
-					this.OnTimeFrequencyChanging(value);
-					this.SendPropertyChanging();
-					this._TimeFrequency = value;
-					this.SendPropertyChanged("TimeFrequency");
-					this.OnTimeFrequencyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MonthDay", DbType="Int")]
-		public System.Nullable<int> MonthDay
-		{
-			get
-			{
-				return this._MonthDay;
-			}
-			set
-			{
-				if ((this._MonthDay != value))
-				{
-					this.OnMonthDayChanging(value);
-					this.SendPropertyChanging();
-					this._MonthDay = value;
-					this.SendPropertyChanged("MonthDay");
-					this.OnMonthDayChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OccursEvery", DbType="Int")]
-		public System.Nullable<int> OccursEvery
-		{
-			get
-			{
-				return this._OccursEvery;
-			}
-			set
-			{
-				if ((this._OccursEvery != value))
-				{
-					this.OnOccursEveryChanging(value);
-					this.SendPropertyChanging();
-					this._OccursEvery = value;
-					this.SendPropertyChanged("OccursEvery");
-					this.OnOccursEveryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecificTime", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> SpecificTime
-		{
-			get
-			{
-				return this._SpecificTime;
-			}
-			set
-			{
-				if ((this._SpecificTime != value))
-				{
-					this.OnSpecificTimeChanging(value);
-					this.SendPropertyChanging();
-					this._SpecificTime = value;
-					this.SendPropertyChanged("SpecificTime");
-					this.OnSpecificTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SipAccountId", DbType="Int")]
-		public System.Nullable<int> SipAccountId
-		{
-			get
-			{
-				return this._SipAccountId;
-			}
-			set
-			{
-				if ((this._SipAccountId != value))
-				{
-					if (this._SipAccount.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnSipAccountIdChanging(value);
-					this.SendPropertyChanging();
-					this._SipAccountId = value;
-					this.SendPropertyChanged("SipAccountId");
-					this.OnSipAccountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedBy", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> CreatedBy
-		{
-			get
-			{
-				return this._CreatedBy;
-			}
-			set
-			{
-				if ((this._CreatedBy != value))
-				{
-					this.OnCreatedByChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedBy = value;
-					this.SendPropertyChanged("CreatedBy");
-					this.OnCreatedByChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="SmallDateTime")]
-		public System.Nullable<System.DateTime> CreationDate
-		{
-			get
-			{
-				return this._CreationDate;
-			}
-			set
-			{
-				if ((this._CreationDate != value))
-				{
-					this.OnCreationDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreationDate = value;
-					this.SendPropertyChanged("CreationDate");
-					this.OnCreationDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalNumbers", DbType="Int")]
-		public System.Nullable<int> TotalNumbers
-		{
-			get
-			{
-				return this._TotalNumbers;
-			}
-			set
-			{
-				if ((this._TotalNumbers != value))
-				{
-					this.OnTotalNumbersChanging(value);
-					this.SendPropertyChanging();
-					this._TotalNumbers = value;
-					this.SendPropertyChanged("TotalNumbers");
-					this.OnTotalNumbersChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RatioOfCalls", DbType="Decimal(18,2)")]
-		public System.Nullable<decimal> RatioOfCalls
-		{
-			get
-			{
-				return this._RatioOfCalls;
-			}
-			set
-			{
-				if ((this._RatioOfCalls != value))
-				{
-					this.OnRatioOfCallsChanging(value);
-					this.SendPropertyChanging();
-					this._RatioOfCalls = value;
-					this.SendPropertyChanged("RatioOfCalls");
-					this.OnRatioOfCallsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int")]
-		public System.Nullable<int> UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_CallSession", Storage="_CallSessions", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<CallSession> CallSessions
-		{
-			get
-			{
-				return this._CallSessions;
-			}
-			set
-			{
-				this._CallSessions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleWeekDay", Storage="_ScheduleWeekDays", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<ScheduleWeekDay> ScheduleWeekDays
-		{
-			get
-			{
-				return this._ScheduleWeekDays;
-			}
-			set
-			{
-				this._ScheduleWeekDays.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleNumber", Storage="_ScheduleNumbers", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<ScheduleNumber> ScheduleNumbers
-		{
-			get
-			{
-				return this._ScheduleNumbers;
-			}
-			set
-			{
-				this._ScheduleNumbers.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<ScheduleOperator> ScheduleOperators
-		{
-			get
-			{
-				return this._ScheduleOperators;
-			}
-			set
-			{
-				this._ScheduleOperators.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleGroup", Storage="_ScheduleGroups", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<ScheduleGroup> ScheduleGroups
-		{
-			get
-			{
-				return this._ScheduleGroups;
-			}
-			set
-			{
-				this._ScheduleGroups.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleLog", Storage="_ScheduleLogs", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<ScheduleLog> ScheduleLogs
-		{
-			get
-			{
-				return this._ScheduleLogs;
-			}
-			set
-			{
-				this._ScheduleLogs.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="ScheduleId")]
-		public EntitySet<TestOperator> TestOperators
-		{
-			get
-			{
-				return this._TestOperators;
-			}
-			set
-			{
-				this._TestOperators.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_Schedule", Storage="_SipAccount", ThisKey="SipAccountId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
-		public SipAccount SipAccount
-		{
-			get
-			{
-				return this._SipAccount.Entity;
-			}
-			set
-			{
-				SipAccount previousValue = this._SipAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._SipAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._SipAccount.Entity = null;
-						previousValue.Schedules.Remove(this);
-					}
-					this._SipAccount.Entity = value;
-					if ((value != null))
-					{
-						value.Schedules.Add(this);
-						this._SipAccountId = value.Id;
-					}
-					else
-					{
-						this._SipAccountId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("SipAccount");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Schedules.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Schedules.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_CallSessions(CallSession entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_CallSessions(CallSession entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_ScheduleWeekDays(ScheduleWeekDay entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_ScheduleWeekDays(ScheduleWeekDay entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_ScheduleNumbers(ScheduleNumber entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_ScheduleNumbers(ScheduleNumber entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_ScheduleGroups(ScheduleGroup entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_ScheduleGroups(ScheduleGroup entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_ScheduleLogs(ScheduleLog entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_ScheduleLogs(ScheduleLog entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-		
-		private void attach_TestOperators(TestOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = this;
-		}
-		
-		private void detach_TestOperators(TestOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Schedule = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ScheduleOperators")]
-	public partial class ScheduleOperator : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.Nullable<int> _ScheduleId;
-		
-		private System.Nullable<int> _OperatorId;
-		
-		private System.Nullable<int> _CarrierId;
-		
-		private EntityRef<Carrier> _Carrier;
-		
-		private EntityRef<Schedule> _Schedule;
-		
-		private EntityRef<Operator> _Operator;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnScheduleIdChanging(System.Nullable<int> value);
-    partial void OnScheduleIdChanged();
-    partial void OnOperatorIdChanging(System.Nullable<int> value);
-    partial void OnOperatorIdChanged();
-    partial void OnCarrierIdChanging(System.Nullable<int> value);
-    partial void OnCarrierIdChanged();
-    #endregion
-		
-		public ScheduleOperator()
-		{
-			this._Carrier = default(EntityRef<Carrier>);
-			this._Schedule = default(EntityRef<Schedule>);
-			this._Operator = default(EntityRef<Operator>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScheduleId", DbType="Int")]
-		public System.Nullable<int> ScheduleId
-		{
-			get
-			{
-				return this._ScheduleId;
-			}
-			set
-			{
-				if ((this._ScheduleId != value))
-				{
-					if (this._Schedule.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnScheduleIdChanging(value);
-					this.SendPropertyChanging();
-					this._ScheduleId = value;
-					this.SendPropertyChanged("ScheduleId");
-					this.OnScheduleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OperatorId", DbType="Int")]
-		public System.Nullable<int> OperatorId
-		{
-			get
-			{
-				return this._OperatorId;
-			}
-			set
-			{
-				if ((this._OperatorId != value))
-				{
-					if (this._Operator.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOperatorIdChanging(value);
-					this.SendPropertyChanging();
-					this._OperatorId = value;
-					this.SendPropertyChanged("OperatorId");
-					this.OnOperatorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CarrierId", DbType="Int")]
-		public System.Nullable<int> CarrierId
-		{
-			get
-			{
-				return this._CarrierId;
-			}
-			set
-			{
-				if ((this._CarrierId != value))
-				{
-					if (this._Carrier.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCarrierIdChanging(value);
-					this.SendPropertyChanging();
-					this._CarrierId = value;
-					this.SendPropertyChanged("CarrierId");
-					this.OnCarrierIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Carrier_ScheduleOperator", Storage="_Carrier", ThisKey="CarrierId", OtherKey="Id", IsForeignKey=true)]
-		public Carrier Carrier
-		{
-			get
-			{
-				return this._Carrier.Entity;
-			}
-			set
-			{
-				Carrier previousValue = this._Carrier.Entity;
-				if (((previousValue != value) 
-							|| (this._Carrier.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Carrier.Entity = null;
-						previousValue.ScheduleOperators.Remove(this);
-					}
-					this._Carrier.Entity = value;
-					if ((value != null))
-					{
-						value.ScheduleOperators.Add(this);
-						this._CarrierId = value.Id;
-					}
-					else
-					{
-						this._CarrierId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Carrier");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleOperator", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
-		public Schedule Schedule
-		{
-			get
-			{
-				return this._Schedule.Entity;
-			}
-			set
-			{
-				Schedule previousValue = this._Schedule.Entity;
-				if (((previousValue != value) 
-							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Schedule.Entity = null;
-						previousValue.ScheduleOperators.Remove(this);
-					}
-					this._Schedule.Entity = value;
-					if ((value != null))
-					{
-						value.ScheduleOperators.Add(this);
-						this._ScheduleId = value.Id;
-					}
-					else
-					{
-						this._ScheduleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Schedule");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_Operator", ThisKey="OperatorId", OtherKey="Id", IsForeignKey=true)]
-		public Operator Operator
-		{
-			get
-			{
-				return this._Operator.Entity;
-			}
-			set
-			{
-				Operator previousValue = this._Operator.Entity;
-				if (((previousValue != value) 
-							|| (this._Operator.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Operator.Entity = null;
-						previousValue.ScheduleOperators.Remove(this);
-					}
-					this._Operator.Entity = value;
-					if ((value != null))
-					{
-						value.ScheduleOperators.Add(this);
-						this._OperatorId = value.Id;
-					}
-					else
-					{
-						this._OperatorId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Operator");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TestNumbers")]
 	public partial class TestNumber : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -5157,9 +4236,9 @@ namespace CallGeneratorLibrary
 		
 		private System.Nullable<int> _GroupId;
 		
-		private EntityRef<Schedule> _Schedule;
-		
 		private EntityRef<TestNumberGroup> _TestNumberGroup;
+		
+		private EntityRef<Schedule> _Schedule;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -5175,8 +4254,8 @@ namespace CallGeneratorLibrary
 		
 		public ScheduleGroup()
 		{
-			this._Schedule = default(EntityRef<Schedule>);
 			this._TestNumberGroup = default(EntityRef<TestNumberGroup>);
+			this._Schedule = default(EntityRef<Schedule>);
 			OnCreated();
 		}
 		
@@ -5248,40 +4327,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleGroup", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
-		public Schedule Schedule
-		{
-			get
-			{
-				return this._Schedule.Entity;
-			}
-			set
-			{
-				Schedule previousValue = this._Schedule.Entity;
-				if (((previousValue != value) 
-							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Schedule.Entity = null;
-						previousValue.ScheduleGroups.Remove(this);
-					}
-					this._Schedule.Entity = value;
-					if ((value != null))
-					{
-						value.ScheduleGroups.Add(this);
-						this._ScheduleId = value.Id;
-					}
-					else
-					{
-						this._ScheduleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Schedule");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TestNumberGroup_ScheduleGroup", Storage="_TestNumberGroup", ThisKey="GroupId", OtherKey="Id", IsForeignKey=true)]
 		public TestNumberGroup TestNumberGroup
 		{
@@ -5312,6 +4357,40 @@ namespace CallGeneratorLibrary
 						this._GroupId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TestNumberGroup");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleGroup", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
+		public Schedule Schedule
+		{
+			get
+			{
+				return this._Schedule.Entity;
+			}
+			set
+			{
+				Schedule previousValue = this._Schedule.Entity;
+				if (((previousValue != value) 
+							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Schedule.Entity = null;
+						previousValue.ScheduleGroups.Remove(this);
+					}
+					this._Schedule.Entity = value;
+					if ((value != null))
+					{
+						value.ScheduleGroups.Add(this);
+						this._ScheduleId = value.Id;
+					}
+					else
+					{
+						this._ScheduleId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Schedule");
 				}
 			}
 		}
@@ -7616,9 +6695,9 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<CallSession> _CallSessions;
 		
-		private EntitySet<Schedule> _Schedules;
-		
 		private EntitySet<GeneratedCall> _GeneratedCalls;
+		
+		private EntitySet<Schedule> _Schedules;
 		
 		private EntityRef<User> _User;
 		
@@ -7671,8 +6750,8 @@ namespace CallGeneratorLibrary
 		public SipAccount()
 		{
 			this._CallSessions = new EntitySet<CallSession>(new Action<CallSession>(this.attach_CallSessions), new Action<CallSession>(this.detach_CallSessions));
-			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._GeneratedCalls = new EntitySet<GeneratedCall>(new Action<GeneratedCall>(this.attach_GeneratedCalls), new Action<GeneratedCall>(this.detach_GeneratedCalls));
+			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -8094,19 +7173,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_Schedule", Storage="_Schedules", ThisKey="Id", OtherKey="SipAccountId")]
-		public EntitySet<Schedule> Schedules
-		{
-			get
-			{
-				return this._Schedules;
-			}
-			set
-			{
-				this._Schedules.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_GeneratedCall", Storage="_GeneratedCalls", ThisKey="Id", OtherKey="SipAccountId")]
 		public EntitySet<GeneratedCall> GeneratedCalls
 		{
@@ -8117,6 +7183,19 @@ namespace CallGeneratorLibrary
 			set
 			{
 				this._GeneratedCalls.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_Schedule", Storage="_Schedules", ThisKey="Id", OtherKey="SipAccountId")]
+		public EntitySet<Schedule> Schedules
+		{
+			get
+			{
+				return this._Schedules;
+			}
+			set
+			{
+				this._Schedules.Assign(value);
 			}
 		}
 		
@@ -8186,18 +7265,6 @@ namespace CallGeneratorLibrary
 			entity.SipAccount = null;
 		}
 		
-		private void attach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.SipAccount = this;
-		}
-		
-		private void detach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.SipAccount = null;
-		}
-		
 		private void attach_GeneratedCalls(GeneratedCall entity)
 		{
 			this.SendPropertyChanging();
@@ -8205,6 +7272,18 @@ namespace CallGeneratorLibrary
 		}
 		
 		private void detach_GeneratedCalls(GeneratedCall entity)
+		{
+			this.SendPropertyChanging();
+			entity.SipAccount = null;
+		}
+		
+		private void attach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.SipAccount = this;
+		}
+		
+		private void detach_Schedules(Schedule entity)
 		{
 			this.SendPropertyChanging();
 			entity.SipAccount = null;
@@ -8910,13 +7989,13 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<Carrier> _Carriers;
 		
-		private EntitySet<Schedule> _Schedules;
-		
 		private EntitySet<SipAccount> _SipAccounts;
 		
 		private EntitySet<ActionLog> _ActionLogs;
 		
 		private EntitySet<TestOperator> _TestOperators;
+		
+		private EntitySet<Schedule> _Schedules;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -8964,10 +8043,10 @@ namespace CallGeneratorLibrary
 		{
 			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
 			this._Carriers = new EntitySet<Carrier>(new Action<Carrier>(this.attach_Carriers), new Action<Carrier>(this.detach_Carriers));
-			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			this._SipAccounts = new EntitySet<SipAccount>(new Action<SipAccount>(this.attach_SipAccounts), new Action<SipAccount>(this.detach_SipAccounts));
 			this._ActionLogs = new EntitySet<ActionLog>(new Action<ActionLog>(this.attach_ActionLogs), new Action<ActionLog>(this.detach_ActionLogs));
 			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
+			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
 			OnCreated();
 		}
 		
@@ -9357,19 +8436,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<Schedule> Schedules
-		{
-			get
-			{
-				return this._Schedules;
-			}
-			set
-			{
-				this._Schedules.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_SipAccount", Storage="_SipAccounts", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<SipAccount> SipAccounts
 		{
@@ -9406,6 +8472,19 @@ namespace CallGeneratorLibrary
 			set
 			{
 				this._TestOperators.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_Schedules", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<Schedule> Schedules
+		{
+			get
+			{
+				return this._Schedules;
+			}
+			set
+			{
+				this._Schedules.Assign(value);
 			}
 		}
 		
@@ -9453,18 +8532,6 @@ namespace CallGeneratorLibrary
 			entity.User = null;
 		}
 		
-		private void attach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Schedules(Schedule entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_SipAccounts(SipAccount entity)
 		{
 			this.SendPropertyChanging();
@@ -9500,6 +8567,18 @@ namespace CallGeneratorLibrary
 			this.SendPropertyChanging();
 			entity.User = null;
 		}
+		
+		private void attach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="")]
@@ -9521,6 +8600,8 @@ namespace CallGeneratorLibrary
 		private System.Nullable<int> _RowCount;
 		
 		private System.Nullable<int> _Status;
+		
+		private string _Route;
 		
 		public TestOperatorHistory()
 		{
@@ -9653,6 +8734,22 @@ namespace CallGeneratorLibrary
 				}
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Route", CanBeNull=false)]
+		public string Route
+		{
+			get
+			{
+				return this._Route;
+			}
+			set
+			{
+				if ((this._Route != value))
+				{
+					this._Route = value;
+				}
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Operators")]
@@ -9677,9 +8774,9 @@ namespace CallGeneratorLibrary
 		
 		private System.Nullable<bool> _ServiceMonty;
 		
-		private EntitySet<ScheduleOperator> _ScheduleOperators;
-		
 		private EntitySet<TestOperator> _TestOperators;
+		
+		private EntitySet<ScheduleOperator> _ScheduleOperators;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -9705,8 +8802,8 @@ namespace CallGeneratorLibrary
 		
 		public Operator()
 		{
-			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
 			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
+			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
 			OnCreated();
 		}
 		
@@ -9870,19 +8967,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="OperatorId")]
-		public EntitySet<ScheduleOperator> ScheduleOperators
-		{
-			get
-			{
-				return this._ScheduleOperators;
-			}
-			set
-			{
-				this._ScheduleOperators.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="OperatorId")]
 		public EntitySet<TestOperator> TestOperators
 		{
@@ -9893,6 +8977,19 @@ namespace CallGeneratorLibrary
 			set
 			{
 				this._TestOperators.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="OperatorId")]
+		public EntitySet<ScheduleOperator> ScheduleOperators
+		{
+			get
+			{
+				return this._ScheduleOperators;
+			}
+			set
+			{
+				this._ScheduleOperators.Assign(value);
 			}
 		}
 		
@@ -9916,18 +9013,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		private void attach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = this;
-		}
-		
-		private void detach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = null;
-		}
-		
 		private void attach_TestOperators(TestOperator entity)
 		{
 			this.SendPropertyChanging();
@@ -9935,6 +9020,18 @@ namespace CallGeneratorLibrary
 		}
 		
 		private void detach_TestOperators(TestOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = null;
+		}
+		
+		private void attach_ScheduleOperators(ScheduleOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Operator = this;
+		}
+		
+		private void detach_ScheduleOperators(ScheduleOperator entity)
 		{
 			this.SendPropertyChanging();
 			entity.Operator = null;
@@ -10813,9 +9910,9 @@ namespace CallGeneratorLibrary
 		
 		private EntityRef<Operator> _Operator;
 		
-		private EntityRef<Schedule> _Schedule;
-		
 		private EntityRef<User> _User;
+		
+		private EntityRef<Schedule> _Schedule;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -10857,8 +9954,8 @@ namespace CallGeneratorLibrary
 		{
 			this._MontyCalls = new EntitySet<MontyCall>(new Action<MontyCall>(this.attach_MontyCalls), new Action<MontyCall>(this.detach_MontyCalls));
 			this._Operator = default(EntityRef<Operator>);
-			this._Schedule = default(EntityRef<Schedule>);
 			this._User = default(EntityRef<User>);
+			this._Schedule = default(EntityRef<Schedule>);
 			OnCreated();
 		}
 		
@@ -11221,40 +10318,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_TestOperator", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
-		public Schedule Schedule
-		{
-			get
-			{
-				return this._Schedule.Entity;
-			}
-			set
-			{
-				Schedule previousValue = this._Schedule.Entity;
-				if (((previousValue != value) 
-							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Schedule.Entity = null;
-						previousValue.TestOperators.Remove(this);
-					}
-					this._Schedule.Entity = value;
-					if ((value != null))
-					{
-						value.TestOperators.Add(this);
-						this._ScheduleId = value.Id;
-					}
-					else
-					{
-						this._ScheduleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Schedule");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_TestOperator", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
 		public User User
 		{
@@ -11289,6 +10352,40 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_TestOperator", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
+		public Schedule Schedule
+		{
+			get
+			{
+				return this._Schedule.Entity;
+			}
+			set
+			{
+				Schedule previousValue = this._Schedule.Entity;
+				if (((previousValue != value) 
+							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Schedule.Entity = null;
+						previousValue.TestOperators.Remove(this);
+					}
+					this._Schedule.Entity = value;
+					if ((value != null))
+					{
+						value.TestOperators.Add(this);
+						this._ScheduleId = value.Id;
+					}
+					else
+					{
+						this._ScheduleId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Schedule");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -11319,6 +10416,1193 @@ namespace CallGeneratorLibrary
 		{
 			this.SendPropertyChanging();
 			entity.TestOperator = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ScheduleOperators")]
+	public partial class ScheduleOperator : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Nullable<int> _ScheduleId;
+		
+		private System.Nullable<int> _OperatorId;
+		
+		private System.Nullable<int> _CarrierId;
+		
+		private System.Nullable<int> _Frequency;
+		
+		private EntityRef<Carrier> _Carrier;
+		
+		private EntityRef<Operator> _Operator;
+		
+		private EntityRef<Schedule> _Schedule;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnScheduleIdChanging(System.Nullable<int> value);
+    partial void OnScheduleIdChanged();
+    partial void OnOperatorIdChanging(System.Nullable<int> value);
+    partial void OnOperatorIdChanged();
+    partial void OnCarrierIdChanging(System.Nullable<int> value);
+    partial void OnCarrierIdChanged();
+    partial void OnFrequencyChanging(System.Nullable<int> value);
+    partial void OnFrequencyChanged();
+    #endregion
+		
+		public ScheduleOperator()
+		{
+			this._Carrier = default(EntityRef<Carrier>);
+			this._Operator = default(EntityRef<Operator>);
+			this._Schedule = default(EntityRef<Schedule>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScheduleId", DbType="Int")]
+		public System.Nullable<int> ScheduleId
+		{
+			get
+			{
+				return this._ScheduleId;
+			}
+			set
+			{
+				if ((this._ScheduleId != value))
+				{
+					if (this._Schedule.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnScheduleIdChanging(value);
+					this.SendPropertyChanging();
+					this._ScheduleId = value;
+					this.SendPropertyChanged("ScheduleId");
+					this.OnScheduleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OperatorId", DbType="Int")]
+		public System.Nullable<int> OperatorId
+		{
+			get
+			{
+				return this._OperatorId;
+			}
+			set
+			{
+				if ((this._OperatorId != value))
+				{
+					if (this._Operator.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOperatorIdChanging(value);
+					this.SendPropertyChanging();
+					this._OperatorId = value;
+					this.SendPropertyChanged("OperatorId");
+					this.OnOperatorIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CarrierId", DbType="Int")]
+		public System.Nullable<int> CarrierId
+		{
+			get
+			{
+				return this._CarrierId;
+			}
+			set
+			{
+				if ((this._CarrierId != value))
+				{
+					if (this._Carrier.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCarrierIdChanging(value);
+					this.SendPropertyChanging();
+					this._CarrierId = value;
+					this.SendPropertyChanged("CarrierId");
+					this.OnCarrierIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Int")]
+		public System.Nullable<int> Frequency
+		{
+			get
+			{
+				return this._Frequency;
+			}
+			set
+			{
+				if ((this._Frequency != value))
+				{
+					this.OnFrequencyChanging(value);
+					this.SendPropertyChanging();
+					this._Frequency = value;
+					this.SendPropertyChanged("Frequency");
+					this.OnFrequencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Carrier_ScheduleOperator", Storage="_Carrier", ThisKey="CarrierId", OtherKey="Id", IsForeignKey=true)]
+		public Carrier Carrier
+		{
+			get
+			{
+				return this._Carrier.Entity;
+			}
+			set
+			{
+				Carrier previousValue = this._Carrier.Entity;
+				if (((previousValue != value) 
+							|| (this._Carrier.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Carrier.Entity = null;
+						previousValue.ScheduleOperators.Remove(this);
+					}
+					this._Carrier.Entity = value;
+					if ((value != null))
+					{
+						value.ScheduleOperators.Add(this);
+						this._CarrierId = value.Id;
+					}
+					else
+					{
+						this._CarrierId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Carrier");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_ScheduleOperator", Storage="_Operator", ThisKey="OperatorId", OtherKey="Id", IsForeignKey=true)]
+		public Operator Operator
+		{
+			get
+			{
+				return this._Operator.Entity;
+			}
+			set
+			{
+				Operator previousValue = this._Operator.Entity;
+				if (((previousValue != value) 
+							|| (this._Operator.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Operator.Entity = null;
+						previousValue.ScheduleOperators.Remove(this);
+					}
+					this._Operator.Entity = value;
+					if ((value != null))
+					{
+						value.ScheduleOperators.Add(this);
+						this._OperatorId = value.Id;
+					}
+					else
+					{
+						this._OperatorId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Operator");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleOperator", Storage="_Schedule", ThisKey="ScheduleId", OtherKey="Id", IsForeignKey=true)]
+		public Schedule Schedule
+		{
+			get
+			{
+				return this._Schedule.Entity;
+			}
+			set
+			{
+				Schedule previousValue = this._Schedule.Entity;
+				if (((previousValue != value) 
+							|| (this._Schedule.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Schedule.Entity = null;
+						previousValue.ScheduleOperators.Remove(this);
+					}
+					this._Schedule.Entity = value;
+					if ((value != null))
+					{
+						value.ScheduleOperators.Add(this);
+						this._ScheduleId = value.Id;
+					}
+					else
+					{
+						this._ScheduleId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Schedule");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OperatorLogs")]
+	public partial class OperatorLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private string _MCC;
+		
+		private string _MNC;
+		
+		private string _Country;
+		
+		private System.Nullable<bool> _IsOnline;
+		
+		private System.Nullable<System.DateTime> _LogDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnMCCChanging(string value);
+    partial void OnMCCChanged();
+    partial void OnMNCChanging(string value);
+    partial void OnMNCChanged();
+    partial void OnCountryChanging(string value);
+    partial void OnCountryChanged();
+    partial void OnIsOnlineChanging(System.Nullable<bool> value);
+    partial void OnIsOnlineChanged();
+    partial void OnLogDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnLogDateChanged();
+    #endregion
+		
+		public OperatorLog()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(200)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MCC", DbType="NVarChar(20)")]
+		public string MCC
+		{
+			get
+			{
+				return this._MCC;
+			}
+			set
+			{
+				if ((this._MCC != value))
+				{
+					this.OnMCCChanging(value);
+					this.SendPropertyChanging();
+					this._MCC = value;
+					this.SendPropertyChanged("MCC");
+					this.OnMCCChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MNC", DbType="NVarChar(20)")]
+		public string MNC
+		{
+			get
+			{
+				return this._MNC;
+			}
+			set
+			{
+				if ((this._MNC != value))
+				{
+					this.OnMNCChanging(value);
+					this.SendPropertyChanging();
+					this._MNC = value;
+					this.SendPropertyChanged("MNC");
+					this.OnMNCChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Country", DbType="NVarChar(200)")]
+		public string Country
+		{
+			get
+			{
+				return this._Country;
+			}
+			set
+			{
+				if ((this._Country != value))
+				{
+					this.OnCountryChanging(value);
+					this.SendPropertyChanging();
+					this._Country = value;
+					this.SendPropertyChanged("Country");
+					this.OnCountryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsOnline", DbType="Bit")]
+		public System.Nullable<bool> IsOnline
+		{
+			get
+			{
+				return this._IsOnline;
+			}
+			set
+			{
+				if ((this._IsOnline != value))
+				{
+					this.OnIsOnlineChanging(value);
+					this.SendPropertyChanging();
+					this._IsOnline = value;
+					this.SendPropertyChanged("IsOnline");
+					this.OnIsOnlineChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> LogDate
+		{
+			get
+			{
+				return this._LogDate;
+			}
+			set
+			{
+				if ((this._LogDate != value))
+				{
+					this.OnLogDateChanging(value);
+					this.SendPropertyChanging();
+					this._LogDate = value;
+					this.SendPropertyChanged("LogDate");
+					this.OnLogDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Schedules")]
+	public partial class Schedule : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _DisplayName;
+		
+		private System.Nullable<int> _Frequency;
+		
+		private System.Nullable<int> _TimeFrequency;
+		
+		private System.Nullable<int> _MonthDay;
+		
+		private System.Nullable<int> _OccursEvery;
+		
+		private System.Nullable<System.DateTime> _SpecificTime;
+		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private System.Nullable<int> _SipAccountId;
+		
+		private System.Nullable<System.Guid> _CreatedBy;
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<int> _TotalNumbers;
+		
+		private System.Nullable<decimal> _RatioOfCalls;
+		
+		private System.Nullable<int> _UserId;
+		
+		private System.Nullable<System.DateTime> _SpecificTime1;
+		
+		private EntitySet<CallSession> _CallSessions;
+		
+		private EntitySet<ScheduleWeekDay> _ScheduleWeekDays;
+		
+		private EntitySet<ScheduleNumber> _ScheduleNumbers;
+		
+		private EntitySet<ScheduleGroup> _ScheduleGroups;
+		
+		private EntitySet<ScheduleLog> _ScheduleLogs;
+		
+		private EntitySet<TestOperator> _TestOperators;
+		
+		private EntitySet<ScheduleOperator> _ScheduleOperators;
+		
+		private EntityRef<SipAccount> _SipAccount;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnDisplayNameChanging(string value);
+    partial void OnDisplayNameChanged();
+    partial void OnFrequencyChanging(System.Nullable<int> value);
+    partial void OnFrequencyChanged();
+    partial void OnTimeFrequencyChanging(System.Nullable<int> value);
+    partial void OnTimeFrequencyChanged();
+    partial void OnMonthDayChanging(System.Nullable<int> value);
+    partial void OnMonthDayChanged();
+    partial void OnOccursEveryChanging(System.Nullable<int> value);
+    partial void OnOccursEveryChanged();
+    partial void OnSpecificTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnSpecificTimeChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnSipAccountIdChanging(System.Nullable<int> value);
+    partial void OnSipAccountIdChanged();
+    partial void OnCreatedByChanging(System.Nullable<System.Guid> value);
+    partial void OnCreatedByChanged();
+    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreationDateChanged();
+    partial void OnTotalNumbersChanging(System.Nullable<int> value);
+    partial void OnTotalNumbersChanged();
+    partial void OnRatioOfCallsChanging(System.Nullable<decimal> value);
+    partial void OnRatioOfCallsChanged();
+    partial void OnUserIdChanging(System.Nullable<int> value);
+    partial void OnUserIdChanged();
+    partial void OnSpecificTime1Changing(System.Nullable<System.DateTime> value);
+    partial void OnSpecificTime1Changed();
+    #endregion
+		
+		public Schedule()
+		{
+			this._CallSessions = new EntitySet<CallSession>(new Action<CallSession>(this.attach_CallSessions), new Action<CallSession>(this.detach_CallSessions));
+			this._ScheduleWeekDays = new EntitySet<ScheduleWeekDay>(new Action<ScheduleWeekDay>(this.attach_ScheduleWeekDays), new Action<ScheduleWeekDay>(this.detach_ScheduleWeekDays));
+			this._ScheduleNumbers = new EntitySet<ScheduleNumber>(new Action<ScheduleNumber>(this.attach_ScheduleNumbers), new Action<ScheduleNumber>(this.detach_ScheduleNumbers));
+			this._ScheduleGroups = new EntitySet<ScheduleGroup>(new Action<ScheduleGroup>(this.attach_ScheduleGroups), new Action<ScheduleGroup>(this.detach_ScheduleGroups));
+			this._ScheduleLogs = new EntitySet<ScheduleLog>(new Action<ScheduleLog>(this.attach_ScheduleLogs), new Action<ScheduleLog>(this.detach_ScheduleLogs));
+			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
+			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
+			this._SipAccount = default(EntityRef<SipAccount>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DisplayName", DbType="VarChar(500)")]
+		public string DisplayName
+		{
+			get
+			{
+				return this._DisplayName;
+			}
+			set
+			{
+				if ((this._DisplayName != value))
+				{
+					this.OnDisplayNameChanging(value);
+					this.SendPropertyChanging();
+					this._DisplayName = value;
+					this.SendPropertyChanged("DisplayName");
+					this.OnDisplayNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Int")]
+		public System.Nullable<int> Frequency
+		{
+			get
+			{
+				return this._Frequency;
+			}
+			set
+			{
+				if ((this._Frequency != value))
+				{
+					this.OnFrequencyChanging(value);
+					this.SendPropertyChanging();
+					this._Frequency = value;
+					this.SendPropertyChanged("Frequency");
+					this.OnFrequencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeFrequency", DbType="Int")]
+		public System.Nullable<int> TimeFrequency
+		{
+			get
+			{
+				return this._TimeFrequency;
+			}
+			set
+			{
+				if ((this._TimeFrequency != value))
+				{
+					this.OnTimeFrequencyChanging(value);
+					this.SendPropertyChanging();
+					this._TimeFrequency = value;
+					this.SendPropertyChanged("TimeFrequency");
+					this.OnTimeFrequencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MonthDay", DbType="Int")]
+		public System.Nullable<int> MonthDay
+		{
+			get
+			{
+				return this._MonthDay;
+			}
+			set
+			{
+				if ((this._MonthDay != value))
+				{
+					this.OnMonthDayChanging(value);
+					this.SendPropertyChanging();
+					this._MonthDay = value;
+					this.SendPropertyChanged("MonthDay");
+					this.OnMonthDayChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OccursEvery", DbType="Int")]
+		public System.Nullable<int> OccursEvery
+		{
+			get
+			{
+				return this._OccursEvery;
+			}
+			set
+			{
+				if ((this._OccursEvery != value))
+				{
+					this.OnOccursEveryChanging(value);
+					this.SendPropertyChanging();
+					this._OccursEvery = value;
+					this.SendPropertyChanged("OccursEvery");
+					this.OnOccursEveryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecificTime", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> SpecificTime
+		{
+			get
+			{
+				return this._SpecificTime;
+			}
+			set
+			{
+				if ((this._SpecificTime != value))
+				{
+					this.OnSpecificTimeChanging(value);
+					this.SendPropertyChanging();
+					this._SpecificTime = value;
+					this.SendPropertyChanged("SpecificTime");
+					this.OnSpecificTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SipAccountId", DbType="Int")]
+		public System.Nullable<int> SipAccountId
+		{
+			get
+			{
+				return this._SipAccountId;
+			}
+			set
+			{
+				if ((this._SipAccountId != value))
+				{
+					if (this._SipAccount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSipAccountIdChanging(value);
+					this.SendPropertyChanging();
+					this._SipAccountId = value;
+					this.SendPropertyChanged("SipAccountId");
+					this.OnSipAccountIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedBy", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> CreatedBy
+		{
+			get
+			{
+				return this._CreatedBy;
+			}
+			set
+			{
+				if ((this._CreatedBy != value))
+				{
+					this.OnCreatedByChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedBy = value;
+					this.SendPropertyChanged("CreatedBy");
+					this.OnCreatedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this.OnCreationDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreationDate = value;
+					this.SendPropertyChanged("CreationDate");
+					this.OnCreationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalNumbers", DbType="Int")]
+		public System.Nullable<int> TotalNumbers
+		{
+			get
+			{
+				return this._TotalNumbers;
+			}
+			set
+			{
+				if ((this._TotalNumbers != value))
+				{
+					this.OnTotalNumbersChanging(value);
+					this.SendPropertyChanging();
+					this._TotalNumbers = value;
+					this.SendPropertyChanged("TotalNumbers");
+					this.OnTotalNumbersChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RatioOfCalls", DbType="Decimal(18,2)")]
+		public System.Nullable<decimal> RatioOfCalls
+		{
+			get
+			{
+				return this._RatioOfCalls;
+			}
+			set
+			{
+				if ((this._RatioOfCalls != value))
+				{
+					this.OnRatioOfCallsChanging(value);
+					this.SendPropertyChanging();
+					this._RatioOfCalls = value;
+					this.SendPropertyChanged("RatioOfCalls");
+					this.OnRatioOfCallsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int")]
+		public System.Nullable<int> UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecificTime1", DbType="SmallDateTime")]
+		public System.Nullable<System.DateTime> SpecificTime1
+		{
+			get
+			{
+				return this._SpecificTime1;
+			}
+			set
+			{
+				if ((this._SpecificTime1 != value))
+				{
+					this.OnSpecificTime1Changing(value);
+					this.SendPropertyChanging();
+					this._SpecificTime1 = value;
+					this.SendPropertyChanged("SpecificTime1");
+					this.OnSpecificTime1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_CallSession", Storage="_CallSessions", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<CallSession> CallSessions
+		{
+			get
+			{
+				return this._CallSessions;
+			}
+			set
+			{
+				this._CallSessions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleWeekDay", Storage="_ScheduleWeekDays", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<ScheduleWeekDay> ScheduleWeekDays
+		{
+			get
+			{
+				return this._ScheduleWeekDays;
+			}
+			set
+			{
+				this._ScheduleWeekDays.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleNumber", Storage="_ScheduleNumbers", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<ScheduleNumber> ScheduleNumbers
+		{
+			get
+			{
+				return this._ScheduleNumbers;
+			}
+			set
+			{
+				this._ScheduleNumbers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleGroup", Storage="_ScheduleGroups", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<ScheduleGroup> ScheduleGroups
+		{
+			get
+			{
+				return this._ScheduleGroups;
+			}
+			set
+			{
+				this._ScheduleGroups.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleLog", Storage="_ScheduleLogs", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<ScheduleLog> ScheduleLogs
+		{
+			get
+			{
+				return this._ScheduleLogs;
+			}
+			set
+			{
+				this._ScheduleLogs.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<TestOperator> TestOperators
+		{
+			get
+			{
+				return this._TestOperators;
+			}
+			set
+			{
+				this._TestOperators.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Schedule_ScheduleOperator", Storage="_ScheduleOperators", ThisKey="Id", OtherKey="ScheduleId")]
+		public EntitySet<ScheduleOperator> ScheduleOperators
+		{
+			get
+			{
+				return this._ScheduleOperators;
+			}
+			set
+			{
+				this._ScheduleOperators.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_Schedule", Storage="_SipAccount", ThisKey="SipAccountId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
+		public SipAccount SipAccount
+		{
+			get
+			{
+				return this._SipAccount.Entity;
+			}
+			set
+			{
+				SipAccount previousValue = this._SipAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._SipAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._SipAccount.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._SipAccount.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._SipAccountId = value.Id;
+					}
+					else
+					{
+						this._SipAccountId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("SipAccount");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Schedule", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Schedules.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Schedules.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_CallSessions(CallSession entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_CallSessions(CallSession entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_ScheduleWeekDays(ScheduleWeekDay entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_ScheduleWeekDays(ScheduleWeekDay entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_ScheduleNumbers(ScheduleNumber entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_ScheduleNumbers(ScheduleNumber entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_ScheduleGroups(ScheduleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_ScheduleGroups(ScheduleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_ScheduleLogs(ScheduleLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_ScheduleLogs(ScheduleLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_TestOperators(TestOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_TestOperators(TestOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
+		}
+		
+		private void attach_ScheduleOperators(ScheduleOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = this;
+		}
+		
+		private void detach_ScheduleOperators(ScheduleOperator entity)
+		{
+			this.SendPropertyChanging();
+			entity.Schedule = null;
 		}
 	}
 	

@@ -244,11 +244,72 @@
                 }
             });
 
+
+            $.validator.addMethod("timecompare", function (value, element) {
+                var SpecificTime = $('#txtTime').val();
+                var SpecificTime1 = $('#txtTime1').val();
+
+                if (SpecificTime1 == '')
+                    return true;
+
+                var hour = SpecificTime.substring(0, SpecificTime.indexOf(':'));
+                var hour1 = SpecificTime1.substring(0, SpecificTime1.indexOf(':'));
+                
+
+                if (hour < hour1) {
+                    if ((hour1 - hour) < 2) {
+                        return false;
+                    }
+                }
+                else {
+                    if ((hour - hour1) < 2) {
+                        return false;
+                    }
+                }
+                return true;
+            }, "* Enddate should be greater than Startdate");
+
+
+            $.validator.addMethod("countcompare", function (value2, element) {
+                var value = '';
+                $("#myTable > tbody > tr").each(function () {
+                    value = value + ';' + $(this).find('td:eq(0)').text();
+                });
+
+                $('#ctl00$MainContent$HdTable').val(value);
+                console.log('MAster ' + value);
+            if (value == '') {
+                
+                return false;
+            }
+            return true;
+            }, "* Enddate should be greater than Startdate");
+
             form1.find('.valStringR').each(function () {
                 $(this).rules('add', {
                     required: true
                 });
             });
+
+            form1.find('.valTimeR').each(function () {
+                $(this).rules('add', {
+                    required: true,
+                    timecompare:true
+                });
+            });
+
+            form1.find('.valTime').each(function () {
+                $(this).rules('add', {
+                    timecompare: true
+                });
+            });
+
+            form1.find('.valCount').each(function () {
+                $(this).rules('add', {
+                    countcompare: true
+                });
+            });
+
 
             form1.find('.valString').each(function () {
                 $(this).rules('add', {

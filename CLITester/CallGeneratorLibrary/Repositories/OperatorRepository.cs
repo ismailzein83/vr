@@ -143,6 +143,26 @@ namespace CallGeneratorLibrary.Repositories
             return success;
         }
 
+        public static bool InsertLog(OperatorLog oper)
+        {
+            bool success = false;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    context.OperatorLogs.InsertOnSubmit(oper);
+                    context.SubmitChanges();
+                    success = true;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return success;
+        }
+
         private static void WriteToEventLogEx(string message)
         {
             string cs = "Call Generator Lib Excep";

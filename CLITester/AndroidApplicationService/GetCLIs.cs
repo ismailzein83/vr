@@ -107,7 +107,15 @@ namespace AndroidApplicationService
                                             ///
 
                                             testoperators[i].EndDate = DateTime.Now;
-                                            testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
+                                            string testcli = GenEnd.SipAccount.User.CallerId;
+                                            if (testcli.Substring(0, 1) == "+")
+                                            {
+                                                int len2 = GenEnd.SipAccount.User.CallerId.Length;
+                                                len2 = len2 - 1;
+                                                testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId.Substring(1, len2);
+                                            }
+                                            else
+                                                testoperators[i].TestCli = GenEnd.SipAccount.User.CallerId;
                                             string RecCLi = resp2.CLI;
 
                                             if (resp2.CLI.Length > 4)

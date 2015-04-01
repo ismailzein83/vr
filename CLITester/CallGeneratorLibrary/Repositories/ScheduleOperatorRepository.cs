@@ -123,6 +123,7 @@ namespace CallGeneratorLibrary.Repositories
                     look.ScheduleId = ScheduleOperator.ScheduleId;
                     look.OperatorId = ScheduleOperator.OperatorId;
                     look.CarrierId = ScheduleOperator.CarrierId;
+                    look.Frequency = ScheduleOperator.Frequency;
                     context.SubmitChanges();
                     success = true;
                 }
