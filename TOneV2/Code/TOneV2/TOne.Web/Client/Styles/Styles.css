@@ -511,14 +511,87 @@ input.ui-grid-filter-input[type="text"] {
     position: fixed;
     top: 0px;
 }
+
+.dropdown-menu-custom-serf {
+    top: -3px;
+    left: 30px;
+    border-radius: 0px;
+    background-color:#f0f0f0 !important;
+    color: #666 !important;
+    border-color: #CBC8C8;
+    border: 1px 1px 1px 0px solid !important;
+    padding: 0px 0px;
+}
+
+.panel-group .panel + .panel {
+    margin-top: 0px;
+}
+
+.toggle-panel {
+    margin: 0px;
+    border-bottom: 1px solid #d0d0d0;
+}
+.menu-item-list{
+           
+    border-bottom: 1px solid #d0d0d0 !important;
+}
+.menu-item-list .panel-body {
+    padding: 0px;
+    background-color: #f0f0f0 !important;
+}
+.dll-menu {
+    background-color: #dddddd !important;
+    color: #666 !important;
+}
+.dll-menu:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+}
+.dll-menu a:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+    border-color: transparent #666;
+}
 .toggel{
      float:right;
      font-size:10px;
 }
 .menulink{
-    color:#000;
     text-decoration:none !important;
+    padding: 5px 0px 5px 37px !important;
+    color: #000;
+
 }
+.dll-menu a:before{
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+
+}
+.leftdiv {   
+    color: #666 !important;
+    border-bottom: 1px #CBC8C8 solid;
+}
+.leftdiv:hover{
+    background-color:#f0f0f0 !important;
+    color: #666 !important;
+}
+.dleftdiv:focus {
+    background-color:#f0f0f0 !important;
+    color: #666 !important;
+}
+.dropdown-menu-custom-serf li > a:hover {
+    background-color:#f0f0f0 !important;
+    color: #666 !important;
+}
+
 .menulink:hover{
     color:#000;
     text-decoration:none;
@@ -526,4 +599,27 @@ input.ui-grid-filter-input[type="text"] {
 .menulink:active{
     color:#000;
     text-decoration:none;
+}
+.innerlist a:before { 
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
+.caret-rigth {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-right: 4px solid transparent;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid;
 }

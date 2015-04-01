@@ -12,41 +12,42 @@
     @Styles.Render("~/Content/Styles")
 
 
-
+    
 </head>
 <body ng-controller="mainCtrl">
 
-    <header class="navbar navbar-static-top navbar-inverse" id="top" role="banner">
-        <div class="container">
 
-            <nav class="collapse navbar-collapse bs-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#menu-toggle" class="btn btn-link toggle-menu" id="menu-toggle"></a>
-                    </li>
-
-                </ul>
-
-            </nav>
-        </div>
-    </header>
-    <div id="wrapper">
+    <div id="wrapper" ng-style="toogled==true?{'padding-left':'250px'}:{'padding-left':'0px'}">
         <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                <div ng-repeat="item in menuItems" class="panel panel-default">
-                    <div class="panel-heading">
-                        <span data-toggle="collapse" data-parent="#accordion" ng-if="item.childs.length > 0">
-                            <span class=" hand-cursor" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index)">{{item.name}} </span>
-                            <span class=" hand-cursor  toggel" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}">
+        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'250px'}:{'width':'30px'}">
 
-                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size:10px" ng-click="setIndex($index)"></span>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true">
+                <div class="panel panel-default toggle-panel ">
+                    <div class="panel-heading dll-menu" style="height: 40px;">
+
+                        <span style="font-size: 20px; margin: 0px 4px; position: absolute; right: 5px; top: 5px;" ng-click="toggledpanel()" class=" hand-cursor glyphicon glyphicon-chevron-left "></span>
+
+
+                    </div>
+                </div>
+                <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
+                    <div class="panel-heading hand-cursor dll-menu" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index)">
+                        <span ng-if="item.childs.length > 0">
+                            <span class="glyphicon " ng-class="item.icon" style="font-size:20px"></span>
+                            <span>{{item.name}} </span>
+                            <span class=" hand-cursor  toggel">
+
+                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size:10px"></span>
 
                             </span>
                         </span>
-                        <span ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
-                            <a class="menulink" ng-href="{{item.location}}">{{item.name}}</a>
-                        </span>
+
+                        <ul class="nav" ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                            <li class="dll-menu" ng-repeat="c in item.childs">
+                                <a class="menulink" ng-href="{{item.location}}">{{item.name}}</a>
+                            </li>
+                        </ul>
+
 
 
                     </div>
@@ -54,11 +55,34 @@
                     <div id="collapse-{{$index}}" ng-if="item.childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
                         <div class="panel-body">
                             <ul class="nav">
-                                <li ng-repeat="c in item.childs"><a ng-href="{{c.location}}">{{c.name}}</a> </li>
+                                <li class="dll-menu" ng-repeat="c in item.childs"><a class="menulink" ng-href="{{c.location}}">{{c.name}}</a> </li>
                             </ul>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:30px;position:fixed;z-index:10" ng-show="toogled==false">
+                <div class="dropdown dropdown-custom-serf " >
+                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right" ng-click="toggledpanel()" style="font-size: 20px; margin: 0px 4px;">
+
+                    </div>
+                </div>
+
+                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                    <div class="dropdown-toggle hand-cursor glyphicon " ng-class="item.icon" style="font-size:20px;margin:0px 4px" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
+
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
+                        <li role="presentation" class="innerlist" ng-repeat="c in item.childs">
+
+                            <a ng-href="{{c.location}}">{{c.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                @*</li>
+
+                    </ul>*@
+
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -173,4 +197,3 @@
 @*@Scripts.Render("~/bundles/Semantic")*@
 @Scripts.Render("~/bundles/Javascripts")
 </html>
-

@@ -2,11 +2,37 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope, notify) {
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
+.controller('mainCtrl', function mainCtrl($scope, notify, $animate) {
+    var dropdownHidingTimeoutHandlerc;
+
+    
+    $animate.enabled(false, $('#sidebar-wrapper'));
+    $animate.enabled(false, $('#collapsedmenu'));
+    
+    $scope.toogled = true;
+    $scope.toggledpanel = function () {
+     
+        $scope.toogled = !$scope.toogled;
+    }
+    $scope.showMenu = function (e) {      
+        var $this = angular.element(e.currentTarget);
+        clearTimeout(dropdownHidingTimeoutHandlerc);
+        if (!$this.hasClass('open')) {
+            $('.dropdown-toggle', $this).dropdown('toggle');
+            $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        }
+    }
+    $scope.hideMenu = function (e) {
+        var $this = angular.element(e.currentTarget);
+        //dropdownHidingTimeoutHandlerc = setTimeout(function () {
+        //    if ($this.hasClass('open')) {
+        //        $('.dropdown-toggle', $this).dropdown('toggle');
+        //        $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        //    }
+        //}, 150);
+        
+    }
+   
     $scope.menuItemsCurrent = -1;
     $scope.setIndex = function (i) {
         if ($scope.menuItemsCurrent == i) {
@@ -18,25 +44,25 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     
     $scope.menuItems = [
         {
-            name: "Routing", location: '', childs: [
+            name: "Routing", location: '', icon: 'glyphicon-certificate', childs: [
                { name: "Rule Management", location: '#/RouteRuleManager' },
                { name: "Route Manager", location: '' }
             ]
         },
         {
-            name: "BI", location: '', childs: [
+            name: "BI", location: '', icon: 'glyphicon-cog', childs: [
                { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' },
                 { name: "Senior Management Dashboard", location: '#/BI/SeniorManagementDashboard' },
                 { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' }
             ]
         },
         {
-            name: "NOC", location: '', childs: [
+            name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
                { name: "Zone Monitor", location: '' }
             ]
         },
         {
-            name: "Others", location: '', childs: [
+            name: "Others", icon: 'glyphicon-pencil', location: '', childs: [
                { name: "Default", location: '#/Default' },
                 { name: "Test View", location: '#/TestView' },
                 { name: "ZingChart", location: '#/ZingChart' },
