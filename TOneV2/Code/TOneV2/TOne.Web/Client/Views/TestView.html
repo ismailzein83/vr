@@ -33,7 +33,7 @@
         <div class="col-lg-2">
             
             <vr-dropdown type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone"></vr-dropdown>
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" validationoptions="testviewCtrl.validationoptions1"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span >Selected Values : </span>
@@ -45,14 +45,20 @@
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier" vr-validation="testviewCtrl.validationOptions" ></vr-dropdown>
+            <vr-dropdown options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier" validationoptions="testviewCtrl.validationoptions2"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span> Selected Customer Value : </span>
             <span ng-repeat="c in testviewCtrl.options.selectedvalues">{{c.Name}}</span>
         </div>
+       
     </div>
+
     <div class="row">
+        <div class="col-lg-2">
+            <button ng-disabled="testviewCtrl.validateForm()" type="button" class="btn btn-default" ng-click="testviewCtrl.save()">Save</button>
+        </div>
+
         <div class="col-lg-2">
             <!--<vr-dropdown type="menu" datasource="testviewCtrl.routes" datatextfield="name" datavaluefield="value"
                          entityname="Route" onselectionchange="testviewCtrl.selectedRoutes" lastselectedvalue="testviewCtrl.lstselectedroute"></vr-dropdown>--> 

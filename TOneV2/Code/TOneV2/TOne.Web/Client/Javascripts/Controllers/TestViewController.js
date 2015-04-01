@@ -7,9 +7,7 @@ var TestViewController = function (CarriersService, ZonesService) {
     loadZone();
     loadCarriers();
 
-    ctrl.alertMsg = function () {
-        alert(ctrl.Input);
-    }
+    
 
     ctrl.selectedRoutes = function (items, item, data) {
 
@@ -17,6 +15,15 @@ var TestViewController = function (CarriersService, ZonesService) {
 
     ctrl.onsearch = function (text) {
         return ZonesService.getSalesZones(text);
+    }
+
+    ctrl.validateForm = function () {
+        for (var i = 0 ; i < ctrl.validationGroup.length ; i++) {
+            if (! ctrl.validationGroup[i].isvalid)
+                return true;
+        }
+
+        return false;
     }
     
     function load() {
@@ -35,6 +42,26 @@ var TestViewController = function (CarriersService, ZonesService) {
             datasource: []
         };
 
+        ctrl.validationoptions1 = {
+            required: true,
+            isvalid : true
+        };
+
+        ctrl.validationoptions2 = {
+            required: true,
+            isvalid: true,
+            customvalidate: function (items, item) {
+                if (item == undefined) return false;
+                if (item.Name == 'TEST') return true;
+                else return false;
+            }
+        };
+
+        ctrl.validationGroup = [];
+        ctrl.validationGroup.push(ctrl.validationoptions1);
+        ctrl.validationGroup.push(ctrl.validationoptions2);
+
+        
         ctrl.optionsZone = {
             selectedvalues: [],
             datasource: [],
@@ -42,12 +69,18 @@ var TestViewController = function (CarriersService, ZonesService) {
         };
 
         ctrl.validationOptions = {
-            required : true
+            value: ctrl.options.selectedvalues
+        };
+
+        ctrl.alertMsg = function () {
+            //ctrl.validationOptions.value = ctrl.options.selectedvalues;
+            //console.log(ctrl.validationOptions.value);
+            //console.log(ctrl.options.selectedvalues);
         };
 
         //ctrl.options.lastselectedvalue = { CarrierAccountID: "C097", Name: "TEST (test02)" };
     }
-
+    
     function loadZone() {
         ZonesService.getSalesZones("Lebanon").then(function (items) {
             ctrl.optionsZone.selectedvalues = items;

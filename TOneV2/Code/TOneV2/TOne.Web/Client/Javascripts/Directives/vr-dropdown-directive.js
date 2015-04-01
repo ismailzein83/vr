@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (DropdownService, BaseDirService) {
+app.directive('vrDropdown', ['DropdownService', 'BaseDirService', 'ValidationService', function (DropdownService, BaseDirService, ValidationService) {
 
     var directiveDefinitionObject = {
 
@@ -18,7 +18,8 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             multipleselection: '@',
             onsearch: '&',
             limitplaceholder: '@',
-            limitcharactercount: '@'
+            limitcharactercount: '@',
+            validationoptions:'='
         },
         controller: function () {
             var controller = this;
@@ -161,7 +162,48 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                                     }
 
                                 }
-                            };
+                    };
+
+                    var validationClass = { invalid: "required-inpute", valid: '' };
+
+                    $scope.isvalidcomp = function () {
+
+                        ctrl.validationoptions.isvalid = false;
+
+                        if (ctrl.validationoptions == undefined) {
+                            ctrl.validationoptions.isvalid = true;
+                            return '';
+                        }
+
+                        if (ctrl.validationoptions.customvalidate && typeof (ctrl.validationoptions.customvalidate) == 'function') {
+
+                            var isvalid = ctrl.validationoptions.customvalidate(ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
+
+                            if (isvalid !== undefined) {
+                                ctrl.validationoptions.isvalid = isvalid;
+                                if (isvalid)
+                                    return validationClass.valid;
+                            }
+                            return validationClass.invalid;
+                        }
+
+                        if (ctrl.singleSelection()) {
+                            if (ValidationService.validate(ctrl.validationoptions, { data: ctrl.options.selectedvalues }))
+                            {
+                                ctrl.validationoptions.isvalid = true;
+                                return validationClass.valid;
+                            }
+                        }
+                        else {
+                            if (ValidationService.validate(ctrl.validationoptions, { arrData: ctrl.options.selectedvalues }))
+                            {
+                                ctrl.validationoptions.isvalid = true;
+                                return validationClass.valid;
+                            }
+                        }
+
+                        return validationClass.invalid;
+                    };
 
                     $scope.search = function () {
                         $scope.clearDatasource();
