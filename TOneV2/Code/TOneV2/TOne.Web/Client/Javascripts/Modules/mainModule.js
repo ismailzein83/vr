@@ -3,6 +3,7 @@
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
 .controller('mainCtrl', function mainCtrl($scope, notify, $animate) {
+    Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
     
@@ -24,22 +25,32 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     }
     $scope.hideMenu = function (e) {
         var $this = angular.element(e.currentTarget);
-        //dropdownHidingTimeoutHandlerc = setTimeout(function () {
-        //    if ($this.hasClass('open')) {
-        //        $('.dropdown-toggle', $this).dropdown('toggle');
-        //        $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
-        //    }
-        //}, 150);
+        dropdownHidingTimeoutHandlerc = setTimeout(function () {
+            if ($this.hasClass('open')) {
+                $('.dropdown-toggle', $this).dropdown('toggle');
+                $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            }
+        }, 150);
         
     }
    
     $scope.menuItemsCurrent = -1;
-    $scope.setIndex = function (i) {
+    $scope.setIndex = function (i, e) {
+        $('.panel-heading').removeClass('active-menu-parent');
         if ($scope.menuItemsCurrent == i) {
             $scope.menuItemsCurrent = -1;
         }
-        else
-        $scope.menuItemsCurrent = i;
+        else {
+            $scope.menuItemsCurrent = i;            
+            var $this = angular.element(e.currentTarget);
+            $this.addClass('active-menu-parent');
+        }
+       
+    }
+    $scope.setActiveClass = function (e) {
+        $('.menu-item-list-ligth').removeClass('active-menu');
+        var $this = angular.element(e.currentTarget);
+        $this.addClass('active-menu');
     }
     
     $scope.menuItems = [

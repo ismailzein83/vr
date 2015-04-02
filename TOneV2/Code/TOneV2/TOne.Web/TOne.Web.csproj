@@ -419,6 +419,7 @@
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\Helpers\DateFormat.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
+    <Content Include="Client\Libraries\waves\waves.js" />
     <Content Include="Client\Modules\BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="Client\Modules\BI\Constants\BIMeasureTypeEnum.js" />
     <Content Include="Client\Modules\BI\Constants\BITimeDimensionTypeEnum.js" />
@@ -519,6 +520,7 @@
     <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
+    <Content Include="Client\Styles\waves.css" />
     <Content Include="Client\Templates\Directives\vr-chart.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
@@ -706,6 +708,7 @@
     <Content Include="Client\Styles\ui-grid.ttf" />
     <Content Include="Client\Styles\ui-grid.woff" />
     <Content Include="Client\Libraries\Angular\angular-animate.min.js.map" />
+    <Content Include="Client\Libraries\waves\waves.min.js.map" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <PropertyGroup>

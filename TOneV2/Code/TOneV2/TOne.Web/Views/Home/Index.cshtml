@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div class="panel-heading hand-cursor dll-menu" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index)">
+                    <div class="panel-heading hand-cursor dll-menu boxes float-box waves-effect waves-float waves-block" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.childs.length > 0">
                             <span class="glyphicon " ng-class="item.icon" style="font-size:20px"></span>
                             <span>{{item.name}} </span>
@@ -42,9 +42,9 @@
                             </span>
                         </span>
 
-                        <ul class="nav" ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
-                            <li class="dll-menu" ng-repeat="c in item.childs">
-                                <a class="menulink" ng-href="{{item.location}}">{{item.name}}</a>
+                        <ul class="nav" ng-if="item.childs.length == 0"  data-toggle="collapse" data-parent="#accordion">
+                            <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.childs">
+                                <a class="menulink " ng-href="{{item.location}}">{{item.name}}</a>
                             </li>
                         </ul>
 
@@ -52,17 +52,17 @@
 
                     </div>
 
-                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
-                        <div class="panel-body">
+                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0"  class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
+                        <div class="panel-body ">
                             <ul class="nav">
-                                <li class="dll-menu" ng-repeat="c in item.childs"><a class="menulink" ng-href="{{c.location}}">{{c.name}}</a> </li>
+                                <li class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event)" ng-repeat="c in item.childs"><a class=" menulink" ng-href="{{c.location}}">{{c.name}}</a> </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:30px;position:fixed;z-index:10" ng-show="toogled==false">
-                <div class="dropdown dropdown-custom-serf " >
+                <div class="dropdown dropdown-custom-serf leftdiv">
                     <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right" ng-click="toggledpanel()" style="font-size: 20px; margin: 0px 4px;">
 
                     </div>
@@ -186,6 +186,8 @@
 
         </div>
     *@
+    
+
 
 
 </body>
@@ -196,4 +198,7 @@
 @Scripts.Render("~/bundles/highchart")
 @*@Scripts.Render("~/bundles/Semantic")*@
 @Scripts.Render("~/bundles/Javascripts")
+@Scripts.Render("~/bundles/waves")
+
+
 </html>

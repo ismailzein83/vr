@@ -54,6 +54,9 @@ namespace TOne.Web
             bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
                "~/Client/Libraries/Helpers", "*.js", true));
 
+            bundles.Add(new ScriptBundle("~/bundles/waves").IncludeDirectory(
+              "~/Client/Libraries/waves", "*.js", true));
+
             //Bootstrap
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
                 "~/Client/Libraries/Bootstrap", "*.js", true));

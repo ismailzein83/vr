@@ -521,6 +521,7 @@ input.ui-grid-filter-input[type="text"] {
     border-color: #CBC8C8;
     border: 1px 1px 1px 0px solid !important;
     padding: 0px 0px;
+    border-left: medium none transparent;
 }
 
 .panel-group .panel + .panel {
@@ -535,6 +536,11 @@ input.ui-grid-filter-input[type="text"] {
            
     border-bottom: 1px solid #d0d0d0 !important;
 }
+.menu-item-list .panel-body > li{
+    font-size:12px;
+   
+}
+
 .menu-item-list .panel-body {
     padding: 0px;
     background-color: #f0f0f0 !important;
@@ -543,7 +549,25 @@ input.ui-grid-filter-input[type="text"] {
     background-color: #dddddd !important;
     color: #666 !important;
 }
+
 .dll-menu:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+}
+.active-menu {    
+    color: #666 !important;
+    background-color: #ddd !important;
+}
+
+.active-menu a:visited {    
+    background-color: #E3DEDE  !important;
+    color: #666 !important;
+}
+.active-menu a:active {    
+     background-color: #E3DEDE  !important;
+    color: #666 !important;
+}
+.active-menu-parent{
     background-color: #f0f0f0 !important;
     color: #666 !important;
 }
@@ -560,6 +584,7 @@ input.ui-grid-filter-input[type="text"] {
     text-decoration:none !important;
     padding: 5px 0px 5px 37px !important;
     color: #000;
+    text-align:left !important;
 
 }
 .dll-menu a:before{
@@ -583,7 +608,7 @@ input.ui-grid-filter-input[type="text"] {
     background-color:#f0f0f0 !important;
     color: #666 !important;
 }
-.dleftdiv:focus {
+.leftdiv:focus {
     background-color:#f0f0f0 !important;
     color: #666 !important;
 }
@@ -611,6 +636,9 @@ input.ui-grid-filter-input[type="text"] {
     left: -5px;
     top: -1px;
     position: relative;
+}
+.menu-item-list-ligth{
+     background-color: #E3DEDE  !important;
 }
 .caret-rigth {
     display: inline-block;
