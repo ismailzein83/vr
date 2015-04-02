@@ -3,6 +3,7 @@
 
 
         var chartSelectedMeasureAPI;
+        var chartSelectedEntityAPI;
         var resultKey;
         var sortColumn;
         var sortDescending = true;
@@ -27,10 +28,8 @@
             $scope.gridOptionsAllMeasures.useExternalSorting = true;
             $scope.gridOptionsAllMeasures.data = [];
             $scope.gridOptionsAllMeasures.onRegisterApi = function (gridApi) {
-                console.log('onRegisterApi');
               
                 gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                    console.log('sortChanged');
                     
                     if (sortColumns.length > 0) {
                         var measure = $.grep(measures, function (m, index) {
@@ -64,6 +63,16 @@
 
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
+            };
+
+            $scope.chartSelectedEntityReady = function (api) {
+                chartSelectedEntityAPI = api;
+                chartSelectedEntityAPI.onDataItemClicked = function (selectedEntity) {
+
+                    $scope.selectedEntityId = selectedEntity.GroupKeyValues[0].Id;
+                    $scope.selectedEntityName = selectedEntity.GroupKeyValues[0].Name;
+                    getAndShowEntityStatistics();
+                };
             };
 
             $scope.getData = function () {
@@ -117,7 +126,7 @@
                 name: 'Zone',
                 headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
                 enableColumnMenu: false,
-                field: 'GroupKeyValues[0]'
+                field: 'GroupKeyValues[0].Name'
             };
             gridOption.columnDefs.push(zoneColumn);
 
@@ -137,9 +146,7 @@
                 gridOption.columnDefs.push(colDef);
             });
         }
-
         
-
         function getData() {
             if (!chartSelectedMeasureAPI)
                 return;
@@ -171,7 +178,7 @@
 
                 var seriesDefinitions = [{
                     title: sortColumn.description,
-                    titlePath: "GroupKeyValues[0]",
+                    titlePath: "GroupKeyValues[0].Name",
                     valuePath: sortColumn.description
                 }];
                 console.log(chartData.length);
@@ -180,6 +187,10 @@
                 .finally(function () {
                     chartSelectedMeasureAPI.hideLoader();
                 });
+        }
+
+        function getAndShowEntityStatistics() {
+
         }
 
         function loadMeasureTypes() {

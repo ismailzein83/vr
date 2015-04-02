@@ -48,16 +48,7 @@
                     <vr-chart data-on-ready="chartSelectedMeasureReady" style="display:inline-block"></vr-chart>
                 </div>
                 <div class="col-lg-5 style-col">
-                    <vr-chart data-on-ready="chartZoneReady" style="display:inline-block"></vr-chart>
-                </div>
-                <div ng-show="isZoneVisible">
-                    <div ng-repeat="itm in optionsMeasureTypes.datasource">
-                        <label class="control-label" style="padding-top:6px">
-                            <input type="checkbox" ng-model="itm.selected" ng-change="updateZone()" />
-                            {{itm.name}}
-
-                        </label>
-                    </div>
+                    <vr-chart data-on-ready="chartSelectedEntityReady" style="display:inline-block"></vr-chart>
                 </div>
             </div>
             <div class="row style-row">

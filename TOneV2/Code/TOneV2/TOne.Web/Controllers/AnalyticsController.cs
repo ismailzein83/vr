@@ -113,6 +113,12 @@ namespace TOne.Web.Controllers
             return manager.GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
         }
 
+        public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
+        {
+            TrafficStatisticManager manager = new TrafficStatisticManager();
+            return manager.GetTrafficStatistics(filterByColumn, columnFilterValue, from, to);
+        }
+
         #endregion
     }
 }
