@@ -18,7 +18,7 @@
 .hljs-addition{background:#dfd}
 .diff .hljs-change{background:#0086b3}
 .hljs-chunk{color:#aaa}
-.am-collapse{-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards;opacity:1}
+.am-collapse{-webkit-animation-duration:.3s;animation-duration:.3s;-webkit-animation-timing-function:ease;animation-timing-function:ease;-webkit-animation-fill-mode:backwards;animation-fill-mode:backwards;opacity:1}
 .am-collapse.am-collapse-add,.am-collapse.ng-hide-remove,.am-collapse.ng-move{-webkit-animation-name:expand;animation-name:expand}.am-collapse.am-collapse-remove,.am-collapse.ng-hide{-webkit-animation-name:collapse;animation-name:collapse}
 .am-collapse.ng-enter{visibility:hidden;-webkit-animation-name:expand;animation-name:expand;-webkit-animation-play-state:paused;animation-play-state:paused}.am-collapse.ng-enter.ng-enter-active{visibility:visible;-webkit-animation-play-state:running;animation-play-state:running}
 .am-collapse.ng-leave{-webkit-animation-name:collapse;animation-name:collapse;-webkit-animation-play-state:paused;animation-play-state:paused}
