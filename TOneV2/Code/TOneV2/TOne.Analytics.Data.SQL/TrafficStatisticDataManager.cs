@@ -21,19 +21,22 @@ namespace TOne.Analytics.Data.SQL
                 tempTableName = GenerateTempTableName();
             BigResult<TrafficStatisticGroupSummary> rslt = new BigResult<TrafficStatisticGroupSummary>()
             {
-                ResultKey = tempTableName.Key,
-                Data = new List<TrafficStatisticGroupSummary>()
+                ResultKey = tempTableName.Key
             };
 
             CreateTempTableIfNotExists(tempTableName.TableName, groupKeys, from, to);
-            rslt.Data = GetData(tempTableName.TableName, groupKeys, fromRow, toRow, orderBy, isDescending);
+            int totalDataCount;
+            rslt.Data = GetData(tempTableName.TableName, groupKeys, fromRow, toRow, orderBy, isDescending, out totalDataCount);
+            rslt.TotalCount = totalDataCount;
             return rslt;
         }
 
-        private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending, out int totalCount)
         {
             string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER ( ORDER BY {1} {2}) AS rowNumber FROM {0})
 	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName, GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
+
+            totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
             return GetItemsText(query,
                 (reader) =>
                 {

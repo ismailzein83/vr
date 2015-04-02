@@ -55,6 +55,7 @@
     <Compile Include="RoutingRules\Actions\IRouteBuildContext.cs" />
     <Compile Include="RoutingRules\Actions\RouteActions\ApplyPercentageRouteActionData.cs" />
     <Compile Include="RoutingRules\Actions\RouteActions\BlockRouteActionData.cs" />
+    <Compile Include="RoutingRules\Actions\RouteActions\BlockSuppliersRouteActionData.cs" />
     <Compile Include="RoutingRules\Actions\RouteOptionActions\BlockRouteOptionActionData.cs" />
     <Compile Include="RoutingRules\CodeSet\SupplierZoneSelectionSet.cs" />
     <Compile Include="RoutingRules\Actions\IRouteOptionBuildContext.cs" />

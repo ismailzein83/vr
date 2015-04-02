@@ -186,7 +186,10 @@ namespace TOne.LCR.Business
                 }
                 
                 _retrievedOptionNextReturnedIndex++;
-                return new RouteSupplierOption(nextOption.Info);
+                if ((nextOption.ServicesFlag & _currentRoute.ServicesFlag) == _currentRoute.ServicesFlag)
+                    return new RouteSupplierOption(nextOption.Info);
+                else
+                    return GetNextOptionInLCR();
             }
             else
             {
@@ -257,6 +260,7 @@ namespace TOne.LCR.Business
 
         #region Public Methods
 
+        RouteDetail _currentRoute;
         public List<RouteDetail> BuildRoutes()
         {
             InitializeRoutes();
@@ -278,7 +282,7 @@ namespace TOne.LCR.Business
             
             foreach (var customerRateEntry in _saleZoneCustomerRates.CustomersRates)
             {
-                RouteDetail route = new RouteDetail
+                _currentRoute = new RouteDetail
                 {
                     Code = _singleDestinationCodeMatches.RouteCode,
                     CustomerID = customerRateEntry.Key,
@@ -287,10 +291,10 @@ namespace TOne.LCR.Business
                     SaleZoneId = _saleZoneId
                 };
                 _retrievedOptionNextReturnedIndex = 0;
-                using (RouteBuildContext routeBuildContext = new RouteBuildContext(route, this))
+                using (RouteBuildContext routeBuildContext = new RouteBuildContext(_currentRoute, this))
                 {
                     routeBuildContext.BuildRoute();
-                    routes.Add(route);
+                    routes.Add(_currentRoute);
                 }
             }
 

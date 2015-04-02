@@ -55,6 +55,7 @@
     <Compile Include="RouteRuleMatchFinder.cs" />
     <Compile Include="RouteRules\RouteActions\ApplyPercentageRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\BlockRouteAction.cs" />
+    <Compile Include="RouteRules\RouteActions\BlockSuppliersRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\BuildLCRRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\CheckNoOptionsRouteAction.cs" />
     <Compile Include="RouteRules\RouteActions\GetTopOptionsRouteAction.cs" />

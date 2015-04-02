@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class BigResult<T>
+    public class KeyColumn
     {
-        public string ResultKey { get; set; }
+        public string Id { get; set; }
 
-        public IEnumerable<T> Data { get; set; }
-
-        public int TotalCount { get; set; }
+        public string Name { get; set; }
     }
 }

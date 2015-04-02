@@ -1,82 +1,199 @@
 ﻿appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService) {
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants) {
+
+
+        var chartSelectedMeasureAPI;
+        var resultKey;
+        var sortColumn;
+        var sortDescending = true;
+        var measures;
 
         defineScopeObjects();
         defineScopeMethods();
         load();
-        var chartZonesAPI;
         function defineScopeObjects() {
             $scope.testModel = 'ZoneMonitorController';
 
             $scope.optionsTopCount = {
                 datasource: [
-                { description: "5", value: "5" },
-                { description: "10", value: "10" },
-                { description: "15", value: "15" },
-                { description: "20", value: "25" }
+                { description: "5", value: 5 },
+                { description: "10", value: 10 },
+                { description: "15", value: 15 }
                 ]
             };
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
-
-            $scope.optionsMeasureTypes = {
-                datasource: []
+            
+            $scope.gridOptionsAllMeasures = {};
+            $scope.gridOptionsAllMeasures.useExternalSorting = true;
+            $scope.gridOptionsAllMeasures.data = [];
+            $scope.gridOptionsAllMeasures.onRegisterApi = function (gridApi) {
+                console.log('onRegisterApi');
+              
+                gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+                    console.log('sortChanged');
+                    
+                    if (sortColumns.length > 0) {
+                        var measure = $.grep(measures, function (m, index) {
+                            // num = the current value for the item in the array
+                            // index = the index of the item in the array
+                            return m.description == sortColumns[0].field; // returns a boolean
+                        })[0]; 
+                        sortColumn = measure;
+                        switch (sortColumns[0].sort.direction) {
+                            case uiGridConstants.ASC:
+                                sortDescending = false;
+                                break;
+                            case uiGridConstants.DESC:
+                                sortDescending = true;
+                                break;
+                            case undefined:
+                                sortDescending = false;
+                                break;
+                        }
+                    }
+                    getData();
+                });
             };
+
+            $scope.totalDataCount = 0;
+            $scope.currentPage = 1;
+
         }
         
         function defineScopeMethods() {
 
-            $scope.chartZonesReady = function (api) {
-                chartZonesAPI = api;
+            $scope.chartSelectedMeasureReady = function (api) {
+                chartSelectedMeasureAPI = api;
             };
 
             $scope.getData = function () {
+                $scope.currentPage = 1;
+                resultKey = '';
                 getData();
+            };
+            
+            $scope.pageChanged = function () {
+                getData();
+            };
+
+            $scope.getGridHeight = function (gridOptions) {
+                var height;
+                if (gridOptions.data.length == 0) {
+                    height = gridOptions.lastHeight;
+                }
+                else {
+                    var rowHeight = 30; // your row height
+                    var headerHeight = 30; // your header height
+                    var height = (gridOption.data.length * rowHeight + headerHeight);
+                }
+                gridOptions.lastHeight = height;
+                
+                return {
+                    height: height + "px"
+                };
             };
         }
 
         function load() {
-            $scope.fromDate = '2014-08-01';
-            $scope.toDate = '2012-08-02';
+            $scope.fromDate = '2014-04-27';
+            $scope.toDate = '2014-04-29';
             loadMeasureTypes();
         }
 
+        function defineGrid()
+        {
+            gridOption = $scope.gridOptionsAllMeasures;
+            gridOption.enableHorizontalScrollbar = 0;
+            gridOption.enableVerticalScrollbar = 0;
+            //gridOption.minRowsToShow = 30;
+            //gridOption.enableFiltering = false;
+            //gridOption.saveFocus = false;
+            //gridOption.saveScroll = true;
+            gridOption.enableColumnResizing = true;
+           
+
+            gridOption.columnDefs = [];
+            var zoneColumn = {
+                name: 'Zone',
+                headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
+                enableColumnMenu: false,
+                field: 'GroupKeyValues[0]'
+            };
+            gridOption.columnDefs.push(zoneColumn);
+
+            var valColumnIndex = 0;
+            angular.forEach(measures, function (measureType) {
+                var colDef = {
+                    name: measureType.description,
+                    headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
+                    enableColumnMenu: false,
+                    field: measureType.description,
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 1
+                    }
+                   // cellFilter: "number:2"
+                };
+                gridOption.columnDefs.push(colDef);
+            });
+        }
+
+        
+
         function getData() {
-            if (!chartZonesAPI)
+            if (!chartSelectedMeasureAPI)
                 return;
-            chartZonesAPI.showLoader();
+            $scope.showResult = true;
+            $scope.gridOptionsAllMeasures.data.length = 0;
+            chartSelectedMeasureAPI.showLoader();
             var count = $scope.optionsTopCount.lastselectedvalue.value;
-            var measure = $scope.optionsMeasureTypes.lastselectedvalue;
-            AnalyticsAPIService.GetTrafficStatisticSummary('', [4], $scope.fromDate, $scope.toDate, 1, count, measure.value, true).then(function (response) {
-                var chartData = response;
+            
+           
+            var fromRow = ($scope.currentPage - 1) * count + 1;
+            var toRow = fromRow + count - 1;
+            AnalyticsAPIService.GetTrafficStatisticSummary(resultKey, [4], $scope.fromDate, $scope.toDate, fromRow, toRow, sortColumn.value, sortDescending).then(function (response) {
+
+                resultKey = response.ResultKey;
+                $scope.totalDataCount = response.TotalCount;
+
+                angular.forEach(response.Data, function (itm) {
+                    $scope.gridOptionsAllMeasures.data.push(itm);
+                });
+                
+
+                var chartData = response.Data;
                 var chartDefinition = {
                     type: "pie",
-                    title: "TOP DESTINATIONS",
+                    title: sortColumn.description,
                     yAxisTitle: "Value",
                     showLegendsWithValues: $scope.showValuesOnLegends
                 };
 
                 var seriesDefinitions = [{
-                    title: measure.description,
+                    title: sortColumn.description,
                     titlePath: "GroupKeyValues[0]",
-                    valuePath: measure.description
+                    valuePath: sortColumn.description
                 }];
-
-                chartZonesAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+                console.log(chartData.length);
+                chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
             })
                 .finally(function () {
-                    chartZonesAPI.hideLoader();
+                    chartSelectedMeasureAPI.hideLoader();
                 });
         }
 
         function loadMeasureTypes() {
             AnalyticsAPIService.GetTrafficStatisticMeasureList().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    $scope.optionsMeasureTypes.datasource.push({
+                measures = [];
+                angular.forEach(response, function (itm) {                   
+                    measures.push({
                         value: itm.Value,
                         description: itm.Description
                     });
-                    $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
                 });
+
+                sortColumn = measures[2];
+                defineGrid();
             });
         }
         
