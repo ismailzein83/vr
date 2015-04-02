@@ -6,7 +6,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
-    
+    $animate.enabled($('#sidebar-wrapper'));
     $animate.enabled(false, $('#sidebar-wrapper'));
     $animate.enabled(false, $('#collapsedmenu'));
     
@@ -173,13 +173,15 @@ angular.module('mainModule')
     angular.extend($timepickerProvider.defaults, {
         timeFormat: 'HH:mm:ss',
         length: 7,
-        minuteStep: 1
+        minuteStep: 1,
+        animation:""
     });
 })
 .config(function ($datepickerProvider) {
     angular.extend($datepickerProvider.defaults, {
         dateFormat: 'dd/MM/yyyy',
-        startWeek: 1
+        startWeek: 1,
+        animation:""
     });
 })
 .config(function ($popoverProvider) {

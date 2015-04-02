@@ -43,11 +43,11 @@
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
                     <div class="panel-heading hand-cursor dll-menu boxes float-box waves-effect waves-float waves-block" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.childs.length > 0">
-                            <span class="glyphicon " ng-class="item.icon" style="font-size:20px"></span>
+                            <span class="glyphicon " ng-class="item.icon" style="font-size: 20px; top: 4px;"></span>
                             <span>{{item.name}} </span>
                             <span class=" hand-cursor  toggel">
 
-                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size:10px"></span>
+                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
 
                             </span>
                         </span>
@@ -83,6 +83,10 @@
 
                     </div>
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
+                        <li role="presentation" >
+
+                           <label class="titel-groupe"> {{item.name}}</label>
+                        </li>
                         <li role="presentation" class="innerlist" ng-repeat="c in item.childs">
 
                             <a ng-href="{{c.location}}">{{c.name}}</a>

@@ -102,9 +102,13 @@
             }
         }
         $scope.validateForm = function () {
-            var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
-
-            return ($scope.optionsRouteType.lastselectedvalue.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+            if ($scope.issaving == true) {
+                return true;
+            }
+            else {
+                var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
+                return ($scope.optionsRouteType.lastselectedvalue.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+            }
         }
 
         $scope.update = function (val, model) {
@@ -127,6 +131,7 @@
             }
         }
         $scope.saveRule = function () {
+            $scope.issaving = true;
             var routeRule = {
                     CodeSet: $scope.subViewConnector.getCodeSet(),
                     CarrierAccountSet: $scope.subViewConnector.getCarrierAccountSet(),
@@ -137,9 +142,10 @@
                     Reason: $scope.Reason
             };
             RoutingService.saveRouteRule(routeRule)
-            .then(function (response) {             
+            .then(function (response) {
+                $scope.issaving = false;
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
-                $location.path("/RouteRuleManager").replace();
+               // $location.path("/RouteRuleManager").replace();
             })
 
         }
@@ -151,14 +157,7 @@
     }
     function load() {
             
-        $('.dropdown').on('show.bs.dropdown', function (e) {
-            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-        });
-
-        $('.dropdown').on('hide.bs.dropdown', function (e) {
-            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-        });
-
+       
         var dropdownHidingTimeoutHandler;
 
         $('.dropdown-custom').on('mouseenter', function () {

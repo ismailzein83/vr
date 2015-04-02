@@ -24,6 +24,7 @@ namespace TOne.Web.Controllers
         [HttpPost]
         public void SaveRouteRule(RouteRule rule)
         {
+            System.Threading.Thread.Sleep(2000);
             RouteRuleManager manager = new RouteRuleManager();
             manager.SaveRouteRule(rule);
 

@@ -1,5 +1,5 @@
 ﻿appControllers.controller('SeniorManagementDashboardController',
-    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum) {
+    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum, $animate) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -53,7 +53,8 @@
                         var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
                         $scope.fromDate = selectedDateTimeFilter.fromDate;
                         $scope.toDate = selectedDateTimeFilter.toDate;
-                       var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true });
+                        var addModal = $modal({  scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-slide-top" });
+                       // $animate.enabled(true);
                       //  addModal.$promise.then(addModal.show);
                         //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
                     //});
@@ -79,6 +80,7 @@
         }
 
         function load() {
+           
             $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
             $scope.dateTimeFilterOption.lastselectedvalue = $scope.dateTimeFilterOption.datasource[0];
             $scope.optionTopCounts.lastselectedvalue = $scope.optionTopCounts.datasource[1];

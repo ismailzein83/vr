@@ -436,6 +436,7 @@
     <Content Include="Client\Modules\BI\Views\Reports\ZoneSummary.html" />
     <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitor.html" />
     <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitorController.js" />
+    <Content Include="Client\Styles\angular-motion.css" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
