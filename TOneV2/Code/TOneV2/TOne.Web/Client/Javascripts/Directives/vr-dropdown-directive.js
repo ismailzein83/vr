@@ -169,7 +169,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', 'ValidationSer
                     $scope.isvalidcomp = function () {
 
                         if (ctrl.validationoptions == undefined) {
-                            ctrl.validationoptions.isvalid = true;
                             return '';
                         }
 
