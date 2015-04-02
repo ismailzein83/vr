@@ -1,6 +1,13 @@
 ﻿body {
 }
-
+.datepicker-custom button{
+    border:0px !important;
+}
+.vr-nav-custom{
+    min-height:40px !important;
+    border-color:transparent !important;
+    background-color:#666 !important;
+}
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
     transition: none !important;
