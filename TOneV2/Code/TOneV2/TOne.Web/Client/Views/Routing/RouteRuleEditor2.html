@@ -41,7 +41,7 @@
                     <label class="control-label" style="padding-top:6px">End Effective Date:</label>
                 </div>
                 <div class="col-lg-2  style-col">
-                    <div style="display:inline-block;position:relative;" ng-mouseenter="showtde=true" ng-mouseleave="showtde=false">
+                    <div style="display: inline-block; position: relative; width: 100%" ng-mouseenter="showtde=true" ng-mouseleave="showtde=false">
                         <input size="10" ng-class="isvalidcompDateEED()" class="form-control" data-min-date="{{BEDDate}}" ng-model="EEDDate" data-autoclose="1" placeholder="Date" data-date-format="dd/MM/yyyy" bs-datepicker type="text">
                         <div class="tooltip-error" ng-show="initErrortooltipEED()">{{msged}}</div>
                     </div>
