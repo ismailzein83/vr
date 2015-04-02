@@ -63,16 +63,18 @@
 
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
+                chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
+
+                    $scope.selectedEntityId = selectedEntity.GroupKeyValues[0].Id;
+                    $scope.selectedEntityName = selectedEntity.GroupKeyValues[0].Name;
+                    console.log($scope.selectedEntityName);
+                    getAndShowEntityStatistics();
+                };
             };
 
             $scope.chartSelectedEntityReady = function (api) {
                 chartSelectedEntityAPI = api;
-                chartSelectedEntityAPI.onDataItemClicked = function (selectedEntity) {
-
-                    $scope.selectedEntityId = selectedEntity.GroupKeyValues[0].Id;
-                    $scope.selectedEntityName = selectedEntity.GroupKeyValues[0].Name;
-                    getAndShowEntityStatistics();
-                };
+                
             };
 
             $scope.getData = function () {
@@ -190,7 +192,34 @@
         }
 
         function getAndShowEntityStatistics() {
+           
+            chartSelectedEntityAPI.showLoader();
+            AnalyticsAPIService.GetTrafficStatistics(4, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
+            .then(function (response) {
+                var chartData = response;
 
+                var chartDefinition = {
+                    type: "spline",
+                    title: $scope.selectedEntityName
+                };
+                var xAxisDefinition = {
+                    titlePath: "FirstCDRAttempt",
+                    isDate: true
+                };
+                var seriesDefinitions = [];
+                for (var i = 0; i < measures.length; i++) {
+                    var measure = measures[i];
+                    seriesDefinitions.push({
+                        title: measure.description,
+                        valuePath: measure.description
+                    });
+                }
+
+                chartSelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+            })
+            .finally(function () {
+                chartSelectedEntityAPI.hideLoader();
+            });;
         }
 
         function loadMeasureTypes() {

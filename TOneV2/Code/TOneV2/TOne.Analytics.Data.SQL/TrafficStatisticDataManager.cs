@@ -52,7 +52,7 @@ namespace TOne.Analytics.Data.SQL
 
 			                FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
 			                WHERE {0} AND  ts.FirstCDRAttempt BETWEEN @FromDate AND @ToDate
-			                GROUP BY ts.FirstCDRAttempt ", GetColumnFilter(filterByColumn, columnFilterValue));
+			                ORDER BY ts.FirstCDRAttempt ", GetColumnFilter(filterByColumn, columnFilterValue));
             return GetItemsText(query, TrafficStatisticMapper,
                 (cmd) =>
                 {
