@@ -145,7 +145,7 @@
             .then(function (response) {
                 $scope.issaving = false;
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
-               // $location.path("/RouteRuleManager").replace();
+                $location.path("/RouteRuleManager").replace();
             })
 
         }

@@ -8,6 +8,15 @@
     border-color:transparent !important;
     background-color:#666 !important;
 }
+/*bootstrap overide */
+.form-control {   
+    height: 29px !important;
+}
+.btn{
+    height: 29px !important;
+    padding: 4px 12px !important;
+} 
+/* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
     transition: none !important;
