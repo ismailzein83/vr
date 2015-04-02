@@ -430,12 +430,15 @@ input.ui-grid-filter-input[type="text"] {
   border: 0px ;
    
 }
+#custom .ui-grid-header {
+    border-bottom: 0px solid #D4D4D4;
+}
 #custom .ui-grid-header-cell {
      border: 0px ;
 }
 #custom .ui-grid-header-canvas {
     background-color: #fff;
-    border-bottom: 1px solid #798992;
+    border-bottom: 0px solid #798992;
 }
 #custom .ui-grid-header-cell {
     font-size  : 12px;
