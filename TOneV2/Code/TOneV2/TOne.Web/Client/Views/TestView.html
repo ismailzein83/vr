@@ -31,9 +31,8 @@
 
     <div class="row">
         <div class="col-lg-2">
-            
             <vr-dropdown type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone" validationoptions="testviewCtrl.validationoptions1"></vr-dropdown>
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" ></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span >Selected Values : </span>
@@ -45,7 +44,8 @@
         </div>
 
         <div class="col-lg-2">
-            <vr-dropdown options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID" entityname="Supplier" validationoptions="testviewCtrl.validationoptions2"></vr-dropdown>
+            <vr-dropdown options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"
+                         entityname="Supplier"  customvalidate="testviewCtrl.customvalidate" isrequired="true"></vr-dropdown>
         </div>
         <div class="col-lg-2">
             <span> Selected Customer Value : </span>

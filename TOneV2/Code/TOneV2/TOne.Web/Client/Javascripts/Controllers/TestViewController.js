@@ -7,8 +7,6 @@ var TestViewController = function (CarriersService, ZonesService) {
     loadZone();
     loadCarriers();
 
-    
-
     ctrl.selectedRoutes = function (items, item, data) {
 
     }
@@ -17,15 +15,6 @@ var TestViewController = function (CarriersService, ZonesService) {
         return ZonesService.getSalesZones(text);
     }
 
-    ctrl.validateForm = function () {
-        for (var i = 0 ; i < ctrl.validationGroup.length ; i++) {
-            if (! ctrl.validationGroup[i].isvalid)
-                return true;
-        }
-
-        return false;
-    }
-    
     function load() {
         ctrl.model = 'Test View model';
         ctrl.Input = '123';
@@ -43,25 +32,19 @@ var TestViewController = function (CarriersService, ZonesService) {
         };
 
         ctrl.validationoptions1 = {
-            required: true,
-            isvalid : true
         };
 
-        ctrl.validationoptions2 = {
-            required: true,
-            isvalid: true,
-            customvalidate: function (items, item) {
-                if (item == undefined) return false;
-                if (item.Name == 'TEST') return true;
-                else return false;
-            }
-        };
+        ctrl.customvalidate = function (api) {
+            if (api == undefined || api.lastselectedvalue == undefined) return false;
+                
+            if (api.lastselectedvalue.Name == 'TEST') return true;
+            return false;
+        }
 
         ctrl.validationGroup = [];
         ctrl.validationGroup.push(ctrl.validationoptions1);
         ctrl.validationGroup.push(ctrl.validationoptions2);
 
-        
         ctrl.optionsZone = {
             selectedvalues: [],
             datasource: [],

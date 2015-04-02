@@ -30,7 +30,6 @@ app.directive('vrValidation', ['ValidationService', 'BaseDirService', function (
                             validationElement.toggleClass('required-inpute');
                     });
 
-
                     //options.$parsers.unshift(function (value) {
                     //    console.log(value);
                     //    //var valid = value ? value.indexOf('dogs') == -1 : true;
