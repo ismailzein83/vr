@@ -43,6 +43,77 @@
 
     }
     function defineScopeMethods() {
+        $scope.issaving = false;
+        $scope.findExsite = function (arr, value, attname) {
+            var index = -1;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i][attname] == value) {
+                    index = i
+                }
+            }
+            return index;
+        }
+        $scope.findExsiteObj = function (arr, value, attname) {
+            var obj = null;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i][attname] == value) {
+                    obj = arr[i];
+                }
+            }
+            return obj;
+        }
+        var numberReg = /^\d+$/;
+        $scope.isNumber = function (s) {
+            return String(s).search(numberReg) != -1
+        };
+        $scope.dateToString = function (date) {
+            var dateString = '';
+            if (date) {
+
+                var day = "" + (parseInt(date.getDate()));
+                if (day.length == 1)
+                    dateString += "0" + day;
+                else
+                    dateString += day;
+                var month = "" + (parseInt(date.getMonth()) + 1);
+                if (month.length == 1)
+                    dateString += "/0" + month;
+                else
+                    dateString += "/" + month;
+                dateString += "/" + date.getFullYear();
+            }
+            return dateString;
+        }
+        var dateReg = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/((199\d)|([2-9]\d{3}))$/;
+        $scope.isDate = function (s) {
+            var d = "";
+            if (s && (s instanceof Date)) {
+                var d = $scope.dateToString(s);
+            }
+            else d = s;
+            var res = String(d).search(dateReg) != -1;
+            return res;
+        }
+        $scope.testDate = function (s) {
+            var res;
+            var d = "";
+            if (s == '' || s == null) {
+                return 0
+            }
+            else if (s != '' || s == undefined) {
+                if (s && (s instanceof Date)) {
+                    var d = $scope.dateToString(s);
+                }
+                else d = s;
+                var test = String(d).search(dateReg) != -1;
+                if (test)
+                    return 1;
+                else
+                    return 2
+            }
+        }
+
+
         $scope.muteAction = function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -103,6 +174,7 @@
         }
         $scope.validateForm = function () {
             if ($scope.issaving == true) {
+              
                 return true;
             }
             else {
@@ -145,7 +217,7 @@
             .then(function (response) {
                 $scope.issaving = false;
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
-                $location.path("/RouteRuleManager").replace();
+                $scope.$hide();
             })
 
         }
@@ -176,10 +248,10 @@
                 }
             }, 150);
         });
+        //alert($scope.RouteRuleId)
+        if ($scope.RouteRuleId != 'undefined') {
 
-        if ($routeParams.RouteRuleId != 'undefined') {
-
-            RoutingService.getRouteRuleDetails($routeParams.RouteRuleId)
+            RoutingService.getRouteRuleDetails($scope.RouteRuleId)
            .then(function (response) {
                $scope.routeRule = response;
                $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0];

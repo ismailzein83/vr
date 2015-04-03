@@ -56,7 +56,12 @@
     }
     function defineScopeMethods() {
         $scope.onDblClick = function (row) {
-            $location.path("/RouteRuleEditor2/" + row.entity.RouteRuleId).replace();
+            //$location.path("/RouteRuleEditor2/" +).replace();
+            var scopeDetails = $scope.$root.$new();
+            scopeDetails.title = "Update";
+            scopeDetails.RouteRuleId = row.entity.RouteRuleId;
+            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor2.html', show: true, animation: "am-fade-and-scale" });
+            
 
         }
         var getData = function (data, page) {
@@ -109,7 +114,11 @@
 
         };
         $scope.AddNewRoute = function () {
-            $location.path("/RouteRuleEditor2/undefined").replace();
+
+            var scopeDetails = $scope.$root.$new();
+            scopeDetails.title = "New";
+            scopeDetails.RouteRuleId = 'undefined';
+            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor2.html', show: true, animation: "am-fade-and-scale" });
            // addModal.$promise.then(addModal.show);
 
         }

@@ -10,15 +10,18 @@
 }
 /*bootstrap overide */
 .form-control {   
-    height: 29px !important;
+    height: 29px ;
 }
 textarea.form-control {   
-    height: auto !important;
+    height: auto ;
 }
 .btn{
     height: 29px !important;
     padding: 4px 12px !important;
 } 
+.modal-x-lg {
+    width: 97%;
+}
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
@@ -136,6 +139,13 @@ Use this for keyframe animations
  add padding  
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
+
+.right-addon .glyphicon{
+    position:absolute;
+    top: 7px;
+    right: 5px;
+}
+}
 .item-menu{
     padding: 2px 5px;
     margin:0px;
