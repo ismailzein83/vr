@@ -24,6 +24,9 @@
         appScopeProvider: {
             onDblClick: function (row) {
                 $location.path("/ListTracking/" + row.entity.ProcessInstanceID).replace();
+            },
+            onDblClick: function (row) {
+                $location.path("/ListTracking/" + row.entity.ProcessInstanceID).replace();
             }
         },
         rowTemplate: '<div ng-dblclick=\"grid.appScope.onDblClick(row)\"   ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell hand" ui-grid-cell></div>'
@@ -53,7 +56,7 @@
                 }
             })
         .success(function (response) {
-            $scope.isloadingdata = false;
+           // $scope.isloadingdata = false;
             $scope.myData = response;
             $scope.last = (response.length < 10) ? false : true;
           

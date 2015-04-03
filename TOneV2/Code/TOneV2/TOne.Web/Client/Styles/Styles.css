@@ -12,6 +12,9 @@
 .form-control {   
     height: 29px !important;
 }
+textarea.form-control {   
+    height: auto !important;
+}
 .btn{
     height: 29px !important;
     padding: 4px 12px !important;
@@ -658,6 +661,28 @@ input.ui-grid-filter-input[type="text"] {
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     border-left: 4px solid;
+}
+.caret-up {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-right: 4px solid transparent;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid ;
+    border-left: 4px solid transparent;
+}
+.caret-down {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-right: 4px solid transparent;
+    border-top: 4px solid ;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid transparent;
 }
 .titel-groupe{
     font-size:15px;

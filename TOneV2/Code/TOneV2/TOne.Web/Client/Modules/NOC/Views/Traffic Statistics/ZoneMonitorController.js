@@ -8,6 +8,7 @@
         var sortColumn;
         var sortDescending = true;
         var measures;
+        var currentSortedColDef;
 
         defineScopeObjects();
         defineScopeMethods();
@@ -30,7 +31,7 @@
             $scope.gridOptionsAllMeasures.onRegisterApi = function (gridApi) {
               
                 gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                    
+                   
                     if (sortColumns.length > 0) {
                         var measure = $.grep(measures, function (m, index) {
                             // num = the current value for the item in the array
@@ -38,6 +39,8 @@
                             return m.description == sortColumns[0].field; // returns a boolean
                         })[0]; 
                         sortColumn = measure;
+                       
+                        console.log(sortColumns[0].sort.direction);
                         switch (sortColumns[0].sort.direction) {
                             case uiGridConstants.ASC:
                                 sortDescending = false;
@@ -49,6 +52,10 @@
                                 sortDescending = false;
                                 break;
                         }
+                        if (currentSortedColDef != undefined)
+                            currentSortedColDef.currentSorting = undefined;
+                        currentSortedColDef = sortColumns[0].colDef;
+                        
                     }
                     getData();
                 });
@@ -76,7 +83,10 @@
                 chartSelectedEntityAPI = api;
                 
             };
-
+            $scope.toggleHeader = function (e) {
+               alert("in")
+                // console.log(e);
+            };
             $scope.getData = function () {
                 $scope.currentPage = 1;
                 resultKey = '';
@@ -111,6 +121,8 @@
             loadMeasureTypes();
         }
 
+        var gridColumnsByMeasure = [];
+
         function defineGrid()
         {
             gridOption = $scope.gridOptionsAllMeasures;
@@ -131,7 +143,7 @@
                 field: 'GroupKeyValues[0].Name'
             };
             gridOption.columnDefs.push(zoneColumn);
-
+            $scope.globalda = { test: 'ff' };
             var valColumnIndex = 0;
             angular.forEach(measures, function (measureType) {
                 var colDef = {
@@ -142,10 +154,17 @@
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 1
-                    }
+                    },
+                    testData: measureType.value
                    // cellFilter: "number:2"
                 };
                 gridOption.columnDefs.push(colDef);
+                gridColumnsByMeasure.push(
+                    {
+                        measure: measureType.value,
+                        colDef: colDef
+                    }
+                );
             });
         }
         
@@ -164,6 +183,9 @@
             var fromRow = ($scope.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;
             AnalyticsAPIService.GetTrafficStatisticSummary(resultKey, [4], $scope.fromDate, $scope.toDate, fromRow, toRow, sortColumn.value, sortDescending).then(function (response) {
+
+                if (currentSortedColDef != undefined)
+                    currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
 
                 resultKey = response.ResultKey;
                 $scope.totalDataCount = response.TotalCount;
