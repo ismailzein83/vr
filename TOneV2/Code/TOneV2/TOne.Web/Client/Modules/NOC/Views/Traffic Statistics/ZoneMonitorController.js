@@ -155,6 +155,9 @@
             $scope.showResult = true;
             $scope.gridOptionsAllMeasures.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
+            if (chartSelectedEntityAPI)
+                chartSelectedEntityAPI.hideChart();
+
             var count = $scope.optionsTopCount.lastselectedvalue.value;
             
            
@@ -204,7 +207,7 @@
                 };
                 var xAxisDefinition = {
                     titlePath: "FirstCDRAttempt",
-                    isDate: true
+                    isDateTime: true
                 };
                 var seriesDefinitions = [];
                 for (var i = 0; i < measures.length; i++) {
