@@ -14,7 +14,9 @@ namespace TOne.LCRProcess.Activities
         public bool IsFuture { get; set; }
         public DateTime EffectiveOn { get; set; }
         public string CodePrefix { get; set; }
-        public HashSet<Int32> ZoneIds { get; set; }
+        public HashSet<Int32> CustomerZoneIds { get; set; }
+
+        public HashSet<Int32> SupplierZoneIds { get; set; }
 
     }
 
@@ -35,7 +37,10 @@ namespace TOne.LCRProcess.Activities
         public InArgument<string> CodePrefix { get; set; }
 
         [RequiredArgument]
-        public InArgument<HashSet<int>> ZoneIds { get; set; }
+        public InArgument<HashSet<int>> CustomerZoneIds { get; set; }
+
+        [RequiredArgument]
+        public InArgument<HashSet<int>> SupplierZoneIds { get; set; }
 
         public OutArgument<List<RouteRule>> RouteRules { get; set; }
 
@@ -46,14 +51,15 @@ namespace TOne.LCRProcess.Activities
                 CodePrefix = this.CodePrefix.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                ZoneIds = this.ZoneIds.Get(context)
+                CustomerZoneIds = this.CustomerZoneIds.Get(context),
+                SupplierZoneIds = this.SupplierZoneIds.Get(context)
             };
         }
 
         protected override GetRouteRulesOutput DoWorkWithResult(GetRouteRulesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
-            List<RouteRule> routeRules = dataManager.GetRouteRules(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.CodePrefix, inputArgument.ZoneIds);
+            List<RouteRule> routeRules = dataManager.GetRouteRules(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.CodePrefix, inputArgument.CustomerZoneIds, inputArgument.SupplierZoneIds);
             return new GetRouteRulesOutput()
             {
                 RouteRules = routeRules

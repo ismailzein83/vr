@@ -8,7 +8,7 @@ using TOne.LCR.Entities;
 namespace TOne.LCR.Business
 {
     public class RouteRuleManager
-    {        
+    {
         public ActionExecutionPath<BaseRouteAction> GetRouteActionExecutionPath()
         {
             return _routeActionExecutionPath;
@@ -23,6 +23,7 @@ namespace TOne.LCR.Business
             //ActionExecutionStep<BaseRouteAction> buildLCRStep = new ActionExecutionStep<BaseRouteAction> { Action = new BuildLCRRouteAction() };
             ActionExecutionStep<BaseRouteAction> priorityStep = new ActionExecutionStep<BaseRouteAction> { Action = new PriorityRouteAction() };
             ActionExecutionStep<BaseRouteAction> getTopOptionsStep = new ActionExecutionStep<BaseRouteAction> { Action = new GetTopOptionsRouteAction() };
+            ActionExecutionStep<BaseRouteAction> blockSupplierStep = new ActionExecutionStep<BaseRouteAction> { Action = new BlockSuppliersRouteAction() };
             ActionExecutionStep<BaseRouteAction> checkNoOptionsStep = new ActionExecutionStep<BaseRouteAction> { Action = new CheckNoOptionsRouteAction() };
             ActionExecutionStep<BaseRouteAction> applyPercentageStep = new ActionExecutionStep<BaseRouteAction> { Action = new ApplyPercentageRouteAction() };
 
@@ -30,7 +31,8 @@ namespace TOne.LCR.Business
             blockStep.NextStep = overrideStep;
             overrideStep.NextStep = priorityStep;
             priorityStep.NextStep = getTopOptionsStep;
-            getTopOptionsStep.NextStep = checkNoOptionsStep;
+            getTopOptionsStep.NextStep = blockSupplierStep;
+            blockSupplierStep.NextStep = checkNoOptionsStep;
             checkNoOptionsStep.NextStep = applyPercentageStep;
             return executionPath;
         }
@@ -65,7 +67,7 @@ namespace TOne.LCR.Business
             //ActionExecutionStep<BaseRouteOptionAction> checkRateStep = new ActionExecutionStep<BaseRouteOptionAction> { Action = new CheckRateOptionAtion(), IsEndAction = true };
             ActionExecutionStep<BaseRouteOptionAction> blockStep = new ActionExecutionStep<BaseRouteOptionAction> { Action = new BlockRouteOptionAction(), IsEndAction = true };
 
-            ActionExecutionPath<BaseRouteOptionAction> executionPath = new ActionExecutionPath<BaseRouteOptionAction> { FirstStep = blockStep};
+            ActionExecutionPath<BaseRouteOptionAction> executionPath = new ActionExecutionPath<BaseRouteOptionAction> { FirstStep = blockStep };
             //checkRateStep.NextStep = blockStep;
 
             return executionPath;

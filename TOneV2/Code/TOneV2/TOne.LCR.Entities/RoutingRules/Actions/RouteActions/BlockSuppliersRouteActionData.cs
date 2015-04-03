@@ -8,7 +8,7 @@ namespace TOne.LCR.Entities
 {
     public class BlockSuppliersRouteActionData
     {
-        public List<BlockSupplierOption> BlockedOptions { get; set; }
+        public HashSet<string> BlockedOptions { get; set; }
     }
 
     public class BlockSupplierOption

@@ -244,6 +244,11 @@
                 <mca:CSharpValue x:TypeArguments="x:String">CodePrefixGroup</mca:CSharpValue>
               </InArgument>
             </tla:GetRouteRules.CodePrefix>
+            <tla:GetRouteRules.CustomerZoneIds>
+              <InArgument x:TypeArguments="scg1:HashSet(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">saleZoneIds</mca:CSharpValue>
+              </InArgument>
+            </tla:GetRouteRules.CustomerZoneIds>
             <tla:GetRouteRules.EffectiveOn>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveTime</mca:CSharpValue>
@@ -259,11 +264,11 @@
                 <mca:CSharpReference x:TypeArguments="scg:List(tle:RouteRule)">routeRules</mca:CSharpReference>
               </OutArgument>
             </tla:GetRouteRules.RouteRules>
-            <tla:GetRouteRules.ZoneIds>
+            <tla:GetRouteRules.SupplierZoneIds>
               <InArgument x:TypeArguments="scg1:HashSet(x:Int32)">
-                <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">saleZoneIds</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="scg1:HashSet(x:Int32)">costZoneIds</mca:CSharpValue>
               </InArgument>
-            </tla:GetRouteRules.ZoneIds>
+            </tla:GetRouteRules.SupplierZoneIds>
           </tla:GetRouteRules>
         </Parallel>
         <tla:BuildRoutes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildRoutes_1">
@@ -307,7 +312,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbDNSA7cCDgIBAVYLVmsCAR5eC15XAgEQYwtjbQIBAmcFbSADAfwEbgWXARQDAYsEmAEFqAEgAwHgA6kBBa4CEAIBO68CBbUCIAIBLGoLapEBAwH9BHELcXADAe4Eewt7aQMB4AR2C3ZYAwHSBIABC4ABaAMBxASPAQuPAWkDAbYEhQELhQFYAwGoBJQBC5QBaQMBmgSKAQuKAVIDAYwEoAELoAFvAwH9A5sBC5sBWQMB7wOlAQulAWEDAeEDrQENrQFvAgE8tAEH3QEnAwHPAt4BB60CEgIBTrICC7ICtAECAS3aAQ3aAWkDAc4DtwENtwFiAwG8A9ABDdABdAMBqgPGAQ3GAYABAwGYA7wBDbwBWgMBhgPLAQ3LAZMBAwH0AtUBDdUBYwMB4gLBAQ3BAVQDAdAC3wEJjAIUAwG8AY0CCawCGwIBT+ABC/ABJgMBmALxAQuLAh8DAb0BqQIPqQJrAwGqAZ8CD58CbgMBmAGVAg+VAo0BAwGGAZoCD5oChQECAXSkAg+kAmYCAWKQAg+QAmsCAVDoARHoAV8DAb0C7QER7QFnAwGrAuMBEeMBdQMBmQL5ARH5AV4DAYYCiAIRiAJnAwH0AfQBEfQBXgMB4gGDAhGDAnADAdAB/gER/gFYAwG+AQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xTdWJQcm9jZXNzZXNcQnVpbGRMQ1JhbmRSb3V0ZXMueGFtbDRSA7wCDgIBAVYLVmsCAR5eC15XAgEQYwtjbQIBAmcFbSADAY4FbgWXARQDAZ0EmAEFqAEgAwHyA6kBBbMCEAIBO7QCBboCIAIBLGoLapEBAwGPBXELcXADAYAFewt7aQMB8gR2C3ZYAwHkBIABC4ABaAMB1gSPAQuPAWkDAcgEhQELhQFYAwG6BJQBC5QBaQMBrASKAQuKAVIDAZ4EoAELoAFvAwGPBJsBC5sBWQMBgQSlAQulAWEDAfMDrQENrQFvAgE8tAEH3QEnAwHhAt4BB7ICEgIBTrcCC7cCtAECAS3aAQ3aAWkDAeADtwENtwFiAwHOA9ABDdABdAMBvAPGAQ3GAYABAwGqA7wBDbwBWgMBmAPLAQ3LAZMBAwGGA9UBDdUBYwMB9ALBAQ3BAVQDAeIC3wEJkQIUAwG8AZICCbECGwIBT+ABC/ABJgMBqgLxAQuQAh8DAb0BrgIPrgJrAwGqAaQCD6QCbgMBmAGaAg+aAo0BAwGGAZ8CD58ChQECAXSpAg+pAmYCAWKVAg+VAmsCAVDoARHoAV8DAc8C7QER7QFnAwG9AuMBEeMBdQMBqwL5ARH5AWcDAZgC/gER/gFeAwGGAvQBEfQBXgMB9AGIAhGIAnADAeIBjQIRjQJnAwHQAYMCEYMCWAMBvgE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

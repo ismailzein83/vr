@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.LCR.Entities;
 
 namespace TOne.LCR.Business
-{    
+{
     public class RouteBuildContext : IRouteBuildContext, IDisposable
     {
         #region ctor/Local Variables
@@ -39,7 +39,7 @@ namespace TOne.LCR.Business
                 return _parentContext.RouteOptionsRules;
             }
         }
-        
+
         #endregion
 
         #region Private/Internal Methods
@@ -68,7 +68,7 @@ namespace TOne.LCR.Business
                 {
                     RouteRuleMatchFinder ruleFinder;
                     bool done = false;
-                    if (_parentContext.RouteRuleFindersByActionDataType != null 
+                    if (_parentContext.RouteRuleFindersByActionDataType != null
                         && _parentContext.RouteRuleFindersByActionDataType.TryGetValue(actionDataType, out ruleFinder))
                     {
                         ruleFinder.GoToStart();
@@ -85,7 +85,7 @@ namespace TOne.LCR.Business
                                     currentStep = nextStep;
                                 }
                             }
-                        }                        
+                        }
                     }
                     if (!done)
                         currentStep = currentStep.NextStep;
@@ -137,14 +137,10 @@ namespace TOne.LCR.Business
             CodeMatch supplierCodeMatch;
             if (_parentContext.CodeMatchesBySupplierId.TryGetValue(supplierId, out supplierCodeMatch))
             {
-                RateInfo rate;
-                if (_parentContext.SupplierRates.RatesByZoneId.TryGetValue(supplierCodeMatch.SupplierZoneId, out rate))
-                {
-                    routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, rate.Rate, rate.ServicesFlag);
-                    routeOption.Setting = new OptionSetting();
-                    routeOption.Setting.Percentage = percentage;
-                    return true;
-                }
+                routeOption = new RouteSupplierOption(supplierId, supplierCodeMatch.SupplierZoneId, supplierCodeMatch.SupplierRate.Rate, supplierCodeMatch.SupplierRate.ServicesFlag);
+                routeOption.Setting = new OptionSetting();
+                routeOption.Setting.Percentage = percentage;
+                return true;
             }
             routeOption = null;
             return false;
@@ -184,7 +180,7 @@ namespace TOne.LCR.Business
 
             RouteRuleManager ruleManager = new RouteRuleManager();
             var executionPath = ruleManager.GetRouteOptionActionExecutionPath();
-            
+
             int validOptions = 0;
             Queue<RouteSupplierOption> qInitialOptions = new Queue<RouteSupplierOption>();
             if (_route.Options != null && _route.Options.SupplierOptions != null)
@@ -217,7 +213,9 @@ namespace TOne.LCR.Business
                     if (!removeOption && (current.Setting == null || !current.Setting.IsBlocked))
                         validOptions++;
                     if (!removeOption)
+                    {
                         _route.Options.SupplierOptions.Add(current);
+                    }
                 }
             }
             while (validOptions < maxOptions);

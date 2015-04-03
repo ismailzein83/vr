@@ -15,13 +15,14 @@ namespace TOne.LCR.Data.SQL
 {
     public class RouteRulesDataManager : BaseTOneDataManager, IRouteRulesDataManager
     {
-        public List<RouteRule> GetRouteRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
+        public List<RouteRule> GetRouteRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstCustomerZoneIds, IEnumerable<int> lstSupplierZonesIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
-            routeRules.AddRange(GetBlockRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
-            routeRules.AddRange(GetOverrideRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
-            routeRules.AddRange(GetPriorityRules(effectiveOn, isFuture, codePrefix, lstZoneIds));
-
+            routeRules.AddRange(GetBlockRules(effectiveOn, isFuture, codePrefix, lstCustomerZoneIds));
+            routeRules.AddRange(GetOverrideRules(effectiveOn, isFuture, codePrefix, lstCustomerZoneIds));
+            routeRules.AddRange(GetPriorityRules(effectiveOn, isFuture, codePrefix, lstCustomerZoneIds));
+            routeRules.AddRange(GetBlockOptionRules(effectiveOn, isFuture, codePrefix, lstSupplierZonesIds));
+            routeRules.AddRange(GetSuppliersRouteRules(effectiveOn, isFuture, codePrefix, lstCustomerZoneIds));
             return routeRules;
         }
 
@@ -67,6 +68,98 @@ namespace TOne.LCR.Data.SQL
                 );
             return routeRules;
         }
+
+        private List<RouteRule> GetBlockOptionRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
+        {
+            List<RouteRule> routeRules = new List<RouteRule>();
+            DataTable dtZoneIds = BuildZoneIdsTable(lstZoneIds);
+
+            ExecuteReaderSPCmd("[LCR].[sp_RoutingRules_GetOptionBlockRules]",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = new RouteRule();
+                        string customerID = reader["CustomerID"] as string;
+                        string code = reader["Code"] as string;
+                        int zoneID = reader["ZoneID"] != DBNull.Value ? Convert.ToInt32(reader["ZoneID"]) : 0;
+                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+                        string excludedCodes = reader["ExcludedCodes"] as string;
+                        string supplierID = reader["SupplierID"] as string;
+                        rule.CarrierAccountSet = new SupplierSelectionSet() { SupplierId = supplierID };
+                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+                        rule.Reason = reader["Reason"] as string;
+                        rule.Type = RouteRuleType.RouteOptionRule;
+                        rule.ActionData = GetBlockRouteOptionActionData(customerID);
+
+                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+
+                        routeRules.Add(rule);
+                    }
+                },
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneIds", SqlDbType.Structured);
+                    dtPrm.TypeName = "LCR.IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                }
+                );
+            return routeRules;
+        }
+
+        private List<RouteRule> GetSuppliersRouteRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
+        {
+            List<RouteRule> routeRules = new List<RouteRule>();
+
+            DataTable dtZoneIds = BuildZoneIdsTable(lstZoneIds);
+
+            ExecuteReaderSPCmd("[LCR].[sp_RoutingRules_GetBlockSupplierRouteRules]",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = new RouteRule();
+                        string customerID = reader["CustomerID"] as string;
+                        string code = reader["Code"] as string;
+                        int zoneID = GetReaderValue<int>(reader, "ZoneID");
+                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+                        string blockedSuppliers = reader["BlockedSuppliers"] as string;
+                        string excludedCodes = reader["ExcludedCodes"] as string;
+                        MultipleSelection<string> customers = new MultipleSelection<string>();
+                        customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+                        customers.SelectedValues = new List<string>();
+                        customers.SelectedValues.Add(customerID);
+                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+                        rule.Reason = reader["Reason"] as string;
+                        rule.Type = RouteRuleType.RouteRule;
+                        rule.ActionData = GetBlockSuppliersRouteActionData(blockedSuppliers);
+
+                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+
+                        routeRules.Add(rule);
+                    }
+                },
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneIds", SqlDbType.Structured);
+                    dtPrm.TypeName = "LCR.IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                }
+                );
+            return routeRules;
+        }
+
         public void SaveRouteRule(RouteRule rule)
         {
             object RouteRuleId;
@@ -79,6 +172,31 @@ namespace TOne.LCR.Data.SQL
                 rule.Reason,
                 rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
                 );
+        }
+
+        private BlockRouteOptionActionData GetBlockRouteOptionActionData(string customerID)
+        {
+            BlockRouteOptionActionData actionData = new BlockRouteOptionActionData();
+            actionData.Customers = new MultipleSelection<string>();
+            MultipleSelection<string> customers = new MultipleSelection<string>();
+            if (string.IsNullOrEmpty(customerID))
+                actionData.Customers.SelectionOption = MultipleSelectionOption.AllExceptItems;
+            else
+            {
+                actionData.Customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+                actionData.Customers.SelectedValues = new List<string>();
+                actionData.Customers.SelectedValues.Add(customerID);
+            }
+            return actionData;
+        }
+
+        private BlockSuppliersRouteActionData GetBlockSuppliersRouteActionData(string options)
+        {
+            BlockSuppliersRouteActionData actionData = new BlockSuppliersRouteActionData();
+            MultipleSelection<string> suppliers = new MultipleSelection<string>();
+            IEnumerable<string> supplierIds = options.Split('|').Where(s => !string.IsNullOrEmpty(s));
+            actionData.BlockedOptions = new HashSet<string>(supplierIds);
+            return actionData;
         }
 
         public List<RouteRule> GetAllRouteRule()

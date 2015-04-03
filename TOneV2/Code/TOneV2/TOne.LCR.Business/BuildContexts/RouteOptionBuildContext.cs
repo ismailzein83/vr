@@ -13,7 +13,7 @@ namespace TOne.LCR.Business
 
         RouteSupplierOption _routeOption;
         RouteBuildContext _parentContext;
-        bool _removeBlockedOptions = true;
+        bool _removeBlockedOptions = false;
 
         internal RouteOptionBuildContext(RouteSupplierOption routeOption, RouteBuildContext parentContext)
         {
@@ -49,8 +49,8 @@ namespace TOne.LCR.Business
         {
             removeOption = false;
             ActionExecutionStep<BaseRouteOptionAction> currentStep = executionPath.FirstStep;
-            while(currentStep != null)
-            {               
+            while (currentStep != null)
+            {
 
                 Type actionDataType = currentStep.Action.GetActionDataType();
                 if (actionDataType == null)
@@ -80,11 +80,12 @@ namespace TOne.LCR.Business
                             {
                                 RouteOptionActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData);
                                 ActionExecutionStep<BaseRouteOptionAction> nextStep;
-                                if (CheckActionResult(actionResult,  executionPath, currentStep, out nextStep, out removeOption))
+                                if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out removeOption))
                                 {
                                     done = true;
                                     currentStep = nextStep;
                                 }
+
                             }
                         }
                     }
@@ -92,6 +93,9 @@ namespace TOne.LCR.Business
                         currentStep = currentStep.NextStep;
                 }
             }
+
+            if (_routeOption.Setting != null && _routeOption.Setting.IsBlocked && _removeBlockedOptions)
+                removeOption = true;
         }
 
         private bool CheckActionResult(RouteOptionActionResult actionResult, ActionExecutionPath<BaseRouteOptionAction> executionPath,
@@ -110,8 +114,7 @@ namespace TOne.LCR.Business
                 {
                     if (actionResult.BlockOption || actionResult.RemoveOption)
                     {
-                        if (actionResult.RemoveOption
-                                || (actionResult.BlockOption && _removeBlockedOptions))
+                        if (actionResult.RemoveOption)
                             removeOption = true;
                         else if (actionResult.BlockOption)
                         {
