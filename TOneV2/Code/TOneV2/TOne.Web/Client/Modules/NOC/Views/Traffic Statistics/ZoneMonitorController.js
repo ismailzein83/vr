@@ -1,4 +1,6 @@
-﻿appControllers.controller('ZoneMonitorController',
+﻿/// <reference path="ZoneMonitorSettings.html" />
+/// <reference path="ZoneMonitor.html" />
+appControllers.controller('ZoneMonitorController',
     function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants) {
 
 
@@ -27,6 +29,7 @@
             
             $scope.gridOptionsAllMeasures = {};
             $scope.gridOptionsAllMeasures.useExternalSorting = true;
+            $scope.gridOptionsAllMeasures.enableGridMenu = true;
             $scope.gridOptionsAllMeasures.data = [];
             $scope.gridOptionsAllMeasures.onRegisterApi = function (gridApi) {
               
@@ -59,6 +62,7 @@
                     }
                     getData();
                 });
+
             };
 
             $scope.totalDataCount = 0;
@@ -112,8 +116,7 @@
                 return {
                     height: height + "px"
                 };
-            };
-        }
+            };        }
 
         function load() {
             $scope.fromDate = '2014-04-27';
@@ -121,7 +124,7 @@
             loadMeasureTypes();
         }
 
-        var gridColumnsByMeasure = [];
+
 
         function defineGrid()
         {
@@ -140,10 +143,10 @@
                 name: 'Zone',
                 headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
                 enableColumnMenu: false,
+                enableHiding: false,
                 field: 'GroupKeyValues[0].Name'
             };
             gridOption.columnDefs.push(zoneColumn);
-            $scope.globalda = { test: 'ff' };
             var valColumnIndex = 0;
             angular.forEach(measures, function (measureType) {
                 var colDef = {
@@ -154,17 +157,10 @@
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 1
-                    },
-                    testData: measureType.value
+                    }
                    // cellFilter: "number:2"
                 };
                 gridOption.columnDefs.push(colDef);
-                gridColumnsByMeasure.push(
-                    {
-                        measure: measureType.value,
-                        colDef: colDef
-                    }
-                );
             });
         }
         
@@ -199,8 +195,7 @@
                 var chartDefinition = {
                     type: "pie",
                     title: sortColumn.description,
-                    yAxisTitle: "Value",
-                    showLegendsWithValues: $scope.showValuesOnLegends
+                    yAxisTitle: "Value"
                 };
 
                 var seriesDefinitions = [{

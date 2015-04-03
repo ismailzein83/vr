@@ -522,6 +522,7 @@
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
     <Content Include="Client\Styles\waves.css" />
+    <Content Include="Client\Templates\Directives\vr-chart-settings.html" />
     <Content Include="Client\Templates\Directives\vr-chart.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />

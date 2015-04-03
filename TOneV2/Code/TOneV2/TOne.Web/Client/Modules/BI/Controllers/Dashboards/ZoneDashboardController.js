@@ -86,7 +86,6 @@
 
             if (chartZoneReadyAPI)
                 chartZoneReadyAPI.hideChart();
-            $scope.isZoneVisible = false;
 
             $scope.otherMeasuresDescriptions.length = 0;
             var measures = [];
@@ -106,8 +105,7 @@
                 var chartDefinition = {
                     type: "pie",
                     title: "TOP DESTINATIONS",
-                    yAxisTitle: "Value",
-                    showLegendsWithValues: $scope.showValuesOnLegends
+                    yAxisTitle: "Value"
                 };
 
                 var seriesDefinitions = [{
@@ -161,7 +159,6 @@
                 }
 
                 chartZoneReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-                $scope.isZoneVisible = true;
             })
             .finally(function () {
                 chartZoneReadyAPI.hideLoader();

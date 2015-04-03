@@ -36,8 +36,8 @@ namespace TOne.Analytics.Entities
 
     public enum TrafficStatisticMeasures
     {
-        FirstCDRAttempt = 0,
-        LastCDRAttempt = 1,
+        //FirstCDRAttempt = 0,
+        //LastCDRAttempt = 1,
         Attempts = 2,
         DeliveredAttempts = 3,
         SuccessfulAttempts = 4,

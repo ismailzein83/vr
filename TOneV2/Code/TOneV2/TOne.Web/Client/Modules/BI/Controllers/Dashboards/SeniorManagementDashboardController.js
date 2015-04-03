@@ -53,7 +53,7 @@
                         var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
                         $scope.fromDate = selectedDateTimeFilter.fromDate;
                         $scope.toDate = selectedDateTimeFilter.toDate;
-                        var addModal = $modal({  scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-slide-top" });
+                        var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-fade-and-scale" });
                        // $animate.enabled(true);
                       //  addModal.$promise.then(addModal.show);
                         //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
@@ -132,8 +132,7 @@
                     var chartDefinition = {
                         type: "pie",
                         title: chartSettings.chartTitle,
-                        yAxisTitle: "Value",
-                        showLegendsWithValues: $scope.showLegendsWithValues
+                        yAxisTitle: "Value"
                     };
 
                     var seriesDefinitions = [{

@@ -1,4 +1,6 @@
 ﻿<div ng-show="isLoading" style="z-index: 100; position: absolute; color: gray; font-size: 16px; height: 350px;">
     <img src="~/../images/loader-mask.gif"  />
 </div>
+
+<div ng-show="isSettingsVisible()" style="z-index: 90; position: relative; "><div style="position: absolute; bottom: -32px;right:35px;cursor:pointer"><span class="glyphicon  glyphicon-cog" ng-click="changeSettings()"></span></div></div>
 <div id="divChart" style="height:350px" />

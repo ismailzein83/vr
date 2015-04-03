@@ -29,14 +29,6 @@
                     <vr-dropdown datatextfield="name" datavaluefield="value"
                                  entityname="" type="standard" options="optionsTopCount" onselectionchange="filterChanged"></vr-dropdown>
                 </div>
-
-                <div class="col-lg-2 style-col">
-                    <div class="control-label">&nbsp;</div>
-                    <label class="control-label" style="padding-top:6px">
-                        <input type="checkbox" ng-model="showValuesOnLegends" ng-change="filterChanged()" />
-                        Show Values with Legends
-                    </label>                    
-                </div>
             </div>
 
             <div class="row style-row">
@@ -45,15 +37,6 @@
                     </div>
                     <div class="col-lg-5 style-col">
                         <vr-chart data-on-ready="chartZoneReady" style="display:inline-block"></vr-chart>
-                    </div>
-                    <div ng-show="isZoneVisible">
-                        <div ng-repeat="itm in optionsMeasureTypes.datasource">
-                            <label class="control-label" style="padding-top:6px">
-                                <input type="checkbox" ng-model="itm.selected" ng-change="updateZone()" />
-                                {{itm.name}}
-                               
-                            </label>
-                        </div>
                     </div>
                 </div>
             <div class="row style-row">
