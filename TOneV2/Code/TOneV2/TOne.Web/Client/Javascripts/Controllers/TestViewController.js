@@ -53,24 +53,18 @@ var TestViewController = function (CarriersService, ZonesService) {
 
         ctrl.customvalidate1 = function (api) {
             
-            
             var isvalid = false;
             if (api == undefined || api.selectedvalues == undefined) isvalid = false;
             else if (api.selectedvalues.length == 2) isvalid = true;
-
-            console.log(isvalid);
 
             return isvalid;
         }
 
         ctrl.customvalidate2 = function (api) {
 
-
             var isvalid = false;
             if (api == undefined || api.lastselectedvalue == undefined) isvalid = false;
             else if (api.lastselectedvalue.Name == 'TEST') isvalid = true;
-
-            console.log(isvalid);
 
             return isvalid;
         }

@@ -1,4 +1,4 @@
-﻿<div class="dropdown" name="dropdown" ng-model="ctrl.options.selectedvalues.length" >
+﻿<div class="dropdown" name="dropdown" ng-model="ctrl.options.selectedvalues.length" ng-mouseenter=" ctrl.showtooltip(); " ng-mouseleave="ctrl.hidetooltip()">
     <button class="btn btn-default dropdown-toggle" ng-class="isvalidcomp()" style="width:100%;position:relative" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
         <span style="float:left;margin:0px"> {{ctrl.getSelectText()}}</span>
         <span style="position:absolute;top:13px;right:5px" class="caret"></span>
@@ -45,4 +45,5 @@
             </div>
         </li>
     </ul>
+    <div class="tooltip-error" ng-show="isvisibleTooltip()">{{ctrl.errorMessage}}</div>
 </div>   

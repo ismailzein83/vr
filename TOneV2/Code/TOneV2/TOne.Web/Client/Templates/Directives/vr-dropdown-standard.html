@@ -1,9 +1,9 @@
-﻿<div class="dropdown" name="dropdown" ng-model="ctrl.options.lastselectedvalue">
+﻿<div class="dropdown" name="dropdown" ng-model="ctrl.options.lastselectedvalue" ng-mouseenter=" ctrl.showtooltip(); " ng-mouseleave="ctrl.hidetooltip()">
     <button class="btn btn-default dropdown-toggle" ng-class="isvalidcomp()" style="width:100%;position:relative" type="button" id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
         <span style="float: left; margin: 0px; ">{{ctrl.getSelectText()}}</span>
         <span style="position:absolute;top:13px;right:5px" class="caret"></span>
     </button>
-    <ul class="dropdown-menu dropdown-menu-custom"  role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
+    <ul class="dropdown-menu dropdown-menu-custom" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="ctrl.muteaction($event);">
         <li role="presentation">
             <div ng-repeat="c in ctrl.options.datasource" class="mark-select " ng-click="selectValue($event, c);"
                  ng-mouseenter="ctrl.muteaction($event);" style="display: block;padding:2px; margin:2px; white-space: normal;">
@@ -11,6 +11,9 @@
             </div>
         </li>
     </ul>
+    <div class="tooltip-error" ng-show="isvisibleTooltip()">{{ctrl.errorMessage}}</div>
 </div>
+
+
 
 

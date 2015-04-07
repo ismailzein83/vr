@@ -158,6 +158,18 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             if (typeof (controller.onReady()) !== "undefined")
                 controller.onReady()(controller.api);
 
+            this.tooltip = false;
+              
+            this.showtooltip = function() {
+                controller.tooltip = true;
+            };
+
+            this.errorMessage = "Required";
+
+            this.hidetooltip = function() {
+                controller.tooltip = false;
+            };
+
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -242,28 +254,35 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
                     var validationClass = { invalid: "required-inpute", valid: '' };
                     var index = -1;
-                    $scope.isvalidcomp = function () {
 
+                    var isValidElem = function() {
                         if (iAttrs.isrequired !== undefined || iAttrs.customvalidate !== undefined)
-                        {
-                            var isvalid = formCtrl[iAttrs.id].$valid;
+                            return formCtrl[iAttrs.id].$valid;
+                        return true;
+                    };
 
-                            if (ctrl.options.validationGroup == undefined) {
-                                ctrl.options.validationGroup = [];
-                                index = ctrl.options.validationGroup.push(isvalid) - 1;
-                            }
-                            else {
-                                if (index != -1)
-                                    ctrl.options.validationGroup[index] = isvalid;
-                                else
-                                    index = ctrl.options.validationGroup.push(isvalid) - 1;
-                            }
+                    $scope.isvisibleTooltip = function () {
+                        if (isValidElem()) return false; 
+                        return ctrl.tooltip;
+                    };
 
-                            if (isvalid) return validationClass.valid;
-                            return validationClass.invalid;
-                        }
+                    $scope.isvalidcomp = function () {
+                        
+                        if (isValidElem()) return validationClass.valid;
 
-                        return validationClass.valid;
+                        return validationClass.invalid;
+
+                            //if (ctrl.options.validationGroup == undefined) {
+                            //    ctrl.options.validationGroup = [];
+                            //    index = ctrl.options.validationGroup.push(isvalid) - 1;
+                            //}
+                            //else {
+                            //    if (index != -1)
+                            //        ctrl.options.validationGroup[index] = isvalid;
+                            //    else
+                            //        index = ctrl.options.validationGroup.push(isvalid) - 1;
+                            //}
+
                     }
 
                     $scope.search = function () {
