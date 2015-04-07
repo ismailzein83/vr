@@ -16,7 +16,6 @@
 
         }
         function defineScopeMethods() {
-
             $scope.subViewConnector.getActionData = function () {
                 return getActionData()
                 

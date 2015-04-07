@@ -1,4 +1,4 @@
-﻿var RouteRuleEditorController2 = function ($scope, $http, $location, $routeParams, notify, RoutingAPIService) {
+﻿var RouteRuleEditorController = function ($scope, $http, $location, $routeParams, notify, RoutingAPIService) {
 
 
     defineScopeObjects();
@@ -294,6 +294,6 @@
 
     }
 }
-RouteRuleEditorController2.$inject = ['$scope', '$http', '$location', '$routeParams', 'notify', 'RoutingAPIService'];
+RouteRuleEditorController.$inject = ['$scope', '$http', '$location', '$routeParams', 'notify', 'RoutingAPIService'];
 
-appControllers.controller('RouteRuleEditorController2',RouteRuleEditorController2)
+appControllers.controller('RouteRuleEditorController',RouteRuleEditorController)
