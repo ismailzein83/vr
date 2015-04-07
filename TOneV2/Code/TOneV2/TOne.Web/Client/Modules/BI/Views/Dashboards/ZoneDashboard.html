@@ -2,43 +2,62 @@
 <div class="container-fluid ">
     <div class="panel panel-primary panel-over-color">
         <div class="panel-body">
-            <div class="row style-row">
-                
-                <div class="col-lg-2 style-col">
-                    <label class="control-label">Measure:</label>
-                    <vr-dropdown datatextfield="name" datavaluefield="value"
-                                 entityname="" type="standard" options="optionsMeasureTypes" onselectionchange="filterChanged"></vr-dropdown>
-                </div>
-                
-                <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                    <label class="control-label">From:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
-                    </div>
-                </div>
+            <div class="am-collapse" ng-show="inputSectionVisible">
+                <div class="row style-row">
 
-                <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                    <label class="control-label">To:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                    <div class="col-lg-2 style-col">
+                        <label class="control-label">Measure:</label>
+                        <vr-dropdown datatextfield="name" datavaluefield="value"
+                                     entityname="" type="standard" options="optionsMeasureTypes" onselectionchange="filterChanged"></vr-dropdown>
                     </div>
-                </div>
 
-                <div class="col-lg-1 style-col">
-                    <label class="control-label">Top:</label>
-                    <vr-dropdown datatextfield="name" datavaluefield="value"
-                                 entityname="" type="standard" options="optionsTopCount" onselectionchange="filterChanged"></vr-dropdown>
+                    <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                        <label class="control-label">From:</label>
+                        <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                            <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                        <label class="control-label">To:</label>
+                        <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                            <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1 style-col">
+                        <label class="control-label">Top:</label>
+                        <vr-dropdown datatextfield="name" datavaluefield="value"
+                                     entityname="" type="standard" options="optionsTopCount" onselectionchange="filterChanged"></vr-dropdown>
+                    </div>
                 </div>
             </div>
 
+            <div class="row ">
+                <div class="col-lg-12 col-no-padding ">
+                    <div class="action-bar">
+                        <div class="btn-group action-bar-left">
+                            <button ng-init="inputSectionVisible=true" ng-click="inputSectionVisible = !inputSectionVisible" style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
+                                <span ng-show="inputSectionVisible" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-hide="inputSectionVisible" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+                        <div class="btn-group action-bar-right" ng-show="inputSectionVisible">
+                            <!--<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Reset<span style="padding-left:4px" class="glyphicon  glyphicon-refresh" aria-hidden="true"></span></button>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row style-row">
                 <div class="col-lg-5 style-col">
                     <vr-chart data-on-ready="chartTopDestinationsReady" style="display:inline-block"></vr-chart>
-                    </div>
-                    <div class="col-lg-5 style-col">
-                        <vr-chart data-on-ready="chartZoneReady" style="display:inline-block"></vr-chart>
-                    </div>
                 </div>
+                <div class="col-lg-5 style-col">
+                    <vr-chart data-on-ready="chartZoneReady" style="display:inline-block"></vr-chart>
+                </div>
+            </div>
             <div class="row style-row">
                 <table>
                     <thead>
@@ -61,5 +80,5 @@
 </div>
 
 
-           
+
 

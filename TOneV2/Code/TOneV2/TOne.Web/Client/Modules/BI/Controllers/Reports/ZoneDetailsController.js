@@ -1,5 +1,5 @@
 ﻿appControllers.controller('ZoneDetailsController',
-    function ZoneDetailsController($scope, $routeParams, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
+    function ZoneDetailsController($scope, $routeParams, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
 
         var zoneId;
         var maxTimeDimension = 0;
@@ -14,6 +14,11 @@
               $scope.zoneName = $routeParams.zoneName;
             $scope.testModel = 'ZoneDashboardController: ' + zoneId;
             $scope.timeDimensionTypesOption = {
+                datasource: []
+            };
+
+            $scope.zonesOption= {
+                selectedvalues: [],
                 datasource: []
             };
 
@@ -156,6 +161,10 @@
                     height: height + "px"
                 };
             };
+
+            $scope.searchZones = function (text) {
+                return ZonesService.getSalesZones(text);
+            }
 
         }
 

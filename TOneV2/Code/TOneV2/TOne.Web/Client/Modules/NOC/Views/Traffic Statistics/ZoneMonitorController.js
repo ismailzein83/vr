@@ -17,6 +17,16 @@ appControllers.controller('ZoneMonitorController',
         load();
         function defineScopeObjects() {
             $scope.testModel = 'ZoneMonitorController';
+            $scope.chartDataSource = [{ value: "test 1" },
+            { value: "test 2" },
+            { value: "test 3" }];
+
+            $scope.getChartDataSource = function () {
+
+                return [{ value: "test 4" },
+            { value: "test 5" },
+            { value: "test 6" }];
+            };
 
             $scope.optionsTopCount = {
                 datasource: [
@@ -27,6 +37,8 @@ appControllers.controller('ZoneMonitorController',
             };
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
             
+           
+
             $scope.gridOptionsAllMeasures = {};
             $scope.gridOptionsAllMeasures.useExternalSorting = true;
             $scope.gridOptionsAllMeasures.enableGridMenu = true;
@@ -67,6 +79,10 @@ appControllers.controller('ZoneMonitorController',
 
             $scope.totalDataCount = 0;
             $scope.currentPage = 1;
+
+            $scope.gridAllMeasuresScope = {};
+
+            
 
         }
         
@@ -116,7 +132,16 @@ appControllers.controller('ZoneMonitorController',
                 return {
                     height: height + "px"
                 };
-            };        }
+            };
+
+            $scope.gridCellClicked = function (entity) {
+                console.log("gridCellClicked");
+                $scope.selectedEntityId = entity.GroupKeyValues[0].Id;
+                $scope.selectedEntityName = entity.GroupKeyValues[0].Name;
+                console.log($scope.selectedEntityName);
+                getAndShowEntityStatistics();
+            };
+        }
 
         function load() {
             $scope.fromDate = '2014-04-27';
@@ -136,7 +161,13 @@ appControllers.controller('ZoneMonitorController',
             //gridOption.saveFocus = false;
             //gridOption.saveScroll = true;
             gridOption.enableColumnResizing = true;
-           
+            gridOption.gridCellClicked = function (entity) {
+                console.log("gridOption gridCellClicked");
+                $scope.selectedEntityId = entity.GroupKeyValues[0].Id;
+                $scope.selectedEntityName = entity.GroupKeyValues[0].Name;
+                console.log($scope.selectedEntityName);
+                getAndShowEntityStatistics();
+            };
 
             gridOption.columnDefs = [];
             var zoneColumn = {
@@ -144,7 +175,8 @@ appControllers.controller('ZoneMonitorController',
                 headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
                 enableColumnMenu: false,
                 enableHiding: false,
-                field: 'GroupKeyValues[0].Name'
+                field: 'zoneName',
+                cellTemplate: '/Client/Templates/Grid/ClickableCellTemplate.html'
             };
             gridOption.columnDefs.push(zoneColumn);
             var valColumnIndex = 0;
@@ -187,6 +219,14 @@ appControllers.controller('ZoneMonitorController',
                 $scope.totalDataCount = response.TotalCount;
 
                 angular.forEach(response.Data, function (itm) {
+                    itm.clicked = function () {
+                        console.log('itm.clicked');
+                        $scope.selectedEntityId = itm.GroupKeyValues[0].Id;
+                        $scope.selectedEntityName = itm.GroupKeyValues[0].Name;
+                        console.log($scope.selectedEntityName);
+                        getAndShowEntityStatistics();
+                    };
+                    itm.zoneName = itm.GroupKeyValues[0].Name;
                     $scope.gridOptionsAllMeasures.data.push(itm);
                 });
                 

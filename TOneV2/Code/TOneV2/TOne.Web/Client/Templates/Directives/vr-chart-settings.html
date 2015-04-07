@@ -9,17 +9,17 @@
             <div class="modal-body" style="max-height:500px;overflow-y:auto">
 
 
-               
-                        <div class="row style-row" ng-show="config.isSingleDimension">
-                            <div class="col-lg-12 style-col">
-                                <div>
-                                    <label class="control-label">
-                                        <input type="checkbox" ng-model="config.showValuesWithLegends" />
-                                        Show Values with Legends
-                                    </label>
-                                </div>
-                            </div>
+
+                <div class="row style-row" ng-show="config.isSingleDimension">
+                    <div class="col-lg-12 style-col">
+                        <div>
+                            <label class="control-label">
+                                <switch ng-model="config.showValuesWithLegends" class="green"></switch>
+                                Show Values with Legends
+                            </label>
                         </div>
+                    </div>
+                </div>
 
 
                 <div class="row style-row" ng-show="!config.isSingleDimension">
@@ -28,16 +28,26 @@
                             Series to draw:
                         </label>
                         <div ng-repeat="itm in config.series">
-                            <label class="control-label">
-                                <input type="checkbox" ng-model="itm.selected" />
-                                {{itm.name}}
-                            </label>
+                            <div class="row style-row">
+                                <div class="col-lg-3 style-col">
+                                    <label class="control-label">
+                                        {{itm.title}}
+                                    </label>
+                                </div>
+                                <div class="col-lg-1 style-col">
+                                    <switch ng-model="itm.selected" class="green"></switch>
+                                </div>
+                                <div class="col-lg-3 style-col">
+                                    <vr-dropdown datatextfield="value" datavaluefield="value"
+                                                 entityname="" type="standard" options="itm.seriesTypesOption"></vr-dropdown>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
-                   
+
 
             </div>
             <div class="modal-footer">

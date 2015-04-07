@@ -14,84 +14,39 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
             var controller = this;
             var chartObj;
             var currentChartSource;
-            var currentChartSettings = {
-                hiddenSeries: [],
-                showValuesWithLegends: false
-            };
-            var isChartAvailable = false;
+            var currentChartSettings;
+            var isChartAvailable = false;           
 
-            var api = {};
-            api.showLoader = function () {
-                $scope.isLoading = true;
-            };
 
-            api.hideLoader = function () {
-                $scope.isLoading = false;
-            };
-
-            api.hideChart = function () {
-                if ($element.find('#divChart').highcharts() != undefined)
-                    $element.find('#divChart').highcharts().destroy();
-                isChartAvailable = false;
-            };
-
-            $scope.changeSettings = function () {
-               
-                var modalScope = $scope.$root.$new();
-                modalScope.title = 'Chart Settings';
-                modalScope.config = {
-                    isSingleDimension: currentChartSource.isSingleDimension
+            function ResetChartSettings()
+            {
+                currentChartSettings = {
+                    isSingleDimension: currentChartSource.isSingleDimension,
+                    showValuesWithLegends: false,
+                    series: []
                 };
 
-                if (currentChartSource.isSingleDimension) {
-                    modalScope.config.showValuesWithLegends = currentChartSettings.showValuesWithLegends;
-                }
-                else {
-                    modalScope.config.series = [];
-                    angular.forEach(currentChartSource.seriesDefinitions, function (sDef) {
-                        var serieConfig = {
-                            name: sDef.title,
-                            selected: currentChartSettings.hiddenSeries.indexOf(sDef.title) < 0
-                        };
-                        modalScope.config.series.push(serieConfig);
-                    });
-                }
-                
-                modalScope.save = function () {
-                    modalInstance.hide();
-                    if (currentChartSource.isSingleDimension) {
-                        currentChartSettings.showValuesWithLegends = modalScope.config.showValuesWithLegends
-                        api.renderSingleDimensionChart(currentChartSource.chartData, currentChartSource.chartDefinition, currentChartSource.seriesDefinitions);
-                    }
-                    else {
-                        currentChartSettings.hiddenSeries.length = 0;
-                        angular.forEach(modalScope.config.series, function (serieConfig) {
-                            if (!serieConfig.selected)
-                                currentChartSettings.hiddenSeries.push(serieConfig.name);
-                        });
-                        api.renderChart(currentChartSource.chartData, currentChartSource.chartDefinition, currentChartSource.seriesDefinitions, currentChartSource.xAxisDefinition);
-                    }
-                };
-                var modalInstance = $modal({ scope: modalScope, template: '/Client/Templates/Directives/vr-chart-settings.html', show: true, animation: "am-fade-and-scale" });
+                angular.forEach(currentChartSource.seriesDefinitions, function (sDef) {
+                    var serieSettings = {
+                        title: sDef.title,
+                        selected: true,
+                        type: sDef.type ? sDef.type : currentChartSource.chartDefinition.type
+                    };
+                    currentChartSettings.series.push(serieSettings);
+                });
             }
 
-            $scope.isSettingsVisible = function () {
-                return (controller.hidesettings == undefined || controller.hidesettings == false) && isChartAvailable;
-            }
-            
             function onDataItemClicked(dataItem) {
                 console.log(dataItem);
                 if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function')
                     api.onDataItemClicked(dataItem);
             }
 
-            api.renderSingleDimensionChart = function (chartData, chartDefinition, seriesDefinitions) {
-                currentChartSource = {
-                    isSingleDimension: true,
-                    chartData: chartData,
-                    chartDefinition: chartDefinition,
-                    seriesDefinitions: seriesDefinitions
-                };
+            function renderSingleDimensionChart(chartSource) {
+                var chartData = chartSource.chartData;
+                var chartDefinition = chartSource.chartDefinition;
+                var seriesDefinitions = chartSource.seriesDefinitions;
+
                 var series = [];
                 angular.forEach(seriesDefinitions, function (sDef) {
                     var serie = {
@@ -115,7 +70,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
 
                         series[i].data.push({
                             name: titleValue,
-                            y: yValue 
+                            y: yValue
                         }
                             );
                     }
@@ -171,21 +126,20 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                     },
                 });
                 isChartAvailable = true;
-               
-            };
+            }
 
-            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition) {
-                currentChartSource = {
-                    isSingleDimension: false,
-                    chartData: chartData,
-                    chartDefinition: chartDefinition,
-                    seriesDefinitions: seriesDefinitions,
-                    xAxisDefinition: xAxisDefinition
-                };
+            function renderChart(chartSource) {
+                var chartData = chartSource.chartData;
+                var chartDefinition = chartSource.chartDefinition;
+                var seriesDefinitions = chartSource.seriesDefinitions;
+                var xAxisDefinition = chartSource.xAxisDefinition;
                 var xAxis = [];
                 var series = [];
                 angular.forEach(seriesDefinitions, function (sDef) {
-                    if (currentChartSettings.hiddenSeries.indexOf(sDef.title) < 0) {
+                    var serieSettings = $.grep(currentChartSettings.series, function (s) {
+                        return sDef.title == s.title;
+                    })[0];
+                    if (serieSettings.selected) {
                         var serie = {
                             name: sDef.title,
                             data: [],
@@ -195,7 +149,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                                     onDataItemClicked(currentChartSource.chartData[e.point.index]);
                                 }
                             },
-                            type: sDef.type ? sDef.type : chartDefinition.type
+                            type: serieSettings.type ? serieSettings.type : (sDef.type ? sDef.type : chartDefinition.type)
                         };
                         series.push(serie);
                     }
@@ -235,7 +189,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
 
                     for (var i = 0; i < series.length; i++) {
                         var sDef = seriesDefinitions[i];
-                        
+
                         var yValue = eval('dataItem.' + sDef.valuePath);
                         series[i].data.push(yValue);
                     }
@@ -287,6 +241,86 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                     tooltip: tooltipSettings,
                 });
                 isChartAvailable = true;
+            }
+           
+            $scope.changeSettings = function () {
+               
+                var modalScope = $scope.$root.$new();
+                modalScope.title = 'Chart Settings';
+                modalScope.config = (JSON.parse(JSON.stringify(currentChartSettings)));
+                var seriesTypes = [{ value: "column" },
+                       { value: "line" },
+                       { value: "spline" },
+                       { value: "area" },
+                       { value: "areaspline" },
+                       { value: "scatter" },
+                       { value: "bar" }
+                ];
+                
+                angular.forEach(modalScope.config.series, function (s) {
+                    s.seriesTypesOption = {
+                        datasource: seriesTypes,
+                        lastselectedvalue: $.grep(seriesTypes, function(sType){return s.type == sType.value;})[0]
+                    };
+
+                });
+
+                modalScope.save = function () {
+                    modalInstance.hide();
+                    currentChartSettings = modalScope.config;
+                    if (currentChartSettings.isSingleDimension) {
+                        renderSingleDimensionChart(currentChartSource);
+                    }
+                    else {
+                        angular.forEach(modalScope.config.series, function (s) {
+                            s.type = s.seriesTypesOption.lastselectedvalue.value;
+                        });
+                        renderChart(currentChartSource);
+                    }
+                };
+                var modalInstance = $modal({ scope: modalScope, template: '/Client/Templates/Directives/vr-chart-settings.html', show: true, animation: "am-fade-and-scale" });
+            }
+
+            $scope.isSettingsVisible = function () {
+                return (controller.hidesettings == undefined || controller.hidesettings == false) && isChartAvailable;
+            }
+             
+            var api = {};
+
+            api.showLoader = function () {
+                $scope.isLoading = true;
+            };
+
+            api.hideLoader = function () {
+                $scope.isLoading = false;
+            };
+
+            api.hideChart = function () {
+                if ($element.find('#divChart').highcharts() != undefined)
+                    $element.find('#divChart').highcharts().destroy();
+                isChartAvailable = false;
+            };
+            api.renderSingleDimensionChart = function (chartData, chartDefinition, seriesDefinitions) {
+                currentChartSource = {
+                    isSingleDimension: true,
+                    chartData: chartData,
+                    chartDefinition: chartDefinition,
+                    seriesDefinitions: seriesDefinitions
+                };
+                ResetChartSettings();
+                renderSingleDimensionChart(currentChartSource);
+            };
+
+            api.renderChart = function (chartData, chartDefinition, seriesDefinitions, xAxisDefinition) {
+                currentChartSource = {
+                    isSingleDimension: false,
+                    chartData: chartData,
+                    chartDefinition: chartDefinition,
+                    seriesDefinitions: seriesDefinitions,
+                    xAxisDefinition: xAxisDefinition
+                };
+                ResetChartSettings();
+                renderChart(currentChartSource);
             };
 
             if (controller.onReady && typeof (controller.onReady) == 'function')

@@ -45,22 +45,28 @@
             </div>
             <div class="row style-row">
                 <div class="col-lg-1 style-col">
+                    <label class="control-label" style="padding-top:3px">
+                       Items per Page:
+                    </label>
+                </div>
+                <div class="col-lg-1 style-col">
                     <vr-dropdown datatextfield="description" datavaluefield="value"
                                  entityname="" type="standard" options="optionsTopCount" data-onselectionchange="pageChanged"></vr-dropdown>
                 </div>
+                
                 <div class="col-lg-5 style-col">
-                    <pagination total-items="totalDataCount" ng-model="currentPage" max-size="5" class="pagination-sm"
+                    <pagination total-items="totalDataCount" ng-model="currentPage" max-size="5" class="pagination-sm" num-pages="numberOfPages"
                                 items-per-page="optionsTopCount.lastselectedvalue.value" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
-                </div>
-                <div class="col-lg-1 style-col">
-                    <label class="control-label" style="padding-top:6px">
-                        {{totalDataCount}} Items
-                    </label>
                 </div>
             </div>
             <div class="row style-row">
                 <div class="col-lg-12 col-md-12   style-col">
-                    <div id="custom" class="gridroute" ui-grid="gridOptionsAllMeasures" ui-grid-auto-resize ng-style="getGridHeight(gridOptionsAllMeasures)"></div>
+                    <div id="custom" class="gridroute" ui-grid="gridOptionsAllMeasures" external-scopes="gridAllMeasuresScope" ui-grid-auto-resize ng-style="getGridHeight(gridOptionsAllMeasures)"></div>
+                </div>
+                <div style="float:right;margin-right:25px">
+                    <label class="control-label" style="padding-top:6px">
+                        Page {{currentPage}} of {{numberOfPages}}
+                    </label>
                 </div>
             </div>
         </div>
