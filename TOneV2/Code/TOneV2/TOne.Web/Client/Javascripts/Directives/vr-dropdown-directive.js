@@ -1,9 +1,65 @@
 ﻿'use strict';
 
+app.directive('vrValidationArray', function () {
+
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ctrlModel) {
+
+            var validate = function (viewValue) {
+                if (viewValue == undefined || viewValue == 0) ctrlModel.$setValidity('requiredarray' + attrs.name, false);
+                else ctrlModel.$setValidity('requiredarray' + attrs.name, true);
+                return viewValue;
+            }
+            ctrlModel.$parsers.unshift(validate);
+            ctrlModel.$formatters.push(validate);
+        }
+    };
+});
+
+app.directive('vrValidationValue', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ctrlModel) {
+
+            var validate = function (viewValue) {
+                if (viewValue == undefined || viewValue == '') ctrlModel.$setValidity('requiredvalue' + attrs.name, false);
+                else ctrlModel.$setValidity('requiredvalue' + attrs.name, true);
+                return viewValue;
+            }
+            ctrlModel.$parsers.unshift(validate);
+            ctrlModel.$formatters.push(validate);
+
+        }
+    };
+});
+
+app.directive('vrValidationCustom', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ctrlModel) {
+
+            var validate = function (viewValue) {
+                var isvalid = scope.ctrl.customvalidate()(scope.ctrl.options);
+                ctrlModel.$setValidity('customvalidation' + attrs.name, isvalid);
+
+                return viewValue;
+            }
+            ctrlModel.$parsers.unshift(validate);
+            ctrlModel.$formatters.push(validate);
+
+        }
+    };
+});
+
 app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (DropdownService, BaseDirService) {
 
     var directiveDefinitionObject = {
 
+        require: '^form',
         restrict: 'E',
         scope: {
             options:'=',
@@ -20,7 +76,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             limitplaceholder: '@',
             limitcharactercount: '@',
             customvalidate: '&',
-            onReady: '='
+            onReady: '&',
         },
         controller: function ($scope, $element, $attrs) {
             var controller = this;
@@ -32,7 +88,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             this.singleSelection = function () {
                 return DropdownService.isSingleSelection(controller.type);
             };
-
 
             this.getObjectProperty = function (item, property) {
                 return BaseDirService.getObjectProperty(item, property);
@@ -100,33 +155,24 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                     return controller.getObjectText(controller.options.datasource[0]);
             };
 
-            this.api.isvalid = function () {
+            if (typeof (controller.onReady()) !== "undefined")
+                controller.onReady()(controller.api);
 
-                var isrequired = $scope.$eval($attrs.isrequired);
-
-                if (typeof (controller.customvalidate()) !== "undefined")
-                    return controller.customvalidate()(controller.options);
-
-                if (isrequired && isrequired !== undefined) {
-
-                    if (controller.singleSelection()) {
-                        if (controller.options.lastselectedvalue == undefined || controller.options.lastselectedvalue == '') return false;
-                    }
-                    else {
-                        if (controller.options.selectedvalues == undefined || controller.options.selectedvalues.length == 0) return false;
-                    }
-                }
-                return true;
-            };
-
-            if (controller.onReady && typeof (controller.onReady) == 'function')
-                controller.onReady(controller.api);
-
-    },
+        },
         controllerAs: 'ctrl',
         bindToController: true,
-            compile: function (element, attrs) {
+        compile: function (element, attrs) {
 
+            attrs.id = BaseDirService.guid();
+            angular.element(element.children()[0]).attr('name', attrs.id);
+
+            if (attrs.isrequired !== undefined) {
+                if (DropdownService.isSingleSelection(attrs.type)) angular.element(element.children()[0]).attr('vr-validation-value', '');
+                else angular.element(element.children()[0]).attr('vr-validation-array', '');
+            }
+
+            if (attrs.customvalidate !== undefined) angular.element(element.children()[0]).attr('vr-validation-custom', 'ctrl.customvalidate');
+            
             angular.element(element.children()[0]).on('show.bs.dropdown', function (e) {
                 $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
             });
@@ -138,7 +184,11 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
             attrs = DropdownService.setDefaultAttributes(attrs);
 
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
+                pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    
+                    
+
+                    var ctrl = $scope.ctrl;
 
                     $scope.clearDatasource = function () {
                         if (ctrl.options.datasource == undefined) return;
@@ -148,6 +198,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
                     $scope.clearAllSelected = function (e) {
                         ctrl.muteAction(e);
+                        ctrl.options.lastselectedvalue = '';
                         ctrl.options.selectedvalues = [];
                         ctrl.options.selectedvalues.length = 0;
                     };
@@ -155,7 +206,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                     var selectval = function (e, item) {
 
                         if (ctrl.singleSelection()) {
-
+                            ctrl.options.lastselectedvalue = '';
                             ctrl.options.selectedvalues = [];
                             ctrl.options.selectedvalues.length = 0;
                             ctrl.options.selectedvalues.push(item);
@@ -190,10 +241,29 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                     };
 
                     var validationClass = { invalid: "required-inpute", valid: '' };
-                    
-                    $scope.isvalidcomp = function() {
-                        if (ctrl.api.isvalid()) return validationClass.valid;
-                        return validationClass.invalid;
+                    var index = -1;
+                    $scope.isvalidcomp = function () {
+
+                        if (iAttrs.isrequired !== undefined || iAttrs.customvalidate !== undefined)
+                        {
+                            var isvalid = formCtrl[iAttrs.id].$valid;
+
+                            if (ctrl.options.validationGroup == undefined) {
+                                ctrl.options.validationGroup = [];
+                                index = ctrl.options.validationGroup.push(isvalid) - 1;
+                            }
+                            else {
+                                if (index != -1)
+                                    ctrl.options.validationGroup[index] = isvalid;
+                                else
+                                    index = ctrl.options.validationGroup.push(isvalid) - 1;
+                            }
+
+                            if (isvalid) return validationClass.valid;
+                            return validationClass.invalid;
+                        }
+
+                        return validationClass.valid;
                     }
 
                     $scope.search = function () {

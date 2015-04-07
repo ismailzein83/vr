@@ -15,9 +15,21 @@ var TestViewController = function (CarriersService, ZonesService) {
         return ZonesService.getSalesZones(text);
     }
 
+    ctrl.onready = function (api) {
+        //ZonesService.getSalesZones("Lebanon").then(function (items) {
+        //    api.setSelectedValues(items);
+        //}, function (msg) {
+        //    console.log(msg);
+        //});
+
+        
+    }
+    
+
     function load() {
         ctrl.model = 'Test View model';
-        ctrl.Input = '123';
+        ctrl.Input1 = '';
+        ctrl.Input2 = '';
         ctrl.data = [{ name: "Moroni", age: 50 },
                     { name: "Tiancum", age: 43 },
                     { name: "Jacob", age: 27 }];
@@ -26,42 +38,64 @@ var TestViewController = function (CarriersService, ZonesService) {
             { name: "Tiancum", value: 43 },
             { name: "Jacob", value: 27 }];
 
+        ctrl.routesOptions = {
+            lastselectedvalue: {},
+            datasource: [{ name: "Moroni", value: 50 },
+            { name: "Tiancum", value: 43 },
+            { name: "Jacob", value: 27 }]
+        };
+
         ctrl.options = {
+            selectedvalues: [],
+            lastselectedvalue: {},
+            datasource: []
+        };
+
+        ctrl.customvalidate1 = function (api) {
+            
+            
+            var isvalid = false;
+            if (api == undefined || api.selectedvalues == undefined) isvalid = false;
+            else if (api.selectedvalues.length == 2) isvalid = true;
+
+            console.log(isvalid);
+
+            return isvalid;
+        }
+
+        ctrl.customvalidate2 = function (api) {
+
+
+            var isvalid = false;
+            if (api == undefined || api.lastselectedvalue == undefined) isvalid = false;
+            else if (api.lastselectedvalue.Name == 'TEST') isvalid = true;
+
+            console.log(isvalid);
+
+            return isvalid;
+        }
+
+        ctrl.validationGroup = [];
+
+        ctrl.optionsZone = {
             selectedvalues: [],
             datasource: []
         };
 
-        ctrl.validationoptions1 = {
-        };
-
-        ctrl.customvalidate = function (api) {
-            if (api == undefined || api.lastselectedvalue == undefined) return false;
-                
-            if (api.lastselectedvalue.Name == 'TEST') return true;
-            return false;
-        }
-
-        ctrl.validationGroup = [];
-        ctrl.validationGroup.push(ctrl.validationoptions1);
-        ctrl.validationGroup.push(ctrl.validationoptions2);
-
-        ctrl.optionsZone = {
+        ctrl.optionsZone2 = {
             selectedvalues: [],
-            datasource: [],
-            lastselectedvalue: ''
-        };
-
-        ctrl.validationOptions = {
-            value: ctrl.options.selectedvalues
+            datasource: []
         };
 
         ctrl.alertMsg = function () {
-            //ctrl.validationOptions.value = ctrl.options.selectedvalues;
-            //console.log(ctrl.validationOptions.value);
-            //console.log(ctrl.options.selectedvalues);
-        };
 
-        //ctrl.options.lastselectedvalue = { CarrierAccountID: "C097", Name: "TEST (test02)" };
+        };
+        
+        ctrl.validateForm = function () {
+            if (ctrl.api == undefined || ctrl.api.isvalid == undefined) return true;
+            return ! ctrl.api.isvalid();
+        };
+        
     }
     
     function loadZone() {

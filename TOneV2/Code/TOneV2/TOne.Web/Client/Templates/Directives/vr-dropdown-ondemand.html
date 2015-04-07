@@ -1,4 +1,4 @@
-﻿<div class="dropdown">
+﻿<div class="dropdown" name="dropdown" ng-model="ctrl.options.selectedvalues.length" >
     <button class="btn btn-default dropdown-toggle" ng-class="isvalidcomp()" style="width:100%;position:relative" type="button" id="dropdownMenuZ" data-toggle="dropdown" aria-expanded="true">
         <span style="float:left;margin:0px"> {{ctrl.getSelectText()}}</span>
         <span style="position:absolute;top:13px;right:5px" class="caret"></span>
@@ -38,7 +38,7 @@
                 <div style="height: 225px; overflow: auto;padding-top:5px">
                     <span class="label custom-label" ng-repeat="obj in ctrl.options.selectedvalues">
                         {{ctrl.getObjectText(obj)}}
-                        <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectValue($event,obj); "></span> 
+                        <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="selectValue($event,obj); "></span>
                     </span>
                 </div>
 
