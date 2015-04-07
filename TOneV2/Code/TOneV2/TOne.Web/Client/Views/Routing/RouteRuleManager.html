@@ -14,16 +14,16 @@
                         <div class="btn-group action-bar-left">
                             <label class="action-bar-label">Visible Rows:</label>
                             <div class="dropdown action-bar-ddl">
-                                <label class=" dropdown-toggle hand-cursor action-bar-ddl-label"  id="dropdownMenuRule" data-toggle="dropdown" aria-expanded="true">
+                                <label class=" dropdown-toggle hand-cursor action-bar-ddl-label"  id="dropdownCount" data-toggle="dropdown" aria-expanded="true">
                                     <span class="no-margin" >{{numberoflines}}</span>
                                 </label>
-                                <ul class="dropdown-menu action-bar-ddl-ul" role="menu" aria-labelledby="dropdownMenuRule" ng-mouseenter="muteaction($event);">
+                                <ul class="dropdown-menu action-bar-ddl-ul" role="menu" aria-labelledby="dropdownCount" ng-mouseenter="muteaction($event);">
                                     <li role="presentation">
-                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);" >
-                                            <div class="hand-cursor action-bar-ddl-inner-item" >10</div>
+                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);">
+                                            <div class="hand-cursor action-bar-ddl-inner-item">10</div>
                                         </div>
-                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);" >
-                                            <div class ="hand-cursor action-bar-ddl-inner-item">20</div>
+                                        <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);">
+                                            <div class="hand-cursor action-bar-ddl-inner-item">20</div>
                                         </div>
                                     </li>
                                 </ul>
@@ -45,7 +45,7 @@
 
                     </div>
 
-                    <div id="grid1" class="gridroute" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
+                    <div id="grid1" class="gridroute" ui-grid="gridOptionsRouteRule" ui-grid-selection  ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
                     </div>
 
 

@@ -1,4 +1,4 @@
-﻿var RouteRuleEditorController2 = function($scope, $http, $location, $routeParams, notify, RoutingService) {
+﻿var RouteRuleEditorController2 = function ($scope, $http, $location, $routeParams, notify, RoutingAPIService) {
 
 
     defineScopeObjects();
@@ -202,6 +202,22 @@
                 return $scope.optionsRuleType.datasource[0];
             }
         }
+
+        $scope.onchangeRouteRule = function (data, items, last) {
+            if ($scope.routeRule && $scope.routeRule.ActionData && $scope.routeRule.ActionData.Options)
+                $scope.routeRule.ActionData.Options.length = 0;
+        }
+
+        $scope.onchangeEditorType = function (data, items, last) {
+            if ($scope.routeRule && $scope.routeRule.CodeSet )
+                $scope.routeRule.CodeSet = {
+                    Code: "",
+                    WithSubCodes:  false,
+                    ExcludedCodes: [],
+                    SelectionOption: "OnlyItems" ,
+                    SelectedValues:[]
+                };
+        }
         $scope.saveRule = function () {
             $scope.issaving = true;
             var routeRule = {
@@ -211,14 +227,20 @@
                     Type: "RouteRule",
                     BeginEffectiveDate: $scope.BEDDate,
                     EndEffectiveDate: ($scope.EEDDate),
-                    Reason: $scope.Reason
+                    Reason: $scope.Reason,
+                    RouteRuleId: ($scope.RouteRuleId !=null)? $scope.RouteRuleId : 0 
             };
-            RoutingService.saveRouteRule(routeRule)
+            RoutingAPIService.saveRouteRule(routeRule)
             .then(function (response) {
                 $scope.issaving = false;
+                if ($scope.RouteRuleId != 'undefined') {
+                    $scope.refreshRowData( response , $scope.index );
+                }
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
                 $scope.$hide();
-            })
+            }).finally(function () {
+                $scope.issaving = false;
+            });
 
         }
         $scope.cancel = function () {
@@ -251,7 +273,7 @@
         //alert($scope.RouteRuleId)
         if ($scope.RouteRuleId != 'undefined') {
 
-            RoutingService.getRouteRuleDetails($scope.RouteRuleId)
+            RoutingAPIService.getRouteRuleDetails($scope.RouteRuleId)
            .then(function (response) {
                $scope.routeRule = response;
                $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0];
@@ -272,6 +294,6 @@
 
     }
 }
-RouteRuleEditorController2.$inject = ['$scope', '$http', '$location', '$routeParams', 'notify', 'RoutingService'];
+RouteRuleEditorController2.$inject = ['$scope', '$http', '$location', '$routeParams', 'notify', 'RoutingAPIService'];
 
 appControllers.controller('RouteRuleEditorController2',RouteRuleEditorController2)

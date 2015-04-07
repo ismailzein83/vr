@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="col-lg-2 style-col">
                                         <vr-dropdown datatextfield="name" datavaluefield="objectType"
-                                                     entityname="" type="standard" options="optionsRouteType"></vr-dropdown>
+                                                     entityname="" type="standard" onselectionchange="onchangeRouteRule"  options="optionsRouteType"></vr-dropdown>
                                     </div>
                                 </div>
                                 <div class="row style-row">
@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="row style-row">
                                     <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
-                                                 options="optionsEditorType"></vr-dropdown>
+                                                 options="optionsEditorType" onselectionchange="onchangeEditorType"></vr-dropdown>
 
                                     <div ng-include src=" optionsEditorType.lastselectedvalue.url">
                                     </div>

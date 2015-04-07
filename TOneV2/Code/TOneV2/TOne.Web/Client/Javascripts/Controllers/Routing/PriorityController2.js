@@ -1,7 +1,7 @@
 ﻿appControllers.controller('PriorityController2',
     function PriorityController2($scope, $http, CarriersService) {
        
-        $scope.subViewConnector.getActionData = function () {
+        $scope.subViewConnector.getActionData = function () {           
             return {
                 $type: "TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities",
                 Options: $scope.fillOptionsData()

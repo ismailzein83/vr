@@ -22,11 +22,12 @@ namespace TOne.Web.Controllers
         }
 
         [HttpPost]
-        public void SaveRouteRule(RouteRule rule)
+        public RouteRuleSummaryModel SaveRouteRule(RouteRule rule)
         {
             System.Threading.Thread.Sleep(2000);
             RouteRuleManager manager = new RouteRuleManager();
-            manager.SaveRouteRule(rule);
+            return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
+          
 
         }
         [HttpGet]

@@ -22,6 +22,23 @@ textarea.form-control {
 .modal-x-lg {
     width: 97%;
 }
+/*.modal .dropdown-menu {
+    position: fixed;
+    z-index: 1000;
+    min-width: 160px;
+    padding: 5px 0px;
+    margin: 2px 0px 0px;
+    font-size: 14px;
+    text-align: left;
+    list-style: outside none none;
+    background-color: #FFF;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176);
+    top:inherit;
+    left:inherit;
+}*/
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;

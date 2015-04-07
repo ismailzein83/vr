@@ -1,9 +1,9 @@
-﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingService, $modal) {
+﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingAPIService, $modal) {
     var pageSize = 40;
     var page = 0;
     var pageUp = 0;
     var last = false;
-    var addModal = null ;
+    
 
     defineScopeObjects();
     defineScopeMethods();
@@ -21,6 +21,7 @@
             enableFiltering: false,
             saveFocus: false,
             saveScroll: true,
+            enableCellEdit : false,
             columnDefs: [
               {
                   name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false,
@@ -49,18 +50,23 @@
             enableFiltering: false,
             height: 40,
             enableHiding: false,
-            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.onDblClick(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
+            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row,rowRenderIndex)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
         }
-        addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: false, backdrop:true });
 
     }
     function defineScopeMethods() {
-        $scope.onDblClick = function (row) {
-            //$location.path("/RouteRuleEditor2/" +).replace();
+        var refreshRowData = function (rowEntity, index) {
+             $scope.gridOptionsRouteRule.data[index] = null;
+             $scope.gridOptionsRouteRule.data[index] = rowEntity;
+             
+        };
+         $scope.openEdit = function (row, i) {
             var scopeDetails = $scope.$root.$new();
             scopeDetails.title = "Update";
+            scopeDetails.index = $scope.gridOptionsRouteRule.data.indexOf(row.entity);
             scopeDetails.RouteRuleId = row.entity.RouteRuleId;
-            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor2.html', show: true, animation: "am-fade-and-scale" });
+            scopeDetails.refreshRowData = refreshRowData;
+            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
             
 
         }
@@ -84,9 +90,10 @@
             }
             return res;
         };
+
         $scope.getDatalist = function (page, pageSize) {
             $scope.isloadingdata = true;           
-            RoutingService.getAllRouteRule(page, pageSize)
+            RoutingAPIService.getAllRouteRule(page, pageSize)
              .then(function (data) {
                  $scope.isloadingdata = false;
                  $scope.gridOptionsRouteRule.data = getData(data, page);
@@ -99,7 +106,7 @@
             gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
                 if (last==false) {
                     $scope.isloadingdata = true;
-                    RoutingService.getAllRouteRule(page,pageSize)
+                    RoutingAPIService.getAllRouteRule(page, pageSize)
                     .then(function (data) {
                         $scope.isloadingdata = false;
                         $scope.gridOptionsRouteRule.data = $scope.gridOptionsRouteRule.data.concat(data);
@@ -113,13 +120,13 @@
             });
 
         };
+        
         $scope.AddNewRoute = function () {
 
             var scopeDetails = $scope.$root.$new();
             scopeDetails.title = "New";
             scopeDetails.RouteRuleId = 'undefined';
-            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor2.html', show: true, animation: "am-fade-and-scale" });
-           // addModal.$promise.then(addModal.show);
+            var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
 
         }
         $scope.toggelFilter = function () {
@@ -150,7 +157,7 @@
     
 
 }
-RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants','RoutingService','$modal'];
+RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants', 'RoutingAPIService', '$modal'];
 
 appControllers.controller('RouteRuleManagerController', RouteRuleManagerController)
 
