@@ -1,7 +1,7 @@
 ﻿/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants) {
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q) {
 
 
         var chartSelectedMeasureAPI;
@@ -107,10 +107,11 @@ appControllers.controller('ZoneMonitorController',
                alert("in")
                 // console.log(e);
             };
-            $scope.getData = function () {
+            $scope.getData = function (asyncHandle) {
                 $scope.currentPage = 1;
                 resultKey = '';
-                getData();
+                getData(asyncHandle);
+
             };
             
             $scope.pageChanged = function () {
@@ -196,7 +197,7 @@ appControllers.controller('ZoneMonitorController',
             });
         }
         
-        function getData() {
+        function getData(asyncHandle) {
             if (!chartSelectedMeasureAPI)
                 return;
             $scope.showResult = true;
@@ -248,6 +249,8 @@ appControllers.controller('ZoneMonitorController',
             })
                 .finally(function () {
                     chartSelectedMeasureAPI.hideLoader();
+                    if (asyncHandle)
+                        asyncHandle.operationDone();
                 });
         }
 

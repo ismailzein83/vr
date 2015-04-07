@@ -14,6 +14,7 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'mgcrea.ngStrap',
     'uiSwitch',
     'cgNotify',
+    'ngAria',
     'ui.grid.autoResize'//,
     //'slidePushMenu'
 ]);

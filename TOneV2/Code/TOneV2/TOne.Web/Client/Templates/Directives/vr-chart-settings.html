@@ -51,8 +51,10 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" ng-click="save()">Save</button>
-                <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+                <vr-actionbar>
+                    <vr-button type="Save" data-onclick="save"></vr-button>
+                    <vr-button type="Close" data-onclick="$hide"></vr-button>
+                </vr-actionbar>
             </div>
         </div>
     </div>

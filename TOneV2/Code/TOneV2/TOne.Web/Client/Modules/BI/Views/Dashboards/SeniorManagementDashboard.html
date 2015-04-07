@@ -2,25 +2,26 @@
     <div class="panel panel-primary panel-over-color">
         <div class="panel-body">
             <div class="am-collapse" ng-show="inputSectionVisible">
-                <div class="row style-row">
-                    <div class="col-lg-2 style-col">
-                        <label class="control-label">Date Period:</label>
-                        <vr-dropdown datatextfield="name" datavaluefield="value"
-                                     entityname="" type="standard" options="dateTimeFilterOption" data-onselectionchange="updateCharts"></vr-dropdown>
+                <form name="filterForm" novalidate>
+                    <div class="row style-row">
+                        <div class="col-lg-2 style-col">
+                            <label class="control-label">Date Period:</label>
+                            <vr-dropdown datatextfield="name" datavaluefield="value"
+                                         entityname="" type="standard" options="dateTimeFilterOption" data-onselectionchange="updateCharts"></vr-dropdown>
+                        </div>
+                        <div class="col-lg-2 style-col">
+                            <label class="control-label">Measure:</label>
+                            <vr-dropdown datatextfield="name" datavaluefield="value"
+                                         entityname="" type="standard" options="optionsMeasureTypes" data-onselectionchange="updateCharts"></vr-dropdown>
+                        </div>
+                        <div class="col-lg-2 style-col">
+                            <label class="control-label">Top:</label>
+                            <vr-dropdown datatextfield="value" datavaluefield="value"
+                                         entityname="" type="standard" options="optionTopCounts" data-onselectionchange="updateCharts"></vr-dropdown>
+                        </div>
                     </div>
-                    <div class="col-lg-2 style-col">
-                        <label class="control-label">Measure:</label>
-                        <vr-dropdown datatextfield="name" datavaluefield="value"
-                                     entityname="" type="standard" options="optionsMeasureTypes" data-onselectionchange="updateCharts"></vr-dropdown>
-                    </div>
-                    <div class="col-lg-2 style-col">
-                        <label class="control-label">Top:</label>
-                        <vr-dropdown datatextfield="value" datavaluefield="value"
-                                     entityname="" type="standard" options="optionTopCounts" data-onselectionchange="updateCharts"></vr-dropdown>
-                    </div>
-                </div>
             </div>
-
+            </form>
             <div class="row ">
                 <div class="col-lg-12 col-no-padding ">
                     <div class="action-bar">

@@ -3,34 +3,36 @@
     <div class="panel panel-primary panel-over-color">
         <div class="panel-body">
             <div class="am-collapse" ng-show="inputSectionVisible">
-                <div class="row style-row">
+                <form name="filterForm" novalidate>
+                    <div class="row style-row">
 
-                    <div class="col-lg-2 style-col">
-                        <label class="control-label">Measure:</label>
-                        <vr-dropdown datatextfield="name" datavaluefield="value"
-                                     entityname="" type="standard" options="optionsMeasureTypes" onselectionchange="filterChanged"></vr-dropdown>
-                    </div>
+                        <div class="col-lg-2 style-col">
+                            <label class="control-label">Measure:</label>
+                            <vr-dropdown datatextfield="name" datavaluefield="value"
+                                         entityname="" type="standard" options="optionsMeasureTypes" onselectionchange="filterChanged"></vr-dropdown>
+                        </div>
 
-                    <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <label class="control-label">From:</label>
-                        <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                            <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                        <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                            <label class="control-label">From:</label>
+                            <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                                <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                            <label class="control-label">To:</label>
+                            <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
+                                <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1 style-col">
+                            <label class="control-label">Top:</label>
+                            <vr-dropdown datatextfield="name" datavaluefield="value"
+                                         entityname="" type="standard" options="optionsTopCount" onselectionchange="filterChanged"></vr-dropdown>
                         </div>
                     </div>
-
-                    <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <label class="control-label">To:</label>
-                        <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                            <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="filterChanged()">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 style-col">
-                        <label class="control-label">Top:</label>
-                        <vr-dropdown datatextfield="name" datavaluefield="value"
-                                     entityname="" type="standard" options="optionsTopCount" onselectionchange="filterChanged"></vr-dropdown>
-                    </div>
-                </div>
+                </form>
             </div>
 
             <div class="row ">
