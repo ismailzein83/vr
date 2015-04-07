@@ -42,10 +42,10 @@ namespace TOne.LCR.Business
             return _routeOptionActionExecutionPath;
         }
 
-        public void SaveRouteRule(RouteRule rule)
+        public RouteRule SaveRouteRule(RouteRule rule)
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
-            dataManager.SaveRouteRule(rule);
+            return dataManager.SaveRouteRule(rule);
         }
 
         public List<RouteRule> GetAllRouteRule()

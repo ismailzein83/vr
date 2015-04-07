@@ -11,7 +11,7 @@ namespace TOne.LCR.Data
     {
         List<RouteRule> GetRouteRules(DateTime effectiveDate, bool isFuture, string codePrefix, IEnumerable<Int32> lstCustomerZoneIds, IEnumerable<Int32> lstSupplierZoneIds );
 
-        void SaveRouteRule(RouteRule rule);
+        RouteRule SaveRouteRule(RouteRule rule);
 
         List<RouteRule> GetAllRouteRule();
 

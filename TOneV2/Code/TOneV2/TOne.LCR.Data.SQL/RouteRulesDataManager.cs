@@ -160,18 +160,41 @@ namespace TOne.LCR.Data.SQL
             return routeRules;
         }
 
-        public void SaveRouteRule(RouteRule rule)
+        public RouteRule SaveRouteRule(RouteRule rule)
         {
-            object RouteRuleId;
-            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
-                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
-                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
-                (int)rule.Type,
-                rule.BeginEffectiveDate,
-                rule.EndEffectiveDate,
-                rule.Reason,
-                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
-                );
+            int id;
+            if (rule.RouteRuleId != 0)
+            {
+
+                ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Update]",
+                   rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+                   rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+                   (int)rule.Type,
+                   rule.BeginEffectiveDate,
+                   rule.EndEffectiveDate,
+                   rule.Reason,
+                   rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null,
+                   rule.RouteRuleId
+               );
+               id = rule.RouteRuleId;
+            }
+            else
+            {
+                object RouteRuleId;
+                ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
+               rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+               rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+               (int)rule.Type,
+               rule.BeginEffectiveDate,
+               rule.EndEffectiveDate,
+               rule.Reason,
+               rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
+               );
+                id = (int)RouteRuleId;
+            }
+           
+            return GetRouteRuleDetails(id);
+           
         }
 
         private BlockRouteOptionActionData GetBlockRouteOptionActionData(string customerID)
