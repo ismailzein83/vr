@@ -57,7 +57,8 @@ var TestViewController = function (CarriersService, ZonesService) {
             if (api == undefined || api.selectedvalues == undefined) isvalid = false;
             else if (api.selectedvalues.length == 2) isvalid = true;
 
-            return isvalid;
+            if (isvalid) return '';
+            return 'Maximum length : 2';
         }
 
         ctrl.customvalidate2 = function (api) {
@@ -66,7 +67,8 @@ var TestViewController = function (CarriersService, ZonesService) {
             if (api == undefined || api.lastselectedvalue == undefined) isvalid = false;
             else if (api.lastselectedvalue.Name == 'TEST') isvalid = true;
 
-            return isvalid;
+            if (isvalid) return '';
+            return 'Name : TEST';
         }
 
         ctrl.validationGroup = [];

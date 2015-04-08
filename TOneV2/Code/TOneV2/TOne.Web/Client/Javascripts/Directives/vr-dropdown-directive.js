@@ -1,5 +1,10 @@
 ﻿'use strict';
 
+app.constant('ValidationMessagesEnum', {
+    required: "You did not enter a field",
+    custom:"Custom validation"
+});
+
 app.directive('vrValidationArray', function () {
 
     return {
@@ -8,8 +13,8 @@ app.directive('vrValidationArray', function () {
         link: function (scope, elm, attrs, ctrlModel) {
 
             var validate = function (viewValue) {
-                if (viewValue == undefined || viewValue == 0) ctrlModel.$setValidity('requiredarray' + attrs.name, false);
-                else ctrlModel.$setValidity('requiredarray' + attrs.name, true);
+                if (viewValue == undefined || viewValue == 0) ctrlModel.$setValidity('requiredarray', false);
+                else ctrlModel.$setValidity('requiredarray', true);
                 return viewValue;
             }
             ctrlModel.$parsers.unshift(validate);
@@ -25,8 +30,8 @@ app.directive('vrValidationValue', function () {
         link: function (scope, elm, attrs, ctrlModel) {
 
             var validate = function (viewValue) {
-                if (viewValue == undefined || viewValue == '') ctrlModel.$setValidity('requiredvalue' + attrs.name, false);
-                else ctrlModel.$setValidity('requiredvalue' + attrs.name, true);
+                if (viewValue == undefined || viewValue == '') ctrlModel.$setValidity('requiredvalue' , false);
+                else ctrlModel.$setValidity('requiredvalue', true);
                 return viewValue;
             }
             ctrlModel.$parsers.unshift(validate);
@@ -36,16 +41,23 @@ app.directive('vrValidationValue', function () {
     };
 });
 
-app.directive('vrValidationCustom', function () {
+app.directive('vrValidationCustom',['ValidationMessagesEnum', function (ValidationMessagesEnum) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function (scope, elm, attrs, ctrlModel) {
 
-            var validate = function (viewValue) {
-                var isvalid = scope.ctrl.customvalidate()(scope.ctrl.options);
-                ctrlModel.$setValidity('customvalidation' + attrs.name, isvalid);
+            scope.customMessage = ValidationMessagesEnum.custom;
+            
 
+            var validate = function (viewValue) {
+                var isvalid = true;
+                scope.customMessage = scope.ctrl.customvalidate()(scope.ctrl.options);
+
+                if (scope.customMessage == undefined || scope.customMessage == '') isvalid = true;
+                else isvalid = false;
+                console.log(scope.customMessage);
+                ctrlModel.$setValidity('Custom validation', isvalid);
                 return viewValue;
             }
             ctrlModel.$parsers.unshift(validate);
@@ -53,9 +65,9 @@ app.directive('vrValidationCustom', function () {
 
         }
     };
-});
+}]);
 
-app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (DropdownService, BaseDirService) {
+app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMessagesEnum' , function (DropdownService, BaseDirService,ValidationMessagesEnum) {
 
     var directiveDefinitionObject = {
 
@@ -81,6 +93,8 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
         controller: function ($scope, $element, $attrs) {
             var controller = this;
             this.api = {};
+
+            this.ValidationMessagesEnum =ValidationMessagesEnum;
 
             this.filtername = '';
             this.showloading = false;
@@ -164,8 +178,6 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                 controller.tooltip = true;
             };
 
-            this.errorMessage = "Required";
-
             this.hidetooltip = function() {
                 controller.tooltip = false;
             };
@@ -177,14 +189,21 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
             attrs.id = BaseDirService.guid();
             angular.element(element.children()[0]).attr('name', attrs.id);
+            var divError = angular.element(element[0].querySelector('.tooltip-error'));
+            if(attrs.isrequired !== undefined) {
+                if (DropdownService.isSingleSelection(attrs.type)) {
+                        angular.element(element.children()[0]).attr('vr-validation-value', '');
+                    }
+                    else {
+                        angular.element(element.children()[0]).attr('vr-validation-array', '');
+                    } 
+                }
 
-            if (attrs.isrequired !== undefined) {
-                if (DropdownService.isSingleSelection(attrs.type)) angular.element(element.children()[0]).attr('vr-validation-value', '');
-                else angular.element(element.children()[0]).attr('vr-validation-array', '');
+
+            if (attrs.customvalidate !== undefined) {
+                angular.element(element.children()[0]).attr('vr-validation-custom', 'ctrl.customvalidate');
             }
 
-            if (attrs.customvalidate !== undefined) angular.element(element.children()[0]).attr('vr-validation-custom', 'ctrl.customvalidate');
-            
             angular.element(element.children()[0]).on('show.bs.dropdown', function (e) {
                 $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
             });
@@ -197,29 +216,27 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
 
             return {
                 pre: function ($scope, iElem, iAttrs, formCtrl) {
-                    
-                    
 
                     var ctrl = $scope.ctrl;
 
                     $scope.clearDatasource = function () {
                         if (ctrl.options.datasource == undefined) return;
-                        ctrl.options.datasource = [];
+                        ctrl.options.datasource =[];
                         ctrl.options.datasource.length = 0;
-                    };
+                        };
 
                     $scope.clearAllSelected = function (e) {
                         ctrl.muteAction(e);
                         ctrl.options.lastselectedvalue = '';
-                        ctrl.options.selectedvalues = [];
+                        ctrl.options.selectedvalues =[];
                         ctrl.options.selectedvalues.length = 0;
-                    };
+                        };
 
                     var selectval = function (e, item) {
 
                         if (ctrl.singleSelection()) {
                             ctrl.options.lastselectedvalue = '';
-                            ctrl.options.selectedvalues = [];
+                            ctrl.options.selectedvalues =[];
                             ctrl.options.selectedvalues.length = 0;
                             ctrl.options.selectedvalues.push(item);
                         }
@@ -229,45 +246,50 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             try {
                                 index = BaseDirService.findExsite(ctrl.options.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
                             }
-                            catch (ex) {
+                            catch (ex) { 
 
                             }
                             if (index >= 0)
                                 ctrl.options.selectedvalues.splice(index, 1);
-                            else
+                        else
                                 ctrl.options.selectedvalues.push(item);
-                        }
-                    };
+                                }
+                                };
 
                     $scope.selectValue = function (e, item) {
                         selectval(e, item);
                         ctrl.options.lastselectedvalue = item;
                         if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                            var item = ctrl.onselectionchange()(ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
+                            var item = ctrl.onselectionchange() (ctrl.options.selectedvalues, ctrl.options.lastselectedvalue, ctrl.options.datasource);
                             if (item !== undefined) {
                                 ctrl.options.lastselectedvalue = item;
                                 selectval(null, item);
                             }
 
-                        }
+            }
                     };
 
-                    var validationClass = { invalid: "required-inpute", valid: '' };
+                    var validationClass = { invalid : "required-inpute", valid: ''
+                    };
                     var index = -1;
 
-                    var isValidElem = function() {
+                    var isValidElem = function () {
                         if (iAttrs.isrequired !== undefined || iAttrs.customvalidate !== undefined)
                             return formCtrl[iAttrs.id].$valid;
                         return true;
-                    };
+                        };
+                    
+                    $scope.getErrorObject = function() {
+                        return formCtrl[iAttrs.id].$error;
+                    }
 
                     $scope.isvisibleTooltip = function () {
-                        if (isValidElem()) return false; 
+                        if (isValidElem()) return false;
                         return ctrl.tooltip;
                     };
 
                     $scope.isvalidcomp = function () {
-                        
+
                         if (isValidElem()) return validationClass.valid;
 
                         return validationClass.invalid;
@@ -280,10 +302,10 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             //    if (index != -1)
                             //        ctrl.options.validationGroup[index] = isvalid;
                             //    else
-                            //        index = ctrl.options.validationGroup.push(isvalid) - 1;
+                //        index = ctrl.options.validationGroup.push(isvalid) - 1;
                             //}
 
-                    }
+                }
 
                     $scope.search = function () {
                         $scope.clearDatasource();
@@ -292,7 +314,7 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService', function (Drop
                             ctrl.onsearch() (ctrl.filtername).then(function (items) {
                                 ctrl.options.datasource = items;
                                 ctrl.showloading = false;
-                                }, function (msg) {
+                    }, function (msg) {
                                     console.log(msg);
                         });
                     }

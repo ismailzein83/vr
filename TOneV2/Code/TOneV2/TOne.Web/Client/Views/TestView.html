@@ -36,7 +36,7 @@
         
         <div class="col-lg-2">
             <vr-dropdown id="dropdown1" type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready"></vr-dropdown>
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired customvalidate="testviewCtrl.customvalidate1" on-ready="testviewCtrl.onready"></vr-dropdown>
         </div>
 
         <div class="row">
@@ -44,20 +44,19 @@
                Invalid : {{myForm2.$invalid}}
             </div>
         </div>
-
         <div class="col-lg-2">
             <vr-dropdown  type="ondemand" options="testviewCtrl.optionsZone2" datatextfield="Name" datavaluefield="ZoneId"
                          onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready" customvalidate="testviewCtrl.customvalidate1"></vr-dropdown>
         </div>
-        <div class="col-lg-2">
+        <!--<div class="col-lg-2">
             <vr-dropdown  options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"
                          entityname="Supplier" isrequired customvalidate="testviewCtrl.customvalidate2"></vr-dropdown>
         </div>
-
+          
         <div class="col-lg-2">
             <vr-dropdown  type="menu" options="testviewCtrl.routesOptions" datatextfield="name" datavaluefield="value"
                          entityname="Route"  onselectionchange="testviewCtrl.selectedRoutes"></vr-dropdown>
-        </div>
+        </div>-->
 
     </form>
 
