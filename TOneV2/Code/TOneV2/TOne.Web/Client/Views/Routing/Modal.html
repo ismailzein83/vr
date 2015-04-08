@@ -5,12 +5,12 @@
                 <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" ng-bind="title"></h4>
             </div>
-
+           
             <div class="modal-body">
-                <h4>
-                    in modal
-                </h4>
-
+                <form name="test" novalidate>
+                    <vr-dropdown type="multiple" entityname="Suppliers" datatextfield="name" datavaluefield="name"
+                                 options="optionsRuleType"></vr-dropdown>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>

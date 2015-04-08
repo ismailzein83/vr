@@ -23,7 +23,7 @@ textarea.form-control {
     width: 97%;
 }
 .modal .dropdown-menu {
-    position: fixed;
+    position: absolute;
     z-index: 1000;
     min-width: 160px;
     padding: 5px 0px;
@@ -36,8 +36,9 @@ textarea.form-control {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176);
-    top:inherit;
-    left:inherit;
+    left: inherit !important;
+    right: inherit !important;
+    top:inherit !important;
 }
 .modal .menu-right{
     position: absolute;

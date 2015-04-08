@@ -12,7 +12,29 @@
     function defineScopeObjects() {
         $scope.numberoflines = 10;
         $scope.isloadingdata = false;
-        
+        $scope.optionsRuleType = {
+            selectedvalues: [],
+            datasource: [],
+            lastselectedvalue: ""
+        };
+        $scope.optionsRuleType.datasource = [
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+        ]
+
         var last = false;
         $scope.gridOptionsRouteRule = {
             enableHorizontalScrollbar: 0,
@@ -132,6 +154,7 @@
             var scopeDetails = $scope.$root.$new();
             scopeDetails.title = "New";
             scopeDetails.RouteRuleId = 'undefined';
+           // var addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: true, animation: "am-fade-and-scale" });
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
 
         }
