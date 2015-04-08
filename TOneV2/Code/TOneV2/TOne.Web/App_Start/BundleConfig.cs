@@ -36,8 +36,8 @@ namespace TOne.Web
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/Angular/angular.js",
-               "~/Client/Libraries/Angular/angular-aria.js",
                "~/Client/Libraries/Angular/angular-route.js",
+               "~/Client/Libraries/Angular/angular-messages.js",
                "~/Client/Libraries/Angular/angular-animate.js",
                "~/Client/Libraries/Angular/ui-grid.js",
                "~/Client/Libraries/Angular/angular-sanitize.js",              

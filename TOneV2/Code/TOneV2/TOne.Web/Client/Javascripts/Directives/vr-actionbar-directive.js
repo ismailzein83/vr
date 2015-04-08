@@ -15,15 +15,11 @@ app.directive('vrActionbar', ['ActionBarDirService', function (ActionBarDirServi
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        compile: function (element, attrs) {
-
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-
-
-                }
-            }
-        },
+        //link: function (scope, element, attrs, ctrl, transclude) {
+        //    transclude(scope.$parent, function (clone, scope) {
+        //        element.append(scope);
+        //    });
+        //},
         templateUrl: function (element, attrs) {
             return ActionBarDirService.dTemplate;
         }

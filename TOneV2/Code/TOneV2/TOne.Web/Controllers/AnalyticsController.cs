@@ -109,7 +109,7 @@ namespace TOne.Web.Controllers
 
         public BigResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(string tempTableKey, [FromUri] TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
         {
-            System.Threading.Thread.Sleep(3000);
+            System.Threading.Thread.Sleep(1000);
             TrafficStatisticManager manager = new TrafficStatisticManager();
             return manager.GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
         }

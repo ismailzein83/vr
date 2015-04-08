@@ -208,9 +208,12 @@
     <Content Include="Client\Javascripts\Directives\vr-actionbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-button-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-columns-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-form-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-gridview-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-row-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-panel-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-textbox-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-validation.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
@@ -233,7 +236,7 @@
     <Content Include="Client\Javascripts\Services\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\Angular\angular-animate.js" />
-    <Content Include="Client\Libraries\Angular\angular-aria.js" />
+    <Content Include="Client\Libraries\Angular\angular-messages.js" />
     <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />
     <Content Include="Client\Libraries\Angular\angular-sanitize.js" />
