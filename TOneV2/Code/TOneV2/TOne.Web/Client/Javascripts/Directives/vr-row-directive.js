@@ -1,23 +1,15 @@
 ﻿'use strict';
 
-app.directive('vrRow', [function () {
+app.directive('vrRow', ['$compile', function ($compile) {
 
     var directiveDefinitionObject = {
-        transclude: true,
         restrict: 'E',
-        //replace: true,
-        scope: {},
-        link: function (scope, element, attrs, transclude) {
-            
-            transclude(scope.$parent, function(content) {
-                element.append(content);
-            });
-        },
-        template: function (element, attrs) {
-            var removeline = attrs.removeline;
-            return '<div class="row' + (removeline == 'true' ? '' : ' style-row') + '" ng-transclude></div>';
+        scope: false,
+        compile: function (tElement, tAttrs) {
+            var removeline = tAttrs.removeline;
+            var newElement = '<div class="row' + (removeline == 'true' ? '' : ' style-row') + '">' + tElement.context.innerHTML + '</div>';
+            tElement.html(newElement);            
         }
-
     };
 
     return directiveDefinitionObject;

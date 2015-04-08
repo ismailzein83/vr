@@ -4,46 +4,38 @@
         <div class="am-collapse" ng-hide="filterSectionCollapsed" ng-init="formState={gettingDataDisabled: false}">
             <vr-row>
                 <vr-columns>
-                    <label class="control-label">From:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
-                    </div>
+                    <vr-datetimepicker type="date" value="fromDate" label="From: {{formState.gettingDataDisabled}}"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns>
-                    <label class="control-label">To:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text">
-                    </div>
+                    <vr-datetimepicker type="date" value="toDate" label="To:"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>
+    </vr-form>
 
+    <vr-row removeline="true">
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <vr-button type="Search" data-onclick="getData" isasynchronous=" true" isdisabled="formState.gettingDataDisabled"></vr-button>
+            <vr-button type="Reset"></vr-button>
+        </vr-actionbar>
+    </vr-row>
 
-        <vr-row removeline="true">
-            <vr-columns colnum="12">
-                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                    <vr-button type="Search" data-onclick="getData" isasynchronous=" true" isdisabled="formState.gettingDataDisabled"></vr-button>
-                    <vr-button type="Reset"></vr-button>
-                </vr-actionbar>
+    <div ng-show="showResult">
+        <vr-row>
+            <vr-columns colnum="5">
+                <vr-chart data-on-ready="chartSelectedMeasureReady" style="display:inline-block"></vr-chart>
+            </vr-columns>
+            <vr-columns colnum="5">
+                <vr-chart data-on-ready="chartSelectedEntityReady" style="display:inline-block"></vr-chart>
             </vr-columns>
         </vr-row>
-
-        <div ng-show="showResult">
-            <vr-row>
-                <vr-columns colnum="5">
-                    <vr-chart data-on-ready="chartSelectedMeasureReady" style="display:inline-block"></vr-chart>
-                </vr-columns>
-                <vr-columns colnum="5">
-                    <vr-chart data-on-ready="chartSelectedEntityReady" style="display:inline-block"></vr-chart>
-                </vr-columns>
-            </vr-row>
-
-            <div ng-class="{'disabledbutton': formState.gettingDataDisabled}">
+        <div ng-class="{'disabledbutton': formState.gettingDataDisabled}">
+            <vr-form name="formNavigation">
                 <vr-row>
                     <vr-columns colnum="2">
-                        <label class="control-label" style="padding-top:3px">
+                        <vr-label style="padding-top:3px">
                             Items per Page:
-                        </label>
+                        </vr-label>
                     </vr-columns>
                     <vr-columns>
                         <vr-dropdown datatextfield="description" datavaluefield="value"
@@ -55,32 +47,31 @@
                                     items-per-page="optionsTopCount.lastselectedvalue.value" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
                     </vr-columns>
                 </vr-row>
-            </div>
-
-
-            <vr-row>
-                <vr-columns colnum="12">
-                    <div id="custom" class="gridroute" ui-grid="gridOptionsAllMeasures" ui-grid-auto-resize ng-style="getGridHeight(gridOptionsAllMeasures)"></div>
-                </vr-columns>
-                <div style="float:right;margin-right:25px">
-                    <label class="control-label" style="padding-top:6px">
-                        Page {{currentPage}} of {{numberOfPages}}
-                    </label>
-                </div>
-            </vr-row>
+            </vr-form>
         </div>
-    </vr-form>
-</vr-panel>
-    <style>
-        .pagination {
-            margin: 0px !important;
-        }
 
-        .disabledbutton {
-            pointer-events: none;
-            opacity: 0.1;
-        }
-    </style>
+        <vr-row>
+            <vr-columns colnum="12">
+                <div id="custom" class="gridroute" ui-grid="gridOptionsAllMeasures" ui-grid-auto-resize ng-style="getGridHeight(gridOptionsAllMeasures)"></div>
+            </vr-columns>
+            <div style="float:right;margin-right:25px">
+                <vr-label>
+                    Page {{currentPage}} of {{numberOfPages}}
+                </vr-label>
+            </div>
+        </vr-row>
+    </div>
+</vr-panel>
+<style>
+    .pagination {
+        margin: 0px !important;
+    }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.1;
+    }
+</style>
 
 
 

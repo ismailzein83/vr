@@ -8,50 +8,47 @@
 
             <div class="modal-body" style="max-height:500px;overflow-y:auto">
 
-
-
-                <div class="row style-row" ng-show="config.isSingleDimension">
-                    <div class="col-lg-12 style-col">
-                        <div>
-                            <label class="control-label">
-                                <switch ng-model="config.showValuesWithLegends" class="green"></switch>
-                                Show Values with Legends
-                            </label>
-                        </div>
+                <vr-form name="formChartSettings">
+                    <div ng-show="config.isSingleDimension">
+                        <vr-row>
+                            <vr-columns colnum="12">
+                                <div>
+                                    <vr-switch value="config.showValuesWithLegends" label="Show Values with Legends"></vr-switch>
+                                </div>
+                            </vr-columns>
+                        </vr-row>
                     </div>
-                </div>
+                    
 
-
-                <div class="row style-row" ng-show="!config.isSingleDimension">
-                    <div class="col-lg-12 style-col">
-                        <label class="control-label">
-                            Series to draw:
-                        </label>
-                        <div ng-repeat="itm in config.series">
-                            <div class="row style-row">
-                                <div class="col-lg-3 style-col">
-                                    <label class="control-label">
-                                        {{itm.title}}
-                                    </label>
+                    <div ng-show="!config.isSingleDimension">
+                        <vr-row>
+                            <vr-columns colnum="12">
+                                <vr-label>
+                                    Series to draw:
+                                </vr-label>
+                                <div ng-repeat="itm in config.series">
+                                    <vr-row>
+                                        <vr-columns colnum="3">
+                                            <label class="control-label">
+                                                {{itm.title}}
+                                            </label>
+                                        </vr-columns>
+                                        <vr-columns>
+                                            <vr-switch value="itm.selected"></vr-switch>
+                                        </vr-columns>
+                                        <vr-columns colnum="3">
+                                            <vr-dropdown datatextfield="value" datavaluefield="value"
+                                                         entityname="" type="standard" options="itm.seriesTypesOption"></vr-dropdown>
+                                        </vr-columns>
+                                    </vr-row>
                                 </div>
-                                <div class="col-lg-1 style-col">
-                                    <switch ng-model="itm.selected" class="green"></switch>
-                                </div>
-                                <div class="col-lg-3 style-col">
-                                    <vr-dropdown datatextfield="value" datavaluefield="value"
-                                                 entityname="" type="standard" options="itm.seriesTypesOption"></vr-dropdown>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
+                            </vr-columns>
+                        </vr-row>
+                    </div>                    
+                </vr-form>
             </div>
-            <div class="modal-footer">
-                <vr-actionbar>
+            <div >
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
                     <vr-button type="Save" data-onclick="save"></vr-button>
                     <vr-button type="Close" data-onclick="$hide"></vr-button>
                 </vr-actionbar>

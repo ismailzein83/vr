@@ -1,60 +1,38 @@
-﻿
+﻿<vr-panel>
+    <div class="am-collapse" ng-hide="filterSectionCollapsed">
+        <vr-form name="filterForm">
+            <vr-row>
 
-
-
-<div class="container-fluid ">
-    <div class="panel panel-primary panel-over-color">
-        <div class="panel-body">
-
-            <div class="row style-row am-collapse" ng-show="custom">
-
-                <div class="col-lg-2 style-col">
-                    <label class="control-label">Grouped By:</label>
+                <vr-columns colnum="2">
+                    <vr-label>Grouped By:</vr-label>
                     <vr-dropdown datatextfield="name" datavaluefield="value"
                                  entityname="" type="standard" options="timeDimensionTypesOption" onselectionchange="updateChart"></vr-dropdown>
-                </div>
-                <div class="col-lg-1 style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                    <label class="control-label">From:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="fromDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="updateChart()">
-                    </div>
-                </div>
+                </vr-columns>
+                <vr-columns>
+                    <vr-datetimepicker type="date" value="fromDate" label="From:" onvaluechanged="updateChart"></vr-datetimepicker>
+                </vr-columns>
 
-                <div class="col-lg-1  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                    <label class="control-label">To:</label>
-                    <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                        <input size="10" class="form-control" ng-model="toDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-change="updateChart()">
-                    </div>
-                </div>
+                <vr-columns>
+                    <vr-datetimepicker type="date" value="toDate" label="To:" onvaluechanged="updateChart"></vr-datetimepicker>
+                </vr-columns>
 
-            </div>
-            <div class="row ">
-                <div class="col-lg-12 col-no-padding ">
-                    <div class="action-bar">
-                        <div class="btn-group action-bar-left">
-                            <button ng-init="custom=true" ng-click="custom = !custom" style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
-                                <span ng-show="custom" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-                                <span ng-hide="custom" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                            </button>
-
-                        </div>
-                        <div class="btn-group action-bar-right" ng-show="custom">
-                            <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="onclickClear()">Reset<span style="padding-left:4px" class="glyphicon  glyphicon-refresh" aria-hidden="true"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row style-row">
-                <div class="col-lg-12 style-col">
-                    <vr-chart data-on-ready="chartSaleCostProfitReady"></vr-chart>
-                </div>
-            </div>
-
-            <div class="row style-row">
-                <div class="col-lg-12 style-col">
-                    <vr-chart data-on-ready="chartProfitReady"></vr-chart>
-                </div>
-            </div>
-        </div>
+            </vr-row>
+        </vr-form>
     </div>
-</div>
+    <vr-row removeline="true">
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+        </vr-actionbar>
+    </vr-row>
+    <vr-row>
+        <vr-columns colnum="12">
+            <vr-chart data-on-ready="chartSaleCostProfitReady"></vr-chart>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row class="row style-row">
+        <vr-columns colnum="12">
+            <vr-chart data-on-ready="chartProfitReady"></vr-chart>
+        </vr-columns>
+    </vr-row>
+</vr-panel>

@@ -17,16 +17,6 @@ appControllers.controller('ZoneMonitorController',
         load();
         function defineScopeObjects() {
             $scope.testModel = 'ZoneMonitorController';
-            $scope.chartDataSource = [{ value: "test 1" },
-            { value: "test 2" },
-            { value: "test 3" }];
-
-            $scope.getChartDataSource = function () {
-
-                return [{ value: "test 4" },
-            { value: "test 5" },
-            { value: "test 6" }];
-            };
 
             $scope.optionsTopCount = {
                 datasource: [
@@ -136,7 +126,6 @@ appControllers.controller('ZoneMonitorController',
             };
 
             $scope.gridCellClicked = function (entity) {
-                console.log("gridCellClicked");
                 $scope.selectedEntityId = entity.GroupKeyValues[0].Id;
                 $scope.selectedEntityName = entity.GroupKeyValues[0].Name;
                 console.log($scope.selectedEntityName);
@@ -207,7 +196,6 @@ appControllers.controller('ZoneMonitorController',
                 chartSelectedEntityAPI.hideChart();
 
             var count = $scope.optionsTopCount.lastselectedvalue.value;
-            
            
             var fromRow = ($scope.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;

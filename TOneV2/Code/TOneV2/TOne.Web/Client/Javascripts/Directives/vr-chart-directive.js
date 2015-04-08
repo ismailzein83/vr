@@ -18,22 +18,24 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
             var isChartAvailable = false;           
 
 
-            function ResetChartSettings()
+            function InitializeChartSettings()
             {
-                currentChartSettings = {
-                    isSingleDimension: currentChartSource.isSingleDimension,
-                    showValuesWithLegends: false,
-                    series: []
-                };
-
-                angular.forEach(currentChartSource.seriesDefinitions, function (sDef) {
-                    var serieSettings = {
-                        title: sDef.title,
-                        selected: true,
-                        type: sDef.type ? sDef.type : currentChartSource.chartDefinition.type
+                if (currentChartSettings == undefined) {
+                    currentChartSettings = {
+                        isSingleDimension: currentChartSource.isSingleDimension,
+                        showValuesWithLegends: false,
+                        series: []
                     };
-                    currentChartSettings.series.push(serieSettings);
-                });
+
+                    angular.forEach(currentChartSource.seriesDefinitions, function (sDef) {
+                        var serieSettings = {
+                            title: sDef.title,
+                            selected: true,
+                            type: sDef.type ? sDef.type : currentChartSource.chartDefinition.type
+                        };
+                        currentChartSettings.series.push(serieSettings);
+                    });
+                }
             }
 
             function onDataItemClicked(dataItem) {
@@ -307,7 +309,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                     chartDefinition: chartDefinition,
                     seriesDefinitions: seriesDefinitions
                 };
-                ResetChartSettings();
+                InitializeChartSettings();
                 renderSingleDimensionChart(currentChartSource);
             };
 
@@ -319,7 +321,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                     seriesDefinitions: seriesDefinitions,
                     xAxisDefinition: xAxisDefinition
                 };
-                ResetChartSettings();
+                InitializeChartSettings();
                 renderChart(currentChartSource);
             };
 
