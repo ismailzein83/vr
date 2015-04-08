@@ -69,7 +69,13 @@
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
             
 
-        }
+         }
+         $scope.test = function (row, i) {
+             var scopeDetails = $scope.$root.$new();            
+             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/testModal.html', show: true, animation: "am-fade-and-scale" });
+
+
+         }
         var getData = function (data, page) {
             var res = [];
             for (var i = (page * pageSize) ; i < (page + 1) * pageSize && i < data.length; ++i) {

@@ -1,4 +1,4 @@
-﻿appControllers.controller('RouteRuleEditorController',
+﻿appControllers.controller('RouteOverrideController2',
     function RouteOverrideController2($scope, $http, CarriersService) {
 
         defineScopeObjects();

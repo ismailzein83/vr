@@ -199,7 +199,7 @@
 
                 notify.closeAll();
                 notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
-                return $scope.optionsRuleType.datasource[0];
+                $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0]
             }
         }
 
@@ -252,24 +252,17 @@
     function load() {
             
        
-        var dropdownHidingTimeoutHandler;
-
-        $('.dropdown-custom').on('mouseenter', function () {
-            var $this = $(this);
-            clearTimeout(dropdownHidingTimeoutHandler);
-            if (!$this.hasClass('open')) {
-                $('.dropdown-toggle', $this).dropdown('toggle');
-            }
+       
+        $('.test').on('show.bs.dropdown', function (e) {
+           console.log($('.test'))
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
 
-        $('.dropdown-custom').on('mouseleave', function () {
-            var $this = $(this);
-            dropdownHidingTimeoutHandler = setTimeout(function () {
-                if ($this.hasClass('open')) {
-                    $('.dropdown-toggle', $this).dropdown('toggle');
-                }
-            }, 150);
+        //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('.test').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+
         //alert($scope.RouteRuleId)
         if ($scope.RouteRuleId != 'undefined') {
 
