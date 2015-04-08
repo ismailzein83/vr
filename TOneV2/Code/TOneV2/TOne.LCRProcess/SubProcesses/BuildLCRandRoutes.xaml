@@ -22,8 +22,8 @@
     <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
     <x:Property Name="EffectiveTime" Type="InArgument(s:DateTime)" />
     <x:Property Name="CodeMatchesQueue" Type="InArgument(vq:BaseQueue(scg:List(tle:CodeMatch)))" />
-    <x:Property Name="RoutingDataBaseId" Type="InArgument(x:Int32)" />
     <x:Property Name="RouteDetailsBatchQueue" Type="InArgument(vq:BaseQueue(tle:RouteDetailBatch))" />
+    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.BuildLCRandRoutes_1</sap2010:WorkflowViewState.IdRef>
@@ -152,7 +152,7 @@
     <tla:GetSupplierZoneRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneRates_1">
       <tla:GetSupplierZoneRates.RoutingDatabaseId>
         <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDataBaseId</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
         </InArgument>
       </tla:GetSupplierZoneRates.RoutingDatabaseId>
       <tla:GetSupplierZoneRates.SupplierZoneRates>
@@ -229,7 +229,7 @@
             </tla:GetCustomerZoneRates.CustomerZoneRates>
             <tla:GetCustomerZoneRates.RoutingDatabaseId>
               <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDataBaseId</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
               </InArgument>
             </tla:GetCustomerZoneRates.RoutingDatabaseId>
             <tla:GetCustomerZoneRates.ZoneIds>

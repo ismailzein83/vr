@@ -77,12 +77,23 @@ namespace TOne.LCR.Data.SQL
 
         public void CreateIndexesOnTable()
         {
-            throw new NotImplementedException();
+            ExecuteNonQueryText(query_CreateIndexesOnTable, null);
         }
 
         #region Queries
 
-        const string query_CreateIndexesOnTable = @"";
+        const string query_CreateIndexesOnTable = @"   CREATE NONCLUSTERED INDEX [IX_Route_Code] ON [Route] 
+		                                                (
+			                                                [Code] ASC
+		                                                )
+                                                       CREATE NONCLUSTERED INDEX [IX_Route_CustomerId] ON [Route] 
+		                                                (
+			                                                [CustomerId] ASC
+		                                                )
+                                                         CREATE NONCLUSTERED INDEX [IX_Route_OurZoneId] ON [Route] 
+		                                                (
+			                                                [OurZoneId] ASC
+		                                                )";
 
         #endregion
     }

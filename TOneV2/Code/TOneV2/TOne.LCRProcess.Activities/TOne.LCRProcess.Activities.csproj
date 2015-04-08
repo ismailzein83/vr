@@ -75,6 +75,7 @@
     <Compile Include="BuildCodeMatchByCodeGroup.cs" />
     <Compile Include="BuildCodeMatchByFirstCodeDigit.cs" />
     <Compile Include="BuildRoutes.cs" />
+    <Compile Include="CreateIndexesOnRouteTable.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
