@@ -1,8 +1,7 @@
 ﻿'use strict';
 
 app.constant('ValidationMessagesEnum', {
-    required: "You did not enter a field",
-    custom:"Custom validation"
+    required: "You did not enter a field"
 });
 
 app.directive('vrValidationArray', function () {
@@ -47,7 +46,7 @@ app.directive('vrValidationCustom',['ValidationMessagesEnum', function (Validati
         require: 'ngModel',
         link: function (scope, elm, attrs, ctrlModel) {
 
-            scope.customMessage = ValidationMessagesEnum.custom;
+            scope.customMessage ='';
             
 
             var validate = function (viewValue) {
