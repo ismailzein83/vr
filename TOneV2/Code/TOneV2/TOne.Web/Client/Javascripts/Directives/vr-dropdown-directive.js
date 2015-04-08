@@ -46,17 +46,17 @@ app.directive('vrValidationCustom',['ValidationMessagesEnum', function (Validati
         require: 'ngModel',
         link: function (scope, elm, attrs, ctrlModel) {
 
-            scope.customMessage ='';
+            scope.ctrl.customMessage ='';
             
 
             var validate = function (viewValue) {
                 var isvalid = true;
-                scope.customMessage = scope.ctrl.customvalidate()(scope.ctrl.options);
+                scope.ctrl.customMessage = scope.ctrl.customvalidate() (scope.ctrl.options);
 
-                if (scope.customMessage == undefined || scope.customMessage == '') isvalid = true;
+                if (scope.ctrl.customMessage == undefined || scope.ctrl.customMessage == '') isvalid = true;
                 else isvalid = false;
-                console.log(scope.customMessage);
-                ctrlModel.$setValidity('Custom validation', isvalid);
+                console.log(scope.ctrl.customMessage);
+                ctrlModel.$setValidity('customvalidation', isvalid);
                 return viewValue;
             }
             ctrlModel.$parsers.unshift(validate);
@@ -91,7 +91,8 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
         },
         controller: function ($scope, $element, $attrs) {
             var controller = this;
-            this.api = {};
+            this.api = { };
+            this.customMessage = '';
 
             this.ValidationMessagesEnum =ValidationMessagesEnum;
 
