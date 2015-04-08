@@ -1,6 +1,5 @@
 ﻿var RouteRuleEditorController = function ($scope, $http, $location, $routeParams, notify, RoutingAPIService) {
-
-
+   
     defineScopeObjects();
     defineScopeMethods();
     load();
@@ -250,20 +249,6 @@
 
     }
     function load() {
-            
-       
-       
-        $('.test').on('show.bs.dropdown', function (e) {
-           console.log($('.test'))
-            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-        });
-
-        //ADD SLIDEUP ANIMATION TO DROPDOWN //
-        $('.test').on('hide.bs.dropdown', function (e) {
-            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-        });
-
-        //alert($scope.RouteRuleId)
         if ($scope.RouteRuleId != 'undefined') {
 
             RoutingAPIService.getRouteRuleDetails($scope.RouteRuleId)

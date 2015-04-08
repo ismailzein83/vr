@@ -203,15 +203,17 @@ app.directive('vrDropdown', ['DropdownService', 'BaseDirService','ValidationMess
             if (attrs.customvalidate !== undefined) {
                 angular.element(element.children()[0]).attr('vr-validation-custom', 'ctrl.customvalidate');
             }
+            setTimeout(function () {               
+                $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                });
 
-            angular.element(element.children()[0]).on('show.bs.dropdown', function (e) {
-                $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-            });
-
-            angular.element(element.children()[0]).on('hide.bs.dropdown', function (e) {
-                $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-            });
-
+                $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function (e) {
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                });
+            } , 100)
+           
+         
             attrs = DropdownService.setDefaultAttributes(attrs);
 
             return {
