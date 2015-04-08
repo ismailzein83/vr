@@ -55,7 +55,6 @@ app.directive('vrValidationCustom',['ValidationMessagesEnum', function (Validati
 
                 if (scope.ctrl.customMessage == undefined || scope.ctrl.customMessage == '') isvalid = true;
                 else isvalid = false;
-                console.log(scope.ctrl.customMessage);
                 ctrlModel.$setValidity('customvalidation', isvalid);
                 return viewValue;
             }
