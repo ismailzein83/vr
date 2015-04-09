@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.ServiceProcess;
 using System.Timers;
+using Rebex.Net;
 
 
 namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
@@ -80,161 +81,37 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
             try
             {
-                //  Important: It is helpful to send the contents of the
-                //  sftp.LastErrorText property when requesting support.
-                ErrorLogger("7.1");
-                Chilkat.SFtp sftp = new Chilkat.SFtp();
-                ErrorLogger("7.2");
-                //  Any string automatically begins a fully-functional 30-day trial.
-                bool success = sftp.UnlockComponent("Anything for 30-day trial");
-                ErrorLogger("7.3");
-                if (success != true)
+
+                var sftp = new Rebex.Net.Sftp();
+                sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
+                sftp.Login(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
+
+                if (sftp.GetConnectionState().Connected)
                 {
-                    ErrorLogger("7.4");
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-
-                ErrorLogger("7.5");
-                //  Set some timeouts, in milliseconds:
-                sftp.ConnectTimeoutMs = 5000;
-
-                ErrorLogger("7.6");
-                sftp.IdleTimeoutMs = 10000;
-
-
-                ErrorLogger("7.7");
-                //  Connect to the SSH server.
-                //  The standard SSH port = 22
-                //  The hostname may be a hostname or IP address.
-                int port;
-
-                ErrorLogger("7.8");
-                string hostname;
-                hostname = System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString();
-                ErrorLogger("7.9");
-                port = 22;
-                ErrorLogger("7.10");
-                success = sftp.Connect(hostname, port);
-                ErrorLogger("7.11");
-                if (success != true)
-                {
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-
-                ErrorLogger("7.12");
-                //  Authenticate with the SSH server.  Chilkat SFTP supports
-                //  both password-based authenication as well as public-key
-                //  authentication.  This example uses password authenication.
-                success = sftp.AuthenticatePw(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
-                if (success != true)
-                {
-                    ErrorLogger("7.13");
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-                ErrorLogger("7.14");
-                //  After authenticating, the SFTP subsystem must be initialized:
-                success = sftp.InitializeSftp();
-                if (success != true)
-                {
-                    ErrorLogger("7.15");
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-
-                //  Open a directory on the server...
-                //  Paths starting with a slash are "absolute", and are relative
-                //  to the root of the file system. Names starting with any other
-                //  character are relative to the user's default directory (home directory).
-                //  A path component of ".." refers to the parent directory,
-                //  and "." refers to the current directory.
-                string handle;
-                ErrorLogger("7.16");
-                handle = sftp.OpenDir(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
-                if (handle == null)
-                {
-                    ErrorLogger("7.17");
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-
-                //  Download the directory listing:
-                Chilkat.SFtpDir dirListing = null;
-                ErrorLogger("7.18");
-                dirListing = sftp.ReadDir(handle);
-                if (dirListing == null)
-                {
-                    ErrorLogger("7.19");
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
-                }
-
-                //  Iterate over the files.
-                int i;
-                ErrorLogger("7.20");
-                int n = dirListing.NumFilesAndDirs;
-                if (n == 0)
-                {
-                    ErrorLogger("7.21");
-                    ErrorLogger("No entries found in this directory." + "/n");
-                }
-                else
-                {
-                    ErrorLogger("7.22");
-                    for (i = 0; i <= n - 1; i++)
+                    // set current directory
+                    sftp.ChangeDirectory(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
+                    // get items within the current directory
+                    SftpItemCollection currentItems = sftp.GetList();
+                    if (currentItems.Count > 0)
                     {
-                        ErrorLogger("7.23");
-                        Chilkat.SFtpFile fileObj = null;
-                        ErrorLogger("7.24");
-                        fileObj = dirListing.GetFileObject(i);
-
-
-                        if (!fileObj.IsDirectory && fileObj.Filename.ToUpper().Contains(".DAT"))
+                        foreach (var fileObj in currentItems)
                         {
-                            //ErrorLogger(fileObj.Filename);
-                            //ErrorLogger(fileObj.FileType);
-                            //ErrorLogger("Size in bytes: " + Convert.ToString(fileObj.Size32));
-                            //ErrorLogger("----");
-                            ErrorLogger("7.25");
-                            DBConnect db = new DBConnect();
-                            ErrorLogger("7.26");
-                            db.Load(fileObj.Filename);
-                            ErrorLogger("7.27");
-
-
-
-
-                            //  Rename the file or directory:
-                            success = sftp.RenameFileOrDir(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Filename, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Filename.Replace(".DAT", ".old"));
-
-                            ErrorLogger("7.28");
-                            if (success == false)
+                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
                             {
-                                ErrorLogger(sftp.LastErrorText + "/n");
-                                return;
+                                DBConnect db = new DBConnect();
+                                if (db.Load(fileObj.Name))
+                                {
+                                    sftp.Rename(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name.Replace(".DAT", ".old"));
+                                }
                             }
-
                         }
-
-
-
-
                     }
-
-                }
-                ErrorLogger("7.29");
-                //  Close the directory
-                success = sftp.CloseHandle(handle);
-                if (success != true)
-                {
-                    ErrorLogger(sftp.LastErrorText + "/n");
-                    return;
+                    sftp.Disconnect();
                 }
 
-                ErrorLogger("Success." + "/n");
-               
+                
+
+
             }
             catch (Exception ex)
             {
@@ -364,9 +241,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
 
         //Insert statement
-        public void Load(string FileName)
+        public bool Load(string FileName)
         {
-
+            bool results = false;
             try
             {
                 ErrorLogger("7.26.1");
@@ -389,12 +266,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                     //close connection
                     this.CloseConnection();
                     ErrorLogger("7.26.7");
+                    results = true;
                 }
             }
             catch (MySqlException ex)
             {
 
             }
+            return results;
 
 
         }

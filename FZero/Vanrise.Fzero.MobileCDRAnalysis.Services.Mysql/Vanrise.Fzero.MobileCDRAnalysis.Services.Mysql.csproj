@@ -67,10 +67,6 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChilkatDotNet45, Version=9.5.0.48, Culture=neutral, PublicKeyToken=eb5fc1fc52ef09bd, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\walid.mogharbel\Desktop\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Dependecies\ChilkatDotNet45.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependecies\MySql.Data.dll</HintPath>
@@ -82,6 +78,42 @@
     <Reference Include="MySql.Web, Version=6.7.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependecies\MySql.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ftp, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SecureSocket, Version=3.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.SecureSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh, Version=2.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SshShell, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.SshShell.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Telnet, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security, Version=1.5.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation, Version=1.0.3854.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependecies\Rebex.TerminalEmulation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -116,7 +148,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="bin\Debug\FMSMysqlSln.InstallLog" />
     <None Include="bin\Debug\FMSMysqlSln.InstallState" />
     <None Include="bin\Debug\FMSMysqlSln.v11.suo" />
@@ -157,6 +191,18 @@
     <Content Include="Dependecies\MySql.Data.Entity.EF6.dll" />
     <Content Include="Dependecies\MySql.Fabric.Plugin.dll" />
     <Content Include="Dependecies\MySql.Web.dll" />
+    <Content Include="Dependecies\Rebex.Net.Ftp.dll" />
+    <Content Include="Dependecies\Rebex.Net.ProxySocket.dll" />
+    <Content Include="Dependecies\Rebex.Net.ProxySocket.xml" />
+    <Content Include="Dependecies\Rebex.Net.SecureSocket.dll" />
+    <Content Include="Dependecies\Rebex.Net.Sftp.dll" />
+    <Content Include="Dependecies\Rebex.Net.Ssh.dll" />
+    <Content Include="Dependecies\Rebex.Net.SshShell.dll" />
+    <Content Include="Dependecies\Rebex.Net.Telnet.dll" />
+    <Content Include="Dependecies\Rebex.Net.Telnet.xml" />
+    <Content Include="Dependecies\Rebex.Security.dll" />
+    <Content Include="Dependecies\Rebex.TerminalEmulation.dll" />
+    <Content Include="Dependecies\Rebex.TerminalEmulation.xml" />
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="MySql.Data">
