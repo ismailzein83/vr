@@ -12,9 +12,15 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Peak_Hoursold
+    public partial class Subscriber_ValuesNew
     {
-        public int ID { get; set; }
-        public Nullable<int> hours { get; set; }
+        public int Id { get; set; }
+        public string SubscriberNumber { get; set; }
+        public Nullable<System.DateTime> FromDate { get; set; }
+        public Nullable<System.DateTime> ToDate { get; set; }
+        public Nullable<int> CriteriaId { get; set; }
+        public Nullable<int> StrategyId { get; set; }
+        public Nullable<decimal> Value { get; set; }
+        public Nullable<int> PeriodId { get; set; }
     }
 }

@@ -24,6 +24,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> LastUpdatedBy { get; set; }
     
         public virtual PredefinedColumn PredefinedColumn { get; set; }
+        public virtual PredefinedColumn PredefinedColumn1 { get; set; }
         public virtual SwitchProfile SwitchProfile { get; set; }
+        public virtual SwitchProfile SwitchProfile1 { get; set; }
     }
 }

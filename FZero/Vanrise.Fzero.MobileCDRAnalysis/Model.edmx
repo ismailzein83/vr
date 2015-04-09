@@ -7,6 +7,7 @@
     <Schema Namespace="CDRAnalysisMobileModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="CDRAnalysisMobileModelStoreContainer">
           <EntitySet Name="CDR" EntityType="CDRAnalysisMobileModel.Store.CDR" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="CDR_Old" EntityType="CDRAnalysisMobileModel.Store.CDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="CellProfile" EntityType="CDRAnalysisMobileModel.Store.CellProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="ControlTable" EntityType="CDRAnalysisMobileModel.Store.ControlTable" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Criteria_Profile" EntityType="CDRAnalysisMobileModel.Store.Criteria_Profile" store:Type="Tables" Schema="CDRAnalysisMobile" />
@@ -19,6 +20,8 @@
           <EntitySet Name="Imports" EntityType="CDRAnalysisMobileModel.Store.Imports" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="ImportTypes" EntityType="CDRAnalysisMobileModel.Store.ImportTypes" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="NormalCDR" EntityType="CDRAnalysisMobileModel.Store.NormalCDR" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="NormalCDR_Old" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="NormalCDR_ToDelete" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_ToDelete" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="NormalizationRules" EntityType="CDRAnalysisMobileModel.Store.NormalizationRules" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="NumberProfile" EntityType="CDRAnalysisMobileModel.Store.NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="OperationType" EntityType="CDRAnalysisMobileModel.Store.OperationType" store:Type="Tables" Schema="CDRAnalysisMobile" />
@@ -40,7 +43,9 @@
           <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.Store.StrategyPeriods" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="StrategyThreshold" EntityType="CDRAnalysisMobileModel.Store.StrategyThreshold" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Store.Subscriber_Values" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Store.Subscriber_ValuesNew" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholds" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="SubscriberThresholdstest" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.Store.SwitchProfiles" store:Type="Tables" Schema="CDRAnalysisMobile" />
@@ -88,6 +93,18 @@
       `vwSuspectionAnalysis`.`Occurrence_Hour`
       FROM `vwSuspectionAnalysis` AS `vwSuspectionAnalysis`</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="CDR_Old_ibfk_1" Association="CDRAnalysisMobileModel.Store.CDR_Old_ibfk_1">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
+          <AssociationSet Name="CDR_Old_ibfk_2" Association="CDRAnalysisMobileModel.Store.CDR_Old_ibfk_2">
+            <End Role="Imports" EntitySet="Imports" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
+          <AssociationSet Name="CDR_Old_ibfk_3" Association="CDRAnalysisMobileModel.Store.CDR_Old_ibfk_3">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
           <AssociationSet Name="ControlTable_ibfk_1" Association="CDRAnalysisMobileModel.Store.ControlTable_ibfk_1">
             <End Role="OperationType" EntitySet="OperationType" />
             <End Role="ControlTable" EntitySet="ControlTable" />
@@ -107,6 +124,14 @@
           <AssociationSet Name="EmailTemplates_ibfk_1" Association="CDRAnalysisMobileModel.Store.EmailTemplates_ibfk_1">
             <End Role="Users" EntitySet="Users" />
             <End Role="EmailTemplates" EntitySet="EmailTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_Imports" Association="CDRAnalysisMobileModel.Store.FK_CDR_Imports">
+            <End Role="Imports" EntitySet="Imports" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_SwitchProfiles" Association="CDRAnalysisMobileModel.Store.FK_CDR_SwitchProfiles">
+            <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
           </AssociationSet>
           <AssociationSet Name="FK_ControlTable_OperationType" Association="CDRAnalysisMobileModel.Store.FK_ControlTable_OperationType">
             <End Role="OperationType" EntitySet="OperationType" />
@@ -240,9 +265,17 @@
             <End Role="Periods" EntitySet="Periods" />
             <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
           </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Periods1" Association="CDRAnalysisMobileModel.Store.FK_SubscriberThresholds_Periods1">
+            <End Role="Periods" EntitySet="Periods" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstest" />
+          </AssociationSet>
           <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="CDRAnalysisMobileModel.Store.FK_SubscriberThresholds_Suspection_Level">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level1" Association="CDRAnalysisMobileModel.Store.FK_SubscriberThresholds_Suspection_Level1">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstest" />
           </AssociationSet>
           <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="CDRAnalysisMobileModel.Store.FK_Switch_DatabaseConnections_Switchs">
             <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
@@ -368,9 +401,17 @@
             <End Role="Periods" EntitySet="Periods" />
             <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
           </AssociationSet>
+          <AssociationSet Name="SubscriberThresholds_ibfk_11" Association="CDRAnalysisMobileModel.Store.SubscriberThresholds_ibfk_11">
+            <End Role="Periods" EntitySet="Periods" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstest" />
+          </AssociationSet>
           <AssociationSet Name="SubscriberThresholds_ibfk_2" Association="CDRAnalysisMobileModel.Store.SubscriberThresholds_ibfk_2">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="SubscriberThresholds_ibfk_21" Association="CDRAnalysisMobileModel.Store.SubscriberThresholds_ibfk_21">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstest" />
           </AssociationSet>
           <AssociationSet Name="Switch_DatabaseConnections_ibfk_1" Association="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections_ibfk_1">
             <End Role="SwitchProfiles" EntitySet="SwitchProfiles" />
@@ -386,6 +427,38 @@
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="CDR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MSISDN" Type="varchar" MaxLength="30" />
+          <Property Name="IMSI" Type="varchar" MaxLength="20" />
+          <Property Name="ConnectDateTime" Type="datetime" />
+          <Property Name="Destination" Type="varchar" MaxLength="40" />
+          <Property Name="DurationInSeconds" Type="decimal" Precision="13" Scale="4" />
+          <Property Name="DisconnectDateTime" Type="datetime" />
+          <Property Name="Call_Class" Type="varchar" MaxLength="50" />
+          <Property Name="Call_Type" Type="int" />
+          <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
+          <Property Name="IMEI" Type="varchar" MaxLength="20" />
+          <Property Name="BTS_Id" Type="int" />
+          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
+          <Property Name="Up_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Down_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Cell_Latitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Cell_Longitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Service_Type" Type="int" />
+          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Reference" Type="varchar" MaxLength="50" />
+          <Property Name="SourceID" Type="int" />
+          <Property Name="ImportID" Type="int" />
+          <Property Name="Switch" Type="varchar" MaxLength="50" />
+          <Property Name="Ignore" Type="int" />
+          <Property Name="IsNormalized" Type="bool" />
+        </EntityType>
+        <EntityType Name="CDR_Old">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -545,6 +618,62 @@
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="NormalCDR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MSISDN" Type="varchar" MaxLength="30" />
+          <Property Name="IMSI" Type="varchar" MaxLength="20" />
+          <Property Name="ConnectDateTime" Type="datetime" />
+          <Property Name="Destination" Type="varchar" MaxLength="40" />
+          <Property Name="DurationInSeconds" Type="decimal" Precision="13" Scale="4" />
+          <Property Name="DisconnectDateTime" Type="datetime" />
+          <Property Name="Call_Class" Type="varchar" MaxLength="50" />
+          <Property Name="IsOnNet" Type="utinyint" />
+          <Property Name="Call_Type" Type="int" />
+          <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
+          <Property Name="IMEI" Type="varchar" MaxLength="20" />
+          <Property Name="BTS_Id" Type="int" />
+          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
+          <Property Name="SwitchRecordId" Type="int" />
+          <Property Name="Up_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Down_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Cell_Latitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Cell_Longitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Service_Type" Type="int" />
+          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="NormalCDR_Old">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MSISDN" Type="varchar" MaxLength="30" />
+          <Property Name="IMSI" Type="varchar" MaxLength="20" />
+          <Property Name="ConnectDateTime" Type="datetime" />
+          <Property Name="Destination" Type="varchar" MaxLength="40" />
+          <Property Name="DurationInSeconds" Type="decimal" Precision="13" Scale="4" />
+          <Property Name="DisconnectDateTime" Type="datetime" />
+          <Property Name="Call_Class" Type="varchar" MaxLength="50" />
+          <Property Name="IsOnNet" Type="utinyint" />
+          <Property Name="Call_Type" Type="int" />
+          <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
+          <Property Name="IMEI" Type="varchar" MaxLength="20" />
+          <Property Name="BTS_Id" Type="int" />
+          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
+          <Property Name="SwitchRecordId" Type="int" />
+          <Property Name="Up_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Down_Volume" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Cell_Latitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Cell_Longitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
+          <Property Name="Service_Type" Type="int" />
+          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="NormalCDR_ToDelete">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -834,7 +963,46 @@
           <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PeriodId" Type="int" />
         </EntityType>
+        <EntityType Name="Subscriber_ValuesNew">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="CriteriaId" Type="int" />
+          <Property Name="StrategyId" Type="int" />
+          <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PeriodId" Type="int" />
+        </EntityType>
         <EntityType Name="SubscriberThresholds">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DateDay" Type="datetime" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Criteria1" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria2" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria3" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria4" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria5" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria6" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria7" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria8" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria9" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria10" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria11" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria12" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria13" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria14" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SuspectionLevelId" Type="int" />
+          <Property Name="StrategyId" Type="int" />
+          <Property Name="PeriodId" Type="int" />
+        </EntityType>
+        <EntityType Name="SubscriberThresholdstest">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1005,6 +1173,42 @@
           <Property Name="Occurrence_Day" Type="int" Nullable="false" />
           <Property Name="Occurrence_Hour" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="CDR_Old_ibfk_1">
+          <End Role="SwitchProfiles" Type="CDRAnalysisMobileModel.Store.SwitchProfiles" Multiplicity="0..1" />
+          <End Role="CDR_Old" Type="CDRAnalysisMobileModel.Store.CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="SourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CDR_Old_ibfk_2">
+          <End Role="Imports" Type="CDRAnalysisMobileModel.Store.Imports" Multiplicity="0..1" />
+          <End Role="CDR_Old" Type="CDRAnalysisMobileModel.Store.CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Imports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="ImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CDR_Old_ibfk_3">
+          <End Role="SwitchProfiles" Type="CDRAnalysisMobileModel.Store.SwitchProfiles" Multiplicity="0..1" />
+          <End Role="CDR_Old" Type="CDRAnalysisMobileModel.Store.CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="SourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ControlTable_ibfk_1">
           <End Role="OperationType" Type="CDRAnalysisMobileModel.Store.OperationType" Multiplicity="1" />
           <End Role="ControlTable" Type="CDRAnalysisMobileModel.Store.ControlTable" Multiplicity="*" />
@@ -1062,6 +1266,30 @@
             </Principal>
             <Dependent Role="EmailTemplates">
               <PropertyRef Name="LastUpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_Imports">
+          <End Role="Imports" Type="CDRAnalysisMobileModel.Store.Imports" Multiplicity="0..1" />
+          <End Role="CDR_Old" Type="CDRAnalysisMobileModel.Store.CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Imports">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="ImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_SwitchProfiles">
+          <End Role="SwitchProfiles" Type="CDRAnalysisMobileModel.Store.SwitchProfiles" Multiplicity="0..1" />
+          <End Role="CDR_Old" Type="CDRAnalysisMobileModel.Store.CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfiles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="SourceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1461,6 +1689,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SubscriberThresholds_Periods1">
+          <End Role="Periods" Type="CDRAnalysisMobileModel.Store.Periods" Multiplicity="0..1" />
+          <End Role="SubscriberThresholdstest" Type="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SubscriberThresholds_Suspection_Level">
           <End Role="Suspicion_Level" Type="CDRAnalysisMobileModel.Store.Suspicion_Level" Multiplicity="0..1" />
           <End Role="SubscriberThresholds" Type="CDRAnalysisMobileModel.Store.SubscriberThresholds" Multiplicity="*" />
@@ -1469,6 +1709,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="SubscriberThresholds">
+              <PropertyRef Name="SuspectionLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Suspection_Level1">
+          <End Role="Suspicion_Level" Type="CDRAnalysisMobileModel.Store.Suspicion_Level" Multiplicity="0..1" />
+          <End Role="SubscriberThresholdstest" Type="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
               <PropertyRef Name="SuspectionLevelId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1849,6 +2101,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="SubscriberThresholds_ibfk_11">
+          <End Role="Periods" Type="CDRAnalysisMobileModel.Store.Periods" Multiplicity="0..1" />
+          <End Role="SubscriberThresholdstest" Type="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="SubscriberThresholds_ibfk_2">
           <End Role="Suspicion_Level" Type="CDRAnalysisMobileModel.Store.Suspicion_Level" Multiplicity="0..1" />
           <End Role="SubscriberThresholds" Type="CDRAnalysisMobileModel.Store.SubscriberThresholds" Multiplicity="*" />
@@ -1857,6 +2121,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="SubscriberThresholds">
+              <PropertyRef Name="SuspectionLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SubscriberThresholds_ibfk_21">
+          <End Role="Suspicion_Level" Type="CDRAnalysisMobileModel.Store.Suspicion_Level" Multiplicity="0..1" />
+          <End Role="SubscriberThresholdstest" Type="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
               <PropertyRef Name="SuspectionLevelId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1897,8 +2173,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="prCollectNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+          <Parameter Name="v_StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillDailySubscriberThresholdstest2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
@@ -1929,12 +2209,65 @@
           <Parameter Name="p_SwitchID" Type="int" Mode="In" />
         </Function>
         <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <Function Name="todelete_prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <Function Name="todelete_prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'def.CDRAnalysisMobile.CDR_DAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="CDR_DAT">
+        <Property Name="Source_Type" Type="varchar" MaxLength="10" />
+        <Property Name="Source_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Source_File" Type="varchar" MaxLength="70" />
+        <Property Name="Record_Type" Type="varchar" MaxLength="2" />
+        <Property Name="Call_Type" Type="varchar" MaxLength="3" />
+        <Property Name="IMEI" Type="varchar" MaxLength="20" />
+        <Property Name="IMEI14" Type="varchar" MaxLength="14" />
+        <Property Name="Entity" Type="varchar" MaxLength="20" />
+        <Property Name="Served_MSISDN" Type="varchar" MaxLength="20" />
+        <Property Name="Sub_Type" Type="varchar" MaxLength="10" />
+        <Property Name="SERVED_MSRN" Type="varchar" MaxLength="20" />
+        <Property Name="SERVED_MSRN_CC" Type="varchar" MaxLength="3" />
+        <Property Name="Destination" Type="varchar" MaxLength="20" />
+        <Property Name="Destination_CC" Type="varchar" MaxLength="3" />
+        <Property Name="StartTime_String" Type="varchar" MaxLength="8" />
+        <Property Name="StartTime" Type="varchar" MaxLength="14" />
+        <Property Name="Duration" Type="varchar" MaxLength="5" />
+        <Property Name="Volume_Unit" Type="varchar" MaxLength="7" />
+        <Property Name="Basic_Service" Type="varchar" MaxLength="5" />
+        <Property Name="Cell_ID" Type="varchar" MaxLength="22" />
+        <Property Name="Cause_Of_Termination" Type="varchar" MaxLength="50" />
+        <Property Name="Third_Party" Type="varchar" MaxLength="20" />
+        <Property Name="Service_Center_Address" Type="varchar" MaxLength="50" />
+        <Property Name="Out_TGRP_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Inc_TRGP_Name" Type="varchar" MaxLength="20" />
+        <Property Name="Call_Class" Type="varchar" MaxLength="10" />
+        <Property Name="CP_Desc" Type="varchar" MaxLength="50" />
+        <Property Name="Call_Ref_Num" Type="varchar" MaxLength="30" />
+        <Property Name="Camel_Ref_Num" Type="varchar" MaxLength="50" />
+        <Property Name="Opt_Route_Ind" Type="varchar" MaxLength="1" />
+        <Property Name="Zero_Duration" Type="varchar" MaxLength="1" />
+        <Property Name="Starttime_Month" Type="varchar" MaxLength="2" />
+        <Property Name="Starttime_Day" Type="varchar" MaxLength="2" />
+        <Property Name="Pulses" Type="varchar" MaxLength="3" />
+        <Property Name="Up_Vol" Type="varchar" MaxLength="10" />
+        <Property Name="Down_Vol" Type="varchar" MaxLength="10" />
+        <Property Name="Multiparty_Call" Type="varchar" MaxLength="1" />
+        <Property Name="Latitude" Type="varchar" MaxLength="9" />
+        <Property Name="Longitude" Type="varchar" MaxLength="9" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'def.CDRAnalysisMobile.filesDAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="filesDAT">
+        <Property Name="content" Type="varchar" />
+      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CDRAnalysisMobileModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="MobileEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="CDRs" EntityType="CDRAnalysisMobileModel.CDR" />
+          <EntitySet Name="CDR_Old" EntityType="CDRAnalysisMobileModel.CDR_Old" />
           <EntitySet Name="CellProfiles" EntityType="CDRAnalysisMobileModel.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="CDRAnalysisMobileModel.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="CDRAnalysisMobileModel.Criteria_Profile" />
@@ -1947,11 +2280,11 @@
           <EntitySet Name="Imports" EntityType="CDRAnalysisMobileModel.Import" />
           <EntitySet Name="ImportTypes" EntityType="CDRAnalysisMobileModel.ImportType" />
           <EntitySet Name="NormalCDRs" EntityType="CDRAnalysisMobileModel.NormalCDR" />
+          <EntitySet Name="NormalCDR_Old" EntityType="CDRAnalysisMobileModel.NormalCDR_Old" />
+          <EntitySet Name="NormalCDR_ToDelete" EntityType="CDRAnalysisMobileModel.NormalCDR_ToDelete" />
           <EntitySet Name="NormalizationRules" EntityType="CDRAnalysisMobileModel.NormalizationRule" />
           <EntitySet Name="NumberProfiles" EntityType="CDRAnalysisMobileModel.NumberProfile" />
-          <EntitySet Name="NumberProfileNews" EntityType="CDRAnalysisMobileModel.NumberProfileNew" />
           <EntitySet Name="OperationTypes" EntityType="CDRAnalysisMobileModel.OperationType" />
-          <EntitySet Name="Peak_Hoursold" EntityType="CDRAnalysisMobileModel.Peak_Hoursold" />
           <EntitySet Name="Peak_Time" EntityType="CDRAnalysisMobileModel.Peak_Time" />
           <EntitySet Name="Periods" EntityType="CDRAnalysisMobileModel.Period" />
           <EntitySet Name="Permissions" EntityType="CDRAnalysisMobileModel.Permission" />
@@ -1970,7 +2303,9 @@
           <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.StrategyPeriod" />
           <EntitySet Name="StrategyThresholds" EntityType="CDRAnalysisMobileModel.StrategyThreshold" />
           <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Subscriber_Values" />
+          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Subscriber_ValuesNew" />
           <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.SubscriberThreshold" />
+          <EntitySet Name="SubscriberThresholdstests" EntityType="CDRAnalysisMobileModel.SubscriberThresholdstest" />
           <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Suspicion_Level" />
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" />
           <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.SwitchProfile" />
@@ -1980,18 +2315,27 @@
           <EntitySet Name="vwDashboards" EntityType="CDRAnalysisMobileModel.vwDashboard" />
           <EntitySet Name="vwReportedNumbers" EntityType="CDRAnalysisMobileModel.vwReportedNumber" />
           <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="CDRAnalysisMobileModel.vwReportedNumberNormalCDR" />
+          <EntitySet Name="vwReportVariables" EntityType="CDRAnalysisMobileModel.vwReportVariable" />
           <EntitySet Name="vwSuspectionAnalysis" EntityType="CDRAnalysisMobileModel.vwSuspectionAnalysi" />
-          <AssociationSet Name="CDR_ibfk_1" Association="CDRAnalysisMobileModel.CDR_ibfk_1">
+          <AssociationSet Name="CDR_Old_ibfk_1" Association="CDRAnalysisMobileModel.CDR_Old_ibfk_1">
             <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
-            <End Role="CDR" EntitySet="CDRs" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
           </AssociationSet>
-          <AssociationSet Name="CDR_ibfk_2" Association="CDRAnalysisMobileModel.CDR_ibfk_2">
+          <AssociationSet Name="CDR_Old_ibfk_2" Association="CDRAnalysisMobileModel.CDR_Old_ibfk_2">
             <End Role="Import" EntitySet="Imports" />
-            <End Role="CDR" EntitySet="CDRs" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
           </AssociationSet>
-          <AssociationSet Name="CDR_ibfk_3" Association="CDRAnalysisMobileModel.CDR_ibfk_3">
+          <AssociationSet Name="CDR_Old_ibfk_3" Association="CDRAnalysisMobileModel.CDR_Old_ibfk_3">
             <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
-            <End Role="CDR" EntitySet="CDRs" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_Imports" Association="CDRAnalysisMobileModel.FK_CDR_Imports">
+            <End Role="Import" EntitySet="Imports" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CDR_SwitchProfiles" Association="CDRAnalysisMobileModel.FK_CDR_SwitchProfiles">
+            <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
+            <End Role="CDR_Old" EntitySet="CDR_Old" />
           </AssociationSet>
           <AssociationSet Name="ControlTable_ibfk_1" Association="CDRAnalysisMobileModel.ControlTable_ibfk_1">
             <End Role="OperationType" EntitySet="OperationTypes" />
@@ -2000,6 +2344,38 @@
           <AssociationSet Name="ControlTable_ibfk_2" Association="CDRAnalysisMobileModel.ControlTable_ibfk_2">
             <End Role="Period" EntitySet="Periods" />
             <End Role="ControlTable" EntitySet="ControlTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlTable_OperationType" Association="CDRAnalysisMobileModel.FK_ControlTable_OperationType">
+            <End Role="OperationType" EntitySet="OperationTypes" />
+            <End Role="ControlTable" EntitySet="ControlTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlTable_Periods" Association="CDRAnalysisMobileModel.FK_ControlTable_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="ControlTable" EntitySet="ControlTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile1">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Min_Values_criteria_profile" Association="CDRAnalysisMobileModel.FK_Strategy_Min_Values_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="StrategyThreshold" EntitySet="StrategyThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_criteria_profile" Association="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile">
+            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
           </AssociationSet>
           <AssociationSet Name="Related_Criteria_ibfk_1" Association="CDRAnalysisMobileModel.Related_Criteria_ibfk_1">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
@@ -2033,9 +2409,29 @@
             <End Role="EmailTemplate" EntitySet="EmailTemplates" />
             <End Role="EmailReceiver" EntitySet="EmailReceivers" />
           </AssociationSet>
+          <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="CDRAnalysisMobileModel.FK_EmailReceivers_EmailReceiverTypes">
+            <End Role="EmailReceiverType" EntitySet="EmailReceiverTypes" />
+            <End Role="EmailReceiver" EntitySet="EmailReceivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailReceivers_EmailTemplates" Association="CDRAnalysisMobileModel.FK_EmailReceivers_EmailTemplates">
+            <End Role="EmailTemplate" EntitySet="EmailTemplates" />
+            <End Role="EmailReceiver" EntitySet="EmailReceivers" />
+          </AssociationSet>
           <AssociationSet Name="EmailTemplates_ibfk_1" Association="CDRAnalysisMobileModel.EmailTemplates_ibfk_1">
             <End Role="User" EntitySet="Users" />
             <End Role="EmailTemplate" EntitySet="EmailTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailTemplates_Users" Association="CDRAnalysisMobileModel.FK_EmailTemplates_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="EmailTemplate" EntitySet="EmailTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Imports_ImportTypes" Association="CDRAnalysisMobileModel.FK_Imports_ImportTypes">
+            <End Role="ImportType" EntitySet="ImportTypes" />
+            <End Role="Import" EntitySet="Imports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Imports_Users" Association="CDRAnalysisMobileModel.FK_Imports_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Import" EntitySet="Imports" />
           </AssociationSet>
           <AssociationSet Name="Imports_ibfk_1" Association="CDRAnalysisMobileModel.Imports_ibfk_1">
             <End Role="ImportType" EntitySet="ImportTypes" />
@@ -2045,13 +2441,37 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Import" EntitySet="Imports" />
           </AssociationSet>
+          <AssociationSet Name="FK_NormalizationRules_SwitchProfiles" Association="CDRAnalysisMobileModel.FK_NormalizationRules_SwitchProfiles">
+            <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
+            <End Role="NormalizationRule" EntitySet="NormalizationRules" />
+          </AssociationSet>
           <AssociationSet Name="NormalizationRules_ibfk_1" Association="CDRAnalysisMobileModel.NormalizationRules_ibfk_1">
             <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
             <End Role="NormalizationRule" EntitySet="NormalizationRules" />
           </AssociationSet>
+          <AssociationSet Name="FK_Peak_time_Strategy" Association="CDRAnalysisMobileModel.FK_Peak_time_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Peak_Time" EntitySet="Peak_Time" />
+          </AssociationSet>
           <AssociationSet Name="Peak_Time_ibfk_1" Association="CDRAnalysisMobileModel.Peak_Time_ibfk_1">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Peak_Time" EntitySet="Peak_Time" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_Periods" Association="CDRAnalysisMobileModel.FK_StrategyPeriods_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_Periods" Association="CDRAnalysisMobileModel.FK_Subscriber_Values_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Periods" Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Periods1" Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods1">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstests" />
           </AssociationSet>
           <AssociationSet Name="StrategyPeriods_ibfk_2" Association="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2">
             <End Role="Period" EntitySet="Periods" />
@@ -2065,6 +2485,18 @@
             <End Role="Period" EntitySet="Periods" />
             <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
           </AssociationSet>
+          <AssociationSet Name="SubscriberThresholds_ibfk_11" Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_11">
+            <End Role="Period" EntitySet="Periods" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permissions_Permissions" Association="CDRAnalysisMobileModel.FK_Permissions_Permissions">
+            <End Role="Permission" EntitySet="Permissions" />
+            <End Role="Permission1" EntitySet="Permissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_Permissions" Association="CDRAnalysisMobileModel.FK_UserPermissions_Permissions">
+            <End Role="Permission" EntitySet="Permissions" />
+            <End Role="UserPermission" EntitySet="UserPermissions" />
+          </AssociationSet>
           <AssociationSet Name="Permissions_ibfk_1" Association="CDRAnalysisMobileModel.Permissions_ibfk_1">
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="Permission1" EntitySet="Permissions" />
@@ -2073,13 +2505,33 @@
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
+          <AssociationSet Name="FK_SourceMappings_PredefinedColumns" Association="CDRAnalysisMobileModel.FK_SourceMappings_PredefinedColumns">
+            <End Role="PredefinedColumn" EntitySet="PredefinedColumns" />
+            <End Role="SourceMapping" EntitySet="SourceMappings" />
+          </AssociationSet>
           <AssociationSet Name="SourceMappings_ibfk_1" Association="CDRAnalysisMobileModel.SourceMappings_ibfk_1">
             <End Role="PredefinedColumn" EntitySet="PredefinedColumns" />
             <End Role="SourceMapping" EntitySet="SourceMappings" />
           </AssociationSet>
+          <AssociationSet Name="FK_Related_Criteria_Strategy" Association="CDRAnalysisMobileModel.FK_Related_Criteria_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
           <AssociationSet Name="Related_Criteria_ibfk_3" Association="CDRAnalysisMobileModel.Related_Criteria_ibfk_3">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Related_Criteria" EntitySet="Related_Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_ReportingStatus" Association="CDRAnalysisMobileModel.FK_Report_ReportingStatus">
+            <End Role="ReportingStatu" EntitySet="ReportingStatus" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Users" Association="CDRAnalysisMobileModel.FK_Report_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportDetails_Report" Association="CDRAnalysisMobileModel.FK_ReportDetails_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="ReportDetail" EntitySet="ReportDetails" />
           </AssociationSet>
           <AssociationSet Name="Report_ibfk_1" Association="CDRAnalysisMobileModel.Report_ibfk_1">
             <End Role="ReportingStatu" EntitySet="ReportingStatus" />
@@ -2093,13 +2545,45 @@
             <End Role="Report" EntitySet="Reports" />
             <End Role="ReportDetail" EntitySet="ReportDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_ReportDetails_Strategy" Association="CDRAnalysisMobileModel.FK_ReportDetails_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="ReportDetail" EntitySet="ReportDetails" />
+          </AssociationSet>
           <AssociationSet Name="ReportDetails_ibfk_2" Association="CDRAnalysisMobileModel.ReportDetails_ibfk_2">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="ReportDetail" EntitySet="ReportDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_SourceMappings_SwitchProfiles" Association="CDRAnalysisMobileModel.FK_SourceMappings_SwitchProfiles">
+            <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
+            <End Role="SourceMapping" EntitySet="SourceMappings" />
+          </AssociationSet>
           <AssociationSet Name="SourceMappings_ibfk_2" Association="CDRAnalysisMobileModel.SourceMappings_ibfk_2">
             <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
             <End Role="SourceMapping" EntitySet="SourceMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Min_Values_Strategy" Association="CDRAnalysisMobileModel.FK_Strategy_Min_Values_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Strategy_Min_Values" EntitySet="Strategy_Min_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="CDRAnalysisMobileModel.FK_Strategy_suspection_level_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Strategy_Users" Association="CDRAnalysisMobileModel.FK_Strategy_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Strategy" EntitySet="Strategies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="CDRAnalysisMobileModel.FK_StrategyPeriods_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="StrategyThreshold" EntitySet="StrategyThresholds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriber_Values_Strategy" Association="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy">
+            <End Role="Strategy" EntitySet="Strategies" />
+            <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
           </AssociationSet>
           <AssociationSet Name="Strategy_ibfk_1" Association="CDRAnalysisMobileModel.Strategy_ibfk_1">
             <End Role="User" EntitySet="Users" />
@@ -2125,23 +2609,46 @@
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
           </AssociationSet>
+          <AssociationSet Name="FK_Strategy_suspection_level_suspection_level" Association="CDRAnalysisMobileModel.FK_Strategy_suspection_level_suspection_level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
           <AssociationSet Name="Strategy_Suspicion_Level_ibfk_2" Association="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="Strategy_Suspicion_Level" EntitySet="Strategy_Suspicion_Level" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
           </AssociationSet>
           <AssociationSet Name="SubscriberThresholds_ibfk_2" Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
           </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level1" Association="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level1">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstests" />
+          </AssociationSet>
+          <AssociationSet Name="SubscriberThresholds_ibfk_21" Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_21">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThresholdstest" EntitySet="SubscriberThresholdstests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="CDRAnalysisMobileModel.FK_Switch_DatabaseConnections_Switchs">
+            <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
+            <End Role="Switch_DatabaseConnections" EntitySet="Switch_DatabaseConnections" />
+          </AssociationSet>
           <AssociationSet Name="Switch_DatabaseConnections_ibfk_1" Association="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1">
             <End Role="SwitchProfile" EntitySet="SwitchProfiles" />
             <End Role="Switch_DatabaseConnections" EntitySet="Switch_DatabaseConnections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPermissions_Users" Association="CDRAnalysisMobileModel.FK_UserPermissions_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
           <AssociationSet Name="UserPermissions_ibfk_2" Association="CDRAnalysisMobileModel.UserPermissions_ibfk_2">
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <EntitySet Name="vwReportVariables" EntityType="CDRAnalysisMobileModel.vwReportVariable" />
         </EntityContainer>
         <EntityType Name="CDR">
           <Key>
@@ -2174,9 +2681,43 @@
           <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Ignore" />
           <Property Type="Boolean" Name="IsNormalized" />
-          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.CDR_ibfk_1" FromRole="CDR" ToRole="SwitchProfile" />
-          <NavigationProperty Name="Import" Relationship="CDRAnalysisMobileModel.CDR_ibfk_2" FromRole="CDR" ToRole="Import" />
-          <NavigationProperty Name="SwitchProfile1" Relationship="CDRAnalysisMobileModel.CDR_ibfk_3" FromRole="CDR" ToRole="SwitchProfile" />
+        </EntityType>
+        <EntityType Name="CDR_Old">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" />
+          <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" />
+          <Property Type="DateTime" Name="DisconnectDateTime" />
+          <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Call_Type" />
+          <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BTS_Id" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="Up_Volume" />
+          <Property Type="Decimal" Name="Down_Volume" />
+          <Property Type="Decimal" Name="Cell_Latitude" />
+          <Property Type="Decimal" Name="Cell_Longitude" />
+          <Property Type="String" Name="In_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Out_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Service_Type" />
+          <Property Type="String" Name="Service_VAS_Name" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Reference" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SourceID" />
+          <Property Type="Int32" Name="ImportID" />
+          <Property Type="String" Name="Switch" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Ignore" />
+          <Property Type="Boolean" Name="IsNormalized" />
+          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_1" FromRole="CDR_Old" ToRole="SwitchProfile" />
+          <NavigationProperty Name="Import" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_2" FromRole="CDR_Old" ToRole="Import" />
+          <NavigationProperty Name="SwitchProfile1" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_3" FromRole="CDR_Old" ToRole="SwitchProfile" />
+          <NavigationProperty Name="Import1" Relationship="CDRAnalysisMobileModel.FK_CDR_Imports" FromRole="CDR_Old" ToRole="Import" />
+          <NavigationProperty Name="SwitchProfile2" Relationship="CDRAnalysisMobileModel.FK_CDR_SwitchProfiles" FromRole="CDR_Old" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="CellProfile">
           <Key>
@@ -2211,6 +2752,8 @@
           <Property Type="Int32" Name="NumberOfCalls" />
           <NavigationProperty Name="OperationType" Relationship="CDRAnalysisMobileModel.ControlTable_ibfk_1" FromRole="ControlTable" ToRole="OperationType" />
           <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.ControlTable_ibfk_2" FromRole="ControlTable" ToRole="Period" />
+          <NavigationProperty Name="OperationType1" Relationship="CDRAnalysisMobileModel.FK_ControlTable_OperationType" FromRole="ControlTable" ToRole="OperationType" />
+          <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.FK_ControlTable_Periods" FromRole="ControlTable" ToRole="Period" />
         </EntityType>
         <EntityType Name="Criteria_Profile">
           <Key>
@@ -2218,12 +2761,18 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Description" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Related_Criteria" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
-          <NavigationProperty Name="Related_Criteria1" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
-          <NavigationProperty Name="Strategy_Min_Values" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
-          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
-          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="Related_Criteria" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
+          <NavigationProperty Name="Related_Criteria1" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
+          <NavigationProperty Name="Strategy_Min_Values" Relationship="CDRAnalysisMobileModel.FK_Strategy_Min_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
+          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="Related_Criteria2" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
+          <NavigationProperty Name="Related_Criteria3" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
+          <NavigationProperty Name="Strategy_Min_Values1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
+          <NavigationProperty Name="StrategyPeriods1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="StrategyThresholds1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="Subscriber_Values1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
         </EntityType>
         <EntityType Name="delete_NumberProfile">
           <Key>
@@ -2272,6 +2821,8 @@
           <Property Type="Int32" Name="EmailReceiverTypeID" />
           <NavigationProperty Name="EmailReceiverType" Relationship="CDRAnalysisMobileModel.EmailReceivers_ibfk_1" FromRole="EmailReceiver" ToRole="EmailReceiverType" />
           <NavigationProperty Name="EmailTemplate" Relationship="CDRAnalysisMobileModel.EmailReceivers_ibfk_2" FromRole="EmailReceiver" ToRole="EmailTemplate" />
+          <NavigationProperty Name="EmailReceiverType1" Relationship="CDRAnalysisMobileModel.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiver" ToRole="EmailReceiverType" />
+          <NavigationProperty Name="EmailTemplate1" Relationship="CDRAnalysisMobileModel.FK_EmailReceivers_EmailTemplates" FromRole="EmailReceiver" ToRole="EmailTemplate" />
         </EntityType>
         <EntityType Name="EmailReceiverType">
           <Key>
@@ -2280,6 +2831,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EmailReceivers" Relationship="CDRAnalysisMobileModel.EmailReceivers_ibfk_1" FromRole="EmailReceiverType" ToRole="EmailReceiver" />
+          <NavigationProperty Name="EmailReceivers1" Relationship="CDRAnalysisMobileModel.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiverType" ToRole="EmailReceiver" />
         </EntityType>
         <EntityType Name="EmailTemplate">
           <Key>
@@ -2293,7 +2845,9 @@
           <Property Type="DateTime" Name="LastUpdateDate" Nullable="false" />
           <Property Type="Int32" Name="LastUpdatedBy" Nullable="false" />
           <NavigationProperty Name="EmailReceivers" Relationship="CDRAnalysisMobileModel.EmailReceivers_ibfk_2" FromRole="EmailTemplate" ToRole="EmailReceiver" />
+          <NavigationProperty Name="EmailReceivers1" Relationship="CDRAnalysisMobileModel.FK_EmailReceivers_EmailTemplates" FromRole="EmailTemplate" ToRole="EmailReceiver" />
           <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.EmailTemplates_ibfk_1" FromRole="EmailTemplate" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.FK_EmailTemplates_Users" FromRole="EmailTemplate" ToRole="User" />
         </EntityType>
         <EntityType Name="EmailToken">
           <Key>
@@ -2310,9 +2864,12 @@
           <Property Type="DateTime" Name="ImportDate" Nullable="false" />
           <Property Type="Int32" Name="ImportedBy" />
           <Property Type="Int32" Name="ImportTypeId" Nullable="false" />
-          <NavigationProperty Name="CDRs" Relationship="CDRAnalysisMobileModel.CDR_ibfk_2" FromRole="Import" ToRole="CDR" />
-          <NavigationProperty Name="ImportType" Relationship="CDRAnalysisMobileModel.Imports_ibfk_1" FromRole="Import" ToRole="ImportType" />
-          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.Imports_ibfk_2" FromRole="Import" ToRole="User" />
+          <NavigationProperty Name="CDR_Old" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_2" FromRole="Import" ToRole="CDR_Old" />
+          <NavigationProperty Name="CDR_Old1" Relationship="CDRAnalysisMobileModel.FK_CDR_Imports" FromRole="Import" ToRole="CDR_Old" />
+          <NavigationProperty Name="ImportType" Relationship="CDRAnalysisMobileModel.FK_Imports_ImportTypes" FromRole="Import" ToRole="ImportType" />
+          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.FK_Imports_Users" FromRole="Import" ToRole="User" />
+          <NavigationProperty Name="ImportType1" Relationship="CDRAnalysisMobileModel.Imports_ibfk_1" FromRole="Import" ToRole="ImportType" />
+          <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.Imports_ibfk_2" FromRole="Import" ToRole="User" />
         </EntityType>
         <EntityType Name="ImportType">
           <Key>
@@ -2320,9 +2877,66 @@
           </Key>
           <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Imports" Relationship="CDRAnalysisMobileModel.Imports_ibfk_1" FromRole="ImportType" ToRole="Import" />
+          <NavigationProperty Name="Imports" Relationship="CDRAnalysisMobileModel.FK_Imports_ImportTypes" FromRole="ImportType" ToRole="Import" />
+          <NavigationProperty Name="Imports1" Relationship="CDRAnalysisMobileModel.Imports_ibfk_1" FromRole="ImportType" ToRole="Import" />
         </EntityType>
         <EntityType Name="NormalCDR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" />
+          <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" />
+          <Property Type="DateTime" Name="DisconnectDateTime" />
+          <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Byte" Name="IsOnNet" />
+          <Property Type="Int32" Name="Call_Type" />
+          <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BTS_Id" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SwitchRecordId" />
+          <Property Type="Decimal" Name="Up_Volume" />
+          <Property Type="Decimal" Name="Down_Volume" />
+          <Property Type="Decimal" Name="Cell_Latitude" />
+          <Property Type="Decimal" Name="Cell_Longitude" />
+          <Property Type="String" Name="In_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Out_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Service_Type" />
+          <Property Type="String" Name="Service_VAS_Name" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="NormalCDR_Old">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MSISDN" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMSI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ConnectDateTime" />
+          <Property Type="String" Name="Destination" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="DurationInSeconds" />
+          <Property Type="DateTime" Name="DisconnectDateTime" />
+          <Property Type="String" Name="Call_Class" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Byte" Name="IsOnNet" />
+          <Property Type="Int32" Name="Call_Type" />
+          <Property Type="String" Name="Sub_Type" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IMEI" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BTS_Id" />
+          <Property Type="String" Name="Cell_Id" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SwitchRecordId" />
+          <Property Type="Decimal" Name="Up_Volume" />
+          <Property Type="Decimal" Name="Down_Volume" />
+          <Property Type="Decimal" Name="Cell_Latitude" />
+          <Property Type="Decimal" Name="Cell_Longitude" />
+          <Property Type="String" Name="In_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Out_Trunk" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Service_Type" />
+          <Property Type="String" Name="Service_VAS_Name" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="NormalCDR_ToDelete">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -2367,7 +2981,8 @@
           <Property Type="Int32" Name="SubstringStartIndex" />
           <Property Type="Int32" Name="SubstringLength" />
           <Property Type="String" Name="SuffixToAdd" MaxLength="5" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.NormalizationRules_ibfk_1" FromRole="NormalizationRule" ToRole="SwitchProfile" />
+          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.FK_NormalizationRules_SwitchProfiles" FromRole="NormalizationRule" ToRole="SwitchProfile" />
+          <NavigationProperty Name="SwitchProfile1" Relationship="CDRAnalysisMobileModel.NormalizationRules_ibfk_1" FromRole="NormalizationRule" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
@@ -2389,47 +3004,8 @@
           <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
           <Property Type="Int32" Name="Diff_Dest_net" />
           <Property Type="Int32" Name="Diff_Sources_net" />
-          <Property Type="Int32" Name="Total_Cell_In" />
-          <Property Type="Int32" Name="Total_Cell_Out" />
-          <Property Type="Int32" Name="Total_Cell" />
-          <Property Type="Int32" Name="Count_Out_SMS" />
-          <Property Type="Int32" Name="Count_In_SMS" />
-          <Property Type="Int32" Name="Total_IMEI" />
-          <Property Type="Int32" Name="Count_Out_OnNet" />
-          <Property Type="Int32" Name="Count_In_OnNet" />
-          <Property Type="Int32" Name="Count_Out_OffNet" />
-          <Property Type="Int32" Name="Count_In_OffNet" />
-          <Property Type="Int32" Name="Total_BTS" />
-          <Property Type="Int32" Name="Count_Out_Inter" />
-          <Property Type="Int32" Name="Count_In_Inter" />
-          <Property Type="Int32" Name="IsOnNet" />
-          <Property Type="Decimal" Name="Total_Data_Volume" />
           <Property Type="Int32" Name="Total_BTS_In" />
           <Property Type="Int32" Name="Total_BTS_Out" />
-        </EntityType>
-        <EntityType Name="NumberProfileNew">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Date_Day" />
-          <Property Type="Int32" Name="Day_Hour" />
-          <Property Type="Int32" Name="Count_Out_Calls" />
-          <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
-          <Property Type="Int32" Name="Count_Out_Fail" />
-          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
-          <Property Type="Decimal" Name="Call_Out_Dur_Avg" />
-          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" />
-          <Property Type="Decimal" Name="Total_Out_Volume" />
-          <Property Type="Decimal" Name="Total_In_Volume" Nullable="false" />
-          <Property Type="Int32" Name="Diff_Output_Numb" />
-          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
-          <Property Type="Int32" Name="Diff_Dest_net" />
-          <Property Type="Int32" Name="Diff_Sources_net" />
-          <Property Type="Int32" Name="Total_Cell_In" />
-          <Property Type="Int32" Name="Total_Cell_Out" />
-          <Property Type="Int32" Name="Total_Cell" />
           <Property Type="Int32" Name="Count_Out_SMS" />
           <Property Type="Int32" Name="Count_In_SMS" />
           <Property Type="Int32" Name="Total_IMEI" />
@@ -2454,13 +3030,7 @@
           <Property Type="Boolean" Name="IsActive" />
           <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ControlTables" Relationship="CDRAnalysisMobileModel.ControlTable_ibfk_1" FromRole="OperationType" ToRole="ControlTable" />
-        </EntityType>
-        <EntityType Name="Peak_Hoursold">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="hours" />
+          <NavigationProperty Name="ControlTables1" Relationship="CDRAnalysisMobileModel.FK_ControlTable_OperationType" FromRole="OperationType" ToRole="ControlTable" />
         </EntityType>
         <EntityType Name="Peak_Time">
           <Key>
@@ -2469,7 +3039,8 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="Peak_Hour" Nullable="false" />
           <Property Type="Int32" Name="StrategyId" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.Peak_Time_ibfk_1" FromRole="Peak_Time" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Peak_time_Strategy" FromRole="Peak_Time" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Peak_Time_ibfk_1" FromRole="Peak_Time" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Period">
           <Key>
@@ -2478,9 +3049,15 @@
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Description" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ControlTables" Relationship="CDRAnalysisMobileModel.ControlTable_ibfk_2" FromRole="Period" ToRole="ControlTable" />
-          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2" FromRole="Period" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" FromRole="Period" ToRole="Subscriber_Values" />
-          <NavigationProperty Name="SubscriberThresholds" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_1" FromRole="Period" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="ControlTables1" Relationship="CDRAnalysisMobileModel.FK_ControlTable_Periods" FromRole="Period" ToRole="ControlTable" />
+          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_Periods" FromRole="Period" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Periods" FromRole="Period" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="SubscriberThresholds" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods" FromRole="Period" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="SubscriberThresholdstests" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods1" FromRole="Period" ToRole="SubscriberThresholdstest" />
+          <NavigationProperty Name="StrategyPeriods1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2" FromRole="Period" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="Subscriber_Values1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" FromRole="Period" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="SubscriberThresholds1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_1" FromRole="Period" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="SubscriberThresholdstests1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_11" FromRole="Period" ToRole="SubscriberThresholdstest" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -2491,9 +3068,12 @@
           <Property Type="String" Name="Description" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Category" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="ParentID" />
-          <NavigationProperty Name="Permissions1" Relationship="CDRAnalysisMobileModel.Permissions_ibfk_1" FromRole="Permission" ToRole="Permission1" />
-          <NavigationProperty Name="Permission1" Relationship="CDRAnalysisMobileModel.Permissions_ibfk_1" FromRole="Permission1" ToRole="Permission" />
-          <NavigationProperty Name="UserPermissions" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_1" FromRole="Permission" ToRole="UserPermission" />
+          <NavigationProperty Name="Permissions1" Relationship="CDRAnalysisMobileModel.FK_Permissions_Permissions" FromRole="Permission" ToRole="Permission1" />
+          <NavigationProperty Name="Permission1" Relationship="CDRAnalysisMobileModel.FK_Permissions_Permissions" FromRole="Permission1" ToRole="Permission" />
+          <NavigationProperty Name="UserPermissions" Relationship="CDRAnalysisMobileModel.FK_UserPermissions_Permissions" FromRole="Permission" ToRole="UserPermission" />
+          <NavigationProperty Name="Permissions11" Relationship="CDRAnalysisMobileModel.Permissions_ibfk_1" FromRole="Permission" ToRole="Permission1" />
+          <NavigationProperty Name="Permission2" Relationship="CDRAnalysisMobileModel.Permissions_ibfk_1" FromRole="Permission1" ToRole="Permission" />
+          <NavigationProperty Name="UserPermissions1" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_1" FromRole="Permission" ToRole="UserPermission" />
         </EntityType>
         <EntityType Name="PredefinedColumn">
           <Key>
@@ -2501,7 +3081,8 @@
           </Key>
           <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SourceMappings" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_1" FromRole="PredefinedColumn" ToRole="SourceMapping" />
+          <NavigationProperty Name="SourceMappings" Relationship="CDRAnalysisMobileModel.FK_SourceMappings_PredefinedColumns" FromRole="PredefinedColumn" ToRole="SourceMapping" />
+          <NavigationProperty Name="SourceMappings1" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_1" FromRole="PredefinedColumn" ToRole="SourceMapping" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
@@ -2511,9 +3092,12 @@
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Int32" Name="CriteriaId" />
           <Property Type="Int32" Name="Related_CriteriaId" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_3" FromRole="Related_Criteria" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile1" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile2" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile3" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_Strategy" FromRole="Related_Criteria" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_3" FromRole="Related_Criteria" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
@@ -2528,9 +3112,12 @@
           <Property Type="String" Name="ReportID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="SentDate" />
           <Property Type="Int32" Name="SentBy" />
-          <NavigationProperty Name="ReportingStatu" Relationship="CDRAnalysisMobileModel.Report_ibfk_1" FromRole="Report" ToRole="ReportingStatu" />
-          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.Report_ibfk_2" FromRole="Report" ToRole="User" />
-          <NavigationProperty Name="ReportDetails" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_1" FromRole="Report" ToRole="ReportDetail" />
+          <NavigationProperty Name="ReportingStatu" Relationship="CDRAnalysisMobileModel.FK_Report_ReportingStatus" FromRole="Report" ToRole="ReportingStatu" />
+          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.FK_Report_Users" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="ReportDetails" Relationship="CDRAnalysisMobileModel.FK_ReportDetails_Report" FromRole="Report" ToRole="ReportDetail" />
+          <NavigationProperty Name="ReportingStatu1" Relationship="CDRAnalysisMobileModel.Report_ibfk_1" FromRole="Report" ToRole="ReportingStatu" />
+          <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.Report_ibfk_2" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="ReportDetails1" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_1" FromRole="Report" ToRole="ReportDetail" />
         </EntityType>
         <EntityType Name="ReportDetail">
           <Key>
@@ -2540,8 +3127,10 @@
           <Property Type="Int32" Name="ReportId" />
           <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="StrategyId" />
-          <NavigationProperty Name="Report" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_1" FromRole="ReportDetail" ToRole="Report" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_2" FromRole="ReportDetail" ToRole="Strategy" />
+          <NavigationProperty Name="Report" Relationship="CDRAnalysisMobileModel.FK_ReportDetails_Report" FromRole="ReportDetail" ToRole="Report" />
+          <NavigationProperty Name="Report1" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_1" FromRole="ReportDetail" ToRole="Report" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_ReportDetails_Strategy" FromRole="ReportDetail" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_2" FromRole="ReportDetail" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="ReportingStatu">
           <Key>
@@ -2549,7 +3138,8 @@
           </Key>
           <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Reports" Relationship="CDRAnalysisMobileModel.Report_ibfk_1" FromRole="ReportingStatu" ToRole="Report" />
+          <NavigationProperty Name="Reports" Relationship="CDRAnalysisMobileModel.FK_Report_ReportingStatus" FromRole="ReportingStatu" ToRole="Report" />
+          <NavigationProperty Name="Reports1" Relationship="CDRAnalysisMobileModel.Report_ibfk_1" FromRole="ReportingStatu" ToRole="Report" />
         </EntityType>
         <EntityType Name="Set_CallClass">
           <Key>
@@ -2586,8 +3176,10 @@
           <Property Type="Int32" Name="CreatedBy" />
           <Property Type="DateTime" Name="LastUpdateDate" />
           <Property Type="Int32" Name="LastUpdatedBy" />
-          <NavigationProperty Name="PredefinedColumn" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_1" FromRole="SourceMapping" ToRole="PredefinedColumn" />
-          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_2" FromRole="SourceMapping" ToRole="SwitchProfile" />
+          <NavigationProperty Name="PredefinedColumn" Relationship="CDRAnalysisMobileModel.FK_SourceMappings_PredefinedColumns" FromRole="SourceMapping" ToRole="PredefinedColumn" />
+          <NavigationProperty Name="PredefinedColumn1" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_1" FromRole="SourceMapping" ToRole="PredefinedColumn" />
+          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.FK_SourceMappings_SwitchProfiles" FromRole="SourceMapping" ToRole="SwitchProfile" />
+          <NavigationProperty Name="SwitchProfile1" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_2" FromRole="SourceMapping" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="Strategy">
           <Key>
@@ -2599,15 +3191,24 @@
           <Property Type="DateTime" Name="CreationDate" Nullable="false" />
           <Property Type="String" Name="Name" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="IsDefault" Nullable="false" />
-          <NavigationProperty Name="Peak_Time" Relationship="CDRAnalysisMobileModel.Peak_Time_ibfk_1" FromRole="Strategy" ToRole="Peak_Time" />
-          <NavigationProperty Name="Related_Criteria" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_3" FromRole="Strategy" ToRole="Related_Criteria" />
-          <NavigationProperty Name="ReportDetails" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_2" FromRole="Strategy" ToRole="ReportDetail" />
-          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.Strategy_ibfk_1" FromRole="Strategy" ToRole="User" />
-          <NavigationProperty Name="Strategy_Min_Values" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" FromRole="Strategy" ToRole="Strategy_Min_Values" />
-          <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
-          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" FromRole="Strategy" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="Strategy" ToRole="StrategyThreshold" />
-          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Strategy" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="Peak_Time" Relationship="CDRAnalysisMobileModel.FK_Peak_time_Strategy" FromRole="Strategy" ToRole="Peak_Time" />
+          <NavigationProperty Name="Peak_Time1" Relationship="CDRAnalysisMobileModel.Peak_Time_ibfk_1" FromRole="Strategy" ToRole="Peak_Time" />
+          <NavigationProperty Name="Related_Criteria" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_Strategy" FromRole="Strategy" ToRole="Related_Criteria" />
+          <NavigationProperty Name="Related_Criteria1" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_3" FromRole="Strategy" ToRole="Related_Criteria" />
+          <NavigationProperty Name="ReportDetails" Relationship="CDRAnalysisMobileModel.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
+          <NavigationProperty Name="ReportDetails1" Relationship="CDRAnalysisMobileModel.ReportDetails_ibfk_2" FromRole="Strategy" ToRole="ReportDetail" />
+          <NavigationProperty Name="Strategy_Min_Values" Relationship="CDRAnalysisMobileModel.FK_Strategy_Min_Values_Strategy" FromRole="Strategy" ToRole="Strategy_Min_Values" />
+          <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_Strategy_suspection_level_Strategy" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
+          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
+          <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_Strategy" FromRole="Strategy" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy" FromRole="Strategy" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy" FromRole="Strategy" ToRole="Subscriber_Values" />
+          <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.Strategy_ibfk_1" FromRole="Strategy" ToRole="User" />
+          <NavigationProperty Name="Strategy_Min_Values1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" FromRole="Strategy" ToRole="Strategy_Min_Values" />
+          <NavigationProperty Name="Strategy_Suspicion_Level1" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
+          <NavigationProperty Name="StrategyPeriods1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" FromRole="Strategy" ToRole="StrategyPeriod" />
+          <NavigationProperty Name="StrategyThresholds1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="Strategy" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="Subscriber_Values1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Strategy" ToRole="Subscriber_Values" />
         </EntityType>
         <EntityType Name="Strategy_Min_Values">
           <Key>
@@ -2618,8 +3219,10 @@
           <Property Type="Int32" Name="Min_Count_Value" />
           <Property Type="Decimal" Name="Min_Aggreg_Volume" />
           <Property Type="Int32" Name="CriteriaId" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" FromRole="Strategy_Min_Values" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" FromRole="Strategy_Min_Values" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_Strategy_Min_Values_criteria_profile" FromRole="Strategy_Min_Values" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" FromRole="Strategy_Min_Values" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Strategy_Min_Values_Strategy" FromRole="Strategy_Min_Values" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" FromRole="Strategy_Min_Values" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Strategy_Suspicion_Level">
           <Key>
@@ -2658,8 +3261,10 @@
           <Property Type="Decimal" Name="Cr14Per" />
           <Property Type="Int32" Name="CriteriaId15" />
           <Property Type="Decimal" Name="Cr15Per" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
-          <NavigationProperty Name="Suspicion_Level" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Strategy_suspection_level_Strategy" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
+          <NavigationProperty Name="Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_Strategy_suspection_level_suspection_level" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
+          <NavigationProperty Name="Suspicion_Level1" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
         </EntityType>
         <EntityType Name="StrategyPeriod">
           <Key>
@@ -2670,9 +3275,12 @@
           <Property Type="Int32" Name="PeriodId" />
           <Property Type="Int32" Name="Value" />
           <Property Type="Int32" Name="CriteriaID" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" FromRole="StrategyPeriod" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2" FromRole="StrategyPeriod" ToRole="Period" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" FromRole="StrategyPeriod" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile" FromRole="StrategyPeriod" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" FromRole="StrategyPeriod" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_Periods" FromRole="StrategyPeriod" ToRole="Period" />
+          <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_2" FromRole="StrategyPeriod" ToRole="Period" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_Strategy" FromRole="StrategyPeriod" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" FromRole="StrategyPeriod" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="StrategyThreshold">
           <Key>
@@ -2682,8 +3290,10 @@
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Decimal" Name="MaxValue" />
           <Property Type="Int32" Name="CriteriaID" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="StrategyThreshold" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy" FromRole="StrategyThreshold" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="StrategyThreshold" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Subscriber_Values">
           <Key>
@@ -2697,9 +3307,25 @@
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Decimal" Name="Value" />
           <Property Type="Int32" Name="PeriodId" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" FromRole="Subscriber_Values" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" FromRole="Subscriber_Values" ToRole="Period" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Subscriber_Values" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile" FromRole="Subscriber_Values" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" FromRole="Subscriber_Values" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Periods" FromRole="Subscriber_Values" ToRole="Period" />
+          <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_2" FromRole="Subscriber_Values" ToRole="Period" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy" FromRole="Subscriber_Values" ToRole="Strategy" />
+          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Subscriber_Values" ToRole="Strategy" />
+        </EntityType>
+        <EntityType Name="Subscriber_ValuesNew">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FromDate" />
+          <Property Type="DateTime" Name="ToDate" />
+          <Property Type="Int32" Name="CriteriaId" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Decimal" Name="Value" />
+          <Property Type="Int32" Name="PeriodId" />
         </EntityType>
         <EntityType Name="SubscriberThreshold">
           <Key>
@@ -2726,8 +3352,40 @@
           <Property Type="Int32" Name="SuspectionLevelId" />
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Int32" Name="PeriodId" />
-          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_1" FromRole="SubscriberThreshold" ToRole="Period" />
-          <NavigationProperty Name="Suspicion_Level" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
+          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods" FromRole="SubscriberThreshold" ToRole="Period" />
+          <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_1" FromRole="SubscriberThreshold" ToRole="Period" />
+          <NavigationProperty Name="Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
+          <NavigationProperty Name="Suspicion_Level1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
+        </EntityType>
+        <EntityType Name="SubscriberThresholdstest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="DateDay" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="Criteria1" />
+          <Property Type="Decimal" Name="Criteria2" />
+          <Property Type="Decimal" Name="Criteria3" />
+          <Property Type="Decimal" Name="Criteria4" />
+          <Property Type="Decimal" Name="Criteria5" />
+          <Property Type="Decimal" Name="Criteria6" />
+          <Property Type="Decimal" Name="Criteria7" />
+          <Property Type="Decimal" Name="Criteria8" />
+          <Property Type="Decimal" Name="Criteria9" />
+          <Property Type="Decimal" Name="Criteria10" />
+          <Property Type="Decimal" Name="Criteria11" />
+          <Property Type="Decimal" Name="Criteria12" />
+          <Property Type="Decimal" Name="Criteria13" />
+          <Property Type="Decimal" Name="Criteria14" />
+          <Property Type="Decimal" Name="Criteria15" />
+          <Property Type="Int32" Name="SuspectionLevelId" />
+          <Property Type="Int32" Name="StrategyId" />
+          <Property Type="Int32" Name="PeriodId" />
+          <NavigationProperty Name="Period" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Periods1" FromRole="SubscriberThresholdstest" ToRole="Period" />
+          <NavigationProperty Name="Period1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_11" FromRole="SubscriberThresholdstest" ToRole="Period" />
+          <NavigationProperty Name="Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level1" FromRole="SubscriberThresholdstest" ToRole="Suspicion_Level" />
+          <NavigationProperty Name="Suspicion_Level1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_21" FromRole="SubscriberThresholdstest" ToRole="Suspicion_Level" />
         </EntityType>
         <EntityType Name="Suspicion_Level">
           <Key>
@@ -2735,8 +3393,12 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2" FromRole="Suspicion_Level" ToRole="Strategy_Suspicion_Level" />
-          <NavigationProperty Name="SubscriberThresholds" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_Strategy_suspection_level_suspection_level" FromRole="Suspicion_Level" ToRole="Strategy_Suspicion_Level" />
+          <NavigationProperty Name="Strategy_Suspicion_Level1" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_2" FromRole="Suspicion_Level" ToRole="Strategy_Suspicion_Level" />
+          <NavigationProperty Name="SubscriberThresholds" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="SubscriberThresholds1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
+          <NavigationProperty Name="SubscriberThresholdstests" Relationship="CDRAnalysisMobileModel.FK_SubscriberThresholds_Suspection_Level1" FromRole="Suspicion_Level" ToRole="SubscriberThresholdstest" />
+          <NavigationProperty Name="SubscriberThresholdstests1" Relationship="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_21" FromRole="Suspicion_Level" ToRole="SubscriberThresholdstest" />
         </EntityType>
         <EntityType Name="Switch_DatabaseConnections">
           <Key>
@@ -2747,7 +3409,8 @@
           <Property Type="String" Name="DatabaseName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="UserPassword" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" FromRole="Switch_DatabaseConnections" ToRole="SwitchProfile" />
+          <NavigationProperty Name="SwitchProfile" Relationship="CDRAnalysisMobileModel.FK_Switch_DatabaseConnections_Switchs" FromRole="Switch_DatabaseConnections" ToRole="SwitchProfile" />
+          <NavigationProperty Name="SwitchProfile1" Relationship="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" FromRole="Switch_DatabaseConnections" ToRole="SwitchProfile" />
         </EntityType>
         <EntityType Name="SwitchProfile">
           <Key>
@@ -2756,11 +3419,15 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="AllowAutoImport" Nullable="false" />
-          <NavigationProperty Name="CDRs" Relationship="CDRAnalysisMobileModel.CDR_ibfk_1" FromRole="SwitchProfile" ToRole="CDR" />
-          <NavigationProperty Name="CDRs1" Relationship="CDRAnalysisMobileModel.CDR_ibfk_3" FromRole="SwitchProfile" ToRole="CDR" />
-          <NavigationProperty Name="NormalizationRules" Relationship="CDRAnalysisMobileModel.NormalizationRules_ibfk_1" FromRole="SwitchProfile" ToRole="NormalizationRule" />
-          <NavigationProperty Name="SourceMappings" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_2" FromRole="SwitchProfile" ToRole="SourceMapping" />
-          <NavigationProperty Name="Switch_DatabaseConnections" Relationship="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" FromRole="SwitchProfile" ToRole="Switch_DatabaseConnections" />
+          <NavigationProperty Name="CDR_Old" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_1" FromRole="SwitchProfile" ToRole="CDR_Old" />
+          <NavigationProperty Name="CDR_Old1" Relationship="CDRAnalysisMobileModel.CDR_Old_ibfk_3" FromRole="SwitchProfile" ToRole="CDR_Old" />
+          <NavigationProperty Name="CDR_Old2" Relationship="CDRAnalysisMobileModel.FK_CDR_SwitchProfiles" FromRole="SwitchProfile" ToRole="CDR_Old" />
+          <NavigationProperty Name="NormalizationRules" Relationship="CDRAnalysisMobileModel.FK_NormalizationRules_SwitchProfiles" FromRole="SwitchProfile" ToRole="NormalizationRule" />
+          <NavigationProperty Name="NormalizationRules1" Relationship="CDRAnalysisMobileModel.NormalizationRules_ibfk_1" FromRole="SwitchProfile" ToRole="NormalizationRule" />
+          <NavigationProperty Name="SourceMappings" Relationship="CDRAnalysisMobileModel.FK_SourceMappings_SwitchProfiles" FromRole="SwitchProfile" ToRole="SourceMapping" />
+          <NavigationProperty Name="SourceMappings1" Relationship="CDRAnalysisMobileModel.SourceMappings_ibfk_2" FromRole="SwitchProfile" ToRole="SourceMapping" />
+          <NavigationProperty Name="Switch_DatabaseConnections" Relationship="CDRAnalysisMobileModel.FK_Switch_DatabaseConnections_Switchs" FromRole="SwitchProfile" ToRole="Switch_DatabaseConnections" />
+          <NavigationProperty Name="Switch_DatabaseConnections1" Relationship="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" FromRole="SwitchProfile" ToRole="Switch_DatabaseConnections" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -2782,8 +3449,10 @@
           <Property Type="Int32" Name="PermissionID" Nullable="false" />
           <Property Type="DateTime" Name="CreationDate" Nullable="false" />
           <Property Type="Int32" Name="CreatedBy" Nullable="false" />
-          <NavigationProperty Name="Permission" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_1" FromRole="UserPermission" ToRole="Permission" />
-          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_2" FromRole="UserPermission" ToRole="User" />
+          <NavigationProperty Name="Permission" Relationship="CDRAnalysisMobileModel.FK_UserPermissions_Permissions" FromRole="UserPermission" ToRole="Permission" />
+          <NavigationProperty Name="Permission1" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_1" FromRole="UserPermission" ToRole="Permission" />
+          <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.FK_UserPermissions_Users" FromRole="UserPermission" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_2" FromRole="UserPermission" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -2801,10 +3470,15 @@
           <Property Type="String" Name="Address" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="MobileNumber" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="EmailTemplates" Relationship="CDRAnalysisMobileModel.EmailTemplates_ibfk_1" FromRole="User" ToRole="EmailTemplate" />
-          <NavigationProperty Name="Imports" Relationship="CDRAnalysisMobileModel.Imports_ibfk_2" FromRole="User" ToRole="Import" />
-          <NavigationProperty Name="Reports" Relationship="CDRAnalysisMobileModel.Report_ibfk_2" FromRole="User" ToRole="Report" />
-          <NavigationProperty Name="Strategies" Relationship="CDRAnalysisMobileModel.Strategy_ibfk_1" FromRole="User" ToRole="Strategy" />
-          <NavigationProperty Name="UserPermissions" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_2" FromRole="User" ToRole="UserPermission" />
+          <NavigationProperty Name="EmailTemplates1" Relationship="CDRAnalysisMobileModel.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
+          <NavigationProperty Name="Imports" Relationship="CDRAnalysisMobileModel.FK_Imports_Users" FromRole="User" ToRole="Import" />
+          <NavigationProperty Name="Imports1" Relationship="CDRAnalysisMobileModel.Imports_ibfk_2" FromRole="User" ToRole="Import" />
+          <NavigationProperty Name="Reports" Relationship="CDRAnalysisMobileModel.FK_Report_Users" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="Reports1" Relationship="CDRAnalysisMobileModel.Report_ibfk_2" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="Strategies" Relationship="CDRAnalysisMobileModel.FK_Strategy_Users" FromRole="User" ToRole="Strategy" />
+          <NavigationProperty Name="Strategies1" Relationship="CDRAnalysisMobileModel.Strategy_ibfk_1" FromRole="User" ToRole="Strategy" />
+          <NavigationProperty Name="UserPermissions" Relationship="CDRAnalysisMobileModel.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
+          <NavigationProperty Name="UserPermissions1" Relationship="CDRAnalysisMobileModel.UserPermissions_ibfk_2" FromRole="User" ToRole="UserPermission" />
         </EntityType>
         <EntityType Name="vwDashboard">
           <Key>
@@ -2840,58 +3514,82 @@
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="ReportID" Nullable="false" />
         </EntityType>
+        <EntityType Name="vwReportVariable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="ReportDate" />
+          <Property Type="String" Name="ReportNumber" MaxLength="12" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="vwSuspectionAnalysi">
           <Key>
             <PropertyRef Name="strategyId" />
-            <PropertyRef Name="SubscriberNumber" />
             <PropertyRef Name="SuspectionLevelId" />
-            <PropertyRef Name="SuspectionLevelName" />
             <PropertyRef Name="Occurrence_Day" />
             <PropertyRef Name="Occurrence_Hour" />
-            <PropertyRef Name="LastreportNumber" />
-            <PropertyRef Name="StrategyName" />
           </Key>
           <Property Type="Int32" Name="strategyId" Nullable="false" />
-          <Property Type="String" Name="SubscriberNumber" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="SuspectionLevelId" Nullable="false" />
-          <Property Type="String" Name="SuspectionLevelName" Nullable="false" MaxLength="19" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Occurrence_Day" Nullable="false" />
           <Property Type="Int32" Name="Occurrence_Hour" Nullable="false" />
-          <Property Type="String" Name="LastreportNumber" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="StrategyName" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="CDR_ibfk_1">
+        <Association Name="CDR_Old_ibfk_1">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
-          <End Type="CDRAnalysisMobileModel.CDR" Role="CDR" Multiplicity="*" />
+          <End Type="CDRAnalysisMobileModel.CDR_Old" Role="CDR_Old" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SwitchProfile">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CDR">
+            <Dependent Role="CDR_Old">
               <PropertyRef Name="SourceID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="CDR_ibfk_2">
+        <Association Name="CDR_Old_ibfk_2">
           <End Type="CDRAnalysisMobileModel.Import" Role="Import" Multiplicity="0..1" />
-          <End Type="CDRAnalysisMobileModel.CDR" Role="CDR" Multiplicity="*" />
+          <End Type="CDRAnalysisMobileModel.CDR_Old" Role="CDR_Old" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Import">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="CDR">
+            <Dependent Role="CDR_Old">
               <PropertyRef Name="ImportID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="CDR_ibfk_3">
+        <Association Name="CDR_Old_ibfk_3">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
-          <End Type="CDRAnalysisMobileModel.CDR" Role="CDR" Multiplicity="*" />
+          <End Type="CDRAnalysisMobileModel.CDR_Old" Role="CDR_Old" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SwitchProfile">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CDR">
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="SourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_Imports">
+          <End Type="CDRAnalysisMobileModel.Import" Role="Import" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.CDR_Old" Role="CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Import">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CDR_Old">
+              <PropertyRef Name="ImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CDR_SwitchProfiles">
+          <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.CDR_Old" Role="CDR_Old" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CDR_Old">
               <PropertyRef Name="SourceID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2917,6 +3615,102 @@
             </Principal>
             <Dependent Role="ControlTable">
               <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlTable_OperationType">
+          <End Type="CDRAnalysisMobileModel.OperationType" Role="OperationType" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.ControlTable" Role="ControlTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ControlTable">
+              <PropertyRef Name="OperationTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlTable_Periods">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.ControlTable" Role="ControlTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ControlTable">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Related_Criteria_criteria_profile">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Related_Criteria">
+              <PropertyRef Name="CriteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Related_Criteria_criteria_profile1">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Related_Criteria">
+              <PropertyRef Name="Related_CriteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_Min_Values_criteria_profile">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Strategy_Min_Values" Role="Strategy_Min_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy_Min_Values">
+              <PropertyRef Name="CriteriaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyPeriods_criteria_profile">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.StrategyPeriod" Role="StrategyPeriod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyPeriod">
+              <PropertyRef Name="CriteriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyThreshold_criteria_profile">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.StrategyThreshold" Role="StrategyThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyThreshold">
+              <PropertyRef Name="CriteriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriber_Values_criteria_profile">
+          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Subscriber_Values" Role="Subscriber_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriber_Values">
+              <PropertyRef Name="CriteriaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3016,6 +3810,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EmailReceivers_EmailReceiverTypes">
+          <End Type="CDRAnalysisMobileModel.EmailReceiverType" Role="EmailReceiverType" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.EmailReceiver" Role="EmailReceiver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmailReceiverType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmailReceiver">
+              <PropertyRef Name="EmailReceiverTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmailReceivers_EmailTemplates">
+          <End Type="CDRAnalysisMobileModel.EmailTemplate" Role="EmailTemplate" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.EmailReceiver" Role="EmailReceiver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmailTemplate">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmailReceiver">
+              <PropertyRef Name="EmailTemplateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="EmailTemplates_ibfk_1">
           <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="1" />
           <End Type="CDRAnalysisMobileModel.EmailTemplate" Role="EmailTemplate" Multiplicity="*" />
@@ -3025,6 +3843,42 @@
             </Principal>
             <Dependent Role="EmailTemplate">
               <PropertyRef Name="LastUpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmailTemplates_Users">
+          <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.EmailTemplate" Role="EmailTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EmailTemplate">
+              <PropertyRef Name="LastUpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Imports_ImportTypes">
+          <End Type="CDRAnalysisMobileModel.ImportType" Role="ImportType" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.Import" Role="Import" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImportType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Import">
+              <PropertyRef Name="ImportTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Imports_Users">
+          <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Import" Role="Import" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Import">
+              <PropertyRef Name="ImportedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3052,6 +3906,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NormalizationRules_SwitchProfiles">
+          <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.NormalizationRule" Role="NormalizationRule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NormalizationRule">
+              <PropertyRef Name="SwitchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="NormalizationRules_ibfk_1">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.NormalizationRule" Role="NormalizationRule" Multiplicity="*" />
@@ -3064,6 +3930,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Peak_time_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Peak_Time" Role="Peak_Time" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Peak_Time">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Peak_Time_ibfk_1">
           <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.Peak_Time" Role="Peak_Time" Multiplicity="*" />
@@ -3073,6 +3951,54 @@
             </Principal>
             <Dependent Role="Peak_Time">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyPeriods_Periods">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.StrategyPeriod" Role="StrategyPeriod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyPeriod">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriber_Values_Periods">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Subscriber_Values" Role="Subscriber_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriber_Values">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Periods">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThreshold">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Periods1">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThresholdstest" Role="SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="PeriodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3112,6 +4038,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="SubscriberThresholds_ibfk_11">
+          <End Type="CDRAnalysisMobileModel.Period" Role="Period" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThresholdstest" Role="SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Period">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="PeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permissions_Permissions">
+          <End Type="CDRAnalysisMobileModel.Permission" Role="Permission" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Permission" Role="Permission1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Permission1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPermissions_Permissions">
+          <End Type="CDRAnalysisMobileModel.Permission" Role="Permission" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.UserPermission" Role="UserPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserPermission">
+              <PropertyRef Name="PermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Permissions_ibfk_1">
           <End Type="CDRAnalysisMobileModel.Permission" Role="Permission" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.Permission" Role="Permission1" Multiplicity="*" />
@@ -3136,6 +4098,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SourceMappings_PredefinedColumns">
+          <End Type="CDRAnalysisMobileModel.PredefinedColumn" Role="PredefinedColumn" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.SourceMapping" Role="SourceMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PredefinedColumn">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SourceMapping">
+              <PropertyRef Name="MappedtoColumnNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="SourceMappings_ibfk_1">
           <End Type="CDRAnalysisMobileModel.PredefinedColumn" Role="PredefinedColumn" Multiplicity="1" />
           <End Type="CDRAnalysisMobileModel.SourceMapping" Role="SourceMapping" Multiplicity="*" />
@@ -3148,6 +4122,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Related_Criteria_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Related_Criteria">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Related_Criteria_ibfk_3">
           <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
@@ -3157,6 +4143,42 @@
             </Principal>
             <Dependent Role="Related_Criteria">
               <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_ReportingStatus">
+          <End Type="CDRAnalysisMobileModel.ReportingStatu" Role="ReportingStatu" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReportingStatu">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ReportingStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_Users">
+          <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="SentBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportDetails_Report">
+          <End Type="CDRAnalysisMobileModel.Report" Role="Report" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.ReportDetail" Role="ReportDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportDetail">
+              <PropertyRef Name="ReportId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3196,6 +4218,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ReportDetails_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.ReportDetail" Role="ReportDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportDetail">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ReportDetails_ibfk_2">
           <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.ReportDetail" Role="ReportDetail" Multiplicity="*" />
@@ -3208,6 +4242,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SourceMappings_SwitchProfiles">
+          <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.SourceMapping" Role="SourceMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SourceMapping">
+              <PropertyRef Name="SwitchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="SourceMappings_ibfk_2">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="1" />
           <End Type="CDRAnalysisMobileModel.SourceMapping" Role="SourceMapping" Multiplicity="*" />
@@ -3217,6 +4263,78 @@
             </Principal>
             <Dependent Role="SourceMapping">
               <PropertyRef Name="SwitchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_Min_Values_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Strategy_Min_Values" Role="Strategy_Min_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy_Min_Values">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_suspection_level_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Role="Strategy_Suspicion_Level" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy_Suspicion_Level">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Strategy_Users">
+          <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="1" />
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyPeriods_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.StrategyPeriod" Role="StrategyPeriod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyPeriod">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StrategyThreshold_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.StrategyThreshold" Role="StrategyThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StrategyThreshold">
+              <PropertyRef Name="StrategyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriber_Values_Strategy">
+          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Subscriber_Values" Role="Subscriber_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Strategy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriber_Values">
+              <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3292,6 +4410,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Strategy_suspection_level_suspection_level">
+          <End Type="CDRAnalysisMobileModel.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Role="Strategy_Suspicion_Level" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Strategy_Suspicion_Level">
+              <PropertyRef Name="LevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Strategy_Suspicion_Level_ibfk_2">
           <End Type="CDRAnalysisMobileModel.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
           <End Type="CDRAnalysisMobileModel.Strategy_Suspicion_Level" Role="Strategy_Suspicion_Level" Multiplicity="*" />
@@ -3301,6 +4431,18 @@
             </Principal>
             <Dependent Role="Strategy_Suspicion_Level">
               <PropertyRef Name="LevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberThresholds_Suspection_Level">
+          <End Type="CDRAnalysisMobileModel.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThreshold">
+              <PropertyRef Name="SuspectionLevelId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3316,6 +4458,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SubscriberThresholds_Suspection_Level1">
+          <End Type="CDRAnalysisMobileModel.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThresholdstest" Role="SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="SuspectionLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SubscriberThresholds_ibfk_21">
+          <End Type="CDRAnalysisMobileModel.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
+          <End Type="CDRAnalysisMobileModel.SubscriberThresholdstest" Role="SubscriberThresholdstest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThresholdstest">
+              <PropertyRef Name="SuspectionLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Switch_DatabaseConnections_Switchs">
+          <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CDRAnalysisMobileModel.Switch_DatabaseConnections" Role="Switch_DatabaseConnections" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SwitchProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Switch_DatabaseConnections">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Switch_DatabaseConnections_ibfk_1">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="1" />
           <End Type="CDRAnalysisMobileModel.Switch_DatabaseConnections" Role="Switch_DatabaseConnections" Multiplicity="0..1" />
@@ -3325,6 +4505,20 @@
             </Principal>
             <Dependent Role="Switch_DatabaseConnections">
               <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPermissions_Users">
+          <End Type="CDRAnalysisMobileModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CDRAnalysisMobileModel.UserPermission" Role="UserPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserPermission">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3340,14 +4534,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="vwReportVariable">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="DateTime" Name="ReportDate" />
-          <Property Type="String" Name="ReportNumber" MaxLength="12" FixedLength="false" Unicode="false" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3357,6 +4543,39 @@
           <EntitySetMapping Name="CDRs">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.CDR">
               <MappingFragment StoreEntitySet="CDR">
+                <ScalarProperty Name="IsNormalized" ColumnName="IsNormalized" />
+                <ScalarProperty Name="Ignore" ColumnName="Ignore" />
+                <ScalarProperty Name="Switch" ColumnName="Switch" />
+                <ScalarProperty Name="ImportID" ColumnName="ImportID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
+                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
+                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
+                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CDR_Old">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.CDR_Old">
+              <MappingFragment StoreEntitySet="CDR_Old">
                 <ScalarProperty Name="IsNormalized" ColumnName="IsNormalized" />
                 <ScalarProperty Name="Ignore" ColumnName="Ignore" />
                 <ScalarProperty Name="Switch" ColumnName="Switch" />
@@ -3554,6 +4773,64 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="NormalCDR_Old">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.NormalCDR_Old">
+              <MappingFragment StoreEntitySet="NormalCDR_Old">
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
+                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
+                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
+                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NormalCDR_ToDelete">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.NormalCDR_ToDelete">
+              <MappingFragment StoreEntitySet="NormalCDR_ToDelete">
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
+                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
+                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
+                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="NormalizationRules">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.NormalizationRule">
               <MappingFragment StoreEntitySet="NormalizationRules">
@@ -3576,8 +4853,6 @@
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
-                <ScalarProperty Name="Total_BTS_Out" ColumnName="Total_BTS_Out" />
-                <ScalarProperty Name="Total_BTS_In" ColumnName="Total_BTS_In" />
                 <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
                 <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
                 <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
@@ -3590,6 +4865,8 @@
                 <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
                 <ScalarProperty Name="Count_In_SMS" ColumnName="Count_In_SMS" />
                 <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
+                <ScalarProperty Name="Total_BTS_Out" ColumnName="Total_BTS_Out" />
+                <ScalarProperty Name="Total_BTS_In" ColumnName="Total_BTS_In" />
                 <ScalarProperty Name="Diff_Sources_net" ColumnName="Diff_Sources_net" />
                 <ScalarProperty Name="Diff_Dest_net" ColumnName="Diff_Dest_net" />
                 <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
@@ -3837,9 +5114,50 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Subscriber_ValuesNew">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.Subscriber_ValuesNew">
+              <MappingFragment StoreEntitySet="Subscriber_ValuesNew">
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="SubscriberThresholds">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.SubscriberThreshold">
               <MappingFragment StoreEntitySet="SubscriberThresholds">
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
+                <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
+                <ScalarProperty Name="Criteria13" ColumnName="Criteria13" />
+                <ScalarProperty Name="Criteria12" ColumnName="Criteria12" />
+                <ScalarProperty Name="Criteria11" ColumnName="Criteria11" />
+                <ScalarProperty Name="Criteria10" ColumnName="Criteria10" />
+                <ScalarProperty Name="Criteria9" ColumnName="Criteria9" />
+                <ScalarProperty Name="Criteria8" ColumnName="Criteria8" />
+                <ScalarProperty Name="Criteria7" ColumnName="Criteria7" />
+                <ScalarProperty Name="Criteria6" ColumnName="Criteria6" />
+                <ScalarProperty Name="Criteria5" ColumnName="Criteria5" />
+                <ScalarProperty Name="Criteria4" ColumnName="Criteria4" />
+                <ScalarProperty Name="Criteria3" ColumnName="Criteria3" />
+                <ScalarProperty Name="Criteria2" ColumnName="Criteria2" />
+                <ScalarProperty Name="Criteria1" ColumnName="Criteria1" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriberThresholdstests">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.SubscriberThresholdstest">
+              <MappingFragment StoreEntitySet="SubscriberThresholdstest">
                 <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
@@ -3963,6 +5281,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="vwReportVariables">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.vwReportVariable">
+              <MappingFragment StoreEntitySet="vwReportVariables">
+                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="vwSuspectionAnalysis">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.vwSuspectionAnalysi">
               <MappingFragment StoreEntitySet="vwSuspectionAnalysis">
@@ -3970,15 +5297,6 @@
                 <ScalarProperty Name="Occurrence_Day" ColumnName="Occurrence_Day" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
                 <ScalarProperty Name="strategyId" ColumnName="strategyId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwReportVariables">
-            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.vwReportVariable">
-              <MappingFragment StoreEntitySet="vwReportVariables">
-                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

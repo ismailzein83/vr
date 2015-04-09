@@ -16,7 +16,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public Import()
         {
-            this.CDRs = new HashSet<CDR>();
+            this.CDR_Old = new HashSet<CDR_Old>();
+            this.CDR_Old1 = new HashSet<CDR_Old>();
         }
     
         public int ID { get; set; }
@@ -24,8 +25,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> ImportedBy { get; set; }
         public int ImportTypeId { get; set; }
     
-        public virtual ICollection<CDR> CDRs { get; set; }
+        public virtual ICollection<CDR_Old> CDR_Old { get; set; }
+        public virtual ICollection<CDR_Old> CDR_Old1 { get; set; }
         public virtual ImportType ImportType { get; set; }
         public virtual User User { get; set; }
+        public virtual ImportType ImportType1 { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

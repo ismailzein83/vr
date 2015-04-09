@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class SubscriberThreshold
+    public partial class SubscriberThresholdstest
     {
         public int Id { get; set; }
         public Nullable<System.DateTime> DateDay { get; set; }

@@ -17,11 +17,13 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public EmailReceiverType()
         {
             this.EmailReceivers = new HashSet<EmailReceiver>();
+            this.EmailReceivers1 = new HashSet<EmailReceiver>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
         public virtual ICollection<EmailReceiver> EmailReceivers { get; set; }
+        public virtual ICollection<EmailReceiver> EmailReceivers1 { get; set; }
     }
 }

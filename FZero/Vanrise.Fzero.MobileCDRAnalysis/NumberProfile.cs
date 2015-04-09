@@ -30,9 +30,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int Diff_Input_Numbers { get; set; }
         public Nullable<int> Diff_Dest_net { get; set; }
         public Nullable<int> Diff_Sources_net { get; set; }
-        public Nullable<int> Total_Cell_In { get; set; }
-        public Nullable<int> Total_Cell_Out { get; set; }
-        public Nullable<int> Total_Cell { get; set; }
+        public Nullable<int> Total_BTS_In { get; set; }
+        public Nullable<int> Total_BTS_Out { get; set; }
         public Nullable<int> Count_Out_SMS { get; set; }
         public Nullable<int> Count_In_SMS { get; set; }
         public Nullable<int> Total_IMEI { get; set; }
@@ -45,7 +44,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> Count_In_Inter { get; set; }
         public Nullable<int> IsOnNet { get; set; }
         public Nullable<decimal> Total_Data_Volume { get; set; }
-        public Nullable<int> Total_BTS_In { get; set; }
-        public Nullable<int> Total_BTS_Out { get; set; }
     }
 }

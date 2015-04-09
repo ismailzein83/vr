@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class CDR
+    public partial class CDR_Old
     {
         public int Id { get; set; }
         public string MSISDN { get; set; }
@@ -41,5 +41,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Switch { get; set; }
         public Nullable<int> Ignore { get; set; }
         public Nullable<bool> IsNormalized { get; set; }
+    
+        public virtual SwitchProfile SwitchProfile { get; set; }
+        public virtual Import Import { get; set; }
+        public virtual SwitchProfile SwitchProfile1 { get; set; }
+        public virtual Import Import1 { get; set; }
+        public virtual SwitchProfile SwitchProfile2 { get; set; }
     }
 }
