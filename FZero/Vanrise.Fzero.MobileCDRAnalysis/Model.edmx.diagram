@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="572ca103c26b4e54a2c981f227c10893" Name="Diagram1">
+      <Diagram DiagramId="572ca103c26b4e54a2c981f227c10893" Name="Diagram1" ZoomLevel="88">
         <EntityTypeShape EntityType="CDRAnalysisMobileModel.CDR" Width="1.5" PointX="0.68361567365173981" PointY="2.1168885091863983" />
         <EntityTypeShape EntityType="CDRAnalysisMobileModel.CellProfile" Width="1.5" PointX="4.77394809051135" PointY="25.640582618136229" />
         <EntityTypeShape EntityType="CDRAnalysisMobileModel.ControlTable" Width="1.5" PointX="3.9907799325840454" PointY="31.576336398523459" />
@@ -92,6 +92,7 @@
         <AssociationConnector Association="CDRAnalysisMobileModel.SubscriberThresholds_ibfk_2" />
         <AssociationConnector Association="CDRAnalysisMobileModel.Switch_DatabaseConnections_ibfk_1" />
         <AssociationConnector Association="CDRAnalysisMobileModel.UserPermissions_ibfk_2" />
+        <EntityTypeShape EntityType="CDRAnalysisMobileModel.vwReportVariable" Width="1.5" PointX="5.21497280020964" PointY="24.693774115617281" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

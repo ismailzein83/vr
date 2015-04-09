@@ -56,56 +56,56 @@ public partial class test : System.Web.UI.Page
         if (!IsPostBack)
         {
 
-            try
-            {
+            //try
+            //{
 
-                var sftp = new Rebex.Net.Sftp();
-                sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
-                sftp.Login(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
+            //    var sftp = new Rebex.Net.Sftp();
+            //    sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
+            //    sftp.Login(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
 
-                if (sftp.GetConnectionState().Connected)
-                {
-                    // set current directory
-                    sftp.ChangeDirectory(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
-                    // get items within the current directory
-                    SftpItemCollection currentItems = sftp.GetList();
-                    if (currentItems.Count > 0)
-                    {
-                        foreach (var fileObj in currentItems)
-                        {
-                            if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
-                            {
-                                DBConnect db = new DBConnect();
-                                if (db.Load(fileObj.Name))
-                                {
-                                    sftp.Rename(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name.Replace(".DAT", ".old"));
-                                }
-                            }
-                        }
-                    }
-                }
+            //    if (sftp.GetConnectionState().Connected)
+            //    {
+            //        // set current directory
+            //        sftp.ChangeDirectory(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
+            //        // get items within the current directory
+            //        SftpItemCollection currentItems = sftp.GetList();
+            //        if (currentItems.Count > 0)
+            //        {
+            //            foreach (var fileObj in currentItems)
+            //            {
+            //                if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
+            //                {
+            //                    DBConnect db = new DBConnect();
+            //                    if (db.Load(fileObj.Name))
+            //                    {
+            //                        sftp.Rename(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name.Replace(".DAT", ".old"));
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
 
-                sftp.Disconnect();
+            //    sftp.Disconnect();
                
 
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogger("OnTimedEvent() " + ex.Message);
-                //ErrorLogger("OnTimedEvent() " + ex.ToString());
-                //ErrorLogger("OnTimedEvent() " + ex.InnerException.ToString());
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //ErrorLogger("OnTimedEvent() " + ex.Message);
+            //    //ErrorLogger("OnTimedEvent() " + ex.ToString());
+            //    //ErrorLogger("OnTimedEvent() " + ex.InnerException.ToString());
+            //}
 
 
 
-            //Vanrise.Fzero.MobileCDRAnalysis.Report report = Vanrise.Fzero.MobileCDRAnalysis.Report.Load("201412050001");
-            //string ReportID = "CA" + report.ReportNumber + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + DateTime.Now.Hour.ToString("D2") + DateTime.Now.Minute.ToString("D2");
-            //EmailManager.SendReporttoITPC(ExportReportToExcel("201412050001" + ".xls", 5), ReportID, "FMS_Profile");
-            //report.SentDate = DateTime.Now;
-            //report.SentBy = 1;
-            //report.ReportingStatusID = (int)Enums.ReportingStatuses.Sent;
-            //report.ReportID = ReportID;
-            //Vanrise.Fzero.MobileCDRAnalysis.Report.Save(report);
+            Vanrise.Fzero.MobileCDRAnalysis.Report report = Vanrise.Fzero.MobileCDRAnalysis.Report.Load("201412050001");
+            string ReportID = "CA" + report.ReportNumber + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + DateTime.Now.Hour.ToString("D2") + DateTime.Now.Minute.ToString("D2");
+            EmailManager.SendReporttoITPC(ExportReportToExcel("201412050001" + ".xls", 5), ReportID, "FMS_Profile");
+            report.SentDate = DateTime.Now;
+            report.SentBy = 1;
+            report.ReportingStatusID = (int)Enums.ReportingStatuses.Sent;
+            report.ReportID = ReportID;
+            Vanrise.Fzero.MobileCDRAnalysis.Report.Save(report);
 
 
            // // walid is testing source control from desktop

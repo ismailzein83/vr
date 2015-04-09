@@ -256,6 +256,9 @@
     <Compile Include="vwReportedNumberNormalCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwReportVariable.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwSuspectionAnalysi.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

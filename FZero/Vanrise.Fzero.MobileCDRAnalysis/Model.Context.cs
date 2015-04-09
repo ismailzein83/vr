@@ -72,5 +72,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<vwReportedNumber> vwReportedNumbers { get; set; }
         public DbSet<vwReportedNumberNormalCDR> vwReportedNumberNormalCDRs { get; set; }
         public DbSet<vwSuspectionAnalysi> vwSuspectionAnalysis { get; set; }
+        public DbSet<vwReportVariable> vwReportVariables { get; set; }
     }
 }

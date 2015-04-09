@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
 using Vanrise.Fzero.MobileCDRAnalysis.Providers;
+using System.Data.Entity.Infrastructure;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
@@ -189,10 +190,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 using (MobileEntities context = new MobileEntities())
                 {
-                    //var result = (from c in context.prGetReportVariables() select c).FirstOrDefault();
+                    var result = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwReportVariable>("call prGetReportVariables ()").ToList().FirstOrDefault();
 
-                    //report.ReportNumber = result.ReportNumber;
-                    //report.ReportDate = result.ReportDate; 
+                    report.ReportNumber = result.ReportNumber;
+                    report.ReportDate = result.ReportDate; 
                 }
             }
             catch (Exception err)
