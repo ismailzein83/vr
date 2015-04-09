@@ -237,6 +237,10 @@
                 if ($scope.RouteRuleId != 'undefined') {
                     $scope.refreshRowData( response , $scope.index );
                 }
+                var newdata = response;
+                newdata.Time = new Date();
+                newdata.Action = ($scope.RouteRuleId != 'undefined') ? "Updated" : "Added"; 
+                $scope.callBackHistory(newdata);
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
                 $scope.$hide();
             }).finally(function () {

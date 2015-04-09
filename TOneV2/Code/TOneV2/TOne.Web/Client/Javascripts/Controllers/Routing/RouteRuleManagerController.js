@@ -20,19 +20,7 @@
         $scope.optionsRuleType.datasource = [
           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' },
+          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
         ]
 
         var last = false;
@@ -65,15 +53,36 @@
             enableColumnResizing: true,
             enableSorting: false,
 
-        };
+        };       
         $scope.gridOptionsRouteRule.columnDefs[$scope.gridOptionsRouteRule.columnDefs.length] = {
             name: 'Action',
             enableColumnMenu: false,
             enableFiltering: false,
             height: 40,
             enableHiding: false,
-            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row,rowRenderIndex)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
+            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
         }
+
+        $scope.gridOptionsHistory = {
+            enableHorizontalScrollbar: 0,
+            enableVerticalScrollbar: 2,
+            infiniteScrollPercentage: 20,
+            enableFiltering: false,
+            saveFocus: false,
+            saveScroll: true,
+            enableCellEdit: false,
+            columnDefs: [
+              {
+                  name: 'Roule type', height: 40, enableHiding: false, enableColumnMenu: false,
+                  cellTemplate: '<div><a   class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row)\">{{row.entity.ActionDescription}}</a></div>'
+              },
+              { name: 'Time', enableColumnMenu: false, field: 'Time', height: 40, width: 200, enableHiding: false, cellFilter: 'date:"yyyy-MM-dd hh:mm:ss "' },
+              { name: 'Action', enableColumnMenu: false, field: 'Action', height: 40, width: 200, enableHiding: false }
+            ],
+            enableColumnResizing: true,
+            enableSorting: false,
+
+        };
 
     }
     function defineScopeMethods() {
@@ -82,22 +91,22 @@
              $scope.gridOptionsRouteRule.data[index] = rowEntity;
              
         };
+        var callBackHistory = function (rowEntity) {
+            $scope.gridOptionsHistory.data.unshift(rowEntity);
+
+        };
          $scope.openEdit = function (row, i) {
             var scopeDetails = $scope.$root.$new();
             scopeDetails.title = "Update";
             scopeDetails.index = $scope.gridOptionsRouteRule.data.indexOf(row.entity);
             scopeDetails.RouteRuleId = row.entity.RouteRuleId;
             scopeDetails.refreshRowData = refreshRowData;
+            scopeDetails.callBackHistory = callBackHistory;
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
             
 
          }
-         $scope.test = function (row, i) {
-             var scopeDetails = $scope.$root.$new();            
-             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/testModal.html', show: true, animation: "am-fade-and-scale" });
-
-
-         }
+        
         var getData = function (data, page) {
             var res = [];
             for (var i = (page * pageSize) ; i < (page + 1) * pageSize && i < data.length; ++i) {
@@ -154,6 +163,7 @@
             var scopeDetails = $scope.$root.$new();
             scopeDetails.title = "New";
             scopeDetails.RouteRuleId = 'undefined';
+            scopeDetails.callBackHistory = callBackHistory;
            // var addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: true, animation: "am-fade-and-scale" });
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
 
@@ -161,13 +171,13 @@
         $scope.toggelFilter = function () {
             $scope.gridOptionsRouteRule.enableFiltering = !$scope.gridOptionsRouteRule.enableFiltering;
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-            $('.ui-grid-header-canvas').height(($scope.gridOptionsRouteRule.enableFiltering == true) ? 60 : 30);
+            $('#grid1').find('.ui-grid-header-canvas').height(($scope.gridOptionsRouteRule.enableFiltering == true) ? 60 : 30);
 
         }
         $scope.divStyleChange = function (n) {
             $scope.numberoflines = n;
             var h = ((n + 2) * 30) + ($scope.showf == true ? 0 : 30);
-            angular.element(document.getElementsByClassName('gridroute')[0]).css('height', h + 'px');
+            angular.element(document.getElementsById('grid1')[0]).css('height', h + 'px');
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
 
         }
