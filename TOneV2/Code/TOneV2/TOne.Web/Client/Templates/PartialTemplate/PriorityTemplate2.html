@@ -3,7 +3,7 @@
         <vr-dropdown type="multiple" options="optionsSuppliers" datatextfield="Name" datavaluefield="CarrierAccountID"
                      entityname="Suppliers"></vr-dropdown>
     </div>
-    <div class="col-lg-4  style-col " style="max-height:250px;overflow:auto" ng-class="optionsSuppliers.selectedvalues.length == 0 ? 'emptycol':''">
+    <div class="col-lg-4  style-col "  ng-class="optionsSuppliers.selectedvalues.length == 0 ? 'emptycol':''">
         <ul class="list-group" style="margin:0px" ng-show="optionsSuppliers.selectedvalues.length > 0">
             <li class="list-group-item list-custom" style="margin:1px;border:0px">
                 <div style="display:inline-block;padding-left:25px">Supplier</div>
@@ -25,5 +25,9 @@
                 </div>
             </li>
         </ul>
+    </div>
+    <div class="col-lg-4">
+        <select ng-model="myColor" ng-options="c.Name for c in optionsSuppliers.datasource"></select><br>
+
     </div>
 </div>

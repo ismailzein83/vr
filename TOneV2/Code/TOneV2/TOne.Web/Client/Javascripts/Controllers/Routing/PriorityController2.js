@@ -1,5 +1,7 @@
 ﻿appControllers.controller('PriorityController2',
     function PriorityController2($scope, $http, CarriersService) {
+
+       
        
         $scope.subViewConnector.getActionData = function () {           
             return {

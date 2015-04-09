@@ -3,6 +3,8 @@
     defineScopeObjects();
     defineScopeMethods();
     load();
+   
+   
 
     function defineScopeObjects() {
         $scope.subViewConnector = {};

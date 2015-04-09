@@ -8,7 +8,7 @@
                 <h4 class="modal-title" ng-bind="title"></h4>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" style="max-height:200px;overflow:auto">
                 <div>
                     <div class="panel panel-primary panel-over-color">
                         <div class="panel-body">
@@ -25,6 +25,7 @@
                                         </div>
                                         
                                     </div>
+                                    
                                     <div class="row style-row">
                                         <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
                                                      onselectionchange="update2" options="optionsRuleType"></vr-dropdown>
