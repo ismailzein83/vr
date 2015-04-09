@@ -25,8 +25,18 @@ textarea.form-control {
 .modal .menu-right {   
     min-width: 100px;
     margin: -10px 0px 0px;
+    top:auto ;
+    width:auto;
+    right:auto ;
+    left: initial ;
 }
-
+.menu-right{
+    top:74% ;
+    width:100% ;
+    min-width:100% ;
+    right:0px ;
+    left: initial ;
+}
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
