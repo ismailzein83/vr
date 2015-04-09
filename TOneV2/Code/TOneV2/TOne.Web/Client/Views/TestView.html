@@ -35,8 +35,12 @@
         </div>
         
         <div class="col-lg-2">
-            <vr-dropdown id="dropdown1" type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired customvalidate="testviewCtrl.customvalidate1" on-ready="testviewCtrl.onready"></vr-dropdown>
+            <!--<vr-dropdown id="dropdown1" type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired customvalidate="testviewCtrl.customvalidate1" on-ready="testviewCtrl.onready"></vr-dropdown>-->
+        </div>
+
+        <div class="col-lg-2">
+            <vr-select datasource="testviewCtrl.optionsZone.datasource" selectedvalues="testviewCtrl.optionsZone.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zone"></vr-select>
         </div>
 
         <div class="row">
@@ -45,8 +49,8 @@
             </div>
         </div>
         <div class="col-lg-2">
-            <vr-dropdown  type="ondemand" options="testviewCtrl.optionsZone2" datatextfield="Name" datavaluefield="ZoneId"
-                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready" customvalidate="testviewCtrl.customvalidate1"></vr-dropdown>
+            <!--<vr-dropdown  type="ondemand" options="testviewCtrl.optionsZone2" datatextfield="Name" datavaluefield="ZoneId"
+                         onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready" customvalidate="testviewCtrl.customvalidate1"></vr-dropdown>-->
         </div>
         <!--<div class="col-lg-2">
             <vr-dropdown  options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"

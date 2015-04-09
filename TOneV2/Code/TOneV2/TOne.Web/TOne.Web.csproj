@@ -209,6 +209,7 @@
     <Content Include="Client\Javascripts\Directives\vr-button-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-columns-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-select-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-switch-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-datetimepicker-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
@@ -542,6 +543,7 @@
     <Content Include="Client\Templates\Directives\vr-dropdown-ondemand.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
     <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
+    <Content Include="Client\Templates\Directives\vr-select.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />

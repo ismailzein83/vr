@@ -75,7 +75,9 @@ var TestViewController = function (CarriersService, ZonesService) {
 
         ctrl.optionsZone = {
             selectedvalues: [],
-            datasource: []
+            datasource: function (text) {
+                return ZonesService.getSalesZones(text);
+            }
         };
 
         ctrl.optionsZone2 = {
