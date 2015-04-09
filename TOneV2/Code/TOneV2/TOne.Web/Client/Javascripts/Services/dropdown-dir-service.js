@@ -7,7 +7,9 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
         getSelectText: getSelectText,
         setDefaultAttributes: setDefaultAttributes,
         getTemplateByType: getTemplateByType,
-        isSingleSelection: isSingleSelection
+        isSingleSelection: isSingleSelection,
+        isMenu: isMenu,
+        dSelectTemplate: BaseDirService.directiveMainURL + "vr-select.html"
     });
 
     function getTemplateByType(type) {
@@ -47,6 +49,11 @@ app.service('DropdownService', ['BaseDirService', function (BaseDirService) {
 
     function isSingleSelection(type) {
         if (type == undefined || type == "" || type == "standard" || type == "menu") return true;
+        return false;
+    }
+
+    function isMenu(type) {
+        if (type == "menu") return true;
         return false;
     }
 
