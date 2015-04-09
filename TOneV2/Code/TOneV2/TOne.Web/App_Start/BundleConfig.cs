@@ -70,6 +70,7 @@ namespace TOne.Web
 
             bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
                "~/Client/Libraries/Charts/HichChart/highcharts.js",
+               "~/Client/Libraries/Charts/HichChart/highcharts-more.js",
                "~/Client/Libraries/Charts/HichChart/highcharts-3d.js").IncludeDirectory(
                 "~/Client/Libraries/Charts/HichChart/adapters", "*.js", true).IncludeDirectory(
                 "~/Client/Libraries/Charts/HichChart/modules", "*.js", true).IncludeDirectory(

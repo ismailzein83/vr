@@ -59,13 +59,15 @@
 
             if ($scope.chartProfitAPI == undefined)
                 return;
+            var fromDate = $scope.fromDate;
+            var toDate = $scope.toDate;
+            if (fromDate == undefined || toDate == undefined)
+                return;
             
             $scope.profit.length = 0;
             $scope.chartSaleCostProfitAPI.showLoader();
             $scope.chartProfitAPI.showLoader();
             var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
-            var fromDate = $scope.fromDate;
-            var toDate = $scope.toDate;
             BIAPIService.GetMeasureValues(selectedTimeDimension.value, fromDate, toDate, [1, 2, 3])
                 .then(function (response) {
                     BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension.value, fromDate, toDate);

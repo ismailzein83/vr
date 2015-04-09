@@ -29,9 +29,9 @@
                                 <div ng-repeat="itm in config.series">
                                     <vr-row>
                                         <vr-columns colnum="3">
-                                            <label class="control-label">
+                                            <vr-label>
                                                 {{itm.title}}
-                                            </label>
+                                            </vr-label>
                                         </vr-columns>
                                         <vr-columns>
                                             <vr-switch value="itm.selected"></vr-switch>
@@ -49,7 +49,7 @@
             </div>
             <div >
                 <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <vr-button type="Save" data-onclick="save"></vr-button>
+                    <vr-button type="Save" data-onclick="save" formname="formChartSettings"></vr-button>
                     <vr-button type="Close" data-onclick="$hide"></vr-button>
                 </vr-actionbar>
             </div>

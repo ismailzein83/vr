@@ -84,7 +84,7 @@ appControllers.controller('ZoneMonitorController',
 
                     $scope.selectedEntityId = selectedEntity.GroupKeyValues[0].Id;
                     $scope.selectedEntityName = selectedEntity.GroupKeyValues[0].Name;
-                    console.log($scope.selectedEntityName);
+                    //console.log($scope.selectedEntityName);
                     getAndShowEntityStatistics();
                 };
             };
@@ -232,7 +232,7 @@ appControllers.controller('ZoneMonitorController',
                     titlePath: "GroupKeyValues[0].Name",
                     valuePath: sortColumn.description
                 }];
-                console.log(chartData.length);
+                //console.log(chartData.length);
                 chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
             })
                 .finally(function () {

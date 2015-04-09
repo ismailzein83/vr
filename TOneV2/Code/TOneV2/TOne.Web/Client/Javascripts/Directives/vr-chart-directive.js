@@ -39,7 +39,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
             }
 
             function onDataItemClicked(dataItem) {
-                console.log(dataItem);
+                //console.log(dataItem);
                 if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function')
                     api.onDataItemClicked(dataItem);
             }
@@ -77,7 +77,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                             );
                     }
                 });
-
+                api.hideChart();
                 $element.find('#divChart').highcharts({
                     chart: {
                         type: chartDefinition.type,
@@ -232,7 +232,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                 var tooltipSettings = {
                     shared: true
                 };
-
+                api.hideChart();
                 chartObj = $element.find('#divChart').highcharts({
                     chart: chartSettings,
                     title: titleSettings,
