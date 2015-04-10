@@ -1,5 +1,5 @@
 ﻿
-var CustomerController2 = function ($scope, $http, CarriersService) {
+var CustomerController = function ($scope, $http, CarriersService) {
 
     defineScopeObjects();
     defineScopeMethods();
@@ -94,6 +94,6 @@ var CustomerController2 = function ($scope, $http, CarriersService) {
     }
 
 }
-CustomerController2.$inject = ['$scope', '$http', 'CarriersService'];
-appControllers.controller('CustomerController2', CustomerController2)
+CustomerController.$inject = ['$scope', '$http', 'CarriersService'];
+appControllers.controller('CustomerController', CustomerController)
 

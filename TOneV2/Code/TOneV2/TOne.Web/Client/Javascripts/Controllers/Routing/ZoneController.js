@@ -1,5 +1,5 @@
-﻿appControllers.controller('ZoneController2',
-    function ZoneController2($scope, $http, ZonesService) {
+﻿appControllers.controller('ZoneController',
+    function ZoneController($scope, $http, ZonesService) {
         $scope.optionsZones = {
             selectedvalues: [],
             datasource: []

@@ -191,14 +191,14 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController2.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController2.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
     <Content Include="Client\Javascripts\Directives\vr-actionbar-directive.js" />
