@@ -518,18 +518,18 @@ namespace CallGeneratorLibrary
 			return ((ISingleResult<GetDataResult>)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetChartTotals")]
-		public ISingleResult<GetChartTotalsResult> GetChartTotals([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Status", DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status, userId);
-			return ((ISingleResult<GetChartTotalsResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetActionLogs")]
 		public ISingleResult<GetActionLogsResult> GetActionLogs([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectType", DbType="NVarChar(200)")] string objectType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectType, userId);
 			return ((ISingleResult<GetActionLogsResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetChartTotals")]
+		public ISingleResult<GetChartTotalsResult> GetChartTotals([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Status", DbType="Int")] System.Nullable<int> status, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), status, userId);
+			return ((ISingleResult<GetChartTotalsResult>)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetTestOperators")]
@@ -11938,50 +11938,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	public partial class GetChartTotalsResult
-	{
-		
-		private System.Nullable<System.DateTime> _CreationDate;
-		
-		private System.Nullable<int> _TotalCalls;
-		
-		public GetChartTotalsResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CreationDate
-		{
-			get
-			{
-				return this._CreationDate;
-			}
-			set
-			{
-				if ((this._CreationDate != value))
-				{
-					this._CreationDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCalls", DbType="Int")]
-		public System.Nullable<int> TotalCalls
-		{
-			get
-			{
-				return this._TotalCalls;
-			}
-			set
-			{
-				if ((this._TotalCalls != value))
-				{
-					this._TotalCalls = value;
-				}
-			}
-		}
-	}
-	
 	public partial class GetActionLogsResult
 	{
 		
@@ -12129,6 +12085,50 @@ namespace CallGeneratorLibrary
 				if ((this._Name != value))
 				{
 					this._Name = value;
+				}
+			}
+		}
+	}
+	
+	public partial class GetChartTotalsResult
+	{
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<int> _TotalCalls;
+		
+		public GetChartTotalsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this._CreationDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCalls", DbType="Int")]
+		public System.Nullable<int> TotalCalls
+		{
+			get
+			{
+				return this._TotalCalls;
+			}
+			set
+			{
+				if ((this._TotalCalls != value))
+				{
+					this._TotalCalls = value;
 				}
 			}
 		}

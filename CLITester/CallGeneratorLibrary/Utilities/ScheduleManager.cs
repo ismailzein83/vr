@@ -44,6 +44,7 @@ namespace CallGeneratorLibrary.Utilities
                             if (lastlog != null)
                                 lastRunDate = lastlog.StartDate.Value;
 
+                            WriteToEventLogEx("LastRunDate " + lastRunDate);
                             DateTime currentRunDate = DateTime.Now;
 
                             if (schedule.StartDate <= DateTime.Now && (schedule.EndDate == null || schedule.EndDate.Value >= DateTime.Now))
@@ -51,6 +52,7 @@ namespace CallGeneratorLibrary.Utilities
                                 if (!schedule.OccursEvery.HasValue || schedule.OccursEvery.Value == 0) schedule.OccursEvery = 1;
                                 if (lastlog == null)
                                 {
+                                    WriteToEventLogEx("lastlog null ");
                                     if (schedule.SpecificTime.HasValue)
                                     {
                                         DateTime spec = (DateTime)schedule.SpecificTime.Value;
@@ -72,26 +74,63 @@ namespace CallGeneratorLibrary.Utilities
                                 }
                                 else
                                 {
-                                    if (lastRunDate.Hour < schedule.SpecificTime1.Value.Hour)
+                                    WriteToEventLogEx("lastlog: " + lastlog.StartDate);
+                                    if (schedule.SpecificTime1 == null)
                                     {
-                                        currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
-                                            schedule.SpecificTime1.Value.Hour, schedule.SpecificTime1.Value.Minute, schedule.SpecificTime1.Value.Second);
+                                        if (schedule.SpecificTime != null && (lastRunDate.Hour < schedule.SpecificTime.Value.Hour))
+                                        {
+                                            currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                                    schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second);
+                                            WriteToEventLogEx("currentRunDate21: " + currentRunDate);
+                                        }
+                                        else
+                                        {
+                                            currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                                        schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second).AddDays(1);
+                                            WriteToEventLogEx("currentRunDate31: " + currentRunDate);
+                                        }
                                     }
                                     else
                                     {
-                                        currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                        if (lastRunDate.Hour < schedule.SpecificTime.Value.Hour)
+                                        {
+                                            currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                                schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second);
+
+                                            WriteToEventLogEx("currentRunDate41: " + currentRunDate);
+                                        }
+                                        else
+                                        {
+                                            if (lastRunDate.Hour < schedule.SpecificTime1.Value.Hour)
+                                            {
+                                                currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
+                                                    schedule.SpecificTime1.Value.Hour, schedule.SpecificTime1.Value.Minute, schedule.SpecificTime1.Value.Second);
+
+                                                WriteToEventLogEx("currentRunDate51: " + currentRunDate);
+                                            }
+                                            else
+                                            {
+                                                currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
                                                     schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second).AddDays(1);
+
+                                                WriteToEventLogEx("currentRunDate61: " + currentRunDate);
+                                            }
+                                        }
                                     }
                                     //currentRunDate = new DateTime(lastRunDate.Date.Year, lastRunDate.Date.Month, lastRunDate.Date.Day,
                                     //            lastRunDate.Hour, lastRunDate.Minute, lastRunDate.Second).AddDays(1);
                                 }
 
+                                WriteToEventLogEx("currentRunDate:::: " + currentRunDate);
+
                                 currentSchedule = new ScheduleLog();
                                 currentSchedule.ScheduleId = schedule.Id;
                                 currentSchedule.StartDate = currentRunDate;
                                 currentSchedule.Frequency = 0;
-                                db.ScheduleLogs.InsertOnSubmit(currentSchedule);
-                                db.SubmitChanges();
+                                ScheduleLogRepository.Save(currentSchedule);
+                                WriteToEventLogEx("currentSchedule:::: " + currentSchedule.Id);
+                                //db.ScheduleLogs.InsertOnSubmit(currentSchedule);
+                                //db.SubmitChanges();
 
                                 //List<ScheduleOperator> LstShcOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(schedule.Id);
                                 //foreach (ScheduleOperator SchOp in LstShcOp)
@@ -117,7 +156,13 @@ namespace CallGeneratorLibrary.Utilities
                                 schedule.SpecificTime.Value.Date.Year, schedule.SpecificTime.Value.Date.Month, schedule.SpecificTime.Value.Date.Day,
                                 NewLog.StartDate.Value.Hour, NewLog.StartDate.Value.Minute, NewLog.StartDate.Value.Second);
 
+                            DateTime dt1 = new DateTime(
+                                schedule.SpecificTime1.Value.Date.Year, schedule.SpecificTime1.Value.Date.Month, schedule.SpecificTime1.Value.Date.Day,
+                                NewLog.StartDate.Value.Hour, NewLog.StartDate.Value.Minute, NewLog.StartDate.Value.Second);
+
                             TimeSpan span = new TimeSpan();
+                            TimeSpan span1 = new TimeSpan();
+
                             TimeSpan span2 = new TimeSpan();
 
                             if (dt != null)
@@ -125,23 +170,53 @@ namespace CallGeneratorLibrary.Utilities
                                 if (schedule.SpecificTime.HasValue)
                                 {
                                     span = schedule.SpecificTime.Value - dt;
-                                    if (span.TotalSeconds != 0)
+                                    if (schedule.SpecificTime1.HasValue)
                                     {
-                                        DateTime dt2 = new DateTime(
-                                    DateTime.Now.Date.Year, DateTime.Now.Date.Month, DateTime.Now.Date.Day,
-                                    schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second);
+                                        span1 = schedule.SpecificTime1.Value - dt1;
 
-                                        span2 = dt2 - DateTime.Now;
-                                        if (span2.TotalSeconds > 0)
+                                        if (span.TotalSeconds != 0 && span1.TotalSeconds != 0)
                                         {
-                                            NewLog.StartDate = dt2;
-                                        }
-                                        else
-                                        {
-                                            NewLog.StartDate = dt2.AddDays(1);
-                                        }
+                                            DateTime dt2 = new DateTime(
+                                        DateTime.Now.Date.Year, DateTime.Now.Date.Month, DateTime.Now.Date.Day,
+                                        schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second);
 
-                                        ScheduleLogRepository.Save(NewLog);
+                                            span2 = dt2 - DateTime.Now;
+                                            if (span2.TotalSeconds >= 0)
+                                            {
+                                                NewLog.StartDate = dt2;
+                                            }
+                                            else
+                                            {
+                                                NewLog.StartDate = dt2.AddDays(1);
+                                            }
+
+                                            WriteToEventLogEx("NewLog4 " + NewLog.Id + " " + NewLog.StartDate);
+
+                                            ScheduleLogRepository.Save(NewLog);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (span.TotalSeconds != 0)
+                                        {
+                                            DateTime dt2 = new DateTime(
+                                        DateTime.Now.Date.Year, DateTime.Now.Date.Month, DateTime.Now.Date.Day,
+                                        schedule.SpecificTime.Value.Hour, schedule.SpecificTime.Value.Minute, schedule.SpecificTime.Value.Second);
+
+                                            span2 = dt2 - DateTime.Now;
+                                            if (span2.TotalSeconds >= 0)
+                                            {
+                                                NewLog.StartDate = dt2;
+                                            }
+                                            else
+                                            {
+                                                NewLog.StartDate = dt2.AddDays(1);
+                                            }
+
+                                            WriteToEventLogEx("NewLog4 " + NewLog.Id + " " + NewLog.StartDate);
+
+                                            ScheduleLogRepository.Save(NewLog);
+                                        }
                                     }
                                 }
                             }
@@ -159,6 +234,8 @@ namespace CallGeneratorLibrary.Utilities
                                     
                                     //currentSchedule = log;
                                     NewLog.Frequency++;
+
+                                    WriteToEventLogEx("NewLog5 " + NewLog.Id + " " + NewLog.StartDate);
                                     ScheduleLogRepository.Save(NewLog);
                                     List<ScheduleOperator> LstShcOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(schedule.Id);
 
@@ -175,7 +252,8 @@ namespace CallGeneratorLibrary.Utilities
                                     {
                                         foreach (ScheduleOperator SchOp in LstShcOp)
                                         {
-                                            if (SchOp.Frequency < NewLog.Frequency)
+                                            //if (SchOp.Frequency <= NewLog.Frequency)
+                                            if (NewLog.Frequency <= SchOp.Frequency)
                                             {
                                                 TestOperator testOp = new TestOperator();
                                                 testOp.UserId = schedule.UserId;
@@ -192,37 +270,40 @@ namespace CallGeneratorLibrary.Utilities
                                     }
                                     else
                                     {
+                                        WriteToEventLogEx("NewLog1 " + NewLog.Id + " " + NewLog.StartDate);
+                                        
                                         NewLog.EndDate = DateTime.Now;
                                         ScheduleLogRepository.Save(NewLog);
-
-                                        //Schedule Log finished => Send Email
-                                        //WriteToEventLogEx("DONEE " + schedule.User.Id);
-                                        while (SendFailureEmail(schedule.User, NewLog) == false) ;
 
                                         ActionLog action = new ActionLog();
                                         action.ObjectId = schedule.Id;
                                         action.ObjectType = "Schedule";
                                         action.ActionType = (int)Enums.ActionType.ScheduleFailed;
-                                        action.UserId = 0;
-                                        AuditRepository.Save(action);
+                                        action.UserId = schedule.UserId;
+                                        AuditRepository.Save2(action);
+
+                                        //Schedule Log finished => Send Email
+                                        //WriteToEventLogEx("DONEE " + schedule.User.Id);
+                                        while (SendFailureEmail(schedule.User, NewLog) == false) ;
                                     }
                                 }
                             }
                             else
                             {
+                                WriteToEventLogEx("NewLog2 " + NewLog.Id + " " + NewLog.StartDate);
                                 NewLog.EndDate = DateTime.Now;
                                 ScheduleLogRepository.Save(NewLog);
 
-                                //Schedule Log finished => Send Email
-                                //WriteToEventLogEx("DONEE " + schedule.User.Id);
-                                while(SendEmail2(schedule.User, NewLog) == false);
-                                
                                 ActionLog action = new ActionLog();
                                 action.ObjectId = schedule.Id;
                                 action.ObjectType = "Schedule";
                                 action.ActionType = (int)Enums.ActionType.ScheduleDone;
-                                action.UserId = 0;
-                                AuditRepository.Save(action);
+                                action.UserId = schedule.UserId;
+                                AuditRepository.Save2(action);
+
+                                //Schedule Log finished => Send Email
+                                //WriteToEventLogEx("DONEE " + schedule.User.Id);
+                                while(SendEmail2(schedule.User, NewLog) == false);
                             }
                         }
                     }
@@ -425,7 +506,6 @@ namespace CallGeneratorLibrary.Utilities
 
                     dt.Rows.Add(row);
                 }
-                WriteToEventLogEx("1");
 
 
                 //Microsoft.Reporting.WebForms.ReportViewer rview = new Microsoft.Reporting.WebForms.ReportViewer();
@@ -464,7 +544,7 @@ namespace CallGeneratorLibrary.Utilities
                 //{
                 //    fs.Write(bytes, 0, bytes.Length);
                 //}
-                WriteToEventLogEx("5");
+
                 StringBuilder EmailBody = new StringBuilder();
                 EmailBody.Append("<table cellspacing='0' cellpadding='0'>");
                 EmailBody.Append("<tr><td style='font-family: Arial; font-size: 13pt; font-weight: bold'>CLITester Website</td></tr>");

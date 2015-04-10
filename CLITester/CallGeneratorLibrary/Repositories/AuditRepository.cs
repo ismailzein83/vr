@@ -96,9 +96,27 @@ namespace CallGeneratorLibrary.Repositories
             }
         }
 
+        public static void Save2(ActionLog action)
+        {
+            action.LogDate = DateTime.Now;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    context.ActionLogs.InsertOnSubmit(action);
+                    context.SubmitChanges();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+        }
+
         private static void WriteToEventLogEx(string message)
         {
-            string cs = "Call Generator Lib Excep";
+            string cs = "LogCallGen";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

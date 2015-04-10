@@ -585,14 +585,6 @@
       <Column Name="mnc" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.GetChartTotals" Method="GetChartTotals">
-    <Parameter Name="Status" Parameter="status" Type="System.Int32" DbType="Int" />
-    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
-    <ElementType Name="GetChartTotalsResult">
-      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TotalCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.GetActionLogs" Method="GetActionLogs">
     <Parameter Name="ObjectType" Parameter="objectType" Type="System.String" DbType="NVarChar(200)" />
     <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
@@ -605,6 +597,14 @@
       <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GetChartTotals" Method="GetChartTotals">
+    <Parameter Name="Status" Parameter="status" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GetChartTotalsResult">
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotalCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.GetTestOperators" Method="GetTestOperators">

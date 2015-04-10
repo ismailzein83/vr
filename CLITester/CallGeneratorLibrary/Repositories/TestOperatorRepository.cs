@@ -23,6 +23,11 @@ namespace CallGeneratorLibrary.Repositories
             if (status == 1) return "Delivered"; else return "Not Delivered";
         }
 
+        public static String GetLabelUser(int UserId)
+        {
+            return UserRepository.Load(UserId).UserName;
+        }
+
         public static List<ChartCall> GetChartCalls(int status, int userId)
         {
             List<ChartCall> LstChartCalls = new List<ChartCall>();
@@ -59,7 +64,7 @@ namespace CallGeneratorLibrary.Repositories
             return LstChartCalls;
         }
 
-        public static List<ChartCall> GetChartCallsUser(int status, int userId)
+        public static List<ChartCall> GetChartCallsUser(int userId)
         {
             List<ChartCall> LstChartCalls = new List<ChartCall>();
             List<ChartCalls> LstOp = new List<ChartCalls>();
@@ -67,12 +72,14 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    LstOp = context.GetChartTotals1(status, userId).GetResult<ChartCalls>().ToList<ChartCalls>();
+                    LstOp = context.GetChartTotals1(null, userId).GetResult<ChartCalls>().ToList<ChartCalls>();
+                    String lbl = GetLabelUser(userId);
                     for (int i = 1; i <= 31; i++)
                     {
                         ChartCall c = new ChartCall();
                         c.ChartId = i;
                         c.Total = 0;
+                        c.label = lbl;
                         foreach (ChartCalls cc in LstOp)
                         {
                             if (cc.CreationDate.Value.Day == i)
@@ -305,7 +312,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<TestOperator>(c => c.Schedule);
                     context.LoadOptions = options;
 
-                    LstOperators = context.TestOperators.Where(x => (x.ScheduleId == ScheduleId)).OrderByDescending(l => l.Id).ToList<TestOperator>();
+                    LstOperators = context.TestOperators.Where(x => (x.ScheduleId == ScheduleId)).OrderByDescending(l => l.Id).Take(100).ToList<TestOperator>();
                 }
             }
             catch (System.Exception ex)

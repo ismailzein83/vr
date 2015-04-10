@@ -82,6 +82,7 @@ namespace CallGeneratorLibrary.Repositories
             bool success = false;
             try
             {
+                WriteToEventLogEx("Insert:::: " + scheduleLog.StartDate);
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
                     context.ScheduleLogs.InsertOnSubmit(scheduleLog);
@@ -104,6 +105,7 @@ namespace CallGeneratorLibrary.Repositories
 
             try
             {
+                WriteToEventLogEx("Update:::: " + scheduleLog.StartDate);
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
                     look = context.ScheduleLogs.Single(l => l.Id == scheduleLog.Id);

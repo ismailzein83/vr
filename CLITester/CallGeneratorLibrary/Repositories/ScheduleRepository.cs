@@ -213,6 +213,7 @@ namespace CallGeneratorLibrary.Repositories
                     look.MonthDay = schedule.MonthDay;
                     look.OccursEvery = schedule.OccursEvery;
                     look.SpecificTime = schedule.SpecificTime;
+                    look.SpecificTime1 = schedule.SpecificTime1;
                     look.StartDate = schedule.StartDate;
                     look.EndDate = schedule.EndDate;
                     look.SipAccountId = schedule.SipAccountId;

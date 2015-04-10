@@ -11,26 +11,47 @@ namespace CallGeneratorLibrary.Utilities
     {
         public static string GetIPAddress()
         {
-            string VisitorsIPAddr = string.Empty;
-            if (HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
+            try
             {
-                VisitorsIPAddr = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].ToString();
+                string VisitorsIPAddr = string.Empty;
+                if (HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
+                {
+                    VisitorsIPAddr = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].ToString();
+                }
+                else if (HttpContext.Current.Request.UserHostAddress.Length != 0)
+                {
+                    VisitorsIPAddr = HttpContext.Current.Request.UserHostAddress;
+                }
+                return VisitorsIPAddr;
             }
-            else if (HttpContext.Current.Request.UserHostAddress.Length != 0)
+            catch
             {
-                VisitorsIPAddr = HttpContext.Current.Request.UserHostAddress;
+                return null;
             }
-            return VisitorsIPAddr;
         }
 
         public static string GetRemoteAddress()
         {
-            return HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            try
+            {
+                return HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            }
+                catch
+            {
+                return null;
+            }
         }
 
         public static string GetComputerName()
         {
-            return System.Environment.MachineName;
+            try
+            {
+                return System.Environment.MachineName;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
