@@ -193,7 +193,7 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CustomerController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\PriorityController2.js" />
+    <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
@@ -553,7 +553,6 @@
     <Content Include="Client\Templates\PartialTemplate\PriorityTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\ZoneTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />

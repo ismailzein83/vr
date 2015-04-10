@@ -1,5 +1,5 @@
-﻿appControllers.controller('PriorityController2',
-    function PriorityController2($scope, $http, CarriersService) {
+﻿appControllers.controller('PriorityController',
+    function PriorityController($scope, $http, CarriersService) {
 
        
        
