@@ -42,7 +42,24 @@ public partial class ManageSchedules : BasePage
     #region Methods
     private void GetData()
     {
-        List<Schedule> Schedules = ScheduleRepository.GetSchedules(Current.User.Id).OrderByDescending(l => l.Id).ToList();
+        List<Schedule> Schedules  = new List<Schedule>();
+        if (Current.User.User.ParentId == null)
+        {
+            List<Schedule> LstSchedules = new List<Schedule>();
+            
+            LstSchedules = ScheduleRepository.GetSchedules(Current.User.Id).OrderByDescending(l => l.Id).ToList();
+            foreach (Schedule s in LstSchedules)
+                Schedules.Add(s);
+
+            List<User> LstUsers = UserRepository.GetSubUsers(Current.User.Id);
+            foreach(User u in LstUsers)
+            {
+                LstSchedules = new List<Schedule>();
+                LstSchedules = ScheduleRepository.GetSchedules(u.Id).OrderByDescending(l => l.Id).ToList();
+                foreach (Schedule s in LstSchedules)
+                    Schedules.Add(s);
+            }
+        }
         Session["Schedules"] = Schedules;
         rptSchedules.DataSource = Schedules;
         rptSchedules.DataBind();

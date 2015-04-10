@@ -9,7 +9,7 @@ using CallGeneratorLibrary.Repositories;
 using CallGeneratorLibrary.Utilities;
 using System.Configuration;
 
-public partial class TestCall : BasePage
+public partial class ManualTestCall : BasePage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -22,12 +22,12 @@ public partial class TestCall : BasePage
         rptOperators.DataBind();
 
         List<Carrier> LstCarriersList = new List<Carrier>();
-        
-        if(Current.User.User.ParentId == null)
+
+        if (Current.User.User.ParentId == null)
             LstCarriersList = CarrierRepository.LoadbyUserID(Current.User.Id);
         else
             LstCarriersList = CarrierRepository.LoadbyUserID(Current.User.User.ParentId.Value);
-        
+
         rptCarriers.DataSource = LstCarriersList;
         rptCarriers.DataBind();
 

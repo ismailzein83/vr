@@ -21,6 +21,8 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
         }
         
         public string Id { get; set; }
+        public string Operator { get; set; }
+        public string CountryId { get; set; }
         public string OperatorId { get; set; }
         public string Prefix { get; set; }
         public string CreationDate { get; set; }

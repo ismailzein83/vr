@@ -19,6 +19,9 @@
                     <i class="icon-home"></i>
                     <a href="default.aspx">Home</a>
                 </li>
+                
+                    <label class="pull-right" >Next schedule: <asp:Label ID="lblNxtSch" runat="server" /> &nbsp;</label>
+                
             </ul>
             <!-- END PAGE TITLE & BREADCRUMB-->
         </div>
@@ -156,7 +159,7 @@
             <!-- BEGIN PORTLET-->
             <div class="portlet solid bordered light-grey">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-bar-chart"></i>Statistics users</div>
+                    <div class="caption"><i class="icon-bar-chart"></i>Statistics Total Calls</div>
                 </div>
                 <div class="portlet-body">
                     <div id="site_statistics2_loading">
@@ -360,8 +363,6 @@
 
                 request.done(function (msg) {
 
-                    console.log(msg);
-
                     var graphs = [];
                     var i = 0;
 
@@ -380,8 +381,6 @@
                         });
                     }
 
-
-                    console.log(graphs);
 
                     var plot_statistics = $.plot($('#' + id), graphs, {
                         series: {
@@ -457,7 +456,7 @@
             }
 
             loadChart("site_statistics", "HandlerGetChartCalls.ashx?status=2");
-            loadChart("site_statistics2", "HandlerGetChartCalls.ashx?status=1");
+            loadChart("site_statistics2", "HandlerGetChartUserCalls.ashx");
 
         }
 

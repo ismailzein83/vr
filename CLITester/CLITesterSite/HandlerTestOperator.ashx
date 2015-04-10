@@ -71,12 +71,15 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
 
             int balance = 0;
             int Requested = 0;
-            int ParentId = 0;
+            int? ParentId = null;
             ParentId = UserRepository.GetParentId(Current.getCurrentUser(context).Id);
             
-            balance = UserRepository.Load(Current.getCurrentUser(context).Id).Balance.Value;
+            if(ParentId == null)
+                balance = UserRepository.Load(Current.getCurrentUser(context).Id).Balance.Value;
+            else
+                balance = UserRepository.Load(ParentId.Value).Balance.Value;
 
-            Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId);
+            Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId.Value);
 
             if (balance - Requested > 0)
             {

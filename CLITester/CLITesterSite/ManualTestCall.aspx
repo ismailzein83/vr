@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="TestCall.aspx.cs" Inherits="TestCall" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="ManualTestCall.aspx.cs" Inherits="ManualTestCall" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <%--<link href="assets/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />--%>
@@ -17,7 +17,7 @@
             <!-- BEGIN STYLE CUSTOMIZER -->
             <!-- END BEGIN STYLE CUSTOMIZER -->
             <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-            <h3 class="page-title">Direct Test Call <small>Please choose an operator and a route</small>
+            <h3 class="page-title">Manual Test Call <small>Please choose an operator and a route</small>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -26,7 +26,7 @@
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="#">Direct Test Call</a>
+                    <a href="#">Manual Test Call</a>
                 </li>
 
             </ul>
@@ -70,11 +70,13 @@
 
         </div>
         <div class="span2">
-            <a class="btn green big" data-toggle="modal" href="#responsive" onclick='editRow()'>Test Call <i class="m-icon-big-swapright m-icon-white"></i></a>
-            <%--<a class="btn green" data-toggle="modal" href="#responsive" onclick='editRow()'>Add New <i class="icon-plus"></i></a>--%>
+            <a class="btn blue big" id="LnkAdd">Add <i class=" icon-plus "></i></a>
         </div>
-        <div class="span3">
-            <a class="btn black big" id="LnkClear">Clear <i class=" icon-remove "></i></a>
+        <div class="span2">
+            <a class="btn green big"  id="LinkTestCall">Start <i class="m-icon-big-swapright m-icon-white"></i></a>            
+        </div>
+        <div class="span2">
+            <a class="btn black big" id="LnkClear">Clear <i class=" icon-remove"></i></a>
         </div>
     </div>
 
@@ -84,7 +86,7 @@
             <!-- BEGIN SAMPLE TABLE PORTLET-->
             <div class="portlet box red">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-weibo"></i>Direct Test Call</div>
+                    <div class="caption"><i class="icon-weibo"></i>Manual Test Call</div>
                     <div class="tools">
 
                         <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
@@ -106,8 +108,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -131,12 +131,6 @@
     </div>
 
     <div id="responsive" class="modal hide fade" tabindex="-1" data-width="160">
-<%--        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>
-                <asp:Label ID="lblTitle" runat="server" Text="Add New Test Call"></asp:Label></h3>
-
-        </div>--%>
         <div class="modal-body fade in">
             <div data-always-visible="1" data-rail-visible1="1">
 
@@ -171,7 +165,7 @@
         </div>
         <div class="modal-footer form-actions">
             <button type="button" data-dismiss="modal" class="btn">Close</button>
-            <asp:Button id="LinkTestCall"  data-dismiss="modal" class="btn blue" runat="server" Text="Add" />
+            
         </div>
     </div>
     <asp:HiddenField runat="server" ID="imgSRC" />
@@ -183,16 +177,7 @@
     <script>
         var arrayRow = [];
 
-        var editRow = function () {
-            var dl1 = $('select[name=selectOperator]').val();
-            var res = dl1.split("~");
-            var imgSrc = $('#<%=imgSRC.ClientID %>').val()+ '';
-            imgSrc = imgSrc + res[0] + '.png';
-            $('#Table1 > tbody').html('');
-            $('#Table1 > tbody').append('<tr>' +
-                                 '<td><img src='+imgSrc+' alt="" />  ' + $('#selectOperator :selected').text() + '</td>' +
-                              '<td>' + $('#selectPrefix :selected').text() + '</td></tr>');
-        }
+
 
         var rmvArrayElement = function (array, item) {
             var index = array.indexOf(item);
@@ -249,9 +234,17 @@
             if (msg.ErrorMessage == "null")
                 msg.ErrorMessage = "";
 
+            var dl1 = $('select[name=selectOperator]').val();
+            var res = dl1.split("~");
+
+            var imgSrc = $('#<%=imgSRC.ClientID %>').val() + '';
+            imgSrc = imgSrc + res[0] + '.png';
+
             $('#myTable > tbody').append('<tr>' +
                                  '<td class="hideTd">' + msg.idOp + '</td>' +
-                              '<td>' + msg.OperatorId + '</td>' +
+                                '<td class="hideTd">' + msg.Operator + '</td>' +
+                                '<td class="hideTd">' + msg.CountryId  + '</td>' +
+                              '<td><img src=' + imgSrc + ' alt="" /> ' + msg.OperatorId + '</td>' +
                               '<td>' + msg.Prefix + '</td>' +
                               '<td>' + msg.CreationDate + '</td>' +
                               '<td>' + msg.EndDate + '</td>' +
@@ -273,11 +266,43 @@
             a_onClick();
         });
 
+        $('#LnkAdd').bind('click', function (e) {
+            e.preventDefault();
+            aAdd_onClick();
+        });
 
         $('#LnkClear').bind('click', function (e) {
             e.preventDefault();
             aClear_onClick();
         });
+
+        function aAdd_onClick() {
+
+            var dl2 = $('select[name=selectPrefix]').val();
+            var dl1 = $('select[name=selectOperator]').val();
+            var res = dl1.split("~");
+
+            var imgSrc = $('#<%=imgSRC.ClientID %>').val() + '';
+            imgSrc = imgSrc + res[0] + '.png';
+
+            $('#myTable > tbody').append('<tr>' +
+                                 '<td class="hideTd">0</td>' +
+                                 '<td class="hideTd">' + res[1] + '</td>' +
+                                  '<td class="hideTd">' + res[0] + '</td>' +
+                              '<td><img src=' + imgSrc + ' alt="" /> ' + $('#selectOperator :selected').text() + '</td>' +
+                              '<td>' + dl2 + '</td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td class="hideTd">0</td>' +
+                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
+                              '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
+
+        }
 
         function resetTimer() {
             window.clearInterval(timer);
@@ -291,7 +316,6 @@
             arrayRow = [];
 
             $('#myTable > tbody').html('');
-
         }
 
 
@@ -321,7 +345,7 @@
                 else {
                     msg.idOp = idOperator;
                     arrayRow.push(msg.Id);
-                    addTable(msg);
+                    //addTable(msg);
 
                     if (Clicked == false) {
 
@@ -329,7 +353,6 @@
 
                         resetTimer();
                         timer = window.setInterval(function () {
-
                             if (arrayRow.length == 0) { aClear_onClick(); return; }
 
                             var request1 = $.ajax({
@@ -346,7 +369,6 @@
                                 //$('#divError').css('visibility', 'visible');
                                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                                 $('#<%=lblSuccess.ClientID %>').html('');
-                                console.log('failll');
                                 resetTimer();
 
                             });
@@ -382,7 +404,6 @@
                     }
 
                 }
-
             });
 
             request.fail(function (xhr, ajaxOptions, thrownError) {
@@ -403,26 +424,62 @@
         }
 
         function a_onClick() {
+            arrayRow = [];
 
-            var dl1 = $('select[name=selectOperator]').val();
-            var dl2 = $('select[name=selectPrefix]').val();
-            var res = dl1.split("~");
-            console.log(res[1], dl2);
-            testCall(res[1], dl2);
+            $('#myTable > tbody  > tr').each(function () {
+                var op = $('td:nth-child(2)', $(this)).html();
+                var prefix = $('td:nth-child(5)', $(this)).html();
+                console.log("OP: " + op + " PRE: " + prefix);
+                if (typeof op === "undefined") {
+                    console.log("undefined");
+                }
+                else {
+                    testCall(op, prefix);
+                }
+            });
         }
 
 
         $('#myTable').delegate('a.testCall', 'click', function (e) {
 
             var opId = $('td:first-child', $(this).parents('tr')).html();
-            var prefix = $('td:nth-child(3)', $(this).parents('tr')).html();
+            var prefix = $('td:nth-child(5)', $(this).parents('tr')).html();
+            var opName = $('td:nth-child(4)', $(this).parents('tr')).html();
+            var country = $('td:nth-child(3)', $(this).parents('tr')).html();
 
-            testCall(opId, prefix);
+
+            var dl2 = $('select[name=selectPrefix]').val();
+           
+            var dl1 = $('select[name=selectOperator]').val();
+            var res = dl1.split("~");
+
+            var imgSrc = $('#<%=imgSRC.ClientID %>').val() + '';
+            imgSrc = imgSrc + res[0] + '.png';
+
+
+            $('#myTable > tbody').append('<tr>' +
+                                 '<td class="hideTd">0</td>' +
+                                  '<td class="hideTd">0</td>' +
+                                  '<td class="hideTd">' + country + '</td>' +
+                                 '<td class="hideTd">' + opId + '</td>' +
+                              '<td><img src=' + imgSrc + ' alt="" /> ' + opName + '</td>' +
+                              '<td>' + prefix + '</td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td></td>' +
+                              '<td class="hideTd">0</td>' +
+                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
+                              '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
+
         });
 
         $('#myTable').delegate('a.clearCall', 'click', function (e) {
 
-            var id = $('td:nth-child(11)', $(this).parents('tr')).html();
+            var id = $('td:nth-child(12)', $(this).parents('tr')).html();
             $(this).parents('tr').remove();
             rmvArrayElement(arrayRow, id);
         });
@@ -467,4 +524,6 @@
     </script>
 
 </asp:Content>
+
+
 

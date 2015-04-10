@@ -278,8 +278,9 @@
 
         <div class="portlet box purple">
             <div class="portlet-title">
-                <div class="caption"><i class="icon-reorder"></i>Schedule History</div>
+                <div class="caption"><i class="icon-reorder"></i>Schedule History </div>
                 <div class="actions">
+                    <small class="pull-left"> <i class="icon-warning-sign"></i> Last 100 records </small>&nbsp;
                     <button class="btn black" id="btnClose" onclick="CloseLst(); return false;"><i class="icon-remove"></i>Close</button>
                 </div>
             </div>
@@ -590,6 +591,10 @@
             var operator = $('#selectOperator').find(":selected").text();
             var prefix = $('#selectPrefix').find(":selected").text();
             var count = $('#txtCount').val();
+
+            if (count == '')
+                count = 1;
+
             var operatorId = $('#selectOperator').find(":selected").val().split('~')[1];
             var prefixId = $('#selectPrefix').find(":selected").val();
             var row = operatorId + '~' + prefixId + '~' + count;
@@ -598,8 +603,7 @@
             if ($.inArray(row2, arrayRow2) !== -1) {
                 return false;
             }
-            if (count == '')
-                count = 1;
+
             $('#myTable > tbody').append('<tr>' +
                                 '<td style="display:none;">' + row + '</td>' +
                                 '<td style="display:none;">' + row2 + '</td>' +
@@ -692,13 +696,29 @@
 
             var hour = SpecificTime.substring(SpecificTime.indexOf(':') -2, SpecificTime.indexOf(':'));
             var min = st.substring(st.indexOf(':') + 1, st.indexOf(':') + 3);
-            console.log(SpecificTime1);
-            if (SpecificTime1 != "") {
-            }
-            var hour1 = SpecificTime1.substr(SpecificTime1.indexOf(':') -2 , 2);
             
-            var min1 = st1.substring(st1.indexOf(':') + 1, st1.indexOf(':') + 3);
-            console.log(min1);
+            if (SpecificTime1 != "") {
+
+                var pm = SpecificTime1.substring(SpecificTime1.length - 2, SpecificTime1.length);
+                var hour1 = 0;
+                if (pm == "PM") {
+                    hour1 = SpecificTime1.substr(SpecificTime1.indexOf(':') - 2, 2);
+                    
+                    if( hour1 != "12")
+                        hour1 = Number(Number(hour1) + 12);
+                }
+                else {
+                    hour1 = SpecificTime1.substr(SpecificTime1.indexOf(':') - 2, 2);
+                }
+
+                var min1 = st1.substring(st1.indexOf(':') + 1, st1.indexOf(':') + 3);
+                console.log(min1);
+                $('#<%=txtTime1.ClientID %>').val(hour1 + ":" + min1);
+            }
+            else {
+                $('#<%=txtTime1.ClientID %>').val("");
+            }
+
             //var pp = '';
             //if (hour >= 12) {
             //    pp = "PM";
@@ -711,7 +731,7 @@
             //var pp = st.substring(st.indexOf(' ') + 1, st.indexOf(' ') + 3);
             //$('#<txtTime.ClientID %>').val(hour + ":" + min + " " + pp);
             $('#<%=txtTime.ClientID %>').val(hour + ":" + min);
-            $('#<%=txtTime1.ClientID %>').val(hour1 + ":" + min1);
+            
 
             $('#<%=txtDate.ClientID %>').val(startDate + " to " + endDate);
             $('.date-range').setDate();
@@ -726,13 +746,13 @@
 
         var getSchedules = function () {
             var value = '';
-            console.log('asdsad ');
+           
             $("#myTable > tbody > tr").each(function () {
                 value = value + ';' + $(this).find('td:eq(0)').text();
             });
-            
+            console.log('getSchedules: ' + value);
+
             $('#<%=HdTable.ClientID %>').val(value);
-            console.log('TEST ' + value);
 
             //if (value == '') {
             //    $("#form_sample_1").valid();

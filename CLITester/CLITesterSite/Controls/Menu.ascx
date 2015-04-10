@@ -58,7 +58,8 @@
         <li><a href="javascript:;"><i class="icon-table"></i><span class="title">Management</span>
             <span class="arrow "></span></a>
             <ul class="sub-menu">
-                <li><a href="TestCall.aspx">Test Call</a> </li>
+                <li><a href="ManualTestCall.aspx">Manual Call</a> </li>
+                <li><a href="TestCall.aspx">Direct Call</a> </li>
                 <li runat="server" id="liCarriers"><a href="ManageCarriers.aspx">Carriers</a> </li>
                 <li><a href="ManageSchedules.aspx">Schedules</a> </li>
                 <%--<li><a href="ManageLookups.aspx">Lookups</a> </li>--%>

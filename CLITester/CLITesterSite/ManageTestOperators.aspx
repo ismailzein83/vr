@@ -55,7 +55,6 @@
                     </select>
                 </div>
             </div>
-
         </div>
 
         <div class="span3">
@@ -187,7 +186,7 @@
                 "processing": true,
                 'bServerSide': true,
                 "bSort": false,
-                'aoColumns': [null, null, null, null, null, null, null],
+                'aoColumns': [null, null, null, null, null, null, null, null],
                 'bStateSave': false,
                 'sAjaxSource': 'SearchTestOpHandler.ashx?operatorId=0&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val(),
             });

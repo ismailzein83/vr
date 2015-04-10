@@ -27,6 +27,32 @@ public partial class Default : BasePage
 
         if (!IsPostBack)
         {
+            DateTime d = new DateTime();
+            DateTime maxd = new DateTime();
+            int i = 0;
+            List<Schedule> LstShc = new List<Schedule>();
+            if(Current.User.User.ParentId == null)
+                LstShc = ScheduleRepository.GetSchedules(Current.User.Id);
+            else
+                LstShc = ScheduleRepository.GetSchedules(Current.User.User.ParentId.Value);
+            foreach (Schedule s in LstShc)
+            {
+                ScheduleLog sl = ScheduleLogRepository.GetLastLog(s.Id);
+                if (sl != null)
+                    if (sl.StartDate.HasValue)
+                        d = sl.StartDate.Value;
+
+                if (i == 0)
+                    maxd = d;
+                if (d <= maxd)
+                    maxd = d;
+                i++;
+            }
+            if (maxd == DateTime.MinValue)
+                lblNxtSch.Text = "No Schedule is running";
+            else
+                lblNxtSch.Text = maxd.ToString("dd MMM yyyy - HH:mm");
+            
             if (Current.User.User.ParentId != null)
                 RegionalFeeds.Visible = false;
             else
@@ -53,7 +79,13 @@ public partial class Default : BasePage
             lblCLIDel.Text = TestOperatorRepository.GetCLIDeliv(Current.User.Id).ToString();
             lblCLINonDel.Text = TestOperatorRepository.GetCLINonDeliv(Current.User.Id).ToString();
 
-            List<Carrier> LstCarriers = CarrierRepository.LoadbyUserID(Current.User.User.Id);
+            User us = UserRepository.Load(Current.User.User.Id);
+            List<Carrier> LstCarriers = new List<Carrier>();
+            if(us.ParentId == null)
+                LstCarriers = CarrierRepository.LoadbyUserID(Current.User.User.Id);
+            else
+                LstCarriers = CarrierRepository.LoadbyUserID(us.ParentId.Value);
+
             List<CarrierStat> LstStat = new List<CarrierStat>();
             
             foreach (Carrier c in LstCarriers)
