@@ -415,7 +415,7 @@ public partial class SuspectionAnalysis : BasePage
             if (row.RowType == DataControlRowType.DataRow)
             {
                 CheckBox chkReport = (row.Cells[1].FindControl("chkReport") as CheckBox);
-                if (chkReport.Checked)
+                if (chkReport.Checked && row.Cells[3].Text.Trim() !=string.Empty)
                 {
                     string StrategyId = row.Cells[1].Text;
                     string SubscriberNumber = row.Cells[3].Text;

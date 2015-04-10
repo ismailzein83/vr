@@ -1,16 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="DSReportedNumbers" targetNamespace="http://tempuri.org/DSReportedNumbers.xsd" xmlns:mstns="http://tempuri.org/DSReportedNumbers.xsd" xmlns="http://tempuri.org/DSReportedNumbers.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+<xs:schema id="CDRAnalysisMobileDataSet" targetNamespace="http://tempuri.org/CDRAnalysisMobileDataSet.xsd" xmlns:mstns="http://tempuri.org/CDRAnalysisMobileDataSet.xsd" xmlns="http://tempuri.org/CDRAnalysisMobileDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CDRAnalysisConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CDRAnalysisConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CDRAnalysisConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
           <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CDRAnalysisMobileConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CDRAnalysisMobileConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CDRAnalysisMobileConnectionString.ConnectionString" Provider="MySql.Data.MySqlClient" />
         </Connections>
         <Tables>
-          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ReportDetailsTableAdapter" GeneratorDataComponentClassName="ReportDetailsTableAdapter" Name="ReportDetails" UserDataComponentName="ReportDetailsTableAdapter">
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ReportDetailsTableAdapter" Name="ReportDetails">
             <MainSource>
-              <DbSource ConnectionRef="CDRAnalysisMobileConnectionString (Web.config)" DbObjectName="CDRAnalysisMobile.ReportDetails" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="CDRAnalysisMobileConnectionString (Web.config)" DbObjectName="CDRAnalysisMobile.ReportDetails" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false">
                 <DeleteCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="false">
                     <CommandText>DELETE FROM `ReportDetails` WHERE ((`Id` = @p1))</CommandText>
@@ -30,9 +29,8 @@
                   </DbCommand>
                 </InsertCommand>
                 <SelectCommand>
-                  <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        Id, ReportId, SubscriberNumber, StrategyId
-FROM            ReportDetails</CommandText>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT `Id`, `ReportId`, `SubscriberNumber`, `StrategyId` FROM `ReportDetails`</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
@@ -62,22 +60,22 @@ FROM            ReportDetails</CommandText>
       </DataSource>
     </xs:appinfo>
   </xs:annotation>
-  <xs:element name="DSReportedNumbers" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="False" msprop:Generator_DataSetName="DSReportedNumbers" msprop:Generator_UserDSName="DSReportedNumbers">
+  <xs:element name="CDRAnalysisMobileDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="False">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="ReportDetails" msprop:Generator_TableClassName="ReportDetailsDataTable" msprop:Generator_TableVarName="tableReportDetails" msprop:Generator_TablePropName="ReportDetails" msprop:Generator_RowDeletingName="ReportDetailsRowDeleting" msprop:Generator_RowChangingName="ReportDetailsRowChanging" msprop:Generator_RowEvHandlerName="ReportDetailsRowChangeEventHandler" msprop:Generator_RowDeletedName="ReportDetailsRowDeleted" msprop:Generator_UserTableName="ReportDetails" msprop:Generator_RowChangedName="ReportDetailsRowChanged" msprop:Generator_RowEvArgName="ReportDetailsRowChangeEvent" msprop:Generator_RowClassName="ReportDetailsRow">
+        <xs:element name="ReportDetails">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" />
-              <xs:element name="ReportId" msprop:Generator_ColumnVarNameInTable="columnReportId" msprop:Generator_ColumnPropNameInRow="ReportId" msprop:Generator_ColumnPropNameInTable="ReportIdColumn" msprop:Generator_UserColumnName="ReportId" type="xs:int" minOccurs="0" />
-              <xs:element name="SubscriberNumber" msprop:Generator_ColumnVarNameInTable="columnSubscriberNumber" msprop:Generator_ColumnPropNameInRow="SubscriberNumber" msprop:Generator_ColumnPropNameInTable="SubscriberNumberColumn" msprop:Generator_UserColumnName="SubscriberNumber" minOccurs="0">
+              <xs:element name="Id" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" type="xs:int" />
+              <xs:element name="ReportId" type="xs:int" minOccurs="0" />
+              <xs:element name="SubscriberNumber" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="30" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="StrategyId" msprop:Generator_ColumnVarNameInTable="columnStrategyId" msprop:Generator_ColumnPropNameInRow="StrategyId" msprop:Generator_ColumnPropNameInTable="StrategyIdColumn" msprop:Generator_UserColumnName="StrategyId" type="xs:int" minOccurs="0" />
+              <xs:element name="StrategyId" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
