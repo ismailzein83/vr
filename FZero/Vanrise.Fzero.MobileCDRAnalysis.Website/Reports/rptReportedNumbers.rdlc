@@ -15,13 +15,15 @@
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Left>2.905in</Left>
+        <Left>2.26958in</Left>
         <Height>0.35417in</Height>
-        <Width>0.72916in</Width>
+        <Width>1.91666in</Width>
         <Style>
           <Border>
             <Style>None</Style>

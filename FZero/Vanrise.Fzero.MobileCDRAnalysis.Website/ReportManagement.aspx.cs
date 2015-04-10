@@ -278,7 +278,7 @@ public partial class ReportManagement : BasePage
 
         rvToOperator.LocalReport.ReportPath = Path.Combine(string.Empty, @"Reports\rptReportedNumbers.rdlc");
 
-        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("ReportDetails", ReportDetail.GetList(ReportID));
+        ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("DSReportDetails", ReportDetail.GetList(ReportID));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
         rvToOperator.LocalReport.Refresh();
