@@ -192,7 +192,6 @@
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CustomerController2.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController2.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
@@ -200,9 +199,7 @@
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController2.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
     <Content Include="Client\Javascripts\Directives\vr-actionbar-directive.js" />
@@ -560,9 +557,7 @@
     <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate2.html" />
     <Content Include="Client\Templates\PartialTemplate\ZoneTemplate2.html" />
-    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />
     <Content Include="Client\Templates\Views\vr-gridview-v1.html" />
     <Content Include="Client\Views\ChartPrototypes\AMChart.html" />
     <Content Include="Client\Views\ChartPrototypes\CanvasJSChart.html" />
@@ -571,7 +566,6 @@
     <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
-    <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\header-template.html" />
     <Content Include="Client\Views\Routing\Modal.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
