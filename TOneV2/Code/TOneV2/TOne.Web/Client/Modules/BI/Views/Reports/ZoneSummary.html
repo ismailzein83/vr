@@ -7,7 +7,7 @@
             </div>
 
             <div class="modal-body">
-                
+
 
                 <div ng-controller="ZoneSummaryController">
                     <h3>Zone Name: {{zoneName}}</h3>
@@ -21,7 +21,9 @@
             </div>
             <div>
                 <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <vr-button type="Close" data-onclick="$hide"></vr-button>
+                    <div transclude-to="buttons">
+                        <vr-button type="Close" data-onclick="$hide"></vr-button>
+                    </div>
                 </vr-actionbar>
             </div>
         </div>

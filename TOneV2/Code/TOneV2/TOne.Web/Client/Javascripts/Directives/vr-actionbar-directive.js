@@ -1,7 +1,6 @@
 ﻿'use strict';
 
-
-app.directive('vrActionbar', ['ActionBarDirService', function (ActionBarDirService) {
+app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', function (ActionBarDirService, MultiTranscludeService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -11,19 +10,16 @@ app.directive('vrActionbar', ['ActionBarDirService', function (ActionBarDirServi
             issectioncollapsed: '='
         },
         controller: function ($scope, $element) {
-            
+
+        },
+        link: function (scope, elem, attr, ctrl, transcludeFn) {
+            MultiTranscludeService.transclude(elem, transcludeFn);
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        //link: function (scope, element, attrs, ctrl, transclude) {
-        //    transclude(scope.$parent, function (clone, scope) {
-        //        element.append(scope);
-        //    });
-        //},
         templateUrl: function (element, attrs) {
             return ActionBarDirService.dTemplate;
         }
-
     };
 
     return directiveDefinitionObject;

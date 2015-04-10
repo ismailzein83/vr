@@ -205,6 +205,7 @@
     <Content Include="Client\Javascripts\Directives\vr-button-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-chart-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-columns-directive.js" />
+    <Content Include="Client\Javascripts\Directives\vr-datagrid-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-select-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-switch-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-datetimepicker-directive.js" />
@@ -226,6 +227,8 @@
     <Content Include="Client\Javascripts\Services\APIServices\RoutingAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Services\button-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\datagrid-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
     <Content Include="Client\Javascripts\Services\routing-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
     <Content Include="Client\Javascripts\Services\chart-dir-service.js" />
@@ -534,6 +537,7 @@
     <Content Include="Client\Templates\Directives\vr-actionbar.html" />
     <Content Include="Client\Templates\Directives\vr-chart-settings.html" />
     <Content Include="Client\Templates\Directives\vr-chart.html" />
+    <Content Include="Client\Templates\Directives\vr-datagrid.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
     <Content Include="Client\Templates\Directives\vr-dropdown-ondemand.html" />

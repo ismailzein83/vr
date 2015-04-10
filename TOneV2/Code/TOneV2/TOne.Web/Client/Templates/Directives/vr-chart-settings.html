@@ -18,7 +18,7 @@
                             </vr-columns>
                         </vr-row>
                     </div>
-                    
+
 
                     <div ng-show="!config.isSingleDimension">
                         <vr-row>
@@ -44,13 +44,15 @@
                                 </div>
                             </vr-columns>
                         </vr-row>
-                    </div>                    
+                    </div>
                 </vr-form>
             </div>
-            <div >
+            <div>
                 <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <vr-button type="Save" data-onclick="save" formname="formChartSettings"></vr-button>
-                    <vr-button type="Close" data-onclick="$hide"></vr-button>
+                    <div transclude-to="buttons">
+                        <vr-button type="Save" data-onclick="save" formname="formChartSettings"></vr-button>
+                        <vr-button type="Close" data-onclick="$hide"></vr-button>
+                    </div>
                 </vr-actionbar>
             </div>
         </div>

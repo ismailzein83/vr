@@ -14,9 +14,11 @@
     </vr-form>
     <vr-row removeline="true">
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-            <vr-button type="Search" formname="formFilter" data-onclick="getData" isasynchronous=" true" isdisabled="formState.gettingDataDisabled"></vr-button>
-            <vr-button type="Reset"></vr-button>
-        </vr-actionbar>
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formFilter" data-onclick="getData" isasynchronous=" true" isdisabled="formState.gettingDataDisabled"></vr-button>
+                <vr-button type="Reset"></vr-button>
+            </div>                
+</vr-actionbar>
     </vr-row>
 
     <div ng-show="showResult">
