@@ -84,8 +84,31 @@
 
         };
 
+        $scope.showMain = true;
+        $scope.showHis = false;
+
     }
     function defineScopeMethods() {
+        $scope.switchGrids = function () {
+            if ($scope.showMain) {
+                $scope.showMain = false;
+                setTimeout(function () {
+                    $scope.$apply(function () {
+
+                        $scope.showHis = true;
+                    });
+                }, 700);
+            }
+            else {
+                $scope.showHis = false;
+                setTimeout(function () {
+                    $scope.$apply(function () {
+
+                        $scope.showMain = true;
+                    });
+                }, 700);
+            }
+        };
         var refreshRowData = function (rowEntity, index) {
              $scope.gridOptionsRouteRule.data[index] = null;
              $scope.gridOptionsRouteRule.data[index] = rowEntity;

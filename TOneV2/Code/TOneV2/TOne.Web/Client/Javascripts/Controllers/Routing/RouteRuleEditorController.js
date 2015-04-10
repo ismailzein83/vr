@@ -29,21 +29,23 @@
              { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
              { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities' },
              { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities' }
-        ]
+        ];
 
         $scope.optionsEditorType.datasource = [
              { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
              { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
-        ]
+        ];
         $scope.optionsRuleType.datasource = [
           { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
-        ]
-
+        ];
+        
 
     }
     function defineScopeMethods() {
+        
+       
         $scope.issaving = false;
         $scope.findExsite = function (arr, value, attname) {
             var index = -1;
