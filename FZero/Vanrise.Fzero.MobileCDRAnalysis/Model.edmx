@@ -88,9 +88,13 @@
           <EntitySet Name="vwSuspectionAnalysis" EntityType="CDRAnalysisMobileModel.Store.vwSuspectionAnalysis" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwSuspectionAnalysis">
             <DefiningQuery>SELECT
       `vwSuspectionAnalysis`.`strategyId`, 
+      `vwSuspectionAnalysis`.`SubscriberNumber`, 
       `vwSuspectionAnalysis`.`SuspectionLevelId`, 
+      `vwSuspectionAnalysis`.`SuspectionLevelName`, 
       `vwSuspectionAnalysis`.`Occurrence_Day`, 
-      `vwSuspectionAnalysis`.`Occurrence_Hour`
+      `vwSuspectionAnalysis`.`Occurrence_Hour`, 
+      `vwSuspectionAnalysis`.`LastreportNumber`, 
+      `vwSuspectionAnalysis`.`StrategyName`
       FROM `vwSuspectionAnalysis` AS `vwSuspectionAnalysis`</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="CDR_Old_ibfk_1" Association="CDRAnalysisMobileModel.Store.CDR_Old_ibfk_1">
@@ -1152,26 +1156,26 @@
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'SubscriberNumber' in the table 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'SuspectionLevelName' in the table 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'LastreportNumber' in the table 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'StrategyName' in the table 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded.
-      warning 6031: The column 'SubscriberNumber' on the table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
-      warning 6031: The column 'SuspectionLevelName' on the table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
-      warning 6031: The column 'LastreportNumber' on the table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
-      warning 6031: The column 'StrategyName' on the table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
       -->
         <EntityType Name="vwSuspectionAnalysis">
           <Key>
             <PropertyRef Name="strategyId" />
+            <PropertyRef Name="SubscriberNumber" />
             <PropertyRef Name="SuspectionLevelId" />
+            <PropertyRef Name="SuspectionLevelName" />
             <PropertyRef Name="Occurrence_Day" />
             <PropertyRef Name="Occurrence_Hour" />
+            <PropertyRef Name="LastreportNumber" />
+            <PropertyRef Name="StrategyName" />
           </Key>
           <Property Name="strategyId" Type="int" Nullable="false" />
+          <Property Name="SubscriberNumber" Type="varchar" Nullable="false" MaxLength="16" />
           <Property Name="SuspectionLevelId" Type="int" Nullable="false" />
+          <Property Name="SuspectionLevelName" Type="varchar" Nullable="false" MaxLength="19" />
           <Property Name="Occurrence_Day" Type="int" Nullable="false" />
           <Property Name="Occurrence_Hour" Type="int" Nullable="false" />
+          <Property Name="LastreportNumber" Type="varchar" Nullable="false" MaxLength="16" />
+          <Property Name="StrategyName" Type="varchar" Nullable="false" MaxLength="12" />
         </EntityType>
         <Association Name="CDR_Old_ibfk_1">
           <End Role="SwitchProfiles" Type="CDRAnalysisMobileModel.Store.SwitchProfiles" Multiplicity="0..1" />
@@ -3525,14 +3529,22 @@
         <EntityType Name="vwSuspectionAnalysi">
           <Key>
             <PropertyRef Name="strategyId" />
+            <PropertyRef Name="SubscriberNumber" />
             <PropertyRef Name="SuspectionLevelId" />
+            <PropertyRef Name="SuspectionLevelName" />
             <PropertyRef Name="Occurrence_Day" />
             <PropertyRef Name="Occurrence_Hour" />
+            <PropertyRef Name="LastreportNumber" />
+            <PropertyRef Name="StrategyName" />
           </Key>
           <Property Type="Int32" Name="strategyId" Nullable="false" />
+          <Property Type="String" Name="SubscriberNumber" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="SuspectionLevelId" Nullable="false" />
+          <Property Type="String" Name="SuspectionLevelName" Nullable="false" MaxLength="19" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="Occurrence_Day" Nullable="false" />
           <Property Type="Int32" Name="Occurrence_Hour" Nullable="false" />
+          <Property Type="String" Name="LastreportNumber" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StrategyName" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="CDR_Old_ibfk_1">
           <End Type="CDRAnalysisMobileModel.SwitchProfile" Role="SwitchProfile" Multiplicity="0..1" />
@@ -5293,9 +5305,13 @@
           <EntitySetMapping Name="vwSuspectionAnalysis">
             <EntityTypeMapping TypeName="CDRAnalysisMobileModel.vwSuspectionAnalysi">
               <MappingFragment StoreEntitySet="vwSuspectionAnalysis">
+                <ScalarProperty Name="StrategyName" ColumnName="StrategyName" />
+                <ScalarProperty Name="LastreportNumber" ColumnName="LastreportNumber" />
                 <ScalarProperty Name="Occurrence_Hour" ColumnName="Occurrence_Hour" />
                 <ScalarProperty Name="Occurrence_Day" ColumnName="Occurrence_Day" />
+                <ScalarProperty Name="SuspectionLevelName" ColumnName="SuspectionLevelName" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
                 <ScalarProperty Name="strategyId" ColumnName="strategyId" />
               </MappingFragment>
             </EntityTypeMapping>
