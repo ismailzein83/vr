@@ -548,13 +548,13 @@
     <Content Include="Client\Templates\Grid\HeaderTemplate.html" />
     <Content Include="Client\Templates\Grid\ProgressCellTemplate.html" />
     <Content Include="Client\Templates\Grid\RowTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate2.html" />
+    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\PriorityTemplate2.html" />
+    <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate2.html" />
-    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate2.html" />
+    <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
+    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />
     <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />
     <Content Include="Client\Templates\Views\vr-gridview-v1.html" />
     <Content Include="Client\Views\ChartPrototypes\AMChart.html" />
