@@ -109,7 +109,12 @@ namespace AndroidApplicationService
                                     GenCall.Number = op.CarrierPrefix + resp.mobileNumber + "@" + op.User.IpSwitch;
                                     //GenCall.Number = resp.mobileNumber;
                                     //SipAccount sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
-                                    SipAccount sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
+                                    User usParent = UserRepository.Load(op.UserId.Value);
+                                    SipAccount sp = new SipAccount();
+                                    if(usParent.ParentId == null)
+                                        sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
+                                    else
+                                        sp = SipAccountRepository.LoadbyUser(usParent.ParentId.Value);
                                     GenCall.SipAccountId = sp.Id;
                                     GeneratedCallRepository.Save(GenCall);
                                     //WriteToEventLog("GeneratedCall: " + GenCall.Id);
