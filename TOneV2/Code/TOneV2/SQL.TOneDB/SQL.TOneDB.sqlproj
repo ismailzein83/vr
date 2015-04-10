@@ -114,5 +114,8 @@
     <Build Include="BEntity\Stored Procedures\sp_Zone_GetByZonesIds.sql" />
     <Build Include="LCR\User Defined Types\IntIDType.sql" />
     <Build Include="BEntity\User Defined Types\IntIDType.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetPriorityRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetOptionBlockRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetBlockSupplierRouteRules.sql" />
   </ItemGroup>
 </Project>
