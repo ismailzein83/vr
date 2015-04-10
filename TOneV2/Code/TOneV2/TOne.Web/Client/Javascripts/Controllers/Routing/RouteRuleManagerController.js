@@ -199,7 +199,7 @@
         $scope.divStyleChange = function (n) {
             $scope.numberoflines = n;
             var h = ((n + 2) * 30) + ($scope.showf == true ? 0 : 30);
-            angular.element(document.getElementsById('grid1')[0]).css('height', h + 'px');
+            angular.element(document.getElementById('grid1')).css('height', h + 'px');
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
 
         }

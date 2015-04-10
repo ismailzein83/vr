@@ -12,7 +12,9 @@ app.directive('vrLabel', [function () {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (tElement, tAttrs) {
-            var newElement = '<label class="control-label" >' + tElement.context.innerHTML + '</label>';
+            var isStandalone = tAttrs.standalone;
+            var newElement = '<label class="control-label" ' + (isStandalone == "true" ? 'style="padding-top:6px"' : '') + ' >'
+                + tElement.context.innerHTML + '</label>';
             tElement.html(newElement);
         }//,
         //template: function (element, attrs) {
