@@ -8,7 +8,7 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
         scope: {
             label: '@',
             entityname: '@',
-            ismultiplesection: '@',
+            ismultipleselection: '@',
             hideselectedvaluessection: '@',
             datavaluefield: '@',
             datatextfield: '@',
@@ -23,36 +23,51 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
             var controller = this;
             
             this.ValidationMessagesEnum = ValidationMessagesEnum;
-
+            this.selectlbl = $attrs.selectlbl;
             this.filtername = '';
             this.showloading = false;
 
-            this.remoteFilter = function () {
+            this.isRemoteFilter = function () {
                 if(typeof(controller.datasource) == 'function') return true;
                 return false;
             };
 
-            this.enableFilter = function () {
-                if (controller.hidefilterbox) return false;
-                if (typeof (controller.datasource) == 'function') return true;
-                if (ismultiplesection) return true;
-                return false;
+            this.isEnFilter = function () {
+                var isEnable = false;
+                if (controller.isMultiple()) isEnable= true;
+                if (typeof (controller.datasource) == 'function') isEnable =  true;
+                if (controller.hidefilterbox == "" || controller.hidefilterbox ) isEnable = false;
+                return isEnable;
             };
 
-            this.singleSelection = function () {
-                return DropdownService.isSingleSelection(controller.type);
+            this.onClickLi = function (e) {
+                if (controller.isMultiple()) controller.muteAction(e);
             };
+
+            this.isMultiple = function () {
+                if (controller.ismultipleselection == "" || controller.ismultipleselection) return true;
+            };
+
+            this.selectedSectionVisible = function () {
+                if (controller.hideselectedvaluessection == "" || controller.hideselectedvaluessection) return false;
+                if (controller.selectedvalues == undefined) return false;
+                if (controller.selectedvalues.length > 0) return true;
+                return false;
+            };
+            
 
             this.getObjectProperty = function (item, property) {
                 return BaseDirService.getObjectProperty(item, property);
             };
 
             this.getObjectText = function (item) {
-                return controller.getObjectProperty(item, controller.datatextfield);
+                if (controller.datatextfield) return controller.getObjectProperty(item, controller.datatextfield);
+                return item;
             };
 
             this.getObjectValue = function (item) {
-                return controller.getObjectProperty(item, controller.datavaluefield);
+                if (controller.datavaluefield) return controller.getObjectProperty(item, controller.datavaluefield);
+                return item;
             };
 
             this.findExsite = function (item) {
@@ -71,44 +86,54 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
             this.getLastSelectedValue = function () {
 
                 if (controller.selectedvalues == undefined) return null;
-
                 if (controller.selectedvalues.length > 0)
                     return controller.selectedvalues[controller.selectedvalues.length - 1];
                 return null;
             };
 
-            this.getSelectText = function () {
+            this.selectFirstItem = function () {
+                console.log('selectFirstItem');
+                controller.selectedvalues = [];
+                controller.selectedvalues.length = 0;
+                controller.selectedvalues.push(controller.datasource[0]);
+                return controller.getObjectText(controller.datasource[0]);
+            };
 
-                if (controller.singleSelection()) {
-                    if (controller.getLastSelectedValue() !== undefined || controller.getLastSelectedValue() !== '') {
-                        var x = controller.getObjectText(controller.getLastSelectedValue());
-                        if (x !== undefined)
-                            return x;
+            this.getLabel = function () {
+                
+                if (! controller.isMultiple()) {
+
+                    var lastValue = controller.getLastSelectedValue();
+                    if (lastValue == null) {
+
+                        if ($attrs.placeholder)
+                            return $attrs.placeholder;
+
+                        
+                        return controller.selectFirstItem();
                     }
-                    return controller.placeholder;
-                }
 
+                    var x = controller.getObjectText(lastValue);
+                    if (x !== undefined)
+                        return x;
+                }
+                
                 var selectedVal = [];
                 for (var i = 0; i < controller.selectedvalues.length; i++) {
                     selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
                     if (i == 2) break;
                 }
-                var s = DropdownService.getSelectText(controller.selectedvalues.length, selectedVal, controller.placeholder, controller.selectplaceholder);
+                var s = DropdownService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
                 return s;
-            };
 
-            this.selectedSectionVisible = function () {
-                if (controller.hideselectedvaluessection) return false;
-                if (controller.selectedvalues == undefined) return false;
-                if (controller.selectedvalues.length > 0) return true;
-                return false;
             };
+            
+            
 
             this.getSelectedSectionClass = function () {
+                if (!controller.selectedSectionVisible()) return 'single-col-checklist';
                 return controller.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
-
-
 
             this.tooltip = false;
 
@@ -133,7 +158,7 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
             function onLoad(){
                 
                 var divDropdown = angular.element(element[0].querySelector('.dropdown'));
-
+                var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
                 attrs.id = BaseDirService.guid();
                 divDropdown.attr('name', attrs.id);
 
@@ -176,23 +201,20 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
                     angular.element(element[0].querySelector('.dropdown-container1')).attr('style', 'position: relative;');
                     angular.element(element[0].querySelector('.dropdown-container2')).attr('style', 'position: absolute;right: -10px;top: -16px;');
                     divDropdown.prepend(labelTemplate);
-                    angular.element(element[0].querySelector('.dropdown-menu')).attr('class', 'menu-right');
+                    ulDropdown.addClass('menu-right');
                 }
                 else {
 
                     var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;" type="button" data-toggle="dropdown" '
                                         + ' aria-expanded="true"  ' + validateButtonClass + '>'
-                                        + '<span style="float: left; margin: 0px; ">{{ctrl.getSelectText()}}</span>'
+                                        + '<span style="float: left; margin: 0px; ">{{ctrl.getLabel()}}</span>'
                                         + '<span style="position:absolute;top:13px;right:5px" class="caret"></span></button>';
                     divDropdown.prepend(buttonTemplate);
                 }
 
-                if (attrs.ismultiplesection !== undefined ) {
-                    divDropdown.attr('class', 'single-col-checklist');
-                }
-                else {
-                    if (attrs.hideselectedvaluessection)  divDropdown.attr('class', 'single-col-checklist');
-                    else divDropdown.attr('ng-class', 'ctrl.getSelectedSectionClass()');
+                if (attrs.ismultipleselection !== undefined ) {
+                    if (attrs.hideselectedvaluessection) ulDropdown.addClass('single-col-checklist');
+                    else ulDropdown.attr('ng-class', 'ctrl.getSelectedSectionClass()');
                 }
 
             }
@@ -208,7 +230,7 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
                 $('div[name=' + attrs.id + ']').on('hide.bs.dropdown', function (e) {
                     $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                 });
-            }, 100)
+            }, 100);
 
 
             attrs = DropdownService.setDefaultAttributes(attrs);
@@ -232,7 +254,7 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
 
                     var selectval = function (e, item) {
 
-                        if (ctrl.singleSelection()) {
+                        if (! ctrl.isMultiple()) {
                             ctrl.selectedvalues = [];
                             ctrl.selectedvalues.length = 0;
                             ctrl.selectedvalues.push(item);
@@ -241,6 +263,8 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
                             ctrl.muteAction(e);
                             var index = null;
                             try {
+                                console.log(item);
+                                console.log(ctrl.selectedvalues);
                                 index = BaseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
                             }
                             catch (ex) {
@@ -255,14 +279,11 @@ app.directive('vrSelect', ['DropdownService', 'BaseDirService', 'ValidationMessa
 
                     $scope.selectValue = function (e, item) {
                         selectval(e, item);
-                        ctrl.getLastSelectedValue() = item;
-                        if (typeof (ctrl.onselectionchange()) !== "undefined") {
-                            var item = ctrl.onselectionchange()(ctrl.selectedvalues, ctrl.getLastSelectedValue(), ctrl.datasource);
+                        if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
+                            var item =  ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.datasource);
                             if (item !== undefined) {
-                                ctrl.getLastSelectedValue() = item;
                                 selectval(null, item);
                             }
-
                         }
                     };
 

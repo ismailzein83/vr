@@ -4,7 +4,53 @@
         <h1>Test View</h1>
     </div>
     <form name="myForm" novalidate>
+        
         <div class="row">
+            <div class="col-lg-2">
+                Entity Name , datatextfield,datavaluefield
+            </div>
+
+            <div class="col-lg-2">
+                simple
+            </div>
+
+            <div class="col-lg-2">
+                Multiple
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <vr-select datasource="testviewCtrl.optionsZone2.datasource" selectedvalues="testviewCtrl.optionsZone2.selectedvalues"
+                           datatextfield="name" datavaluefield="value" entityname="Zone"></vr-select>
+            </div>
+
+            <div class="col-lg-2">
+                <vr-select datasource="testviewCtrl.optionsFilter.datasource"
+                           selectedvalues="testviewCtrl.optionsFilter.selectedvalues"  ></vr-select>
+            </div>
+
+            <div class="col-lg-2">
+                <vr-select datasource="testviewCtrl.optionsZone.datasource"
+                           selectedvalues="testviewCtrl.optionsZone.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zone" hideselectedvaluessection ismultipleselection hidefilterbox></vr-select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <span ng-repeat="c in testviewCtrl.optionsZone2.selectedvalues">{{c.name}}</span>
+            </div>
+
+            <div class="col-lg-2">
+                <span ng-repeat="c in testviewCtrl.optionsFilter.selectedvalues">{{c}}</span>
+            </div>
+
+        </div>
+
+
+        <!--<div class="row">-->
             <!--<div class="col-md-2">
                 <vr-textbox label="Input" type="standard" placeholder="Username" value="testviewCtrl.Input1"></vr-textbox>
             </div>
@@ -23,7 +69,7 @@
             <div class="col-md-2">
                 <vr-textbox type="button" value="testviewCtrl.Input" placeholder="Alert .. " buttontext="Alert" btn-click="testviewCtrl.alertMsg()"></vr-textbox>
             </div>-->
-            <div class="col-md-2">
+            <!--<div class="col-md-2">
                 {{testviewCtrl.Input1}}
             </div>
             <div class="col-md-2">
@@ -32,26 +78,23 @@
             <div class="col-md-2">
                 Invalid : {{myForm.$invalid}}
             </div>
-        </div>
+        </div>-->
         
-        <div class="col-lg-2">
+        <!--<div class="col-lg-2">-->
             <!--<vr-dropdown id="dropdown1" type="ondemand" options="testviewCtrl.optionsZone" datatextfield="Name" datavaluefield="ZoneId"
                          onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired customvalidate="testviewCtrl.customvalidate1" on-ready="testviewCtrl.onready"></vr-dropdown>-->
-        </div>
+        <!--</div>-->
 
-        <div class="col-lg-2">
-            <vr-select datasource="testviewCtrl.optionsZone.datasource" selectedvalues="testviewCtrl.optionsZone.selectedvalues" datatextfield="Name" datavaluefield="ZoneId" entityname="Zone"></vr-select>
-        </div>
+        
 
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-2">
                Invalid : {{myForm2.$invalid}}
             </div>
-        </div>
-        <div class="col-lg-2">
+        </div>-->
             <!--<vr-dropdown  type="ondemand" options="testviewCtrl.optionsZone2" datatextfield="Name" datavaluefield="ZoneId"
                          onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready" customvalidate="testviewCtrl.customvalidate1"></vr-dropdown>-->
-        </div>
+    
         <!--<div class="col-lg-2">
             <vr-dropdown  options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"
                          entityname="Supplier" isrequired customvalidate="testviewCtrl.customvalidate2"></vr-dropdown>
@@ -86,16 +129,16 @@
 
     </div>-->
 
-    <div class="row">
-        <div class="col-lg-2">
+    <!--<div class="row">-->
+        <!--<div class="col-lg-2">
             <button ng-disabled="myForm.$invalid" type="button" class="btn btn-default" >Save</button>
-        </div>
+        </div>-->
         <!--<div class="col-lg-2">
             <button ng-disabled="testviewCtrl.validateForm()" type="button" class="btn btn-default" ng-click="testviewCtrl.save()">Save</button>
         </div>-->
 
        
-    </div>
+    <!--</div>-->
 
 
 </div>

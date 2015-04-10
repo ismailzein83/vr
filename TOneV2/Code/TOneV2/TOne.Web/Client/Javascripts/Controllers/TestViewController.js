@@ -5,7 +5,7 @@ var TestViewController = function (CarriersService, ZonesService) {
     var ctrl = this;
     load();
     loadZone();
-    loadCarriers();
+    //loadCarriers();
 
     ctrl.selectedRoutes = function (items, item, data) {
 
@@ -73,16 +73,22 @@ var TestViewController = function (CarriersService, ZonesService) {
 
         ctrl.validationGroup = [];
 
-        ctrl.optionsZone = {
+        ctrl.optionsFilter = {
             selectedvalues: [],
-            datasource: function (text) {
-                return ZonesService.getSalesZones(text);
+            datasource: ['5', '10', '15'],
+            onselectionchanged: function (selectedvalues, datasource) {
+                console.log(selectedvalues);
+                console.log(datasource);
             }
         };
 
-        ctrl.optionsZone2 = {
+        ctrl.optionsZone = {
             selectedvalues: [],
-            datasource: []
+            datasource: [],
+            onselectionchanged: function (selectedvalues, datasource) {
+                console.log(selectedvalues);
+                console.log(datasource);
+            }
         };
 
         ctrl.alertMsg = function () {
@@ -97,8 +103,8 @@ var TestViewController = function (CarriersService, ZonesService) {
     }
     
     function loadZone() {
-        ZonesService.getSalesZones("Lebanon").then(function (items) {
-            ctrl.optionsZone.selectedvalues = items;
+        ZonesService.getSalesZones("L").then(function (items) {
+            ctrl.optionsZone.datasource = items;
         }, function (msg) {
             console.log(msg);
         });
