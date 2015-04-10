@@ -34,5 +34,13 @@ namespace TOne.WebConfig.Entities
                 return this.ParentMenuItemId;
             }
         }
+
+        public override int? LinkedToEntityId
+        {
+            get
+            {
+                return this.LinkedEntityId;
+            }
+        }
     }
 }

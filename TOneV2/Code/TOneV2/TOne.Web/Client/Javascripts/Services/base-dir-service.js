@@ -1,13 +1,17 @@
 ﻿'use strict';
 
-app.service('BaseDirService', function () {
+app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMessagesEnum) {
 
     return ({
         directiveMainURL: "../../Client/Templates/Directives/",
         getObjectProperty: getObjectProperty,
         muteAction: muteAction,
         findExsite: findExsite,
-        guid: guid
+        guid: guid,
+        getValidationMessageTemplate: getValidationMessageTemplate,
+        generateHTMLElementName: generateHTMLElementName,
+        addScopeValidationMethods: addScopeValidationMethods,
+        prepareDirectiveHTMLForValidation: prepareDirectiveHTMLForValidation
     });
 
     function getObjectProperty(item, property) {
@@ -47,4 +51,84 @@ app.service('BaseDirService', function () {
           s4() + '-' + s4() + s4() + s4();
     }
 
-});
+   
+    function escapeRegExp(string) {
+        return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+    function replaceAll(string, find, replace) {
+        return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+
+    function generateHTMLElementName() {
+        return 'ElmntId_' + replaceAll(guid(), '-', '');
+    };
+
+    function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation) {
+        var template = '<div  class="tooltip-error disable-animations " ng-show="ctrl.isVisibleTooltip()" ng-messages="ctrl.getErrorObject()">';
+        if (requiredValue)
+            template += '<div ng-message="requiredvalue">{{ ctrl.ValidationMessagesEnum.required }}</div>';
+        if (requiredArray)
+            template += '<div ng-message="requiredarray">{{ ctrl.ValidationMessagesEnum.required }}</div>';
+        if (invalidFormat)
+            template += '<div ng-message="invalidformat">{{ ctrl.ValidationMessagesEnum.invalidFormat }}</div>';
+        if (customValidation)
+            template += '<div ng-message="customvalidation">{{ ctrl.customMessage }}</div>';
+        return template + '</div>';
+    }
+
+    function prepareDirectiveHTMLForValidation(validationOptions, elementToValidate, elementToStyleInvalid, elementToTriggerMessage) {
+        var elementName = generateHTMLElementName();
+        elementToValidate.attr('name', elementName);
+
+        if (validationOptions.requiredValue)
+            elementToValidate.attr('vr-validation-value', '');
+        if (validationOptions.requiredArray)
+            elementToValidate.attr('vr-validation-array', '');
+        if (validationOptions.customValidation)
+            elementToValidate.attr('vr-validation-custom', 'ctrl.customvalidate');
+
+        elementToTriggerMessage.attr('ng-mouseenter', 'ctrl.showTooltip()');
+        elementToTriggerMessage.attr('ng-mouseleave', 'ctrl.hideTooltip()');
+
+        elementToStyleInvalid.attr('ng-class', 'ctrl.isValidComp()');
+        return elementName;
+    }
+
+    function addScopeValidationMethods(ctrl, elementName, formCtrl) {
+        var validationClass = {
+            invalid: "required-inpute", valid: ''
+        };
+
+        var isValidElem = function () {
+            return formCtrl[elementName].$valid;
+        };
+
+        ctrl.ValidationMessagesEnum = ValidationMessagesEnum;
+        ctrl.tooltip = false;
+
+        ctrl.showTooltip = function () {
+            ctrl.tooltip = true;
+        };
+
+        ctrl.hideTooltip = function () {
+            ctrl.tooltip = false;
+        };
+
+        ctrl.getErrorObject = function () {
+            return formCtrl[elementName].$error;
+        }
+
+        ctrl.isVisibleTooltip = function () {
+            if (isValidElem()) return false;
+            return ctrl.tooltip;
+        };
+
+        ctrl.isValidComp = function () {
+            if (isValidElem()) return validationClass.valid;
+
+            return validationClass.invalid;
+        }
+
+        
+    }
+}]);

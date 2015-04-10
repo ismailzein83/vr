@@ -16,6 +16,22 @@ appControllers.controller('ZoneMonitorController',
         defineScopeMethods();
         load();
         function defineScopeObjects() {
+            $scope.customvalidateTestFrom = function (fromDate) {
+                return validateDates(fromDate, $scope.toDate);
+            };
+            $scope.customvalidateTestTo = function (toDate) {
+                return validateDates($scope.fromDate, toDate);
+            };
+            function validateDates(fromDate, toDate) {
+                if (fromDate == undefined || toDate == undefined)
+                    return null;
+                var from = new Date(fromDate);
+                var to = new Date(toDate);
+                if (from.getTime() > to.getTime())
+                    return "Start should be before end";
+                else
+                    return null;
+            }
             $scope.testModel = 'ZoneMonitorController';
 
             $scope.optionsTopCount = {

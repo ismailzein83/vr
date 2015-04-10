@@ -28,64 +28,37 @@ app.directive('vrValidationDatetime', function () {
 });
 
 
-app.directive('vrDatetimepicker', ['ValidationMessagesEnum', function (ValidationMessagesEnum) {
-    function guid() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1);
-        }
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-          s4() + '-' + s4() + s4() + s4();
-    }
-    function escapeRegExp(string) {
-        return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-    }
-    function replaceAll(string, find, replace) {
-        return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-    }
+app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', function (ValidationMessagesEnum, BaseDirService) {
+    
     var directiveDefinitionObject = {
         restrict: 'E',
         require: '^form',
         scope: {
-            value: '='
+            value: '=',
+            customvalidate: '&'
         },
         controller: function ($scope, $element) {
-            $scope.ValidationMessagesEnum = ValidationMessagesEnum;
-            $scope.tooltip = false;
-
-            $scope.showtooltip = function () {
-                $scope.tooltip = true;
-            };
-
-            $scope.hidetooltip = function () {
-                $scope.tooltip = false;
-            };
-
-            
-            
-        },
-        link: function (scope, element, attrs, formCtrl) {
-
-            
             
         },
         compile: function (element, attrs) {
-            var inputId = element.find('#hiddenId').attr('value');
             
-            if (attrs.isrequired !== undefined) {
-                var inputElement = element.find('#' + inputId);
-                inputElement.attr('vr-validation-value', '');
-            }
+            var inputElement = element.find('#mainInput');
+            var validationOptions = {};
+            if (attrs.isrequired !== undefined)
+                validationOptions.requiredValue = true;
+            if (attrs.customvalidate !== undefined)
+                validationOptions.customValidation = true;
 
+            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
              return {
-                pre: function ($scope, iElem, iAttrs, formCtrl) {
-                    $scope.inputId = inputId;
+                 pre: function ($scope, iElem, iAttrs, formCtrl) {
+                     var ctrl = $scope.ctrl;
 
                     var isUserChange;
-                    $scope.$watch('value', function () {
-                        if (!isValidElem())
-                            return;
+                    $scope.$watch('ctrl.value', function () {
+                        //if (!isValidElem())
+                        //    return;
+                       
                         if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                             return;
                         isUserChange = false;//reset the flag
@@ -97,55 +70,32 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', function (Validatio
                         }
                     });
 
-                    $scope.notifyUserChange = function () {
+                    ctrl.notifyUserChange = function () {
                         isUserChange = true;
                     };
 
-                    var isValidElem = function () {
-                       return formCtrl[$scope.inputId].$valid;
-                    };
-
-                    $scope.getErrorObject = function () {
-                        return formCtrl[$scope.inputId].$error;
-                    }
-
-                    $scope.isvisibleTooltip = function () {
-                        if (isValidElem()) return false;
-                        return $scope.tooltip;
-                    };
-
-                    var validationClass = {
-                        invalid: "required-inpute", valid: ''
-                    };
-
-                    $scope.isvalidcomp = function () {
-
-                        if (isValidElem()) return validationClass.valid;
-
-                        return validationClass.invalid;
-                    }
+                    BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
                     
                 }
             }
         },
 
-        //controllerAs: 'ctrl',
-        //bindToController: true,
+        controllerAs: 'ctrl',
+        bindToController: true,
         template: function (element, attrs) {
-            var id = 'input_' + replaceAll(guid(), '-', '');
-            var startTemplate = '<div ng-mouseenter="showtooltip(); " ng-mouseleave="hidetooltip()" ><hidden id="hiddenId" value="' + id + '"></hidden>';
+            var startTemplate = '<div id="rootDiv">';
             var endTemplate = '</div>';
+
             var labelTemplate = '';
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+
             var dateTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
-                                + '<input id="' + id + '" name="' + id + '" bs-datepicker ng-model="value" vr-validation-datetime  ng-class="isvalidcomp()" ng-change="notifyUserChange()" size="10" class="form-control" data-autoclose="1" placeholder="Date" type="text" >'
+                                + '<input id="mainInput" bs-datepicker ng-model="ctrl.value" vr-validation-datetime=""  ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" placeholder="Date" type="text" >'
                             + '</div>';
-            var validationTemplate = '<div class="tooltip-error disable-animations " ng-show="isvisibleTooltip()" ng-messages="getErrorObject()">'
-                                           + '<div ng-message="requiredvalue">{{ ValidationMessagesEnum.required }}</div>'
-                                           + '<div ng-message="invalidformat">invalid format</div>'
-                                           + '<div ng-message="customvalidation">{{ customMessage }}</div>'
-                                        +'</div>'
+
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true);
+
             if(attrs.type == 'date')
                 return startTemplate + labelTemplate + dateTemplate + validationTemplate + endTemplate;
         }

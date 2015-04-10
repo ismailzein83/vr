@@ -1,7 +1,8 @@
 ﻿'use strict';
 
 app.constant('ValidationMessagesEnum', {
-    required: "You did not enter a field"
+    required: "Required Field",
+    invalidFormat: "Invalid Format"
 });
 
 app.directive('vrValidationArray', function () {
@@ -43,19 +44,19 @@ app.directive('vrValidationValue', function () {
 app.directive('vrValidationCustom',['ValidationMessagesEnum', function (ValidationMessagesEnum) {
     return {
         restrict: 'A',
-        require: 'ngModel',
-        link: function (scope, elm, attrs, ctrlModel) {
-
+        require:  ['ngModel', '^form'],
+        link: function (scope, elm, attrs, controllers) {
+            var ctrlModel = controllers[0];
             scope.ctrl.customMessage ='';
             
 
             var validate = function (viewValue) {
                 var isvalid = true;
-                scope.ctrl.customMessage = scope.ctrl.customvalidate() (scope.ctrl.options);
-
-                if (scope.ctrl.customMessage == undefined || scope.ctrl.customMessage == '') isvalid = true;
+                scope.ctrl.customMessage = scope.ctrl.customvalidate()(viewValue);
+                if (scope.ctrl.customMessage == undefined || scope.ctrl.customMessage == null || scope.ctrl.customMessage == '') isvalid = true;
                 else isvalid = false;
                 ctrlModel.$setValidity('customvalidation', isvalid);
+                //controllers[1].validateForm();//.$checkValidity()
                 return viewValue;
             }
             ctrlModel.$parsers.unshift(validate);

@@ -11,6 +11,16 @@ namespace TOne.WebConfig.Entities
     {
         public string Name { get; set; }
 
+        public int? ParentModuleId { get; set; }
+
         public int? DefaultPageId { get; set; }
+
+        public override int? ParentId
+        {
+            get
+            {
+                return this.ParentModuleId;
+            }
+        }
     }
 }
