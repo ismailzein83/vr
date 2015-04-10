@@ -111,6 +111,12 @@ Use this for keyframe animations
 .double-col-checklist-md{
     width:575px ;
 }
+.no-filter{
+    height:260px
+}
+.with-filter{
+    height:225px
+}
 .custom-label{
     display: inline-block;
     vertical-align: baseline;
