@@ -18,7 +18,7 @@
             lastselectedvalue: ""
         };
         $scope.optionsRuleType.datasource = [
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate2.html' },
+          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
           { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
           { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
         ]
@@ -187,7 +187,6 @@
             scopeDetails.title = "New";
             scopeDetails.RouteRuleId = 'undefined';
             scopeDetails.callBackHistory = callBackHistory;
-           // var addModal = $modal({ scope: $scope, template: '/Client/Views/Routing/Modal.html', show: true, animation: "am-fade-and-scale" });
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
 
         }

@@ -15,7 +15,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
      
         $scope.toogled = !$scope.toogled;
     }
-    $scope.showMenu = function (e) {      
+    $scope.showMenu = function (e) {
+       
         var $this = angular.element(e.currentTarget);
         clearTimeout(dropdownHidingTimeoutHandlerc);
         if (!$this.hasClass('open')) {
@@ -30,7 +31,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 $('.dropdown-toggle', $this).dropdown('toggle');
                 $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
             }
-        }, 150);
+        }, 200);
         
     }
    
