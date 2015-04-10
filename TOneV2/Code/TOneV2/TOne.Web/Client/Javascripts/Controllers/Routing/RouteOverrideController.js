@@ -1,5 +1,5 @@
-﻿appControllers.controller('RouteOverrideController2',
-    function RouteOverrideController2($scope, $http, CarriersService) {
+﻿appControllers.controller('RouteOverrideController',
+    function RouteOverrideController($scope, $http, CarriersService) {
 
         defineScopeObjects();
         defineScopeMethods();
