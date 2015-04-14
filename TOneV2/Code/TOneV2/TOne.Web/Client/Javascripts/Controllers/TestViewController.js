@@ -4,7 +4,7 @@ var TestViewController = function (CarriersService, ZonesService) {
 
     var ctrl = this;
     load();
-    //loadZone();
+    loadZone();
     //loadCarriers();
 
     ctrl.selectedRoutes = function (items, item, data) {
@@ -51,11 +51,10 @@ var TestViewController = function (CarriersService, ZonesService) {
             datasource: []
         };
 
-        ctrl.customvalidate1 = function (api) {
-            
+        ctrl.customvalidate1 = function (length) {
+            console.log(length);
             var isvalid = false;
-            if (api == undefined || api.selectedvalues == undefined) isvalid = false;
-            else if (api.selectedvalues.length == 2) isvalid = true;
+            if (length == 2) isvalid = true;
 
             if (isvalid) return '';
             return 'Maximum length : 2';
@@ -83,6 +82,15 @@ var TestViewController = function (CarriersService, ZonesService) {
         };
 
         ctrl.optionsZone = {
+            selectedvalues: [],
+            datasource: [],
+            onselectionchanged: function (selectedvalues, datasource) {
+                console.log(selectedvalues);
+                console.log(datasource);
+            }
+        };
+
+        ctrl.optionsZoneRemote = {
             selectedvalues: [],
             datasource: function (text) {
                 console.log(text);

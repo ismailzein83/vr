@@ -14,7 +14,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             datatextfield: '@',
             hidefilterbox:'@',
             isrequired: '@',
-            validator: '@',
+            customvalidate: '&',
             datasource: '=',
             selectedvalues: '=',
             onselectionchanged: '='
@@ -27,6 +27,13 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             this.filtername = '';
             this.showloading = false;
             this.data = {};
+            
+            this.isContainerVisible = function () {
+                if (controller.isMultiple()) return true;
+                if (controller.isRemoteLoad()) return true;
+                if (controller.isEnFilter()) return true;
+                return false;
+            };
 
             this.getdatasource = function () {
                 if (controller.isRemoteLoad()) return controller.data;
@@ -160,7 +167,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                             validationOptions.requiredValue = true;
                         }
                     }
-                    if (attrs.validator !== undefined)
+                    if (attrs.customvalidate !== undefined)
                         validationOptions.customValidation = true;
 
                     attrs.id = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, divDropdown, undefined, divDropdown);
@@ -236,6 +243,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                             ctrl.selectedvalues = [];
                             ctrl.selectedvalues.length = 0;
                             ctrl.selectedvalues.push(item);
+                               
                         }
                         else {
                             ctrl.muteAction(e);
@@ -264,8 +272,8 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     };
                     
                     ctrl.search = function () {
+                        ctrl.setdatasource([]);
                         if (!ctrl.isRemoteLoad()) return;
-                        ctrl.setdatasource({});
                         if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1)) {
                             ctrl.showloading = true;
                             ctrl.datasource(ctrl.filtername).then(function (items) {
