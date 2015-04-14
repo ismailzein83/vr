@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
                 ErrorLogger("6");
                 GC.KeepAlive(aTimer);
                 ErrorLogger("7");
-                OnTimedEvent(null, null);
+                //OnTimedEvent(null, null);
                 ErrorLogger("8");
             }
             catch (Exception ex)
@@ -81,27 +81,39 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
 
             try
             {
-
+                ErrorLogger("0.1");
                 var sftp = new Rebex.Net.Sftp();
+                ErrorLogger("0.2");
                 sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
+                ErrorLogger("0.3");
                 sftp.Login(System.Configuration.ConfigurationManager.AppSettings["FTP_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["FTP_Pasword"].ToString());
-
+                ErrorLogger("0.4");
                 if (sftp.GetConnectionState().Connected)
                 {
+                    ErrorLogger("0.5");
                     // set current directory
                     sftp.ChangeDirectory(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString());
+                    ErrorLogger("0.6");
                     // get items within the current directory
                     SftpItemCollection currentItems = sftp.GetList();
+                    ErrorLogger("0.7");
                     if (currentItems.Count > 0)
                     {
+                        ErrorLogger("0.8");
                         foreach (var fileObj in currentItems)
                         {
+                            ErrorLogger("0.9");
                             if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
                             {
+                                ErrorLogger("0.10");
                                 DBConnect db = new DBConnect();
+                                ErrorLogger("0.11");
                                 if (db.Load(fileObj.Name))
                                 {
+                                    ErrorLogger("0.12");
+                                    ErrorLogger(fileObj.Name);
                                     sftp.Rename(System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name, System.Configuration.ConfigurationManager.AppSettings["FTP_Path"].ToString() + "/" + fileObj.Name.Replace(".DAT", ".old"));
+                                    ErrorLogger("0.13");
                                 }
                             }
                         }
