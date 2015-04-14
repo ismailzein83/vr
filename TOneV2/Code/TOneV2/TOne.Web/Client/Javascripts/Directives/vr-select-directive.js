@@ -21,21 +21,31 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
         },
         controller: function ($scope, $element, $attrs) {
             var controller = this;
-            
             this.ValidationMessagesEnum = ValidationMessagesEnum;
             this.selectlbl = $attrs.selectlbl;
             this.filtername = '';
             this.showloading = false;
+            this.data = {};
 
-            this.isRemoteFilter = function () {
-                if(typeof(controller.datasource) == 'function') return true;
+            this.getdatasource = function () {
+                if (controller.isRemoteLoad()) return controller.data;
+                return controller.datasource;
+            };
+
+            this.setdatasource = function (datasource) {
+                if (controller.isRemoteLoad()) controller.data = datasource;
+                else controller.datasource = datasource;
+            };
+
+            this.isRemoteLoad = function () {
+                if (typeof (controller.datasource) == 'function') return true;
                 return false;
             };
 
             this.isEnFilter = function () {
                 var isEnable = false;
                 if (controller.isMultiple()) isEnable= true;
-                if (typeof (controller.datasource) == 'function') isEnable =  true;
+                if (controller.isRemoteLoad()) isEnable = true;
                 if (controller.hidefilterbox == "" || controller.hidefilterbox ) isEnable = false;
                 return isEnable;
             };
@@ -86,8 +96,8 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             this.selectFirstItem = function () {
                 controller.selectedvalues = [];
                 controller.selectedvalues.length = 0;
-                controller.selectedvalues.push(controller.datasource[0]);
-                return controller.getObjectText(controller.datasource[0]);
+                controller.selectedvalues.push(controller.getdatasource()[0]);
+                return controller.getObjectText(controller.getdatasource()[0]);
             };
 
             this.getLabel = function () {
@@ -159,9 +169,10 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     divDropdown.append(validationTemplate);
                 }
 
+                
                 if (SelectService.isMenu(attrs.type)) {
 
-                    var labelTemplate = '<label  id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true">'
+                    var lblTemplate = '<label  id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true">'
                     + '<label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px;'
                     + ' border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">'
                     + '{{ctrl.getLabel()}}<span style="float:right;top:8px;position:relative" class="caret"></span></label> </label>';
@@ -169,7 +180,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
 
                     angular.element(element[0].querySelector('.dropdown-container1')).attr('style', 'position: relative;');
                     angular.element(element[0].querySelector('.dropdown-container2')).attr('style', 'position: absolute;right: -10px;top: -16px;');
-                    divDropdown.prepend(labelTemplate);
+                    divDropdown.prepend(lblTemplate);
                     ulDropdown.addClass('menu-right');
                 }
                 else {
@@ -180,6 +191,11 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                                         + '<span style="position:absolute;top:13px;right:5px" class="caret"></span></button>';
                     divDropdown.prepend(buttonTemplate);
                 }
+
+                var labelTemplate = '';
+                if (attrs.label != undefined)
+                    labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+                angular.element(element[0].querySelector('.dropdown-container2')).prepend(labelTemplate);
 
                 if (attrs.ismultipleselection !== undefined ) {
                     if (attrs.hideselectedvaluessection) ulDropdown.addClass('single-col-checklist');
@@ -239,28 +255,26 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     ctrl.selectValue = function (e, item) {
                         selectItem(e, item);
                         if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
-                            var item =  ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.datasource);
+                            var item = ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.getdatasource());
                             if (item !== undefined) {
                                 selectItem(null, item);
                             }
                         }
                     };
-
+                    
                     ctrl.search = function () {
-                   
-                        if (ctrl.datasource == undefined) return;
-                        ctrl.datasource = [];
-                        ctrl.datasource.length = 0;
-
-                        if (ctrl.filtername.length > (ctrl.limitcharactercount - 1)) {
+                        console.log(ctrl.datasource);
+                        if (!ctrl.isRemoteLoad()) return;
+                        if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1)) {
                             ctrl.showloading = true;
-                            ctrl.onsearch()(ctrl.filtername).then(function (items) {
-                                ctrl.datasource = items;
+                            ctrl.datasource(ctrl.filtername).then(function (items) {
+                                ctrl.setdatasource(items);
                                 ctrl.showloading = false;
                             }, function (msg) {
                                 console.log(msg);
                             });
                         }
+                        
                     };
                 }
             }

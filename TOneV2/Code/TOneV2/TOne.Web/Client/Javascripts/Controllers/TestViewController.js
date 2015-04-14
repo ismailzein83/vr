@@ -4,7 +4,7 @@ var TestViewController = function (CarriersService, ZonesService) {
 
     var ctrl = this;
     load();
-    loadZone();
+    //loadZone();
     //loadCarriers();
 
     ctrl.selectedRoutes = function (items, item, data) {
@@ -84,7 +84,10 @@ var TestViewController = function (CarriersService, ZonesService) {
 
         ctrl.optionsZone = {
             selectedvalues: [],
-            datasource: [],
+            datasource: function (text) {
+                console.log(text);
+                return ZonesService.getSalesZones(text);
+            },
             onselectionchanged: function (selectedvalues, datasource) {
                 console.log(selectedvalues);
                 console.log(datasource);
