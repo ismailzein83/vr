@@ -11,8 +11,17 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         getValidationMessageTemplate: getValidationMessageTemplate,
         generateHTMLElementName: generateHTMLElementName,
         addScopeValidationMethods: addScopeValidationMethods,
-        prepareDirectiveHTMLForValidation: prepareDirectiveHTMLForValidation
+        prepareDirectiveHTMLForValidation: prepareDirectiveHTMLForValidation,
+        getLastItem: getLastItem,
     });
+
+    function getLastItem(arr)
+    {
+        if (arr == undefined) return null;
+        if (arr.length > 0)
+            return arr[arr.length - 1];
+        return null;
+    }
 
     function getObjectProperty(item, property) {
         if (item == undefined) return item;
@@ -64,7 +73,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
     };
 
     function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation) {
-        var template = '<div  class="tooltip-error disable-animations " ng-show="ctrl.isVisibleTooltip()" ng-messages="ctrl.getErrorObject()">';
+        var template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
         if (requiredValue)
             template += '<div ng-message="requiredvalue">{{ ctrl.ValidationMessagesEnum.required }}</div>';
         if (requiredArray)
@@ -90,7 +99,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         elementToTriggerMessage.attr('ng-mouseenter', 'ctrl.showTooltip()');
         elementToTriggerMessage.attr('ng-mouseleave', 'ctrl.hideTooltip()');
 
-        elementToStyleInvalid.attr('ng-class', 'ctrl.isValidComp()');
+        if (elementToStyleInvalid !== undefined) elementToStyleInvalid.attr('ng-class', 'ctrl.isValidComp()');
         return elementName;
     }
 
