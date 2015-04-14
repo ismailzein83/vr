@@ -224,9 +224,11 @@
     <Content Include="Client\Javascripts\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BIAPIService.js" />
+    <Content Include="Client\Javascripts\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Client\Javascripts\Services\APIServices\RoutingAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Services\button-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
     <Content Include="Client\Javascripts\Services\datagrid-dir-service.js" />
     <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
     <Content Include="Client\Javascripts\Services\routing-service.js" />

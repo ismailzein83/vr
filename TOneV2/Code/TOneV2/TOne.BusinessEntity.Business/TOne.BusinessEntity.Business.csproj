@@ -52,6 +52,7 @@
     <Compile Include="PricingGeneratorManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateManager.cs" />
+    <Compile Include="SwitchManager.cs" />
     <Compile Include="ZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>

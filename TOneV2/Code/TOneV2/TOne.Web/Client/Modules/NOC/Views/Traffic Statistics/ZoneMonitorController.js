@@ -1,7 +1,7 @@
 ﻿/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q) {
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierTypeEnum) {
 
 
         var chartSelectedMeasureAPI;
@@ -42,8 +42,18 @@ appControllers.controller('ZoneMonitorController',
                 ]
             };
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
-            
+
+            $scope.switches = [];
+            $scope.selectedSwitches = [];
+
+            $scope.codeGroups = [];
+            $scope.selectedCodeGroups = [];
+
+            $scope.customers = [];
+            $scope.selectedCustomers = [];
            
+            $scope.suppliers = [];
+            $scope.selectedSuppliers = [];
 
             $scope.gridOptionsAllMeasures = {};
             $scope.gridOptionsAllMeasures.useExternalSorting = true;
@@ -153,6 +163,10 @@ appControllers.controller('ZoneMonitorController',
             $scope.fromDate = '2014-04-27';
             $scope.toDate = '2014-04-29';
             loadMeasureTypes();
+            loadCodeGroups();
+            loadSwitches();
+            loadCustomers();
+            loadSuppliers();
         }
 
 
@@ -195,8 +209,8 @@ appControllers.controller('ZoneMonitorController',
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 1
-                    }
-                   // cellFilter: "number:2"
+                    },
+                    cellFilter: "number:2"
                 };
                 gridOption.columnDefs.push(colDef);
             });
@@ -250,6 +264,7 @@ appControllers.controller('ZoneMonitorController',
                 }];
                 //console.log(chartData.length);
                 chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+                $scope.filterSectionCollapsed = true;
             })
                 .finally(function () {
                     chartSelectedMeasureAPI.hideLoader();
@@ -301,6 +316,40 @@ appControllers.controller('ZoneMonitorController',
 
                 sortColumn = measures[2];
                 defineGrid();
+            });
+        }
+
+        function loadSwitches() {
+            BusinessEntityAPIService.GetSwitches().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.switches.push(itm);
+                });
+            });
+        }
+
+        function loadCodeGroups()
+        {            
+            BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.codeGroups.push(itm);
+                });
+            });
+
+        }
+
+        function loadCustomers() {
+            BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.customers.push(itm);
+                });
+            });
+        }
+
+        function loadSuppliers() {
+            BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.suppliers.push(itm);
+                });
             });
         }
         

@@ -33,5 +33,17 @@ namespace TOne.Web.Controllers
             ZoneManager manager = new ZoneManager();
             return manager.GetZoneList(zonesIds);
         }
+
+        public List<CodeGroupInfo> GetCodeGroups()
+        {
+            CodeManager manager = new CodeManager();
+            return manager.GetCodeGroups();
+        }
+
+        public List<SwitchInfo> GetSwitches()
+        {
+            SwitchManager manager = new SwitchManager();
+            return manager.GetSwitches();
+        }
     }
 }

@@ -3,6 +3,7 @@
 appControllers.controller('ZoneSummaryController',
     function ZoneSummaryController($scope, $location, $routeParams, $interval, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
         var measureTypes = [BIMeasureTypeEnum.DurationInMinutes, BIMeasureTypeEnum.Sale, BIMeasureTypeEnum.Cost, BIMeasureTypeEnum.Profit];
+        var gridApi;
 
         defineScopeObjects();
         defineScopeMethods();
@@ -26,45 +27,7 @@ appControllers.controller('ZoneSummaryController',
             }
 
 
-            $scope.gridOptionsZoneDetails = {
-                enableHorizontalScrollbar: 0,
-                enableVerticalScrollbar: 2,
-                infiniteScrollPercentage: 20,
-                enableFiltering: false,
-                saveFocus: false,
-                saveScroll: true,
-                enableColumnResizing: true,
-                enableSorting: false,
-                data: [],
-                onRegisterApi: function (gridApi) {
-                    $scope.gridApi = gridApi;
-
-                    // call resize every 200 ms for 2 s after modal finishes opening - usually only necessary on a bootstrap modal
-                    $interval(function () {
-                        $scope.gridApi.core.handleWindowResize();
-                    }, 10, 500);
-                }
-            };
-            $scope.gridOptionsZoneDetails.columnDefs = [];
-            var timeColumn = {
-                name: 'Time',
-                headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
-                enableColumnMenu: false,
-                field: 'dateTimeValue'
-            };
-            $scope.gridOptionsZoneDetails.columnDefs.push(timeColumn);
-            
-            var valColumnIndex = 0;
-            angular.forEach(measureTypes, function (measureType) {
-                var colDef = {
-                    name: measureType.description,
-                    headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
-                    enableColumnMenu: false,
-                    field: 'Values[' + valColumnIndex++ + ']',
-                    cellFilter: "number:2"
-                };
-                $scope.gridOptionsZoneDetails.columnDefs.push(colDef);
-            });
+          
         }
         
         function defineScopeMethods() {
@@ -85,14 +48,44 @@ appControllers.controller('ZoneSummaryController',
                     $location.path("/BI/ZoneDetails/" + $scope.zoneId + "/" + $scope.zoneName).replace();
                 //});
             };
+
+            $scope.onGridReady = function (api) {
+                gridApi = api;
+                defineGrid();
+            };
         }
 
         function load() {
+            
+        }
+
+        function defineGrid() {
+            columns = [];
+            var timeColumn = {
+                headerText: 'Time',
+                field: 'dateTimeValue'
+            };
+            columns.push(timeColumn);
+
+            var valColumnIndex = 0;
+            angular.forEach(measureTypes, function (measureType) {
+                var colDef = {
+                    headerText: measureType.description,
+                    field: 'Values[' + valColumnIndex++ + ']',
+                    type: "Number"
+                };
+                columns.push(colDef);
+            });
+            var gridOptions = {
+                columns: columns
+            };
+            gridApi.defineGrid(gridOptions);
+
             getData();
         }
 
         function getData() {
-            $scope.gridOptionsZoneDetails.data.length = 0;
+            gridApi.data.length = 0;
             var measureTypeValues = [];
             angular.forEach(measureTypes, function (measureType) {
                 measureTypeValues.push(measureType.value);
@@ -103,7 +96,7 @@ appControllers.controller('ZoneSummaryController',
                 BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
 
                 angular.forEach(response, function (itm) {
-                    $scope.gridOptionsZoneDetails.data.push(itm);
+                    gridApi.data.push(itm);
                 });
             });
         }

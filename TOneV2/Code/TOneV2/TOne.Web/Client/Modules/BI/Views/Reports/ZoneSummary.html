@@ -13,7 +13,8 @@
                     <h3>Zone Name: {{zoneName}}</h3>
                     <select ng-options="itm as itm.name for itm in timeDimensionTypes"
                             ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
-                    <div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" style="height:400px"></div>
+                    <!--<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" style="height:400px"></div>-->
+                    <vr-datagrid data-on-ready="onGridReady"></vr-datagrid>
                     <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
                 </div>
 
