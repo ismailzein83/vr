@@ -82,10 +82,10 @@ var TestViewController = function (CarriersService, ZonesService) {
         };
 
         ctrl.optionsZone = {
-            selectedvalues: [],
+            selectedvalues: { ZoneId: 3, Name: "Afghanistan-Mobile" },
             datasource: [],
             onselectionchanged: function (selectedvalues, datasource) {
-                console.log(selectedvalues);
+                console.log(selectedvalues[0]);
                 console.log(datasource);
             }
         };

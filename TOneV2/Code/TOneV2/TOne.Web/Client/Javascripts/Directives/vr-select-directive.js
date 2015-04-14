@@ -112,7 +112,12 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 
                 if (! controller.isMultiple()) {
 
-                    var lastValue = BaseDirService.getLastItem(controller.selectedvalues);
+                    var lastValue = null;
+                    if (Object.prototype.toString.call( controller.selectedvalues ) === '[object Array]')
+                        lastValue = BaseDirService.getLastItem(controller.selectedvalues);
+                    else
+                        lastValue = controller.selectedvalues;
+
                     if (lastValue == null) {
 
                         if ($attrs.placeholder)
