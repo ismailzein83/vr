@@ -22,6 +22,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
         controller: function ($scope, $element, $attrs) {
             var controller = this;
             this.ValidationMessagesEnum = ValidationMessagesEnum;
+            this.limitcharactercount = $attrs.limitcharactercount;
             this.selectlbl = $attrs.selectlbl;
             this.filtername = '';
             this.showloading = false;
@@ -265,6 +266,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     ctrl.search = function () {
                         console.log(ctrl.datasource);
                         if (!ctrl.isRemoteLoad()) return;
+                        ctrl.setdatasource({});
                         if (ctrl.filtername.length > (iAttrs.limitcharactercount - 1)) {
                             ctrl.showloading = true;
                             ctrl.datasource(ctrl.filtername).then(function (items) {
