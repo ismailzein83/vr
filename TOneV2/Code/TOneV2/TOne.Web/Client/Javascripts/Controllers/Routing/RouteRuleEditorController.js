@@ -11,19 +11,16 @@
         $scope.BEDDate = "";
         $scope.EEDDate = "";
         $scope.optionsRouteType = {
-            selectedvalues: [],
             datasource: [],
-            lastselectedvalue: ''
+            selectedvalue: ''
         };
         $scope.optionsEditorType = {
-            selectedvalues: [],
             datasource: [],
-            lastselectedvalue: ''
+            selectedvalue: ''
         };
         $scope.optionsRuleType = {
-            selectedvalues: [],
             datasource: [],
-            lastselectedvalue: ""
+            selectedvalue: ""
         };          
         $scope.optionsRouteType.datasource = [
              { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities' },
@@ -182,7 +179,7 @@
             }
             else {
                 var obj = ($scope.subViewConnector.getCarrierAccountSet != undefined) ? $scope.subViewConnector.getCarrierAccountSet() : null;
-                return ($scope.optionsRouteType.lastselectedvalue.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
+                return ($scope.optionsRouteType.selectedvalue.url == '') || (!$scope.isDate($scope.dateToString($scope.BEDDate))) || $scope.isvalidcompDateEED() != "" || (obj == null || obj.Customers == undefined || obj.Customers.SelectedValues.length == 0);
             }
         }
 
@@ -197,12 +194,12 @@
             }
 
         }
-        $scope.update2 = function (data, items, last) {
-            if (last.name != 'Customer') {
+        $scope.update2 = function (selectedvalues, datasource) {
+            if (selectedvalues.name != 'Customer') {
 
                 notify.closeAll();
                 notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
-                $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0]
+                return $scope.optionsRouteType.selectedvalue = $scope.optionsRuleType.datasource[0];
             }
         }
 
@@ -221,7 +218,7 @@
                     SelectedValues:[]
                 };
         }
-        $scope.saveRule = function () {
+        $scope.saveRule = function (asyncHandle) {
             $scope.issaving = true;
             var routeRule = {
                     CodeSet: $scope.subViewConnector.getCodeSet(),
@@ -246,7 +243,8 @@
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
                 $scope.$hide();
             }).finally(function () {
-                $scope.issaving = false;
+                if (asyncHandle)
+                    asyncHandle.operationDone();
             });
 
         }
@@ -257,25 +255,25 @@
 
     }
     function load() {
+       // $scope.optionsRouteType.selectedvalues = [];
         if ($scope.RouteRuleId != 'undefined') {
 
             RoutingAPIService.getRouteRuleDetails($scope.RouteRuleId)
            .then(function (response) {
                $scope.routeRule = response;
-               $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0];
+               $scope.optionsRuleType.selectedvalue = $scope.optionsRuleType.datasource[0];
                $scope.BEDDate = new Date($scope.routeRule.BeginEffectiveDate);
                $scope.EEDDate = $scope.routeRule.EndEffectiveDate;
                $scope.Reason = $scope.routeRule.Reason;
-               $scope.optionsRouteType.lastselectedvalue = null;
-               $scope.optionsRouteType.lastselectedvalue = $scope.optionsRouteType.datasource[$scope.findExsite($scope.optionsRouteType.datasource, $scope.routeRule.ActionData.$type, 'objectType')];
-               $scope.optionsEditorType.lastselectedvalue = null;
-               $scope.optionsEditorType.lastselectedvalue = $scope.optionsEditorType.datasource[$scope.findExsite($scope.optionsEditorType.datasource, $scope.routeRule.CodeSet.$type, 'objectType')];
+               $scope.optionsRouteType.selectedvalue = $scope.optionsRouteType.datasource[$scope.findExsite($scope.optionsRouteType.datasource, $scope.routeRule.ActionData.$type, 'objectType')];
+               $scope.optionsEditorType.selectedvalue = null;
+               $scope.optionsEditorType.selectedvalue = $scope.optionsEditorType.datasource[$scope.findExsite($scope.optionsEditorType.datasource, $scope.routeRule.CodeSet.$type, 'objectType')];
            })
         }
         else {
-            $scope.optionsRouteType.lastselectedvalue = { name: 'Select ..', url: '' };
-            $scope.optionsEditorType.lastselectedvalue = $scope.optionsEditorType.datasource[0];
-            $scope.optionsRuleType.lastselectedvalue = $scope.optionsRuleType.datasource[0];
+            $scope.optionsRouteType.selectedvalue = null;
+            $scope.optionsEditorType.selectedvalue = $scope.optionsEditorType.datasource[0];
+            $scope.optionsRuleType.selectedvalue = $scope.optionsRuleType.datasource[0];
         }
 
     }

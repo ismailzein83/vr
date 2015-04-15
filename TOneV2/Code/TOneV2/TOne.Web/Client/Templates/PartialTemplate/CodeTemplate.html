@@ -1,21 +1,21 @@
 ﻿<div ng-controller="CodeController">
-    <div class="col-lg-2  style-col">
-        <label class="control-label" style="padding-top:6px">Code</label>
-    </div>
-    <div class="col-lg-2  style-col">
+    <vr-columns colnum="2">
+        <vr-label standalone>Code</vr-label>
+    </vr-columns>
+    <vr-columns colnum="2">
         <div>
-            <number-filed  input-value="code"  />
-</div>
+            <number-filed input-value="code" />
+        </div>
         <div style="padding-top:5px">
-            <switch ng-model="subCodes"  class="green"></switch>
-            <label class="control-label" style="padding-top:6px">With Sub Codes</label>           
+            <switch ng-model="subCodes" class="green"></switch>
+            <vr-label standalone>With Sub Codes</vr-label>
         </div>
 
-    </div>
-    <div class="col-lg-2  style-col">
-        <label class="control-label" style="padding-top:6px">Excluded Codes</label>
-    </div>
-    <div class="col-lg-2  style-col">
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-label standalone>Excluded Codes</vr-label>
+    </vr-columns>
+    <vr-columns colnum="2">
         <div class="dropdown" id="CodeListddl">
             <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenucodes" data-toggle="dropdown" aria-expanded="true">
                 <span style="float:left;margin:0px"> {{getCodes()}}</span>
@@ -47,5 +47,5 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </vr-columns>
 </div>

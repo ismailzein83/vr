@@ -158,15 +158,19 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
 
                 var divDropdown = angular.element(element[0].querySelector('.dropdown'));
                 var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
-
+                attrs.id = BaseDirService.prepareDirectiveHTMLForValidation({}, divDropdown, undefined, divDropdown);
+               
                 var validateButtonClass = '';
                 if (SelectService.validate(attrs)) {
                     validateButtonClass = 'ng-class="ctrl.isValidComp()"';
 
                     var validationOptions = {};
+                    divDropdown.attr('ng-model', 'ctrl.selectedvalues');
+
                     if (attrs.isrequired !== undefined) {
                         if (SelectService.isMultiple(attrs)) {
                             validationOptions.requiredArray = true;
+                            divDropdown.attr('ng-model', 'ctrl.selectedvalues.length');
                         }
                         else {
                             validationOptions.requiredValue = true;
@@ -175,9 +179,9 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     if (attrs.customvalidate !== undefined)
                         validationOptions.customValidation = true;
 
+                   
+                    
                     attrs.id = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, divDropdown, undefined, divDropdown);
-                    divDropdown.attr('ng-model', 'ctrl.selectedvalues.length');
-
                     var validationTemplate = BaseDirService.getValidationMessageTemplate(true, true, false, true);
                     divDropdown.append(validationTemplate);
                 }
@@ -215,20 +219,79 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     else ulDropdown.attr('ng-class', 'ctrl.getSelectedSectionClass()');
                 }
 
+             
+                setTimeout(function () {
+                    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
+                        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                    });
+
+                    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function (e) {
+                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                    });
+                }, 100)
+                setTimeout(function () {
+                    if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
+
+                        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+
+                            var self = $(this);
+                            var selfHeight = $(this).parent().height();
+                            var selfWidth = $(this).parent().width();
+                            var selfOffset = $(self).offset();
+                            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+                            var dropDown = self.parent().find('ul');
+                            $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+                        });
+
+                    var fixDropdownPosition = function () {
+                        $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+                        $('.drop-down-inside-modal').removeClass("open");
+
+                    };
+
+                    $(".modal-body").unbind("scroll");
+                    $(".modal-body").scroll(function () {
+                        fixDropdownPosition();
+                    });
+                    $(window).resize(function () {
+                        fixDropdownPosition();
+                    });
+                      }
+                }, 1000)
+
+
+
+                //setTimeout(function () {
+                //    if (divDropdown.closest('.modal-body').length > 0) {
+
+                //        divDropdown.on('click', '.dropdown-toggle', function (event) {
+
+                //            var self = $(this);
+                //            var selfHeight = $(this).parent().height();
+                //            var selfWidth = $(this).parent().width();
+                //            var selfOffset = $(self).offset();
+                //            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+                //            ulDropdown.css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+                //        });
+
+                //        var fixDropdownPosition = function () {
+                //            ulDropdown.hide();
+                //            divDropdown.removeClass("open");
+                //        };
+
+                //        $(".modal-body").unbind("scroll");
+                //        $(".modal-body").scroll(function () {
+                //            fixDropdownPosition();
+                //        });
+                //        $(window).resize(function () {
+                //            fixDropdownPosition();
+                //        });
+                //    }
+                //}, 1000)
+
             }
 
             onLoad();
-
-            setTimeout(function () {
-                $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
-                    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-                });
-
-                $('div[name=' + attrs.id + ']').on('hide.bs.dropdown', function (e) {
-                    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-                });
-            }, 100);
-
             return {
                 pre: function ($scope, iElem, iAttrs, formCtrl) {
 
@@ -245,9 +308,9 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     var selectItem = function (e, item) {
 
                         if (! ctrl.isMultiple()) {
-                            ctrl.selectedvalues = [];
-                            ctrl.selectedvalues.length = 0;
-                            ctrl.selectedvalues.push(item);
+                            ctrl.selectedvalues = item;// [];
+                            //ctrl.selectedvalues.length = 0;
+                            //ctrl.selectedvalues.push(item);
                                
                         }
                         else {

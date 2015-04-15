@@ -1,7 +1,7 @@
 ﻿<div ng-controller="ZoneController">
-    <div class="col-lg-2  style-col">
+    <vr-columns colnum="2">
         <div class="dropdown dropdown-custom" id="Zoneddl">
-            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption' >
+            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption'>
                 {{zoneSelectionOption == 1 ? "  Zones: " : "  All Zones Except:"}}
             </label>
             <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuZo">
@@ -13,16 +13,16 @@
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="col-lg-2  style-col">       
-        <vr-dropdown type="ondemand" options="optionsZones" datatextfield="Name" datavaluefield="ZoneId"
-                     onsearch="searchZones" entityname="Zones" limitcharactercount="2"></vr-dropdown>
-   
-    </div>
-    <div class="col-lg-2  style-col">
-        <label class="control-label" style="padding-top:6px">Excluded Codes</label>
-    </div>
-    <div class="col-lg-2  style-col">
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-select ismultipleselection datasource="searchZones" selectedvalues="optionsZones.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
+                   entityname="Zones"></vr-select>
+
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-label standalone>Excluded Codes</vr-label>
+    </vr-columns>
+    <vr-columns colnum="2">
         <div class="dropdown" id="CodeListddl">
             <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenucodes" data-toggle="dropdown" aria-expanded="true">
                 <span style="float:left;margin:0px"> {{getCodes()}}</span>
@@ -54,6 +54,6 @@
                 </li>
             </ul>
         </div>
-    </div>
-   
+    </vr-columns>
+
 </div>

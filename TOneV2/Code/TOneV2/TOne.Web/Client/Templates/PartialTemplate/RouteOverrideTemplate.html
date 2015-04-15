@@ -1,11 +1,10 @@
 ﻿<div ng-controller="RouteOverrideController">
-    <div class="col-lg-2 style-col">
+    <vr-columns colnum="2">
        
-        <vr-dropdown type="multiple" options="optionsSuppliers" datatextfield="Name" datavaluefield="CarrierAccountID"
-                     entityname="Suppliers"></vr-dropdown>
-
-    </div>
-    <div class="col-lg-3  style-col "  ng-class="optionsSuppliers.selectedvalues.length == 0 ? 'emptycol':''">
+        <vr-select ismultipleselection hideselectedvaluessection="true" datasource="optionsSuppliers.datasource" selectedvalues="optionsSuppliers.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
+                   entityname="Suppliers"></vr-select>
+    </vr-columns>
+    <vr-columns colnum="3"  ng-class="optionsSuppliers.selectedvalues.length == 0 ? 'emptycol':''">
         <ul class="list-group" style="margin:0px" ng-show="optionsSuppliers.selectedvalues.length > 0">
             <li class="list-group-item list-custom" style="margin:1px;border:0px">
                 <div style="display:inline-block;padding-left:25px">Supplier</div>
@@ -24,5 +23,5 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </vr-columns>
 </div>

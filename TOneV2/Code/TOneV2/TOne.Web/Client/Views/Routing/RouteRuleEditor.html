@@ -9,96 +9,75 @@
             </div>
 
             <div class="modal-body" style="max-height:650px;overflow:auto">
-                <div>
-                    <div class="panel panel-primary panel-over-color">
-                        <div class="panel-body">
-                            <form name="formRouteRuleEditor" novalidate>
-                                <div>
-                                    <div class="row style-row">
-                                        <div class="col-lg-2  style-col">
-                                            <label class="control-label" style="padding-top:6px">Rule Type:</label>
-                                        </div>
-                                        <div class="col-lg-2 style-col">
-                                            <vr-dropdown datatextfield="name" datavaluefield="objectType"
-                                                         type="standard" onselectionchange="onchangeRouteRule" options="optionsRouteType"></vr-dropdown>
+                <vr-panel>
+                    <vr-form name="formRouteRuleEditor">
+                        <vr-row>
+                            <vr-columns colnum="2">
+                                <vr-label standalone>Rule Type:</vr-label>
+                            </vr-columns>
+                            <vr-columns colnum="2">
+                                <vr-select datatextfield="name" datavaluefield="objectType" isrequired 
+                                           onselectionchanged="onchangeRouteRule" datasource="optionsRouteType.datasource" selectedvalues="optionsRouteType.selectedvalue"></vr-select>
 
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                    <div class="row style-row">
-                                        <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
-                                                     onselectionchange="update2" options="optionsRuleType"></vr-dropdown>
-                                        <div ng-include src="optionsRuleType.lastselectedvalue.url">
-                                        </div>
-                                    </div>
-                                    <div class="row style-row">
-                                        <vr-dropdown type="menu" datatextfield="name" datavaluefield="name"
-                                                     options="optionsEditorType" onselectionchange="onchangeEditorType"></vr-dropdown>
+                            </vr-columns>
 
-                                        <div ng-include src=" optionsEditorType.lastselectedvalue.url">
-                                        </div>
-                                    </div>
-                                    <div class="row style-row">
-                                        <div class="col-lg-2  style-col">
-                                            <label class="control-label" style="padding-top:6px">Begin Effective Date:</label>
-                                        </div>
-                                        <div class="col-lg-2  style-col" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                                            <div style="display:inline-block;position:relative;width:100%" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">
-                                                <input size="10" name="d.testdate" class="form-control" ng-model="BEDDate" data-autoclose="1" placeholder="Date" bs-datepicker type="text" ng-class="isvalidcompDate('BEDDate')">
-                                                <div class="tooltip-error" ng-show="initErrortooltipBED()">{{msgd}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2  style-col">
-                                            <label class="control-label" style="padding-top:6px">End Effective Date:</label>
-                                        </div>
-                                        <div class="col-lg-2  style-col">
-                                            <div style="display: inline-block; position: relative; width: 100%" ng-mouseenter="showtde=true" ng-mouseleave="showtde=false">
-                                                <input size="10" ng-class="isvalidcompDateEED()" class="form-control" data-min-date="{{BEDDate}}" ng-model="EEDDate" data-autoclose="1" placeholder="Date" data-date-format="dd/MM/yyyy" bs-datepicker type="text">
-                                                <div class="tooltip-error" ng-show="initErrortooltipEED()">{{msged}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        </vr-row>
+                        <vr-row>
+                            <vr-select type="menu" datatextfield="name" datavaluefield="name"
+                                       onselectionchanged="update2" datasource="optionsRuleType.datasource" selectedvalues="optionsRuleType.selectedvalue"></vr-select>
+                            <div ng-include src="optionsRuleType.selectedvalue.url">
+                            </div>
+                        </vr-row>
+                        <vr-row>
+                            <vr-select type="menu" datatextfield="name" datavaluefield="name"
+                                       datasource="optionsEditorType.datasource" selectedvalues="optionsEditorType.selectedvalue" onselectionchanged="onchangeEditorType"></vr-select>
 
+                            <div ng-include src=" optionsEditorType.selectedvalue.url">
+                            </div>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns colnum="2">
+                                <vr-label standalone>Begin Effective Date:</vr-label>
+                            </vr-columns>
+                            <vr-columns colnum="2" >
+                                <vr-datetimepicker type="date" value="BEDDate" isrequired></vr-datetimepicker>                                
+                            </vr-columns>
+                            <vr-columns colnum="2">
+                                <vr-label standalone>End Effective Date:</vr-label>
+                            </vr-columns>
+                            <vr-columns colnum="2">
+                                <vr-datetimepicker type="date" value="EEDDate" ></vr-datetimepicker>                                   
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row ng-show="optionsRouteType.selectedvalue  && optionsRouteType.selectedvalue.name != 'Block Route' && optionsRouteType.selectedvalue.url!='' ">
+                            <div class="col-lg-12  style-col">
+                                <h4>{{optionsRouteType.selectedvalue.name}} Details:</h4>
+                            </div>
+                            <div style="min-height:70px" ng-include src="optionsRouteType.selectedvalue.url">
 
-                                    <div class="row style-row" ng-show="optionsRouteType.lastselectedvalue.name != 'Block Route' && optionsRouteType.lastselectedvalue.url!='' "  >
-                                        <div class="col-lg-12  style-col">
-                                            <h4>{{optionsRouteType.lastselectedvalue.name}} Details:</h4>
-                                        </div>                                      
-                                        <div  style="min-height:70px" ng-include src="optionsRouteType.lastselectedvalue.url">
-
-                                        </div>
-                                    </div>
-                                    <div class="row ">
-                                        <div class="col-lg-12  style-col">
-                                            <label class="control-label">Reason:</label>
-                                            <textarea class="form-control" ng-model="Reason" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
+                            </div>
+                        </vr-row>
+                        <vr-row removeline="true">
+                            <vr-columns colnum="12">
+                                <var-label>Reason:</var-label>
+                                <textarea class="form-control" ng-model="Reason" />
+                            </vr-columns>
+                        </vr-row>
+                    </vr-form>
+                </vr-panel>
             </div>
-            <div class="row pad-top-m">
-                <div class="col-lg-12 ">
-                    <div class="action-bar">
-                        <div class="btn-group action-bar-left">
-
-                        </div>
-                        <div class="btn-group action-bar-right">
+            <vr-row removeline="true">
+                <vr-columns colnum="12" simplecol>
+                    <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                        <div transclude-to="buttons">
                             <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="$hide()">Cancel<span style="padding-left:4px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-                            <button ng-disabled="validateForm()" style="border-bottom-color: transparent; border-color: transparent; border-radius: 0px; background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="saveRule();">Save<span ng-init=" issaving = false" ng-show="issaving==false" style="padding-left:4px" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span><img src="~/../images/loader-mask.gif" style="width:17px" ng-show="issaving" /></button>
-                        </div>
-                    </div>
-                </div>
-            </div>            
+                            <vr-button type="Save" formname="formRouteRuleEditor" data-onclick="saveRule" isasynchronous=" true" ></vr-button>
+                         </div>
+                    </vr-actionbar>                    
+                </vr-columns>
+            </vr-row>
         </div>
     </div>
-</div>
 
 
 

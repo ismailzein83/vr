@@ -10,8 +10,12 @@ app.directive('vrColumns', ['$compile', function ($compile) {
                 if (numberOfColumns == undefined)
                     numberOfColumns = 1;
               
-                var noPadding = (tAttrs.nopadding !== undefined) ? "col-no-padding" : "style-col ";
+                var noPadding = (tAttrs.nopadding !== undefined) ? " col-no-padding " : " style-col ";
                 var noMargin = (tAttrs.nomargin !== undefined) ? "" : " style-col ";
+                if (tAttrs.simplecol !== undefined) {
+                    noPadding = "";
+                    noMargin = "";
+                }
                 var newElement = '<div class="col-lg-' + numberOfColumns + noMargin + noPadding + '">' + tElement.context.innerHTML + '</div>';
                 tElement.html(newElement);
         }
