@@ -248,8 +248,8 @@
             });
 
         }
-        $scope.cancel = function () {
-            $location.path("/RouteRuleManager").replace();
+        $scope.hide = function () {
+            $scope.$hide();
         };
 
 
