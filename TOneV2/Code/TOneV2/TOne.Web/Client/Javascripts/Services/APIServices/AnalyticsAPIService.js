@@ -30,19 +30,8 @@ app.service('AnalyticsAPIService', function (BaseAPIService) {
            );
     }
 
-    function GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending) {
-        return BaseAPIService.get("/api/Analytics/GetTrafficStatisticSummary",
-           {
-               tempTableKey: tempTableKey,
-               groupKeys: groupKeys,
-               from: from,
-               to: to,
-               fromRow: fromRow,
-               toRow: toRow,
-               orderBy: orderBy,
-               isDescending: isDescending
-           }
-          );
+    function GetTrafficStatisticSummary(getTrafficStatisticSummaryInput) {
+        return BaseAPIService.post("/api/Analytics/GetTrafficStatisticSummary", getTrafficStatisticSummaryInput);
     }
 
     function GetTrafficStatistics(filterByColumn, columnFilterValue, from, to) {

@@ -6,11 +6,13 @@ appControllers.controller('ZoneMonitorController',
 
         var chartSelectedMeasureAPI;
         var chartSelectedEntityAPI;
+        var overallGridAPI;
         var resultKey;
         var sortColumn;
         var sortDescending = true;
         var measures;
         var currentSortedColDef;
+        var trafficStatisticSummary;
 
         defineScopeObjects();
         defineScopeMethods();
@@ -107,9 +109,10 @@ appControllers.controller('ZoneMonitorController',
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
                 chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
-
-                    $scope.selectedEntityId = selectedEntity.GroupKeyValues[0].Id;
-                    $scope.selectedEntityName = selectedEntity.GroupKeyValues[0].Name;
+                    if (selectedEntity.zoneId == undefined)
+                        return;
+                    $scope.selectedEntityId = selectedEntity.zoneId;
+                    $scope.selectedEntityName = selectedEntity.zoneName;
                     //console.log($scope.selectedEntityName);
                     getAndShowEntityStatistics();
                 };
@@ -125,9 +128,8 @@ appControllers.controller('ZoneMonitorController',
             };
             $scope.getData = function (asyncHandle) {
                 $scope.currentPage = 1;
-                resultKey = '';
-                getData(asyncHandle);
-
+                resultKey = null;
+                getData(asyncHandle, true);
             };
             
             $scope.pageChanged = function () {
@@ -157,6 +159,11 @@ appControllers.controller('ZoneMonitorController',
                 console.log($scope.selectedEntityName);
                 getAndShowEntityStatistics();
             };
+
+            $scope.onOverallGridReady = function (api) {
+                overallGridAPI = api;
+                defineOverallGrid();
+            }
         }
 
         function load() {
@@ -173,6 +180,8 @@ appControllers.controller('ZoneMonitorController',
 
         function defineGrid()
         {
+            if (measures == undefined || measures.length == 0)
+                return;
             gridOption = $scope.gridOptionsAllMeasures;
             gridOption.enableHorizontalScrollbar = 0;
             gridOption.enableVerticalScrollbar = 0;
@@ -215,10 +224,37 @@ appControllers.controller('ZoneMonitorController',
                 gridOption.columnDefs.push(colDef);
             });
         }
+
+        function defineOverallGrid() {
+            columns = [];
+            var firstColumn = {
+                headerText: 'Measure',
+                field: 'measure',
+                isClickable: function (itm) {
+                    return itm.measure == "Attempts" || itm.measure == "DeliveredAttempts"
+                        || itm.measure == "SuccessfulAttempts" || itm.measure == "DurationsInSeconds" || itm.measure == "UtilizationInSeconds" || itm.measure == "NumberOfCalls" || itm.measure == "DeliveredNumberOfCalls";
+                }
+            };
+            columns.push(firstColumn);
+
+            var secondColumn = {
+                headerText: 'Value',
+                field: 'value',
+                type: "Number"
+            };
+            columns.push(secondColumn);
+            var gridOptions = {
+                hideHeader: true,                
+                columns: columns
+            };
+            overallGridAPI.defineGrid(gridOptions);
+        }
         
-        function getData(asyncHandle) {
+        function getData(asyncHandle, withSummary) {
             if (!chartSelectedMeasureAPI)
                 return;
+            if (withSummary == undefined)
+                withSummary = false;
             $scope.showResult = true;
             $scope.gridOptionsAllMeasures.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
@@ -229,14 +265,40 @@ appControllers.controller('ZoneMonitorController',
            
             var fromRow = ($scope.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;
-            AnalyticsAPIService.GetTrafficStatisticSummary(resultKey, [4], $scope.fromDate, $scope.toDate, fromRow, toRow, sortColumn.value, sortDescending).then(function (response) {
+            var filter = buildFilter();
+            var getTrafficStatisticSummaryInput = {
+                TempTableKey: resultKey,
+                Filter: filter,
+                WithSummary: withSummary,
+                GroupKeys: [4],
+                From: $scope.fromDate,
+                To: $scope.toDate,
+                FromRow: fromRow,
+                ToRow: toRow,
+                OrderBy: sortColumn.value,
+                IsDescending: sortDescending
+            };
+
+            AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
                 if (currentSortedColDef != undefined)
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
 
                 resultKey = response.ResultKey;
                 $scope.totalDataCount = response.TotalCount;
-
+                if (withSummary) {
+                    trafficStatisticSummary = response.Summary;
+                    overallGridAPI.data.length = 0;
+                    angular.forEach(measures, function (measureType) {
+                        overallGridAPI.data.push({
+                            measure: measureType.description,
+                            value: trafficStatisticSummary[measureType.description],
+                            clicked: function () {
+                                renderOverallChart(response.Data, measureType.description);
+                            }
+                        });
+                    });
+                }
                 angular.forEach(response.Data, function (itm) {
                     itm.clicked = function () {
                         console.log('itm.clicked');
@@ -248,22 +310,7 @@ appControllers.controller('ZoneMonitorController',
                     itm.zoneName = itm.GroupKeyValues[0].Name;
                     $scope.gridOptionsAllMeasures.data.push(itm);
                 });
-                
-
-                var chartData = response.Data;
-                var chartDefinition = {
-                    type: "pie",
-                    title: sortColumn.description,
-                    yAxisTitle: "Value"
-                };
-
-                var seriesDefinitions = [{
-                    title: sortColumn.description,
-                    titlePath: "GroupKeyValues[0].Name",
-                    valuePath: sortColumn.description
-                }];
-                //console.log(chartData.length);
-                chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+                renderOverallChart(response.Data, 'Attempts');
                 $scope.filterSectionCollapsed = true;
             })
                 .finally(function () {
@@ -271,6 +318,56 @@ appControllers.controller('ZoneMonitorController',
                     if (asyncHandle)
                         asyncHandle.operationDone();
                 });
+        }
+
+        function renderOverallChart(data, measure){
+            var chartData = [];
+            var othersValue = trafficStatisticSummary[measure];
+            angular.forEach(data, function (itm) {    
+                chartData.push({
+                    zoneId: itm.GroupKeyValues[0].Id,
+                    zoneName: itm.GroupKeyValues[0].Name,
+                    value: itm[measure]
+                });
+                othersValue -= itm[measure];
+            });
+            chartData.push({
+                zoneName: "Other Destinations",
+                value: othersValue
+            });
+            var chartDefinition = {
+                type: "pie",
+                title: "Overall " + measure,
+                yAxisTitle: "Value"
+            };
+
+            var seriesDefinitions = [{
+                title: measure,
+                titlePath: "zoneName",
+                valuePath: "value"
+            }];
+            //console.log(chartData.length);
+            chartSelectedMeasureAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+        }
+
+        function buildFilter() {
+            var filter = {};
+            filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
+            filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
+            filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
+            filter.CodeGroups = getFilterIds($scope.selectedCodeGroups, "Code");
+            return filter;
+        }
+
+        function getFilterIds(values, idProp) {
+            var filterIds;
+            if (values.length > 0) {
+                filterIds = [];
+                angular.forEach(values, function (val) {
+                    filterIds.push(val[idProp]);
+                });
+            }
+            return filterIds;
         }
 
         function getAndShowEntityStatistics() {

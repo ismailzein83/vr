@@ -13,22 +13,24 @@ namespace TOne.Analytics.Data.SQL
 {
     public class TrafficStatisticDataManager : BaseTOneDataManager, ITrafficStatisticDataManager
     {
-        public BigResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(string tempTableKey, TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(string tempTableKey, TrafficStatisticFilter filter, bool withSummary, TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
         {
             TempTableName tempTableName = null;
             if (tempTableKey != null)
                 tempTableName = GetTempTableName(tempTableKey);
             else
                 tempTableName = GenerateTempTableName();
-            BigResult<TrafficStatisticGroupSummary> rslt = new BigResult<TrafficStatisticGroupSummary>()
+            TrafficStatisticSummaryBigResult rslt = new TrafficStatisticSummaryBigResult()
             {
                 ResultKey = tempTableName.Key
             };
 
-            CreateTempTableIfNotExists(tempTableName.TableName, groupKeys, from, to);
+            CreateTempTableIfNotExists(tempTableName.TableName, filter, groupKeys, from, to);
             int totalDataCount;
             rslt.Data = GetData(tempTableName.TableName, groupKeys, fromRow, toRow, orderBy, isDescending, out totalDataCount);
             rslt.TotalCount = totalDataCount;
+            if (withSummary)
+                rslt.Summary = GetSummary(tempTableName.TableName);
             return rslt;
         }
 
@@ -63,13 +65,14 @@ namespace TOne.Analytics.Data.SQL
 
         #region Private Methods
 
-        private void CreateTempTableIfNotExists(string tempTableName, IEnumerable<TrafficStatisticGroupKeys> groupKeys, DateTime from, DateTime to)
+        private void CreateTempTableIfNotExists(string tempTableName, TrafficStatisticFilter filter, IEnumerable<TrafficStatisticGroupKeys> groupKeys, DateTime from, DateTime to)
         {
-            string query = String.Format(@"
-                            IF NOT OBJECT_ID('{0}', N'U') IS NOT NULL
+            StringBuilder whereBuilder = new StringBuilder();
+            StringBuilder queryBuilder = new StringBuilder(@"
+                            IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
 
-                            WITH OurZones AS (SELECT ZoneID, Name FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+                            WITH OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
 		                        AllResult AS
 		                        (
 			                        SELECT
@@ -92,16 +95,36 @@ namespace TOne.Analytics.Data.SQL
 			                        JOIN OurZones z ON ts.OurZoneID = z.ZoneID
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
+                                    #FILTER#
 			                        GROUP BY ts.OurZoneID, z.Name
 		                        )
-		                        SELECT * INTO {0} FROM AllResult
-                            END", tempTableName);
-            ExecuteNonQueryText(query, (cmd) =>
+		                        SELECT * INTO #TEMPTABLE# FROM AllResult
+                            END");
+            queryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            AddFilterToQuery(filter, whereBuilder);
+            queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", from));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", to));
                 });
         }
+
+        private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder)
+        {
+            AddFilter(whereBuilder, filter.SwitchIds, "CONVERT(VARCHAR, ts.SwitchId)");
+            AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
+            AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
+            AddFilter(whereBuilder, filter.CodeGroups, "z.CodeGroup");
+        }
+
+        void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string columnAsString)
+        {
+            if (values != null && values.Count() > 0)
+                whereBuilder.AppendFormat("AND '|{0}|' LIKE '%|' + {1} + '|%'", String.Join("|", values), columnAsString);
+        }
+
+
 
         private IEnumerable<TrafficStatisticGroupSummary> GetData(string tempTableName, TrafficStatisticGroupKeys[] groupKeys, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending, out int totalCount)
         {
@@ -138,6 +161,24 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
+        }
+
+        private TrafficStatistic GetSummary(string tempTableName)
+        {
+            String query = String.Format(@"SELECT
+					                        Min(FirstCDRAttempt) AS FirstCDRAttempt
+				                           , Max(ts.LastCDRAttempt) AS LastCDRAttempt
+				                           , Sum(ts.Attempts) AS Attempts
+				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
+				                           , Sum(ts.SuccessfulAttempts) AS SuccessfulAttempts
+				                           , Sum(ts.DurationsInSeconds) AS DurationsInSeconds
+				                           , Max(ts.MaxDurationInSeconds) AS MaxDurationInSeconds
+				                           , AVG(ts.PDDInSeconds) AS PDDInSeconds
+				                           , AVG(ts.UtilizationInSeconds) AS UtilizationInSeconds
+				                           , Sum(ts.NumberOfCalls) AS NumberOfCalls
+				                           , SUM(ts.DeliveredNumberOfCalls) AS DeliveredNumberOfCalls
+				                           , AVG(ts.PGAD) AS PGAD FROM {0} ts", tempTableName);
+            return GetItemText(query, TrafficStatisticMapper, null);
         }
 
         TrafficStatistic TrafficStatisticMapper(IDataReader reader)

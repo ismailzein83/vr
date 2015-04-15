@@ -107,11 +107,12 @@ namespace TOne.Web.Controllers
             return rslt;
         }
 
-        public BigResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(string tempTableKey, [FromUri] TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        [HttpPost]
+        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(GetTrafficStatisticSummaryInput input)
         {
             System.Threading.Thread.Sleep(1000);
             TrafficStatisticManager manager = new TrafficStatisticManager();
-            return manager.GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
+            return manager.GetTrafficStatisticSummary(input.TempTableKey, input.Filter, input.WithSummary, input.GroupKeys, input.From, input.To, input.FromRow, input.ToRow, input.OrderBy, input.IsDescending);
         }
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)
@@ -121,5 +122,25 @@ namespace TOne.Web.Controllers
         }
 
         #endregion
+
     }
+
+
+    #region Argument Classes
+    public class GetTrafficStatisticSummaryInput
+    {
+        public string TempTableKey { get; set; }
+        public TrafficStatisticFilter Filter { get; set; }
+
+        public bool WithSummary { get; set; }
+
+        public TrafficStatisticGroupKeys[] GroupKeys { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public int FromRow { get; set; }
+        public int ToRow { get; set; }
+        public TrafficStatisticMeasures OrderBy { get; set; }
+        public bool IsDescending { get; set; }
+    }
+    #endregion
 }

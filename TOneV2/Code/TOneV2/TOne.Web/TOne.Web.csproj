@@ -549,6 +549,7 @@
     <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
     <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Templates\Grid\CellTemplate.html" />
     <Content Include="Client\Templates\Grid\ClickableCellTemplate.html" />
     <Content Include="Client\Templates\Grid\ExpandableRowGridTemplate.html" />
     <Content Include="Client\Templates\Grid\HeaderTemplate.html" />

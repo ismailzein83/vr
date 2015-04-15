@@ -26,11 +26,20 @@ app.directive('vrDatagrid', ['DataGridDirService', '$interval', function (DataGr
                         gridApi.core.handleWindowResize();
                     }, 10, 500);
                 }
-
+                if (options.hideHeader) {
+                    gridOptions.showHeader = false;
+                }
+                else
+                {
+                    gridOptions.enableGridMenu = true;
+                }
                 gridOptions.useExternalSorting = true;
-                gridOptions.enableGridMenu = true;
+                
                 gridOptions.enableHorizontalScrollbar = 0;
-                gridOptions.enableVerticalScrollbar = 2;
+                if (options.showVerticalScroll)
+                    gridOptions.enableVerticalScrollbar = 2;
+                else
+                    gridOptions.enableVerticalScrollbar = 0;
                 //gridOptions.minRowsToShow = 30;
                 //gridOptions.enableFiltering = false;
                 //gridOptions.saveFocus = false;
@@ -45,16 +54,35 @@ app.directive('vrDatagrid', ['DataGridDirService', '$interval', function (DataGr
                         //enableHiding: false,
                         field: col.field
                     };
+                    if (col.isClickable != undefined) {
+                        colDef.cellTemplate = '/Client/Templates/Grid/CellTemplate.html';
+                        colDef.isClickable = function (dataItem) {
+                            return col.isClickable(dataItem);
+                        };
+                    }
                     if (col.type == "Number")
                         colDef.cellFilter = "number:2";
+                    colDef.testModel = 'test gg';
                     gridOptions.columnDefs.push(colDef);
                 });
 
                 gridApi.data = gridOptions.data;
             }
-
             ctrl.getGridHeight = function (gridOptions) {
-                return "400px";
+                var height;
+                if (gridOptions.data.length == 0) {
+                    height = gridOptions.lastHeight;
+                }
+                else {
+                    var rowHeight = 30; // your row height
+                    var headerHeight = 30; // your header height
+                    var height = (gridOptions.data.length * rowHeight + headerHeight);
+                }
+                gridOptions.lastHeight = height;
+
+                return {
+                    height: height + "px"
+                };
             };
 
 

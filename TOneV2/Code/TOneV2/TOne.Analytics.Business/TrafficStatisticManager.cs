@@ -10,10 +10,10 @@ namespace TOne.Analytics.Business
 {
     public class TrafficStatisticManager
     {
-        public BigResult<TrafficStatisticGroupSummary> GetTrafficStatisticSummary(string tempTableKey, TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
+        public TrafficStatisticSummaryBigResult GetTrafficStatisticSummary(string tempTableKey, TrafficStatisticFilter filter, bool withSummary, TrafficStatisticGroupKeys[] groupKeys, DateTime from, DateTime to, int fromRow, int toRow, TrafficStatisticMeasures orderBy, bool isDescending)
         {
             ITrafficStatisticDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<ITrafficStatisticDataManager>();
-            return dataManager.GetTrafficStatisticSummary(tempTableKey, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
+            return dataManager.GetTrafficStatisticSummary(tempTableKey, filter, withSummary, groupKeys, from, to, fromRow, toRow, orderBy, isDescending);
         }
 
         public IEnumerable<TrafficStatistic> GetTrafficStatistics(TrafficStatisticGroupKeys filterByColumn, string columnFilterValue, DateTime from, DateTime to)

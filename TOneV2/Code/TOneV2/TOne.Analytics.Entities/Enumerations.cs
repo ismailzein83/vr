@@ -31,7 +31,8 @@ namespace TOne.Analytics.Entities
         OurZone = 4,
         OriginatingZoneId = 5,
         SupplierId = 6,
-        SupplierZoneId = 7
+        SupplierZoneId = 7,
+        CodeGroup = 8
     }
 
     public enum TrafficStatisticMeasures

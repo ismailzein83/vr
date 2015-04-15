@@ -54,8 +54,10 @@
     <Compile Include="Mobile\TopCustomersView.cs" />
     <Compile Include="Mobile\TopNDestinationView.cs" />
     <Compile Include="TrafficStatistic.cs" />
+    <Compile Include="TrafficStatisticFilter.cs" />
     <Compile Include="TrafficStatisticGroupSummary.cs" />
     <Compile Include="Mobile\TrafficSummaryView.cs" />
+    <Compile Include="TrafficStatisticSummaryBigResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
