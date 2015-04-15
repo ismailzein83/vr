@@ -481,7 +481,7 @@ input.ui-grid-filter-input[type="text"] {
     border-bottom: 1px solid #D4D4D4;
     border-right: 0px solid #D4D4D4;   
     font-size: 12px;
-    margin-top: 3px;
+    margin-top: 0px;
     color: #616f77;
 }
 #custom .ui-grid-row:nth-child(odd) .ui-grid-cell {
