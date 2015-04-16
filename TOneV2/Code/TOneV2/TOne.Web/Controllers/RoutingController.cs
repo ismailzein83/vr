@@ -24,7 +24,7 @@ namespace TOne.Web.Controllers
         [HttpPost]
         public RouteRuleSummaryModel SaveRouteRule(RouteRule rule)
         {
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
             RouteRuleManager manager = new RouteRuleManager();
             return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
           
@@ -33,7 +33,7 @@ namespace TOne.Web.Controllers
         [HttpGet]
         public IEnumerable<RouteRuleSummaryModel> GetAllRouteRule( int pageNumber, int pageSize)
         {
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
 
             RouteRuleManager manager = new RouteRuleManager();
             IEnumerable<RouteRuleSummaryModel> rows = Mappers.MapRouteRules(manager.GetAllRouteRule());

@@ -6,12 +6,16 @@ appControllers.controller('ZoneMonitorController',
 
         var chartSelectedMeasureAPI;
         var chartSelectedEntityAPI;
+        var mainGridAPI;
         var overallGridAPI;
+        var overallSelectedMeasure;
         var resultKey;
         var sortColumn;
         var sortDescending = true;
         var currentSortedColDef;
         var trafficStatisticSummary;
+        var measures;
+        var currentData;
 
         defineScopeObjects();
         defineScopeMethods();
@@ -56,44 +60,6 @@ appControllers.controller('ZoneMonitorController',
             $scope.suppliers = [];
             $scope.selectedSuppliers = [];
 
-            $scope.gridOptionsAllMeasures = {};
-            $scope.gridOptionsAllMeasures.useExternalSorting = true;
-            $scope.gridOptionsAllMeasures.enableGridMenu = true;
-            $scope.gridOptionsAllMeasures.data = [];
-            $scope.gridOptionsAllMeasures.onRegisterApi = function (gridApi) {
-              
-                gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                   
-                    if (sortColumns.length > 0) {
-                        var measure = $.grep(TrafficStatisticsMeasureEnum, function (m, index) {
-                            // num = the current value for the item in the array
-                            // index = the index of the item in the array
-                            return m.propertyName == sortColumns[0].field; // returns a boolean
-                        })[0]; 
-                        sortColumn = measure;
-                       
-                        console.log(sortColumns[0].sort.direction);
-                        switch (sortColumns[0].sort.direction) {
-                            case uiGridConstants.ASC:
-                                sortDescending = false;
-                                break;
-                            case uiGridConstants.DESC:
-                                sortDescending = true;
-                                break;
-                            case undefined:
-                                sortDescending = false;
-                                break;
-                        }
-                        if (currentSortedColDef != undefined)
-                            currentSortedColDef.currentSorting = undefined;
-                        currentSortedColDef = sortColumns[0].colDef;
-                        
-                    }
-                    getData();
-                });
-
-            };
-
             $scope.totalDataCount = 0;
             $scope.currentPage = 1;
 
@@ -121,13 +87,12 @@ appControllers.controller('ZoneMonitorController',
                 chartSelectedEntityAPI = api;
                 
             };
-            $scope.toggleHeader = function (e) {
-               alert("in")
-                // console.log(e);
-            };
+
             $scope.getData = function (asyncHandle) {
                 $scope.currentPage = 1;
                 resultKey = null;
+                mainGridAPI.reset();
+                resetSorting();
                 getData(asyncHandle, true);
             };
             
@@ -159,6 +124,12 @@ appControllers.controller('ZoneMonitorController',
                 getAndShowEntityStatistics();
             };
 
+
+            $scope.onMainGridReady = function (api) {
+                mainGridAPI = api;
+                defineMainGrid();
+            }
+
             $scope.onOverallGridReady = function (api) {
                 overallGridAPI = api;
                 defineOverallGrid();
@@ -166,69 +137,79 @@ appControllers.controller('ZoneMonitorController',
         }
 
         function load() {
+            loadMeasures();
+            overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
             $scope.fromDate = '2014-04-27';
             $scope.toDate = '2014-04-29';
-            sortColumn = TrafficStatisticsMeasureEnum.Attempts;
-            defineGrid();
             loadCodeGroups();
             loadSwitches();
             loadCustomers();
             loadSuppliers();
         }
 
+        function resetSorting() {
+            sortColumn = TrafficStatisticsMeasureEnum.Attempts;
+            sortDescending = true;
+        }
 
+        function loadMeasures() {
+            measures = [];
+            for (var prop in TrafficStatisticsMeasureEnum) {
+                measures.push(TrafficStatisticsMeasureEnum[prop]);
+            }
+        }
 
-        function defineGrid()
-        {            
-            gridOption = $scope.gridOptionsAllMeasures;
-            gridOption.enableHorizontalScrollbar = 0;
-            gridOption.enableVerticalScrollbar = 0;
-            //gridOption.minRowsToShow = 30;
-            //gridOption.enableFiltering = false;
-            //gridOption.saveFocus = false;
-            //gridOption.saveScroll = true;
-            gridOption.enableColumnResizing = true;
-            gridOption.gridCellClicked = function (entity) {
-                console.log("gridOption gridCellClicked");
-                $scope.selectedEntityId = entity.GroupKeyValues[0].Id;
-                $scope.selectedEntityName = entity.GroupKeyValues[0].Name;
-                console.log($scope.selectedEntityName);
-                getAndShowEntityStatistics();
-            };
+        function defineMainGrid()
+        {
+            columns = [];
 
-            gridOption.columnDefs = [];
             var zoneColumn = {
-                name: 'Zone',
-                headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
-                enableColumnMenu: false,
+                headerText: 'Zone',
                 enableHiding: false,
                 field: 'zoneName',
-                cellTemplate: '/Client/Templates/Grid/ClickableCellTemplate.html'
+                isClickable: function (dataItem) {
+                    return true;
+                },
+                onClicked: function (dataItem) {
+                    $scope.selectedEntityId = dataItem.GroupKeyValues[0].Id;
+                    $scope.selectedEntityName = dataItem.GroupKeyValues[0].Name;
+                    getAndShowEntityStatistics();
+                }
             };
-            gridOption.columnDefs.push(zoneColumn);
+            columns.push(zoneColumn);
+
             var valColumnIndex = 0;
-            angular.forEach(TrafficStatisticsMeasureEnum, function (measure) {
-                var colDef = {
-                    name: measure.description,
-                    headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
-                    enableColumnMenu: false,
+            angular.forEach(measures, function (measure) {
+
+                var col = {
+                    headerText: measure.description,
                     field: measure.propertyName,
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 1
-                    },
-                    cellFilter: "number:2"
+                    type: "Number",
+                    onSortChanged: function (sortDirection, handle) {
+                        sortColumn = measure;
+                        sortDescending = (sortDirection == "DESC");
+                        getData(handle);
+                    }
                 };
-                gridOption.columnDefs.push(colDef);
+                columns.push(col);
             });
+
+            var gridOptions = {
+                columns: columns
+            };
+            mainGridAPI.defineGrid(gridOptions);            
         }
 
         function defineOverallGrid() {
             columns = [];
             var firstColumn = {
                 field: 'measureDescription',
-                isClickable: function (itm) {
-                    return (itm.measure.isSum == true);
+                isClickable: function (dataItem) {
+                    return (dataItem.measure.isSum == true);
+                },
+                onClicked: function (dataItem) {
+                    overallSelectedMeasure = dataItem.measure;
+                    renderOverallChart();
                 }
             };
             columns.push(firstColumn);
@@ -251,7 +232,7 @@ appControllers.controller('ZoneMonitorController',
             if (withSummary == undefined)
                 withSummary = false;
             $scope.showResult = true;
-            $scope.gridOptionsAllMeasures.data.length = 0;
+            mainGridAPI.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
             if (chartSelectedEntityAPI)
                 chartSelectedEntityAPI.hideChart();
@@ -273,9 +254,10 @@ appControllers.controller('ZoneMonitorController',
                 OrderBy: sortColumn.value,
                 IsDescending: sortDescending
             };
-
+            var isSucceeded;
             AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
+                currentData = response.Data;
                 if (currentSortedColDef != undefined)
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
 
@@ -284,48 +266,49 @@ appControllers.controller('ZoneMonitorController',
                 if (withSummary) {
                     trafficStatisticSummary = response.Summary;
                     overallGridAPI.data.length = 0;
-                    angular.forEach(TrafficStatisticsMeasureEnum, function (measure) {
+                    angular.forEach(measures, function (measure) {
                         overallGridAPI.data.push({
                             measure: measure,
                             measureDescription: measure.description,
-                            value: trafficStatisticSummary[measure.propertyName],                            
-                            clicked: function () {
-                                renderOverallChart(response.Data, measure);
-                            }
+                            value: trafficStatisticSummary[measure.propertyName]
                         });
                     });
                 }
                 angular.forEach(response.Data, function (itm) {
-                    itm.clicked = function () {
-                        console.log('itm.clicked');
-                        $scope.selectedEntityId = itm.GroupKeyValues[0].Id;
-                        $scope.selectedEntityName = itm.GroupKeyValues[0].Name;
-                        console.log($scope.selectedEntityName);
-                        getAndShowEntityStatistics();
-                    };
                     itm.zoneName = itm.GroupKeyValues[0].Name;
-                    $scope.gridOptionsAllMeasures.data.push(itm);
+                    mainGridAPI.data.push(itm);
                 });
-                renderOverallChart(response.Data, TrafficStatisticsMeasureEnum.Attempts);
-                $scope.filterSectionCollapsed = true;
+                renderOverallChart();
+                isSucceeded = true;
             })
                 .finally(function () {
                     chartSelectedMeasureAPI.hideLoader();
                     if (asyncHandle)
-                        asyncHandle.operationDone();
+                        asyncHandle.operationDone(isSucceeded);
                 });
         }
 
-        function renderOverallChart(data, measure){
+        function renderOverallChart(){
             var chartData = [];
+            var measure = overallSelectedMeasure;
             var othersValue = trafficStatisticSummary[measure.propertyName];
-            angular.forEach(data, function (itm) {    
+            angular.forEach(currentData, function (itm) {
                 chartData.push({
                     zoneId: itm.GroupKeyValues[0].Id,
                     zoneName: itm.GroupKeyValues[0].Name,
                     value: itm[measure.propertyName]
                 });
                 othersValue -= itm[measure.propertyName];
+            });
+            chartData.sort(function (a, b) {
+                if (a.value > b.value) {
+                    return 1;
+                }
+                if (a.value < b.value) {
+                    return -1;
+                }
+                // a must be equal to b
+                return 0;
             });
             chartData.push({
                 zoneName: "Other Destinations",
@@ -382,14 +365,13 @@ appControllers.controller('ZoneMonitorController',
                     isDateTime: true
                 };
                 var seriesDefinitions = [];
-                for ( var measureProp in TrafficStatisticsMeasureEnum){
-                    var measure = TrafficStatisticsMeasureEnum[measureProp];
+                angular.forEach(measures, function (measure) {
                     seriesDefinitions.push({
                         title: measure.description,
                         valuePath: measure.propertyName,
                         selected: (measure == TrafficStatisticsMeasureEnum.Attempts || measure == TrafficStatisticsMeasureEnum.DurationsInSeconds)
                     });
-                }
+                });
 
                 chartSelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
             })

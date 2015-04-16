@@ -63,7 +63,10 @@ appControllers.controller('ZoneSummaryController',
             columns = [];
             var timeColumn = {
                 headerText: 'Time',
-                field: 'dateTimeValue'
+                field: 'dateTimeValue',
+                onSortChanged: function (handle) {
+                    handle.sortSucceeded();
+                }
             };
             columns.push(timeColumn);
 
@@ -77,7 +80,9 @@ appControllers.controller('ZoneSummaryController',
                 columns.push(colDef);
             });
             var gridOptions = {
-                columns: columns
+                columns: columns,
+                showVerticalScroll: true,
+                maxHeight: 600
             };
             gridApi.defineGrid(gridOptions);
 

@@ -44,15 +44,15 @@
                 updateProfitChart();
             };
 
-            $scope.updateChart = function () {
-                updateProfitChart();
+            $scope.updateChart = function (asyncHandle) {
+                updateProfitChart(asyncHandle);
             };
         }
 
         function load() {
         }
 
-        function updateProfitChart() {
+        function updateProfitChart(asyncHandle) {
 
             if ($scope.chartSaleCostProfitAPI == undefined)
                 return;
@@ -113,6 +113,8 @@
                 .finally(function () {
                     $scope.chartSaleCostProfitAPI.hideLoader();
                     $scope.chartProfitAPI.hideLoader();
+                    if (asyncHandle)
+                        asyncHandle.operationDone();
                 });
         }
 

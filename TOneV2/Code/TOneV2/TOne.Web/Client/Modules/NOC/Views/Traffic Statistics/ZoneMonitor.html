@@ -91,7 +91,7 @@
 
         <vr-row>
             <vr-columns colnum="12">
-                <div id="custom" class="gridroute" ui-grid="gridOptionsAllMeasures" ui-grid-auto-resize ng-style="getGridHeight(gridOptionsAllMeasures)"></div>
+                <vr-datagrid data-on-ready="onMainGridReady"></vr-datagrid>
             </vr-columns>
             <vr-label style="float:right;margin-right:25px">
                 Page {{currentPage}} of {{numberOfPages}}

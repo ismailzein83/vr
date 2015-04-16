@@ -5,9 +5,9 @@
     DeliveredAttempts: { value: 3, propertyName: "DeliveredAttempts", description: "Delivered Attempts", isSum: true },
     SuccessfulAttempts: { value: 4, propertyName: "SuccessfulAttempts", description: "Successful Attempts", isSum: true },
     DurationsInSeconds: { value: 5, propertyName: "DurationsInSeconds", description: "Durations (sec)", isSum: true },
-    PDDInSeconds: { value: 6, propertyName: "PDDInSeconds", description: "PDD (sec)" },
-    MaxDurationInSeconds: { value: 7, propertyName: "MaxDurationInSeconds", description: "Max Duration (sec)" },
-    UtilizationInSeconds: { value: 8, propertyName: "UtilizationInSeconds", description: "Utilization (sec)", isSum: true },
+    MaxDurationInSeconds: { value: 6, propertyName: "MaxDurationInSeconds", description: "Max Duration (sec)" },
+    PDDInSeconds: { value: 7, propertyName: "PDDInSeconds", description: "PDD (sec)" },
+    UtilizationInSeconds: { value: 8, propertyName: "UtilizationInSeconds", description: "Utilization (sec)" },
     NumberOfCalls: { value: 9, propertyName: "NumberOfCalls", description: "Nb of Calls", isSum: true },
     DeliveredNumberOfCalls: { value: 10, propertyName: "DeliveredNumberOfCalls", description: "Delivered Nb of Calls", isSum: true },
     PGAD: { value: 11, propertyName: "PGAD", description: "PGAD" }

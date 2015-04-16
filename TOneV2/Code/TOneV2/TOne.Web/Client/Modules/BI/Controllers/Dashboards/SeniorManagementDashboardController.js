@@ -74,8 +74,8 @@
                 updateTopSuppliersChart();
             };
 
-            $scope.updateCharts = function () {
-                updateCharts();
+            $scope.updateCharts = function (asyncHandle) {
+                updateCharts(asyncHandle);
             };
         }
 
@@ -86,34 +86,43 @@
             $scope.optionTopCounts.lastselectedvalue = $scope.optionTopCounts.datasource[1];
         }
 
-        function updateCharts() {
-            updateTopDestinationsChart();
-            updateTopCustomersChart();
-            updateTopSuppliersChart();
+        function updateCharts(asyncHandle) {
+            var finishedTasks = 0;
+            var taskHandle = {
+                operationDone: function () {
+                    finishedTasks++;
+                    if (finishedTasks == 3)
+                        if (asyncHandle)
+                            asyncHandle.operationDone();
+                }
+            };
+            updateTopDestinationsChart(taskHandle);
+            updateTopCustomersChart(taskHandle);
+            updateTopSuppliersChart(taskHandle);
         }
 
-        function updateTopDestinationsChart() {
+        function updateTopDestinationsChart(asyncHandle) {
             updateTopChart(chartTopDestinationsAPI, BIEntityTypeEnum.SaleZone.value, {
                 chartTitle: "TOP DESTINATIONS",
                 seriesTitle: "Top Destinations"
-            });
+            }, asyncHandle);
         }
 
-        function updateTopCustomersChart() {
+        function updateTopCustomersChart(asyncHandle) {
             updateTopChart(chartTopCustomersAPI, BIEntityTypeEnum.Customer.value, {
                 chartTitle: "TOP CUSTOMERS",
                 seriesTitle: "Top Customers"
-            });
+            }, asyncHandle);
         }
 
-        function updateTopSuppliersChart() {
+        function updateTopSuppliersChart(asyncHandle) {
             updateTopChart(chartTopSuppliersAPI, BIEntityTypeEnum.Supplier.value, {
                 chartTitle: "TOP SUPPLIERS",
                 seriesTitle: "Top Suppliers"
-            });
+            }, asyncHandle);
         }
 
-        function updateTopChart(chartAPI, entityType, chartSettings) {
+        function updateTopChart(chartAPI, entityType, chartSettings, asyncHandle) {
             if (!chartAPI)
                 return;
             var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
@@ -145,6 +154,8 @@
                 })
                 .finally(function () {
                     chartAPI.hideLoader();
+                    if (asyncHandle)
+                        asyncHandle.operationDone();
                 });
         }
     });
