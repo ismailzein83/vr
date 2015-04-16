@@ -50,6 +50,7 @@
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.Store.SwitchProfiles" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="sysdiagrams" EntityType="CDRAnalysisMobileModel.Store.sysdiagrams" store:Type="Tables" Schema="CDRAnalysisMobile" />
+          <EntitySet Name="ts_NumberProfile" EntityType="CDRAnalysisMobileModel.Store.ts_NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="UserPermissions" EntityType="CDRAnalysisMobileModel.Store.UserPermissions" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="Users" EntityType="CDRAnalysisMobileModel.Store.Users" store:Type="Tables" Schema="CDRAnalysisMobile" />
           <EntitySet Name="vwDashboard" EntityType="CDRAnalysisMobileModel.Store.vwDashboard" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwDashboard">
@@ -244,14 +245,6 @@
           <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="CDRAnalysisMobileModel.Store.FK_StrategyPeriods_Strategy">
             <End Role="Strategy" EntitySet="Strategy" />
             <End Role="StrategyPeriods" EntitySet="StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="CDRAnalysisMobileModel.Store.FK_StrategyThreshold_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="CDRAnalysisMobileModel.Store.FK_StrategyThreshold_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThreshold" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscriber_Values_criteria_profile" Association="CDRAnalysisMobileModel.Store.FK_Subscriber_Values_criteria_profile">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
@@ -1067,6 +1060,44 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="longblob" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'InCalls_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'DiffDest_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutInter_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Call_Out_Dur_Avg' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'AvrDurIn_Vs_AvrDurOut' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutOffNet_Vs_OutOnNet' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Out_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_In_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Data_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      -->
+        <EntityType Name="ts_NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="Count_Out_Calls" Type="int" />
+          <Property Name="Diff_Output_Numb" Type="int" />
+          <Property Name="Count_Out_Inter" Type="int" />
+          <Property Name="Count_In_Inter" Type="int" />
+          <Property Name="Count_Out_Fail" Type="int" />
+          <Property Name="Count_In_Fail" Type="int" Nullable="false" />
+          <Property Name="Diff_Input_Numbers" Type="int" Nullable="false" />
+          <Property Name="Count_Out_SMS" Type="int" />
+          <Property Name="Total_IMEI" Type="int" />
+          <Property Name="Total_BTS" Type="int" />
+          <Property Name="IsOnNet" Type="int" />
+          <Property Name="PeriodId" Type="int" />
+          <Property Name="Count_In_Calls" Type="int" Nullable="false" />
+          <Property Name="Call_In_Dur_Avg" Type="decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="Count_Out_OnNet" Type="int" />
+          <Property Name="Count_In_OnNet" Type="int" />
+          <Property Name="Count_Out_OffNet" Type="int" />
+          <Property Name="Count_In_OffNet" Type="int" />
+        </EntityType>
         <EntityType Name="UserPermissions">
           <Key>
             <PropertyRef Name="UserID" />
@@ -1617,30 +1648,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="StrategyPeriods">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_criteria_profile">
-          <End Role="Criteria_Profile" Type="CDRAnalysisMobileModel.Store.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="StrategyThreshold" Type="CDRAnalysisMobileModel.Store.StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="StrategyThreshold">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_Strategy">
-          <End Role="Strategy" Type="CDRAnalysisMobileModel.Store.Strategy" Multiplicity="0..1" />
-          <End Role="StrategyThreshold" Type="CDRAnalysisMobileModel.Store.StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="StrategyThreshold">
               <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2215,6 +2222,14 @@
         <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="todelete_prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
         <Function Name="todelete_prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <Function Name="ts_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+          <Parameter Name="v_StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ts_prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <Function Name="ts_prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
+        <Function Name="ts_prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+          <Parameter Name="v_StrategyId" Type="int" Mode="In" />
+        </Function>
         <!--Errors Found During Generation:
       warning 6013: The table/view 'def.CDRAnalysisMobile.CDR_DAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
       
@@ -2314,6 +2329,7 @@
           <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Switch_DatabaseConnections" />
           <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.SwitchProfile" />
           <EntitySet Name="sysdiagrams" EntityType="CDRAnalysisMobileModel.sysdiagram" />
+          <EntitySet Name="ts_NumberProfile" EntityType="CDRAnalysisMobileModel.ts_NumberProfile" />
           <EntitySet Name="UserPermissions" EntityType="CDRAnalysisMobileModel.UserPermission" />
           <EntitySet Name="Users" EntityType="CDRAnalysisMobileModel.User" />
           <EntitySet Name="vwDashboards" EntityType="CDRAnalysisMobileModel.vwDashboard" />
@@ -2372,10 +2388,6 @@
           <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
             <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThresholds" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscriber_Values_criteria_profile" Association="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
@@ -2581,10 +2593,6 @@
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="StrategyPeriod" EntitySet="StrategyPeriods" />
           </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="StrategyThreshold" EntitySet="StrategyThresholds" />
-          </AssociationSet>
           <AssociationSet Name="FK_Subscriber_Values_Strategy" Association="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy">
             <End Role="Strategy" EntitySet="Strategies" />
             <End Role="Subscriber_Values" EntitySet="Subscriber_Values" />
@@ -2769,13 +2777,12 @@
           <NavigationProperty Name="Related_Criteria1" Relationship="CDRAnalysisMobileModel.FK_Related_Criteria_criteria_profile1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Strategy_Min_Values" Relationship="CDRAnalysisMobileModel.FK_Strategy_Min_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
           <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
           <NavigationProperty Name="Related_Criteria2" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Related_Criteria3" Relationship="CDRAnalysisMobileModel.Related_Criteria_ibfk_2" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Strategy_Min_Values1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Strategy_Min_Values" />
           <NavigationProperty Name="StrategyPeriods1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="Criteria_Profile" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_1" FromRole="Criteria_Profile" ToRole="Subscriber_Values" />
         </EntityType>
         <EntityType Name="delete_NumberProfile">
@@ -3205,13 +3212,12 @@
           <NavigationProperty Name="Strategy_Suspicion_Level" Relationship="CDRAnalysisMobileModel.FK_Strategy_suspection_level_Strategy" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
           <NavigationProperty Name="User" Relationship="CDRAnalysisMobileModel.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
           <NavigationProperty Name="StrategyPeriods" Relationship="CDRAnalysisMobileModel.FK_StrategyPeriods_Strategy" FromRole="Strategy" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy" FromRole="Strategy" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values" Relationship="CDRAnalysisMobileModel.FK_Subscriber_Values_Strategy" FromRole="Strategy" ToRole="Subscriber_Values" />
           <NavigationProperty Name="User1" Relationship="CDRAnalysisMobileModel.Strategy_ibfk_1" FromRole="Strategy" ToRole="User" />
           <NavigationProperty Name="Strategy_Min_Values1" Relationship="CDRAnalysisMobileModel.Strategy_Min_Values_ibfk_2" FromRole="Strategy" ToRole="Strategy_Min_Values" />
           <NavigationProperty Name="Strategy_Suspicion_Level1" Relationship="CDRAnalysisMobileModel.Strategy_Suspicion_Level_ibfk_1" FromRole="Strategy" ToRole="Strategy_Suspicion_Level" />
           <NavigationProperty Name="StrategyPeriods1" Relationship="CDRAnalysisMobileModel.StrategyPeriods_ibfk_3" FromRole="Strategy" ToRole="StrategyPeriod" />
-          <NavigationProperty Name="StrategyThresholds1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="Strategy" ToRole="StrategyThreshold" />
+          <NavigationProperty Name="StrategyThresholds" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="Strategy" ToRole="StrategyThreshold" />
           <NavigationProperty Name="Subscriber_Values1" Relationship="CDRAnalysisMobileModel.Subscriber_Values_ibfk_3" FromRole="Strategy" ToRole="Subscriber_Values" />
         </EntityType>
         <EntityType Name="Strategy_Min_Values">
@@ -3294,10 +3300,8 @@
           <Property Type="Int32" Name="StrategyId" />
           <Property Type="Decimal" Name="MaxValue" />
           <Property Type="Int32" Name="CriteriaID" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_criteria_profile" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Criteria_Profile1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.FK_StrategyThreshold_Strategy" FromRole="StrategyThreshold" ToRole="Strategy" />
-          <NavigationProperty Name="Strategy1" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="StrategyThreshold" ToRole="Strategy" />
+          <NavigationProperty Name="Criteria_Profile" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_1" FromRole="StrategyThreshold" ToRole="Criteria_Profile" />
+          <NavigationProperty Name="Strategy" Relationship="CDRAnalysisMobileModel.StrategyThreshold_ibfk_2" FromRole="StrategyThreshold" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Subscriber_Values">
           <Key>
@@ -3442,6 +3446,33 @@
           <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="version" />
           <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="ts_NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="SubscriberNumber" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FromDate" />
+          <Property Type="DateTime" Name="ToDate" />
+          <Property Type="Int32" Name="Count_Out_Calls" />
+          <Property Type="Int32" Name="Diff_Output_Numb" />
+          <Property Type="Int32" Name="Count_Out_Inter" />
+          <Property Type="Int32" Name="Count_In_Inter" />
+          <Property Type="Int32" Name="Count_Out_Fail" />
+          <Property Type="Int32" Name="Count_In_Fail" Nullable="false" />
+          <Property Type="Int32" Name="Diff_Input_Numbers" Nullable="false" />
+          <Property Type="Int32" Name="Count_Out_SMS" />
+          <Property Type="Int32" Name="Total_IMEI" />
+          <Property Type="Int32" Name="Total_BTS" />
+          <Property Type="Int32" Name="IsOnNet" />
+          <Property Type="Int32" Name="PeriodId" />
+          <Property Type="Int32" Name="Count_In_Calls" Nullable="false" />
+          <Property Type="Decimal" Name="Call_In_Dur_Avg" Nullable="false" />
+          <Property Type="Int32" Name="Count_Out_OnNet" />
+          <Property Type="Int32" Name="Count_In_OnNet" />
+          <Property Type="Int32" Name="Count_Out_OffNet" />
+          <Property Type="Int32" Name="Count_In_OffNet" />
         </EntityType>
         <EntityType Name="UserPermission">
           <Key>
@@ -3698,18 +3729,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="StrategyPeriod">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_criteria_profile">
-          <End Type="CDRAnalysisMobileModel.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="CDRAnalysisMobileModel.StrategyThreshold" Role="StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="StrategyThreshold">
               <PropertyRef Name="CriteriaID" />
             </Dependent>
           </ReferentialConstraint>
@@ -4322,18 +4341,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="StrategyPeriod">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_Strategy">
-          <End Type="CDRAnalysisMobileModel.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="CDRAnalysisMobileModel.StrategyThreshold" Role="StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="StrategyThreshold">
               <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
@@ -5230,6 +5237,34 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ts_NumberProfile">
+            <EntityTypeMapping TypeName="CDRAnalysisMobileModel.ts_NumberProfile">
+              <MappingFragment StoreEntitySet="ts_NumberProfile">
+                <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
+                <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
+                <ScalarProperty Name="Count_In_OnNet" ColumnName="Count_In_OnNet" />
+                <ScalarProperty Name="Count_Out_OnNet" ColumnName="Count_Out_OnNet" />
+                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
+                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
+                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
+                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
+                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
+                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
+                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
+                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
+                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
+                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
+                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

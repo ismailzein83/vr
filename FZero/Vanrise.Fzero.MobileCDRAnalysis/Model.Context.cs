@@ -69,6 +69,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }
         public DbSet<SwitchProfile> SwitchProfiles { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
+        public DbSet<ts_NumberProfile> ts_NumberProfile { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<vwDashboard> vwDashboards { get; set; }

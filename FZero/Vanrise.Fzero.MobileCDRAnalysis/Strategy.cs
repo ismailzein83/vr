@@ -25,12 +25,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             this.Strategy_Min_Values = new HashSet<Strategy_Min_Values>();
             this.Strategy_Suspicion_Level = new HashSet<Strategy_Suspicion_Level>();
             this.StrategyPeriods = new HashSet<StrategyPeriod>();
-            this.StrategyThresholds = new HashSet<StrategyThreshold>();
             this.Subscriber_Values = new HashSet<Subscriber_Values>();
             this.Strategy_Min_Values1 = new HashSet<Strategy_Min_Values>();
             this.Strategy_Suspicion_Level1 = new HashSet<Strategy_Suspicion_Level>();
             this.StrategyPeriods1 = new HashSet<StrategyPeriod>();
-            this.StrategyThresholds1 = new HashSet<StrategyThreshold>();
+            this.StrategyThresholds = new HashSet<StrategyThreshold>();
             this.Subscriber_Values1 = new HashSet<Subscriber_Values>();
         }
     
@@ -51,13 +50,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
-        public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
         public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
         public virtual User User1 { get; set; }
         public virtual ICollection<Strategy_Min_Values> Strategy_Min_Values1 { get; set; }
         public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level1 { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods1 { get; set; }
-        public virtual ICollection<StrategyThreshold> StrategyThresholds1 { get; set; }
+        public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
         public virtual ICollection<Subscriber_Values> Subscriber_Values1 { get; set; }
     }
 }
