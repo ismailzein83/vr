@@ -1,146 +1,1319 @@
-﻿/*
- Highcharts JS v4.1.3 (2015-02-27)
+﻿// ==ClosureCompiler==
+// @compilation_level SIMPLE_OPTIMIZATIONS
 
- (c) 2009-2013 Torstein HÃ¸nsi
+/**
+ * @license Highcharts JS v4.1.3 (2015-02-27)
+ *
+ * (c) 2009-2013 Torstein Hønsi
+ *
+ * License: www.highcharts.com/license
+ */
 
- License: www.highcharts.com/license
+// JSLint options:
+/*global Highcharts, HighchartsAdapter, document, window, navigator, setInterval, clearInterval, clearTimeout, setTimeout, location, jQuery, $, console */
+
+(function (Highcharts) {
+    /**
+	Shorthands for often used function
 */
-(function (c) {
-    function n(d, a, b) {
-        var e, f, g = a.options.chart.options3d, h = !1; b ? (h = a.inverted, b = a.plotWidth / 2, a = a.plotHeight / 2, e = g.depth / 2, f = A(g.depth, 1) * A(g.viewDistance, 0)) : (b = a.plotLeft + a.plotWidth / 2, a = a.plotTop + a.plotHeight / 2, e = g.depth / 2, f = A(g.depth, 1) * A(g.viewDistance, 0)); var j = [], i = b, k = a, v = e, p = f, b = y * (h ? g.beta : -g.beta), g = y * (h ? -g.alpha : g.alpha), o = l(b), s = m(b), t = l(g), u = m(g), w, x, r, n, q, z; c.each(d, function (a) {
-            w = (h ? a.y : a.x) - i; x = (h ? a.x : a.y) - k; r = (a.z || 0) - v; n = s * w - o * r; q = -o * t * w - s * t * r + u * x; z = o * u * w + s * u * r + t * x; p > 0 &&
-            p < Number.POSITIVE_INFINITY && (n *= p / (z + v + p), q *= p / (z + v + p)); n += i; q += k; z += v; j.push({ x: h ? q : n, y: h ? n : q, z: z })
-        }); return j
-    } function q(d) { return d !== void 0 && d !== null } function E(d) { var a = 0, b, e; for (b = 0; b < d.length; b++) e = (b + 1) % d.length, a += d[b].x * d[e].y - d[e].x * d[b].y; return a / 2 } function D(d) { var a = 0, b; for (b = 0; b < d.length; b++) a += d[b].z; return d.length ? a / d.length : 0 } function r(d, a, b, e, f, g, c, j) {
-        var i = []; return g > f && g - f > o / 2 + 1.0E-4 ? (i = i.concat(r(d, a, b, e, f, f + o / 2, c, j)), i = i.concat(r(d, a, b, e, f + o / 2, g, c, j))) : g < f && f - g > o / 2 + 1.0E-4 ?
-        (i = i.concat(r(d, a, b, e, f, f - o / 2, c, j)), i = i.concat(r(d, a, b, e, f - o / 2, g, c, j))) : (i = g - f, ["C", d + b * m(f) - b * B * i * l(f) + c, a + e * l(f) + e * B * i * m(f) + j, d + b * m(g) + b * B * i * l(g) + c, a + e * l(g) - e * B * i * m(g) + j, d + b * m(g) + c, a + e * l(g) + j])
-    } function F(d) {
-        if (this.chart.is3d()) {
-            var a = this.chart.options.plotOptions.column.grouping; a !== void 0 && !a && this.group.zIndex !== void 0 && this.group.attr({ zIndex: this.group.zIndex * 10 }); var b = this.options, e = this.options.states; this.borderWidth = b.borderWidth = b.edgeWidth || 1; c.each(this.data, function (a) {
-                if (a.y !==
-                null) a = a.pointAttr, this.borderColor = c.pick(b.edgeColor, a[""].fill), a[""].stroke = this.borderColor, a.hover.stroke = c.pick(e.hover.edgeColor, this.borderColor), a.select.stroke = c.pick(e.select.edgeColor, this.borderColor)
-            })
-        } d.apply(this, [].slice.call(arguments, 1))
-    } var o = Math.PI, y = o / 180, l = Math.sin, m = Math.cos, A = c.pick, G = Math.round; c.perspective = n; var B = 4 * (Math.sqrt(2) - 1) / 3 / (o / 2); c.SVGRenderer.prototype.toLinePath = function (d, a) {
-        var b = []; c.each(d, function (a) { b.push("L", a.x, a.y) }); d.length && (b[0] = "M", a && b.push("Z"));
-        return b
-    }; c.SVGRenderer.prototype.cuboid = function (d) {
-        var a = this.g(), d = this.cuboidPath(d); a.front = this.path(d[0]).attr({ zIndex: d[3], "stroke-linejoin": "round" }).add(a); a.top = this.path(d[1]).attr({ zIndex: d[4], "stroke-linejoin": "round" }).add(a); a.side = this.path(d[2]).attr({ zIndex: d[5], "stroke-linejoin": "round" }).add(a); a.fillSetter = function (a) {
-            var d = c.Color(a).brighten(0.1).get(), f = c.Color(a).brighten(-0.1).get(); this.front.attr({ fill: a }); this.top.attr({ fill: d }); this.side.attr({ fill: f }); this.color = a;
-            return this
-        }; a.opacitySetter = function (a) { this.front.attr({ opacity: a }); this.top.attr({ opacity: a }); this.side.attr({ opacity: a }); return this }; a.attr = function (a) { a.shapeArgs || q(a.x) ? (a = this.renderer.cuboidPath(a.shapeArgs || a), this.front.attr({ d: a[0], zIndex: a[3] }), this.top.attr({ d: a[1], zIndex: a[4] }), this.side.attr({ d: a[2], zIndex: a[5] })) : c.SVGElement.prototype.attr.call(this, a); return this }; a.animate = function (a, d, f) {
-            q(a.x) && q(a.y) ? (a = this.renderer.cuboidPath(a), this.front.attr({ zIndex: a[3] }).animate({ d: a[0] },
-            d, f), this.top.attr({ zIndex: a[4] }).animate({ d: a[1] }, d, f), this.side.attr({ zIndex: a[5] }).animate({ d: a[2] }, d, f)) : a.opacity ? (this.front.animate(a, d, f), this.top.animate(a, d, f), this.side.animate(a, d, f)) : c.SVGElement.prototype.animate.call(this, a, d, f); return this
-        }; a.destroy = function () { this.front.destroy(); this.top.destroy(); this.side.destroy(); return null }; a.attr({ zIndex: -d[3] }); return a
-    }; c.SVGRenderer.prototype.cuboidPath = function (d) {
-        var a = d.x, b = d.y, e = d.z, f = d.height, g = d.width, h = d.depth, j = c.map, i = [{
-            x: a, y: b,
-            z: e
-        }, { x: a + g, y: b, z: e }, { x: a + g, y: b + f, z: e }, { x: a, y: b + f, z: e }, { x: a, y: b + f, z: e + h }, { x: a + g, y: b + f, z: e + h }, { x: a + g, y: b, z: e + h }, { x: a, y: b, z: e + h }], i = n(i, c.charts[this.chartIndex], d.insidePlotArea), b = function (a, b) { a = j(a, function (a) { return i[a] }); b = j(b, function (a) { return i[a] }); return E(a) < 0 ? a : E(b) < 0 ? b : [] }, d = b([3, 2, 1, 0], [7, 6, 5, 4]), a = b([1, 6, 7, 0], [4, 5, 2, 3]), b = b([1, 2, 5, 6], [0, 7, 4, 3]); return [this.toLinePath(d, !0), this.toLinePath(a, !0), this.toLinePath(b, !0), D(d), D(a), D(b)]
-    }; c.SVGRenderer.prototype.arc3d = function (d) {
-        d.alpha *=
-        y; d.beta *= y; var a = this.g(), b = this.arc3dPath(d), e = a.renderer, f = b.zTop * 100; a.shapeArgs = d; a.top = e.path(b.top).attr({ zIndex: b.zTop }).add(a); a.side1 = e.path(b.side2).attr({ zIndex: b.zSide1 }); a.side2 = e.path(b.side1).attr({ zIndex: b.zSide2 }); a.inn = e.path(b.inn).attr({ zIndex: b.zInn }); a.out = e.path(b.out).attr({ zIndex: b.zOut }); a.fillSetter = function (a) {
-            this.color = a; var b = c.Color(a).brighten(-0.1).get(); this.side1.attr({ fill: b }); this.side2.attr({ fill: b }); this.inn.attr({ fill: b }); this.out.attr({ fill: b }); this.top.attr({ fill: a });
-            return this
-        }; a.translateXSetter = function (a) { this.out.attr({ translateX: a }); this.inn.attr({ translateX: a }); this.side1.attr({ translateX: a }); this.side2.attr({ translateX: a }); this.top.attr({ translateX: a }) }; a.translateYSetter = function (a) { this.out.attr({ translateY: a }); this.inn.attr({ translateY: a }); this.side1.attr({ translateY: a }); this.side2.attr({ translateY: a }); this.top.attr({ translateY: a }) }; a.animate = function (a, b, d) {
-            q(a.end) || q(a.start) ? (this._shapeArgs = this.shapeArgs, c.SVGElement.prototype.animate.call(this,
-            { _args: a }, { duration: b, step: function () { var a = arguments[1], b = a.elem, d = b._shapeArgs, e = a.end, a = a.pos, d = c.merge(d, { x: d.x + (e.x - d.x) * a, y: d.y + (e.y - d.y) * a, r: d.r + (e.r - d.r) * a, innerR: d.innerR + (e.innerR - d.innerR) * a, start: d.start + (e.start - d.start) * a, end: d.end + (e.end - d.end) * a }), e = b.renderer.arc3dPath(d); b.shapeArgs = d; b.top.attr({ d: e.top, zIndex: e.zTop }); b.inn.attr({ d: e.inn, zIndex: e.zInn }); b.out.attr({ d: e.out, zIndex: e.zOut }); b.side1.attr({ d: e.side1, zIndex: e.zSide1 }); b.side2.attr({ d: e.side2, zIndex: e.zSide2 }) } }, d)) :
-            c.SVGElement.prototype.animate.call(this, a, b, d); return this
-        }; a.destroy = function () { this.top.destroy(); this.out.destroy(); this.inn.destroy(); this.side1.destroy(); this.side2.destroy(); c.SVGElement.prototype.destroy.call(this) }; a.hide = function () { this.top.hide(); this.out.hide(); this.inn.hide(); this.side1.hide(); this.side2.hide() }; a.show = function () { this.top.show(); this.out.show(); this.inn.show(); this.side1.show(); this.side2.show() }; a.zIndex = f; a.attr({ zIndex: f }); return a
-    }; c.SVGRenderer.prototype.arc3dPath =
-    function (d) {
-        var a = d.x, b = d.y, e = d.start, c = d.end - 1.0E-5, g = d.r, h = d.innerR, j = d.depth, i = d.alpha, k = d.beta, v = m(e), p = l(e), d = m(c), n = l(c), s = g * m(k), t = g * m(i), u = h * m(k); h *= m(i); var w = j * l(k), x = j * l(i), j = ["M", a + s * v, b + t * p], j = j.concat(r(a, b, s, t, e, c, 0, 0)), j = j.concat(["L", a + u * d, b + h * n]), j = j.concat(r(a, b, u, h, c, e, 0, 0)), j = j.concat(["Z"]), k = k > 0 ? o / 2 : 0, i = i > 0 ? 0 : o / 2, k = e > -k ? e : c > -k ? -k : e, q = c < o - i ? c : e < o - i ? o - i : c, i = ["M", a + s * m(k), b + t * l(k)], i = i.concat(r(a, b, s, t, k, q, 0, 0)), i = i.concat(["L", a + s * m(q) + w, b + t * l(q) + x]), i = i.concat(r(a, b, s, t, q, k,
-        w, x)), i = i.concat(["Z"]), k = ["M", a + u * v, b + h * p], k = k.concat(r(a, b, u, h, e, c, 0, 0)), k = k.concat(["L", a + u * m(c) + w, b + h * l(c) + x]), k = k.concat(r(a, b, u, h, c, e, w, x)), k = k.concat(["Z"]), v = ["M", a + s * v, b + t * p, "L", a + s * v + w, b + t * p + x, "L", a + u * v + w, b + h * p + x, "L", a + u * v, b + h * p, "Z"], a = ["M", a + s * d, b + t * n, "L", a + s * d + w, b + t * n + x, "L", a + u * d + w, b + h * n + x, "L", a + u * d, b + h * n, "Z"], b = l((e + c) / 2), e = l(e), c = l(c); return { top: j, zTop: g, out: i, zOut: Math.max(b, e, c) * g, inn: k, zInn: Math.max(b, e, c) * g, side1: v, zSide1: e * g * 0.99, side2: a, zSide2: c * g * 0.99 }
-    }; c.Chart.prototype.is3d =
-    function () { return this.options.chart.options3d && this.options.chart.options3d.enabled }; c.wrap(c.Chart.prototype, "isInsidePlot", function (d) { return this.is3d() ? !0 : d.apply(this, [].slice.call(arguments, 1)) }); c.getOptions().chart.options3d = { enabled: !1, alpha: 0, beta: 0, depth: 100, viewDistance: 25, frame: { bottom: { size: 1, color: "rgba(255,255,255,0)" }, side: { size: 1, color: "rgba(255,255,255,0)" }, back: { size: 1, color: "rgba(255,255,255,0)" } } }; c.wrap(c.Chart.prototype, "init", function (d) {
-        var a = [].slice.call(arguments, 1),
-        b; if (a[0].chart.options3d && a[0].chart.options3d.enabled) b = a[0].plotOptions || {}, b = b.pie || {}, b.borderColor = c.pick(b.borderColor, void 0); d.apply(this, a)
-    }); c.wrap(c.Chart.prototype, "setChartSize", function (d) { d.apply(this, [].slice.call(arguments, 1)); if (this.is3d()) { var a = this.inverted, b = this.clipBox, c = this.margin; b[a ? "y" : "x"] = -(c[3] || 0); b[a ? "x" : "y"] = -(c[0] || 0); b[a ? "height" : "width"] = this.chartWidth + (c[3] || 0) + (c[1] || 0); b[a ? "width" : "height"] = this.chartHeight + (c[0] || 0) + (c[2] || 0) } }); c.wrap(c.Chart.prototype,
-    "redraw", function (d) { if (this.is3d()) this.isDirtyBox = !0; d.apply(this, [].slice.call(arguments, 1)) }); c.Chart.prototype.renderSeries = function () { for (var d, a = this.series.length; a--;) d = this.series[a], d.translate(), d.render() }; c.Chart.prototype.retrieveStacks = function (d) { var a = this.series, b = {}, e, f = 1; c.each(this.series, function (c) { e = d ? c.options.stack || 0 : a.length - 1 - c.index; b[e] ? b[e].series.push(c) : (b[e] = { series: [c], position: f }, f++) }); b.totalStacks = f + 1; return b }; c.wrap(c.Axis.prototype, "init", function (d) {
-        var a =
-        arguments; if (a[1].is3d()) a[2].tickWidth = c.pick(a[2].tickWidth, 0), a[2].gridLineWidth = c.pick(a[2].gridLineWidth, 1); d.apply(this, [].slice.call(arguments, 1))
-    }); c.wrap(c.Axis.prototype, "render", function (d) {
-        d.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) {
-            var a = this.chart, b = a.renderer, c = a.options.chart.options3d, f = c.frame, g = f.bottom, h = f.back, f = f.side, j = c.depth, i = this.height, k = this.width, l = this.left, p = this.top; this.horiz ? (this.axisLine && this.axisLine.hide(), h = {
-                x: l, y: p + (a.yAxis[0].reversed ?
-                -g.size : i), z: 0, width: k, height: g.size, depth: j, insidePlotArea: !1
-            }, this.bottomFrame ? this.bottomFrame.animate(h) : this.bottomFrame = b.cuboid(h).attr({ fill: g.color, zIndex: a.yAxis[0].reversed && c.alpha > 0 ? 4 : -1 }).css({ stroke: g.color }).add()) : (c = { x: l, y: p, z: j + 1, width: k, height: i + g.size, depth: h.size, insidePlotArea: !1 }, this.backFrame ? this.backFrame.animate(c) : this.backFrame = b.cuboid(c).attr({ fill: h.color, zIndex: -3 }).css({ stroke: h.color }).add(), this.axisLine && this.axisLine.hide(), a = {
-                x: (a.yAxis[0].opposite ? k : 0) + l -
-                f.size, y: p, z: 0, width: f.size, height: i + g.size, depth: j + h.size, insidePlotArea: !1
-            }, this.sideFrame ? this.sideFrame.animate(a) : this.sideFrame = b.cuboid(a).attr({ fill: f.color, zIndex: -2 }).css({ stroke: f.color }).add())
+    /**
+     *	Mathematical Functionility
+     */
+    var PI = Math.PI,
+        deg2rad = (PI / 180), // degrees to radians 
+        sin = Math.sin,
+        cos = Math.cos,
+        pick = Highcharts.pick,
+        round = Math.round;
+
+    function perspective(points, chart, insidePlotArea) {
+        var options3d = chart.options.chart.options3d,
+            inverted = false,
+            origin;
+
+        if (insidePlotArea) {
+            inverted = chart.inverted;
+            origin = {
+                x: chart.plotWidth / 2,
+                y: chart.plotHeight / 2,
+                z: options3d.depth / 2,
+                vd: pick(options3d.depth, 1) * pick(options3d.viewDistance, 0)
+            };
+        } else {
+            origin = {
+                x: chart.plotLeft + (chart.plotWidth / 2),
+                y: chart.plotTop + (chart.plotHeight / 2),
+                z: options3d.depth / 2,
+                vd: pick(options3d.depth, 1) * pick(options3d.viewDistance, 0)
+            };
         }
-    }); c.wrap(c.Axis.prototype, "getPlotLinePath", function (c) {
-        var a = c.apply(this, [].slice.call(arguments, 1)); if (!this.chart.is3d()) return a; if (a === null) return a; var b = this.chart.options.chart.options3d.depth, a = [{ x: a[1], y: a[2], z: this.horiz || this.opposite ? b : 0 }, { x: a[1], y: a[2], z: b }, { x: a[4], y: a[5], z: b }, {
-            x: a[4],
-            y: a[5], z: this.horiz || this.opposite ? 0 : b
-        }], a = n(a, this.chart, !1); return a = this.chart.renderer.toLinePath(a, !1)
-    }); c.wrap(c.Axis.prototype, "getPlotBandPath", function (c) { if (this.chart.is3d()) { var a = arguments, b = a[1], a = this.getPlotLinePath(a[2]); (b = this.getPlotLinePath(b)) && a ? b.push(a[7], a[8], a[4], a[5], a[1], a[2]) : b = null; return b } else return c.apply(this, [].slice.call(arguments, 1)) }); c.wrap(c.Tick.prototype, "getMarkPath", function (c) {
-        var a = c.apply(this, [].slice.call(arguments, 1)); if (!this.axis.chart.is3d()) return a;
-        a = [{ x: a[1], y: a[2], z: 0 }, { x: a[4], y: a[5], z: 0 }]; a = n(a, this.axis.chart, !1); return a = ["M", a[0].x, a[0].y, "L", a[1].x, a[1].y]
-    }); c.wrap(c.Tick.prototype, "getLabelPosition", function (c) { var a = c.apply(this, [].slice.call(arguments, 1)); if (!this.axis.chart.is3d()) return a; a = n([{ x: a.x, y: a.y, z: 0 }], this.axis.chart, !1)[0]; a.x -= !this.axis.horiz && this.axis.opposite ? this.axis.transA : 0; return a }); c.wrap(c.Axis.prototype, "drawCrosshair", function (c) {
-        var a = arguments; this.chart.is3d() && a[2] && (a[2] = {
-            plotX: a[2].plotXold || a[2].plotX,
-            plotY: a[2].plotYold || a[2].plotY
-        }); c.apply(this, [].slice.call(a, 1))
-    }); c.wrap(c.seriesTypes.column.prototype, "translate", function (d) {
-        d.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) {
-            var a = this.chart, b = this.options, e = b.depth || 25, f = (b.stacking ? b.stack || 0 : this._i) * (e + (b.groupZPadding || 1)); b.grouping !== !1 && (f = 0); f += b.groupZPadding || 1; c.each(this.data, function (b) {
-                if (b.y !== null) {
-                    var c = b.shapeArgs, d = b.tooltipPos; b.shapeType = "cuboid"; c.z = f; c.depth = e; c.insidePlotArea = !0; d = n([{ x: d[0], y: d[1], z: f }],
-                    a, !1)[0]; b.tooltipPos = [d.x, d.y]
+
+        var result = [],
+            xe = origin.x,
+            ye = origin.y,
+            ze = origin.z,
+            vd = origin.vd,
+            angle1 = deg2rad * (inverted ? options3d.beta : -options3d.beta),
+            angle2 = deg2rad * (inverted ? -options3d.alpha : options3d.alpha),
+            s1 = sin(angle1),
+            c1 = cos(angle1),
+            s2 = sin(angle2),
+            c2 = cos(angle2);
+
+        var x, y, z, px, py, pz;
+
+        Highcharts.each(points, function (point) {
+            x = (inverted ? point.y : point.x) - xe;
+            y = (inverted ? point.x : point.y) - ye;
+            z = (point.z || 0) - ze;
+
+            //Apply 3-D rotation
+            px = c1 * x - s1 * z;
+            py = -s1 * s2 * x - c1 * s2 * z + c2 * y;
+            pz = s1 * c2 * x + c1 * c2 * z + s2 * y;
+
+            //Apply perspective
+            if ((vd > 0) && (vd < Number.POSITIVE_INFINITY)) {
+                px = px * (vd / (pz + ze + vd));
+                py = py * (vd / (pz + ze + vd));
+            }
+
+            //Apply translation
+            px = px + xe;
+            py = py + ye;
+            pz = pz + ze;
+
+            result.push({
+                x: (inverted ? py : px),
+                y: (inverted ? px : py),
+                z: pz
+            });
+        });
+        return result;
+    }
+    // Make function acessible to plugins
+    Highcharts.perspective = perspective;
+    /*** 
+        EXTENSION TO THE SVG-RENDERER TO ENABLE 3D SHAPES
+        ***/
+    ////// HELPER METHODS //////
+    var dFactor = (4 * (Math.sqrt(2) - 1) / 3) / (PI / 2);
+
+    function defined(obj) {
+        return obj !== undefined && obj !== null;
+    }
+
+    //Shoelace algorithm -- http://en.wikipedia.org/wiki/Shoelace_formula
+    function shapeArea(vertexes) {
+        var area = 0,
+            i,
+            j;
+        for (i = 0; i < vertexes.length; i++) {
+            j = (i + 1) % vertexes.length;
+            area += vertexes[i].x * vertexes[j].y - vertexes[j].x * vertexes[i].y;
+        }
+        return area / 2;
+    }
+
+    function averageZ(vertexes) {
+        var z = 0,
+            i;
+        for (i = 0; i < vertexes.length; i++) {
+            z += vertexes[i].z;
+        }
+        return vertexes.length ? z / vertexes.length : 0;
+    }
+
+    function curveTo(cx, cy, rx, ry, start, end, dx, dy) {
+        var result = [];
+        if ((end > start) && (end - start > PI / 2 + 0.0001)) {
+            result = result.concat(curveTo(cx, cy, rx, ry, start, start + (PI / 2), dx, dy));
+            result = result.concat(curveTo(cx, cy, rx, ry, start + (PI / 2), end, dx, dy));
+            return result;
+        } else if ((end < start) && (start - end > PI / 2 + 0.0001)) {
+            result = result.concat(curveTo(cx, cy, rx, ry, start, start - (PI / 2), dx, dy));
+            result = result.concat(curveTo(cx, cy, rx, ry, start - (PI / 2), end, dx, dy));
+            return result;
+        } else {
+            var arcAngle = end - start;
+            return [
+                'C',
+                cx + (rx * cos(start)) - ((rx * dFactor * arcAngle) * sin(start)) + dx,
+                cy + (ry * sin(start)) + ((ry * dFactor * arcAngle) * cos(start)) + dy,
+                cx + (rx * cos(end)) + ((rx * dFactor * arcAngle) * sin(end)) + dx,
+                cy + (ry * sin(end)) - ((ry * dFactor * arcAngle) * cos(end)) + dy,
+
+                cx + (rx * cos(end)) + dx,
+                cy + (ry * sin(end)) + dy
+            ];
+        }
+    }
+
+    Highcharts.SVGRenderer.prototype.toLinePath = function (points, closed) {
+        var result = [];
+
+        // Put "L x y" for each point
+        Highcharts.each(points, function (point) {
+            result.push('L', point.x, point.y);
+        });
+
+        if (points.length) {
+            // Set the first element to M
+            result[0] = 'M';
+
+            // If it is a closed line, add Z
+            if (closed) {
+                result.push('Z');
+            }
+        }
+
+        return result;
+    };
+
+    ////// CUBOIDS //////
+    Highcharts.SVGRenderer.prototype.cuboid = function (shapeArgs) {
+
+        var result = this.g(),
+        paths = this.cuboidPath(shapeArgs);
+
+        result.front = this.path(paths[0]).attr({ zIndex: paths[3], 'stroke-linejoin': 'round' }).add(result);
+        result.top = this.path(paths[1]).attr({ zIndex: paths[4], 'stroke-linejoin': 'round' }).add(result);
+        result.side = this.path(paths[2]).attr({ zIndex: paths[5], 'stroke-linejoin': 'round' }).add(result);
+
+        result.fillSetter = function (color) {
+            var c0 = color,
+            c1 = Highcharts.Color(color).brighten(0.1).get(),
+            c2 = Highcharts.Color(color).brighten(-0.1).get();
+
+            this.front.attr({ fill: c0 });
+            this.top.attr({ fill: c1 });
+            this.side.attr({ fill: c2 });
+
+            this.color = color;
+            return this;
+        };
+
+        result.opacitySetter = function (opacity) {
+            this.front.attr({ opacity: opacity });
+            this.top.attr({ opacity: opacity });
+            this.side.attr({ opacity: opacity });
+            return this;
+        };
+
+        result.attr = function (args) {
+            if (args.shapeArgs || defined(args.x)) {
+                var shapeArgs = args.shapeArgs || args;
+                var paths = this.renderer.cuboidPath(shapeArgs);
+                this.front.attr({ d: paths[0], zIndex: paths[3] });
+                this.top.attr({ d: paths[1], zIndex: paths[4] });
+                this.side.attr({ d: paths[2], zIndex: paths[5] });
+            } else {
+                Highcharts.SVGElement.prototype.attr.call(this, args);
+            }
+
+            return this;
+        };
+
+        result.animate = function (args, duration, complete) {
+            if (defined(args.x) && defined(args.y)) {
+                var paths = this.renderer.cuboidPath(args);
+                this.front.attr({ zIndex: paths[3] }).animate({ d: paths[0] }, duration, complete);
+                this.top.attr({ zIndex: paths[4] }).animate({ d: paths[1] }, duration, complete);
+                this.side.attr({ zIndex: paths[5] }).animate({ d: paths[2] }, duration, complete);
+            } else if (args.opacity) {
+                this.front.animate(args, duration, complete);
+                this.top.animate(args, duration, complete);
+                this.side.animate(args, duration, complete);
+            } else {
+                Highcharts.SVGElement.prototype.animate.call(this, args, duration, complete);
+            }
+            return this;
+        };
+
+        result.destroy = function () {
+            this.front.destroy();
+            this.top.destroy();
+            this.side.destroy();
+
+            return null;
+        };
+
+        // Apply the Z index to the cuboid group
+        result.attr({ zIndex: -paths[3] });
+
+        return result;
+    };
+
+
+    Highcharts.SVGRenderer.prototype.cuboidPath = function (shapeArgs) {
+        var x = shapeArgs.x,
+            y = shapeArgs.y,
+            z = shapeArgs.z,
+            h = shapeArgs.height,
+            w = shapeArgs.width,
+            d = shapeArgs.depth,
+            chart = Highcharts.charts[this.chartIndex],
+            map = Highcharts.map;
+
+        var pArr = [
+            { x: x, y: y, z: z },
+            { x: x + w, y: y, z: z },
+            { x: x + w, y: y + h, z: z },
+            { x: x, y: y + h, z: z },
+            { x: x, y: y + h, z: z + d },
+            { x: x + w, y: y + h, z: z + d },
+            { x: x + w, y: y, z: z + d },
+            { x: x, y: y, z: z + d }
+        ];
+
+        pArr = perspective(pArr, chart, shapeArgs.insidePlotArea);
+
+        var pickShape = function (path1, path2) {
+            path1 = map(path1, function (i) { return pArr[i]; });
+            path2 = map(path2, function (i) { return pArr[i]; });
+            if (shapeArea(path1) < 0) {
+                return path1;
+            } else if (shapeArea(path2) < 0) {
+                return path2;
+            } else {
+                return [];
+            }
+        };
+
+        // front or back
+        var front = [3, 2, 1, 0];
+        var back = [7, 6, 5, 4];
+        var path1 = pickShape(front, back);
+
+        // top or bottom
+        var top = [1, 6, 7, 0];
+        var bottom = [4, 5, 2, 3];
+        var path2 = pickShape(top, bottom);
+
+        // side
+        var right = [1, 2, 5, 6];
+        var left = [0, 7, 4, 3];
+        var path3 = pickShape(right, left);
+
+        return [this.toLinePath(path1, true), this.toLinePath(path2, true), this.toLinePath(path3, true), averageZ(path1), averageZ(path2), averageZ(path3)];
+    };
+
+    ////// SECTORS //////
+    Highcharts.SVGRenderer.prototype.arc3d = function (shapeArgs) {
+
+        shapeArgs.alpha *= deg2rad;
+        shapeArgs.beta *= deg2rad;
+        var result = this.g(),
+            paths = this.arc3dPath(shapeArgs),
+            renderer = result.renderer;
+
+        var zIndex = paths.zTop * 100;
+
+        result.shapeArgs = shapeArgs;	// Store for later use
+
+        result.top = renderer.path(paths.top).attr({ zIndex: paths.zTop }).add(result);
+        result.side1 = renderer.path(paths.side2).attr({ zIndex: paths.zSide1 });
+        result.side2 = renderer.path(paths.side1).attr({ zIndex: paths.zSide2 });
+        result.inn = renderer.path(paths.inn).attr({ zIndex: paths.zInn });
+        result.out = renderer.path(paths.out).attr({ zIndex: paths.zOut });
+
+        result.fillSetter = function (color) {
+            this.color = color;
+
+            var c0 = color,
+            c2 = Highcharts.Color(color).brighten(-0.1).get();
+
+            this.side1.attr({ fill: c2 });
+            this.side2.attr({ fill: c2 });
+            this.inn.attr({ fill: c2 });
+            this.out.attr({ fill: c2 });
+            this.top.attr({ fill: c0 });
+            return this;
+        };
+
+        result.translateXSetter = function (value) {
+            this.out.attr({ translateX: value });
+            this.inn.attr({ translateX: value });
+            this.side1.attr({ translateX: value });
+            this.side2.attr({ translateX: value });
+            this.top.attr({ translateX: value });
+        };
+
+        result.translateYSetter = function (value) {
+            this.out.attr({ translateY: value });
+            this.inn.attr({ translateY: value });
+            this.side1.attr({ translateY: value });
+            this.side2.attr({ translateY: value });
+            this.top.attr({ translateY: value });
+        };
+
+        result.animate = function (args, duration, complete) {
+            if (defined(args.end) || defined(args.start)) {
+                this._shapeArgs = this.shapeArgs;
+
+                Highcharts.SVGElement.prototype.animate.call(this, {
+                    _args: args
+                }, {
+                    duration: duration,
+                    step: function () {
+                        var args = arguments,
+                            fx = args[1],
+                            result = fx.elem,
+                            start = result._shapeArgs,
+                            end = fx.end,
+                            pos = fx.pos,
+                            sA = Highcharts.merge(start, {
+                                x: start.x + ((end.x - start.x) * pos),
+                                y: start.y + ((end.y - start.y) * pos),
+                                r: start.r + ((end.r - start.r) * pos),
+                                innerR: start.innerR + ((end.innerR - start.innerR) * pos),
+                                start: start.start + ((end.start - start.start) * pos),
+                                end: start.end + ((end.end - start.end) * pos)
+                            });
+
+                        var paths = result.renderer.arc3dPath(sA);
+
+                        result.shapeArgs = sA;
+
+                        result.top.attr({ d: paths.top, zIndex: paths.zTop });
+                        result.inn.attr({ d: paths.inn, zIndex: paths.zInn });
+                        result.out.attr({ d: paths.out, zIndex: paths.zOut });
+                        result.side1.attr({ d: paths.side1, zIndex: paths.zSide1 });
+                        result.side2.attr({ d: paths.side2, zIndex: paths.zSide2 });
+
+                    }
+                }, complete);
+            } else {
+                Highcharts.SVGElement.prototype.animate.call(this, args, duration, complete);
+            }
+            return this;
+        };
+
+        result.destroy = function () {
+            this.top.destroy();
+            this.out.destroy();
+            this.inn.destroy();
+            this.side1.destroy();
+            this.side2.destroy();
+
+            Highcharts.SVGElement.prototype.destroy.call(this);
+        };
+        result.hide = function () {
+            this.top.hide();
+            this.out.hide();
+            this.inn.hide();
+            this.side1.hide();
+            this.side2.hide();
+        };
+        result.show = function () {
+            this.top.show();
+            this.out.show();
+            this.inn.show();
+            this.side1.show();
+            this.side2.show();
+        };
+
+        result.zIndex = zIndex;
+        result.attr({ zIndex: zIndex });
+        return result;
+    };
+
+
+    Highcharts.SVGRenderer.prototype.arc3dPath = function (shapeArgs) {
+        var cx = shapeArgs.x,
+            cy = shapeArgs.y,
+            start = shapeArgs.start,
+            end = shapeArgs.end - 0.00001,
+            r = shapeArgs.r,
+            ir = shapeArgs.innerR,
+            d = shapeArgs.depth,
+            alpha = shapeArgs.alpha,
+            beta = shapeArgs.beta;
+
+        // Some Variables
+        var cs = cos(start),
+            ss = sin(start),
+            ce = cos(end),
+            se = sin(end),
+            rx = r * cos(beta),
+            ry = r * cos(alpha),
+            irx = ir * cos(beta),
+            iry = ir * cos(alpha),
+            dx = d * sin(beta),
+            dy = d * sin(alpha);
+
+        // TOP	
+        var top = ['M', cx + (rx * cs), cy + (ry * ss)];
+        top = top.concat(curveTo(cx, cy, rx, ry, start, end, 0, 0));
+        top = top.concat([
+            'L', cx + (irx * ce), cy + (iry * se)
+        ]);
+        top = top.concat(curveTo(cx, cy, irx, iry, end, start, 0, 0));
+        top = top.concat(['Z']);
+
+        // OUTSIDE
+        var b = (beta > 0 ? PI / 2 : 0),
+            a = (alpha > 0 ? 0 : PI / 2);
+
+        var start2 = start > -b ? start : (end > -b ? -b : start),
+            end2 = end < PI - a ? end : (start < PI - a ? PI - a : end);
+
+        var out = ['M', cx + (rx * cos(start2)), cy + (ry * sin(start2))];
+        out = out.concat(curveTo(cx, cy, rx, ry, start2, end2, 0, 0));
+        out = out.concat([
+            'L', cx + (rx * cos(end2)) + dx, cy + (ry * sin(end2)) + dy
+        ]);
+        out = out.concat(curveTo(cx, cy, rx, ry, end2, start2, dx, dy));
+        out = out.concat(['Z']);
+
+        // INSIDE
+        var inn = ['M', cx + (irx * cs), cy + (iry * ss)];
+        inn = inn.concat(curveTo(cx, cy, irx, iry, start, end, 0, 0));
+        inn = inn.concat([
+            'L', cx + (irx * cos(end)) + dx, cy + (iry * sin(end)) + dy
+        ]);
+        inn = inn.concat(curveTo(cx, cy, irx, iry, end, start, dx, dy));
+        inn = inn.concat(['Z']);
+
+        // SIDES
+        var side1 = [
+            'M', cx + (rx * cs), cy + (ry * ss),
+            'L', cx + (rx * cs) + dx, cy + (ry * ss) + dy,
+            'L', cx + (irx * cs) + dx, cy + (iry * ss) + dy,
+            'L', cx + (irx * cs), cy + (iry * ss),
+            'Z'
+        ];
+        var side2 = [
+            'M', cx + (rx * ce), cy + (ry * se),
+            'L', cx + (rx * ce) + dx, cy + (ry * se) + dy,
+            'L', cx + (irx * ce) + dx, cy + (iry * se) + dy,
+            'L', cx + (irx * ce), cy + (iry * se),
+            'Z'
+        ];
+
+        var a1 = sin((start + end) / 2),
+            a2 = sin(start),
+            a3 = sin(end);
+
+        return {
+            top: top,
+            zTop: r,
+            out: out,
+            zOut: Math.max(a1, a2, a3) * r,
+            inn: inn,
+            zInn: Math.max(a1, a2, a3) * r,
+            side1: side1,
+            zSide1: a2 * (r * 0.99),
+            side2: side2,
+            zSide2: a3 * (r * 0.99)
+        };
+    };
+    /*** 
+        EXTENSION FOR 3D CHARTS
+    ***/
+    // Shorthand to check the is3d flag
+    Highcharts.Chart.prototype.is3d = function () {
+        return this.options.chart.options3d && this.options.chart.options3d.enabled;
+    };
+
+    Highcharts.wrap(Highcharts.Chart.prototype, 'isInsidePlot', function (proceed) {
+        if (this.is3d()) {
+            return true;
+        } else {
+            return proceed.apply(this, [].slice.call(arguments, 1));
+        }
+    });
+
+    var defaultChartOptions = Highcharts.getOptions();
+    defaultChartOptions.chart.options3d = {
+        enabled: false,
+        alpha: 0,
+        beta: 0,
+        depth: 100,
+        viewDistance: 25,
+        frame: {
+            bottom: { size: 1, color: 'rgba(255,255,255,0)' },
+            side: { size: 1, color: 'rgba(255,255,255,0)' },
+            back: { size: 1, color: 'rgba(255,255,255,0)' }
+        }
+    };
+
+    Highcharts.wrap(Highcharts.Chart.prototype, 'init', function (proceed) {
+        var args = [].slice.call(arguments, 1),
+            plotOptions,
+            pieOptions;
+
+        if (args[0].chart.options3d && args[0].chart.options3d.enabled) {
+            plotOptions = args[0].plotOptions || {};
+            pieOptions = plotOptions.pie || {};
+
+            pieOptions.borderColor = Highcharts.pick(pieOptions.borderColor, undefined);
+        }
+        proceed.apply(this, args);
+    });
+
+    Highcharts.wrap(Highcharts.Chart.prototype, 'setChartSize', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        if (this.is3d()) {
+            var inverted = this.inverted,
+                clipBox = this.clipBox,
+                margin = this.margin,
+                x = inverted ? 'y' : 'x',
+                y = inverted ? 'x' : 'y',
+                w = inverted ? 'height' : 'width',
+                h = inverted ? 'width' : 'height';
+
+            clipBox[x] = -(margin[3] || 0);
+            clipBox[y] = -(margin[0] || 0);
+            clipBox[w] = this.chartWidth + (margin[3] || 0) + (margin[1] || 0);
+            clipBox[h] = this.chartHeight + (margin[0] || 0) + (margin[2] || 0);
+        }
+    });
+
+    Highcharts.wrap(Highcharts.Chart.prototype, 'redraw', function (proceed) {
+        if (this.is3d()) {
+            // Set to force a redraw of all elements
+            this.isDirtyBox = true;
+        }
+        proceed.apply(this, [].slice.call(arguments, 1));
+    });
+
+    // Draw the series in the reverse order (#3803)
+    Highcharts.Chart.prototype.renderSeries = function () {
+        var serie,
+            i = this.series.length;
+        while (i--) {
+            serie = this.series[i];
+            serie.translate();
+            serie.render();
+        }
+    };
+
+    Highcharts.Chart.prototype.retrieveStacks = function (stacking) {
+        var series = this.series,
+            stacks = {},
+            stackNumber,
+            i = 1;
+
+        Highcharts.each(this.series, function (S) {
+            stackNumber = stacking ? (S.options.stack || 0) : series.length - 1 - S.index; // #3841
+            if (!stacks[stackNumber]) {
+                stacks[stackNumber] = { series: [S], position: i };
+                i++;
+            } else {
+                stacks[stackNumber].series.push(S);
+            }
+        });
+
+        stacks.totalStacks = i + 1;
+        return stacks;
+    };
+
+    /***
+        EXTENSION TO THE AXIS
+    ***/
+    Highcharts.wrap(Highcharts.Axis.prototype, 'init', function (proceed) {
+        var args = arguments;
+        if (args[1].is3d()) {
+            args[2].tickWidth = Highcharts.pick(args[2].tickWidth, 0);
+            args[2].gridLineWidth = Highcharts.pick(args[2].gridLineWidth, 1);
+        }
+
+        proceed.apply(this, [].slice.call(arguments, 1));
+    });
+    Highcharts.wrap(Highcharts.Axis.prototype, 'render', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return;
+        }
+
+        var chart = this.chart,
+            renderer = chart.renderer,
+            options3d = chart.options.chart.options3d,
+            frame = options3d.frame,
+            fbottom = frame.bottom,
+            fback = frame.back,
+            fside = frame.side,
+            depth = options3d.depth,
+            height = this.height,
+            width = this.width,
+            left = this.left,
+            top = this.top;
+
+        if (this.horiz) {
+            /// BOTTOM
+            if (this.axisLine) {
+                this.axisLine.hide();
+            }
+            var bottomShape = {
+                x: left,
+                y: top + (chart.yAxis[0].reversed ? -fbottom.size : height),
+                z: 0,
+                width: width,
+                height: fbottom.size,
+                depth: depth,
+                insidePlotArea: false
+            };
+            if (!this.bottomFrame) {
+                this.bottomFrame = renderer.cuboid(bottomShape).attr({ fill: fbottom.color, zIndex: (chart.yAxis[0].reversed && options3d.alpha > 0 ? 4 : -1) }).css({ stroke: fbottom.color }).add();
+            } else {
+                this.bottomFrame.animate(bottomShape);
+            }
+        } else {
+            // BACK
+            var backShape = {
+                x: left,
+                y: top,
+                z: depth + 1,
+                width: width,
+                height: height + fbottom.size,
+                depth: fback.size,
+                insidePlotArea: false
+            };
+            if (!this.backFrame) {
+                this.backFrame = renderer.cuboid(backShape).attr({ fill: fback.color, zIndex: -3 }).css({ stroke: fback.color }).add();
+            } else {
+                this.backFrame.animate(backShape);
+            }
+            // SIDE
+            if (this.axisLine) {
+                this.axisLine.hide();
+            }
+            var sideShape = {
+                x: (chart.yAxis[0].opposite ? width : 0) + left - fside.size,
+                y: top,
+                z: 0,
+                width: fside.size,
+                height: height + fbottom.size,
+                depth: depth + fback.size,
+                insidePlotArea: false
+            };
+            if (!this.sideFrame) {
+                this.sideFrame = renderer.cuboid(sideShape).attr({ fill: fside.color, zIndex: -2 }).css({ stroke: fside.color }).add();
+            } else {
+                this.sideFrame.animate(sideShape);
+            }
+        }
+    });
+
+    Highcharts.wrap(Highcharts.Axis.prototype, 'getPlotLinePath', function (proceed) {
+        var path = proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return path;
+        }
+
+        if (path === null) { return path; }
+
+        var chart = this.chart,
+            options3d = chart.options.chart.options3d;
+
+        var d = options3d.depth;
+
+        var pArr = [
+            { x: path[1], y: path[2], z: (this.horiz || this.opposite ? d : 0) },
+            { x: path[1], y: path[2], z: d },
+            { x: path[4], y: path[5], z: d },
+            { x: path[4], y: path[5], z: (this.horiz || this.opposite ? 0 : d) }
+        ];
+
+        pArr = perspective(pArr, this.chart, false);
+        path = this.chart.renderer.toLinePath(pArr, false);
+
+        return path;
+    });
+
+    Highcharts.wrap(Highcharts.Axis.prototype, 'getPlotBandPath', function (proceed) {
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return proceed.apply(this, [].slice.call(arguments, 1));
+        } else {
+            var args = arguments,
+                from = args[1],
+                to = args[2];
+
+            var toPath = this.getPlotLinePath(to),
+                path = this.getPlotLinePath(from);
+
+            if (path && toPath) {
+                path.push(
+                    toPath[7],	// These two do not exist in the regular getPlotLine
+                    toPath[8],  // ---- # 3005
+                    toPath[4],
+                    toPath[5],
+                    toPath[1],
+                    toPath[2]
+                );
+            } else { // outside the axis area
+                path = null;
+            }
+
+            return path;
+        }
+    });
+
+    /*** 
+        EXTENSION TO THE TICKS
+    ***/
+
+    Highcharts.wrap(Highcharts.Tick.prototype, 'getMarkPath', function (proceed) {
+        var path = proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.axis.chart.is3d()) {
+            return path;
+        }
+
+        var pArr = [
+            { x: path[1], y: path[2], z: 0 },
+            { x: path[4], y: path[5], z: 0 }
+        ];
+
+        pArr = perspective(pArr, this.axis.chart, false);
+        path = [
+            'M', pArr[0].x, pArr[0].y,
+            'L', pArr[1].x, pArr[1].y
+        ];
+        return path;
+    });
+
+    Highcharts.wrap(Highcharts.Tick.prototype, 'getLabelPosition', function (proceed) {
+        var pos = proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.axis.chart.is3d()) {
+            return pos;
+        }
+
+        pos = perspective([{ x: pos.x, y: pos.y, z: 0 }], this.axis.chart, false)[0];
+        pos.x = pos.x - (!this.axis.horiz && this.axis.opposite ? this.axis.transA : 0); //#3788
+
+        return pos;
+    });
+
+    Highcharts.wrap(Highcharts.Axis.prototype, 'drawCrosshair', function (proceed) {
+        var args = arguments;
+        if (this.chart.is3d()) {
+            if (args[2]) {
+                args[2] = {
+                    plotX: args[2].plotXold || args[2].plotX,
+                    plotY: args[2].plotYold || args[2].plotY
+                };
+            }
+        }
+        proceed.apply(this, [].slice.call(args, 1));
+    });
+    /***
+        EXTENSION FOR 3D COLUMNS
+    ***/
+    Highcharts.wrap(Highcharts.seriesTypes.column.prototype, 'translate', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return;
+        }
+
+        var series = this,
+            chart = series.chart,
+            seriesOptions = series.options,
+            depth = seriesOptions.depth || 25;
+
+        var stack = seriesOptions.stacking ? (seriesOptions.stack || 0) : series._i;
+        var z = stack * (depth + (seriesOptions.groupZPadding || 1));
+
+        if (seriesOptions.grouping !== false) { z = 0; }
+
+        z += (seriesOptions.groupZPadding || 1);
+
+        Highcharts.each(series.data, function (point) {
+            if (point.y !== null) {
+                var shapeArgs = point.shapeArgs,
+                    tooltipPos = point.tooltipPos;
+
+                point.shapeType = 'cuboid';
+                shapeArgs.z = z;
+                shapeArgs.depth = depth;
+                shapeArgs.insidePlotArea = true;
+
+                // Translate the tooltip position in 3d space
+                tooltipPos = perspective([{ x: tooltipPos[0], y: tooltipPos[1], z: z }], chart, false)[0];
+                point.tooltipPos = [tooltipPos.x, tooltipPos.y];
+            }
+        });
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.column.prototype, 'animate', function (proceed) {
+        if (!this.chart.is3d()) {
+            proceed.apply(this, [].slice.call(arguments, 1));
+        } else {
+            var args = arguments,
+                init = args[1],
+                yAxis = this.yAxis,
+                series = this,
+                reversed = this.yAxis.reversed;
+
+            if (Highcharts.svg) { // VML is too slow anyway
+                if (init) {
+                    Highcharts.each(series.data, function (point) {
+                        if (point.y !== null) {
+                            point.height = point.shapeArgs.height;
+                            point.shapey = point.shapeArgs.y;	//#2968				
+                            point.shapeArgs.height = 1;
+                            if (!reversed) {
+                                if (point.stackY) {
+                                    point.shapeArgs.y = point.plotY + yAxis.translate(point.stackY);
+                                } else {
+                                    point.shapeArgs.y = point.plotY + (point.negative ? -point.height : point.height);
+                                }
+                            }
+                        }
+                    });
+
+                } else { // run the animation				
+                    Highcharts.each(series.data, function (point) {
+                        if (point.y !== null) {
+                            point.shapeArgs.height = point.height;
+                            point.shapeArgs.y = point.shapey;	//#2968
+                            // null value do not have a graphic
+                            if (point.graphic) {
+                                point.graphic.animate(point.shapeArgs, series.options.animation);
+                            }
+                        }
+                    });
+
+                    // redraw datalabels to the correct position
+                    this.drawDataLabels();
+
+                    // delete this function to allow it only once
+                    series.animate = null;
                 }
-            })
+            }
         }
-    }); c.wrap(c.seriesTypes.column.prototype, "animate", function (d) {
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.column.prototype, 'init', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
         if (this.chart.is3d()) {
-            var a = arguments[1], b = this.yAxis, e = this, f = this.yAxis.reversed; if (c.svg) a ? c.each(e.data, function (a) { if (a.y !== null && (a.height = a.shapeArgs.height, a.shapey = a.shapeArgs.y, a.shapeArgs.height = 1, !f)) a.shapeArgs.y = a.stackY ? a.plotY + b.translate(a.stackY) : a.plotY + (a.negative ? -a.height : a.height) }) : (c.each(e.data, function (a) {
-                if (a.y !== null) a.shapeArgs.height = a.height, a.shapeArgs.y = a.shapey, a.graphic &&
-                a.graphic.animate(a.shapeArgs, e.options.animation)
-            }), this.drawDataLabels(), e.animate = null)
-        } else d.apply(this, [].slice.call(arguments, 1))
-    }); c.wrap(c.seriesTypes.column.prototype, "init", function (c) { c.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) { var a = this.options, b = a.grouping, e = a.stacking, f = 0; if (b === void 0 || b) { b = this.chart.retrieveStacks(e); e = a.stack || 0; for (f = 0; f < b[e].series.length; f++) if (b[e].series[f] === this) break; f = b.totalStacks * 10 - 10 * (b.totalStacks - b[e].position) - f } a.zIndex = f } });
-    c.wrap(c.Series.prototype, "alignDataLabel", function (c) { if (this.chart.is3d() && (this.type === "column" || this.type === "columnrange")) { var a = arguments[4], b = { x: a.x, y: a.y, z: 0 }, b = n([b], this.chart, !0)[0]; a.x = b.x; a.y = b.y } c.apply(this, [].slice.call(arguments, 1)) }); c.seriesTypes.columnrange && c.wrap(c.seriesTypes.columnrange.prototype, "drawPoints", F); c.wrap(c.seriesTypes.column.prototype, "drawPoints", F); var C = c.getOptions(); C.plotOptions.cylinder = c.merge(C.plotOptions.column); C = c.extendClass(c.seriesTypes.column,
-    { type: "cylinder" }); c.seriesTypes.cylinder = C; c.wrap(c.seriesTypes.cylinder.prototype, "translate", function (d) {
-        d.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) {
-            var a = this.chart, b = a.options, e = b.plotOptions.cylinder, b = b.chart.options3d, f = e.depth || 0, g = { x: a.inverted ? a.plotHeight / 2 : a.plotWidth / 2, y: a.inverted ? a.plotWidth / 2 : a.plotHeight / 2, z: b.depth, vd: b.viewDistance }, h = b.alpha, j = e.stacking ? (this.options.stack || 0) * f : this._i * f; j += f / 2; e.grouping !== !1 && (j = 0); c.each(this.data, function (a) {
-                var b = a.shapeArgs;
-                a.shapeType = "arc3d"; b.x += f / 2; b.z = j; b.start = 0; b.end = 2 * o; b.r = f * 0.95; b.innerR = 0; b.depth = b.height * (1 / l((90 - h) * y)) - j; b.alpha = 90 - h; b.beta = 0; b.origin = g
-            })
+            var seriesOptions = this.options,
+                grouping = seriesOptions.grouping,
+                stacking = seriesOptions.stacking,
+                z = 0;
+
+            if (!(grouping !== undefined && !grouping)) {
+                var stacks = this.chart.retrieveStacks(stacking),
+                    stack = seriesOptions.stack || 0,
+                    i; // position within the stack
+                for (i = 0; i < stacks[stack].series.length; i++) {
+                    if (stacks[stack].series[i] === this) {
+                        break;
+                    }
+                }
+                z = (stacks.totalStacks * 10) - (10 * (stacks.totalStacks - stacks[stack].position)) - i;
+            }
+
+            seriesOptions.zIndex = z;
         }
-    }); c.wrap(c.seriesTypes.pie.prototype, "translate", function (d) {
-        d.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) {
-            var a = this, b = a.chart, e = a.options, f = e.depth || 0, g = b.options.chart.options3d, h = { x: b.plotWidth / 2, y: b.plotHeight / 2, z: g.depth }, j = g.alpha, i = g.beta, k = e.stacking ? (e.stack || 0) * f : a._i * f; k += f / 2; e.grouping !== !1 && (k = 0); c.each(a.data, function (b) {
-                b.shapeType =
-                "arc3d"; var c = b.shapeArgs; if (b.y) c.z = k, c.depth = f * 0.75, c.origin = h, c.alpha = j, c.beta = i, c = (c.end + c.start) / 2, b.slicedTranslation = { translateX: G(m(c) * a.options.slicedOffset * m(j * y)), translateY: G(l(c) * a.options.slicedOffset * m(j * y)) }
-            })
+    });
+    function draw3DPoints(proceed) {
+        // Do not do this if the chart is not 3D
+        if (this.chart.is3d()) {
+            var grouping = this.chart.options.plotOptions.column.grouping;
+            if (grouping !== undefined && !grouping && this.group.zIndex !== undefined) {
+                this.group.attr({ zIndex: (this.group.zIndex * 10) });
+            }
+
+            var options = this.options,
+                states = this.options.states;
+
+            this.borderWidth = options.borderWidth = options.edgeWidth || 1;
+
+            Highcharts.each(this.data, function (point) {
+                if (point.y !== null) {
+                    var pointAttr = point.pointAttr;
+
+                    // Set the border color to the fill color to provide a smooth edge
+                    this.borderColor = Highcharts.pick(options.edgeColor, pointAttr[''].fill);
+
+                    pointAttr[''].stroke = this.borderColor;
+                    pointAttr.hover.stroke = Highcharts.pick(states.hover.edgeColor, this.borderColor);
+                    pointAttr.select.stroke = Highcharts.pick(states.select.edgeColor, this.borderColor);
+                }
+            });
         }
-    }); c.wrap(c.seriesTypes.pie.prototype.pointClass.prototype, "haloPath", function (c) { var a = arguments; return this.series.chart.is3d() ? [] : c.call(this, a[1]) }); c.wrap(c.seriesTypes.pie.prototype, "drawPoints", function (d) {
+
+        proceed.apply(this, [].slice.call(arguments, 1));
+    }
+
+    Highcharts.wrap(Highcharts.Series.prototype, 'alignDataLabel', function (proceed) {
+
+        // Only do this for 3D columns and columnranges
+        if (this.chart.is3d() && (this.type === 'column' || this.type === 'columnrange')) {
+            var series = this,
+                chart = series.chart;
+
+            var args = arguments,
+                alignTo = args[4];
+
+            var pos = ({ x: alignTo.x, y: alignTo.y, z: 0 });
+            pos = perspective([pos], chart, true)[0];
+            alignTo.x = pos.x;
+            alignTo.y = pos.y;
+        }
+
+        proceed.apply(this, [].slice.call(arguments, 1));
+    });
+
+    if (Highcharts.seriesTypes.columnrange) {
+        Highcharts.wrap(Highcharts.seriesTypes.columnrange.prototype, 'drawPoints', draw3DPoints);
+    }
+
+    Highcharts.wrap(Highcharts.seriesTypes.column.prototype, 'drawPoints', draw3DPoints);
+
+    /*** 
+        EXTENSION FOR 3D CYLINDRICAL COLUMNS
+        Not supported
+    ***/
+    var defaultOptions = Highcharts.getOptions();
+    defaultOptions.plotOptions.cylinder = Highcharts.merge(defaultOptions.plotOptions.column);
+    var CylinderSeries = Highcharts.extendClass(Highcharts.seriesTypes.column, {
+        type: 'cylinder'
+    });
+    Highcharts.seriesTypes.cylinder = CylinderSeries;
+
+    Highcharts.wrap(Highcharts.seriesTypes.cylinder.prototype, 'translate', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return;
+        }
+
+        var series = this,
+            chart = series.chart,
+            options = chart.options,
+            cylOptions = options.plotOptions.cylinder,
+            options3d = options.chart.options3d,
+            depth = cylOptions.depth || 0,
+            origin = {
+                x: chart.inverted ? chart.plotHeight / 2 : chart.plotWidth / 2,
+                y: chart.inverted ? chart.plotWidth / 2 : chart.plotHeight / 2,
+                z: options3d.depth,
+                vd: options3d.viewDistance
+            },
+            alpha = options3d.alpha;
+
+        var z = cylOptions.stacking ? (this.options.stack || 0) * depth : series._i * depth;
+        z += depth / 2;
+
+        if (cylOptions.grouping !== false) { z = 0; }
+
+        Highcharts.each(series.data, function (point) {
+            var shapeArgs = point.shapeArgs;
+            point.shapeType = 'arc3d';
+            shapeArgs.x += depth / 2;
+            shapeArgs.z = z;
+            shapeArgs.start = 0;
+            shapeArgs.end = 2 * PI;
+            shapeArgs.r = depth * 0.95;
+            shapeArgs.innerR = 0;
+            shapeArgs.depth = shapeArgs.height * (1 / sin((90 - alpha) * deg2rad)) - z;
+            shapeArgs.alpha = 90 - alpha;
+            shapeArgs.beta = 0;
+            shapeArgs.origin = origin;
+        });
+    });
+    /*** 
+        EXTENSION FOR 3D PIES
+    ***/
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype, 'translate', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        // Do not do this if the chart is not 3D
+        if (!this.chart.is3d()) {
+            return;
+        }
+
+        var series = this,
+            chart = series.chart,
+            options = chart.options,
+            seriesOptions = series.options,
+            depth = seriesOptions.depth || 0,
+            options3d = options.chart.options3d,
+            origin = {
+                x: chart.plotWidth / 2,
+                y: chart.plotHeight / 2,
+                z: options3d.depth
+            },
+            alpha = options3d.alpha,
+            beta = options3d.beta;
+
+        var z = seriesOptions.stacking ? (seriesOptions.stack || 0) * depth : series._i * depth;
+        z += depth / 2;
+
+        if (seriesOptions.grouping !== false) { z = 0; }
+
+        Highcharts.each(series.data, function (point) {
+            point.shapeType = 'arc3d';
+            var shapeArgs = point.shapeArgs;
+
+            if (point.y) { // will be false if null or 0 #3006
+                shapeArgs.z = z;
+                shapeArgs.depth = depth * 0.75;
+                shapeArgs.origin = origin;
+                shapeArgs.alpha = alpha;
+                shapeArgs.beta = beta;
+
+                var angle = (shapeArgs.end + shapeArgs.start) / 2;
+
+                point.slicedTranslation = {
+                    translateX: round(cos(angle) * series.options.slicedOffset * cos(alpha * deg2rad)),
+                    translateY: round(sin(angle) * series.options.slicedOffset * cos(alpha * deg2rad))
+                };
+            } else {
+                shapeArgs = null;
+            }
+        });
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype.pointClass.prototype, 'haloPath', function (proceed) {
+        var args = arguments;
+        return this.series.chart.is3d() ? [] : proceed.call(this, args[1]);
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype, 'drawPoints', function (proceed) {
+        // Do not do this if the chart is not 3D
         if (this.chart.is3d()) {
-            var a = this.options, b = this.options.states;
-            this.borderWidth = a.borderWidth = a.edgeWidth || 1; this.borderColor = a.edgeColor = c.pick(a.edgeColor, a.borderColor, void 0); b.hover.borderColor = c.pick(b.hover.edgeColor, this.borderColor); b.hover.borderWidth = c.pick(b.hover.edgeWidth, this.borderWidth); b.select.borderColor = c.pick(b.select.edgeColor, this.borderColor); b.select.borderWidth = c.pick(b.select.edgeWidth, this.borderWidth); c.each(this.data, function (a) {
-                var c = a.pointAttr; c[""].stroke = a.series.borderColor || a.color; c[""]["stroke-width"] = a.series.borderWidth;
-                c.hover.stroke = b.hover.borderColor; c.hover["stroke-width"] = b.hover.borderWidth; c.select.stroke = b.select.borderColor; c.select["stroke-width"] = b.select.borderWidth
-            })
-        } d.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) { var e = this.group; c.each(this.points, function (a) { a.graphic.out.add(e); a.graphic.inn.add(e); a.graphic.side1.add(e); a.graphic.side2.add(e) }) }
-    }); c.wrap(c.seriesTypes.pie.prototype, "drawDataLabels", function (d) {
+            var options = this.options,
+                states = this.options.states;
+
+            // Set the border color to the fill color to provide a smooth edge
+            this.borderWidth = options.borderWidth = options.edgeWidth || 1;
+            this.borderColor = options.edgeColor = Highcharts.pick(options.edgeColor, options.borderColor, undefined);
+
+            states.hover.borderColor = Highcharts.pick(states.hover.edgeColor, this.borderColor);
+            states.hover.borderWidth = Highcharts.pick(states.hover.edgeWidth, this.borderWidth);
+            states.select.borderColor = Highcharts.pick(states.select.edgeColor, this.borderColor);
+            states.select.borderWidth = Highcharts.pick(states.select.edgeWidth, this.borderWidth);
+
+            Highcharts.each(this.data, function (point) {
+                var pointAttr = point.pointAttr;
+                pointAttr[''].stroke = point.series.borderColor || point.color;
+                pointAttr['']['stroke-width'] = point.series.borderWidth;
+                pointAttr.hover.stroke = states.hover.borderColor;
+                pointAttr.hover['stroke-width'] = states.hover.borderWidth;
+                pointAttr.select.stroke = states.select.borderColor;
+                pointAttr.select['stroke-width'] = states.select.borderWidth;
+            });
+        }
+
+        proceed.apply(this, [].slice.call(arguments, 1));
+
         if (this.chart.is3d()) {
-            var a = this; c.each(a.data, function (b) {
-                var c = b.shapeArgs,
-                d = c.r, g = c.depth, h = (c.alpha || a.chart.options.chart.options3d.alpha) * y, c = (c.start + c.end) / 2, b = b.labelPos; b[1] += -d * (1 - m(h)) * l(c) + (l(c) > 0 ? l(h) * g : 0); b[3] += -d * (1 - m(h)) * l(c) + (l(c) > 0 ? l(h) * g : 0); b[5] += -d * (1 - m(h)) * l(c) + (l(c) > 0 ? l(h) * g : 0)
-            })
-        } d.apply(this, [].slice.call(arguments, 1))
-    }); c.wrap(c.seriesTypes.pie.prototype, "addPoint", function (c) { c.apply(this, [].slice.call(arguments, 1)); this.chart.is3d() && this.update(this.userOptions, !0) }); c.wrap(c.seriesTypes.pie.prototype, "animate", function (d) {
+            var seriesGroup = this.group;
+            Highcharts.each(this.points, function (point) {
+                point.graphic.out.add(seriesGroup);
+                point.graphic.inn.add(seriesGroup);
+                point.graphic.side1.add(seriesGroup);
+                point.graphic.side2.add(seriesGroup);
+            });
+        }
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype, 'drawDataLabels', function (proceed) {
         if (this.chart.is3d()) {
-            var a =
-            arguments[1], b = this.options.animation, e = this.center, f = this.group, g = this.markerGroup; if (c.svg) if (b === !0 && (b = {}), a) { if (f.oldtranslateX = f.translateX, f.oldtranslateY = f.translateY, a = { translateX: e[0], translateY: e[1], scaleX: 0.001, scaleY: 0.001 }, f.attr(a), g) g.attrSetters = f.attrSetters, g.attr(a) } else a = { translateX: f.oldtranslateX, translateY: f.oldtranslateY, scaleX: 1, scaleY: 1 }, f.animate(a, b), g && g.animate(a, b), this.animate = null
-        } else d.apply(this, [].slice.call(arguments, 1))
-    }); c.wrap(c.seriesTypes.scatter.prototype,
-    "translate", function (c) { c.apply(this, [].slice.call(arguments, 1)); if (this.chart.is3d()) { var a = this.chart, b = a.options.chart.options3d.depth, e = a.options.zAxis || { min: 0, max: b }, f = b / (e.max - e.min), g = [], h; for (h = 0; h < this.data.length; h++) b = this.data[h], g.push({ x: b.plotX, y: b.plotY, z: (b.z - e.min) * f }); a = n(g, a, !0); for (h = 0; h < this.data.length; h++) b = this.data[h], e = a[h], b.plotXold = b.plotX, b.plotYold = b.plotY, b.plotX = e.x, b.plotY = e.y, b.plotZ = e.z } }); c.wrap(c.seriesTypes.scatter.prototype, "init", function (c) {
-        var a = c.apply(this,
-        [].slice.call(arguments, 1)); if (this.chart.is3d()) this.pointArrayMap = ["x", "y", "z"], this.tooltipOptions.pointFormat = this.userOptions.tooltip ? this.userOptions.tooltip.pointFormat || "x: <b>{point.x}</b><br/>y: <b>{point.y}</b><br/>z: <b>{point.z}</b><br/>" : "x: <b>{point.x}</b><br/>y: <b>{point.y}</b><br/>z: <b>{point.z}</b><br/>"; return a
-    }); if (c.VMLRenderer) c.setOptions({ animate: !1 }), c.VMLRenderer.prototype.cuboid = c.SVGRenderer.prototype.cuboid, c.VMLRenderer.prototype.cuboidPath = c.SVGRenderer.prototype.cuboidPath,
-    c.VMLRenderer.prototype.toLinePath = c.SVGRenderer.prototype.toLinePath, c.VMLRenderer.prototype.createElement3D = c.SVGRenderer.prototype.createElement3D, c.VMLRenderer.prototype.arc3d = function (d) { d = c.SVGRenderer.prototype.arc3d.call(this, d); d.css({ zIndex: d.zIndex }); return d }, c.VMLRenderer.prototype.arc3dPath = c.SVGRenderer.prototype.arc3dPath, c.wrap(c.Axis.prototype, "render", function (c) {
-        c.apply(this, [].slice.call(arguments, 1)); this.sideFrame && (this.sideFrame.css({ zIndex: 0 }), this.sideFrame.front.attr({ fill: this.sideFrame.color }));
-        this.bottomFrame && (this.bottomFrame.css({ zIndex: 1 }), this.bottomFrame.front.attr({ fill: this.bottomFrame.color })); this.backFrame && (this.backFrame.css({ zIndex: 0 }), this.backFrame.front.attr({ fill: this.backFrame.color }))
-    })
-})(Highcharts);
+            var series = this;
+            Highcharts.each(series.data, function (point) {
+                var shapeArgs = point.shapeArgs,
+                    r = shapeArgs.r,
+                    d = shapeArgs.depth,
+                    a1 = (shapeArgs.alpha || series.chart.options.chart.options3d.alpha) * deg2rad, //#3240 issue with datalabels for 0 and null values
+                    a2 = (shapeArgs.start + shapeArgs.end) / 2,
+                    labelPos = point.labelPos;
+
+                labelPos[1] += (-r * (1 - cos(a1)) * sin(a2)) + (sin(a2) > 0 ? sin(a1) * d : 0);
+                labelPos[3] += (-r * (1 - cos(a1)) * sin(a2)) + (sin(a2) > 0 ? sin(a1) * d : 0);
+                labelPos[5] += (-r * (1 - cos(a1)) * sin(a2)) + (sin(a2) > 0 ? sin(a1) * d : 0);
+
+            });
+        }
+
+        proceed.apply(this, [].slice.call(arguments, 1));
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype, 'addPoint', function (proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+        if (this.chart.is3d()) {
+            // destroy (and rebuild) everything!!!
+            this.update(this.userOptions, true); // #3845 pass the old options
+        }
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.pie.prototype, 'animate', function (proceed) {
+        if (!this.chart.is3d()) {
+            proceed.apply(this, [].slice.call(arguments, 1));
+        } else {
+            var args = arguments,
+                init = args[1],
+                animation = this.options.animation,
+                attribs,
+                center = this.center,
+                group = this.group,
+                markerGroup = this.markerGroup;
+
+            if (Highcharts.svg) { // VML is too slow anyway
+
+                if (animation === true) {
+                    animation = {};
+                }
+                // Initialize the animation
+                if (init) {
+
+                    // Scale down the group and place it in the center
+                    group.oldtranslateX = group.translateX;
+                    group.oldtranslateY = group.translateY;
+                    attribs = {
+                        translateX: center[0],
+                        translateY: center[1],
+                        scaleX: 0.001, // #1499
+                        scaleY: 0.001
+                    };
+
+                    group.attr(attribs);
+                    if (markerGroup) {
+                        markerGroup.attrSetters = group.attrSetters;
+                        markerGroup.attr(attribs);
+                    }
+
+                    // Run the animation
+                } else {
+                    attribs = {
+                        translateX: group.oldtranslateX,
+                        translateY: group.oldtranslateY,
+                        scaleX: 1,
+                        scaleY: 1
+                    };
+                    group.animate(attribs, animation);
+
+                    if (markerGroup) {
+                        markerGroup.animate(attribs, animation);
+                    }
+
+                    // Delete this function to allow it only once
+                    this.animate = null;
+                }
+
+            }
+        }
+    });/*** 
+	EXTENSION FOR 3D SCATTER CHART
+***/
+    Highcharts.wrap(Highcharts.seriesTypes.scatter.prototype, 'translate', function (proceed) {
+        //function translate3d(proceed) {
+        proceed.apply(this, [].slice.call(arguments, 1));
+
+        if (!this.chart.is3d()) {
+            return;
+        }
+
+        var series = this,
+            chart = series.chart,
+            depth = chart.options.chart.options3d.depth,
+            zAxis = chart.options.zAxis || { min: 0, max: depth };
+
+        var rangeModifier = depth / (zAxis.max - zAxis.min),
+            raw_points = [],
+            raw_point,
+            projected_points,
+            projected_point,
+            i;
+
+        for (i = 0; i < series.data.length; i++) {
+            raw_point = series.data[i];
+            raw_points.push({
+                x: raw_point.plotX,
+                y: raw_point.plotY,
+                z: (raw_point.z - zAxis.min) * rangeModifier
+            });
+        }
+
+        projected_points = perspective(raw_points, chart, true);
+
+        for (i = 0; i < series.data.length; i++) {
+            raw_point = series.data[i];
+            projected_point = projected_points[i];
+
+            raw_point.plotXold = raw_point.plotX;
+            raw_point.plotYold = raw_point.plotY;
+
+            raw_point.plotX = projected_point.x;
+            raw_point.plotY = projected_point.y;
+            raw_point.plotZ = projected_point.z;
+        }
+    });
+
+    Highcharts.wrap(Highcharts.seriesTypes.scatter.prototype, 'init', function (proceed) {
+        var result = proceed.apply(this, [].slice.call(arguments, 1));
+
+        if (this.chart.is3d()) {
+            // Add a third coordinate
+            this.pointArrayMap = ['x', 'y', 'z'];
+
+            // Set a new default tooltip formatter
+            var default3dScatterTooltip = 'x: <b>{point.x}</b><br/>y: <b>{point.y}</b><br/>z: <b>{point.z}</b><br/>';
+            if (this.userOptions.tooltip) {
+                this.tooltipOptions.pointFormat = this.userOptions.tooltip.pointFormat || default3dScatterTooltip;
+            } else {
+                this.tooltipOptions.pointFormat = default3dScatterTooltip;
+            }
+        }
+        return result;
+    });
+    /**
+     *	Extension to the VML Renderer
+     */
+    if (Highcharts.VMLRenderer) {
+
+        Highcharts.setOptions({ animate: false });
+
+        Highcharts.VMLRenderer.prototype.cuboid = Highcharts.SVGRenderer.prototype.cuboid;
+        Highcharts.VMLRenderer.prototype.cuboidPath = Highcharts.SVGRenderer.prototype.cuboidPath;
+
+        Highcharts.VMLRenderer.prototype.toLinePath = Highcharts.SVGRenderer.prototype.toLinePath;
+
+        Highcharts.VMLRenderer.prototype.createElement3D = Highcharts.SVGRenderer.prototype.createElement3D;
+
+        Highcharts.VMLRenderer.prototype.arc3d = function (shapeArgs) {
+            var result = Highcharts.SVGRenderer.prototype.arc3d.call(this, shapeArgs);
+            result.css({ zIndex: result.zIndex });
+            return result;
+        };
+
+        Highcharts.VMLRenderer.prototype.arc3dPath = Highcharts.SVGRenderer.prototype.arc3dPath;
+
+        Highcharts.wrap(Highcharts.Axis.prototype, 'render', function (proceed) {
+            proceed.apply(this, [].slice.call(arguments, 1));
+            // VML doesn't support a negative z-index
+            if (this.sideFrame) {
+                this.sideFrame.css({ zIndex: 0 });
+                this.sideFrame.front.attr({ fill: this.sideFrame.color });
+            }
+            if (this.bottomFrame) {
+                this.bottomFrame.css({ zIndex: 1 });
+                this.bottomFrame.front.attr({ fill: this.bottomFrame.color });
+            }
+            if (this.backFrame) {
+                this.backFrame.css({ zIndex: 0 });
+                this.backFrame.front.attr({ fill: this.backFrame.color });
+            }
+        });
+
+    }
+
+}(Highcharts));
