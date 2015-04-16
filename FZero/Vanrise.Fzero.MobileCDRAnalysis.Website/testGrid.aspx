@@ -197,7 +197,7 @@
             </div>
         </SelectedItemTemplate>
     </telerik:RadListView>
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:CDRAnalysisConnectionString %>" SelectCommand="SELECT [Id], [StrategyId], [CriteriaId1], [CriteriaId2], [CriteriaId3], [CriteriaId4], [CriteriaId5], [CriteriaId6] FROM [Strategy_Suspicion_Level]"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:CDRAnalysisMobileConnectionString %>" SelectCommand="SELECT [Id], [StrategyId], [CriteriaId1], [CriteriaId2], [CriteriaId3], [CriteriaId4], [CriteriaId5], [CriteriaId6] FROM [Strategy_Suspicion_Level]"></asp:SqlDataSource>
 
 
 
