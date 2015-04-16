@@ -48,10 +48,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         }
        
     }
-    $scope.setActiveClass = function (e) {
+    $scope.parent = null;
+    $scope.child = null;
+    $scope.setActiveClass = function (e , p, c) {
         $('.menu-item-list-ligth').removeClass('active-menu');
         var $this = angular.element(e.currentTarget);
         $this.addClass('active-menu');
+        $scope.parent = p;
+        $scope.child = c; 
+
     }
     
     $scope.menuItems = [

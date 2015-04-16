@@ -715,3 +715,18 @@ input.ui-grid-filter-input[type="text"] {
     padding : 2px 0px 0px 15px ;
     color:#666;
 }
+.chart-wrapper {
+ position: relative;
+ height:inherit;
+ width:auto;
+}
+
+.panel-vr > .panel-heading {
+    background-color: #829EBF;
+    border-color: #829EBF;
+    text-transform:uppercase ;
+    font-weight:bold ;
+    font-size:12px;
+    border-radius:0px ;
+    padding: 5px 15px ;
+}

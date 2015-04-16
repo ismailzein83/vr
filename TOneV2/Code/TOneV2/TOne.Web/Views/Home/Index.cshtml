@@ -12,18 +12,18 @@
     @Styles.Render("~/Content/Styles")
 
 
-    
+
 </head>
 <body ng-controller="mainCtrl">
 
     <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
         <div class="container">
             <div class="navbar-header">
-                
-               
+
+
             </div>
-            <div id="navbar" >
-                
+            <div id="navbar">
+
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -52,7 +52,7 @@
                             </span>
                         </span>
 
-                        <ul class="nav" ng-if="item.childs.length == 0"  data-toggle="collapse" data-parent="#accordion">
+                        <ul class="nav" ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
                             <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.childs">
                                 <a class="menulink " ng-href="{{item.location}}">{{item.name}}</a>
                             </li>
@@ -62,10 +62,10 @@
 
                     </div>
 
-                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0"  class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
+                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
                         <div class="panel-body ">
                             <ul class="nav">
-                                <li class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event)" ng-repeat="c in item.childs"><a class=" menulink" ng-href="{{c.location}}">{{c.name}}</a> </li>
+                                <li class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c)" ng-repeat="c in item.childs"><a class=" menulink" ng-href="{{c.location}}">{{c.name}}</a> </li>
                             </ul>
                         </div>
                     </div>
@@ -83,9 +83,9 @@
 
                     </div>
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
-                        <li role="presentation" >
+                        <li role="presentation">
 
-                           <label class="titel-groupe"> {{item.name}}</label>
+                            <label class="titel-groupe"> {{item.name}}</label>
                         </li>
                         <li role="presentation" class="innerlist" ng-repeat="c in item.childs">
 
@@ -104,6 +104,15 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-lg-12" style="padding-left: 30px;">
+                        <ol class="breadcrumb">
+                            <li><a href="#/default">Home</a></li>
+                            <li ng-show="parent!=null"><a href="">{{parent.name}}</a></li>
+                            <li class="active" ng-show="child!=null">{{child.name}}</li>
+                        </ol>
+
+                    </div>
+
                     <div class="col-lg-12" style="padding-left: 30px;" ng-view>
 
 
@@ -200,7 +209,7 @@
 
         </div>
     *@
-    
+
 
 
 

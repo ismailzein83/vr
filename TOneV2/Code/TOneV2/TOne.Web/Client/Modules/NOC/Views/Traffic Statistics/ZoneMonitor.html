@@ -42,8 +42,8 @@
 
     <div ng-show="showResult">
         <vr-row>
-            <vr-columns colnum="7">
-                <div class="panel-primary">
+            <vr-columns colnum="7" simplecol>
+                <div class="panel-primary panel-vr">
                     <div class="panel-heading">Overall</div>
                     <div class="panel-body">
                         <vr-row removeline>
@@ -54,13 +54,13 @@
                                 <vr-chart data-on-ready="chartSelectedMeasureReady"></vr-chart>
                             </vr-columns>
                         </vr-row>
-                       
+
                     </div>
 
                 </div>
             </vr-columns>
-            <vr-columns colnum="4">
-                <div class="panel-primary">
+            <vr-columns colnum="5" simplecol>
+                <div class="panel-primary panel-vr">
                     <div class="panel-heading">Zone Measures</div>
                     <div class="panel-body">
                         <vr-chart data-on-ready="chartSelectedEntityReady"></vr-chart>
