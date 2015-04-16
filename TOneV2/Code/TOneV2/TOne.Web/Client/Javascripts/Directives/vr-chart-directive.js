@@ -30,7 +30,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                     angular.forEach(currentChartSource.seriesDefinitions, function (sDef) {
                         var serieSettings = {
                             title: sDef.title,
-                            selected: true,
+                            selected: sDef.selected != undefined ? sDef.selected : true,
                             type: sDef.type ? sDef.type : currentChartSource.chartDefinition.type
                         };
                         currentChartSettings.series.push(serieSettings);
