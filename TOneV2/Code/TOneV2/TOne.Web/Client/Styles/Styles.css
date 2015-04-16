@@ -730,3 +730,11 @@ input.ui-grid-filter-input[type="text"] {
     border-radius:0px ;
     padding: 5px 15px ;
 }
+.breadcrumb-vr{
+    padding: 4px 0px;
+    margin-bottom: 0px;
+    list-style: outside none none;
+    background-color: transparent;
+    border-radius: 0px;
+    font-size:12px;
+}
