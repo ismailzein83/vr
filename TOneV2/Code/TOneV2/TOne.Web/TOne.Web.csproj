@@ -448,6 +448,7 @@
     <Content Include="Client\Modules\BI\Views\Dashboards\ZoneDashboard.html" />
     <Content Include="Client\Modules\BI\Views\Reports\ZoneDetails.html" />
     <Content Include="Client\Modules\BI\Views\Reports\ZoneSummary.html" />
+    <Content Include="Client\Modules\NOC\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitor.html" />
     <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitorController.js" />
     <Content Include="Client\Styles\angular-motion.css" />

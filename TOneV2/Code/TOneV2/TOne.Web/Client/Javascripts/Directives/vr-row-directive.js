@@ -7,7 +7,7 @@ app.directive('vrRow', ['$compile', function ($compile) {
         scope: false,
         compile: function (tElement, tAttrs) {
             var removeline = tAttrs.removeline;
-            var newElement = '<div class="row' + (removeline == 'true' ? '' : ' style-row') + '">' + tElement.context.innerHTML + '</div>';
+            var newElement = '<div class="row' + (removeline != undefined ? '' : ' style-row') + '">' + tElement.context.innerHTML + '</div>';
             tElement.html(newElement);            
         }
     };

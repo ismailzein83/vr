@@ -1,7 +1,7 @@
 ﻿/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierTypeEnum) {
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticsMeasureEnum, CarrierTypeEnum) {
 
 
         var chartSelectedMeasureAPI;
@@ -10,7 +10,6 @@ appControllers.controller('ZoneMonitorController',
         var resultKey;
         var sortColumn;
         var sortDescending = true;
-        var measures;
         var currentSortedColDef;
         var trafficStatisticSummary;
 
@@ -66,10 +65,10 @@ appControllers.controller('ZoneMonitorController',
                 gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
                    
                     if (sortColumns.length > 0) {
-                        var measure = $.grep(measures, function (m, index) {
+                        var measure = $.grep(TrafficStatisticsMeasureEnum, function (m, index) {
                             // num = the current value for the item in the array
                             // index = the index of the item in the array
-                            return m.description == sortColumns[0].field; // returns a boolean
+                            return m.propertyName == sortColumns[0].field; // returns a boolean
                         })[0]; 
                         sortColumn = measure;
                        
@@ -169,7 +168,8 @@ appControllers.controller('ZoneMonitorController',
         function load() {
             $scope.fromDate = '2014-04-27';
             $scope.toDate = '2014-04-29';
-            loadMeasureTypes();
+            sortColumn = TrafficStatisticsMeasureEnum.Attempts;
+            defineGrid();
             loadCodeGroups();
             loadSwitches();
             loadCustomers();
@@ -179,9 +179,7 @@ appControllers.controller('ZoneMonitorController',
 
 
         function defineGrid()
-        {
-            if (measures == undefined || measures.length == 0)
-                return;
+        {            
             gridOption = $scope.gridOptionsAllMeasures;
             gridOption.enableHorizontalScrollbar = 0;
             gridOption.enableVerticalScrollbar = 0;
@@ -209,12 +207,12 @@ appControllers.controller('ZoneMonitorController',
             };
             gridOption.columnDefs.push(zoneColumn);
             var valColumnIndex = 0;
-            angular.forEach(measures, function (measureType) {
+            angular.forEach(TrafficStatisticsMeasureEnum, function (measure) {
                 var colDef = {
-                    name: measureType.description,
+                    name: measure.description,
                     headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',//template,
                     enableColumnMenu: false,
-                    field: measureType.description,
+                    field: measure.propertyName,
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 1
@@ -228,17 +226,14 @@ appControllers.controller('ZoneMonitorController',
         function defineOverallGrid() {
             columns = [];
             var firstColumn = {
-                headerText: 'Measure',
-                field: 'measure',
+                field: 'measureDescription',
                 isClickable: function (itm) {
-                    return itm.measure == "Attempts" || itm.measure == "DeliveredAttempts"
-                        || itm.measure == "SuccessfulAttempts" || itm.measure == "DurationsInSeconds" || itm.measure == "UtilizationInSeconds" || itm.measure == "NumberOfCalls" || itm.measure == "DeliveredNumberOfCalls";
+                    return (itm.measure.isSum == true);
                 }
             };
             columns.push(firstColumn);
 
             var secondColumn = {
-                headerText: 'Value',
                 field: 'value',
                 type: "Number"
             };
@@ -289,12 +284,13 @@ appControllers.controller('ZoneMonitorController',
                 if (withSummary) {
                     trafficStatisticSummary = response.Summary;
                     overallGridAPI.data.length = 0;
-                    angular.forEach(measures, function (measureType) {
+                    angular.forEach(TrafficStatisticsMeasureEnum, function (measure) {
                         overallGridAPI.data.push({
-                            measure: measureType.description,
-                            value: trafficStatisticSummary[measureType.description],
+                            measure: measure,
+                            measureDescription: measure.description,
+                            value: trafficStatisticSummary[measure.propertyName],                            
                             clicked: function () {
-                                renderOverallChart(response.Data, measureType.description);
+                                renderOverallChart(response.Data, measure);
                             }
                         });
                     });
@@ -310,7 +306,7 @@ appControllers.controller('ZoneMonitorController',
                     itm.zoneName = itm.GroupKeyValues[0].Name;
                     $scope.gridOptionsAllMeasures.data.push(itm);
                 });
-                renderOverallChart(response.Data, 'Attempts');
+                renderOverallChart(response.Data, TrafficStatisticsMeasureEnum.Attempts);
                 $scope.filterSectionCollapsed = true;
             })
                 .finally(function () {
@@ -322,14 +318,14 @@ appControllers.controller('ZoneMonitorController',
 
         function renderOverallChart(data, measure){
             var chartData = [];
-            var othersValue = trafficStatisticSummary[measure];
+            var othersValue = trafficStatisticSummary[measure.propertyName];
             angular.forEach(data, function (itm) {    
                 chartData.push({
                     zoneId: itm.GroupKeyValues[0].Id,
                     zoneName: itm.GroupKeyValues[0].Name,
-                    value: itm[measure]
+                    value: itm[measure.propertyName]
                 });
-                othersValue -= itm[measure];
+                othersValue -= itm[measure.propertyName];
             });
             chartData.push({
                 zoneName: "Other Destinations",
@@ -337,12 +333,12 @@ appControllers.controller('ZoneMonitorController',
             });
             var chartDefinition = {
                 type: "pie",
-                title: "Overall " + measure,
+                title: "Overall " + measure.description,
                 yAxisTitle: "Value"
             };
 
             var seriesDefinitions = [{
-                title: measure,
+                title: measure.description,
                 titlePath: "zoneName",
                 valuePath: "value"
             }];
@@ -386,11 +382,12 @@ appControllers.controller('ZoneMonitorController',
                     isDateTime: true
                 };
                 var seriesDefinitions = [];
-                for (var i = 0; i < measures.length; i++) {
-                    var measure = measures[i];
+                for ( var measureProp in TrafficStatisticsMeasureEnum){
+                    var measure = TrafficStatisticsMeasureEnum[measureProp];
                     seriesDefinitions.push({
                         title: measure.description,
-                        valuePath: measure.description
+                        valuePath: measure.propertyName,
+                        selected: (measure == TrafficStatisticsMeasureEnum.Attempts || measure == TrafficStatisticsMeasureEnum.DurationsInSeconds)
                     });
                 }
 
@@ -399,21 +396,6 @@ appControllers.controller('ZoneMonitorController',
             .finally(function () {
                 chartSelectedEntityAPI.hideLoader();
             });;
-        }
-
-        function loadMeasureTypes() {
-            AnalyticsAPIService.GetTrafficStatisticMeasureList().then(function (response) {
-                measures = [];
-                angular.forEach(response, function (itm) {                   
-                    measures.push({
-                        value: itm.Value,
-                        description: itm.Description
-                    });
-                });
-
-                sortColumn = measures[2];
-                defineGrid();
-            });
         }
 
         function loadSwitches() {
