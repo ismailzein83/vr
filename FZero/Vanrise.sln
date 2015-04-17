@@ -178,9 +178,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Activities", "Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj", "{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Arguments", "Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj", "{14794A4A-32A7-4273-B3A3-0C1B67831D60}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 28
+		SccNumberOfProjects = 29
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -279,6 +281,10 @@ Global
 		SccProjectTopLevelParentUniqueName27 = Vanrise.sln
 		SccProjectName27 = Vanrise.Fzero.CDRImport.BP.Activities
 		SccLocalPath27 = Vanrise.Fzero.CDRImport.BP.Activities
+		SccProjectUniqueName28 = Vanrise.Fzero.CDRImport.BP.Arguments\\Vanrise.Fzero.CDRImport.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName28 = Vanrise.sln
+		SccProjectName28 = Vanrise.Fzero.CDRImport.BP.Arguments
+		SccLocalPath28 = Vanrise.Fzero.CDRImport.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -393,6 +399,10 @@ Global
 		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -402,5 +412,6 @@ Global
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
 		{57ED5DF8-602D-49AE-86FC-416D446F5CE2} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
 		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
 	EndGlobalSection
 EndGlobal

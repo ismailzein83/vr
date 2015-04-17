@@ -63,6 +63,10 @@
       <Project>{c0443807-ce4e-4d37-8ccd-810c5bed4fd2}</Project>
       <Name>Vanrise.Fzero.CDRImport.BP.Activities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{14794a4a-32a7-4273-b3a3-0c1b67831d60}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRImportProcess.xaml">
