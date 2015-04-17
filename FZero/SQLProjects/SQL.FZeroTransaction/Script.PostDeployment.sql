@@ -32,3 +32,26 @@ VALUES ([ID], [Description])
 -- delete rows that are in the target but not the source 
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE;
+
+
+MERGE INTO bp.[BPDefinition] AS Target 
+USING (VALUES 
+	(N'CDRImportProcess', N'CDR Import Process', N'Vanrise.Fzero.CDRImport.BP.CDRImportProcess, Vanrise.Fzero.CDRImport.BP', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}')
+
+
+) 
+AS Source ([Name], [Title], [FQTN], [Config])
+ON Target.[Name] = Source.[Name] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[Title] = Source.[Title],
+			[FQTN] = Source.[FQTN],
+			[Config]  = Source.[Config]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([Name], [Title], [FQTN], [Config])
+VALUES ([Name], [Title], [FQTN], [Config])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;
