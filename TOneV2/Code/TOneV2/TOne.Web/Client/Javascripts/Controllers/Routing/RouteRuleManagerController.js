@@ -36,6 +36,7 @@
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 2,
             infiniteScrollPercentage: 20,
+            infiniteScrollDown: true,
             enableFiltering: false,
             saveFocus: false,
             saveScroll: true,
@@ -202,10 +203,10 @@
         $scope.getDatalistFilterd = function () {
             
             page = 0;
-            last = false;
-            //$scope.gridOptionsRouteRule.data.length = 0;
-            $scope.gridApi.infiniteScroll.dataLoaded();
+            last = false;            
+            $scope.gridApi.infiniteScroll.resetScroll(false, true);
             $scope.getDatalist(page, pageSize);
+           
 
         }
         $scope.gridOptionsRouteRule.onRegisterApi = function (gridApi) {
@@ -249,6 +250,7 @@
             var h = ((n + 2) * 30) + ($scope.showf == true ? 0 : 30);
             angular.element(document.getElementById('grid1')).css('height', h + 'px');
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
+            $scope.gridApi.infiniteScroll.resetScroll(false, true);
 
         }
         $scope.searchZones = function (text) {
