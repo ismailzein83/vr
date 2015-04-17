@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}</ProjectGuid>
+    <ProjectGuid>{8EA7F723-709A-480A-9ECF-BE40C336A0CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dependencies</RootNamespace>
-    <AssemblyName>Dependencies</AssemblyName>
+    <RootNamespace>Vanrise.Fzero.CDRImport.Entities</RootNamespace>
+    <AssemblyName>Vanrise.Fzero.CDRImport.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,38 +41,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportedCDRBatch.cs" />
+    <Compile Include="ParsedCDRBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libraries\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
-    <Content Include="Libraries\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
-    <Content Include="Libraries\Microsoft.Practices.ServiceLocation.dll" />
-    <Content Include="Libraries\Microsoft.Practices.Unity.dll" />
-    <Content Include="Libraries\Microsoft.Practices.Unity.Interception.dll" />
-    <Content Include="Libraries\Newtonsoft.Json.dll" />
-    <Content Include="Libraries\protobuf-net.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Client.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.Entities.dll" />
-    <Content Include="VanriseFramework\Vanrise.BusinessProcess.WFActivities.dll" />
-    <Content Include="VanriseFramework\Vanrise.Caching.dll" />
-    <Content Include="VanriseFramework\Vanrise.Common.dll" />
-    <Content Include="VanriseFramework\Vanrise.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Logging.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Entities.dll" />
-    <Content Include="VanriseFramework\Vanrise.Queueing.Extensions.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Data.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Data.SQL.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.dll" />
-    <Content Include="VanriseFramework\Vanrise.Runtime.Entities.dll" />
+    <Compile Include="QueueName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

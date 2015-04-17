@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRImport.BP
     {
         public string GetTitle(CreateProcessInput createProcessInput)
         {
-            throw new NotImplementedException();
+            return "CDRImportProcess";
         }
     }
 }
