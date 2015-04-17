@@ -174,17 +174,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.DevRuntime", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLDatabases", "SQLDatabases", "{54B273DC-5F65-479F-B83B-40AF53C16C08}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroTransaction", "SQL.FZeroTransaction\SQL.FZeroTransaction.sqlproj", "{E691E2E6-85AE-47E2-8163-D38A09349556}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroQueue", "SQL.FZeroQueue\SQL.FZeroQueue.sqlproj", "{6DC8E267-E175-43DF-830D-97FDEA1B9120}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroLog", "SQL.FZeroLog\SQL.FZeroLog.sqlproj", "{AFA6B159-3301-4392-ABF3-F6B872549B78}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 29
+		SccNumberOfProjects = 26
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -275,18 +267,6 @@ Global
 		SccProjectTopLevelParentUniqueName25 = Vanrise.sln
 		SccProjectName25 = Dependencies
 		SccLocalPath25 = Dependencies
-		SccProjectUniqueName26 = SQL.FZeroTransaction\\SQL.FZeroTransaction.sqlproj
-		SccProjectTopLevelParentUniqueName26 = Vanrise.sln
-		SccProjectName26 = SQL.FZeroTransaction
-		SccLocalPath26 = SQL.FZeroTransaction
-		SccProjectUniqueName27 = SQL.FZeroQueue\\SQL.FZeroQueue.sqlproj
-		SccProjectTopLevelParentUniqueName27 = Vanrise.sln
-		SccProjectName27 = SQL.FZeroQueue
-		SccLocalPath27 = SQL.FZeroQueue
-		SccProjectUniqueName28 = SQL.FZeroLog\\SQL.FZeroLog.sqlproj
-		SccProjectTopLevelParentUniqueName28 = Vanrise.sln
-		SccProjectName28 = SQL.FZeroLog
-		SccLocalPath28 = SQL.FZeroLog
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -393,24 +373,6 @@ Global
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -418,9 +380,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5995A72F-0E1A-4C75-948D-6E0E2C717E49} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
-		{54B273DC-5F65-479F-B83B-40AF53C16C08} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
-		{E691E2E6-85AE-47E2-8163-D38A09349556} = {54B273DC-5F65-479F-B83B-40AF53C16C08}
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120} = {54B273DC-5F65-479F-B83B-40AF53C16C08}
-		{AFA6B159-3301-4392-ABF3-F6B872549B78} = {54B273DC-5F65-479F-B83B-40AF53C16C08}
 	EndGlobalSection
 EndGlobal
