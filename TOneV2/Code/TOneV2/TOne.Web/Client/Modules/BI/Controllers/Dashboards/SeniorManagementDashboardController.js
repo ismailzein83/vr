@@ -140,12 +140,12 @@
                     
                     var chartDefinition = {
                         type: "pie",
-                        title: chartSettings.chartTitle,
+                     //   title: chartSettings.chartTitle,
                         yAxisTitle: "Value"
                     };
 
                     var seriesDefinitions = [{
-                        title: chartSettings.seriesTitle,
+                        title: measureType.name,//chartSettings.seriesTitle,
                         titlePath: "EntityName",
                         valuePath: "Values[0]"
                     }];

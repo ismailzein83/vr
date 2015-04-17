@@ -330,14 +330,17 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     };
 
                     ctrl.selectValue = function (e, item) {
-                        selectItem(e, item);
+                        selectItem(e, item);                       
+                    };
+
+                    $scope.$watch("ctrl.selectedvalues", function () {
                         if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                             var item = ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.getdatasource());
                             if (item !== undefined) {
                                 selectItem(null, item);
                             }
                         }
-                    };
+                    });
                     
                     ctrl.search = function () {
                         ctrl.setdatasource([]);

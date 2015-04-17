@@ -77,13 +77,12 @@
                         </vr-label>
                     </vr-columns>
                     <vr-columns>
-                        <vr-dropdown datatextfield="description" datavaluefield="value"
-                                     entityname=" " type=" standard" options="optionsTopCount" data-onselectionchange="pageChanged"></vr-dropdown>
+                        <vr-select datasource="topCounts" selectedvalues="selectedTopCount" data-onselectionchanged="pageChanged"></vr-select>
                     </vr-columns>
 
                     <vr-columns colnum="5">
                         <pagination total-items="totalDataCount" ng-model="currentPage" max-size="5" class="pagination-sm" num-pages="numberOfPages"
-                                    items-per-page="optionsTopCount.lastselectedvalue.value" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
+                                    items-per-page="selectedTopCount" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
                     </vr-columns>
                 </vr-row>
             </vr-form>

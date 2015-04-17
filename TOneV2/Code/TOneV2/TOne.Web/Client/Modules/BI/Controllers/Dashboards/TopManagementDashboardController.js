@@ -78,7 +78,7 @@
                     var chartData = $scope.profit;
                     var chartDefinition = {
                         type: "column",
-                        title: "Cost/Sale/Profit",
+                    //    title: "Cost/Sale/Profit",
                         yAxisTitle: "Value"
                     };
                     var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
@@ -99,7 +99,7 @@
 
                     var chartDefinition2 = {
                         type: "column",
-                        title: "Profit",
+               //         title: "Profit",
                         yAxisTitle: "Value"
                     };
                     var xAxisDefinition2 = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };

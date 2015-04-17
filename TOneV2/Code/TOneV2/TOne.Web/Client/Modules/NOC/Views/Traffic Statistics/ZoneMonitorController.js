@@ -39,14 +39,8 @@ appControllers.controller('ZoneMonitorController',
             }
             $scope.testModel = 'ZoneMonitorController';
 
-            $scope.optionsTopCount = {
-                datasource: [
-                { description: "5", value: 5 },
-                { description: "10", value: 10 },
-                { description: "15", value: 15 }
-                ]
-            };
-            $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
+            $scope.topCounts = [5, 10, 15];
+            $scope.selectedTopCount = $scope.topCounts[1];
 
             $scope.switches = [];
             $scope.selectedSwitches = [];
@@ -237,7 +231,7 @@ appControllers.controller('ZoneMonitorController',
             if (chartSelectedEntityAPI)
                 chartSelectedEntityAPI.hideChart();
 
-            var count = $scope.optionsTopCount.lastselectedvalue.value;
+            var count = $scope.selectedTopCount;
            
             var fromRow = ($scope.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;

@@ -28,16 +28,32 @@
         </vr-actionbar>
     </vr-row>
     <vr-row>
-        <vr-columns colnum="5">
-            <vr-chart data-on-ready="chartTopDestinationsReady"></vr-chart>
+        <vr-columns colnum="6" simplecol>
+            <div class="panel-primary panel-vr">
+                <div class="panel-heading">Top Destinations</div>
+                <div class="panel-body">
+                     <vr-chart data-on-ready="chartTopDestinationsReady"></vr-chart>
+                </div>
+            </div>
+            
         </vr-columns>
     </vr-row>
     <vr-row>
-        <vr-columns colnum="5">
-            <vr-chart data-on-ready="chartTopCustomersReady" ></vr-chart>
+        <vr-columns colnum="6" simplecol>
+            <div class="panel-primary panel-vr">
+                <div class="panel-heading">Top Customers</div>
+                <div class="panel-body">
+                    <vr-chart data-on-ready="chartTopCustomersReady"></vr-chart>
+                </div>
+            </div>            
         </vr-columns>
-        <vr-columns colnum="5">
-            <vr-chart data-on-ready="chartTopSuppliersReady" ></vr-chart>
+        <vr-columns colnum="6" simplecol>
+            <div class="panel-primary panel-vr">
+                <div class="panel-heading">Top Suppliers</div>
+                <div class="panel-body">
+                    <vr-chart data-on-ready="chartTopSuppliersReady"></vr-chart>
+                </div>
+            </div>            
         </vr-columns>
     </vr-row>
 </vr-panel>

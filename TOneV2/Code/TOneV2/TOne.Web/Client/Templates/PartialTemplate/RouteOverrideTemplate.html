@@ -1,8 +1,9 @@
 ﻿<div ng-controller="RouteOverrideController">
     <vr-columns colnum="2">
        
-        <vr-select ismultipleselection hideselectedvaluessection="true" datasource="optionsSuppliers.datasource" selectedvalues="optionsSuppliers.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
-                   entityname="Suppliers"></vr-select>
+        <vr-select ismultipleselection hideselectedvaluessection="true" datasource="optionsSuppliers.datasource"
+                   selectedvalues="optionsSuppliers.selectedvalues" datatextfield="Name"
+                   datavaluefield="CarrierAccountID" entityname="Suppliers" isrequired></vr-select>
     </vr-columns>
     <vr-columns colnum="3"  ng-class="optionsSuppliers.selectedvalues.length == 0 ? 'emptycol':''">
         <ul class="list-group" style="margin:0px" ng-show="optionsSuppliers.selectedvalues.length > 0">
