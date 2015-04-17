@@ -61,7 +61,7 @@ namespace TOne.LCR.Business
             {
                 Func<RouteRule, bool> filter = (rule) =>
                     {
-                        if (ruleTypes != null && ruleTypes.Count > 0 && !ruleTypes.Contains(rule.ActionData.GetType().AssemblyQualifiedName))
+                        if (ruleTypes != null && ruleTypes.Count > 0 && !ruleTypes.Contains(rule.ActionData.GetType().Name))
                             return false;
 
 
@@ -109,7 +109,7 @@ namespace TOne.LCR.Business
                             bool anyFound = false;
                             foreach (var customerId in customerIds)
                             {
-                                if (!rule.CarrierAccountSet.IsAccountIdIncluded(customerId))
+                                if (rule.CarrierAccountSet.IsAccountIdIncluded(customerId))
                                     anyFound = true;
                             }
                             if (!anyFound)

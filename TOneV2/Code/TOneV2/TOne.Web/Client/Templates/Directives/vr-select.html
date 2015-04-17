@@ -12,10 +12,10 @@
                             <div class="inner-addon right-addon">
 
                                 <i ng-if="! ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
-                                <input ng-if="!ctrl.isRemoteLoad()" type="text" class="form-control input-sm" ng-model="ctrl.filtername"  ng-click="ctrl.muteAction($event)" />
+                                <input ng-if="!ctrl.isRemoteLoad()" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-click="ctrl.muteAction($event)" />
 
                                 <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
-                                <input ng-if="ctrl.isRemoteLoad()" class="form-control input-sm" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
+                                <input ng-if="ctrl.isRemoteLoad()" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-click="ctrl.muteAction($event)" ng-model="ctrl.filtername" ng-change="ctrl.search();">
 
                             </div>
                         </div>

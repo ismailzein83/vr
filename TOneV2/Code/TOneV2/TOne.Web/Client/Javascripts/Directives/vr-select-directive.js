@@ -191,7 +191,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
 
                     var lblTemplate = '<label  id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true">'
                     + '<label class="hand-cursor" style="display: inline-block; min-width: 100px; font-size: 12px;'
-                    + ' border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">'
+                    + ' border-width: 0px 0px 1px 1px;border-style: solid;border-color: #F0F0F0; border-bottom-left-radius: 4px; padding: 5px; ">By '
                     + '{{ctrl.getLabel()}}<span style="float:right;top:8px;position:relative" class="caret"></span></label> </label>';
 
 

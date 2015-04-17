@@ -11,9 +11,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $animate.enabled(false, $('#collapsedmenu'));
     
     $scope.toogled = true;
-    $scope.toggledpanel = function () {
-     
+    $scope.toggledpanel = function () {       
         $scope.toogled = !$scope.toogled;
+        
+        
     }
     $scope.showMenu = function (e) {
        
@@ -34,7 +35,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         }, 200);
         
     }
-   
+    $(window).resize(function () {       
+            var w = window.innerWidth;
+            if (w >= 768)
+                $scope.toogled = true;
+            else 
+                $scope.toogled = false;
+    });
     $scope.menuItemsCurrent = -1;
     $scope.setIndex = function (i, e) {
         $('.panel-heading').removeClass('active-menu-parent');
@@ -50,10 +57,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     }
     $scope.parent = null;
     $scope.child = null;
-    $scope.setActiveClass = function (e , p, c) {
-        $('.menu-item-list-ligth').removeClass('active-menu');
-        var $this = angular.element(e.currentTarget);
-        $this.addClass('active-menu');
+    $scope.setActiveClass = function (e, p, c) {
+        if (e != null) {
+            $('.menu-item-list-ligth').removeClass('active-menu');
+            var $this = angular.element(e.currentTarget);
+            $this.addClass('active-menu');
+        }      
         $scope.parent = p;
         $scope.child = c; 
 

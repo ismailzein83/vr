@@ -1,11 +1,48 @@
 ﻿
 <vr-panel>
     <vr-row>
-        <vr-columns colnum="12">
-            <h3 class="text-center">
-                Customer Route Rule Management
-            </h3>
-        </vr-columns>
+
+        <form>
+            <vr-columns colnum="3">
+                <label>Type</label>
+                <vr-select ismultipleselection hideselectedvaluessection="true" datatextfield="name" datavaluefield="objectType"
+                           datasource="optionsRouteTypeF.datasource" selectedvalues="optionsRouteTypeF.selectedvalues"></vr-select>
+            </vr-columns>
+            <vr-columns colnum="3">
+                <vr-label>Customer</vr-label>
+                <vr-select ismultipleselection datasource="optionsCustomersF.datasource" selectedvalues="optionsCustomersF.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
+                           entityname="Customers">
+
+                </vr-select>
+            </vr-columns>
+            <vr-columns colnum="3">
+                <div class="dropdown option-filter" id="optionddl">
+                    <label class="dropdown-toggle hand-cursor" id="dropdownMenuOptions" data-toggle="dropdown" aria-expanded="true" ng-init="option=1" ng-model='option'>
+                        By {{option == 1 ? "  Zones " : " Code "}}
+                    </label>
+                    <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuOptions">
+                        <li role="presentation" ng-show="option != 1">
+                            <label class="item-menu hand-cursor" ng-click="option = 1">Zones</label>
+                        </li>
+                        <li role="presentation" ng-show="option != 2">
+                            <label class="item-menu hand-cursor" ng-click="option = 2">Code</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <vr-select ng-show="option == 1" ismultipleselection datasource="searchZones" selectedvalues="optionsZonesFilter.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
+                           entityname="Zones"></vr-select>
+
+
+                <number-filed ng-show="option == 2" input-value="code" />
+
+            </vr-columns>
+
+
+
+            <!--<button ng-click="getDatalistFilterd()" class="btn btn-default">Search</button>-->
+        </form>
+
     </vr-row>
     <vr-row>
         <div class="action-bar">
@@ -41,8 +78,9 @@
                         <span style="padding-left:4px" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                     </span>
                 </button>
-
                 <button type="button" class="btn btn-default btncustom btncustom action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+
+                <vr-button type="Search" data-onclick="getDatalistFilterd"  ></vr-button>
 
             </div>
         </div>
@@ -58,7 +96,7 @@
             </div>
 
         </vr-columns>
-        <vr-columns colnum="12" nopadding nomargin  ng-show="showHis==true">
+        <vr-columns colnum="12" nopadding nomargin ng-show="showHis==true">
 
             <div id="grid2" class="gridroute" ui-grid="gridOptionsHistory">
             </div>

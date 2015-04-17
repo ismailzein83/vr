@@ -4,7 +4,8 @@ var RoutingAPIService = function (BaseAPIService) {
     return ({
         getAllRouteRule:getAllRouteRule,
         getRouteRuleDetails: getRouteRuleDetails,
-        saveRouteRule: saveRouteRule
+        saveRouteRule: saveRouteRule,
+        GetFilteredRouteRules: GetFilteredRouteRules,
     });
     function getAllRouteRule(page, pageSize) {      
         return BaseAPIService.get("/api/routing/GetAllRouteRule",

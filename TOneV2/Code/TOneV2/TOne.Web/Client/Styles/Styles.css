@@ -738,3 +738,7 @@ input.ui-grid-filter-input[type="text"] {
     border-radius: 0px;
     font-size:12px;
 }
+/*.vr-container{
+    overflow-x: hidden;
+    padding: 0px 6px 0px 15px;
+}*/

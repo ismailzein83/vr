@@ -1,4 +1,4 @@
-﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingAPIService, $modal) {
+﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingAPIService,CarriersService,ZonesService, $modal) {
     var pageSize = 40;
     var page = 0;
     var pageUp = 0;
@@ -12,17 +12,25 @@
     function defineScopeObjects() {
         $scope.numberoflines = 10;
         $scope.isloadingdata = false;
-        $scope.optionsRuleType = {
+      
+        $scope.optionsZonesFilter = {
             selectedvalues: [],
-            datasource: [],
-            lastselectedvalue: ""
+            datasource: []
         };
-        $scope.optionsRuleType.datasource = [
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
-        ]
-
+        
+        $scope.optionsCustomersF = {
+            selectedvalues: [],
+            datasource: []
+        };
+        $scope.optionsRouteTypeF = {
+            datasource: [],
+            selectedvalues: []
+        };
+        $scope.optionsRouteTypeF.datasource = [
+            { name: 'Override Route', url: '/Client/Templates/PartialTemplate/RouteOverrideTemplate.html', objectType: 'TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities', typeName: 'OverrideRouteActionData' },
+            { name: 'Priority Rule', url: '/Client/Templates/PartialTemplate/PriorityTemplate.html', objectType: 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities', typeName: 'PriorityRouteActionData' },
+            { name: 'Block Route', url: '/Client/Templates/PartialTemplate/RouteBlockTemplate.html', objectType: 'TOne.LCR.Entities.BlockRouteActionData, TOne.LCR.Entities', typeName: 'BlockRouteActionData' }
+        ];
         var last = false;
         $scope.gridOptionsRouteRule = {
             enableHorizontalScrollbar: 0,
@@ -129,12 +137,42 @@
             
 
          }
-        
+         var buildFilter =  function (page, pageSize){
+
+             var filter = {
+                 PageNumber: page,
+                 PageSize : pageSize 
+             }
+             if ($scope.optionsCustomersF.selectedvalues.length > 0) {
+                 filter.CustomerIds = [];
+                 angular.forEach($scope.optionsCustomersF.selectedvalues, function (customers) {
+                     filter.CustomerIds.push(customers.CarrierAccountID);
+                 });
+             }
+             if ($scope.optionsRouteTypeF.selectedvalues.length > 0) {
+                 filter.RuleTypes = [];
+                 angular.forEach($scope.optionsRouteTypeF.selectedvalues, function (type) {
+                     filter.RuleTypes.push(type.typeName);
+                 });
+             }
+             if($scope.option ==1 && $scope.optionsZonesFilter.selectedvalues.length > 0 ){
+                 filter.ZoneIds = [];
+                 angular.forEach($scope.optionsZonesFilter.selectedvalues, function (zone) {
+                     filter.ZoneIds.push(zone.ZoneId);
+                 });
+             }
+             if($scope.option ==2 && $scope.code!='' ){
+                 filter.code =  $scope.code;                
+             }
+             return filter;
+         }
+
         var getData = function (data, page) {
             var res = [];
             for (var i = (page * pageSize) ; i < (page + 1) * pageSize && i < data.length; ++i) {
                 res.push(data[i]);
             }
+            
             return res;
         };
 
@@ -152,21 +190,31 @@
         };
 
         $scope.getDatalist = function (page, pageSize) {
-            $scope.isloadingdata = true;           
-            RoutingAPIService.getAllRouteRule(page, pageSize)
+            $scope.isloadingdata = true;
+            RoutingAPIService.GetFilteredRouteRules(buildFilter(page, pageSize))
              .then(function (data) {
                  $scope.isloadingdata = false;
                  $scope.gridOptionsRouteRule.data = getData(data, page);
                  ++page;
              })
 
-        }      
+        }
+        $scope.getDatalistFilterd = function () {
+            
+            page = 0;
+            last = false;
+            //$scope.gridOptionsRouteRule.data.length = 0;
+            $scope.gridApi.infiniteScroll.dataLoaded();
+            $scope.getDatalist(page, pageSize);
+
+        }
         $scope.gridOptionsRouteRule.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
                 if (last==false) {
                     $scope.isloadingdata = true;
-                    RoutingAPIService.getAllRouteRule(page, pageSize)
+                                           
+                    RoutingAPIService.GetFilteredRouteRules(buildFilter(page, pageSize))
                     .then(function (data) {
                         $scope.isloadingdata = false;
                         $scope.gridOptionsRouteRule.data = $scope.gridOptionsRouteRule.data.concat(data);
@@ -203,6 +251,9 @@
             $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
 
         }
+        $scope.searchZones = function (text) {
+            return ZonesService.getSalesZones(text);
+        }
 
     }
     function load() {
@@ -213,12 +264,46 @@
         $('.action-bar-ddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+        var dropdownHidingTimeoutHandleropt;
+        $('#optionddl').on('show.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+        });
+
+        //ADD SLIDEUP ANIMATION TO DROPDOWN //
+        $('#optionddl').on('hide.bs.dropdown', function (e) {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+        });
+
+        $('.option-filter').on('mouseenter', function () {
+            var $this = $(this);
+            clearTimeout(dropdownHidingTimeoutHandleropt);
+            if (!$this.hasClass('open')) {
+                $('.dropdown-toggle', $this).dropdown('toggle');
+            }
+        });
+
+        $('.option-filter').on('mouseleave', function () {
+            var $this = $(this);
+            dropdownHidingTimeoutHandleropt = setTimeout(function () {
+                if ($this.hasClass('open')) {
+                    $('.dropdown-toggle', $this).dropdown('toggle');
+                }
+            }, 150);
+        });
+
+
+
         $scope.getDatalist(page, pageSize);
+
+        CarriersService.getCustomers().then(function (response) {
+            $scope.optionsCustomersF.datasource = response;
+           
+        })
     }
     
 
 }
-RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants', 'RoutingAPIService', '$modal'];
+RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants', 'RoutingAPIService', 'CarriersService', 'ZonesService', '$modal'];
 
 appControllers.controller('RouteRuleManagerController', RouteRuleManagerController)
 
