@@ -19,6 +19,9 @@ var RoutingAPIService = function (BaseAPIService) {
                 RouteRuleId: RouteRuleId
             });
     }
+    function GetFilteredRouteRules(filter) {
+        return BaseAPIService.post("/api/routing/GetFilteredRouteRules", filter);
+    }
     function saveRouteRule(routeRule) {
 
         return BaseAPIService.post("/api/routing/SaveRouteRule", routeRule);

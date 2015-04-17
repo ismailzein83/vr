@@ -54,6 +54,75 @@ namespace TOne.LCR.Business
             return dataManager.GetAllRouteRule();
         }
 
+        public IEnumerable<RouteRule> GetFilteredRouteRules(List<string> ruleTypes, List<int> zoneIds, string code, List<string> customerIds, int pageNumber, int pageSize)
+        {
+            IEnumerable<RouteRule> rules = GetAllRouteRule();
+            if(rules != null)
+            {
+                Func<RouteRule, bool> filter = (rule) =>
+                    {
+                        if (ruleTypes != null && ruleTypes.Count > 0 && !ruleTypes.Contains(rule.ActionData.GetType().AssemblyQualifiedName))
+                            return false;
+
+
+                        var codeSetMatch = rule.CodeSet.GetMatch();
+
+                        if (!String.IsNullOrEmpty(code))
+                        {
+                            bool isFound = false;
+                            if (codeSetMatch.IsMatchingAllZones
+                                ||
+                                (
+                                    codeSetMatch.MatchCodes != null
+                                    &&
+                                    (codeSetMatch.MatchCodes.ContainsKey(code)
+                                    ||
+                                    codeSetMatch.MatchCodes.Any(itm => itm.Value && code.StartsWith(itm.Key))
+                                    )
+                                 )
+                                )
+                                isFound = true;
+                            if (!isFound || rule.CodeSet.IsCodeExcluded(code))
+                                return false;
+                        }
+
+                        if (zoneIds != null && zoneIds.Count > 0)
+                        {
+                            bool anyFound = false;
+                            foreach (var zoneId in zoneIds)
+                            {
+                                if ((codeSetMatch.MatchZoneIds != null && codeSetMatch.MatchZoneIds.Contains(zoneId))
+                                    ||
+                                (codeSetMatch.IsMatchingAllZones && !rule.CodeSet.IsZoneExcluded(zoneId)))
+                                {
+                                    anyFound = true;
+                                    break;
+                                }
+                            }
+                            if (!anyFound)
+                                return false;
+                        }
+
+
+                        if (customerIds != null && customerIds.Count > 0)
+                        {
+                            bool anyFound = false;
+                            foreach (var customerId in customerIds)
+                            {
+                                if (!rule.CarrierAccountSet.IsAccountIdIncluded(customerId))
+                                    anyFound = true;
+                            }
+                            if (!anyFound)
+                                return false;
+                        }
+
+                        return true;
+                    };
+                rules = rules.Where(filter).Skip(pageNumber * pageSize).Take(pageSize);
+            }
+            return rules;
+        }
+
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();

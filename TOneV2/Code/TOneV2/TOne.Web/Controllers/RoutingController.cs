@@ -44,6 +44,17 @@ namespace TOne.Web.Controllers
 
         }
 
+        [HttpPost]
+        public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRouteRulesInput filter)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            var rules = manager.GetFilteredRouteRules(filter.RuleTypes, filter.ZoneIds, filter.Code, filter.CustomerIds, filter.PageNumber, filter.PageSize);
+            if (rules != null)
+                return Mappers.MapRouteRules(rules);
+            else
+                return null;            
+        }
+
         [HttpGet]
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
@@ -54,6 +65,18 @@ namespace TOne.Web.Controllers
         }
         
     }
+
+    #region Argument Classes
+    public class GetFilteredRouteRulesInput
+    {
+        public List<string> RuleTypes { get; set; }
+        public List<int> ZoneIds { get; set; }
+        public string Code { get; set; }
+        public List<string> CustomerIds { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+    }
+    #endregion
 
     public class CustomJSONTypeHandlingAttribure : Attribute, IControllerConfiguration
     {

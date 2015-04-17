@@ -35,8 +35,8 @@
                 if (timeDimensionValue > maxTimeDimension)
                     maxTimeDimension = timeDimensionValue;
             }
-            $scope.fromDate = '2012-01-02';
-            $scope.toDate = '2012-04-28';
+            $scope.fromDate = '2015-02-15';
+            $scope.toDate = '2015-04-15';
 
 
             

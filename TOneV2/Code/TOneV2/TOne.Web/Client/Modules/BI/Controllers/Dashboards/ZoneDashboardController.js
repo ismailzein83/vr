@@ -71,8 +71,8 @@
 
         function initializeValues()
         {
-            $scope.fromDate = '2012-01-02';
-            $scope.toDate = '2012-03-01';
+            $scope.fromDate = '2015-02-15';
+            $scope.toDate = '2015-04-15';
             $scope.optionsMeasureTypes.lastselectedvalue = $scope.optionsMeasureTypes.datasource[0];
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
         }

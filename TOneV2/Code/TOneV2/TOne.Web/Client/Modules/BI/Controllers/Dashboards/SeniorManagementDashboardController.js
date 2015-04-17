@@ -10,10 +10,10 @@
 
             $scope.testModel = 'SeniorManagementDashboardController';
             $scope.dateTimeFilterOption = {
-                datasource: [{ name: "Today", value: 0, fromDate: '2012-1-2', toDate: '2012-1-3' },
-            { name: "WTD", value: 1, fromDate: '2012-1-2', toDate: '2012-02-9' },
-            { name: "MTD", value: 2, fromDate: '2012-1-2', toDate: '2013-2-2' },
-            { name: "YTD", value: 3, fromDate: '2011-1-2', toDate: '2014-1-1' }]
+                datasource: [{ name: "Today", value: 0, fromDate: '2015-3-30', toDate: '2015-3-30' },
+            { name: "WTD", value: 1, fromDate: '2015-3-23', toDate: '2015-3-30' },
+            { name: "MTD", value: 2, fromDate: '2015-3-01', toDate: '2015-3-31' },
+            { name: "YTD", value: 3, fromDate: '2014-3-31', toDate: '2015-3-31' }]
             };
 
             $scope.optionsMeasureTypes = {

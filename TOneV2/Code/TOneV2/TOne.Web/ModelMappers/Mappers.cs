@@ -26,13 +26,13 @@ namespace TOne.Web.ModelMappers
             };
         }
 
-        public static List<RouteRuleSummaryModel> MapRouteRules(List<RouteRule> routs)
+        public static IEnumerable<RouteRuleSummaryModel> MapRouteRules(IEnumerable<RouteRule> rules)
         {
             List<RouteRuleSummaryModel> models = new List<RouteRuleSummaryModel>();
-            if (routs != null )
-                foreach (var route in routs)
+            if (rules != null )
+                foreach (var rule in rules)
                 {
-                    models.Add(MapRouteRule(route));
+                    models.Add(MapRouteRule(rule));
                 }
             return models;
         }
