@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP", "Vanrise.Fzero.CDRImport.BP\Vanrise.Fzero.CDRImport.BP.csproj", "{57ED5DF8-602D-49AE-86FC-416D446F5CE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Activities", "Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj", "{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}"
@@ -28,6 +30,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{c42ea41e-45f6-49fa-bcec-d13f8cc03e27}|Vanrise.Fzero.MobileCDRAnalysis.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Vanrise.Fzero.MobileCDRAnalysis.Website"
 		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Vanrise.Fzero.MobileCDRAnalysis.Website\"
@@ -43,6 +46,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "45816"
+		SlnRelativePath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
