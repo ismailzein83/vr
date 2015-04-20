@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 
@@ -20,7 +21,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
     #endregion
 
-    public class SaveCDRsToDB : BaseAsyncActivity<SaveCDRsToDBInput>
+    public class SaveCDRsToDB : DependentAsyncActivity<SaveCDRsToDBInput>
     {
         #region Arguments
 
@@ -29,19 +30,26 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         #endregion
 
-        protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            inputArgument.InputQueue.TryDequeue(
-                        (CDRBatch) =>
+            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (item) =>
                         {
-                           // CDRBatch.cdrs
-
-                           // Object preparedMainCDRs = dataManager.PrepareCDRsForDBApply(CDR.CDRs, CDR.SwitchId);
-                           // dataManager.ApplyCDRsToDB(preparedMainCDRs);
+                            Object preparedCDRs = dataManager.PrepareCDRsForDBApply(item.cdrs);
+                            dataManager.ApplyCDRsToDB(preparedCDRs);
                         });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
         }
 
-        protected override SaveCDRsToDBInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
+        protected override SaveCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new SaveCDRsToDBInput
             {

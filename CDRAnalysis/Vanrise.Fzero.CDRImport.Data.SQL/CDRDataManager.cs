@@ -18,18 +18,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         }
 
 
-        public void ApplyMainCDRsToDB(Object preparedMainCDRs)
+        public void ApplyCDRsToDB(Object preparedCDRs)
         {
-            List<BulkInsertInfo> listPreparedCDRs = (List<BulkInsertInfo>)preparedMainCDRs;
-
-            Parallel.ForEach(listPreparedCDRs, item =>
-            {
-                InsertBulkToTable(item);
-            });
-
+            InsertBulkToTable(preparedCDRs as BulkInsertInfo);
         }
 
-        private BulkInsertInfo PrepareCDRsForDBApply(List<CDR> cdrs)
+        public Object PrepareCDRsForDBApply(List<CDR> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
 
@@ -72,7 +66,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 TableName = "[dbo].[NormalCDR]",
                 DataFilePath = filePath,
                 TabLock = false,
-                FieldSeparator = '^'
+                FieldSeparator = ','
             };
         }
 
