@@ -287,7 +287,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.dll.config" />
     <None Include="Dependencies\MySql.Data.Entity.EF5.dll.refresh" />
     <None Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -308,16 +307,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\log4net.dll" />
-    <Content Include="bin\Debug\log4net.xml" />
-    <Content Include="bin\Debug\MySql.Data.Entity.EF5.dll" />
-    <Content Include="bin\Debug\MySql.Data.Entity.EF6.dll" />
-    <Content Include="bin\Debug\MySql.Fabric.Plugin.dll" />
-    <Content Include="bin\Debug\Telerik.Web.UI.dll" />
-    <Content Include="bin\Debug\Telerik.Web.UI.xml" />
-    <Content Include="bin\Debug\Vanrise.CommonLibrary.dll" />
-    <Content Include="bin\Debug\Vanrise.CommonLibrary.pdb" />
-    <Content Include="bin\Debug\Vanrise.Fzero.MobileCDRAnalysis.dll" />
     <Content Include="Dependencies\EntityFramework.dll" />
     <Content Include="Dependencies\EntityFramework.xml" />
     <Content Include="Dependencies\MySql.Data.dll" />
