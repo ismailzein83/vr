@@ -37,14 +37,25 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 //file =File.ReadAllBytes(fileName)
           //  });
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new CreateProcessInput
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "CDRImportProcess",
+            //    InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput
+            //    {
+            //    }
+            //});
+
+
+            BPClient bpClient2 = new BPClient();
+            bpClient2.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "CDRImportProcess",
-                InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput
+                ProcessName = "SaveCDRToDBProcess",
+                InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput
                 {
                 }
             });
+
 
             Console.WriteLine("END");
             Console.ReadKey();

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Fzero.CDRImport.Data
+namespace Vanrise.Fzero.CDRImport.BP.Arguments
 {
-    public interface IDataManager
+    public class SaveCDRToDBProcessInput
     {
-
-
     }
 }
