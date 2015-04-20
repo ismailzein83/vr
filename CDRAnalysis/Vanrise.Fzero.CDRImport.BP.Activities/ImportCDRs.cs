@@ -69,14 +69,24 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     var i = sr.ReadLine();
 
                                     CDR cdr = new CDR();
-                                    cdr.Source_Type = i.Substring(0, 9);
-                                    cdr.Source_Name = i.Substring(9, 19);
-                                    cdr.Source_File = i.Substring(20, 29);
-                                    cdr.Record_Type = i.Substring(30, 39);
-                                    cdr.Call_Type = i.Substring(40, 49);
-                                    cdr.IMEI = i.Substring(50, 59);
-                                    cdr.IMEI14 = i.Substring(60, 69);
-                                    cdr.Entity = i.Substring(70, 79);
+                                    cdr.MSISDN = i.Substring(146,20).Trim();
+                                    cdr.IMSI = i.Substring(126,20).Trim();
+                                    cdr.ConnectDateTime = i.Substring( 222,14).Trim();
+                                    cdr.Destination = i.Substring( 199,20).Trim();
+                                    cdr.DurationInSeconds = i.Substring( 435,10).Trim();
+                                    cdr.Call_Class = i.Substring( 236,5).Trim();
+                                    cdr.Call_Type = i.Substring( 103,3).Trim();
+                                    cdr.Sub_Type = i.Substring( 166,10).Trim();
+                                    cdr.IMEI = i.Substring( 106,20).Trim();
+                                    cdr.BTS_Id = i.Substring(253, 22).Trim().Substring(i.Substring(253, 22).Length - 1);
+                                    cdr.Cell_Id = i.Substring( 253,22).Trim();
+                                    cdr.Up_Volume = i.Substring( 589,10).Trim();
+                                    cdr.Down_Volume = i.Substring( 599,10).Trim();
+                                    cdr.Cell_Latitude = i.Substring( 610,9).Trim();
+                                    cdr.Cell_Longitude = i.Substring( 619,9).Trim();
+                                    cdr.In_Trunk = i.Substring( 415,20).Trim();
+                                    cdr.Out_Trunk = i.Substring( 395,20).Trim();
+
                                     CDRs.Add(cdr);
                                 }
                             }

@@ -8,14 +8,31 @@ namespace Vanrise.Fzero.CDRImport.Entities
 {
     public class CDR
     {
-        public string Source_Type { get; set; }
-        public string Source_Name { get; set; }
-        public string Source_File { get; set; }
-        public string Record_Type { get; set; }
-        public string Call_Type { get; set; }
-        public string IMEI { get; set; }
-        public string IMEI14 { get; set; }
-        public string Entity { get; set; }
+
+          public string MSISDN  { get; set; }
+          public string IMSI { get; set; }
+          public string ConnectDateTime { get; set; }
+          public string Destination { get; set; }
+          public string DurationInSeconds { get; set; }
+          public string DisconnectDateTime { get; set; }
+          public string Call_Class { get; set; }
+          public string IsOnNet { get; set; }
+          public string Call_Type { get; set; }
+          public string Sub_Type { get; set; }
+          public string IMEI { get; set; }
+          public string BTS_Id { get; set; }
+          public string Cell_Id { get; set; }
+          public string SwitchRecordId { get; set; }
+          public string Up_Volume { get; set; }
+          public string Down_Volume { get; set; }
+          public string Cell_Latitude { get; set; }
+          public string Cell_Longitude { get; set; }
+          public string In_Trunk { get; set; }
+          public string Out_Trunk { get; set; }
+          public string Service_Type { get; set; }
+          public string Service_VAS_Name { get; set; }
+                      
+        
 
     }
 }
