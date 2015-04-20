@@ -130,6 +130,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.CommonLibrary">
+      <HintPath>..\Dependencies\Libraries\Vanrise.CommonLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MysqlService.cs">
@@ -225,12 +228,6 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj">
-      <Project>{a0a85889-ced2-4de6-bda9-fef2c10eb564}</Project>
-      <Name>Vanrise.CommonLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
