@@ -154,11 +154,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="bin\Debug\FMSMysqlSln.InstallLog" />
-    <None Include="bin\Debug\FMSMysqlSln.InstallState" />
-    <None Include="bin\Debug\FMSMysqlSln.v11.suo" />
-    <None Include="bin\Debug\FMSMysqlSln.vshost.exe.config" />
-    <None Include="bin\Debug\InstallUtil.InstallLog" />
     <None Include="FMSMysqlSln_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +182,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\FMSMysqlSln.vshost.exe" />
     <Content Include="Dependecies\ChilkatDotNet45.dll" />
     <Content Include="Dependecies\MySql.Data.dll" />
     <Content Include="Dependecies\MySql.Data.Entity.EF5.dll" />
@@ -228,6 +222,9 @@
       <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
