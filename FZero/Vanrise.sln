@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Bypass", "Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj", "{1CA1B8A4-C6AC-499D-A763-8276A68C415E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.CommonLibrary", "Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj", "{A0A85889-CED2-4DE6-BDA9-FEF2C10EB564}"
@@ -138,61 +136,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WcfS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WeeklyReport", "Vanrise.Fzero.Services.WeeklyReport\Vanrise.Fzero.Services.WeeklyReport.csproj", "{990E2C6C-70A1-47EE-AA39-6A6A875FA031}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis", "Vanrise.Fzero.MobileCDRAnalysis\Vanrise.Fzero.MobileCDRAnalysis.csproj", "{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}"
-EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website", "http://localhost:39680", "{37FC8881-A0B2-4461-A238-627F8B7F4C6E}"
-	ProjectSection(WebsiteProperties) = preProject
-		SccProjectName = "SAK"
-		SccAuxPath = "SAK"
-		SccLocalPath = "SAK"
-		SccProvider = "SAK"
-		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{a0a85889-ced2-4de6-bda9-fef2c10eb564}|Vanrise.CommonLibrary.dll;{c42ea41e-45f6-49fa-bcec-d13f8cc03e27}|Vanrise.Fzero.MobileCDRAnalysis.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_39680"
-		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_39680\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_39680"
-		Release.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_39680\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business Process", "Business Process", "{4E07640C-FC9E-46FE-9244-CA133B32230B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.DevRuntime", "Vanrise.Fzero.DevRuntime\Vanrise.Fzero.DevRuntime.csproj", "{5995A72F-0E1A-4C75-948D-6E0E2C717E49}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP", "Vanrise.Fzero.CDRImport.BP\Vanrise.Fzero.CDRImport.BP.csproj", "{57ED5DF8-602D-49AE-86FC-416D446F5CE2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Activities", "Vanrise.Fzero.CDRImport.BP.Activities\Vanrise.Fzero.CDRImport.BP.Activities.csproj", "{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.BP.Arguments", "Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj", "{14794A4A-32A7-4273-B3A3-0C1B67831D60}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Business", "Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj", "{A4B118BE-DED8-429C-9EF8-EAB394085DFF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Entities", "Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj", "{8EA7F723-709A-480A-9ECF-BE40C336A0CB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data", "Vanrise.Fzero.CDRImport.Data\Vanrise.Fzero.CDRImport.Data.csproj", "{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.SQL", "Vanrise.Fzero.CDRImport.Data.SQL\Vanrise.Fzero.CDRImport.Data.SQL.csproj", "{3A5581DB-9680-4CD4-AF20-0339D02F5447}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CDRImport", "CDRImport", "{474A8894-DCBA-4804-933E-D4C4B0CA9FAE}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 33
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -244,73 +190,26 @@ Global
 		SccProjectUniqueName16 = Vanrise.Fzero.Services.WeeklyReport\\Vanrise.Fzero.Services.WeeklyReport.csproj
 		SccProjectName16 = Vanrise.Fzero.Services.WeeklyReport
 		SccLocalPath16 = Vanrise.Fzero.Services.WeeklyReport
-		SccProjectUniqueName17 = Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
-		SccProjectName17 = Vanrise.Fzero.MobileCDRAnalysis
-		SccLocalPath17 = Vanrise.Fzero.MobileCDRAnalysis
-		SccProjectUniqueName18 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj
-		SccProjectName18 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
-		SccLocalPath18 = Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql
+		SccWebProject17 = true
+		SccProjectUniqueName17 = http://localhost:2251
+		SccProjectName17 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccLocalPath17 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccProjectEnlistmentChoice17 = 2
+		SccWebProject18 = true
+		SccProjectUniqueName18 = http://localhost:2289
+		SccProjectName18 = Vanrise.Fzero.Bypass.FTP
+		SccLocalPath18 = Vanrise.Fzero.Bypass.FTP
+		SccProjectEnlistmentChoice18 = 2
 		SccWebProject19 = true
-		SccProjectUniqueName19 = http://localhost:2251
-		SccProjectName19 = Vanrise.Fzero.Bypass.ClientWebSite
-		SccLocalPath19 = Vanrise.Fzero.Bypass.ClientWebSite
+		SccProjectUniqueName19 = http://localhost:2240
+		SccProjectName19 = Vanrise.Fzero.Bypass.WebSite
+		SccLocalPath19 = Vanrise.Fzero.Bypass.WebSite
 		SccProjectEnlistmentChoice19 = 2
 		SccWebProject20 = true
-		SccProjectUniqueName20 = http://localhost:2289
-		SccProjectName20 = Vanrise.Fzero.Bypass.FTP
-		SccLocalPath20 = Vanrise.Fzero.Bypass.FTP
+		SccProjectUniqueName20 = http://localhost:2244
+		SccProjectName20 = Vanrise.Fzero.CDRAnalysis.Website
+		SccLocalPath20 = Vanrise.Fzero.CDRAnalysis.Website
 		SccProjectEnlistmentChoice20 = 2
-		SccWebProject21 = true
-		SccProjectUniqueName21 = http://localhost:2240
-		SccProjectName21 = Vanrise.Fzero.Bypass.WebSite
-		SccLocalPath21 = Vanrise.Fzero.Bypass.WebSite
-		SccProjectEnlistmentChoice21 = 2
-		SccWebProject22 = true
-		SccProjectUniqueName22 = http://localhost:2244
-		SccProjectName22 = Vanrise.Fzero.CDRAnalysis.Website
-		SccLocalPath22 = Vanrise.Fzero.CDRAnalysis.Website
-		SccProjectEnlistmentChoice22 = 2
-		SccWebProject23 = true
-		SccProjectUniqueName23 = http://localhost:39680
-		SccProjectName23 = Vanrise.Fzero.MobileCDRAnalysis.Website
-		SccLocalPath23 = Vanrise.Fzero.MobileCDRAnalysis.Website
-		SccProjectEnlistmentChoice23 = 2
-		SccProjectUniqueName24 = Vanrise.Fzero.DevRuntime\\Vanrise.Fzero.DevRuntime.csproj
-		SccProjectTopLevelParentUniqueName24 = Vanrise.sln
-		SccProjectName24 = Vanrise.Fzero.DevRuntime
-		SccLocalPath24 = Vanrise.Fzero.DevRuntime
-		SccProjectUniqueName25 = Dependencies\\Dependencies.csproj
-		SccProjectTopLevelParentUniqueName25 = Vanrise.sln
-		SccProjectName25 = Dependencies
-		SccLocalPath25 = Dependencies
-		SccProjectUniqueName26 = Vanrise.Fzero.CDRImport.BP\\Vanrise.Fzero.CDRImport.BP.csproj
-		SccProjectTopLevelParentUniqueName26 = Vanrise.sln
-		SccProjectName26 = Vanrise.Fzero.CDRImport.BP
-		SccLocalPath26 = Vanrise.Fzero.CDRImport.BP
-		SccProjectUniqueName27 = Vanrise.Fzero.CDRImport.BP.Activities\\Vanrise.Fzero.CDRImport.BP.Activities.csproj
-		SccProjectTopLevelParentUniqueName27 = Vanrise.sln
-		SccProjectName27 = Vanrise.Fzero.CDRImport.BP.Activities
-		SccLocalPath27 = Vanrise.Fzero.CDRImport.BP.Activities
-		SccProjectUniqueName28 = Vanrise.Fzero.CDRImport.BP.Arguments\\Vanrise.Fzero.CDRImport.BP.Arguments.csproj
-		SccProjectTopLevelParentUniqueName28 = Vanrise.sln
-		SccProjectName28 = Vanrise.Fzero.CDRImport.BP.Arguments
-		SccLocalPath28 = Vanrise.Fzero.CDRImport.BP.Arguments
-		SccProjectUniqueName29 = Vanrise.Fzero.CDRImport.Business\\Vanrise.Fzero.CDRImport.Business.csproj
-		SccProjectTopLevelParentUniqueName29 = Vanrise.sln
-		SccProjectName29 = Vanrise.Fzero.CDRImport.Business
-		SccLocalPath29 = Vanrise.Fzero.CDRImport.Business
-		SccProjectUniqueName30 = Vanrise.Fzero.CDRImport.Entities\\Vanrise.Fzero.CDRImport.Entities.csproj
-		SccProjectTopLevelParentUniqueName30 = Vanrise.sln
-		SccProjectName30 = Vanrise.Fzero.CDRImport.Entities
-		SccLocalPath30 = Vanrise.Fzero.CDRImport.Entities
-		SccProjectUniqueName31 = Vanrise.Fzero.CDRImport.Data\\Vanrise.Fzero.CDRImport.Data.csproj
-		SccProjectTopLevelParentUniqueName31 = Vanrise.sln
-		SccProjectName31 = Vanrise.Fzero.CDRImport.Data
-		SccLocalPath31 = Vanrise.Fzero.CDRImport.Data
-		SccProjectUniqueName32 = Vanrise.Fzero.CDRImport.Data.SQL\\Vanrise.Fzero.CDRImport.Data.SQL.csproj
-		SccProjectTopLevelParentUniqueName32 = Vanrise.sln
-		SccProjectName32 = Vanrise.Fzero.CDRImport.Data.SQL
-		SccLocalPath32 = Vanrise.Fzero.CDRImport.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -397,68 +296,8 @@ Global
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C42EA41E-45F6-49FA-BCEC-D13F8CC03E27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{37FC8881-A0B2-4461-A238-627F8B7F4C6E}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A69317A-3793-454B-BE3B-C864AA76EF6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Debug|Any CPU.Build.0 = Debug|x64
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57ED5DF8-602D-49AE-86FC-416D446F5CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57ED5DF8-602D-49AE-86FC-416D446F5CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57ED5DF8-602D-49AE-86FC-416D446F5CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57ED5DF8-602D-49AE-86FC-416D446F5CE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14794A4A-32A7-4273-B3A3-0C1B67831D60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4B118BE-DED8-429C-9EF8-EAB394085DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4B118BE-DED8-429C-9EF8-EAB394085DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4B118BE-DED8-429C-9EF8-EAB394085DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4B118BE-DED8-429C-9EF8-EAB394085DFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EA7F723-709A-480A-9ECF-BE40C336A0CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EA7F723-709A-480A-9ECF-BE40C336A0CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EA7F723-709A-480A-9ECF-BE40C336A0CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EA7F723-709A-480A-9ECF-BE40C336A0CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A5581DB-9680-4CD4-AF20-0339D02F5447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A5581DB-9680-4CD4-AF20-0339D02F5447}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A5581DB-9680-4CD4-AF20-0339D02F5447}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A5581DB-9680-4CD4-AF20-0339D02F5447}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{5995A72F-0E1A-4C75-948D-6E0E2C717E49} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
-		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
-		{474A8894-DCBA-4804-933E-D4C4B0CA9FAE} = {4E07640C-FC9E-46FE-9244-CA133B32230B}
-		{57ED5DF8-602D-49AE-86FC-416D446F5CE2} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{14794A4A-32A7-4273-B3A3-0C1B67831D60} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{A4B118BE-DED8-429C-9EF8-EAB394085DFF} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{3A5581DB-9680-4CD4-AF20-0339D02F5447} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
-		{8EA7F723-709A-480A-9ECF-BE40C336A0CB} = {474A8894-DCBA-4804-933E-D4C4B0CA9FAE}
 	EndGlobalSection
 EndGlobal
