@@ -53,6 +53,9 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRImportProcess.cs" />
@@ -66,6 +69,14 @@
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
       <Project>{14794a4a-32a7-4273-b3a3-0c1b67831d60}</Project>
       <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Business\Vanrise.Fzero.CDRImport.Business.csproj">
+      <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
+      <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

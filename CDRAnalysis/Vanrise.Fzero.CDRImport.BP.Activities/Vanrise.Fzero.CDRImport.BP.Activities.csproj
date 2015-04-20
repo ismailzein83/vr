@@ -37,6 +37,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rebex.Net.Ftp">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SecureSocket">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.SecureSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.SshShell">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.SshShell.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Telnet">
+      <HintPath>..\Dependencies\Libraries\Rebex.Net.Telnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security">
+      <HintPath>..\Dependencies\Libraries\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.TerminalEmulation">
+      <HintPath>..\Dependencies\Libraries\Rebex.TerminalEmulation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
@@ -47,11 +74,23 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.BP.Arguments\Vanrise.Fzero.CDRImport.BP.Arguments.csproj">
+      <Project>{14794a4a-32a7-4273-b3a3-0c1b67831d60}</Project>
+      <Name>Vanrise.Fzero.CDRImport.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data\Vanrise.Fzero.CDRImport.Data.csproj">
       <Project>{73e469c6-3ccb-4414-8ef1-3ea3600f1eba}</Project>
       <Name>Vanrise.Fzero.CDRImport.Data</Name>

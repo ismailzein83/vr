@@ -11,15 +11,17 @@ namespace Vanrise.Fzero.CDRImport.Entities
     {
         static ImportedCDRBatch()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "file");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "cdrs");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(CDR), "Source_Type", "Source_Name", "Source_File", 
+                "Record_Type", "Call_Type", "IMEI","IMEI14", "Entity");
         }
 
         public override string GenerateDescription()
         {
-            return String.Format("Imported CDR Batch of {0} CDRs", file.Length);
+            return String.Format("Imported CDR Batch of {0} CDRs", cdrs.Count);
         }
 
-        public byte[] file;
+        public List<CDR> cdrs;
 
     }
 }
