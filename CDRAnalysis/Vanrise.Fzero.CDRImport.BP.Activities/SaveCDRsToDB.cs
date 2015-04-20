@@ -33,6 +33,13 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+
+
+            //Object preparedCDRs = dataManager.PrepareCDRsForDBApply(null);
+       //     dataManager.ApplyCDRsToDB(preparedCDRs);
+
+
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;

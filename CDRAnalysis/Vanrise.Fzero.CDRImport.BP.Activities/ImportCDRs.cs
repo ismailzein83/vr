@@ -9,6 +9,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 using System.IO;
+using System.Globalization;
 
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
@@ -69,23 +70,23 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     var i = sr.ReadLine();
 
                                     CDR cdr = new CDR();
-                                    cdr.MSISDN = i.Substring(146,20).Trim();
-                                    cdr.IMSI = i.Substring(126,20).Trim();
-                                    cdr.ConnectDateTime = i.Substring( 222,14).Trim();
-                                    cdr.Destination = i.Substring( 199,20).Trim();
-                                    cdr.DurationInSeconds = i.Substring( 435,10).Trim();
-                                    cdr.Call_Class = i.Substring( 236,5).Trim();
-                                    cdr.Call_Type = i.Substring( 103,3).Trim();
-                                    cdr.Sub_Type = i.Substring( 166,10).Trim();
-                                    cdr.IMEI = i.Substring( 106,20).Trim();
-                                    cdr.BTS_Id = i.Substring(253, 22).Trim().Substring(i.Substring(253, 22).Length - 1);
-                                    cdr.Cell_Id = i.Substring( 253,22).Trim();
-                                    cdr.Up_Volume = i.Substring( 589,10).Trim();
-                                    cdr.Down_Volume = i.Substring( 599,10).Trim();
-                                    cdr.Cell_Latitude = i.Substring( 610,9).Trim();
-                                    cdr.Cell_Longitude = i.Substring( 619,9).Trim();
-                                    cdr.In_Trunk = i.Substring( 415,20).Trim();
-                                    cdr.Out_Trunk = i.Substring( 395,20).Trim();
+                                    cdr.MSISDN = i.Substring(145,20).Trim();
+                                    cdr.IMSI = i.Substring(125,20).Trim();
+                                    //cdr.ConnectDateTime = DateTime.ParseExact(i.Substring(221, 14).Trim(),"yyyyMddHHmmss",CultureInfo.InvariantCulture);
+                                    cdr.Destination = i.Substring( 198,20).Trim();
+                                    cdr.DurationInSeconds = i.Substring( 434,10).Trim();
+                                    cdr.Call_Class = i.Substring( 235,5).Trim();
+                                    cdr.Call_Type = i.Substring( 102,3).Trim();
+                                    cdr.Sub_Type = i.Substring( 165,10).Trim();
+                                    cdr.IMEI = i.Substring( 105,20).Trim();
+                                    cdr.BTS_Id = i.Substring(252, 21).Trim();
+                                    cdr.Cell_Id = i.Substring( 252,22).Trim();
+                                    cdr.Up_Volume = i.Substring( 588,10).Trim();
+                                    cdr.Down_Volume = i.Substring( 598,10).Trim();
+                                    cdr.Cell_Latitude = i.Substring( 609,9).Trim();
+                                    cdr.Cell_Longitude = i.Substring( 618,9).Trim();
+                                    cdr.In_Trunk = i.Substring( 414,20).Trim();
+                                    cdr.Out_Trunk = i.Substring( 394,20).Trim();
 
                                     CDRs.Add(cdr);
                                 }

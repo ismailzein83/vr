@@ -11,10 +11,10 @@ namespace Vanrise.Fzero.CDRImport.Entities
 
           public string MSISDN  { get; set; }
           public string IMSI { get; set; }
-          public string ConnectDateTime { get; set; }
+          public DateTime ConnectDateTime { get; set; }
           public string Destination { get; set; }
           public string DurationInSeconds { get; set; }
-          public string DisconnectDateTime { get; set; }
+          public DateTime DisconnectDateTime { get; set; }
           public string Call_Class { get; set; }
           public string IsOnNet { get; set; }
           public string Call_Type { get; set; }
