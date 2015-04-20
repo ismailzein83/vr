@@ -46,6 +46,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\log4net.dll" />
+    <Content Include="Libraries\log4net.xml" />
     <Content Include="Libraries\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="Libraries\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
     <Content Include="Libraries\Microsoft.Practices.ServiceLocation.dll" />
@@ -53,6 +55,9 @@
     <Content Include="Libraries\Microsoft.Practices.Unity.Interception.dll" />
     <Content Include="Libraries\Newtonsoft.Json.dll" />
     <Content Include="Libraries\protobuf-net.dll" />
+    <Content Include="Libraries\Telerik.Web.UI.dll" />
+    <Content Include="Libraries\Telerik.Web.UI.xml" />
+    <Content Include="Libraries\Vanrise.CommonLibrary.dll" />
     <Content Include="VanriseFramework\Vanrise.BusinessProcess.Client.dll" />
     <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.dll" />
     <Content Include="VanriseFramework\Vanrise.BusinessProcess.Data.SQL.dll" />
@@ -73,6 +78,9 @@
     <Content Include="VanriseFramework\Vanrise.Runtime.Data.SQL.dll" />
     <Content Include="VanriseFramework\Vanrise.Runtime.dll" />
     <Content Include="VanriseFramework\Vanrise.Runtime.Entities.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\Vanrise.CommonLibrary.dll.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
