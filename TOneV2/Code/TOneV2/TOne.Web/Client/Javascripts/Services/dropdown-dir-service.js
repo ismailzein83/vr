@@ -80,7 +80,8 @@ app.service('SelectService', ['BaseDirService', function (BaseDirService) {
         isMenu: isMenu,
         isMultiple:isMultiple,
         setAttributes: setAttributes,
-        validate : validate,
+        validate: validate,
+        isActionBarTop: isActionBarTop
     });
 
     function validate(attrs) {
@@ -129,4 +130,8 @@ app.service('SelectService', ['BaseDirService', function (BaseDirService) {
         return false;
     }
 
+    function isActionBarTop(type) {
+        if (type == "actionbartop") return true;
+        else return false;
+    }
 }]);

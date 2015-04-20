@@ -58,7 +58,7 @@ appControllers.controller('ZoneMonitorController',
             $scope.currentPage = 1;
 
             $scope.gridAllMeasuresScope = {};
-
+            $scope.showResult = false;
             
 
         }
@@ -225,7 +225,7 @@ appControllers.controller('ZoneMonitorController',
                 return;
             if (withSummary == undefined)
                 withSummary = false;
-            $scope.showResult = true;
+            
             mainGridAPI.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
             if (chartSelectedEntityAPI)
@@ -249,6 +249,7 @@ appControllers.controller('ZoneMonitorController',
                 IsDescending: sortDescending
             };
             var isSucceeded;
+            $scope.showResult = true;
             AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
                 currentData = response.Data;
@@ -310,7 +311,7 @@ appControllers.controller('ZoneMonitorController',
             });
             var chartDefinition = {
                 type: "pie",
-                title: "Overall " + measure.description,
+                title: measure.description,
                 yAxisTitle: "Value"
             };
 

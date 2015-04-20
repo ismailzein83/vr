@@ -17,6 +17,7 @@
 
             for (prop in BIMeasureTypeEnum) {
                 var obj = {
+                    measure: BIMeasureTypeEnum[prop],
                     name: BIMeasureTypeEnum[prop].description,
                     value: BIMeasureTypeEnum[prop].value,
                     selected: true
@@ -29,16 +30,14 @@
                 { name: "5", value: "5" },
                 { name: "10", value: "10" },
                 { name: "15", value: "15" },
-                { name: "20", value: "25" }
+                { name: "20", value: "20" }
                 ]
             };
-
-            $scope.otherMeasuresDescriptions = [];
-            $scope.topDestinationData = [];
         }
 
         var chartTopDestinationsAPI;
         var chartZoneReadyAPI;
+        var gridMainAPI;
         function defineScopeMethods() {
 
             $scope.chartTopDestinationsReady = function (api) {
@@ -56,12 +55,18 @@
                 chartZoneReadyAPI = api;
             };
             
-            $scope.filterChanged = function () {
-                getAndShowTopDestination();
+            $scope.updateData = function (asyncHandle) {
+                getAndShowTopDestination(asyncHandle);
             };
 
             $scope.updateZone = function () {
                 getAndShowZone();
+            };
+
+            $scope.gridMainReady = function (api) {
+                gridMainAPI = api;
+                defineGrid();
+                getAndShowTopDestination();
             };
         }
 
@@ -77,8 +82,34 @@
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
         }
 
-        function getAndShowTopDestination() {
+        function defineGrid() {
+            columns = [];
+            var zoneColumn = {
+                headerText: 'Zone Name',
+                field: 'EntityName'
+            };
+            columns.push(zoneColumn);
+
+            var valColumnIndex = 0;
+            angular.forEach($scope.optionsMeasureTypes.datasource, function (measure) {
+                var colDef = {
+                    headerText: measure.name,
+                    field: 'Values[' + valColumnIndex++ + ']',
+                    type: "Number"
+                };
+                columns.push(colDef);
+            });
+            var gridOptions = {
+                columns: columns,
+                maxHeight: 700
+            };
+            gridMainAPI.defineGrid(gridOptions);
+        }
+
+        function getAndShowTopDestination(asyncHandle) {
             if (!chartTopDestinationsAPI)
+                return;
+            if (!gridMainAPI)
                 return;
             var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
             if (measureType == undefined || measureType == null || measureType.length == 0)
@@ -87,37 +118,36 @@
             if (chartZoneReadyAPI)
                 chartZoneReadyAPI.hideChart();
 
-            $scope.otherMeasuresDescriptions.length = 0;
             var measures = [];
             angular.forEach($scope.optionsMeasureTypes.datasource, function (itm) {
                 measures.push(itm.value);
-                $scope.otherMeasuresDescriptions.push(itm.name);
             });
-
-            $scope.topDestinationData.length = 0
+            gridMainAPI.data.length = 0;
             chartTopDestinationsAPI.showLoader();
             BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 angular.forEach(response, function (itm) {
-                    $scope.topDestinationData.push(itm);
+                    gridMainAPI.data.push(itm);
                 });
                 var chartData = response;
                 var chartDefinition = {
                     type: "pie",
-                    title: "TOP DESTINATIONS",
+                  //  title: "TOP DESTINATIONS",
                     yAxisTitle: "Value"
                 };
 
                 var seriesDefinitions = [{
-                    title: measureType.Description,
+                    title: measureType.name,
                     titlePath: "EntityName",
-                    valuePath: "Values[0]"
+                    valuePath: "Values[" + $scope.optionsMeasureTypes.datasource.indexOf(measureType) + "]"
                 }];
 
                 chartTopDestinationsAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
             })
                 .finally(function () {
                     chartTopDestinationsAPI.hideLoader();
+                    if (asyncHandle)
+                        asyncHandle.operationDone();
                 });
         }
 
@@ -154,7 +184,8 @@
                     var measure = measures[i];
                     seriesDefinitions.push({
                         title: measure.name,
-                        valuePath: "Values[" + i + "]"
+                        valuePath: "Values[" + i + "]",
+                        selected: measure.measure == BIMeasureTypeEnum.Sale || measure.measure == BIMeasureTypeEnum.Cost
                     });
                 }
 

@@ -112,16 +112,21 @@ namespace TOne.Analytics.Data.SQL
 
         private void AddFilterToQuery(TrafficStatisticFilter filter, StringBuilder whereBuilder)
         {
-            AddFilter(whereBuilder, filter.SwitchIds, "CONVERT(VARCHAR, ts.SwitchId)");
+            AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
             AddFilter(whereBuilder, filter.CodeGroups, "z.CodeGroup");
         }
 
-        void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string columnAsString)
+        void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
             if (values != null && values.Count() > 0)
-                whereBuilder.AppendFormat("AND '|{0}|' LIKE '%|' + {1} + '|%'", String.Join("|", values), columnAsString);
+            {
+                if (typeof(T) == typeof(string))
+                    whereBuilder.AppendFormat("AND {0} IN ('{1}')", column, String.Join("', '", values));
+                else
+                    whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
+            }
         }
 
 

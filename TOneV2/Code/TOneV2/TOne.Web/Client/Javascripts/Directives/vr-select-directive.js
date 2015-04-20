@@ -200,12 +200,19 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     divDropdown.prepend(lblTemplate);
                     ulDropdown.addClass('menu-right');
                 }
+                else if (SelectService.isActionBarTop(attrs.type)) {
+                    var lblTemplate = ' <label  id="dropdownMenuType" class="dropdown-toggle" style="padding-top:6px" data-toggle="dropdown" aria-expanded="true">'
+                    + '<label class="hand-cursor" style="color: #FFF;">{{ctrl.getLabel()}}</span></label> </label>';
+                    divDropdown.prepend(lblTemplate);
+                }
                 else {
-
-                    var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;" type="button" data-toggle="dropdown" '
+                    var noCaret = attrs.nocaret != undefined; 
+                    var noborder = attrs.noborder != undefined;
+                    var buttonTemplate = '<button class="btn btn-default dropdown-toggle" style="width:100%;' + (noborder ? 'border:none' :  '') + '" type="button" data-toggle="dropdown" '
                                         + ' aria-expanded="true"  ' + validateButtonClass + '>'
                                         + '<span style="float: left; margin: 0px; ">{{ctrl.getLabel()}}</span>'
-                                        + '<span style="position:absolute;top:13px;right:5px" class="caret"></span></button>';
+                                        + (noCaret == true ? '' : '<span style="position:absolute;top:13px;right:5px" class="caret"></span>')
+                                        + '</button>';
                     divDropdown.prepend(buttonTemplate);
                 }
 
