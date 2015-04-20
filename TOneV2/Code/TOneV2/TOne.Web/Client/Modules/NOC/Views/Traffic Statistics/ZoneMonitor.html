@@ -1,7 +1,7 @@
 ﻿
 <vr-panel>
     <vr-form name="formFilter">
-        <div  ng-hide="filterSectionCollapsed" ng-init="formState={gettingDataDisabled: false}">
+        <div ng-hide="filterSectionCollapsed" ng-init="formState={gettingDataDisabled: false}">
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-select label="Switches:" datasource="switches"
@@ -71,13 +71,15 @@
         <div ng-class="{'disabledbutton': formState.gettingDataDisabled}">
             <vr-form name="formNavigation">
                 <vr-row>
-                    <vr-columns colnum="2">
+                    
+                    <vr-columns colnum="3">
                         <vr-label style="padding-top:3px">
                             Items per Page:
                         </vr-label>
+                        <vr-select datasource="topCounts" selectedvalues="selectedTopCount" data-onselectionchanged="pageChanged"></vr-select>
                     </vr-columns>
                     <vr-columns>
-                        <vr-select datasource="topCounts" selectedvalues="selectedTopCount" data-onselectionchanged="pageChanged"></vr-select>
+
                     </vr-columns>
 
                     <vr-columns colnum="5">
