@@ -84,11 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="bin\Debug\fmsservicehost.InstallLog" />
-    <None Include="bin\Debug\fmsservicehost.InstallState" />
-    <None Include="bin\Debug\InstallUtil.InstallLog" />
-    <None Include="bin\Debug\WCFServiceHost.vshost.exe.config" />
-    <None Include="bin\Debug\WCFServiceHost.vshost.exe.manifest" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ProjectInstaller.resx">
@@ -119,11 +114,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\DataAccessLayerT1.dll" />
-    <Content Include="bin\Debug\DataAccessLayerT1.pdb" />
-    <Content Include="bin\Debug\EntityFramework.dll" />
-    <Content Include="bin\Debug\EntityFramework.xml" />
-    <Content Include="bin\Debug\WCFServiceHost.vshost.exe" />
+    <Folder Include="bin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
