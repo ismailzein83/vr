@@ -61,6 +61,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.CommonLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Libraries\Vanrise.CommonLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDR.cs">
@@ -302,12 +306,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj">
-      <Project>{a0a85889-ced2-4de6-bda9-fef2c10eb564}</Project>
-      <Name>Vanrise.CommonLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\log4net.dll" />
