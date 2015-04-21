@@ -5,35 +5,20 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.CDRAnalysis", "SQL.CDRAnalysis\SQL.CDRAnalysis.sqlproj", "{1166FD40-2848-4315-8DC3-0668D0733840}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroLog", "SQL.FZeroLog\SQL.FZeroLog.sqlproj", "{AFA6B159-3301-4392-ABF3-F6B872549B78}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroQueue", "SQL.FZeroQueue\SQL.FZeroQueue.sqlproj", "{6DC8E267-E175-43DF-830D-97FDEA1B9120}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroTransaction", "SQL.FZeroTransaction\SQL.FZeroTransaction.sqlproj", "{E691E2E6-85AE-47E2-8163-D38A09349556}"
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.ByPass", "SQL.ByPass\SQL.ByPass.sqlproj", "{6A9AE917-EB02-4404-879C-36CD9A26BD35}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = SQL.CDRAnalysis\\SQL.CDRAnalysis.sqlproj
 		SccProjectName1 = SQL.CDRAnalysis
 		SccLocalPath1 = SQL.CDRAnalysis
-		SccProjectUniqueName2 = SQL.FZeroLog\\SQL.FZeroLog.sqlproj
-		SccProjectName2 = SQL.FZeroLog
-		SccLocalPath2 = SQL.FZeroLog
-		SccProjectUniqueName3 = SQL.FZeroQueue\\SQL.FZeroQueue.sqlproj
-		SccProjectName3 = SQL.FZeroQueue
-		SccLocalPath3 = SQL.FZeroQueue
-		SccProjectUniqueName4 = SQL.FZeroTransaction\\SQL.FZeroTransaction.sqlproj
-		SccProjectName4 = SQL.FZeroTransaction
-		SccLocalPath4 = SQL.FZeroTransaction
-		SccProjectUniqueName5 = SQL.ByPass\\SQL.ByPass.sqlproj
-		SccProjectName5 = SQL.ByPass
-		SccLocalPath5 = SQL.ByPass
+		SccProjectUniqueName2 = SQL.ByPass\\SQL.ByPass.sqlproj
+		SccProjectName2 = SQL.ByPass
+		SccLocalPath2 = SQL.ByPass
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,24 +31,6 @@ Global
 		{1166FD40-2848-4315-8DC3-0668D0733840}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1166FD40-2848-4315-8DC3-0668D0733840}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1166FD40-2848-4315-8DC3-0668D0733840}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{6A9AE917-EB02-4404-879C-36CD9A26BD35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A9AE917-EB02-4404-879C-36CD9A26BD35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9AE917-EB02-4404-879C-36CD9A26BD35}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
