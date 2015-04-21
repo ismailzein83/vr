@@ -15,6 +15,15 @@ namespace TOne.LCR.Data.SQL
 {
     public class RouteRulesDataManager : BaseTOneDataManager, IRouteRulesDataManager
     {
+        /// <summary>
+        /// Get All Rules from Route Tables. Handles the structure of Tone V1.
+        /// </summary>
+        /// <param name="effectiveOn">Rule Effective DateTime</param>
+        /// <param name="isFuture">True for building future Route Rules, else False for Current.</param>
+        /// <param name="codePrefix" example="961">Code Prefix for selecting rules like this code. For instance 96</param>
+        /// <param name="lstCustomerZoneIds">List of Sale Zones</param>
+        /// <param name="lstSupplierZonesIds">List of Supplier Zones</param>
+        /// <returns>List of All Route Rules (Block, Override, Special Request)</returns>
         public List<RouteRule> GetRouteRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstCustomerZoneIds, IEnumerable<int> lstSupplierZonesIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
@@ -35,23 +44,7 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
-                        RouteRule rule = new RouteRule();
-                        string customerID = reader["CustomerID"] as string;
-                        string code = reader["Code"] as string;
-                        int zoneID = reader["ZoneID"] != DBNull.Value ? Convert.ToInt32(reader["ZoneID"]) : 0;
-                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
-                        string excludedCodes = reader["ExcludedCodes"] as string;
-                        MultipleSelection<string> customers = new MultipleSelection<string>();
-                        customers.SelectionOption = MultipleSelectionOption.OnlyItems;
-                        customers.SelectedValues = new List<string>();
-                        customers.SelectedValues.Add(customerID);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
-                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
-                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
-                        rule.Reason = reader["Reason"] as string;
-                        rule.Type = RouteRuleType.RouteRule;
-                        rule.ActionData = new BlockRouteActionData();
-                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+                        RouteRule rule = GetBlockRule(reader);
                         routeRules.Add(rule);
                     }
                 },
@@ -69,6 +62,28 @@ namespace TOne.LCR.Data.SQL
             return routeRules;
         }
 
+        private RouteRule GetBlockRule(IDataReader reader)
+        {
+            RouteRule rule = new RouteRule();
+            string customerID = reader["CustomerID"] as string;
+            string code = reader["Code"] as string;
+            int zoneID = reader["ZoneID"] != DBNull.Value ? Convert.ToInt32(reader["ZoneID"]) : 0;
+            bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+            string excludedCodes = reader["ExcludedCodes"] as string;
+            MultipleSelection<string> customers = new MultipleSelection<string>();
+            customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+            customers.SelectedValues = new List<string>();
+            customers.SelectedValues.Add(customerID);
+            rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+            rule.Reason = reader["Reason"] as string;
+            rule.Type = RouteRuleType.RouteRule;
+            rule.ActionData = new BlockRouteActionData();
+            rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+            return rule;
+        }
+
         private List<RouteRule> GetBlockOptionRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
@@ -79,22 +94,7 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
-                        RouteRule rule = new RouteRule();
-                        string customerID = reader["CustomerID"] as string;
-                        string code = reader["Code"] as string;
-                        int zoneID = reader["ZoneID"] != DBNull.Value ? Convert.ToInt32(reader["ZoneID"]) : 0;
-                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
-                        string excludedCodes = reader["ExcludedCodes"] as string;
-                        string supplierID = reader["SupplierID"] as string;
-                        rule.CarrierAccountSet = new SupplierSelectionSet() { SupplierId = supplierID };
-                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
-                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
-                        rule.Reason = reader["Reason"] as string;
-                        rule.Type = RouteRuleType.RouteOptionRule;
-                        rule.ActionData = GetBlockRouteOptionActionData(customerID);
-
-                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
-
+                        RouteRule rule = GetBlockOptionRule(reader);
                         routeRules.Add(rule);
                     }
                 },
@@ -110,6 +110,26 @@ namespace TOne.LCR.Data.SQL
                 }
                 );
             return routeRules;
+        }
+
+        private RouteRule GetBlockOptionRule(IDataReader reader)
+        {
+            RouteRule rule = new RouteRule();
+            string customerID = reader["CustomerID"] as string;
+            string code = reader["Code"] as string;
+            int zoneID = reader["ZoneID"] != DBNull.Value ? Convert.ToInt32(reader["ZoneID"]) : 0;
+            bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+            string excludedCodes = reader["ExcludedCodes"] as string;
+            string supplierID = reader["SupplierID"] as string;
+            rule.CarrierAccountSet = new SupplierSelectionSet() { SupplierId = supplierID };
+            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+            rule.Reason = reader["Reason"] as string;
+            rule.Type = RouteRuleType.RouteOptionRule;
+            rule.ActionData = GetBlockRouteOptionActionData(customerID);
+
+            rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+            return rule;
         }
 
         private List<RouteRule> GetSuppliersRouteRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
@@ -123,26 +143,7 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
-                        RouteRule rule = new RouteRule();
-                        string customerID = reader["CustomerID"] as string;
-                        string code = reader["Code"] as string;
-                        int zoneID = GetReaderValue<int>(reader, "ZoneID");
-                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
-                        string blockedSuppliers = reader["BlockedSuppliers"] as string;
-                        string excludedCodes = reader["ExcludedCodes"] as string;
-                        MultipleSelection<string> customers = new MultipleSelection<string>();
-                        customers.SelectionOption = MultipleSelectionOption.OnlyItems;
-                        customers.SelectedValues = new List<string>();
-                        customers.SelectedValues.Add(customerID);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
-                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
-                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
-                        rule.Reason = reader["Reason"] as string;
-                        rule.Type = RouteRuleType.RouteRule;
-                        rule.ActionData = GetBlockSuppliersRouteActionData(blockedSuppliers);
-
-                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
-
+                        RouteRule rule = GetBlockSupplierRule(reader);
                         routeRules.Add(rule);
                     }
                 },
@@ -158,6 +159,29 @@ namespace TOne.LCR.Data.SQL
                 }
                 );
             return routeRules;
+        }
+
+        private RouteRule GetBlockSupplierRule(IDataReader reader)
+        {
+            RouteRule rule = new RouteRule();
+            string customerID = reader["CustomerID"] as string;
+            string code = reader["Code"] as string;
+            int zoneID = GetReaderValue<int>(reader, "ZoneID");
+            bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+            string blockedSuppliers = reader["BlockedSuppliers"] as string;
+            string excludedCodes = reader["ExcludedCodes"] as string;
+            MultipleSelection<string> customers = new MultipleSelection<string>();
+            customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+            customers.SelectedValues = new List<string>();
+            customers.SelectedValues.Add(customerID);
+            rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+            rule.Reason = reader["Reason"] as string;
+            rule.Type = RouteRuleType.RouteRule;
+            rule.ActionData = GetBlockSuppliersRouteActionData(blockedSuppliers);
+            rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+            return rule;
         }
 
         public RouteRule SaveRouteRule(RouteRule rule)
@@ -176,7 +200,7 @@ namespace TOne.LCR.Data.SQL
                    rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null,
                    rule.RouteRuleId
                );
-               id = rule.RouteRuleId;
+                id = rule.RouteRuleId;
             }
             else
             {
@@ -192,9 +216,9 @@ namespace TOne.LCR.Data.SQL
                );
                 id = (int)RouteRuleId;
             }
-           
+
             return GetRouteRuleDetails(id);
-           
+
         }
 
         private BlockRouteOptionActionData GetBlockRouteOptionActionData(string customerID)
@@ -242,43 +266,7 @@ namespace TOne.LCR.Data.SQL
                     List<PriorityOption> priorityOptions = null;
                     while (reader.Read())
                     {
-                        PriorityOption priorityOption = new PriorityOption()
-                        {
-                            SupplierId = reader["SupplierID"] as string,
-                            Percentage = GetReaderValue<byte>(reader, "Percentage"),
-                            Priority = GetReaderValue<byte>(reader, "Priority"),
-                            Force = GetReaderValue<byte>(reader, "Type") == 1 ? true : false
-                        };
-
-                        string customerID = reader["CustomerID"] as string;
-                        string code = reader["Code"] as string;
-
-                        if (currentCode != code || currentCustomer != customerID)
-                        {
-
-                            //TODO Create RouteRule
-
-                            currentCode = code;
-                            currentCustomer = customerID;
-                            RouteRule rule = new RouteRule();
-                            MultipleSelection<string> customers = new MultipleSelection<string>();
-                            customers.SelectionOption = MultipleSelectionOption.OnlyItems;
-                            customers.SelectedValues = new List<string>();
-                            customers.SelectedValues.Add(currentCustomer);
-                            rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
-                            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
-                            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
-                            priorityOptions = new List<PriorityOption>();
-                            rule.ActionData = new PriorityRouteActionData() { Options = priorityOptions };
-                            rule.CodeSet = GetBaseCodeSet(currentCode, 0, (reader["IncludeSubCodes"] as string) == "Y", reader["ExcludedCodes"] as string);
-                            rule.Type = RouteRuleType.RouteRule;
-                            rule.Reason = reader["Reason"] as string;
-                            routeRules.Add(rule);
-
-                        }
-
-                        priorityOptions.Add(priorityOption);
-
+                        GetPriorityRule(routeRules, reader, ref currentCustomer, ref currentCode, ref priorityOptions);
                     }
                 },
                 (cmd) =>
@@ -295,6 +283,46 @@ namespace TOne.LCR.Data.SQL
             return routeRules;
         }
 
+        private void GetPriorityRule(List<RouteRule> routeRules, IDataReader reader, ref string currentCustomer, ref string currentCode, ref List<PriorityOption> priorityOptions)
+        {
+            PriorityOption priorityOption = new PriorityOption()
+            {
+                SupplierId = reader["SupplierID"] as string,
+                Percentage = GetReaderValue<byte>(reader, "Percentage"),
+                Priority = GetReaderValue<byte>(reader, "Priority"),
+                Force = GetReaderValue<byte>(reader, "Type") == 1 ? true : false
+            };
+
+            string customerID = reader["CustomerID"] as string;
+            string code = reader["Code"] as string;
+
+            if (currentCode != code || currentCustomer != customerID)
+            {
+
+                //TODO Create RouteRule
+
+                currentCode = code;
+                currentCustomer = customerID;
+                RouteRule rule = new RouteRule();
+                MultipleSelection<string> customers = new MultipleSelection<string>();
+                customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+                customers.SelectedValues = new List<string>();
+                customers.SelectedValues.Add(currentCustomer);
+                rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+                rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+                priorityOptions = new List<PriorityOption>();
+                rule.ActionData = new PriorityRouteActionData() { Options = priorityOptions };
+                rule.CodeSet = GetBaseCodeSet(currentCode, 0, (reader["IncludeSubCodes"] as string) == "Y", reader["ExcludedCodes"] as string);
+                rule.Type = RouteRuleType.RouteRule;
+                rule.Reason = reader["Reason"] as string;
+                routeRules.Add(rule);
+
+            }
+
+            priorityOptions.Add(priorityOption);
+        }
+
         private List<RouteRule> GetOverrideRules(DateTime effectiveOn, bool isFuture, string codePrefix, IEnumerable<int> lstZoneIds)
         {
             List<RouteRule> routeRules = new List<RouteRule>();
@@ -304,25 +332,7 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
-                        RouteRule rule = new RouteRule();
-                        string customerID = reader["CustomerID"] as string;
-                        string code = reader["Code"] as string;
-                        int zoneID = GetReaderValue<int>(reader, "ZoneID");
-                        bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
-                        string options = reader["RouteOptions"] as string;
-                        string excludedCodes = reader["ExcludedCodes"] as string;
-                        MultipleSelection<string> customers = new MultipleSelection<string>();
-                        customers.SelectionOption = MultipleSelectionOption.OnlyItems;
-                        customers.SelectedValues = new List<string>();
-                        customers.SelectedValues.Add(customerID);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
-                        rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
-                        rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
-                        rule.Reason = reader["Reason"] as string;
-                        rule.Type = RouteRuleType.RouteRule;
-                        rule.ActionData = GetOverrideActionData(options);
-
-                        rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+                        RouteRule rule = GetOverrideRule(reader);
                         routeRules.Add(rule);
                     }
                 },
@@ -338,6 +348,30 @@ namespace TOne.LCR.Data.SQL
                 }
                 );
             return routeRules;
+        }
+
+        private RouteRule GetOverrideRule(IDataReader reader)
+        {
+            RouteRule rule = new RouteRule();
+            string customerID = reader["CustomerID"] as string;
+            string code = reader["Code"] as string;
+            int zoneID = GetReaderValue<int>(reader, "ZoneID");
+            bool includeSubCodes = reader["IncludeSubCodes"] as string == "Y" ? true : false;
+            string options = reader["RouteOptions"] as string;
+            string excludedCodes = reader["ExcludedCodes"] as string;
+            MultipleSelection<string> customers = new MultipleSelection<string>();
+            customers.SelectionOption = MultipleSelectionOption.OnlyItems;
+            customers.SelectedValues = new List<string>();
+            customers.SelectedValues.Add(customerID);
+            rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+            rule.BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate");
+            rule.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
+            rule.Reason = reader["Reason"] as string;
+            rule.Type = RouteRuleType.RouteRule;
+            rule.ActionData = GetOverrideActionData(options);
+
+            rule.CodeSet = GetBaseCodeSet(code, zoneID, includeSubCodes, excludedCodes);
+            return rule;
         }
 
         private OverrideRouteActionData GetOverrideActionData(string options)
@@ -411,6 +445,108 @@ namespace TOne.LCR.Data.SQL
             };
 
             return routeRule;
+        }
+
+        /// <summary>
+        /// Get Rules for Differential Route Build
+        /// </summary>
+        /// <param name="lastRun">Last Run DateTime of Differential Route Build Process</param>
+        /// <returns>List of All Route Rules having Begin Effective Date </returns>
+        public List<RouteRule> GetDifferentialRouteRules(DateTime lastRun)
+        {
+            List<RouteRule> routeRules = new List<RouteRule>();
+            MultipleSelection<string> customers = new MultipleSelection<string>();
+            customers.SelectionOption = MultipleSelectionOption.AllExceptItems;
+            customers.SelectedValues = null;
+            ExecuteReaderSP("sp_RoutingRules_GetDifferentialBlockRules",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = GetBlockRule(reader);
+                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        routeRules.Add(rule);
+                    }
+                }, lastRun);
+
+
+            ExecuteReaderSP("sp_RoutingRules_GetDifferentialBlockSupplierRouteRules",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = GetBlockSupplierRule(reader);
+                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        routeRules.Add(rule);
+                    }
+                }, lastRun);
+
+
+            ExecuteReaderSP("sp_RoutingRules_GetDiffrentialOptionBlockRules",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = GetBlockOptionRule(reader);
+                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        routeRules.Add(rule);
+                    }
+                }, lastRun);
+
+
+            ExecuteReaderSP("sp_RoutingRules_GetDifferentialOverrideRules",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        RouteRule rule = GetOverrideRule(reader);
+                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        routeRules.Add(rule);
+                    }
+                }, lastRun);
+
+
+            ExecuteReaderSP("sp_RoutingRules_GetDifferentialPriorityRules",
+                (reader) =>
+                {
+                    string currentCustomer = null;
+                    string currentCode = null;
+                    List<PriorityOption> priorityOptions = null;
+                    while (reader.Read())
+                    {
+                        GetPriorityRule(routeRules, reader, ref currentCustomer, ref currentCode, ref priorityOptions);
+                    }
+                }, lastRun);
+
+            return routeRules;
+
+        }
+
+        public CodeCustomers GetRulesRouteCodes(DateTime lastRun)
+        {
+            CodeCustomers codeCustomers = new CodeCustomers();
+            ExecuteReaderSP("[LCR].[sp_RoutingRules_GetDifferentialRuleCodes]",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+
+                        string code = reader["Code"] as string;
+                        string customerID = reader["CustomerID"] as string;
+                        HashSet<string> customerIds;
+                        if (!codeCustomers.TryGetValue(code, out customerIds))
+                        {
+                            customerIds = new HashSet<string>();
+                            codeCustomers.Add(code, customerIds);
+                        }
+                        if (customerIds != null && !string.IsNullOrEmpty(customerID))
+                            customerIds.Add(customerID);
+                        else
+                            codeCustomers[code] = null;
+                    }
+                }, lastRun);
+
+            return codeCustomers;
         }
     }
 }
