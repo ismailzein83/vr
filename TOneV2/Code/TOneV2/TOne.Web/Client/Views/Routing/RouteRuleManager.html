@@ -57,7 +57,7 @@
                     <button class="btn btn-default btncustom action-bar-btn-icon" ng-show="showHis==false" ng-class="gridOptionsRouteRule.enableFiltering==true?'':'toggle-Icon'" type="button" aria-label="Left Align" ng-click="toggelFilter()"><span style="padding-left:4px" class="glyphicon glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
                 </div>
                 <div transclude-to="buttons">
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon  highlight-btn " ng-if="gridOptionsHistory.data.length > 0 " ng-click="switchGrids()" aria-label="Left Align">
+                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon  " ng-if="gridOptionsHistory.data.length > 0 " ng-click="switchGrids()" aria-label="Left Align">
                         <span ng-show="showHis==false">
                             {{gridOptionsHistory.data.length}} Updated Rule(s)
                             <span style="padding-left:4px" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -68,10 +68,11 @@
                         </span>
                     </button>
 
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+                   
 
                     <vr-button type="Search" data-onclick="getDatalistFilterd"></vr-button>
                     <vr-button type="Reset" data-onclick="resetDatalistFilterd"></vr-button>
+                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
 
                 </div>
             </vr-actionbar>

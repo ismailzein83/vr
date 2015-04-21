@@ -45,9 +45,27 @@ padding: 5px 2px;
 label{
     font-size:12px;
 }
+@media (min-width: 1205px)  { 
+    .form-control {
+       min-width:185px;
+       max-width:185px
+    }
+    textarea{
+       min-width:initial !important;
+       max-width:initial !important;
+    }
+    .dropdown {
+       min-width:185px;         
+       max-width:185px;
+    }
+}
+
 .dropdown .dropdown-toggle > span{    
 font-size:12px !important;
-}    
+}   
+.mark-select .hand-cursor{
+    font-size:12px !important;
+} 
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
@@ -99,9 +117,22 @@ Use this for keyframe animations
     transition: background-color 0.2s ease 0s, box-shadow 0.2s ease 0s, border-color 0.2s ease 0s;
     box-shadow: none;
 }
+.selected:first-child{
+    background-color: #D0D0D0  !important;
+    border-top: 1px solid #AAA0A0 !important;
+    border-bottom: 0px solid #AAA0A0 !important;
+}
 .selected{
     background-color: #D0D0D0  !important;
-    border-color: #D0D0D0  !important;
+    border-left: 1px solid #AAA0A0 !important;
+    border-right: 1px solid #AAA0A0 !important;
+    border-top: 1px solid #AAA0A0 !important;
+    border-bottom: 1px solid #AAA0A0 !important;
+}
+.selected:last-child{
+    background-color: #D0D0D0  !important;
+    border-top: 0px solid #AAA0A0 !important;
+    border-bottom: 1px solid #AAA0A0 !important;
 }
 .mark-select:hover{
     background-color: #D0D0D0  !important;
@@ -109,6 +140,10 @@ Use this for keyframe animations
     color:#fff !important;
     cursor: pointer !important;
     cursor: hand !important;
+    border-left: 1px solid #AAA0A0 !important;
+    border-right: 1px solid #AAA0A0 !important;
+    border-top: 1px solid #AAA0A0 !important;
+    border-bottom: 1px solid #AAA0A0 !important;
 }
 .single-col-checklist{
     width:226px ;
@@ -148,9 +183,7 @@ Use this for keyframe animations
     text-decoration:none !important;
 }
 .dropdown-menu {
- font-weight:700 !important;
- font-size:13px !important;
- color:rgba(0, 0, 0, 0.6) !important;
+  color:rgba(0, 0, 0, 0.6) !important;
 }
 
 .inner-addon {
@@ -275,6 +308,7 @@ body{
 }
 .list-inpute{
     max-width: 40px !important;
+    min-width: 40px !important;
     height: 25px !important;
     display:inline-block !important;
     padding: 3px 6px !important;

@@ -52,7 +52,12 @@
                       placeholder: 'contains'
                   }
               },
-              { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 200, enableHiding: false },
+              {
+                  name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 200, enableHiding: false,
+                  cellTooltip: function (row, col) {
+                      return row.entity.CodeSetDescription;
+                  },
+              },
               { name: 'Rule Type', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
               { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
               { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false }//,
