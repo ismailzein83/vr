@@ -72,21 +72,50 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     CDR cdr = new CDR();
                                     cdr.MSISDN = i.Substring(145,20).Trim();
                                     cdr.IMSI = i.Substring(125,20).Trim();
-                                    //cdr.ConnectDateTime = DateTime.ParseExact(i.Substring(221, 14).Trim(),"yyyyMddHHmmss",CultureInfo.InvariantCulture);
-                                    cdr.Destination = i.Substring( 198,20).Trim();
-                                    cdr.DurationInSeconds = i.Substring( 434,10).Trim();
-                                    cdr.Call_Class = i.Substring( 235,5).Trim();
-                                    cdr.Call_Type = i.Substring( 102,3).Trim();
-                                    cdr.Sub_Type = i.Substring( 165,10).Trim();
-                                    cdr.IMEI = i.Substring( 105,20).Trim();
-                                    cdr.BTS_Id = i.Substring(252, 21).Trim();
-                                    cdr.Cell_Id = i.Substring( 252,22).Trim();
-                                    cdr.Up_Volume = i.Substring( 588,10).Trim();
-                                    cdr.Down_Volume = i.Substring( 598,10).Trim();
-                                    cdr.Cell_Latitude = i.Substring( 609,9).Trim();
-                                    cdr.Cell_Longitude = i.Substring( 618,9).Trim();
-                                    cdr.In_Trunk = i.Substring( 414,20).Trim();
-                                    cdr.Out_Trunk = i.Substring( 394,20).Trim();
+                                    cdr.Destination = i.Substring(198, 20).Trim();
+                                    cdr.Call_Class = i.Substring(434, 10).Trim();
+                                    cdr.Sub_Type = i.Substring(165, 10).Trim();
+                                    cdr.IMEI = i.Substring(105, 20).Trim();
+                                    cdr.Cell_Id = i.Substring(252, 22).Trim();
+                                    cdr.In_Trunk = i.Substring(414, 20).Trim();
+                                    cdr.Out_Trunk = i.Substring(394, 20).Trim();
+
+
+                                    DateTime ConnectDateTime;
+                                    if (DateTime.TryParseExact(i.Substring(221, 14).Trim(), "yyyyMddHHmmss", CultureInfo.InvariantCulture,
+                                                               DateTimeStyles.None, out ConnectDateTime))
+                                        cdr.ConnectDateTime = ConnectDateTime;
+
+
+
+                                    int Call_Type = 0;
+                                    if (int.TryParse(i.Substring(102, 3).Trim(), out Call_Type))
+                                        cdr.Call_Type = Call_Type;
+                                    
+                                    decimal Cell_Latitude ;
+                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out Cell_Latitude))
+                                        cdr.Cell_Latitude = Cell_Latitude;
+
+
+                                    decimal DurationInSeconds ;
+                                    if (decimal.TryParse(i.Substring(588, 10).Trim(), out DurationInSeconds))
+                                        cdr.DurationInSeconds = DurationInSeconds;
+
+
+                                    decimal Up_Volume ;
+                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out Up_Volume))
+                                        cdr.Up_Volume = Up_Volume;
+
+
+                                    decimal Cell_Longitude ;
+                                    if (decimal.TryParse(i.Substring(618, 9).Trim(), out Cell_Longitude))
+                                        cdr.Cell_Longitude = Cell_Longitude;
+
+
+                                    decimal Down_Volume ;
+                                    if (decimal.TryParse(i.Substring(598, 10).Trim(), out Down_Volume))
+                                        cdr.Down_Volume = Down_Volume;
+
 
                                     CDRs.Add(cdr);
                                 }
