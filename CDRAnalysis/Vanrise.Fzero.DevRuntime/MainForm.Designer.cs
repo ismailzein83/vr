@@ -37,12 +37,12 @@
             this.cmbTask.FormattingEnabled = true;
             this.cmbTask.Location = new System.Drawing.Point(40, 34);
             this.cmbTask.Name = "cmbTask";
-            this.cmbTask.Size = new System.Drawing.Size(171, 21);
+            this.cmbTask.Size = new System.Drawing.Size(380, 21);
             this.cmbTask.TabIndex = 0;
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(217, 34);
+            this.btnStart.Location = new System.Drawing.Point(437, 32);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 1;
@@ -55,7 +55,7 @@
             this.AcceptButton = this.btnStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(347, 110);
+            this.ClientSize = new System.Drawing.Size(524, 76);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.cmbTask);
             this.Name = "MainForm";
