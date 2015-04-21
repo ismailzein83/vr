@@ -24,6 +24,6 @@ namespace TOne.LCR.Entities
 
         public string Reason { get; set; }
 
-        public Object ActionData { get; set; }
+        public BaseRouteRuleActionData ActionData { get; set; }
     }
 }

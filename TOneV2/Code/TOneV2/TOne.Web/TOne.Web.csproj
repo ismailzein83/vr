@@ -238,6 +238,7 @@
     <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
     <Content Include="Client\Javascripts\Services\utilities-service.js" />
+    <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\Angular\angular-animate.js" />

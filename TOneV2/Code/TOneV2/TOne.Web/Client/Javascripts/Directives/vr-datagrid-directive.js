@@ -1,10 +1,10 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagrid', ['DataGridDirService', '$interval', function (DataGridDirService, $interval) {
-    var cellTemplate = '<div class="ui-grid-cell-contents">'
-    +'<a ng-show="col.colDef.isClickable(row.entity)" class="span-summary" ng-click="col.colDef.onClicked(row.entity)" style="cursor:pointer;"> {{row.entity[col.field]}}</a>'
-    + '<span ng-hide="col.colDef.isClickable(row.entity)" class="span-summary"> {{row.entity[col.field]}}</span>'
+app.directive('vrDatagrid', ['DataGridDirService', 'UtilsService', '$interval', function (DataGridDirService, UtilsService, $interval) {
+    var cellTemplate = '<div class="ui-grid-cell-contents" style="text-align: #TEXTALIGN#">'
+    + '<a ng-show="col.colDef.isClickable(row.entity)" class="span-summary" ng-click="col.colDef.onClicked(row.entity)" style="cursor:pointer;"> {{col.colDef.getValue(row.entity) #CELLFILTER#}}</a>'
+    + '<span ng-hide="col.colDef.isClickable(row.entity)" class="span-summary"> {{col.colDef.getValue(row.entity) #CELLFILTER#}}</span>'
 + '</div>';
 
     var headerTemplate = '<div ng-class="{ \'sortable\': col.colDef.enableSorting }" class="header-custom" ng-click="col.colDef.onSort()" style="background-color: #829EBF;color:#FFF">'
@@ -90,8 +90,21 @@ app.directive('vrDatagrid', ['DataGridDirService', '$interval', function (DataGr
                         }
                     };
                     
+                    colDef.getValue = function (dataItem) {
+                        return eval('dataItem.' + colDef.field);
+                    };
+
+                    var columnCellTemplate = cellTemplate;
+                    if (col.type == "Number") {
+                        columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "right;margin-right:10px");
+                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| number:2");
+                    }
+                    else {
+                        columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "left");
+                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "");
+                    }
+                    colDef.cellTemplate = columnCellTemplate;
                     if (col.isClickable != undefined) {
-                        colDef.cellTemplate = cellTemplate;//'/Client/Templates/Grid/CellTemplate.html';
                         colDef.isClickable = function (dataItem) {
                             return col.isClickable(dataItem);
                         };
@@ -100,9 +113,7 @@ app.directive('vrDatagrid', ['DataGridDirService', '$interval', function (DataGr
                                 col.onClicked(dataItem);
                         };
                     }
-                    if (col.type == "Number")
-                        colDef.cellFilter = "number:2";
-                    colDef.testModel = 'test gg';
+
                     gridOptions.columnDefs.push(colDef);
                 });
                 maxHeight = options.maxHeight;

@@ -364,7 +364,7 @@ appControllers.controller('ZoneMonitorController',
                     seriesDefinitions.push({
                         title: measure.description,
                         valuePath: measure.propertyName,
-                        selected: (measure == TrafficStatisticsMeasureEnum.Attempts || measure == TrafficStatisticsMeasureEnum.DurationsInSeconds)
+                        selected: (measure == TrafficStatisticsMeasureEnum.Attempts || measure == TrafficStatisticsMeasureEnum.DurationsInMinutes)
                     });
                 });
 

@@ -28,6 +28,18 @@ namespace TOne.BusinessEntity.Data.SQL
             }, carrierType.ToString());
         }
 
+        public string GetCarrierAccountName(string carrierAccountId)
+        {
+            string carrierAccountName = GetItemSP("BEntity.sp_CarrierAccount_GetName",
+                (reader) =>
+                {
+                    return string.Format("{0}{1}", reader["Name"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"] as string) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty);
+                }, 
+                carrierAccountId);
+
+            return carrierAccountName;
+        }
+
         #region Private Methods
 
         private CarrierAccountInfo CarrierAccountInfoMapper(IDataReader reader)

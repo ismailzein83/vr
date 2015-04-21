@@ -10,9 +10,9 @@ namespace TOne.LCR.Entities
     {
         public List<int> SupplierZonesIds { get; set; }
 
-        public override string Description
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
         {
-            get { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
     }
 }

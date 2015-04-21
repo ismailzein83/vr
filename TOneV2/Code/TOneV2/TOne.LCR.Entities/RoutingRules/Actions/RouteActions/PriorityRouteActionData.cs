@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class PriorityRouteActionData
+    public class PriorityRouteActionData : BaseRouteRuleActionData
     {
         public List<PriorityOption> Options { get; set; }
+
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Priority Rule";
+        }
     }
 
     public class PriorityOption

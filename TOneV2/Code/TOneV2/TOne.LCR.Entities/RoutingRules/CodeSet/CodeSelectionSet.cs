@@ -26,9 +26,9 @@ namespace TOne.LCR.Entities
             return this.ExcludedCodes != null && this.ExcludedCodes.Contains(code);
         }
         
-        public override string Description
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
         {
-            get { return String.Format("Code: {0}", Code); }
-        }        
+            return String.Format("Code {0} {1}", Code, WithSubCodes ? "with sub codes" : "");
+        }
     }
 }

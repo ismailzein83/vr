@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.LCR.Entities
 {
     public abstract class BaseCodeSet
     {
-        public abstract string Description { get; }
+        public abstract string GetDescription(IBusinessEntityInfoManager businessEntityManager);
         public virtual CodeSetMatch GetMatch()
         {
             return null;

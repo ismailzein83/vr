@@ -38,9 +38,11 @@ namespace TOne.LCR.Entities
             return this.ExcludedCodes != null && this.ExcludedCodes.Contains(code);
         }
 
-        public override string Description
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
         {
-            get { return String.Format("Zones: {0}", String.Join(",", ZoneIds.SelectedValues.Select<int, string>(itm => itm.ToString()))); }
+            return String.Format("{0}: {1}", 
+                this.ZoneIds.SelectionOption == MultipleSelectionOption.OnlyItems ? "Zones" : "All Zones Except", 
+                String.Join(",", ZoneIds.SelectedValues.Select<int, string>(itm => businessEntityManager.GetZoneName(itm))));
         }
     }
 }

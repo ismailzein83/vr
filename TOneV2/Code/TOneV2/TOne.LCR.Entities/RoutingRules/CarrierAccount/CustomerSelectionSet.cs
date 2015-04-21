@@ -21,9 +21,11 @@ namespace TOne.LCR.Entities
             return false;
         }
 
-        public override string Description
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
         {
-            get { return String.Format("Customers: {0}", String.Join(",", this.Customers.SelectedValues)); }
+            return String.Format("{0}: {1}", 
+                this.Customers.SelectionOption == MultipleSelectionOption.OnlyItems ? "Customers" : "All Customers Except",
+                String.Join(",", this.Customers.SelectedValues.Select<string, string>(itm => businessEntityManager.GetCarrirAccountName(itm))));
         }
     }
 }

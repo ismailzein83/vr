@@ -7,8 +7,13 @@ using TOne.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public class BlockRouteOptionActionData
+    public class BlockRouteOptionActionData : BaseRouteRuleActionData
     {
         public MultipleSelection<string> Customers { get; set; }
+
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Block Route Option";
+        }
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="CloneHelper.cs" />
     <Compile Include="CodeCustomers.cs" />
     <Compile Include="RoutingRuleActionType.cs" />
+    <Compile Include="RoutingRules\Actions\BaseRouteRuleActionData.cs" />
     <Compile Include="RoutingRules\Actions\BaseRouteAction.cs" />
     <Compile Include="RoutingRules\Actions\BaseRouteOptionAction.cs" />
     <Compile Include="RoutingRules\Actions\IRouteBuildContext.cs" />
@@ -85,6 +86,10 @@
     <Compile Include="ZoneRates\ZoneRates.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
       <Name>TOne.Entities</Name>

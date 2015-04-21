@@ -132,5 +132,7 @@
     <Build Include="Analytics\Stored Procedures\sp_TrafficStats_GetSummaryWithGrouping.sql" />
     <Build Include="LCR\User Defined Types\StringIDType.sql" />
     <Build Include="LCR\User Defined Types\CodeType.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_Zone_GetName.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_GetName.sql" />
   </ItemGroup>
 </Project>

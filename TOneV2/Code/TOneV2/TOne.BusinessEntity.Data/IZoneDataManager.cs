@@ -13,5 +13,6 @@ namespace TOne.BusinessEntity.Data
         List<ZoneInfo> GetZones(string supplierId ,string nameFilter);
 
         List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds);
+        string GetZoneName(int zoneId);
     }
 }

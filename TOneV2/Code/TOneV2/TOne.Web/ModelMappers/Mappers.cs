@@ -11,18 +11,18 @@ namespace TOne.Web.ModelMappers
     {
         public static RouteRuleSummaryModel MapRouteRule(RouteRule route)
         {
+            BusinessEntity.Business.BusinessEntityInfoManager beManager = new BusinessEntity.Business.BusinessEntityInfoManager();
             return new RouteRuleSummaryModel
             {
-                RouteRuleId = route.RouteRuleId ,
-                CarrierAccountDescription = route.CarrierAccountSet.Description,
-                CodeSetDescription = route.CodeSet.Description,
-                ActionDescription = (route.ActionData!=null)?route.ActionData.GetType().Name : "Route Block" ,
-                Type = route.Type ,
-                TypeDescription = route.Type.ToString() ,
+                RouteRuleId = route.RouteRuleId,
+                CarrierAccountDescription = route.CarrierAccountSet.GetDescription(beManager),
+                CodeSetDescription = route.CodeSet.GetDescription(beManager),
+                ActionDescription = (route.ActionData != null) ? route.ActionData.GetDescription(beManager) : "Route Block",
+                Type = route.Type,
+                TypeDescription = route.Type.ToString(),
                 BeginEffectiveDate = route.BeginEffectiveDate,
                 EndEffectiveDate = route.EndEffectiveDate,
                 Reason = route.Reason
-               
             };
         }
 

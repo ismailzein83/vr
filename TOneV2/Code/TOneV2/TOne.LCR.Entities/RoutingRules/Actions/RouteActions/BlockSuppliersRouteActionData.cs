@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class BlockSuppliersRouteActionData
+    public class BlockSuppliersRouteActionData : BaseRouteRuleActionData
     {
         public HashSet<string> BlockedOptions { get; set; }
+
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Block Suppliers";
+        }
     }
 
     public class BlockSupplierOption

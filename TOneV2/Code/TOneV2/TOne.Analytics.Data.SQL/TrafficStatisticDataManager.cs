@@ -210,8 +210,8 @@ namespace TOne.Analytics.Data.SQL
             trafficStatistics.Attempts = GetReaderValue<int>(reader, "Attempts");
             trafficStatistics.DeliveredAttempts = GetReaderValue<int>(reader, "DeliveredAttempts");
             trafficStatistics.SuccessfulAttempts = GetReaderValue<int>(reader, "SuccessfulAttempts");
-            trafficStatistics.DurationsInSeconds = GetReaderValue<Decimal>(reader, "DurationsInSeconds");
-            trafficStatistics.MaxDurationInSeconds = GetReaderValue<Decimal>(reader, "MaxDurationInSeconds");
+            trafficStatistics.DurationsInMinutes = GetReaderValue<Decimal>(reader, "DurationsInSeconds") / 60;
+            trafficStatistics.MaxDurationInMinutes = GetReaderValue<Decimal>(reader, "MaxDurationInSeconds") / 60;
             trafficStatistics.PDDInSeconds = GetReaderValue<Decimal>(reader, "PDDInSeconds");
             trafficStatistics.UtilizationInSeconds = GetReaderValue<Decimal>(reader, "UtilizationInSeconds");
             trafficStatistics.NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls");
@@ -221,7 +221,12 @@ namespace TOne.Analytics.Data.SQL
 
         private string GetColumnName(TrafficStatisticMeasures column)
         {
-            return column.ToString();
+            switch(column)
+            {
+                case TrafficStatisticMeasures.DurationsInMinutes: return "DurationsInSeconds";
+                case TrafficStatisticMeasures.MaxDurationInMinutes: return "MaxDurationsInSeconds";
+                default: return column.ToString();
+            }            
         }
 
         private void GetColumnNames(TrafficStatisticGroupKeys column, out string idColumn, out string nameColumn)

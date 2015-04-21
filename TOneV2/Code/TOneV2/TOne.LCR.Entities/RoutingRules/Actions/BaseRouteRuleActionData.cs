@@ -7,12 +7,8 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.LCR.Entities
 {
-    public abstract class BaseCarrierAccountSet
+    public abstract class BaseRouteRuleActionData
     {
         public abstract string GetDescription(IBusinessEntityInfoManager businessEntityManager);
-        public virtual bool IsAccountIdIncluded(string accountId)
-        {
-            return true;
-        }
     }
 }

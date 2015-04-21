@@ -12,5 +12,7 @@ namespace TOne.BusinessEntity.Data
         List<CarrierAccountInfo> GetActiveSuppliersInfo();
 
         List<CarrierInfo> GetCarriers(CarrierType carrierType);
+
+        string GetCarrierAccountName(string carrierAccountId);
     }
 }

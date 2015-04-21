@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class ApplyPercentageRouteActionData
+    public class ApplyPercentageRouteActionData : BaseRouteRuleActionData
     {
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Percentage Rule";
+        }
     }
 }

@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class OverrideRouteActionData
+    public class OverrideRouteActionData : BaseRouteRuleActionData
     {
         public List<OverrideOption> Options { get; set; }
 
         public OverrideRouteNoOptionAction NoOptionAction { get; set; }
 
         public List<OverrideOption> BackupOptions { get; set; }
+
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Override Route";
+        }
     }
 
     public class OverrideOption

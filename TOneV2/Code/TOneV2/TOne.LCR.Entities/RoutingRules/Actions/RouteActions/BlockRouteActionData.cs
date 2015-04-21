@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class BlockRouteActionData
+    public class BlockRouteActionData : BaseRouteRuleActionData
     {
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
+        {
+            return "Block Route";
+        }
     }
 }

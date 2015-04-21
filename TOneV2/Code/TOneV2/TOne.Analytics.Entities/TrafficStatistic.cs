@@ -18,9 +18,9 @@ namespace TOne.Analytics.Entities
 
         public int SuccessfulAttempts { get; set; }
 
-        public Decimal DurationsInSeconds { get; set; }
+        public Decimal DurationsInMinutes { get; set; }
 
-        public Decimal MaxDurationInSeconds { get; set; }
+        public Decimal MaxDurationInMinutes { get; set; }
 
         public Decimal PDDInSeconds { get; set; }
 

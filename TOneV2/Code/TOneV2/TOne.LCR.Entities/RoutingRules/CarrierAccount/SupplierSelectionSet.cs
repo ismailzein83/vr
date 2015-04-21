@@ -16,9 +16,9 @@ namespace TOne.LCR.Entities
             return this.SupplierId == accountId;
         }
 
-        public override string Description
+        public override string GetDescription(BusinessEntity.Entities.IBusinessEntityInfoManager businessEntityManager)
         {
-            get { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
     }
 }

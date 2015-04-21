@@ -52,6 +52,11 @@ namespace TOne.BusinessEntity.Data.SQL
          
         }
 
+        public string GetZoneName(int zoneId)
+        {
+            return ExecuteScalarSP("[BEntity].[sp_Zone_GetName]", zoneId) as string;
+        }
+
         public List<ZoneInfo> GetZoneList(IEnumerable<int> zonesIds)
         {
             DataTable dtZones = BuildZoneInfoTable(zonesIds);
