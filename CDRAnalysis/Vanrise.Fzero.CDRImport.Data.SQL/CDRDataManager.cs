@@ -31,28 +31,28 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             foreach (CDR cdr in cdrs)
             {
                 stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",
-                              new[]  {   cdr.MSISDN
-                                  , cdr.IMSI
-                                  , ""//cdr.ConnectDateTime
-                                  , cdr.Destination
-                                  , cdr.DurationInSeconds
-                                  , ""//cdr.DisconnectDateTime.ToString()
-                                  , cdr.Call_Class
-                                  , cdr.IsOnNet
-                                  , cdr.Call_Type
-                                  , cdr.Sub_Type
-                                  , cdr.IMEI
-                                  , cdr.BTS_Id
-                                  , cdr.Cell_Id
-                                  , cdr.SwitchRecordId
-                                  , cdr.Up_Volume
-                                  , cdr.Down_Volume
-                                  , cdr.Cell_Latitude
-                                  , cdr.Cell_Longitude
-                                  , cdr.In_Trunk
-                                  , cdr.Out_Trunk
-                                  , cdr.Service_Type
-                                  , cdr.Service_VAS_Name}
+                              new[]  {   cdr.MSISDN.ToString()
+                                  , cdr.IMSI.ToString()
+                                  , cdr.ConnectDateTime.ToString()
+                                  , cdr.Destination.ToString()
+                                  , cdr.DurationInSeconds.ToString()
+                                  , ""
+                                  , cdr.Call_Class.ToString()
+                                  , cdr.IsOnNet.ToString()
+                                  , cdr.Call_Type.ToString()
+                                  , cdr.Sub_Type.ToString()
+                                  , cdr.IMEI.ToString()
+                                  , ""
+                                  , cdr.Cell_Id.ToString()
+                                  , ""
+                                  , ""
+                                  , ""
+                                  , cdr.Cell_Latitude.ToString()
+                                  , cdr.Cell_Longitude.ToString()
+                                  , cdr.In_Trunk.ToString()
+                                  , cdr.Out_Trunk.ToString()
+                                  , ""
+                                  , ""}
                 );
             }
 
