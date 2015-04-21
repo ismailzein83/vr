@@ -37,6 +37,10 @@ textarea.form-control {
     right:0px ;
     left: initial ;
 }
+.dropdown-menu-label{
+padding: 5px 2px;
+}
+    
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
@@ -209,8 +213,12 @@ Use this for keyframe animations
 .action-bar-right div{
     float:right !important ;
 }
-.btncustom:hover{
- 
+.btncustom:hover{ 
+    opacity:0.99;
+    background-color:black !important;
+
+}
+.highlight-btn{ 
     opacity:0.99;
     background-color:black !important;
 
@@ -338,7 +346,7 @@ body{
 	cursor: pointer;
 }
 
- ui-grid override
+ /*ui-grid override*/
 .ui-grid {
     border:none;
 }
@@ -675,6 +683,17 @@ input.ui-grid-filter-input[type="text"] {
 .menu-item-list-ligth{
      background-color: #E3DEDE  !important;
 }
+.caret-left {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-right: 4px solid ;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
 .caret-rigth {
     display: inline-block;
     width: 0px;
@@ -685,6 +704,11 @@ input.ui-grid-filter-input[type="text"] {
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     border-left: 4px solid;
+}
+.indicator {
+   position:absolute;
+   top:0px;
+   color:black;
 }
 .caret-up {
     display: inline-block;
@@ -738,7 +762,92 @@ input.ui-grid-filter-input[type="text"] {
     border-radius: 0px;
     font-size:12px;
 }
-/*.vr-container{
-    overflow-x: hidden;
-    padding: 0px 6px 0px 15px;
-}*/
+
+.vr-grid  {
+  border: 0px !important;
+   
+}
+.vr-grid .ui-grid-header {
+    border-bottom: 0px solid #D4D4D4;
+}
+.vr-grid .ui-grid-header-cell {
+     border: 0px ;
+}
+.vr-grid .ui-grid-header-canvas {
+    background-color: #fff;
+    border-bottom: 0px solid #798992;
+}
+.vr-grid .ui-grid-header-cell {
+    font-size  : 12px;
+    color: #534B4B;
+    border: medium none;
+    
+}
+.vr-grid .ui-grid-cell {    
+    border-bottom: 1px solid #D4D4D4;
+    border-right: 0px solid #D4D4D4;   
+    font-size: 12px;
+    margin-top: 0px;
+    color: #616f77;
+}
+.vr-grid .ui-grid-row:nth-child(odd) .ui-grid-cell {
+  background-color: #fff;
+}
+.vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: #fff;
+}
+.vr-grid .ui-grid-cell-contents {
+    
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
+.vr-grid .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+    border-right: 0px solid #fff;
+}
+.vr-grid .ui-grid-header-canvas{
+     background-color:#829EBF !important;
+     min-height: 26.983px;
+}
+.vr-grid .ui-grid-header-cell {
+  background-color:#829EBF;
+  color:#fff !important;
+  border:none;
+}
+.vr-grid input.ui-grid-filter-input[type="text"] {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    border: 1px solid #D4D4D4;
+    border-radius: 0px;
+    background-clip: padding-box;
+    color: #000;
+}
+.vr-grid .ui-grid-cell {
+    border:none;
+}
+.vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: #F5F5F5;
+}
+.btn-group-custom >button {
+    height: 24px !important;
+    padding: 2px 12px !important;
+}
+.btn-group-custom > label{
+   
+}
+.clicked-btn{ 
+     border-bottom:2px solid;
+}
+.ui-grid-cell{
+    overflow:visible !important;
+}
+.gid-cell-menu {
+    display: block;
+    min-width: 100px;
+    position: relative;
+    top: -7px;
+    padding: 5px 2px;
+}

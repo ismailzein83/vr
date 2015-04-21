@@ -1,15 +1,16 @@
 ﻿<div ng-controller="CustomerController">
     <vr-columns colnum="2">
-        <div class="dropdown dropdown-custom" id="dropdownMenuddl">
-            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption' >
+        <div class="dropdown dropdown-custom " id="dropdownMenuddl">
+            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" ng-style="carrierAccountSelectionOption==2?{'color':'#D44A47'}:''" type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption'>
                 {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
+                <span class="caret-rigth indicator"></span>
             </label>
-            <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuCu">
+            <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-label" role="menu" aria-labelledby="dropdownMenuCu">
                 <li role="presentation" ng-show="carrierAccountSelectionOption != 1">
                     <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 1">Customers</label>
                 </li>
                 <li role="presentation" ng-show="carrierAccountSelectionOption != 2">
-                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 2">All Customers Except</label>
+                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 2 ;s={'color':'red'} ">All Customers Except</label>
                 </li>
             </ul>
         </div>

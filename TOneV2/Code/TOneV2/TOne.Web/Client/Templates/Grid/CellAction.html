@@ -1,0 +1,17 @@
+﻿<div class="ui-grid-cell-contents" style="overflow:visible">
+    <div ng-mouseleave="show = false">
+        <label class=" hand-cursor" ng-init="show=false" ng-click="show=!show">
+            <span class="glyphicon glyphicon-list-alt" ></span>
+        </label>
+        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
+            <li role="presentation">
+                <div class="mark-select ">
+                    <div class="hand-cursor" ng-click=" show = false ; grid.appScope.openEdit(row)">Edit</div>
+                </div>
+                <div class="mark-select ">
+                    <div class="hand-cursor " ng-click=" show = false ;">Delete</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -32,8 +32,9 @@
             .then(function (response) {
                 $scope.optionsSuppliers.datasource = response;
                 $scope.optionsSuppliers.selectedvalues.length = 0;
-                if ($scope.routeRule) {
-                    var tab = [];
+                var tab = [];
+                if ($scope.routeRule && $scope.routeRule.ActionData.$type == 'TOne.LCR.Entities.PriorityRouteActionData, TOne.LCR.Entities') {
+                  
                     $.each($scope.routeRule.ActionData.Options, function (i, value) {
                         var existobj = $scope.findExsiteObj($scope.optionsSuppliers.datasource, value.SupplierId, 'CarrierAccountID')
                         if (existobj != null) {

@@ -195,18 +195,14 @@
 
         }
         $scope.update2 = function (selectedvalues, datasource) {
-            if (selectedvalues.name != 'Customer') {
-
+            if (selectedvalues.name != 'Customer' && selectedvalues.name!== undefined) {
                 notify.closeAll();
                 notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
                 return $scope.optionsRouteType.selectedvalue = $scope.optionsRuleType.datasource[0];
             }
         }
 
-        $scope.onchangeRouteRule = function (data, items, last) {
-            if ($scope.routeRule && $scope.routeRule.ActionData && $scope.routeRule.ActionData.Options)
-                $scope.routeRule.ActionData.Options.length = 0;
-        }
+        
 
         $scope.onchangeEditorType = function (data, items, last) {
             if ($scope.routeRule && $scope.routeRule.CodeSet )

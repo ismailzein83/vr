@@ -1040,14 +1040,14 @@ div.ui-grid-cell input.ng-valid {
 }
 .ui-grid-pinned-container.ui-grid-pinned-container-left .ui-grid-header-cell:last-child {
   box-sizing: border-box;
-  border-right: 1px solid;
-  border-width: 1px;
+  border-right: 0px solid;
+  border-width: 0px;
   border-color: #aeaeae;
 }
 .ui-grid-pinned-container.ui-grid-pinned-container-left .ui-grid-cell:last-child {
   box-sizing: border-box;
-  border-right: 1px solid;
-  border-width: 1px;
+  border-right: 0px solid;
+  border-width: 0px;
   border-color: #aeaeae;
 }
 .ui-grid-pinned-container.ui-grid-pinned-container-left .ui-grid-header-cell:not(:last-child) .ui-grid-vertical-bar,

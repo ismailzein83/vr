@@ -1,10 +1,11 @@
 ﻿<div ng-controller="ZoneController">
     <vr-columns colnum="2">
         <div class="dropdown dropdown-custom" id="Zoneddl">
-            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption'>
+            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" ng-style="zoneSelectionOption==2?{'color':'#D44A47'}:''" id="dropdownMenuZo" data-toggle="dropdown" aria-expanded="true" ng-model='zoneSelectionOption'>
                 {{zoneSelectionOption == 1 ? "  Zones: " : "  All Zones Except:"}}
+                <span class="caret-rigth indicator"></span>
             </label>
-            <ul class="dropdown-menu dropdown-menu-custom " role="menu" aria-labelledby="dropdownMenuZo">
+            <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-label" role="menu" aria-labelledby="dropdownMenuZo">
                 <li role="presentation" ng-show="zoneSelectionOption != 1">
                     <label class="item-menu hand-cursor" ng-click="zoneSelectionOption = 1">Zones</label>
                 </li>

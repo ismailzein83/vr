@@ -54,27 +54,28 @@
               },
               { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 100, enableHiding: false },
               { name: 'Action desc', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
-              { name: 'Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100 },
+              { name: 'Rule Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100 },
               { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
-              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
-              { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false },
+              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false }//,
+             // { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false },
             ],
             enableColumnResizing: true,
             enableSorting: false,
 
         };       
         $scope.gridOptionsRouteRule.columnDefs[$scope.gridOptionsRouteRule.columnDefs.length] = {
-            name: 'Action',
+            name: ' ',
             enableColumnMenu: false,
             enableFiltering: false,
-            height: 40,
-            enableHiding: false,
-            cellTemplate: '<div><button  type="button" class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row)\"><span  class="glyphicon glyphicon glyphicon-edit" aria-hidden="true"></span></button></div>'
+            height: 40, 
+            enableHiding: false, //'/Client/Templates/Grid/CellAction.html'
+            cellTemplate: '/Client/Templates/Grid/CellAction.html'
         }
 
         $scope.gridOptionsHistory = {
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 2,
+            data:[],
             infiniteScrollPercentage: 20,
             enableFiltering: false,
             saveFocus: false,
@@ -103,7 +104,6 @@
                 $scope.showMain = false;
                 setTimeout(function () {
                     $scope.$apply(function () {
-
                         $scope.showHis = true;
                     });
                 }, 700);
@@ -127,9 +127,10 @@
             $scope.gridOptionsHistory.data.unshift(rowEntity);
 
         };
-         $scope.openEdit = function (row, i) {
+        $scope.openEdit = function (row, i) {
+
             var scopeDetails = $scope.$root.$new();
-            scopeDetails.title = "Update";
+            scopeDetails.title = "Update Route Rule";
             scopeDetails.index = $scope.gridOptionsRouteRule.data.indexOf(row.entity);
             scopeDetails.RouteRuleId = row.entity.RouteRuleId;
             scopeDetails.refreshRowData = refreshRowData;
@@ -233,7 +234,7 @@
         $scope.AddNewRoute = function () {
 
             var scopeDetails = $scope.$root.$new();
-            scopeDetails.title = "New";
+            scopeDetails.title = "New Route Rule";
             scopeDetails.RouteRuleId = 'undefined';
             scopeDetails.callBackHistory = callBackHistory;
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });

@@ -42,8 +42,8 @@
             CarriersService.getSuppliers()
            .then(function (response) {
                $scope.optionsSuppliers.datasource = response;
-               if ($scope.routeRule) {
-                   var tab = [];
+               var tab = [];
+               if ($scope.routeRule && $scope.routeRule.ActionData.$type=='TOne.LCR.Entities.OverrideRouteActionData, TOne.LCR.Entities') {                  
                    $.each($scope.routeRule.ActionData.Options, function (i, value) {
                        $scope.optionsSuppliers.selectedvalues.length = 0;
                        var existobj = $scope.findExsiteObj($scope.optionsSuppliers.datasource, value.SupplierId, 'CarrierAccountID')
@@ -55,7 +55,7 @@
                            }
                        }
 
-                   });
+                   });                 
                    $scope.optionsSuppliers.selectedvalues = tab;
                }
 

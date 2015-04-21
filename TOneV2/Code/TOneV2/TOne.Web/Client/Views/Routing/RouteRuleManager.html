@@ -16,7 +16,7 @@
                 </vr-select>
             </vr-columns>
             <vr-columns colnum="3">
-                <div class="dropdown option-filter" id="optionddl">
+                <!--<div class="dropdown option-filter" id="optionddl">
                     <label class="dropdown-toggle hand-cursor" id="dropdownMenuOptions" data-toggle="dropdown" aria-expanded="true" ng-init="option=1" ng-model='option'>
                         By {{option == 1 ? "  Zones " : " Code "}}
                     </label>
@@ -28,6 +28,11 @@
                             <label class="item-menu hand-cursor" ng-click="option = 2">Code</label>
                         </li>
                     </ul>
+                </div>-->
+                <div class="btn-group btn-group-custom" role="group" ng-init="option=1">
+                    <label  class="hand-cursor" ng-class="option == 1?'clicked-btn':''" ng-click="option = 1">By Zones</label>
+                    <label >|</label>
+                    <label class="hand-cursor" ng-class="option == 2?'clicked-btn':''" ng-click="option = 2">By Code</label>
                 </div>
 
                 <vr-select ng-show="option == 1" ismultipleselection datasource="searchZones" selectedvalues="optionsZonesFilter.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
@@ -68,17 +73,17 @@
 
             </div>
             <div class="btn-group action-bar-right">
-                <button type="button" class="btn btn-default btncustom btncustom action-bar-btn-icon no-float" ng-show="gridOptionsHistory.data.length > 0" ng-click="switchGrids()" aria-label="Left Align">
+                <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float " ng-class=" showHis== true ? 'highlight-btn':''" ng-show="gridOptionsHistory.data.length > 0" ng-click="switchGrids()" aria-label="Left Align">
                     <span ng-show="showHis==false">
-                        {{gridOptionsHistory.data.length}}  Action(s)
+                        {{gridOptionsHistory.data.length}} Updated Rule(s)
                         <span style="padding-left:4px" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                     </span>
                     <span ng-show="showHis==true">
-                        Back
+                        Main View
                         <span style="padding-left:4px" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                     </span>
                 </button>
-                <button type="button" class="btn btn-default btncustom btncustom action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
 
                 <vr-button type="Search" data-onclick="getDatalistFilterd"  ></vr-button>
 
@@ -92,16 +97,15 @@
 
             </div>
 
-            <div id="grid1" class="gridroute" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
+            <div id="grid1" class="gridroute vr-grid" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
             </div>
 
         </vr-columns>
-        <vr-columns colnum="12" nopadding nomargin ng-show="showHis==true">
+        <vr-columns colnum="12" nopadding nomargin >
 
-            <div id="grid2" class="gridroute" ui-grid="gridOptionsHistory">
+            <div ui-grid="gridOptionsHistory" ng-if="showHis">
             </div>
-
-
+            
         </vr-columns>
     </vr-row>
 </vr-panel>
