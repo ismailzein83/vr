@@ -1,0 +1,4 @@
+﻿CREATE TYPE [LCR].[StringIDType] AS TABLE (
+    [Code] VARCHAR (20) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Code] ASC));
+

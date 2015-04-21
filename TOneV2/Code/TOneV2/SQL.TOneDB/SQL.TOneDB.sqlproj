@@ -117,5 +117,20 @@
     <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetPriorityRules.sql" />
     <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetOptionBlockRules.sql" />
     <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetBlockSupplierRouteRules.sql" />
+    <Build Include="LCR\Tables\RoutingRuleAction.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDiffrentialOptionBlockRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDifferentialRuleCodes.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDifferentialPriorityRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDifferentialOverrideRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDifferentialBlockSupplierRouteRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetDifferentialBlockRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetActivePriorityRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetActiveOverrideRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetActiveOptionBlockRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetActiveBlockSupplierRouteRules.sql" />
+    <Build Include="LCR\Stored Procedures\sp_RoutingRules_GetActiveBlockRules.sql" />
+    <Build Include="Analytics\Stored Procedures\sp_TrafficStats_GetSummaryWithGrouping.sql" />
+    <Build Include="LCR\User Defined Types\StringIDType.sql" />
+    <Build Include="LCR\User Defined Types\CodeType.sql" />
   </ItemGroup>
 </Project>
