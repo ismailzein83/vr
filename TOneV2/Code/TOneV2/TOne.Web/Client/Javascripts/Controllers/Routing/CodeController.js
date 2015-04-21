@@ -83,13 +83,16 @@ var CodeController = function ($scope, $http) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
 
-        if ($scope.routeRule != null && $scope.routeRule.CodeSet.Code != null) {
+        if ($scope.routeRule != null && $scope.routeRule.CodeSet.Code != null && $scope.routeRule.CodeSet.$type == 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities') {
             $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
             $scope.code = $scope.routeRule.CodeSet.Code;
             $scope.subCodes = $scope.routeRule.CodeSet.WithSubCodes;
         }
         else {
             $scope.zoneSelectionOption = 1;
+            $scope.codeList = [];
+            $scope.code = '';
+            $scope.subCodes = false;
         }
     }
 }

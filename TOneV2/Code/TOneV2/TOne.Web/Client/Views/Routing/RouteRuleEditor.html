@@ -21,7 +21,7 @@
 
                             </vr-columns>
 
-                        </vr-row>
+                        </vr-row>                        
                         <vr-row>
                             <vr-select type="menu" datatextfield="name" datavaluefield="name"
                                        onselectionchanged="update2" datasource="optionsRuleType.datasource" selectedvalues="optionsRuleType.selectedvalue"></vr-select>
@@ -49,6 +49,7 @@
                                 <vr-datetimepicker type="date" value="EEDDate" ></vr-datetimepicker>                                   
                             </vr-columns>
                         </vr-row>
+                      
                         <vr-row ng-show="optionsRouteType.selectedvalue  && optionsRouteType.selectedvalue.name != 'Block Route' && optionsRouteType.selectedvalue.url!='' ">
                             <div class="col-lg-12  style-col">
                                 <h4>{{optionsRouteType.selectedvalue.name}} Details:</h4>

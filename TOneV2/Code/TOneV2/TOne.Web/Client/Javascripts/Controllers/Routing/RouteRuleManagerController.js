@@ -43,7 +43,7 @@
             enableCellEdit : false,
             columnDefs: [
               {
-                  name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false,
+                  name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false, width: 200,
                   cellTooltip: function (row, col) {
                       return row.entity.CarrierAccountDescription;
                   },
@@ -52,12 +52,10 @@
                       placeholder: 'contains'
                   }
               },
-              { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 100, enableHiding: false },
-              { name: 'Action desc', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
-              { name: 'Rule Type', enableColumnMenu: false, field: 'TypeDescription', height: 40, width: 100 },
+              { name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 200, enableHiding: false },
+              { name: 'Rule Type', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
               { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
               { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false }//,
-             // { name: 'Reason', enableColumnMenu: false, field: 'Reason', height: 40, enableHiding: false },
             ],
             enableColumnResizing: true,
             enableSorting: false,
@@ -76,7 +74,7 @@
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 2,
             data:[],
-            infiniteScrollPercentage: 20,
+            infiniteScrollPercentage: 100,
             enableFiltering: false,
             saveFocus: false,
             saveScroll: true,
@@ -138,7 +136,19 @@
             var addModal = $modal({ scope: scopeDetails, template: '/Client/Views/Routing/RouteRuleEditor.html', show: true, animation: "am-fade-and-scale" });
             
 
-         }
+        }
+        $scope.adjustpost = function (e) {
+
+            var self = angular.element(e.currentTarget);
+            var selfHeight = $(this).parent().height()+12;
+            var selfWidth = $(this).parent().width();
+            var selfOffset = $(self).offset();
+            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+            var dropDown = self.parent().find('ul');
+            $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+
+
+        }
          var buildFilter =  function (page, pageSize){
 
              var filter = {
@@ -208,6 +218,19 @@
             $scope.gridApi.infiniteScroll.resetScroll(false, true);
             $scope.getDatalist(page, pageSize);
            
+
+        }
+        $scope.resetDatalistFilterd = function () {
+
+            page = 0;
+            last = false;
+            $scope.gridApi.infiniteScroll.resetScroll(false, true);
+            $scope.optionsCustomersF.selectedvalues.length = 0;
+            $scope.optionsRouteTypeF.selectedvalues.length = 0;
+            $scope.optionsZonesFilter.selectedvalues.length = 0;
+            $scope.code = '';
+            $scope.getDatalist(page, pageSize);
+
 
         }
         $scope.gridOptionsRouteRule.onRegisterApi = function (gridApi) {

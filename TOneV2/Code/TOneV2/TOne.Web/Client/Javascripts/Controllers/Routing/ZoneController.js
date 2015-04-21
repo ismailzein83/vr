@@ -6,8 +6,8 @@
         };
         $scope.code = "";
         $scope.codeList = [];
-        $scope.codeInpute = '';
-        if ($scope.routeRule != null && $scope.routeRule.CodeSet.ZoneIds != undefined) {
+        $scope.codeInpute = ''; 
+        if ($scope.routeRule != null && $scope.routeRule.CodeSet.ZoneIds != undefined && $scope.routeRule.CodeSet.$type == 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities') {
             $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
             $scope.zoneSelectionOption = $scope.routeRule.CodeSet.ZoneIds.SelectionOption;
             ZonesService.getZoneList($scope.routeRule.CodeSet.ZoneIds.SelectedValues)
@@ -18,6 +18,7 @@
         }
         else {
             $scope.zoneSelectionOption = 1;
+            $scope.codeList = [];
         }
         $scope.subViewConnector.getCodeSet = function () {
             return {

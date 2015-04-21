@@ -1,7 +1,7 @@
 ﻿<div class="ui-grid-cell-contents" style="overflow:visible">
     <div ng-mouseleave="show = false">
-        <label class=" hand-cursor" ng-init="show=false" ng-click="show=!show">
-            <span class="glyphicon glyphicon-list-alt" ></span>
+        <label class=" hand-cursor" ng-init="show=false" ng-click="show=!show ; grid.appScope.adjustpost($event)">
+            <span class="glyphicon glyphicon-list-alt"></span>
         </label>
         <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
             <li role="presentation">

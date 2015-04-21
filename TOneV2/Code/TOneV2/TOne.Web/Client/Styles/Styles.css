@@ -39,8 +39,15 @@ textarea.form-control {
 }
 .dropdown-menu-label{
 padding: 5px 2px;
+
 }
-    
+
+label{
+    font-size:12px;
+}
+.dropdown .dropdown-toggle > span{    
+font-size:12px !important;
+}    
 /* end bootstrap overide */  
 .disable-animations.ng-animate{
     -webkit-transition: none !important;
@@ -221,6 +228,10 @@ Use this for keyframe animations
 .highlight-btn{ 
     opacity:0.99;
     background-color:black !important;
+
+}
+.highlight-btn .glyphicon{ 
+    color:#d6e9c6 !important;
 
 }
 .style-col{
@@ -704,6 +715,17 @@ input.ui-grid-filter-input[type="text"] {
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     border-left: 4px solid;
+}
+.caret-rigth-sm {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    margin-left: 4px;
+    vertical-align: middle;
+    border-right: 3px solid transparent;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-left: 3px solid;
 }
 .indicator {
    position:absolute;

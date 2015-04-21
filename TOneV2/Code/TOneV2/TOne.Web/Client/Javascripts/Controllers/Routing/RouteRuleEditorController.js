@@ -19,7 +19,11 @@
             selectedvalue: ''
         };
         $scope.optionsRuleType = {
-            datasource: [],
+            datasource:[
+              { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
+              { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
+              { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
+            ],
             selectedvalue: ""
         };          
         $scope.optionsRouteType.datasource = [
@@ -32,11 +36,7 @@
              { name: 'Zone', url: '/Client/Templates/PartialTemplate/ZoneTemplate.html', objectType: 'TOne.LCR.Entities.ZoneSelectionSet, TOne.LCR.Entities' },
              { name: 'Code', url: '/Client/Templates/PartialTemplate/CodeTemplate.html', objectType: 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities' }
         ];
-        $scope.optionsRuleType.datasource = [
-          { name: 'Customer', url: '/Client/Templates/PartialTemplate/CustomerTemplate.html' },
-          { name: 'Pool', url: '/Client/Templates/PartialTemplate/PoolTemplate.html' },
-          { name: 'Product', url: '/Client/Templates/PartialTemplate/ProductTemplate.html' }
-        ];
+       // $scope.optionsRuleType.datasource = ;
         
 
     }
@@ -183,37 +183,15 @@
             }
         }
 
-        $scope.update = function (val, model) {
-            if (model == 'routetype' && val.name != 'Customer') {
-                $scope[model] = { "name": 'Customer', "url": '/Client/Templates/PartialTemplate/CustomerTemplate2.html' };
-                notify.closeAll();
-                notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
-            }
-            else {
-                $scope[model] = val;
-            }
-
-        }
+   
         $scope.update2 = function (selectedvalues, datasource) {
             if (selectedvalues.name != 'Customer' && selectedvalues.name!== undefined) {
                 notify.closeAll();
                 notify({ message: 'This module is under construction.', classes: "alert alert-danger" });
-                return $scope.optionsRouteType.selectedvalue = $scope.optionsRuleType.datasource[0];
+                return $scope.optionsRuleType.datasource[0];
             }
-        }
+        }      
 
-        
-
-        $scope.onchangeEditorType = function (data, items, last) {
-            if ($scope.routeRule && $scope.routeRule.CodeSet )
-                $scope.routeRule.CodeSet = {
-                    Code: "",
-                    WithSubCodes:  false,
-                    ExcludedCodes: [],
-                    SelectionOption: "OnlyItems" ,
-                    SelectedValues:[]
-                };
-        }
         $scope.saveRule = function (asyncHandle) {
             $scope.issaving = true;
             var routeRule = {
