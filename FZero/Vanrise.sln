@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Bypass", "Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj", "{1CA1B8A4-C6AC-499D-A763-8276A68C415E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.CommonLibrary", "Vanrise.CommonLibrary\Vanrise.CommonLibrary.csproj", "{A0A85889-CED2-4DE6-BDA9-FEF2C10EB564}"
@@ -86,32 +88,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.Bypass.Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Bypass.TOne", "Vanrise.Fzero.Bypass.TOne\Vanrise.Fzero.Bypass.TOne.csproj", "{AA133B7E-6501-4A0D-AE8D-847B35008044}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.Bypass.FTP", "http://localhost:2289", "{F3B29DA4-1B8D-4085-A4D3-6AE447144750}"
-	ProjectSection(WebsiteProperties) = preProject
-		SccProjectName = "SAK"
-		SccAuxPath = "SAK"
-		SccLocalPath = "SAK"
-		SccProvider = "SAK"
-		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{a0a85889-ced2-4de6-bda9-fef2c10eb564}|Vanrise.CommonLibrary.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_2289"
-		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.Bypass.FTP\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2289\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_2289"
-		Release.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.Bypass.FTP\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2289\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "Vanrise.Fzero.Bypass.FTP\"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.ClientReport", "Vanrise.Fzero.Services.ClientReport\Vanrise.Fzero.Services.ClientReport.csproj", "{68C22EBB-E2E7-47F5-A1AF-6538BBE4E0EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.DailyReport", "Vanrise.Fzero.Services.DailyReport\Vanrise.Fzero.Services.DailyReport.csproj", "{2B782E4E-93EC-4F08-BCBD-F6D43808D438}"
@@ -138,7 +114,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.Week
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 21
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -196,20 +172,15 @@ Global
 		SccLocalPath17 = Vanrise.Fzero.Bypass.ClientWebSite
 		SccProjectEnlistmentChoice17 = 2
 		SccWebProject18 = true
-		SccProjectUniqueName18 = http://localhost:2289
-		SccProjectName18 = Vanrise.Fzero.Bypass.FTP
-		SccLocalPath18 = Vanrise.Fzero.Bypass.FTP
+		SccProjectUniqueName18 = http://localhost:2240
+		SccProjectName18 = Vanrise.Fzero.Bypass.WebSite
+		SccLocalPath18 = Vanrise.Fzero.Bypass.WebSite
 		SccProjectEnlistmentChoice18 = 2
 		SccWebProject19 = true
-		SccProjectUniqueName19 = http://localhost:2240
-		SccProjectName19 = Vanrise.Fzero.Bypass.WebSite
-		SccLocalPath19 = Vanrise.Fzero.Bypass.WebSite
+		SccProjectUniqueName19 = http://localhost:2244
+		SccProjectName19 = Vanrise.Fzero.CDRAnalysis.Website
+		SccLocalPath19 = Vanrise.Fzero.CDRAnalysis.Website
 		SccProjectEnlistmentChoice19 = 2
-		SccWebProject20 = true
-		SccProjectUniqueName20 = http://localhost:2244
-		SccProjectName20 = Vanrise.Fzero.CDRAnalysis.Website
-		SccLocalPath20 = Vanrise.Fzero.CDRAnalysis.Website
-		SccProjectEnlistmentChoice20 = 2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,10 +215,6 @@ Global
 		{AA133B7E-6501-4A0D-AE8D-847B35008044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA133B7E-6501-4A0D-AE8D-847B35008044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA133B7E-6501-4A0D-AE8D-847B35008044}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3B29DA4-1B8D-4085-A4D3-6AE447144750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3B29DA4-1B8D-4085-A4D3-6AE447144750}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3B29DA4-1B8D-4085-A4D3-6AE447144750}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3B29DA4-1B8D-4085-A4D3-6AE447144750}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{68C22EBB-E2E7-47F5-A1AF-6538BBE4E0EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68C22EBB-E2E7-47F5-A1AF-6538BBE4E0EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C22EBB-E2E7-47F5-A1AF-6538BBE4E0EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
