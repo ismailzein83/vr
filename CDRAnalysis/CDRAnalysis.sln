@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website(1)", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -51,9 +51,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.MYSQL", "Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj", "{C8B28352-62C8-4598-A54D-9B962BA47565}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -95,6 +97,9 @@ Global
 		SccProjectUniqueName12 = Dependencies\\Dependencies.csproj
 		SccProjectName12 = Dependencies
 		SccLocalPath12 = Dependencies
+		SccProjectUniqueName13 = Vanrise.Fzero.CDRImport.Data.MYSQL\\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj
+		SccProjectName13 = Vanrise.Fzero.CDRImport.Data.MYSQL
+		SccLocalPath13 = Vanrise.Fzero.CDRImport.Data.MYSQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +182,12 @@ Global
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|x64.ActiveCfg = Release|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
