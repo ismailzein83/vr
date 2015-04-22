@@ -51,7 +51,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.MYSQL", "Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj", "{C8B28352-62C8-4598-A54D-9B962BA47565}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.MYSQL", "Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj", "{656B4BE0-3309-4F19-9F73-58EEDB56B20F}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -182,12 +182,12 @@ Global
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}.Release|x64.ActiveCfg = Release|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8B28352-62C8-4598-A54D-9B962BA47565}.Release|x64.ActiveCfg = Release|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
