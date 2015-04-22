@@ -54,6 +54,15 @@ label{
        min-width:initial !important;
        max-width:initial !important;
     }
+    .dropdown-custom-serf{
+       min-width:initial !important;
+       max-width:initial !important;
+
+    }
+    .menu-right-parent{
+       min-width:initial !important;
+       max-width:initial !important;
+    }
     .dropdown {
        min-width:185px;         
        max-width:185px;
@@ -119,20 +128,17 @@ Use this for keyframe animations
 }
 .selected:first-of-type {
     background-color: #D0D0D0  !important;
-    border-top: 1px solid #AAA0A0 !important;
-    border-bottom: 0px solid #AAA0A0 !important;
+    border-top: 1px solid #C8C8C8 !important;
+    border-bottom: 0px solid #C8C8C8 !important;
 }
 .selected{
     background-color: #D0D0D0  !important;
-    border-left: 1px solid #AAA0A0 !important;
-    border-right: 1px solid #AAA0A0 !important;
-    border-top: 1px solid #AAA0A0 !important;
-    border-bottom: 1px solid #AAA0A0 !important;
+    border: 1px solid #C8C8C8 !important;
 }
 .selected:last-of-type{
     background-color: #D0D0D0  !important;
-    border-top: 0px solid #AAA0A0 !important;
-    border-bottom: 1px solid #AAA0A0 !important;
+    border-top: 0px solid #C8C8C8 !important;
+    border-bottom: 1px solid #C8C8C8 !important;
 }
 .mark-select:hover{
     background-color: #D0D0D0  !important;
@@ -140,10 +146,7 @@ Use this for keyframe animations
     color:#fff !important;
     cursor: pointer !important;
     cursor: hand !important;
-    border-left: 1px solid #AAA0A0 !important;
-    border-right: 1px solid #AAA0A0 !important;
-    border-top: 1px solid #AAA0A0 !important;
-    border-bottom: 1px solid #AAA0A0 !important;
+    border: 1px solid #C8C8C8 !important;
 }
 .single-col-checklist{
     width:226px ;
