@@ -37,5 +37,18 @@ namespace Vanrise.BusinessProcess
                 CacheManagerFactory.RemoveCacheManager(cacheManagerId);
             cacheManagerIds.Clear();
         }
+
+        public void WriteTrackingMessage(BPTrackingSeverity severity, string messageFormat, params object[] args)
+        {
+            BPTrackingMessage trackingMessage = new BPTrackingMessage
+            {
+                Message = String.Format(messageFormat, args),
+                EventTime = DateTime.Now,
+                ProcessInstanceId = this.InstanceInfo.ProcessInstanceID,
+                ParentProcessId = this.InstanceInfo.ParentProcessID,
+                Severity = severity
+            };
+            BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);
+        }
     }
 }
