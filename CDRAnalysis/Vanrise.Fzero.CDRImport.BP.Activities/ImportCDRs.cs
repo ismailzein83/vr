@@ -7,7 +7,7 @@ using System.IO;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
-
+using System.Configuration;
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
 
@@ -31,17 +31,18 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         #endregion
 
+
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-
+            string SFTP_Dir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork {0}", DateTime.Now);
             var sftp = new Rebex.Net.Sftp();
-            sftp.Connect("192.168.110.241");
-            sftp.Login("root", "P@ssw0rd");
+            sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
+            sftp.Login(System.Configuration.ConfigurationManager.AppSettings["Server_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["Server_Pasword"].ToString());
             if (sftp.GetConnectionState().Connected)
             {
                 // set current directory
-                sftp.ChangeDirectory("/var/mysql/5.5/data");
+                sftp.ChangeDirectory(SFTP_Dir);
                 // get items within the current directory
                 SftpItemCollection currentItems = sftp.GetList();
                 if (currentItems.Count > 0)
@@ -50,8 +51,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     {
                         if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
                         {
-                            String filePath = "/var/mysql/5.5/data" + "/" + fileObj.Name;
-                            String newFilePath =  "/var/mysql/5.5/data" + "/" + fileObj.Name.Replace(".DAT", ".old");
+                            String filePath = SFTP_Dir + "/" + fileObj.Name;
+                            String newFilePath = SFTP_Dir + "/" + fileObj.Name.Replace(".DAT", ".old");
                             
                             var stream = new MemoryStream();
                             sftp.GetFile(filePath, stream);
