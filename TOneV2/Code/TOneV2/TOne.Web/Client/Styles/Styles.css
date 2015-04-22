@@ -50,6 +50,10 @@ padding: 5px 2px;
 label{
     font-size:12px;
 }
+.menu-to-top{
+    bottom: 100%;
+    top: initial;
+}
 @media (max-width: 1200px)  { 
     /*.form-control {
        min-width:185px;
@@ -199,6 +203,7 @@ Use this for keyframe animations
 
 .inner-addon {
   position: relative;
+  padding: 0px 2px;
 }
 
  style glyph 

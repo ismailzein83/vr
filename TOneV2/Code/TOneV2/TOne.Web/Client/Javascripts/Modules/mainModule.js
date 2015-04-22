@@ -37,7 +37,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     }
     $(window).resize(function () {       
             var w = window.innerWidth;
-            if (w >= 768)
+            if (w >= 1200)
                 $scope.toogled = true;
             else 
                 $scope.toogled = false;

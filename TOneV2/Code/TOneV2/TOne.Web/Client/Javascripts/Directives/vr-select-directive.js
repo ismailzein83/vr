@@ -226,7 +226,9 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     if (attrs.hideselectedvaluessection) ulDropdown.addClass('single-col-checklist');
                     else ulDropdown.attr('ng-class', 'ctrl.getSelectedSectionClass()');
                 }
-
+                if (attrs.openup !== undefined) {
+                    ulDropdown.addClass('menu-to-top');
+                }
              
                 setTimeout(function () {
                     $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
