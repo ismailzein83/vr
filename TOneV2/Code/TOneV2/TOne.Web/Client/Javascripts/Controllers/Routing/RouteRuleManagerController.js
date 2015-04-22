@@ -43,7 +43,7 @@
             enableCellEdit : false,
             columnDefs: [
               {
-                  name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false, width: 200,
+                  name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false, width: 300,
                   cellTooltip: function (row, col) {
                       return row.entity.CarrierAccountDescription;
                   },
@@ -53,14 +53,14 @@
                   }
               },
               {
-                  name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 200, enableHiding: false,
+                  name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 300, enableHiding: false,
                   cellTooltip: function (row, col) {
                       return row.entity.CodeSetDescription;
                   },
               },
               { name: 'Rule Type', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
-              { name: 'Begin Effective Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false },
-              { name: 'End Effective Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 170, enableHiding: false }//,
+              { name: 'Start Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 75, enableHiding: false },
+              { name: 'End Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 75, enableHiding: false }//,
             ],
             enableColumnResizing: true,
             enableSorting: false,
@@ -70,8 +70,8 @@
             name: ' ',
             enableColumnMenu: false,
             enableFiltering: false,
-            height: 40, 
-            enableHiding: false, //'/Client/Templates/Grid/CellAction.html'
+            height: 40,
+            enableHiding: false, 
             cellTemplate: '/Client/Templates/Grid/CellAction.html'
         }
 

@@ -198,7 +198,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                     angular.element(element[0].querySelector('.dropdown-container1')).attr('style', 'position: relative;');
                     angular.element(element[0].querySelector('.dropdown-container2')).attr('style', 'position: absolute;right: -10px;top: -16px;');
                     divDropdown.prepend(lblTemplate);
-                    divDropdown.addClass('menu-right-parent');
+                    divDropdown.parent().parent().addClass('menu-right-con');
                     ulDropdown.addClass('menu-right');
                 }
                 else if (SelectService.isActionBarTop(attrs.type)) {

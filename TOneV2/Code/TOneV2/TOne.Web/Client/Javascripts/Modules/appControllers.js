@@ -37,10 +37,11 @@ appControllers.directive('resizable', function () {
 appControllers.directive('numberFiled', function () {
     return {
         restrict: 'EA',
-        template: '<input name="{{inputName}}" ng-model="inputValue" class="form-control" />',
+        template: '<input name="{{inputName}}" ng-model="inputValue" placeholder="{{placeHolder}}" class="form-control" />',
         scope: {
             inputValue: '=',
-            inputName: '='
+            inputName: '=',
+            placeHolder: '='
         },
         link: function (scope) {
             scope.$watch('inputValue', function (newValue, oldValue) {
