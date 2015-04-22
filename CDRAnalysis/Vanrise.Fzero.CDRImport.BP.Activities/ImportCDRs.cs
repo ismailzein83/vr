@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Rebex.Net;
+using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rebex.Net;
+using System.Globalization;
+using System.IO;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
-using System.IO;
-using System.Globalization;
 
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {
@@ -37,6 +34,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
 
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork {0}", DateTime.Now);
             var sftp = new Rebex.Net.Sftp();
             sftp.Connect("192.168.110.241");
             sftp.Login("root", "P@ssw0rd");
@@ -133,7 +131,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 }
                 sftp.Disconnect();
             }
-
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End ImportCDRs.DoWork {0}", DateTime.Now);
         }
 
         protected override ImportCDRsInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)

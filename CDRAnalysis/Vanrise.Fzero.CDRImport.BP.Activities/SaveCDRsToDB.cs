@@ -32,6 +32,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork {0}", DateTime.Now);
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
 
 
@@ -54,6 +55,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork {0}", DateTime.Now);
         }
 
         protected override SaveCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
