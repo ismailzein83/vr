@@ -8,6 +8,19 @@ namespace Vanrise.Data.MySQL
 {
     public class BaseMySQLDataManager : BaseDataManager
     {
+        #region ctor
+
+        public BaseMySQLDataManager()
+            : base()
+        {
+        }
+
+        public BaseMySQLDataManager(string connectionStringKey)
+            : base(connectionStringKey)
+        {            
+        }
+
+        #endregion
         protected StreamForBulkInsert InitializeStreamForBulkInsert()
         {
             string filePath = GetFilePathForBulkInsert();
