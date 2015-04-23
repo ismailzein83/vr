@@ -21,7 +21,6 @@ namespace Vanrise.Fzero.CDRImport.Data.MYSQL
 
         public void SaveCDRsToDB(List<CDR> cdrs)
         {
-            // Read and show each line from the file. 
             string filename = GetFilePathForBulkInsert();
 
             using (StreamWriter sw = new StreamWriter(filename))
@@ -56,11 +55,8 @@ namespace Vanrise.Fzero.CDRImport.Data.MYSQL
                 sw.Close();
             }
 
-            //Open Connection Mysql
             MySqlConnection connection = new MySqlConnection(GetConnectionString());
-            //string query = @"LOAD DATA LOCAL  INFILE 'C:\\tmpE1E5.txt' INTO TABLE NormalCDR FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r';";
-            string query = @"LOAD DATA LOCAL  INFILE '" + filename.Replace(@"\", @"\\") + @"' INTO TABLE NormalCDR FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r';";
-            //String.Format("LOAD DATA LOCAL  INFILE 'C:\\test.txt' INTO TABLE {1} FIELDS TERMINATED BY '{2}' LINES TERMINATED BY '\r';", stream.GetDataFilePath(), stream.TableName, stream.FieldSeparator);
+            string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE NormalCDR FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r';", filename.Replace(@"\", @"\\"));
             connection.Open();
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.ExecuteNonQuery();
