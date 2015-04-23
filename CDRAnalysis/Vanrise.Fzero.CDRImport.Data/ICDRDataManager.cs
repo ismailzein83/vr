@@ -9,8 +9,6 @@ namespace Vanrise.Fzero.CDRImport.Data
 {
     public interface ICDRDataManager : IDataManager
     {
-        Object PrepareCDRsForDBApply(List<CDR> cdrs);
-
-        void ApplyCDRsToDB(Object preparedInvalidCDRs);
+        void SaveCDRsToDB(List<CDR> cdrs);
     }
 }

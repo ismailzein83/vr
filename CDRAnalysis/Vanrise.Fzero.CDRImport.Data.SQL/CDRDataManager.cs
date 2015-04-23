@@ -14,20 +14,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public CDRDataManager()
             : base("CDRDBConnectionString")
         {
-
         }
 
-
-        public void ApplyCDRsToDB(Object preparedCDRs)
+        public void SaveCDRsToDB(List<CDR> cdrs)
         {
-            InsertBulkToTable(preparedCDRs as StreamBulkInsertInfo);
-        }
-
-        public Object PrepareCDRsForDBApply(List<CDR> cdrs)
-        {
-
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
-            
+
             foreach (CDR cdr in cdrs)
             {
                 stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",
@@ -58,15 +50,15 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
             stream.Close();
 
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[dbo].[NormalCDR]",
-                Stream = stream,
-                TabLock = false,
-                KeepIdentity = false,
-                FieldSeparator = ','
-            };
+            InsertBulkToTable(  
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[dbo].[NormalCDR]",
+                    Stream = stream,
+                    TabLock = false,
+                    KeepIdentity = false,
+                    FieldSeparator = ','
+                });
         }
-
     }
 }

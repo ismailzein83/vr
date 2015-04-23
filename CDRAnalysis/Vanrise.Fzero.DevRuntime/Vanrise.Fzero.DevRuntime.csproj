@@ -177,6 +177,10 @@
       <Project>{a4b118be-ded8-429c-9ef8-eab394085dff}</Project>
       <Name>Vanrise.Fzero.CDRImport.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj">
+      <Project>{656b4be0-3309-4f19-9f73-58eedb56b20f}</Project>
+      <Name>Vanrise.Fzero.CDRImport.Data.MYSQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Data.SQL\Vanrise.Fzero.CDRImport.Data.SQL.csproj">
       <Project>{3a5581db-9680-4cd4-af20-0339d02f5447}</Project>
       <Name>Vanrise.Fzero.CDRImport.Data.SQL</Name>

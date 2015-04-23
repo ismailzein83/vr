@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRImport.Data
         static ObjectFactory s_objectFactory;
         static CDRDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.CDRImport.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.CDRImport.Data.MYSQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager
