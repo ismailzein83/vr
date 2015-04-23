@@ -84,6 +84,7 @@
     <Content Include="VanriseFramework\Vanrise.Caching.dll" />
     <Content Include="VanriseFramework\Vanrise.Common.dll" />
     <Content Include="VanriseFramework\Vanrise.Data.dll" />
+    <Content Include="VanriseFramework\Vanrise.Data.MySQL.dll" />
     <Content Include="VanriseFramework\Vanrise.Data.SQL.dll" />
     <Content Include="VanriseFramework\Vanrise.Logging.SQL.dll" />
     <Content Include="VanriseFramework\Vanrise.Queueing.Data.dll" />
