@@ -28,14 +28,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
-            //PersistentQueue<ImportedCDRBatch> queue =  Vanrise.Fzero.CDRImport.Business.CDRQueueFactory.GetImportedCDRQueue("DS1");
-
-            //String fileName = @"C:\Users\mustafa.hawi\Desktop\x.Dat";
-
-            //  queue.Enqueue(new ImportedCDRBatch()
-            // {
-            //file =File.ReadAllBytes(fileName)
-            //  });
 
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
