@@ -35,12 +35,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork {0}", DateTime.Now);
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
 
-
-            //Object preparedCDRs = dataManager.PrepareCDRsForDBApply(null);
-       //     dataManager.ApplyCDRsToDB(preparedCDRs);
-
-
-
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -49,8 +43,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
-                            Object preparedCDRs = dataManager.PrepareCDRsForDBApply(item.cdrs);
-                            dataManager.ApplyCDRsToDB(preparedCDRs);
+                            dataManager.SaveCDRsToDB(item.cdrs);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
