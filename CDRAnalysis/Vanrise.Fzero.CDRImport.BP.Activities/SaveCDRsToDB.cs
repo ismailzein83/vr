@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(SaveCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork.Start {0}", DateTime.Now);
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -43,12 +43,14 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.Dequeued {0}", DateTime.Now);
                             dataManager.SaveCDRsToDB(item.cdrs);
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.SavedtoDB {0}", DateTime.Now);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.End {0}", DateTime.Now);
         }
 
         protected override SaveCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
