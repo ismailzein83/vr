@@ -18,6 +18,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void SaveCDRsToDB(List<CDR> cdrs)
         {
+
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
             foreach (CDR cdr in cdrs)

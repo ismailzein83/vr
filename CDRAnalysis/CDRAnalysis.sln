@@ -53,9 +53,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.MYSQL", "Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj", "{656B4BE0-3309-4F19-9F73-58EEDB56B20F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FraudAnalysis", "FraudAnalysis", "{2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Data", "Vanrise.Fzero.FraudAnalysis.Data\Vanrise.Fzero.FraudAnalysis.Data.csproj", "{521364BC-AE3D-4ECA-8392-44A6C1961939}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Data.MySQL", "Vanrise.Fzero.FraudAnalysis.Data.MySQL\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj", "{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Entities", "Vanrise.Fzero.FraudAnalysis.Entities\Vanrise.Fzero.FraudAnalysis.Entities.csproj", "{516B5FB8-205F-44C7-9CE9-949AD88EC87B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Business", "Vanrise.Fzero.FraudAnalysis.Business\Vanrise.Fzero.FraudAnalysis.Business.csproj", "{C195CFD3-948D-447C-83B4-3365D0515EC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.BP.Arguments", "Vanrise.Fzero.FraudAnalysis.Arguments\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj", "{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.BP", "Vanrise.Fzero.FraudAnalysis.BP\Vanrise.Fzero.FraudAnalysis.BP.csproj", "{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.BP.Activities", "Vanrise.Fzero.FraudAnalysis.BP.Activities\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj", "{DD806597-E531-469D-847D-6DE0354889DD}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -100,6 +116,34 @@ Global
 		SccProjectUniqueName13 = Vanrise.Fzero.CDRImport.Data.MYSQL\\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj
 		SccProjectName13 = Vanrise.Fzero.CDRImport.Data.MYSQL
 		SccLocalPath13 = Vanrise.Fzero.CDRImport.Data.MYSQL
+		SccProjectUniqueName14 = Vanrise.Fzero.FraudAnalysis.Data\\Vanrise.Fzero.FraudAnalysis.Data.csproj
+		SccProjectTopLevelParentUniqueName14 = CDRAnalysis.sln
+		SccProjectName14 = Vanrise.Fzero.FraudAnalysis.Data
+		SccLocalPath14 = Vanrise.Fzero.FraudAnalysis.Data
+		SccProjectUniqueName15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL\\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj
+		SccProjectTopLevelParentUniqueName15 = CDRAnalysis.sln
+		SccProjectName15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
+		SccLocalPath15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
+		SccProjectUniqueName16 = Vanrise.Fzero.FraudAnalysis.Entities\\Vanrise.Fzero.FraudAnalysis.Entities.csproj
+		SccProjectTopLevelParentUniqueName16 = CDRAnalysis.sln
+		SccProjectName16 = Vanrise.Fzero.FraudAnalysis.Entities
+		SccLocalPath16 = Vanrise.Fzero.FraudAnalysis.Entities
+		SccProjectUniqueName17 = Vanrise.Fzero.FraudAnalysis.Business\\Vanrise.Fzero.FraudAnalysis.Business.csproj
+		SccProjectTopLevelParentUniqueName17 = CDRAnalysis.sln
+		SccProjectName17 = Vanrise.Fzero.FraudAnalysis.Business
+		SccLocalPath17 = Vanrise.Fzero.FraudAnalysis.Business
+		SccProjectUniqueName18 = Vanrise.Fzero.FraudAnalysis.BP\\Vanrise.Fzero.FraudAnalysis.BP.csproj
+		SccProjectTopLevelParentUniqueName18 = CDRAnalysis.sln
+		SccProjectName18 = Vanrise.Fzero.FraudAnalysis.BP
+		SccLocalPath18 = Vanrise.Fzero.FraudAnalysis.BP
+		SccProjectUniqueName19 = Vanrise.Fzero.FraudAnalysis.Arguments\\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName19 = CDRAnalysis.sln
+		SccProjectName19 = Vanrise.Fzero.FraudAnalysis.Arguments
+		SccLocalPath19 = Vanrise.Fzero.FraudAnalysis.Arguments
+		SccProjectUniqueName20 = Vanrise.Fzero.FraudAnalysis.BP.Activities\\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName20 = CDRAnalysis.sln
+		SccProjectName20 = Vanrise.Fzero.FraudAnalysis.BP.Activities
+		SccLocalPath20 = Vanrise.Fzero.FraudAnalysis.BP.Activities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -188,8 +232,59 @@ Global
 		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{656B4BE0-3309-4F19-9F73-58EEDB56B20F}.Release|x64.ActiveCfg = Release|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{521364BC-AE3D-4ECA-8392-44A6C1961939}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34}.Release|x64.ActiveCfg = Release|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C195CFD3-948D-447C-83B4-3365D0515EC9}.Release|x64.ActiveCfg = Release|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}.Release|x64.ActiveCfg = Release|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD806597-E531-469D-847D-6DE0354889DD}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{521364BC-AE3D-4ECA-8392-44A6C1961939} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{DD4F4480-110D-4BC4-8EA0-688FC59C9B34} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{516B5FB8-205F-44C7-9CE9-949AD88EC87B} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{C195CFD3-948D-447C-83B4-3365D0515EC9} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{DD806597-E531-469D-847D-6DE0354889DD} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 	EndGlobalSection
 EndGlobal
