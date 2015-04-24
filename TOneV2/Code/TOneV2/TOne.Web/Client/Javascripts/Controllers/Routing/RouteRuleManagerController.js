@@ -87,7 +87,7 @@
             columnDefs: [
               {
                   name: 'Roule type', height: 40, enableHiding: false, enableColumnMenu: false,
-                  cellTemplate: '<div><a   class="btn btn-link " style="color:#000" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row)\">{{row.entity.ActionDescription}}</a></div>'
+                  cellTemplate: '<div><a   class="btn btn-link " style="color:#000;font-size:12px" aria-label="Left Align"   ng-click=\"grid.appScope.openEdit(row)\">{{row.entity.ActionDescription}}</a></div>'
               },
               { name: 'Time', enableColumnMenu: false, field: 'Time', height: 40, width: 200, enableHiding: false, cellFilter: 'date:"yyyy-MM-dd hh:mm:ss "' },
               { name: 'Action', enableColumnMenu: false, field: 'Action', height: 40, width: 200, enableHiding: false }

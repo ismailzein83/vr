@@ -98,11 +98,22 @@
                     });
                 };
             }
-            
+            var headerTemplate = '<div ng-class="{ \'sortable\': col.colDef.enableSorting }" class="header-custom" ng-click="col.colDef.onSort()" style="background-color: #829EBF;color:#FFF">'
+    +'<div class="ui-grid-cell-contents" col-index="renderIndex">'
+    +'    <span>'
+      +'          <span ng-show="col.colDef.sortDirection==\'ASC\'">&uarr;</span>'
+        +'        <span ng-show="col.colDef.sortDirection==\'DESC\'">&darr;</span>'
+          +'  {{col.name}}'
+           +' </span>'
+        +'</div>'
+        +'<div class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false" class="ui-grid-column-menu-button" ng-click="toggleMenu($event)">'
+         +'   <i class="ui-grid-icon-angle-down">&nbsp;</i>'
+        +'</div>'
+    +'</div>  ';
             gridOption.columnDefs = [];
             var timeColumn = {
                 name: 'Time',
-                headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',
+                headerCellTemplate: headerTemplate,
                 enableColumnMenu: false,
                 field: 'dateTimeValue'
             };
@@ -112,7 +123,7 @@
             for (var prop in BIMeasureTypeEnum) {
                 var colDef = {
                     name: BIMeasureTypeEnum[prop].description,
-                    headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',
+                    headerCellTemplate: headerTemplate,
                     enableColumnMenu: false,
                     field: 'Values[' + valColumnIndex++ + ']',
                     cellFilter: "number:2"
@@ -122,7 +133,7 @@
 
             var progressColumn = {
                 name: 'Progress (ex)',
-                headerCellTemplate: '/Client/Templates/Grid/HeaderTemplate.html',
+                headerCellTemplate: headerTemplate,
                 cellTemplate: '/Client/Templates/Grid/ProgressCellTemplate.html',
                 field: 'random',
                 enableColumnMenu: false,

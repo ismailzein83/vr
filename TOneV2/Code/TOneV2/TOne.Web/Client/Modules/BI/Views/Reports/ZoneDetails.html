@@ -8,7 +8,7 @@
     <div class="am-collapse" ng-hide="filterSectionCollapsed">
         <vr-form name="formFilter">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns colnum="2" ng-show="false">
                     <vr-label>Zone:</vr-label>
                     <vr-dropdown type="ondemand" options="zonesOption" datatextfield="Name" datavaluefield="ZoneId"
                                  onsearch="searchZones" entityname="Zones" limitcharactercount="2"></vr-dropdown>
