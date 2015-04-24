@@ -83,7 +83,7 @@ app.directive('vrDatetimepicker', ['ValidationMessagesEnum', 'BaseDirService', f
         controllerAs: 'ctrl',
         bindToController: true,
         template: function (element, attrs) {
-            var startTemplate = '<div id="rootDiv">';
+            var startTemplate = '<div id="rootDiv" style="position: relative;">';
             var endTemplate = '</div>';
 
             var labelTemplate = '';

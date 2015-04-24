@@ -96,7 +96,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 { name: "HighChartSparkline", location: '#/HighChartSparkline' },
                 { name: "FusionChart", location: '#/FusionChart' },
                 { name: "CanvasJSChart", location: '#/CanvasJSChart' },
-                { name: "AMChart", location: '#/AMChart' }
+                { name: "AMChart", location: '#/AMChart' },
+                { name: "Tree", location: '#/Tree' }
             ]
         }
     ];

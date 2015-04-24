@@ -16,7 +16,8 @@ app.directive('vrColumns', ['$compile', function ($compile) {
                     noPadding = "";
                     noMargin = "";
                 }
-                var newElement = '<div class="col-lg-' + numberOfColumns + noMargin + noPadding + '">' + tElement.context.innerHTML + '</div>';
+                var otherCol = ' col-md-' + numberOfColumns + ' col-sm-' + numberOfColumns *2;
+                var newElement = '<div class="col-lg-' + numberOfColumns + noMargin + noPadding + otherCol + ' ">' + tElement.context.innerHTML + '</div>';
                 tElement.html(newElement);
         }
     };

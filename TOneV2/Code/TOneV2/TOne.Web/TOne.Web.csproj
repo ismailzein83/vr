@@ -200,6 +200,7 @@
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
     <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
+    <Content Include="Client\Javascripts\Controllers\TreeController .js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
     <Content Include="Client\Javascripts\Directives\vr-actionbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\vr-button-directive.js" />
@@ -250,6 +251,7 @@
     <Content Include="Client\Libraries\Angular\angular-strap.tpl.js" />
     <Content Include="Client\Libraries\Angular\angular-ui-switch.js" />
     <Content Include="Client\Libraries\Angular\angular.js" />
+    <Content Include="Client\Libraries\Angular\ivh-treeview.js" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.html" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.js" />
@@ -454,6 +456,7 @@
     <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitorController.js" />
     <Content Include="Client\Styles\angular-motion.css" />
     <Content Include="Client\Styles\custom.css" />
+    <Content Include="Client\Styles\ivh-treeview.css" />
     <Content Include="Client\Styles\jquery-ui.css" />
     <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
     <Content Include="Client\Libraries\Semantic -old2\semantic.min.css" />
@@ -578,6 +581,7 @@
     <Content Include="Client\Views\Routing\Modal.html" />
     <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
     <Content Include="Client\Views\Routing\RouteRuleManager.html" />
+    <Content Include="Client\Views\TreeView.html" />
     <Content Include="images\alert\attention.png" />
     <Content Include="images\alert\close.png" />
     <Content Include="images\alert\remove-small.png" />

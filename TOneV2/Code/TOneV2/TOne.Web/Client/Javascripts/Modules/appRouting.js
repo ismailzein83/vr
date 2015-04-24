@@ -72,6 +72,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/NOC/Views/Traffic Statistics/ZoneMonitor.html',
             controller: 'ZoneMonitorController'
         }).
+          when('/Tree', {
+              templateUrl: '/Client/Views/TreeView.html',
+              controller: 'TreeController'
+          }).
         otherwise({
             redirectTo: '/default'
         });

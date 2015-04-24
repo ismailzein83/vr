@@ -15,8 +15,8 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'uiSwitch',
     'cgNotify',
     'ui.grid.autoResize',
-    'ngMessages'//,
-    //'slidePushMenu'
+    'ngMessages',
+    'ivh.treeview'
 ]);
 appControllers.directive('resizable', function () {
     return {
