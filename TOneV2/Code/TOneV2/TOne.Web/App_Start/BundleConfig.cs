@@ -96,13 +96,14 @@ namespace TOne.Web
             //Site
             bundles.Add(new ScriptBundle("~/bundles/Javascripts").IncludeDirectory(
                 "~/Client/Javascripts/Modules", "*.js", true).IncludeDirectory(
+                "~/Client/Javascripts/Constants", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Services", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Controllers", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BI/Constants", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BI/Services", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BI/Controllers", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/NOC/Views", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/NOC/Constants", "*.js", true).IncludeDirectory(
+                "~/Client/Modules", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Analytics", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Routing", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BusinessEntity", "*.js", true).IncludeDirectory(
                 "~/Client/Javascripts/Directives", "*.js", true));
 
             

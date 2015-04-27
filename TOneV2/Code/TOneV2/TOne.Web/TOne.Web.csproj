@@ -146,6 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Client\Modules\" />
+    <Folder Include="Client\Templates\Directives\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -166,24 +168,16 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AnalyticsController.cs" />
-    <Compile Include="Controllers\BIController.cs" />
-    <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\ChartTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\RoutingController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ModelMappers\Mappers.cs" />
-    <Compile Include="Models\BIMeasureTypeModel.cs" />
-    <Compile Include="Models\EnumModel.cs" />
-    <Compile Include="Models\RouteRuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\AMChartController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\CanvasJSChartController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\FusionChartController.js" />
@@ -191,56 +185,44 @@
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
     <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\CustomerController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\CodeController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\PriorityController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteBlockController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteOverrideController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleManagerController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\ZoneController.js" />
-    <Content Include="Client\Javascripts\Controllers\Routing\RouteRuleEditorControllerOld.js" />
     <Content Include="Client\Javascripts\Controllers\TreeController .js" />
     <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
-    <Content Include="Client\Javascripts\Directives\vr-actionbar-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-button-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-chart-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-columns-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-datagrid-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-select-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-switch-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-datetimepicker-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-dropdown-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-form-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-gridview-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-label-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-row-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-panel-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-textbox-directive.js" />
-    <Content Include="Client\Javascripts\Directives\vr-validation.js" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Button\vr-button-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Switch\vr-switch-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\DatePicker\vr-datetimepicker-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationArray.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationCustom.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationValue.js" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-gridview-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Label\vr-label-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-row-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-panel-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />
     <Content Include="Client\Javascripts\Modules\appControllers.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
-    <Content Include="Client\Javascripts\Services\actionbar-dir-service.js" />
-    <Content Include="Client\Javascripts\Services\APIServices\AnalyticsAPIService.js" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\actionbar-dir-service.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
-    <Content Include="Client\Javascripts\Services\APIServices\BIAPIService.js" />
-    <Content Include="Client\Javascripts\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Client\Javascripts\Services\APIServices\RoutingAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
-    <Content Include="Client\Javascripts\Services\button-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
     <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
-    <Content Include="Client\Javascripts\Services\datagrid-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\datagrid-dir-service.js" />
     <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
-    <Content Include="Client\Javascripts\Services\routing-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
-    <Content Include="Client\Javascripts\Services\chart-dir-service.js" />
-    <Content Include="Client\Javascripts\Services\dropdown-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Services\main-service.js" />
-    <Content Include="Client\Javascripts\Services\textbox-dir-service.js" />
-    <Content Include="Client\Javascripts\Services\utilities-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\textbox-dir-service.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
-    <Content Include="Client\Javascripts\Services\validation-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />
     <Content Include="Client\Libraries\Angular\angular-animate.js" />
     <Content Include="Client\Libraries\Angular\angular-messages.js" />
@@ -437,23 +419,6 @@
     <Content Include="Client\Libraries\Helpers\DateFormat.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
     <Content Include="Client\Libraries\waves\waves.js" />
-    <Content Include="Client\Modules\BI\Constants\BIEntityTypeEnum.js" />
-    <Content Include="Client\Modules\BI\Constants\BIMeasureTypeEnum.js" />
-    <Content Include="Client\Modules\BI\Constants\BITimeDimensionTypeEnum.js" />
-    <Content Include="Client\Modules\BI\Controllers\Dashboards\SeniorManagementDashboardController.js" />
-    <Content Include="Client\Modules\BI\Controllers\Dashboards\TopManagementDashboardController.js" />
-    <Content Include="Client\Modules\BI\Controllers\Dashboards\ZoneDashboardController.js" />
-    <Content Include="Client\Modules\BI\Controllers\Reports\ZoneDetailsController.js" />
-    <Content Include="Client\Modules\BI\Controllers\Reports\ZoneSummaryController.js" />
-    <Content Include="Client\Modules\BI\Services\bi-utilities-service.js" />
-    <Content Include="Client\Modules\BI\Views\Dashboards\SeniorManagementDashboard.html" />
-    <Content Include="Client\Modules\BI\Views\Dashboards\TopManagementDashboard.html" />
-    <Content Include="Client\Modules\BI\Views\Dashboards\ZoneDashboard.html" />
-    <Content Include="Client\Modules\BI\Views\Reports\ZoneDetails.html" />
-    <Content Include="Client\Modules\BI\Views\Reports\ZoneSummary.html" />
-    <Content Include="Client\Modules\NOC\Constants\TrafficStatisticsMeasureEnum.js" />
-    <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitor.html" />
-    <Content Include="Client\Modules\NOC\Views\Traffic Statistics\ZoneMonitorController.js" />
     <Content Include="Client\Styles\angular-motion.css" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\ivh-treeview.css" />
@@ -541,19 +506,19 @@
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />
     <Content Include="Client\Styles\waves.css" />
-    <Content Include="Client\Templates\Directives\vr-actionbar.html" />
-    <Content Include="Client\Templates\Directives\vr-chart-settings.html" />
-    <Content Include="Client\Templates\Directives\vr-chart.html" />
-    <Content Include="Client\Templates\Directives\vr-datagrid.html" />
-    <Content Include="Client\Templates\Directives\vr-dropdown-menu.html" />
-    <Content Include="Client\Templates\Directives\vr-dropdown-multiple.html" />
-    <Content Include="Client\Templates\Directives\vr-dropdown-ondemand.html" />
-    <Content Include="Client\Templates\Directives\vr-dropdown-standard.html" />
-    <Content Include="Client\Templates\Directives\vr-gridview-standard.html" />
-    <Content Include="Client\Templates\Directives\vr-select.html" />
-    <Content Include="Client\Templates\Directives\vr-textbox-button.html" />
-    <Content Include="Client\Templates\Directives\vr-textbox-icon.html" />
-    <Content Include="Client\Templates\Directives\vr-textbox-standard.html" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar.html" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-menu.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-multiple.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-ondemand.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-standard.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-gridview-standard.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-button.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-icon.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-standard.html" />
     <Content Include="Client\Templates\Grid\CellAction.html" />
     <Content Include="Client\Templates\Grid\CellTemplate.html" />
     <Content Include="Client\Templates\Grid\ClickableCellTemplate.html" />
@@ -561,15 +526,6 @@
     <Content Include="Client\Templates\Grid\HeaderTemplate.html" />
     <Content Include="Client\Templates\Grid\ProgressCellTemplate.html" />
     <Content Include="Client\Templates\Grid\RowTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\CustomerTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\PoolTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\PriorityTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\RouteBlockTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\ProductTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\RouteOverrideTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\ZoneTemplate.html" />
-    <Content Include="Client\Templates\PartialTemplate\CodeTemplate.html" />
-    <Content Include="Client\Templates\Views\vr-gridview-v1.html" />
     <Content Include="Client\Views\ChartPrototypes\AMChart.html" />
     <Content Include="Client\Views\ChartPrototypes\CanvasJSChart.html" />
     <Content Include="Client\Views\ChartPrototypes\FusionChart.html" />
@@ -577,10 +533,6 @@
     <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
     <Content Include="Client\Views\Default.html" />
     <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
-    <Content Include="Client\Templates\PartialTemplate\header-template.html" />
-    <Content Include="Client\Views\Routing\Modal.html" />
-    <Content Include="Client\Views\Routing\RouteRuleEditor.html" />
-    <Content Include="Client\Views\Routing\RouteRuleManager.html" />
     <Content Include="Client\Views\TreeView.html" />
     <Content Include="images\alert\attention.png" />
     <Content Include="images\alert\close.png" />
@@ -592,7 +544,6 @@
     <Content Include="images\loader-mask.gif" />
     <Content Include="images\menu-normal.png" />
     <Content Include="popoverTemp.html" />
-    <Content Include="Client\Views\Routing\RouteRuleEditorOld.html" />
     <Content Include="Client\Views\TestView.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -639,6 +590,10 @@
       <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
       <Name>TOne.Analytics.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Analytics.Web\TOne.Analytics.Web.csproj">
+      <Project>{9d04963a-abea-49b3-9855-5b64b3b85619}</Project>
+      <Name>TOne.Analytics.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.BI.Business\TOne.BI.Business.csproj">
       <Project>{8ad4159c-2a7f-4755-bc06-c0bff17bd953}</Project>
       <Name>TOne.BI.Business</Name>
@@ -655,6 +610,10 @@
       <Project>{91757f60-1a2b-4413-8d27-26b637a03cb4}</Project>
       <Name>TOne.BI.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.BI.Web\TOne.BI.Web.csproj">
+      <Project>{1fbb316a-3c66-40b9-a40d-b7a93ad2fda2}</Project>
+      <Name>TOne.BI.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
       <Name>TOne.BusinessEntity.Business</Name>
@@ -670,6 +629,10 @@
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
       <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
       <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Web\TOne.BusinessEntity.Web.csproj">
+      <Project>{1df254fb-aa7a-44aa-a192-4e56d1d000f7}</Project>
+      <Name>TOne.BusinessEntity.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
@@ -694,6 +657,10 @@
     <ProjectReference Include="..\TOne.LCR.Entities\TOne.LCR.Entities.csproj">
       <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
       <Name>TOne.LCR.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.LCR.Web\TOne.LCR.Web.csproj">
+      <Project>{c548bf24-a8fe-4bb5-aced-0aaf538da6ab}</Project>
+      <Name>TOne.LCR.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

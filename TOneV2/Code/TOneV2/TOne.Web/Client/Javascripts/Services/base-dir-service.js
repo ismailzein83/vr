@@ -3,7 +3,6 @@
 app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMessagesEnum) {
 
     return ({
-        directiveMainURL: "../../Client/Templates/Directives/",
         getObjectProperty: getObjectProperty,
         muteAction: muteAction,
         findExsite: findExsite,

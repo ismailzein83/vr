@@ -16,17 +16,12 @@ appRouting.config(['$routeProvider',
             controller: 'RouteRuleEditorControllerOld'
         }).
         when('/RouteRuleManager', {
-            templateUrl: '/Client/Views/Routing/RouteRuleManager.html',
+            templateUrl: '/Client/Modules/Routing/Views/Management/RouteRuleManager.html',
             controller: 'RouteRuleManagerController'
         }).
         when('/RouteRuleEditor/:RouteRuleId', {
-            templateUrl: '/Client/Views/Routing/RouteRuleEditor.html',
+            templateUrl: '/Client/Modules/Routing/Views/Management/RouteRuleEditor.html',
             controller: 'RouteRuleEditorController'
-        }).
-        when('/RouteRuleEditor2/:RouteRuleId', {
-            templateUrl: '/Client/Views/Routing/RouteRuleEditor2.html',
-            controller: 'RouteRuleEditorController2',
-            controllerAs: 'RouteRuleEditorController2'
         }).
         when('/ZingChart', {
             templateUrl: '/Client/Views/ChartPrototypes/ZingChart.html',
@@ -69,12 +64,16 @@ appRouting.config(['$routeProvider',
             controller: 'ZoneDetailsController'
         }).
         when('/NOC/ZoneMonitor', {
-            templateUrl: '/Client/Modules/NOC/Views/Traffic Statistics/ZoneMonitor.html',
+            templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html',
             controller: 'ZoneMonitorController'
         }).
           when('/Tree', {
               templateUrl: '/Client/Views/TreeView.html',
               controller: 'TreeController'
+          }).
+          when('/Analytics/TestPage', {
+              templateUrl: '/Client/Modules/Analytics/Views/TestPage.html',
+              controller: 'TestPageController'
           }).
         otherwise({
             redirectTo: '/default'
