@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -11,7 +12,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     {
         public Strategy GetStrategy(int strategyId)
         {
-            throw new NotImplementedException();
+
+            IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            return dataManager.GetStrategy(strategyId);
+
         }
     }
 }

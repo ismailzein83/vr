@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<BaseQueue<ImportedCDRBatch>> OutputQueue { get; set; }
+        public  InArgument<BaseQueue<ImportedCDRBatch>> OutputQueue { get; set; }
 
         #endregion
 
