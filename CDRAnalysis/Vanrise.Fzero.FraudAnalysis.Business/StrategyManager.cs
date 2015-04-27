@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyManager
     {
-        public Strategy GetStrategy()
+        public Strategy GetStrategy(int strategyId)
         {
             throw new NotImplementedException();
         }
