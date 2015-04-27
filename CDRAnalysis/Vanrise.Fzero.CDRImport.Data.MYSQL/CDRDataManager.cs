@@ -59,6 +59,7 @@ namespace Vanrise.Fzero.CDRImport.Data.MYSQL
             string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE NormalCDR FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r';", filename.Replace(@"\", @"\\"));
             connection.Open();
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.CommandTimeout = int.MaxValue;
             cmd.ExecuteNonQuery();
             connection.Close();
         }
