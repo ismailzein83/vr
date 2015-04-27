@@ -193,6 +193,34 @@
       <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
       <Name>Vanrise.Fzero.CDRImport.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Arguments\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj">
+      <Project>{8de7b4ac-2ea9-4a88-9a44-e73a21e26398}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.BP.Activities\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj">
+      <Project>{dd806597-e531-469d-847d-6de0354889dd}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.BP\Vanrise.Fzero.FraudAnalysis.BP.csproj">
+      <Project>{2e88ee6a-ab0d-4bb4-87bd-ef9dc4079fe8}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Business\Vanrise.Fzero.FraudAnalysis.Business.csproj">
+      <Project>{c195cfd3-948d-447c-83b4-3365d0515ec9}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.MySQL\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj">
+      <Project>{dd4f4480-110d-4bc4-8ea0-688fc59c9b34}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data.MySQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data\Vanrise.Fzero.FraudAnalysis.Data.csproj">
+      <Project>{521364bc-ae3d-4eca-8392-44a6c1961939}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Entities\Vanrise.Fzero.FraudAnalysis.Entities.csproj">
+      <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
