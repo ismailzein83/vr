@@ -1,102 +1,105 @@
 ﻿
-<vr-panel>
-    <vr-row>
+<vr-panel ng-controller="RouteRuleManagerController">
+    <div ng-hide="ishideView('rule View')">
+        <vr-row>
 
-        <form ng-hide="filterSectionCollapsed">
-            <vr-columns colnum="2" simplecol>
-                <label>Type</label>
-                <vr-select ismultipleselection hideselectedvaluessection="true" datatextfield="name" datavaluefield="objectType"
-                           datasource="optionsRouteTypeF.datasource" selectedvalues="optionsRouteTypeF.selectedvalues"></vr-select>
-            </vr-columns>
-            <vr-columns colnum="2" simplecol>
-                <vr-label>Customer</vr-label>
-                <vr-select ismultipleselection datasource="optionsCustomersF.datasource" selectedvalues="optionsCustomersF.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
-                           entityname="Customers">
+            <form ng-hide="filterSectionCollapsed">
+                <vr-columns colnum="2" simplecol>
+                    <label>Type</label>
+                    <vr-select ismultipleselection hideselectedvaluessection="true" datatextfield="name" datavaluefield="objectType"
+                               datasource="optionsRouteTypeF.datasource" selectedvalues="optionsRouteTypeF.selectedvalues"></vr-select>
+                </vr-columns>
+                <vr-columns colnum="2" simplecol>
+                    <vr-label>Customer</vr-label>
+                    <vr-select ismultipleselection datasource="optionsCustomersF.datasource" selectedvalues="optionsCustomersF.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
+                               entityname="Customers">
 
-                </vr-select>
-            </vr-columns>
-            <vr-columns colnum="2" simplecol>
-                <div class="btn-group btn-group-custom" role="group" ng-init="option=1">
-                    <label class="hand-cursor" ng-class="option == 1?'clicked-btn':''" ng-click="option = 1">By Zones</label>
-                    <label>|</label>
-                    <label class="hand-cursor" ng-class="option == 2?'clicked-btn':''" ng-click="option = 2">By Code</label>
-                </div>
-
-                <vr-select ng-show="option == 1" ismultipleselection datasource="searchZones" selectedvalues="optionsZonesFilter.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
-                           entityname="Zones" ></vr-select>
-
-
-                <number-filed ng-show="option == 2" input-value="code" place-holder="'Type Code'" />
-
-            </vr-columns>
-
-        </form>
-
-    </vr-row>
-    <vr-row removeline>
-        <vr-columns colnum="12" nopadding nomargin>
-
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="leftSection">
-                    <label class="action-bar-label" ng-show="showHis==false">Visible Rows:</label>
-                    <div class="dropdown action-bar-ddl" ng-show="showHis==false">
-                        <label class=" dropdown-toggle hand-cursor action-bar-ddl-label" id="dropdownCount" data-toggle="dropdown" aria-expanded="true">
-                            <span class="no-margin">{{numberoflines}}</span>
-                        </label>
-                        <ul class="dropdown-menu action-bar-ddl-ul" role="menu" aria-labelledby="dropdownCount" ng-mouseenter="muteaction($event);">
-                            <li role="presentation">
-                                <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);">
-                                    <div class="hand-cursor action-bar-ddl-inner-item">10</div>
-                                </div>
-                                <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);">
-                                    <div class="hand-cursor action-bar-ddl-inner-item">20</div>
-                                </div>
-                            </li>
-                        </ul>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="2" simplecol>
+                    <div class="btn-group btn-group-custom" role="group" ng-init="option=1">
+                        <label class="hand-cursor" ng-class="option == 1?'clicked-btn':''" ng-click="option = 1">By Zones</label>
+                        <label>|</label>
+                        <label class="hand-cursor" ng-class="option == 2?'clicked-btn':''" ng-click="option = 2">By Code</label>
                     </div>
-                    <button class="btn btn-default btncustom action-bar-btn-icon" ng-show="showHis==false" ng-class="gridOptionsRouteRule.enableFiltering==true?'':'toggle-Icon'" type="button" aria-label="Left Align" ng-click="toggelFilter()"><span style="padding-left:4px" class="glyphicon glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
+
+                    <vr-select ng-show="option == 1" ismultipleselection datasource="searchZones" selectedvalues="optionsZonesFilter.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
+                               entityname="Zones"></vr-select>
+
+
+                    <number-filed ng-show="option == 2" input-value="code" place-holder="'Type Code'" />
+
+                </vr-columns>
+
+            </form>
+
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns colnum="12" nopadding nomargin>
+
+                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                    <div transclude-to="leftSection">
+                        <label class="action-bar-label" ng-show="showHis==false">Visible Rows:</label>
+                        <div class="dropdown action-bar-ddl" ng-show="showHis==false">
+                            <label class=" dropdown-toggle hand-cursor action-bar-ddl-label" id="dropdownCount" data-toggle="dropdown" aria-expanded="true">
+                                <span class="no-margin">{{numberoflines}}</span>
+                            </label>
+                            <ul class="dropdown-menu action-bar-ddl-ul" role="menu" aria-labelledby="dropdownCount" ng-mouseenter="muteaction($event);">
+                                <li role="presentation">
+                                    <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(10)" ng-mouseenter="muteaction($event);">
+                                        <div class="hand-cursor action-bar-ddl-inner-item">10</div>
+                                    </div>
+                                    <div class="mark-select action-bar-ddl-item" ng-click="divStyleChange(20)" ng-mouseenter="muteaction($event);">
+                                        <div class="hand-cursor action-bar-ddl-inner-item">20</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-default btncustom action-bar-btn-icon" ng-show="showHis==false" ng-class="gridOptionsRouteRule.enableFiltering==true?'':'toggle-Icon'" type="button" aria-label="Left Align" ng-click="toggelFilter()"><span style="padding-left:4px" class="glyphicon glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
+                    </div>
+                    <div transclude-to="buttons">
+                        <button type="button" class="btn btn-default btncustom  action-bar-btn-icon  highlight-btn" ng-if="gridOptionsHistory.data.length > 0 " ng-click="switchGrids()" aria-label="Left Align">
+                            <span ng-show="showHis==false">
+                                {{gridOptionsHistory.data.length}} Updated Rule(s)
+                                <span style="padding-left:4px" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </span>
+                            <span ng-show="showHis==true">
+                                Main View
+                                <span style="padding-left:4px" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                            </span>
+                        </button>
+
+
+
+                        <vr-button type="Search" data-onclick="getDatalistFilterd"></vr-button>
+                        <vr-button type="Reset" data-onclick="resetDatalistFilterd"></vr-button>
+                        <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+
+                    </div>
+                </vr-actionbar>
+
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12" nopadding nomargin class="am-fade" ng-show="showMain==true">
+
+                <div class="loader" ng-show="isloadingdata">
+                    <img src="~/../images/loader-mask.gif" />
+
                 </div>
-                <div transclude-to="buttons">
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon  highlight-btn" ng-if="gridOptionsHistory.data.length > 0 " ng-click="switchGrids()" aria-label="Left Align">
-                        <span ng-show="showHis==false">
-                            {{gridOptionsHistory.data.length}} Updated Rule(s)
-                            <span style="padding-left:4px" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                        </span>
-                        <span ng-show="showHis==true">
-                            Main View
-                            <span style="padding-left:4px" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                        </span>
-                    </button>
 
-                   
-
-                    <vr-button type="Search" data-onclick="getDatalistFilterd"></vr-button>
-                    <vr-button type="Reset" data-onclick="resetDatalistFilterd"></vr-button>
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRoute()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-
+                <div id="grid1" class="gridroute vr-grid" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
                 </div>
-            </vr-actionbar>
-            
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns colnum="12" nopadding nomargin class="am-fade" ng-show="showMain==true">
 
-            <div class="loader" ng-show="isloadingdata">
-                <img src="~/../images/loader-mask.gif" />
+            </vr-columns>
+            <vr-columns colnum="12" nopadding nomargin>
 
-            </div>
+                <div ui-grid="gridOptionsHistory" class="vr-grid" ng-if="showHis">
+                </div>
 
-            <div id="grid1" class="gridroute vr-grid" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
-            </div>
-
-        </vr-columns>
-        <vr-columns colnum="12" nopadding nomargin>
-
-            <div ui-grid="gridOptionsHistory" class="vr-grid" ng-if="showHis">
-            </div>
-
-        </vr-columns>
-    </vr-row>
+            </vr-columns>
+        </vr-row>
+    </div>
+    <a ng-click="showsubview('rule View')">go other</a>
 </vr-panel>
-
+<div ng-include src="'Client/Modules/NOC/Views/Traffic Statistics/ZoneMonitor.html'" ng-show="ishideView('rule View')"></div>

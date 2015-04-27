@@ -1,4 +1,4 @@
-﻿var RouteRuleManagerController = function ($scope, $location, $http, $timeout, uiGridConstants, RoutingAPIService,CarriersService,ZonesService, $modal) {
+﻿var RouteRuleManagerController = function ($scope, $rootScope, $location, $http, $timeout, uiGridConstants, RoutingAPIService,CarriersService,ZonesService, $modal) {
     var pageSize = 40;
     var page = 0;
     var pageUp = 0;
@@ -331,10 +331,18 @@
            
         })
     }
-    
+    $scope.$on("rule View-show", function (e) {
+       
+        $rootScope.hisnav.push({
+            name: 'rule View',
+            show:true 
+        });
+    });
+    $scope.$on("rule View", function (e) {
+    });
 
 }
-RouteRuleManagerController.$inject = ['$scope', '$location', '$http', '$timeout', 'uiGridConstants', 'RoutingAPIService', 'CarriersService', 'ZonesService', '$modal'];
+RouteRuleManagerController.$inject = ['$scope', '$rootScope', '$location', '$http', '$timeout', 'uiGridConstants', 'RoutingAPIService', 'CarriersService', 'ZonesService', '$modal'];
 
 appControllers.controller('RouteRuleManagerController', RouteRuleManagerController)
 
