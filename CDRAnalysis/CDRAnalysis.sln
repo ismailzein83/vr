@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website(1)", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -69,34 +69,48 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.BP.Activities", "Vanrise.Fzero.FraudAnalysis.BP.Activities\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj", "{DD806597-E531-469D-847D-6DE0354889DD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CDR Import", "CDR Import", "{7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{B646C60C-E175-44BC-A0DB-617DE07E99AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Vanrise.Fzero.CDRImport.BP\\Vanrise.Fzero.CDRImport.BP.csproj
+		SccProjectTopLevelParentUniqueName1 = CDRAnalysis.sln
 		SccProjectName1 = Vanrise.Fzero.CDRImport.BP
 		SccLocalPath1 = Vanrise.Fzero.CDRImport.BP
 		SccProjectUniqueName2 = Vanrise.Fzero.CDRImport.BP.Activities\\Vanrise.Fzero.CDRImport.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName2 = CDRAnalysis.sln
 		SccProjectName2 = Vanrise.Fzero.CDRImport.BP.Activities
 		SccLocalPath2 = Vanrise.Fzero.CDRImport.BP.Activities
 		SccProjectUniqueName3 = Vanrise.Fzero.CDRImport.BP.Arguments\\Vanrise.Fzero.CDRImport.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName3 = CDRAnalysis.sln
 		SccProjectName3 = Vanrise.Fzero.CDRImport.BP.Arguments
 		SccLocalPath3 = Vanrise.Fzero.CDRImport.BP.Arguments
 		SccProjectUniqueName4 = Vanrise.Fzero.CDRImport.Business\\Vanrise.Fzero.CDRImport.Business.csproj
+		SccProjectTopLevelParentUniqueName4 = CDRAnalysis.sln
 		SccProjectName4 = Vanrise.Fzero.CDRImport.Business
 		SccLocalPath4 = Vanrise.Fzero.CDRImport.Business
 		SccProjectUniqueName5 = Vanrise.Fzero.CDRImport.Data\\Vanrise.Fzero.CDRImport.Data.csproj
+		SccProjectTopLevelParentUniqueName5 = CDRAnalysis.sln
 		SccProjectName5 = Vanrise.Fzero.CDRImport.Data
 		SccLocalPath5 = Vanrise.Fzero.CDRImport.Data
 		SccProjectUniqueName6 = Vanrise.Fzero.CDRImport.Data.SQL\\Vanrise.Fzero.CDRImport.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName6 = CDRAnalysis.sln
 		SccProjectName6 = Vanrise.Fzero.CDRImport.Data.SQL
 		SccLocalPath6 = Vanrise.Fzero.CDRImport.Data.SQL
 		SccProjectUniqueName7 = Vanrise.Fzero.CDRImport.Entities\\Vanrise.Fzero.CDRImport.Entities.csproj
+		SccProjectTopLevelParentUniqueName7 = CDRAnalysis.sln
 		SccProjectName7 = Vanrise.Fzero.CDRImport.Entities
 		SccLocalPath7 = Vanrise.Fzero.CDRImport.Entities
 		SccProjectUniqueName8 = Vanrise.Fzero.DevRuntime\\Vanrise.Fzero.DevRuntime.csproj
+		SccProjectTopLevelParentUniqueName8 = CDRAnalysis.sln
 		SccProjectName8 = Vanrise.Fzero.DevRuntime
 		SccLocalPath8 = Vanrise.Fzero.DevRuntime
 		SccProjectUniqueName9 = Vanrise.Fzero.MobileCDRAnalysis\\Vanrise.Fzero.MobileCDRAnalysis.csproj
@@ -111,9 +125,11 @@ Global
 		SccLocalPath11 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccProjectEnlistmentChoice11 = 2
 		SccProjectUniqueName12 = Dependencies\\Dependencies.csproj
+		SccProjectTopLevelParentUniqueName12 = CDRAnalysis.sln
 		SccProjectName12 = Dependencies
 		SccLocalPath12 = Dependencies
 		SccProjectUniqueName13 = Vanrise.Fzero.CDRImport.Data.MYSQL\\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj
+		SccProjectTopLevelParentUniqueName13 = CDRAnalysis.sln
 		SccProjectName13 = Vanrise.Fzero.CDRImport.Data.MYSQL
 		SccLocalPath13 = Vanrise.Fzero.CDRImport.Data.MYSQL
 		SccProjectUniqueName14 = Vanrise.Fzero.FraudAnalysis.Data\\Vanrise.Fzero.FraudAnalysis.Data.csproj
@@ -286,5 +302,15 @@ Global
 		{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{DD806597-E531-469D-847D-6DE0354889DD} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{57ED5DF8-602D-49AE-86FC-416D446F5CE2} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{C0443807-CE4E-4D37-8CCD-810C5BED4FD2} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{14794A4A-32A7-4273-B3A3-0C1B67831D60} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{A4B118BE-DED8-429C-9EF8-EAB394085DFF} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{73E469C6-3CCB-4414-8EF1-3EA3600F1EBA} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{656B4BE0-3309-4F19-9F73-58EEDB56B20F} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{3A5581DB-9680-4CD4-AF20-0339D02F5447} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{8EA7F723-709A-480A-9ECF-BE40C336A0CB} = {7A71D2CF-9B16-4D57-89F1-C5B263DCFB77}
+		{5995A72F-0E1A-4C75-948D-6E0E2C717E49} = {B646C60C-E175-44BC-A0DB-617DE07E99AE}
+		{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983} = {1FFAF5A6-AC9C-4361-9ACD-1BFDDD87A336}
 	EndGlobalSection
 EndGlobal
