@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {
 
-            decimal result;
+            decimal result = 0;
 
 
               string Number = numberProfile.Number;
@@ -48,80 +48,80 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
           
 
 
-            switch (criteria.CriteriaId)
+            switch ((Criteria)criteria.CriteriaId)
             {
 
-                        case (int)Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls :
-                                result=  decimal.Parse(  (Count_In_Calls / Count_Out_Calls).ToString() );
+                        case Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls :
+                                result = (decimal)(numberProfile.Count_In_Calls / numberProfile.Count_Out_Calls);
                                 break; 
 
 
-                        case (int)Criteria.Count_of_Distinct_Destinations :
+                        case Criteria.Count_of_Distinct_Destinations :
 
                                 break; 
 
 
-                        case (int)Criteria.Count_outgoing_calls :
+                        case Criteria.Count_outgoing_calls :
 
                                 break;
  
 
-                        case (int)Criteria.Count_of_Total_BTS_Per_MSISDN :
+                        case Criteria.Count_of_Total_BTS_Per_MSISDN :
 
                                 break; 
 
 
-                        case (int)Criteria.Total_Originated_Volume :
+                        case Criteria.Total_Originated_Volume :
 
                                 break; 
 
 
-                        case (int)Criteria.Count_of_Total_IMEI_Per_MSISDN :
+                        case Criteria.Count_of_Total_IMEI_Per_MSISDN :
 
                                 break; 
 
 
-                        case (int)Criteria.Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration :
+                        case Criteria.Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration :
 
                                 break; 
 
 
-                        case (int)Criteria.Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls :
+                        case Criteria.Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls :
 
                                 break; 
 
 
-                        case (int)Criteria.Count_of_daily_active_hours :
+                        case Criteria.Count_of_daily_active_hours :
 
                                 break; 
 
 
-                        case (int)Criteria.Distinct_Destination_of_Night_Calls :
+                        case Criteria.Distinct_Destination_of_Night_Calls :
 
                                 break; 
 
 
-                        case (int)Criteria.Voice_Only_Service_Usage :
+                        case Criteria.Voice_Only_Service_Usage :
 
                                 break; 
 
 
-                        case (int)Criteria.Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls :
+                        case Criteria.Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls :
 
                                 break; 
 
 
-                        case (int)Criteria.Ratio_International_Originated_Vs_Outgoing_Calls :
+                        case Criteria.Ratio_International_Originated_Vs_Outgoing_Calls :
 
                                 break; 
 
 
-                        case (int)Criteria.Count_of_outgoing_during_peak_hours :
+                        case Criteria.Count_of_outgoing_during_peak_hours :
 
                                 break;
 
 
-                        case (int)Criteria.Data_Usage:
+                        case Criteria.Data_Usage:
 
                                 break; 
 
