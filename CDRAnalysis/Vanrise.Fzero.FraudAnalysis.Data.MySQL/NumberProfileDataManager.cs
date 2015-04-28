@@ -11,9 +11,9 @@ using Vanrise.Data.MySQL;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MYSQL
 {
-    public class CDRDataManager : BaseMySQLDataManager, ICDRDataManager
+    public class NumberProfileDataManager : BaseMySQLDataManager, INumberProfileDataManager
     {
-        public CDRDataManager()
+        public NumberProfileDataManager()
             : base("CDRDBConnectionStringMySQL")
         {
 

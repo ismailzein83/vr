@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="FraudDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
