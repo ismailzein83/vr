@@ -315,7 +315,10 @@ namespace Vanrise.Data.SQL
             if (!String.IsNullOrEmpty(configuredDirectory))
             {
                 string filePath = Path.Combine(configuredDirectory, Guid.NewGuid().ToString());
-                File.Create(filePath);
+                using(var stream = File.Create(filePath))
+                {
+                    stream.Close();
+                }
                 return filePath;
             }
             else
