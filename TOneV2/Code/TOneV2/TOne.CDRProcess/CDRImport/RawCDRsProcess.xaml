@@ -93,11 +93,6 @@
           <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">BaseCDRsQueue</mca:CSharpReference>
         </InOutArgument>
       </tca1:ProcessRawCDRs.OutputQueue>
-      <tca1:ProcessRawCDRs.SwitchID>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SwitchID</mca:CSharpValue>
-        </InArgument>
-      </tca1:ProcessRawCDRs.SwitchID>
     </tca1:ProcessRawCDRs>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">

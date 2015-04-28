@@ -19,8 +19,6 @@ namespace TOne.CDRProcess.Activities
 
     public class ProcessRawCDRsInput
     {
-        public int SwitchID { get; set; }
-
         public BaseQueue<TOne.CDR.Entities.CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<TOne.CDR.Entities.CDRBillingBatch> OutputQueue { get; set; }
@@ -35,10 +33,7 @@ namespace TOne.CDRProcess.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<TOne.CDR.Entities.CDRBatch>> InputQueue { get; set; }
-
-        [RequiredArgument]
-        public InArgument<int> SwitchID { get; set; }
-
+        
         [RequiredArgument]
         public InOutArgument<BaseQueue<TOne.CDR.Entities.CDRBillingBatch>> OutputQueue { get; set; }
 
@@ -55,13 +50,7 @@ namespace TOne.CDRProcess.Activities
         protected override void DoWork(ProcessRawCDRsInput inputArgument, Vanrise.BusinessProcess.AsyncActivityStatus previousActivityStatus, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             TOneCacheManager cacheManager = handle.CustomData["CacheManager"] as TOneCacheManager;
-            ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
-
-            TABS.Switch CDRSwitch;
-            if (! TABS.Switch.All.TryGetValue(inputArgument.SwitchID, out CDRSwitch))
-            { 
-                throw new Exception("Switch Not Exist");
-            }
+            ProtCodeMap codeMap = new ProtCodeMap(cacheManager);            
 
             bool hasItem = false;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -72,9 +61,14 @@ namespace TOne.CDRProcess.Activities
                     {
                         TOne.CDR.Entities.CDRBillingBatch CdrBillingGenerated = new TOne.CDR.Entities.CDRBillingBatch();
                         CdrBillingGenerated.CDRs = new List<BillingCDRBase>();
+                        TABS.Switch cdrSwitch;
+                        if (!TABS.Switch.All.TryGetValue(cdrBatch.SwitchId, out cdrSwitch))
+                        {
+                            throw new Exception("Switch Not Exist");
+                        }
                         foreach (TABS.CDR cdr in cdrBatch.CDRs)
                         {
-                            cdr.Switch = CDRSwitch;
+                            cdr.Switch = cdrSwitch;
                             Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
                             CdrBillingGenerated.CDRs.Add(GetBillingCDRBase(cdrBase));
                         }
@@ -90,7 +84,6 @@ namespace TOne.CDRProcess.Activities
             return new ProcessRawCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                SwitchID = this.SwitchID.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }

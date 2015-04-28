@@ -73,16 +73,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingCDRsProcess.cs" />
+    <Compile Include="CDRImport\BillingCDRsProcess.cs" />
     <Compile Include="CDRGenerationProcess.cs" />
-    <Compile Include="DailyRepricingProcess.cs" />
-    <Compile Include="ImportCDRProcess.cs" />
+    <Compile Include="Repricing\DailyRepricingProcess.cs" />
+    <Compile Include="CDRImport\ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RawCDRsProcess.cs" />
-    <Compile Include="StoreCDRsInDBProcess.cs" />
-    <Compile Include="StoreInvalidCDRsInDBProcess.cs" />
-    <Compile Include="StoreMainCDRsInDBProcess.cs" />
-    <Compile Include="TimeRangeRepricingProcess.cs" />
+    <Compile Include="CDRImport\RawCDRsProcess.cs" />
+    <Compile Include="CDRImport\StoreCDRsInDBProcess.cs" />
+    <Compile Include="CDRImport\StoreInvalidCDRsInDBProcess.cs" />
+    <Compile Include="CDRImport\StoreMainCDRsInDBProcess.cs" />
+    <Compile Include="Repricing\TimeRangeRepricingProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
@@ -123,13 +123,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="DailyRepricingProcess.xaml">
+    <XamlAppDef Include="Repricing\DailyRepricingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="TimeRangeRepricingProcess.xaml">
+    <XamlAppDef Include="Repricing\TimeRangeRepricingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
@@ -141,41 +141,42 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="ImportCDRProcess.xaml">
+    <XamlAppDef Include="CDRImport\ImportCDRProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="StoreCDRsInDBProcess.xaml">
+    <XamlAppDef Include="CDRImport\StoreCDRsInDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="RawCDRsProcess.xaml">
+    <XamlAppDef Include="CDRImport\RawCDRsProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="BillingCDRsProcess.xaml">
+    <XamlAppDef Include="CDRImport\BillingCDRsProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="StoreMainCDRsInDBProcess.xaml">
+    <XamlAppDef Include="CDRImport\StoreMainCDRsInDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="StoreInvalidCDRsInDBProcess.xaml">
+    <XamlAppDef Include="CDRImport\StoreInvalidCDRsInDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

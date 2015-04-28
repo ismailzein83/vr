@@ -81,7 +81,7 @@
     <Compile Include="ProcessBillingCDR.cs" />
     <Compile Include="InitializeObjects.cs" />
     <Compile Include="LoadCDRs.cs" />
-    <Compile Include="ProcessCDRs.cs">
+    <Compile Include="OLD\ProcessCDRs.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProcessRawCDRs.cs" />

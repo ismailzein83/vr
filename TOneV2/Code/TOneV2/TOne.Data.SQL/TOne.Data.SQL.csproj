@@ -51,6 +51,10 @@
     <Reference Include="TABS.Addons.Utilities">
       <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
@@ -61,6 +65,7 @@
   <ItemGroup>
     <Compile Include="BaseTOneDataManager.cs" />
     <Compile Include="BusinessEntityDataManager.cs" />
+    <Compile Include="GenericEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

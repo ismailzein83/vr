@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using System.Collections.Concurrent;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -17,7 +18,7 @@ namespace TOne.CDRProcess.Activities
    
         public DateTime To { get; set; }
 
-        public ConcurrentQueue<CDRBatch> QueueLoadedCDRs { get; set; }
+        public BaseQueue<CDRBatch> QueueLoadedCDRs { get; set; }
     }
 
     public class LoadCDRsOutput
@@ -36,7 +37,7 @@ namespace TOne.CDRProcess.Activities
         public InArgument<DateTime> To { get; set; }
 
         [RequiredArgument]
-        public InArgument<ConcurrentQueue<CDRBatch>> QueueLoadedCDRs { get; set; }
+        public InArgument<BaseQueue<CDRBatch>> QueueLoadedCDRs { get; set; }
 
         [RequiredArgument]
         public OutArgument<int> Result { get; set; }
