@@ -62,14 +62,12 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //    }
             //});
 
-            Action empBasicAction = () => GetEmployeeBasicDetails(0);
 
-            new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager().LoadNumberProfile(DateTime.Now.AddDays(-1000), 1000, Action)
-           
-
+            new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager().LoadNumberProfile(DateTime.Now.AddDays(-1000), DateTime.Now.AddDays(1000), 1000, null);
 
             Console.WriteLine("END");
             Console.ReadKey();
         }
+
     }
 }
