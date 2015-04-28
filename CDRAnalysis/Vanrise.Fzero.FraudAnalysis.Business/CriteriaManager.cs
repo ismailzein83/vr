@@ -127,7 +127,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
         {
-            throw new NotImplementedException();
+            Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
+
+            dictionary.Add(1, new CriteriaDefinition() { CriteriaId = 1, Description = "Ratio_Incoming_Calls_vs_Outgoing_Calls", CompareOperator= CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(2, new CriteriaDefinition() { CriteriaId = 2, Description = "Count_of_Distinct_Destinations", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(3, new CriteriaDefinition() { CriteriaId = 3, Description = "Count_outgoing_calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(4, new CriteriaDefinition() { CriteriaId = 4, Description = "Count_of_Total_BTS_Per_MSISDN", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(5, new CriteriaDefinition() { CriteriaId = 5, Description = "Total_Originated_Volume", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(6, new CriteriaDefinition() { CriteriaId = 6, Description = "Count_of_Total_IMEI_Per_MSISDN", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(7, new CriteriaDefinition() { CriteriaId = 7, Description = "Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(8, new CriteriaDefinition() { CriteriaId = 8, Description = "Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(9, new CriteriaDefinition() { CriteriaId = 9, Description = "Count_of_daily_active_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(10, new CriteriaDefinition() { CriteriaId = 10, Description = "Distinct_Destination_of_Night_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(11, new CriteriaDefinition() { CriteriaId = 11, Description = "Voice_Only_Service_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(12, new CriteriaDefinition() { CriteriaId = 12, Description = "Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
+            dictionary.Add(13, new CriteriaDefinition() { CriteriaId = 13, Description = "Ratio_International_Originated_Vs_Outgoing_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(14, new CriteriaDefinition() { CriteriaId = 14, Description = "Count_of_outgoing_during_peak_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(15, new CriteriaDefinition() { CriteriaId = 15, Description = "Data_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+
+            return dictionary; 
         }
 
 
