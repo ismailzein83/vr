@@ -62,8 +62,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //    }
             //});
 
-            Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager x = new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager();
-            x.LoadNumberProfile(DateTime.Now.AddDays(-1000), DateTime.Now.AddDays(1000), 1000, null);
+            //Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager x = new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager();
+            //x.LoadNumberProfile(DateTime.Now.AddDays(-1000), DateTime.Now.AddDays(1000), 1000, null);
 
             Console.WriteLine("END");
             Console.ReadKey();
