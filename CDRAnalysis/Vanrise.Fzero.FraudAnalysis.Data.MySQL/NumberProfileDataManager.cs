@@ -10,7 +10,7 @@ using System.IO;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
 
-namespace Vanrise.Fzero.FraudAnalysis.Data.MYSQL
+namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 {
     public class NumberProfileDataManager : BaseMySQLDataManager, INumberProfileDataManager
     {

@@ -53,18 +53,18 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
 
 
-            BPClient bpClient2 = new BPClient();
-            bpClient2.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "SaveCDRToDBProcess",
-                InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput
-                {
-                }
-            });
+            //BPClient bpClient2 = new BPClient();
+            //bpClient2.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "SaveCDRToDBProcess",
+            //    InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput
+            //    {
+            //    }
+            //});
 
+            Action empBasicAction = () => GetEmployeeBasicDetails(0);
 
-
-
+            new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager().LoadNumberProfile(DateTime.Now.AddDays(-1000), 1000, Action)
            
 
 
