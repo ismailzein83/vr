@@ -85,6 +85,7 @@
     <Content Include="DLLs\Telerik.Reporting.dll" />
     <Content Include="DLLs\Vanrise.Components.Security.dll" />
     <Content Include="DLLs\WebHelperLibrary.dll" />
+    <Content Include="Notes\Web Virtual Directories.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -147,7 +147,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Client\Modules\" />
-    <Folder Include="Client\Templates\Directives\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
