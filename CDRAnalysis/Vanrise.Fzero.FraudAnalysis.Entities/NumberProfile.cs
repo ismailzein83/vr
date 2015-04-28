@@ -8,31 +8,31 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class NumberProfile
     {
-        public string SubscriberNumber { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public int?  Count_Out_Calls { get; set; }
-        public int?      Diff_Output_Numb { get; set; }
-        public int?      Count_Out_Inter { get; set; }
-        public int?      Count_In_Inter { get; set; }
-        public decimal?  Call_Out_Dur_Avg { get; set; }
-        public int ? Count_Out_Fail { get; set; }
-        public int   Count_In_Fail { get; set; }
-        public decimal?  Total_Out_Volume { get; set; }
-        public decimal   Total_In_Volume { get; set; }
-        public int       Diff_Input_Numbers { get; set; }
-        public int?      Count_Out_SMS { get; set; }
-        public int?      Total_IMEI { get; set; }
-        public int?      Total_BTS { get; set; }
-        public int?      IsOnNet { get; set; }
-        public decimal?  Total_Data_Volume { get; set; }
-        public int?  PeriodId { get; set; }                
-        public int   Count_In_Calls { get; set; }
-        public decimal   Call_In_Dur_Avg { get; set; }
-        public int ?     Count_Out_OnNet { get; set; }
-        public int?      Count_In_OnNet { get; set; }
-        public int?      Count_Out_OffNet { get; set; }
-        public int?      Count_In_OffNet { get; set; }
+        public string subscriberNumber { get; set; }
+        public DateTime? fromDate { get; set; }
+        public DateTime? toDate { get; set; }
+        public int?  countOutCalls { get; set; }
+        public int?      diffOutputNumb { get; set; }
+        public int?      countOutInter { get; set; }
+        public int?      countInInter { get; set; }
+        public decimal?  callOutDurAvg { get; set; }
+        public int ? countOutFail { get; set; }
+        public int   countInFail { get; set; }
+        public decimal?  totalOutVolume { get; set; }
+        public decimal   totalInVolume { get; set; }
+        public int       diffInputNumbers { get; set; }
+        public int?      countOutSMS { get; set; }
+        public int?      totalIMEI { get; set; }
+        public int?      totalBTS { get; set; }
+        public int?      isOnNet { get; set; }
+        public decimal?  totalDataVolume { get; set; }
+        public int?  periodId { get; set; }                
+        public int   countInCalls { get; set; }
+        public decimal   callInDurAvg { get; set; }
+        public int ?     countOutOnNet { get; set; }
+        public int?      countInOnNet { get; set; }
+        public int?      countOutOffNet { get; set; }
+        public int?      countInOffNet { get; set; }
         
 
     }
