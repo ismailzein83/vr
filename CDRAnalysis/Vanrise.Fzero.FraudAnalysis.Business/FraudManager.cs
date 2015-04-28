@@ -33,9 +33,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 throw new ArgumentNullException("criterias");
 
             _levelsByPriority = new List<StrategyLevelWithCriterias>();
+            List<StrategyLevelWithCriterias> levelsByPriority = new List<StrategyLevelWithCriterias>();
             foreach(var level in strategy.Levels.OrderByDescending(itm => itm.SuspectionLevel))
             {
                 //TODO: Fill Levels
+                StrategyLevelWithCriterias s = new StrategyLevelWithCriterias();
+                s.SuspectionLevel = level.SuspectionLevel;
+                s.Criterias = new List<LevelCriteria>();
+                LevelCriteria lc = new LevelCriteria();
+
+                foreach (KeyValuePair<int, CriteriaDefinition> pair in criterias)
+                {
+                    foreach (var criteria in strategy.Criterias.OrderByDescending(itm => itm.CriteriaId))
+                    {
+                        if(pair.Key == criteria.CriteriaId)
+                        {
+                            lc.Criteria = pair.Value;
+                            lc.Threshold = criteria.Threshold;
+                            
+                        }
+                        foreach (var c in level.Criterias.OrderByDescending(itm => itm.CriteriaId))
+                        {
+                            if (c.CriteriaId == criteria.CriteriaId)
+                            {
+                                lc.Percentage = c.Percentage;
+                            }
+                        }
+                    }
+                }
+                s.Criterias.Add(lc);
             }
         }
 
@@ -60,7 +86,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             public Decimal Threshold { get; set; }
 
-            public int Percentage { get; set; }
+            public Decimal Percentage { get; set; }
         }
 
         #endregion
