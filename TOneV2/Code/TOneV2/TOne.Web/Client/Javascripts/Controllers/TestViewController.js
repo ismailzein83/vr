@@ -1,7 +1,6 @@
 ﻿'use strict'
 
-var TestViewController = function (CarriersService, ZonesService) {
-
+var TestViewController = function ($scope, CarriersService, ZonesService, RoutingAPIService) {
     var ctrl = this;
     load();
     loadZone();
@@ -24,7 +23,64 @@ var TestViewController = function (CarriersService, ZonesService) {
 
         
     }
-    
+    $scope.gridOptionsRouteRule = {
+        expandableRowTemplate: '<div style="height:20px;"> test</div>',
+        expandableRowHeight: 20,
+        enableVerticalScrollbar: 2,
+        //subGridVariable will be available in subGrid scope
+        expandableRowScope: {
+            subGridVariable: 'subGridScopeVariable'
+        },
+        columnDefs: [
+          {
+              name: 'Carrier Account', field: 'CarrierAccountDescription', height: 40, enableHiding: false, enableColumnMenu: false, width: 300,
+              cellTooltip: function (row, col) {
+                  return row.entity.CarrierAccountDescription;
+              },
+          },
+          {
+              name: 'Code Set', enableColumnMenu: false, field: 'CodeSetDescription', height: 40, width: 300, enableHiding: false,
+              cellTooltip: function (row, col) {
+                  return row.entity.CodeSetDescription;
+              },
+          },
+          { name: 'Rule Type', enableColumnMenu: false, field: 'ActionDescription', height: 40, width: 100, enableHiding: false },
+          { name: 'Start Date', enableColumnMenu: false, field: 'BeginEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 100, enableHiding: false },
+          { name: 'End Date', enableColumnMenu: false, field: 'EndEffectiveDate', cellFilter: 'date:"yyyy-MM-dd "', height: 40, width: 100, enableHiding: false }//,
+        ],
+        enableColumnResizing: true,
+        enableSorting: false,
+        onRegisterApi: function (gridApi) {
+            //gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+            //    var h = angular.element(document.getElementById('gridtest')).css('height');
+            //    var realheigth = parseInt(h.substring(0, h.length - 2));
+            //    alert(realheigth)
+            //    if (row.isExpanded) {
+            //        realheigth = realheigth + 20;
+            //    }
+            //    else {
+            //        realheigth = realheigth - 20;
+            //    }
+
+            //    angular.element(document.getElementById('gridtest')).css('height', realheigth + 'px');
+            //});
+        }
+
+    };
+    $scope.columns = [
+        { displayname: 'last', name: 'EndEffectiveDate' },
+        { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
+        { displayname: 'Code Set', name: 'CodeSetDescription' },
+        { displayname: 'Rule Type', name: 'ActionDescription' }
+        
+    ]
+    $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
+    $scope.tabdata = []
+    RoutingAPIService.getAllRouteRule(0, 10)
+        .then(function (data) {             
+            $scope.gridOptionsRouteRule.data = data;
+            $scope.tabdata = data;
+        })
 
     function load() {
         ctrl.model = 'Test View model';
@@ -131,6 +187,6 @@ var TestViewController = function (CarriersService, ZonesService) {
     
 }
 
-TestViewController.$inject = [ 'CarriersService', 'ZonesService'];
+TestViewController.$inject = ['$scope', 'CarriersService', 'ZonesService', 'RoutingAPIService'];
 
 appControllers.controller('TestViewController', TestViewController);

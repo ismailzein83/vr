@@ -1,6 +1,6 @@
 ﻿'use strict'
 
-var TreeController = function ($scope) {
+var TreeController = function ($scope, $rootScope) {
  
     $scope.tree =  [
         {
@@ -34,9 +34,20 @@ var TreeController = function ($scope) {
                 { label: "Tree", location: '#/Tree' }
             ]
         }
-        ]
+    ]
+    $scope.$on("tree View-show", function (e) {
+        $rootScope.hisnav.push({
+            name: 'tree View',
+            show:true
+        });
+    });
+   
+    $scope.$on("tree View", function (e) {
+
+    });
+   
 }
 
-TreeController.$inject = ['$scope'];
+TreeController.$inject = ['$scope', '$rootScope'];
 
 appControllers.controller('TreeController', TreeController);

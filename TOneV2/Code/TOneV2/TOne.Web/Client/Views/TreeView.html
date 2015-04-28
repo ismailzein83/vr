@@ -1,2 +1,8 @@
-﻿
-<div ivh-treeview="tree" />
+﻿<div ng-hide="ishideView('tree View')">
+    {{findExsiteObj(hisnav,'tree View','name').show}}
+    <div ivh-treeview="tree" />
+    <a ng-click="showsubview('tree View')">go cust</a>
+</div>
+
+
+<div ng-include src="'Client/Views/Routing/RouteRuleManager.html'" ng-show="ishideView('tree View')"></div>

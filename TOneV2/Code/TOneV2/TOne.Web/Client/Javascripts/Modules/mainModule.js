@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope, notify, $animate) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, notify, $animate) {
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
@@ -16,6 +16,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         
         
     }
+
     $scope.showMenu = function (e) {
        
         var $this = angular.element(e.currentTarget);
@@ -67,7 +68,31 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         $scope.child = c; 
 
     }
-    
+    $rootScope.hisnav = [];
+    $rootScope.showsubview = function (page) {
+         $rootScope.$broadcast(page + "-show");
+       
+    }
+    $rootScope.hidesubview = function (page, $index) {
+        if ($index == 0) {
+            $rootScope.hisnav.length = 0;
+        }
+        else {
+            $rootScope.hisnav.pop();
+        }
+        setTimeout(function () {
+            $rootScope.$broadcast(page);
+        }, 10)
+      
+    }
+    $rootScope.ishideView = function (val) {
+        var obj = $scope.findExsiteObj($rootScope.hisnav, val, 'name')        
+        if (obj != null) {
+            return obj.show;
+        }
+        else return false;
+
+    }
     $scope.menuItems = [
         {
             name: "Routing", location: '', icon: 'glyphicon-certificate', childs: [

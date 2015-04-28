@@ -113,6 +113,31 @@
 
                     </div>
 
+                    <div class="panel-primary panel-vr his-nav" ng-if="hisnav.length > 0 ">
+                        <div class="panel-heading">
+                            <span ng-show="showHip"> Nav History </span>
+                            <span class="hand-cursor" ng-click="showHip=!showHip ">
+                                <span ng-show="showHip" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-hide="showHip" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+
+                        </div>
+                        <div class="panel-body am-slide-top" ng-show="showHip">
+                            <vr-row removeline>                                
+                                <div ng-if="hisnav.length > 0 ">
+                                    <div ng-repeat="h in hisnav">
+                                        <button class="btn-link" ng-click="hidesubview(h.name,$index)">{{h.name}}</button>
+                                    </div>
+                                    <span class="glyphicon glyphicon-circle-arrow-left pull-right hand-cursor" ng-click="hidesubview(hisnav[hisnav.length-1].name,hisnav.length-1)"></span>
+                                </div>
+
+
+                            </vr-row>
+
+                        </div>
+
+                    </div>
+
                     <div class="col-lg-12" ng-view>
 
 
