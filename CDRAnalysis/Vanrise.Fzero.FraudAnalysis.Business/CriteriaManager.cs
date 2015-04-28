@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class CriteriaManager
     {
-        public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile, int PeriodID)
+        public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile, Period period, DateTime fromDate, DateTime toDate)
         {
 
             decimal result = 0;
@@ -18,7 +18,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             {
 
                         case Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls ://1
+
+                            if ((numberProfile.Total_In_Volume == 0 && numberProfile.Total_Out_Volume == 0) || (numberProfile.Total_In_Volume == 0 && numberProfile.Total_Out_Volume != 0) || (numberProfile.Total_In_Volume != 0 && numberProfile.Total_Out_Volume == 0))
+                                result = 0;
+                            else if (numberProfile.Total_In_Volume != 0 && numberProfile.Total_Out_Volume != 0)
                                 result = (decimal)(numberProfile.Count_In_Calls / numberProfile.Count_Out_Calls);
+
                                 break; 
 
 
@@ -58,7 +63,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
                         case Criteria.Count_of_daily_active_hours ://9
-                                //result = (decimal)(numberProfile.from);
+                                //if (period== Period.Daily)
+                                    //result = (decimal)(numberProfile.todat);
                                 break; 
 
 
@@ -123,6 +129,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             Ratio_International_Originated_Vs_Outgoing_Calls = 13,
             Count_of_outgoing_during_peak_hours = 14,
             Data_Usage = 15
+        };
+
+
+        enum Period
+        {
+            Daily = 6,
+            Hour = 1
         };
 
     }
