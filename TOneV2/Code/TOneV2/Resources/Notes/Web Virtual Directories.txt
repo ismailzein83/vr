@@ -1,4 +1,4 @@
-﻿under the IIS web site of TOne.Web project, expand the Client folder and create the following virtual directories under the Modules folder:
+﻿Expand the IIS web site of TOne.Web project, Add the following virtual directories under Client > Modules folder:
 Analytics		C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Client
 BI				C:\TFS\TOneV2\Code\TOneV2\TOne.BI.Web\Client
 Routing			C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Client
