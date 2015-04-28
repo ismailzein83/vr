@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Configuration;
 
 namespace Vanrise.Data.SQL
 {
@@ -310,7 +311,15 @@ namespace Vanrise.Data.SQL
 
         protected string GetFilePathForBulkInsert()
         {
-            return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
+            string configuredDirectory = ConfigurationManager.AppSettings["BCPTempFilesDirectory"];
+            if (!String.IsNullOrEmpty(configuredDirectory))
+            {
+                string filePath = Path.Combine(configuredDirectory, Guid.NewGuid().ToString());
+                File.Create(filePath);
+                return filePath;
+            }
+            else
+                return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
         }
 
         protected void InsertBulkToTable(BaseBulkInsertInfo bulkInsertInfo)
