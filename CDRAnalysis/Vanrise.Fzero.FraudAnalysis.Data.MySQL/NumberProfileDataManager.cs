@@ -38,7 +38,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MYSQL
                     NumberProfile numberProfile = new NumberProfile
                     {
                         countOutCalls =(int) reader["countOutCalls"],
-                       
+                        subscriberNumber =(string) reader["subscriberNumber"],
+                        fromDate =(DateTime?) reader["fromDate"],
+                        toDate =(DateTime?) reader["toDate"],
+                        diffOutputNumb =(int?) reader["diffOutputNumb"],
+                        countOutInter =(int?) reader["countOutInter"],
+                        countInInter =(int?) reader["countInInter"],
+                        callOutDurAvg =(decimal?) reader["callOutDurAvg"],
+                        countOutFail =(int?) reader["countOutFail"],
+                        countInFail =(int) reader["countInFail"],
+                        totalOutVolume =(decimal?) reader["totalOutVolume"],
+                        totalInVolume =(decimal) reader["totalInVolume"],
+                        diffInputNumbers =(int) reader["diffInputNumbers"],
+                        countOutSMS =(int?) reader["countOutSMS"],
+                        totalIMEI =(int?) reader["totalIMEI"],
+                        totalBTS =(int?) reader["totalBTS"],
+                        isOnNet =(int?) reader["isOnNet"],
+                        totalDataVolume =(decimal?) reader["totalDataVolume"],
+                        periodId =(int?) reader["periodId"],              
+                        countInCalls =(int) reader["countInCalls"],
+                        callInDurAvg =(decimal) reader["callInDurAvg"],
+                        countOutOnNet =(int?) reader["countOutOnNet"],
+                        countInOnNet =(int?) reader["countInOnNet"],
+                        countOutOffNet =(int?) reader["countOutOffNet"],
+                        countInOffNet =(int?) reader["countInOffNet"],
                     };
                     numberProfileBatch.Add(numberProfile);
                     if (batchSize.HasValue && numberProfileBatch.Count == batchSize)
