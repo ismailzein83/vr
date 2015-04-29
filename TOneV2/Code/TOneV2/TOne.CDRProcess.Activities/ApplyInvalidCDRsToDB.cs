@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.CDR.Data;
 using TOne.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -14,7 +15,7 @@ namespace TOne.CDRProcess.Activities
 
     public class ApplyInvalidCDRsToDBInput
     {
-        public TOneQueue<Object> InputQueue { get; set; }
+        public BaseQueue<Object> InputQueue { get; set; }
     }
 
     #endregion
@@ -22,25 +23,8 @@ namespace TOne.CDRProcess.Activities
     public sealed class ApplyInvalidCDRsToDB : DependentAsyncActivity<ApplyInvalidCDRsToDBInput>
     {
         [RequiredArgument]
-        public InArgument<TOneQueue<Object>> InputQueue { get; set; }
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
 
-        protected override void DoWork(ApplyInvalidCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
-        {
-            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            {
-                bool hasItem = false;
-                do
-                {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (preparedInvalidCDRs) =>
-                        {
-                            dataManager.ApplyInvalidCDRsToDB(preparedInvalidCDRs);
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
-        }
 
         protected override ApplyInvalidCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
         {
@@ -49,5 +33,30 @@ namespace TOne.CDRProcess.Activities
                 InputQueue = this.InputQueue.Get(context)
             };
         }
+
+        protected override void DoWork(ApplyInvalidCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            TimeSpan totalTime = default(TimeSpan);
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (preparedInvalidCDRs) =>
+                        {
+                           // Console.WriteLine("{0}: start writting {1} records to database", DateTime.Now, preparedInvalidCDRs..Count);
+                           // DateTime start = DateTime.Now;
+                            dataManager.ApplyInvalidCDRsToDB(preparedInvalidCDRs);
+                           // totalTime += (DateTime.Now - start);
+                            //Console.WriteLine("{0}: writting batch to database is done in {1}", DateTime.Now, (DateTime.Now - start));
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+        }
+
+        
     }
 }
