@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class FraudManager
     {
-        private IEnumerable<StrategyLevelWithCriterias> _levelsByPriority;
+        private List<StrategyLevelWithCriterias> _levelsByPriority;
 
         public FraudManager(int strategyId) 
         {
@@ -33,7 +33,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 throw new ArgumentNullException("criterias");
 
             _levelsByPriority = new List<StrategyLevelWithCriterias>();
-            List<StrategyLevelWithCriterias> levelsByPriority = new List<StrategyLevelWithCriterias>();
+            
+            //List<StrategyLevelWithCriterias> levelsByPriority = new List<StrategyLevelWithCriterias>();
             foreach(var level in strategy.Levels.OrderByDescending(itm => itm.SuspectionLevel))
             {
                 //TODO: Fill Levels
@@ -62,13 +63,64 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     }
                 }
                 s.Criterias.Add(lc);
+                _levelsByPriority.Add(s);
             }
         }
 
-        public bool IsNumberSuspicious(NumberProfile numberProfile, out SuspiciousNumber suspiciousNumber)
+        public bool IsNumberSuspicious(Dictionary<int, decimal> criteriaValues, String number, out SuspiciousNumber suspiciousNumber)
         {
-            //TODO
-            throw new NotImplementedException();
+            
+            CriteriaDefinition c = new CriteriaDefinition();
+            bool IsSuspicious = false;
+            suspiciousNumber = null;
+            foreach (StrategyLevelWithCriterias StrategyLevel in _levelsByPriority)
+            {
+                IsSuspicious = false;
+                
+                foreach (LevelCriteria LCriteria in StrategyLevel.Criterias)
+                {
+                    Decimal d =  0;
+                    criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
+
+                    Decimal ThrCri = d / LCriteria.Threshold;
+                    criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
+                    if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
+                    {
+                        if (ThrCri >= LCriteria.Percentage)
+                        {
+                            IsSuspicious = true;
+                        }
+                        else
+                        {
+                            IsSuspicious = false;
+                            break;
+                        }
+                    }
+                    else if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
+                    {
+                        if (ThrCri <= LCriteria.Percentage)
+                        {
+                            IsSuspicious = true;
+                        }
+                        else
+                        {
+                            IsSuspicious = false;
+                            break;
+                        }
+                    }
+                }
+
+
+                if (IsSuspicious)
+                {
+                    suspiciousNumber = new SuspiciousNumber();
+                    suspiciousNumber.Number = number;
+                    suspiciousNumber.SuspectionLevel = StrategyLevel.SuspectionLevel;
+                    suspiciousNumber.CriteriaValues = criteriaValues;
+                    return IsSuspicious;
+                }
+            }
+            return IsSuspicious;
         }
 
         #region Private Classes

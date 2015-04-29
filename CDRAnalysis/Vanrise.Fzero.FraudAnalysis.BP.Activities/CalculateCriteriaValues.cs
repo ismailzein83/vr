@@ -18,52 +18,27 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     public class CalculateCriteriaValuesInput
     {
         public BaseQueue<NumberProfileBatch> InputQueue { get; set; }
-    }
 
-    public class CalculateCriteriaValuesOutput
-    {
         public BaseQueue<NumberCriteriaBatch> OutputQueue { get; set; }
     }
 
     #endregion
-    public class CalculateCriteriaValues : BaseAsyncActivity<CalculateCriteriaValuesInput, CalculateCriteriaValuesOutput>
+    public class CalculateCriteriaValues : DependentAsyncActivity<CalculateCriteriaValuesInput>
     {
         #region Arguments
 
         [RequiredArgument]
         public InArgument<BaseQueue<NumberProfileBatch>> InputQueue { get; set; }
 
-        public OutArgument<BaseQueue<NumberCriteriaBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<NumberCriteriaBatch>> OutputQueue { get; set; }
 
         #endregion
 
-
-        //protected override CalculateCriteriaValuesOutput DoWorkWithResult(CalculateCriteriaValuesInput inputArgument, AsyncActivityHandle handle)
-        //{
-        //    return new CalculateCriteriaValuesOutput
-        //    {
-        //        value = new CriteriaManager().GetCriteriaValue(inputArgument.criteria,inputArgument.numberProfile)
-        //    };
-        //}
-
-        //protected override CalculateCriteriaValuesInput GetInputArgument(AsyncCodeActivityContext context)
-        //{
-        //    return new CalculateCriteriaValuesInput();
-        //}
-
-        //protected override void OnWorkComplete(AsyncCodeActivityContext context, CalculateCriteriaValuesOutput result)
-        //{
-        //    this.value.Set(context, result.value);
-        //}
-
-
-
-        protected override CalculateCriteriaValuesOutput DoWorkWithResult(CalculateCriteriaValuesInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(CalculateCriteriaValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-
-
-              handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork.Start {0}", DateTime.Now);
-              INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+            int BatchSize = int.Parse( System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork.Start {0}", DateTime.Now);
+            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -73,7 +48,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
-                            dataManager.LoadNumberProfile( item.numberProfiles,);
+                            foreach (NumberProfile number in item.numberProfiles)
+                            {
+                                inputArgument.OutputQueue.Enqueue(new NumberCriteriaBatch()
+                                {
+                                    criteriaValues  = new CriteriaManager().GetCriteriaValues(number),
+                                    number = number.subscriberNumber
+                                });
+                            }
+                                
                             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.SavedtoDB {0}", DateTime.Now);
                         });
                 }
@@ -81,22 +64,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.End {0}", DateTime.Now);
 
-
-
-            //return new CalculateCriteriaValuesOutput
-            //{
-            //    value = new CriteriaManager().GetCriteriaValues(inputArgument.InputQueue.)
-            //};
         }
 
-        protected override CalculateCriteriaValuesInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override CalculateCriteriaValuesInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, CalculateCriteriaValuesOutput result)
-        {
-            throw new NotImplementedException();
+            return new CalculateCriteriaValuesInput()
+            {
+                InputQueue = this.InputQueue.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
+            };
         }
     }
 }
