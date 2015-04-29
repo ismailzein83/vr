@@ -10,10 +10,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class CriteriaManager
     {
 
-        //public Dictionary<int, decimal> GetCriteriaValues(NumberProfile numberProfile)
-        //{ 
-        //    //
-        //}
+        public Dictionary<int, decimal> GetCriteriaValues(NumberProfile numberProfile)
+        {
+            Dictionary<int, decimal> criteriaValues = new Dictionary<int,decimal>();
+
+            foreach( var i in GetCriteriaDefinitions())
+            {
+                criteriaValues.Add(i.Key, GetCriteriaValue(new CriteriaDefinition(){ CriteriaId=i.Value.CriteriaId, CompareOperator=i.Value.CompareOperator,  Description=i.Value.Description }, numberProfile));
+            }
+            return criteriaValues;
+        }
 
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {
