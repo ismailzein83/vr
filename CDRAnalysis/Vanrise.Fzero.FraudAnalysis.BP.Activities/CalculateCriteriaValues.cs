@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class CalculateCriteriaValuesOutput
     {
-        public BaseQueue<NumberProfileBatch> OutputQueue { get; set; }
+        public BaseQueue<NumberCriteriaBatch> OutputQueue { get; set; }
     }
 
     #endregion
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<BaseQueue<NumberProfileBatch>> InputQueue { get; set; }
 
-        public OutArgument<BaseQueue<NumberProfileBatch>> OutputQueue { get; set; }
+        public OutArgument<BaseQueue<NumberCriteriaBatch>> OutputQueue { get; set; }
 
         #endregion
 
