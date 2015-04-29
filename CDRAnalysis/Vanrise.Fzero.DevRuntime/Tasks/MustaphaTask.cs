@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Fzero.CDRImport.BP.Activities;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
@@ -47,14 +48,15 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //});
 
 
-            BPClient bpClient2 = new BPClient();
-            bpClient2.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "SaveCDRToDBProcess",
-                InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput
-                {
-                }
-            });
+
+            //BPClient bpClient2 = new BPClient();
+            //bpClient2.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "SaveCDRToDBProcess",
+            //    InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput
+            //    {
+            //    }
+            //});
 
 
             Console.WriteLine("END");

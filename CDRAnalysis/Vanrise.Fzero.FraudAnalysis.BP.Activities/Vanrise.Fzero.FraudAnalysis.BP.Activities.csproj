@@ -63,7 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetCriteriaValue.cs" />
+    <Compile Include="CalculateCriteriaValues.cs" />
     <Compile Include="GetCriteriaDefinition.cs" />
     <Compile Include="GetStrategy.cs" />
     <Compile Include="LoadNumberProfile.cs">

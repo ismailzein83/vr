@@ -9,6 +9,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class CriteriaManager
     {
+
+        //public Dictionary<int, decimal> GetCriteriaValues(NumberProfile numberProfile)
+        //{ 
+        //    //
+        //}
+
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {
 
