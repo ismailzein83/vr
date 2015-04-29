@@ -939,21 +939,35 @@ input.ui-grid-filter-input[type="text"] {
 }
 /* custom grid*/
 .grid-vr-custom{
-    font-size:12px;
+    font-size:12px;    
+    width:100%;
+}
+.grid-body-container{
+     height:329px;
+     overflow-y:auto;
 }
 .grid-body{
-     background-color:#f0f0f0;
+     background-color:#fff;
+     border-bottom : 1px solid #D0D0D0;
+    
 }
 .grid-header{
     background-color:#829EBF;
 }
-.grid-header.grid-cell{
-}
+
 .grid-cell{
     display:inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     padding:5px ;
+    position:relative;
     max-width:100%;
+}
+.resizer{
+    display:inline-block;
+    position:absolute;
+    top: 0px;
+    right: 2%;
+    cursor:w-resize;
 }

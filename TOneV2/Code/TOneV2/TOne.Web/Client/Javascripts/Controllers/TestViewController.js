@@ -67,20 +67,71 @@ var TestViewController = function ($scope, CarriersService, ZonesService, Routin
         }
 
     };
+    var pageSize = 40;
+    var page = 0;
+    var pageUp = 0;
+    var last = false;
+
     $scope.columns = [
         { displayname: 'last', name: 'EndEffectiveDate' },
         { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
-        { displayname: 'Code Set', name: 'CodeSetDescription' },
-        { displayname: 'Rule Type', name: 'ActionDescription' }
-        
+        { displayname: 'Code Set', name: 'CodeSetDescription' }
     ]
     $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
     $scope.tabdata = []
-    RoutingAPIService.getAllRouteRule(0, 10)
+    RoutingAPIService.getAllRouteRule(page, pageSize)
         .then(function (data) {             
             $scope.gridOptionsRouteRule.data = data;
             $scope.tabdata = data;
         })
+    var lastScrollTop = 0;
+    var datainloded = false;
+    $(".grid-body-container").scroll(function () {
+
+        var st = $(this).scrollTop();
+        var scrollPercentage = 100 * st / ($('#grid-canvas').height() - $(this).height());
+
+        if (st > lastScrollTop) {
+            if (scrollPercentage > 60 && !datainloded)
+                loaddata()
+        } else {
+            console.log('u' +st +" // " + scrollPercentage)
+        }
+        lastScrollTop = st;
+    });
+    function loaddata() {
+        if (last == false) {
+            page = page + 1;
+            datainloded = true;
+            RoutingAPIService.getAllRouteRule(page, pageSize)
+            .then(function (data) {
+                $scope.tabdata = $scope.tabdata.concat(data);
+                last = (data.length < pageSize) ? true : false;
+                datainloded = false;
+
+            })
+        }
+
+    }
+
+    $scope.getwidth = function () {             
+        var gridwidth = $('#gridtest').width();
+        return (gridwidth / $scope.columns.length);
+    }
+    //$scope.increaseWidth = function (c) {
+       
+    //    var w = c.colwidth * 1.5;
+    //    var gridwidth = $('#gridtest').width() - w ;
+    //    var ow = (gridwidth / ($scope.columns.length - 1));
+    //    console.log(ow + ' // ' + w)
+    //    angular.forEach($scope.columns, function (col) {
+    //        if (col.name != c.name)
+    //            col.colwidth = ow;
+            
+
+    //    });
+    //    col.colwidth = w;
+    //}
 
     function load() {
         ctrl.model = 'Test View model';

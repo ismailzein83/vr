@@ -49,32 +49,41 @@
             </div>
 
         </div>
-        <div class="grid-vr-custom">
+        <div class="grid-vr-custom" id="gridtest">
             <div class="grid-header" ng-sortable="itemsSortable">
-                <div ng-repeat="c in columns" class="grid-cell handeldrag" ng-style="{'width':((100/columns.length-1))+'%'}">
+                <div ng-repeat="c in columns" class="grid-cell handeldrag" ng-init="c.colwidth = getwidth() " ng-style="{'width':getwidth()+'px'}">
                     {{columns[$index].displayname}}
+                    <div class="resizer"
+                         resizer="vertical"
+                         resizer-width="1" ind="{{$index}}" draggable="true">
+                        e
+                    </div>
                 </div>
             </div>
+            <div class="grid-body-container">
+                <div id="grid-canvas">
+                    <div class="grid-body" ng-repeat="d in tabdata">
+                        <div ng-repeat="c in columns" class="grid-cell" ng-style="{'width':c.colwidth+'px'}">
+                            <span ng-if="$index==0">
+                                <a ng-click="d.open=!d.open" href="">
+                                    <span class="caret-rigth" ng-if="!d.open"></span>
+                                    <span class="caret-down" ng-if="d.open"></span>
+                                </a>
+                            </span>
+                            {{d[c.name]}}
+                        </div>
+                        <div ng-if="d.open" class="grid-cell" ng-style="{'width':('100%'}">
+                            {{d}}
+                        </div>
 
-        </div>
-        <div class="grid-body" ng-repeat="d in tabdata">
-            <div ng-repeat="c in columns" class="grid-cell" ng-style="{'width':((100/columns.length)-1)+'%'}">
-                <span ng-if="$index==0">
-                    <a ng-click="d.open=!d.open" href="">
-                        <span class="caret-rigth" ng-if="!d.open"></span>
-                        <span class="caret-down" ng-if="d.open"></span>
-                    </a>
-                </span>
-                {{d[c.name]}}
+                    </div>
+                </div>
+
             </div>
-            <div ng-if="d.open" class="grid-cell" ng-style="{'width':('100%'}">
-                {{d}}
-            </div>
-
         </div>
+        
+        
         </div>
-
-</div>
 
 <!--<div id="gridtest" ui-grid="gridOptionsRouteRule" ui-grid-expandable ui-grid-auto-resize >-->
 <!--<div class="row">-->

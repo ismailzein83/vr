@@ -18,20 +18,7 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'ngMessages',
     'ivh.treeview'
 ]);
-appControllers.directive('resizable', function () {
-    return {
-        restrict: 'A',
-        scope: {
-            callback: '&onResize'
-        },
-        link: function postLink(scope, elem, attrs) {
-            elem.resizable();
-            elem.on('resizestop', function (evt, ui) {
-                if (scope.callback) { scope.callback(); }
-            });
-        }
-    };
-});
+
 
 
 appControllers.directive('numberFiled', function () {
@@ -56,3 +43,42 @@ appControllers.directive('numberFiled', function () {
         }
     };
 });
+appControllers.directive('resizer', function($document) {
+
+    return function($scope, $element, $attrs) {
+
+        $element.on('mousedown', function(event) {
+            event.preventDefault();
+
+            $document.on('mousemove', mousemove);
+            $document.on('mouseup', mouseup);
+        });
+        var x; 
+        function mousemove(event) {
+            console.log($attrs.ind)
+            if ($attrs.resizer == 'vertical') {
+               var  x = event.pageX -  $element.parent().width();
+            } 
+        }
+
+        function mouseup(event) {
+            if ($attrs.resizer == 'vertical') {
+                x = event.pageX - $element.parent().width();
+            }
+            //var nextdivwidth = $scope.columns[parseInt($attrs.ind + 1)].colwidth - (x - ($scope.columns[parseInt($attrs.ind + 1)].colwidth));
+            $scope.$apply(function () {
+               console.log(x)
+                $element.parent().css({
+                    width: x + 'px'
+                });
+               // console.log($scope.columns[parseInt($attrs.ind + 1)].colwidth + " befor ")
+                $scope.columns[$attrs.ind].colwidth = x;
+              //  $scope.columns[parseInt($attrs.ind + 1)].colwidth = nextdivwidth;
+               // console.log($scope.columns[parseInt($attrs.ind + 1)].colwidth  + " after ")
+            });
+            $document.unbind('mousemove', mousemove);
+            $document.unbind('mouseup', mouseup);
+        }
+    };
+});
+
