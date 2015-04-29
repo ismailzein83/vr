@@ -18,7 +18,7 @@ namespace TOne.CDRProcess.Activities
    
         public DateTime To { get; set; }
 
-        public BaseQueue<CDRBatch> QueueLoadedCDRs { get; set; }
+        public BaseQueue<TOne.CDR.Entities.CDRBatch> OutputQueue { get; set; }
     }
 
     public class LoadCDRsOutput
@@ -37,10 +37,18 @@ namespace TOne.CDRProcess.Activities
         public InArgument<DateTime> To { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<CDRBatch>> QueueLoadedCDRs { get; set; }
+        public InOutArgument<BaseQueue<TOne.CDR.Entities.CDRBatch>> OutputQueue { get; set; }
 
         [RequiredArgument]
         public OutArgument<int> Result { get; set; }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<TOne.CDR.Entities.CDRBatch>());
+
+            base.OnBeforeExecute(context, handle);
+        }
 
         protected override LoadCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -48,7 +56,7 @@ namespace TOne.CDRProcess.Activities
             {
                 From = this.From.Get(context),
                 To = this.To.Get(context),
-                QueueLoadedCDRs = this.QueueLoadedCDRs.Get(context),
+                OutputQueue = this.OutputQueue.Get(context),
             };
         }
 
@@ -64,7 +72,7 @@ namespace TOne.CDRProcess.Activities
             manager.LoadCDRRange(inputArgument.From, inputArgument.To, 10000, (cdrs) =>
             {
                 cdrCount += cdrs.Count;
-                inputArgument.QueueLoadedCDRs.Enqueue(new CDRBatch { CDRs = cdrs });
+                inputArgument.OutputQueue.Enqueue(new TOne.CDR.Entities.CDRBatch { CDRs = cdrs });
             });
 
             return new LoadCDRsOutput
