@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.BusinessProcess;
-using System.Activities;
 using Vanrise.Fzero.FraudAnalysis.Business;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using System.Globalization;
+using Vanrise.Fzero.FraudAnalysis.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -54,9 +56,37 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         //    this.value.Set(context, result.value);
         //}
 
+
+
         protected override CalculateCriteriaValuesOutput DoWorkWithResult(CalculateCriteriaValuesInput inputArgument, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+
+
+              handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start SaveCDRsToDB.DoWork.Start {0}", DateTime.Now);
+              INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue(
+                        (item) =>
+                        {
+                            dataManager.LoadNumberProfile( item.numberProfiles,);
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.SavedtoDB {0}", DateTime.Now);
+                        });
+                }
+                while (!ShouldStop(handle) && hasItem);
+            });
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End SaveCDRsToDB.DoWork.End {0}", DateTime.Now);
+
+
+
+            //return new CalculateCriteriaValuesOutput
+            //{
+            //    value = new CriteriaManager().GetCriteriaValues(inputArgument.InputQueue.)
+            //};
         }
 
         protected override CalculateCriteriaValuesInput GetInputArgument(AsyncCodeActivityContext context)

@@ -7,7 +7,6 @@ using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
 using System.Configuration;
-using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
@@ -48,10 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                });
            });
 
-           //handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start LoadNumberProfiles.DoWork.LoadNumberProfile {0}", DateTime.Now);
-           
-           //handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start LoadNumberProfiles.DoWork.Enqueued {0}", DateTime.Now);
-           //handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End LoadNumberProfiles.DoWork {0}", DateTime.Now);
+          
         }
 
         protected override LoadNumberProfilesInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
