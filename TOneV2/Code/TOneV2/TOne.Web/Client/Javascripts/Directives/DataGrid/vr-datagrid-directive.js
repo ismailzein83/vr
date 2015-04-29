@@ -1,100 +1,64 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagrid', ['DataGridDirService', 'UtilsService', '$interval', function (DataGridDirService, UtilsService, $interval) {
-    var cellTemplate = '<div class="ui-grid-cell-contents" style="text-align: #TEXTALIGN#">'
-    + '<a ng-show="col.colDef.isClickable(row.entity)" class="span-summary" ng-click="col.colDef.onClicked(row.entity)" style="cursor:pointer;"> {{col.colDef.getValue(row.entity) #CELLFILTER#}}</a>'
-    + '<span ng-hide="col.colDef.isClickable(row.entity)" class="span-summary"> {{col.colDef.getValue(row.entity) #CELLFILTER#}}</span>'
-+ '</div>';
+app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
 
-    var headerTemplate = '<div ng-class="{ \'sortable\': col.colDef.enableSorting }" class="header-custom" ng-click="col.colDef.onSort()" style="background-color: #829EBF;color:#FFF">'
-   +' <div class="ui-grid-cell-contents" col-index="renderIndex">'
-     +'   <span>'
-       +'         <span ng-show="col.colDef.sortDirection==\'ASC\'">&uarr;</span>'
-        +'        <span ng-show="col.colDef.sortDirection==\'DESC\'">&darr;</span>'
-    +'{{col.name}}'
-   +' </span>'
-+'</div>'
-+'<div class="ui-grid-column-menu-button" ng-if="grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false" class="ui-grid-column-menu-button" ng-click="toggleMenu($event)">'
-+'    <i class="ui-grid-icon-angle-down">&nbsp;</i>'
-+'</div>'
-+'</div>';
     var directiveDefinitionObject = {
-
         restrict: 'E',
         scope: {
-            onReady: '='
+            datasource: '=',
+            onReady: '=',
+            maxheight: '@',
+            hideheader: '='
         },
         controller: function ($scope, $element) {
             var ctrl = this;
             var gridApi = {};
             var maxHeight;
             var lastSortColumnDef;
-            ctrl.gridOptions = { data: [], columnDefs: [] };
+            ctrl.columnDefs = [];
+            ctrl.addColumn = addColumn;
+            ctrl.gridStyle = {};
 
+            if (ctrl.maxheight != undefined) {
+                ctrl.gridStyle['max-height'] = ctrl.maxheight;
+            }
 
-            function defineGrid(options) {
-                var gridOptions = ctrl.gridOptions;
-
-                gridOptions.onRegisterApi = function (api) {
-                    gridApi = api;
-
-                    // call resize every 200 ms for 2 s after modal finishes opening - usually only necessary on a bootstrap modal
-                    $interval(function () {
-                        gridApi.core.handleWindowResize();
-                    }, 10, 500);
-                }
-                if (options.hideHeader) {
-                    gridOptions.showHeader = false;
-                }
-                else
-                {
-                    gridOptions.enableGridMenu = true;
-                }
-                gridOptions.useExternalSorting = true;
-                
-                gridOptions.enableHorizontalScrollbar = 0;
-                if (options.showVerticalScroll)
-                    gridOptions.enableVerticalScrollbar = 1;
-                else
-                    gridOptions.enableVerticalScrollbar = 0;
-                //gridOptions.minRowsToShow = 30;
-                //gridOptions.enableFiltering = false;
-                //gridOptions.saveFocus = false;
-                //gridOptions.saveScroll = true;
-                gridOptions.enableColumnResizing = true;
-
-                angular.forEach(options.columns, function (col) {
-                    var colDef = {
-                        name: col.headerText != undefined ? col.headerText : col.field,
-                        headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
-                        enableColumnMenu: false,
-                        //enableHiding: false,
-                        field: col.field,
-                        enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
-                        onSort: function () {
-                            if (col.onSortChanged != undefined) {
-                                var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
-                                var sortChangedHandle = {
-                                    operationDone: function (isSucceeded) {
-                                        if (isSucceeded == true) {
-                                            if (lastSortColumnDef != undefined)
-                                                lastSortColumnDef.sortDirection = undefined;
-                                            colDef.sortDirection = sortDirection;
-                                            lastSortColumnDef = colDef;
-                                        }
+            function addColumn(col) {
+                var colDef = {
+                    name: col.headerText != undefined ? col.headerText : col.field,
+                    headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
+                    field: col.field,
+                    enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
+                    onSort: function () {
+                        if (col.onSortChanged != undefined) {
+                            var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
+                            var sortChangedHandle = {
+                                operationDone: function (isSucceeded) {
+                                    if (isSucceeded == true) {
+                                        if (lastSortColumnDef != undefined)
+                                            lastSortColumnDef.sortDirection = undefined;
+                                        colDef.sortDirection = sortDirection;
+                                        lastSortColumnDef = colDef;
                                     }
-                                };
-                                col.onSortChanged(sortDirection, sortChangedHandle);
-                            }
+                                }
+                            };
+                            col.onSortChanged(colDef, sortDirection, sortChangedHandle);
                         }
-                    };
-                    
-                    colDef.getValue = function (dataItem) {
-                        return eval('dataItem.' + colDef.field);
-                    };
+                    },
+                    tag: col.tag
+                };
 
-                    var columnCellTemplate = cellTemplate;
+                colDef.getValue = function (dataItem) {
+                    return eval('dataItem.' + colDef.field);
+                };
+
+                var columnCellTemplate;
+                if (col.cellTemplate != undefined && col.cellTemplate != null && col.cellTemplate != "") {                    
+                    columnCellTemplate = col.cellTemplate;
+                }
+                else {
+                    columnCellTemplate = cellTemplate;
                     if (col.type == "Number") {
                         columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "right;margin-right:10px");
                         columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| number:2");
@@ -103,77 +67,72 @@ app.directive('vrDatagrid', ['DataGridDirService', 'UtilsService', '$interval', 
                         columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "left");
                         columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "");
                     }
-                    colDef.cellTemplate = columnCellTemplate;
-                    if (col.isClickable != undefined) {
-                        colDef.isClickable = function (dataItem) {
+                }
+                colDef.cellTemplate = columnCellTemplate;
+                if (col.isClickable != undefined) {
+                    colDef.isClickable = function (dataItem) {
+                        if (typeof (col.isClickable) == 'function')
                             return col.isClickable(dataItem);
-                        };
-                        colDef.onClicked = function (dataItem) {
-                            if (col.onClicked != undefined)
-                                col.onClicked(dataItem);
-                        };
-                    }
+                        else
+                            return col.isClickable;
+                    };
+                    colDef.onClicked = function (dataItem) {
+                        if (col.onClicked != undefined)
+                            col.onClicked(dataItem);
+                    };
+                }
 
-                    gridOptions.columnDefs.push(colDef);
-                });
-                maxHeight = options.maxHeight;
-                if (maxHeight == undefined)
-                    maxHeight = 500;
-
-
-                gridApi.data = gridOptions.data;
+                ctrl.columnDefs.push(colDef);
+                calculateColumnsWidth();
             }
-            ctrl.getGridHeight = function (gridOptions) {
-                var height;
-                if (gridOptions.data.length == 0) {
-                    height = gridOptions.lastHeight;
-                }
-                else {
-                    var rowHeight = 30; // your row height
-                    var headerHeight = 30; // your header height
-                    var height = (gridOptions.data.length * rowHeight + headerHeight);
-                }
-                if (height > maxHeight)
-                    height = maxHeight;
-                gridOptions.lastHeight = height;
 
-                return {
-                    height: height + "px"
-                };
-            };
+            function calculateColumnsWidth() {
+                angular.forEach(ctrl.columnDefs, function (col) {
 
+                    col.width = (100 / ctrl.columnDefs.length) + '%';
+                });
+            }
 
-            gridApi.defineGrid = defineGrid;
             gridApi.reset = function () {
                 if (lastSortColumnDef != undefined) {
                     lastSortColumnDef.sortDirection = undefined;
                     lastSortColumnDef = undefined;
                 }
             }
-            ctrl.onReady(gridApi);
+            if (ctrl.onReady != null)
+                ctrl.onReady(gridApi);
 
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        //compile: function (element, attrs) {
-
-        //    return {
-        //        pre: function ($scope, iElem, iAttrs, ctrl) {
-        //            $scope.gridOptions = { data: [], columnDefs: [] };
-
-        //        }
-        //    }
-        //},
-        //link: function ($scope, $element, $attrs, $tabsCtrl) {
-        //    $scope.gridOptions = { columnDefs: [], data: []  };
-
-        //},
-        templateUrl: function (element, attrs) {
-            return DataGridDirService.dTemplate;
+        compile: function (element, attrs) {
+            element.append('<vr-datagridrows></vr-datagridrows>');  
+            return {
+                pre: function ($scope, iElem, iAttrs, ctrl) {                    
+                }
+            }
         }
 
     };
 
+    var cellTemplate = '<div class="ui-grid-cell-contents" style="text-align: #TEXTALIGN#">'
+      + '<a ng-show="colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{colDef.getValue(dataItem) #CELLFILTER#}}</a>'
+      + '<span ng-hide="colDef.isClickable(dataItem)" class="span-summary"> {{colDef.getValue(dataItem) #CELLFILTER#}}</span>'
+   + '</div>';
+
+    var headerTemplate = '<div class="header-custom" ng-click="colDef.onSort()" style="background-color: #829EBF;color:#FFF">'
+   + ' <div class="ui-grid-cell-contents" col-index="renderIndex">'
+     + '   <span>'
+       + '         <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
+        + '        <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
+    + '{{colDef.name}}'
+   + ' </span>'
++ '</div>'
++ '</div>';
+
     return directiveDefinitionObject;
 
+   
+
 }]);
+

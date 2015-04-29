@@ -7,14 +7,13 @@ appControllers.controller('ZoneMonitorController',
         var chartSelectedMeasureAPI;
         var chartSelectedEntityAPI;
         var mainGridAPI;
-        var overallGridAPI;
         var overallSelectedMeasure;
         var resultKey;
         var sortColumn;
         var sortDescending = true;
         var currentSortedColDef;
         var trafficStatisticSummary;
-        var measures;
+        var measures = [];
         var currentData;
 
         defineScopeObjects();
@@ -59,8 +58,9 @@ appControllers.controller('ZoneMonitorController',
 
             $scope.gridAllMeasuresScope = {};
             $scope.showResult = false;
-            
-
+            $scope.measures = measures;
+            $scope.data = [];
+            $scope.overallData = [];
         }
         
         function defineScopeMethods() {
@@ -93,41 +93,29 @@ appControllers.controller('ZoneMonitorController',
             $scope.pageChanged = function () {
                 getData();
             };
-
-            $scope.getGridHeight = function (gridOptions) {
-                var height;
-                if (gridOptions.data.length == 0) {
-                    height = gridOptions.lastHeight;
-                }
-                else {
-                    var rowHeight = 30; // your row height
-                    var headerHeight = 30; // your header height
-                    var height = (gridOption.data.length * rowHeight + headerHeight);
-                }
-                gridOptions.lastHeight = height;
-                
-                return {
-                    height: height + "px"
-                };
-            };
-
-            $scope.gridCellClicked = function (entity) {
-                $scope.selectedEntityId = entity.GroupKeyValues[0].Id;
-                $scope.selectedEntityName = entity.GroupKeyValues[0].Name;
-                console.log($scope.selectedEntityName);
-                getAndShowEntityStatistics();
-            };
-
-
+            
             $scope.onMainGridReady = function (api) {
                 mainGridAPI = api;
-                defineMainGrid();
             }
 
-            $scope.onOverallGridReady = function (api) {
-                overallGridAPI = api;
-                defineOverallGrid();
+            $scope.onZoneClicked = function (dataItem) {
+                selectZone(dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name);
+            };
+
+            $scope.onMainGridSortChanged = function (colDef, sortDirection, handle) {
+                sortColumn = colDef.tag;
+                sortDescending = (sortDirection == "DESC");
+                getData(handle);
             }
+
+            $scope.isOverallItemClickable = function (dataItem) {
+                return (dataItem.measure.isSum == true);
+            };
+
+            $scope.onOverallItemClicked = function (dataItem) {
+                overallSelectedMeasure = dataItem.measure;
+                renderOverallChart();
+            };
         }
 
         function load() {
@@ -141,83 +129,21 @@ appControllers.controller('ZoneMonitorController',
             loadSuppliers();
         }
 
+        function selectZone(zoneId, zoneName) {
+            $scope.selectedEntityId = zoneId;
+            $scope.selectedEntityName = zoneName;
+            getAndShowEntityStatistics();
+        }
+
         function resetSorting() {
             sortColumn = TrafficStatisticsMeasureEnum.Attempts;
             sortDescending = true;
         }
 
-        function loadMeasures() {
-            measures = [];
+        function loadMeasures() {           
             for (var prop in TrafficStatisticsMeasureEnum) {
                 measures.push(TrafficStatisticsMeasureEnum[prop]);
             }
-        }
-
-        function defineMainGrid()
-        {
-            columns = [];
-
-            var zoneColumn = {
-                headerText: 'Zone',
-                enableHiding: false,
-                field: 'zoneName',
-                isClickable: function (dataItem) {
-                    return true;
-                },
-                onClicked: function (dataItem) {
-                    $scope.selectedEntityId = dataItem.GroupKeyValues[0].Id;
-                    $scope.selectedEntityName = dataItem.GroupKeyValues[0].Name;
-                    getAndShowEntityStatistics();
-                }
-            };
-            columns.push(zoneColumn);
-
-            var valColumnIndex = 0;
-            angular.forEach(measures, function (measure) {
-
-                var col = {
-                    headerText: measure.description,
-                    field: measure.propertyName,
-                    type: "Number",
-                    onSortChanged: function (sortDirection, handle) {
-                        sortColumn = measure;
-                        sortDescending = (sortDirection == "DESC");
-                        getData(handle);
-                    }
-                };
-                columns.push(col);
-            });
-
-            var gridOptions = {
-                columns: columns
-            };
-            mainGridAPI.defineGrid(gridOptions);            
-        }
-
-        function defineOverallGrid() {
-            columns = [];
-            var firstColumn = {
-                field: 'measureDescription',
-                isClickable: function (dataItem) {
-                    return (dataItem.measure.isSum == true);
-                },
-                onClicked: function (dataItem) {
-                    overallSelectedMeasure = dataItem.measure;
-                    renderOverallChart();
-                }
-            };
-            columns.push(firstColumn);
-
-            var secondColumn = {
-                field: 'value',
-                type: "Number"
-            };
-            columns.push(secondColumn);
-            var gridOptions = {
-                hideHeader: true,                
-                columns: columns
-            };
-            overallGridAPI.defineGrid(gridOptions);
         }
         
         function getData(asyncHandle, withSummary) {
@@ -226,7 +152,7 @@ appControllers.controller('ZoneMonitorController',
             if (withSummary == undefined)
                 withSummary = false;
             
-            mainGridAPI.data.length = 0;
+            $scope.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
             if (chartSelectedEntityAPI)
                 chartSelectedEntityAPI.hideChart();
@@ -260,9 +186,9 @@ appControllers.controller('ZoneMonitorController',
                 $scope.totalDataCount = response.TotalCount;
                 if (withSummary) {
                     trafficStatisticSummary = response.Summary;
-                    overallGridAPI.data.length = 0;
+                    $scope.overallData.length = 0;
                     angular.forEach(measures, function (measure) {
-                        overallGridAPI.data.push({
+                        $scope.overallData.push({
                             measure: measure,
                             measureDescription: measure.description,
                             value: trafficStatisticSummary[measure.propertyName]
@@ -271,7 +197,7 @@ appControllers.controller('ZoneMonitorController',
                 }
                 angular.forEach(response.Data, function (itm) {
                     itm.zoneName = itm.GroupKeyValues[0].Name;
-                    mainGridAPI.data.push(itm);
+                    $scope.data.push(itm);
                 });
                 renderOverallChart();
                 isSucceeded = true;

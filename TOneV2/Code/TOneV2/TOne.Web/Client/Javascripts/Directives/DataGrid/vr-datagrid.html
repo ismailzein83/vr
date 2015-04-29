@@ -1,1 +1,16 @@
-﻿<div id="custom" class="gridroute" ui-grid="ctrl.gridOptions" ui-grid-auto-resize ng-style="ctrl.getGridHeight(ctrl.gridOptions)"></div>
+﻿<div>
+    <div ng-sortable="itemsSortable" ng-hide="ctrl.hideheader">
+        <div ng-repeat="colDef in ctrl.columnDefs" ng-style="{'width': colDef.width, 'display':'inline-block'}">
+            <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
+        </div>
+    </div>
+
+</div>
+<div ng-style="ctrl.gridStyle" style="overflow-y:auto">
+    <div ng-repeat="dataItem in ctrl.datasource">
+        <div ng-repeat="colDef in ctrl.columnDefs" ng-style="{'width': colDef.width, 'display':'inline-block'}">
+            <vr-datagridcell htmltemplate='colDef.cellTemplate'></vr-datagridcell>
+        </div>
+
+    </div>
+</div>

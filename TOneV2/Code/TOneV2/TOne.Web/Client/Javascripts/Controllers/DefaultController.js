@@ -2,7 +2,10 @@
     function DefaultController($scope, $http) {
        
         $scope.testModel = 'initial from default';
-
+        $scope.html = '<input ng-click="click(1)" value="Click me" type="button">';
+        $scope.click = function (arg) {
+            alert('Clicked ' + arg);
+        }
         $scope.postMsg = function () {
             $http.post($scope.baseurl + "/api/routing/SaveRouteRule",
           {
@@ -38,4 +41,14 @@
           
       });
         };
+
+        $scope.gridData = [];
+        for (var i = 1; i < 10; i++) {
+            $scope.gridData.push({
+                col1: "test " + i + "1",
+                col2: "test " + i + "2",
+                col3: "test " + i + "3",
+            });
+        }
+       
     });

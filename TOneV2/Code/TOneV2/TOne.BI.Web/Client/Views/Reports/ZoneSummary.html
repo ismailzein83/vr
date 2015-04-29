@@ -14,7 +14,10 @@
                     <select ng-options="itm as itm.name for itm in timeDimensionTypes"
                             ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
                     <!--<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" style="height:400px"></div>-->
-                    <vr-datagrid data-on-ready="onGridReady"></vr-datagrid>
+                    <vr-datagrid datasource="data" maxheight="600px">
+                        <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>                        
+                    </vr-datagrid>
                     <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
                 </div>
 

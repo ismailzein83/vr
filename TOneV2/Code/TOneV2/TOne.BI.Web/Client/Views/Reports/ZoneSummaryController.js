@@ -26,7 +26,9 @@ appControllers.controller('ZoneSummaryController',
                     $scope.selectedTimeDimensionType = obj;
             }
 
+            $scope.measureTypes = measureTypes;
 
+            $scope.data = [];
           
         }
         
@@ -48,49 +50,14 @@ appControllers.controller('ZoneSummaryController',
                     $location.path("/BI/ZoneDetails/" + $scope.zoneId + "/" + $scope.zoneName).replace();
                 //});
             };
-
-            $scope.onGridReady = function (api) {
-                gridApi = api;
-                defineGrid();
-            };
         }
 
         function load() {
-            
-        }
-
-        function defineGrid() {
-            columns = [];
-            var timeColumn = {
-                headerText: 'Time',
-                field: 'dateTimeValue',
-                onSortChanged: function (handle) {
-                    handle.sortSucceeded();
-                }
-            };
-            columns.push(timeColumn);
-
-            var valColumnIndex = 0;
-            angular.forEach(measureTypes, function (measureType) {
-                var colDef = {
-                    headerText: measureType.description,
-                    field: 'Values[' + valColumnIndex++ + ']',
-                    type: "Number"
-                };
-                columns.push(colDef);
-            });
-            var gridOptions = {
-                columns: columns,
-                showVerticalScroll: true,
-                maxHeight: 600
-            };
-            gridApi.defineGrid(gridOptions);
-
             getData();
         }
 
         function getData() {
-            gridApi.data.length = 0;
+            $scope.data.length = 0;
             var measureTypeValues = [];
             angular.forEach(measureTypes, function (measureType) {
                 measureTypeValues.push(measureType.value);
@@ -101,7 +68,7 @@ appControllers.controller('ZoneSummaryController',
                 BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
 
                 angular.forEach(response, function (itm) {
-                    gridApi.data.push(itm);
+                    $scope.data.push(itm);
                 });
             });
         }

@@ -33,11 +33,12 @@
                 { name: "20", value: "20" }
                 ]
             };
+
+            $scope.data = [];
         }
 
         var chartTopDestinationsAPI;
         var chartZoneReadyAPI;
-        var gridMainAPI;
         function defineScopeMethods() {
 
             $scope.chartTopDestinationsReady = function (api) {
@@ -63,11 +64,6 @@
                 getAndShowZone();
             };
 
-            $scope.gridMainReady = function (api) {
-                gridMainAPI = api;
-                defineGrid();
-                getAndShowTopDestination();
-            };
         }
 
         function load() {
@@ -109,8 +105,6 @@
         function getAndShowTopDestination(asyncHandle) {
             if (!chartTopDestinationsAPI)
                 return;
-            if (!gridMainAPI)
-                return;
             var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
             if (measureType == undefined || measureType == null || measureType.length == 0)
                 return;
@@ -122,12 +116,12 @@
             angular.forEach($scope.optionsMeasureTypes.datasource, function (itm) {
                 measures.push(itm.value);
             });
-            gridMainAPI.data.length = 0;
+            $scope.data.length = 0;
             chartTopDestinationsAPI.showLoader();
             BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 angular.forEach(response, function (itm) {
-                    gridMainAPI.data.push(itm);
+                    $scope.data.push(itm);
                 });
                 var chartData = response;
                 var chartDefinition = {

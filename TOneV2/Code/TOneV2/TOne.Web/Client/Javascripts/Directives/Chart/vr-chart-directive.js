@@ -281,7 +281,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                         renderChart(currentChartSource);
                     }
                 };
-                var modalInstance = $modal({ scope: modalScope, template: '/Client/Templates/Directives/vr-chart-settings.html', show: true, animation: "am-fade-and-scale" });
+                var modalInstance = $modal({ scope: modalScope, template: '/Client/Javascripts/Directives/Chart/vr-chart-settings.html', show: true, animation: "am-fade-and-scale" });
             }
 
             $scope.isSettingsVisible = function () {

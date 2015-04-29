@@ -4,3 +4,15 @@
 
 
 <input type="button" ng-click="postMsg()" value="Post" />
+
+<vr-datagridcell htmltemplate='html'>
+    
+</vr-datagridcell>
+
+<vr-datagrid datasource="gridData">
+    <vr-datagridcolumn headertext="'Column 3'" field="'col3'">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Column 4'">
+        <input type="text" ng-model="dataItem.col3" />
+    </vr-datagridcolumn>
+</vr-datagrid>
