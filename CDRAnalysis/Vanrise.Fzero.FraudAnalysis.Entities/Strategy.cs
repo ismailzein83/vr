@@ -44,4 +44,3 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public decimal Percentage { get; set; }
     }
 }
-
