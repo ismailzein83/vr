@@ -62,8 +62,19 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //    }
             //});
 
-            //Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager x = new Vanrise.Fzero.FraudAnalysis.Data.MySQL.NumberProfileDataManager();
-            //x.LoadNumberProfile(DateTime.Now.AddDays(-1000), DateTime.Now.AddDays(1000), 1000, null);
+
+
+
+            BPClient bpClient3 = new BPClient();
+            bpClient3.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "ExecuteStrategyProcess",
+                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+                {
+                }
+            });
+
+
 
             Console.WriteLine("END");
             Console.ReadKey();
