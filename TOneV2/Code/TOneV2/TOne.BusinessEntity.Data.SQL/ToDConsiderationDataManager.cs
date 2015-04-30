@@ -18,16 +18,16 @@ namespace TOne.BusinessEntity.Data.SQL
                 ToDConsideration toDConsideration = new ToDConsideration();
 
 
-                toDConsideration.ToDConsiderationID = int.Parse(reader["ID"].ToString());// GetReaderValue<int>(reader, "ID");//(int)reader["ID"]
+                toDConsideration.ToDConsiderationID = (int)(long)reader["ID"];//(int)reader["ID"]
                 toDConsideration.ZoneId = GetReaderValue<int>(reader, "ZoneID");
                 toDConsideration.SupplierId = reader["SupplierID"] as string;
                 toDConsideration.CustomerId = reader["CustomerID"] as string;
                 toDConsideration.BeginTime = reader["BeginTime"] as string;
                 toDConsideration.EndTime = reader["EndTime"] as string;
-                toDConsideration.WeekDay = !String.IsNullOrEmpty(reader["TODWeekDay"].ToString()) ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["TODWeekDay"].ToString()) : 0; //String.IsNullOrEmpty(reader["TODWeekDay"] as string) ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["TODWeekDay"]as string) : 0;
+                toDConsideration.WeekDay = reader["TODWeekDay"] != DBNull.Value ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["TODWeekDay"].ToString()) : 0; //String.IsNullOrEmpty(reader["TODWeekDay"] as string) ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader["TODWeekDay"]as string) : 0;
                 toDConsideration.HolidayDate = GetReaderValue<DateTime?>(reader, "HolidayDate");
                 toDConsideration.HolidayName = reader["HolidayName"] as string;
-                toDConsideration.RateType = !String.IsNullOrEmpty(reader["RateType"].ToString()) ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal;// String.IsNullOrEmpty(reader["RateType"] as string) ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"] as string) : ToDRateType.Normal;
+                toDConsideration.RateType = reader["RateType"] != DBNull.Value ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"].ToString()) : ToDRateType.Normal;// String.IsNullOrEmpty(reader["RateType"] as string) ? (ToDRateType)Enum.Parse(typeof(ToDRateType), reader["RateType"] as string) : ToDRateType.Normal;
                 toDConsideration.BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "BeginEffectiveDate");
                 toDConsideration.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate");
                 return toDConsideration;
