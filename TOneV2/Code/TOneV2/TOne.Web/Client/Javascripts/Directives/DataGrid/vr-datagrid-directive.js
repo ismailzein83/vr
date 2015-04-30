@@ -9,7 +9,8 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
             datasource: '=',
             onReady: '=',
             maxheight: '@',
-            hideheader: '='
+            hideheader: '=',
+            noverticallines: '@'
         },
         controller: function ($scope, $element) {
             var ctrl = this;
@@ -60,7 +61,7 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
                 else {
                     columnCellTemplate = cellTemplate;
                     if (col.type == "Number") {
-                        columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "right;margin-right:10px");
+                        columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "right;margin-right:5px");
                         columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| number:2");
                     }
                     else {
@@ -81,6 +82,10 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
                             col.onClicked(dataItem);
                     };
                 }
+                if (ctrl.noverticallines == "true")
+                    colDef.borderRight = 'none';
+                else
+                    colDef.borderRight = '1px solid #D0D0D0';
 
                 ctrl.columnDefs.push(colDef);
                 calculateColumnsWidth();
@@ -108,25 +113,28 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
         compile: function (element, attrs) {
             element.append('<vr-datagridrows></vr-datagridrows>');  
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {                    
+                pre: function ($scope, iElem, iAttrs, ctrl) {
+                   
                 }
             }
         }
 
     };
 
-    var cellTemplate = '<div class="ui-grid-cell-contents" style="text-align: #TEXTALIGN#">'
+    var cellTemplate = '<div class="vr-datagrid-cell" style="text-align: #TEXTALIGN#">'
+        + '<div>'
       + '<a ng-show="colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{colDef.getValue(dataItem) #CELLFILTER#}}</a>'
       + '<span ng-hide="colDef.isClickable(dataItem)" class="span-summary"> {{colDef.getValue(dataItem) #CELLFILTER#}}</span>'
+      + '</div>'
    + '</div>';
 
-    var headerTemplate = '<div class="header-custom" ng-click="colDef.onSort()" style="background-color: #829EBF;color:#FFF">'
-   + ' <div class="ui-grid-cell-contents" col-index="renderIndex">'
-     + '   <span>'
+    var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
+   + ' <div col-index="renderIndex">'
+     + '   <span >'
        + '         <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
         + '        <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
-    + '{{colDef.name}}'
-   + ' </span>'
+         + '{{colDef.name}}'
+     + ' </span>'
 + '</div>'
 + '</div>';
 

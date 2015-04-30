@@ -971,3 +971,34 @@ input.ui-grid-filter-input[type="text"] {
     right: 2%;
     cursor:w-resize;
 }
+
+.vr-datagrid{
+    font-size:12px;    
+    width:100%;
+}
+.vr-datagrid-header{
+    background-color:#829EBF;
+    color:#FFF;
+    font-weight:bolder;
+    cursor:pointer;
+    height:auto;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+.vr-datagrid-body{
+     background-color:#fff;
+     border-bottom : 1px solid #D0D0D0;
+     color: #616F77;
+    
+}
+.vr-datagrid-cell, .vr-datagrid-header-cell{
+    /*display:inline-block;*/
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    /*overflow: hidden;*/
+    padding-top:5px ;
+    padding-left:5px ;
+    position:relative;
+    max-width:100%;
+}
