@@ -66,9 +66,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                     StrategyLevelCriteria slc = new StrategyLevelCriteria();
                     string CrId = "CriteriaId" + i.ToString();
                     string CrPer = "Cr" + i.ToString() + "Per";
-                    slc.CriteriaId = ParseInt(reader[CrId].ToString());
-                    slc.Percentage = ParseDecimal(reader[CrPer].ToString());
-                    Lstslc.Add(slc);
+                    if (reader[CrId].ToString() != "0")
+                    {
+                        //slc.CriteriaId = ParseInt(reader[CrId].ToString());
+                        slc.CriteriaId = i;
+                        slc.Percentage = ParseDecimal(reader[CrPer].ToString());
+                        Lstslc.Add(slc);
+                    }
                 }
                 sl.Criterias = Lstslc;
                 return sl;
