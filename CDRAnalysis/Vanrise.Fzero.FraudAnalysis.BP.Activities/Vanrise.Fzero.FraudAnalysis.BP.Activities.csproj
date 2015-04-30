@@ -67,6 +67,7 @@
     <Compile Include="CalculateSuspiciousLevel.cs" />
     <Compile Include="GetCriteriaDefinition.cs" />
     <Compile Include="GetStrategy.cs" />
+    <Compile Include="GetSuspiciousNumber.cs" />
     <Compile Include="LoadNumberProfile.cs">
       <SubType>Code</SubType>
     </Compile>
