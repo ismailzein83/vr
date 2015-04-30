@@ -10,9 +10,10 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
             onReady: '=',
             maxheight: '@',
             hideheader: '=',
-            noverticallines: '@'
+            noverticallines: '@',
+            isloading:'='
         },
-        controller: function ($scope, $element) {
+        controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var gridApi = {};
             var maxHeight;
@@ -20,10 +21,11 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
             ctrl.columnDefs = [];
             ctrl.addColumn = addColumn;
             ctrl.gridStyle = {};
-
+            
             if (ctrl.maxheight != undefined) {
                 ctrl.gridStyle['max-height'] = ctrl.maxheight;
             }
+            
 
             function addColumn(col) {
                 var colDef = {
@@ -122,7 +124,7 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
     };
 
     var cellTemplate = '<div class="vr-datagrid-cell" style="text-align: #TEXTALIGN#">'
-        + '<div>'
+        + '<div class="vr-datagrid-celltext">'
       + '<a ng-show="colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{colDef.getValue(dataItem) #CELLFILTER#}}</a>'
       + '<span ng-hide="colDef.isClickable(dataItem)" class="span-summary"> {{colDef.getValue(dataItem) #CELLFILTER#}}</span>'
       + '</div>'

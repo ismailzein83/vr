@@ -152,7 +152,6 @@ appControllers.controller('ZoneMonitorController',
             if (withSummary == undefined)
                 withSummary = false;
             
-            $scope.data.length = 0;
             chartSelectedMeasureAPI.showLoader();
             if (chartSelectedEntityAPI)
                 chartSelectedEntityAPI.hideChart();
@@ -176,8 +175,10 @@ appControllers.controller('ZoneMonitorController',
             };
             var isSucceeded;
             $scope.showResult = true;
+            $scope.isGettingData = true;
             AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
+                $scope.data.length = 0;
                 currentData = response.Data;
                 if (currentSortedColDef != undefined)
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
@@ -206,6 +207,7 @@ appControllers.controller('ZoneMonitorController',
                     chartSelectedMeasureAPI.hideLoader();
                     if (asyncHandle)
                         asyncHandle.operationDone(isSucceeded);
+                    $scope.isGettingData = false;
                 });
         }
 

@@ -1002,3 +1002,17 @@ input.ui-grid-filter-input[type="text"] {
     position:relative;
     max-width:100%;
 }
+
+.vr-datagrid-celltext {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.divLoading {
+        pointer-events: none;
+        opacity: 0.5;
+    }
