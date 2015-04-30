@@ -65,60 +65,61 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
         }
 
-        public bool IsNumberSuspicious(Dictionary<int, decimal> criteriaValues, String number, out SuspiciousNumber suspiciousNumber)
+        public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber)
         {
-            
-            CriteriaDefinition c = new CriteriaDefinition();
-            bool IsSuspicious = false;
             suspiciousNumber = null;
-            foreach (StrategyLevelWithCriterias StrategyLevel in _levelsByPriority)
-            {
-                IsSuspicious = false;
+            return false;
+            //CriteriaDefinition c = new CriteriaDefinition();
+            //bool IsSuspicious = false;
+            
+            //foreach (StrategyLevelWithCriterias StrategyLevel in _levelsByPriority)
+            //{
+            //    IsSuspicious = false;
                 
-                foreach (LevelCriteria LCriteria in StrategyLevel.Criterias)
-                {
-                    Decimal d =  0;
-                    criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
+            //    foreach (LevelCriteria LCriteria in StrategyLevel.Criterias)
+            //    {
+            //        Decimal d =  0;
+            //        criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
 
-                    Decimal ThrCri = d / LCriteria.Threshold;
-                    criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
-                    if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
-                    {
-                        if (ThrCri >= LCriteria.Percentage)
-                        {
-                            IsSuspicious = true;
-                        }
-                        else
-                        {
-                            IsSuspicious = false;
-                            break;
-                        }
-                    }
-                    else if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
-                    {
-                        if (ThrCri <= LCriteria.Percentage)
-                        {
-                            IsSuspicious = true;
-                        }
-                        else
-                        {
-                            IsSuspicious = false;
-                            break;
-                        }
-                    }
-                }
+            //        Decimal ThrCri = d / LCriteria.Threshold;
+            //        criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
+            //        if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
+            //        {
+            //            if (ThrCri >= LCriteria.Percentage)
+            //            {
+            //                IsSuspicious = true;
+            //            }
+            //            else
+            //            {
+            //                IsSuspicious = false;
+            //                break;
+            //            }
+            //        }
+            //        else if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
+            //        {
+            //            if (ThrCri <= LCriteria.Percentage)
+            //            {
+            //                IsSuspicious = true;
+            //            }
+            //            else
+            //            {
+            //                IsSuspicious = false;
+            //                break;
+            //            }
+            //        }
+            //    }
 
 
-                if (IsSuspicious)
-                {
-                    suspiciousNumber = new SuspiciousNumber();
-                    suspiciousNumber.Number = number;
-                    suspiciousNumber.SuspectionLevel = StrategyLevel.SuspectionLevel;
-                    suspiciousNumber.CriteriaValues = criteriaValues;
-                    return IsSuspicious;
-                }
-            }
-            return IsSuspicious;
+            //    if (IsSuspicious)
+            //    {
+            //        suspiciousNumber = new SuspiciousNumber();
+            //        suspiciousNumber.Number = number;
+            //        suspiciousNumber.SuspectionLevel = StrategyLevel.SuspectionLevel;
+            //        suspiciousNumber.CriteriaValues = criteriaValues;
+            //        return IsSuspicious;
+            //    }
+            //}
+            //return IsSuspicious;
         }
 
         #region Private Classes

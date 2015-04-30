@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
 
@@ -48,6 +49,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            FraudManager manager = new FraudManager(inputArgument.strategy);
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -56,9 +59,23 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
-                            
+                            List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
 
-                            
+                            foreach (NumberProfile number in item.numberProfiles)
+                            { 
+                                SuspiciousNumber sNumber = new SuspiciousNumber();
+                                if (manager.IsNumberSuspicious(number, out sNumber))
+                                {
+                                    sNumbers.Add(sNumber);   
+                                }
+                            }
+
+                            if (sNumbers.Count > 0)
+                            {
+                                inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
+                                    suspiciousNumbers = sNumbers
+                                });
+                            }
 
                         });
                 }
