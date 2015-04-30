@@ -8,11 +8,12 @@ using Vanrise.BusinessProcess;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP
 {
-    public partial class TestProcess : Activity, IBPWorkflow
+    public partial class ExecuteStrategyProcess : Activity, IBPWorkflow
     {
+
         public string GetTitle(BusinessProcess.Entities.CreateProcessInput createProcessInput)
         {
-            return "TestProcess";
+            return "Execute Strategy Process";
         }
     }
 }

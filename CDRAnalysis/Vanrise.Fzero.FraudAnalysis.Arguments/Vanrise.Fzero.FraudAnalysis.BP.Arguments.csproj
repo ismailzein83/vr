@@ -7,8 +7,8 @@
     <ProjectGuid>{8DE7B4AC-2EA9-4A88-9A44-E73A21E26398}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Fzero.FraudAnalysis.Arguments</RootNamespace>
-    <AssemblyName>Vanrise.Fzero.FraudAnalysis.Arguments</AssemblyName>
+    <RootNamespace>Vanrise.Fzero.FraudAnalysis.BP.Arguments</RootNamespace>
+    <AssemblyName>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecuteStrategyProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestProcessInput.cs" />
   </ItemGroup>
