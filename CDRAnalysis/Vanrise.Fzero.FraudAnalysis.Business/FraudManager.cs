@@ -70,56 +70,62 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             suspiciousNumber = null;
             return false;
             //CriteriaDefinition c = new CriteriaDefinition();
-            //bool IsSuspicious = false;
-            
-            //foreach (StrategyLevelWithCriterias StrategyLevel in _levelsByPriority)
-            //{
-            //    IsSuspicious = false;
+            Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
+            bool IsSuspicious = false;
+
+            foreach (StrategyLevelWithCriterias StrategyLevel in _levelsByPriority)
+            {
+                IsSuspicious = false;
                 
-            //    foreach (LevelCriteria LCriteria in StrategyLevel.Criterias)
-            //    {
-            //        Decimal d =  0;
-            //        criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
+                criteriaValues = new Dictionary<int, decimal>();
 
-            //        Decimal ThrCri = d / LCriteria.Threshold;
-            //        criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
-            //        if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
-            //        {
-            //            if (ThrCri >= LCriteria.Percentage)
-            //            {
-            //                IsSuspicious = true;
-            //            }
-            //            else
-            //            {
-            //                IsSuspicious = false;
-            //                break;
-            //            }
-            //        }
-            //        else if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
-            //        {
-            //            if (ThrCri <= LCriteria.Percentage)
-            //            {
-            //                IsSuspicious = true;
-            //            }
-            //            else
-            //            {
-            //                IsSuspicious = false;
-            //                break;
-            //            }
-            //        }
-            //    }
+                foreach (LevelCriteria LCriteria in StrategyLevel.Criterias)
+                {
+                    Decimal d = 0;
+                    //criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
+
+                    CriteriaManager m = new CriteriaManager();
+                    d = m.GetCriteriaValue(LCriteria.Criteria, profile);
+
+                    Decimal ThrCri = d / LCriteria.Threshold;
+                    criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
+                    if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
+                    {
+                        if (ThrCri >= LCriteria.Percentage)
+                        {
+                            IsSuspicious = true;
+                        }
+                        else
+                        {
+                            IsSuspicious = false;
+                            break;
+                        }
+                    }
+                    else if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
+                    {
+                        if (ThrCri <= LCriteria.Percentage)
+                        {
+                            IsSuspicious = true;
+                        }
+                        else
+                        {
+                            IsSuspicious = false;
+                            break;
+                        }
+                    }
+                }
 
 
-            //    if (IsSuspicious)
-            //    {
-            //        suspiciousNumber = new SuspiciousNumber();
-            //        suspiciousNumber.Number = number;
-            //        suspiciousNumber.SuspectionLevel = StrategyLevel.SuspectionLevel;
-            //        suspiciousNumber.CriteriaValues = criteriaValues;
-            //        return IsSuspicious;
-            //    }
-            //}
-            //return IsSuspicious;
+                if (IsSuspicious)
+                {
+                    suspiciousNumber = new SuspiciousNumber();
+                    suspiciousNumber.Number = profile.subscriberNumber;
+                    suspiciousNumber.SuspectionLevel = StrategyLevel.SuspectionLevel;
+                    suspiciousNumber.CriteriaValues = criteriaValues;
+                    return IsSuspicious;
+                }
+            }
+            return IsSuspicious;
         }
 
         #region Private Classes
