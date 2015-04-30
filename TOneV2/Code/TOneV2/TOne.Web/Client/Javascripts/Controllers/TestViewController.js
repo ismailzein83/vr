@@ -75,6 +75,12 @@ var TestViewController = function ($scope, CarriersService, ZonesService, Routin
     $scope.columns = [
         { displayname: 'last', name: 'EndEffectiveDate' },
         { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
+        { displayname: 'Code Set', name: 'CodeSetDescription' },
+        { displayname: 'last', name: 'EndEffectiveDate' },
+        { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
+        { displayname: 'Code Set', name: 'CodeSetDescription' },
+         { displayname: 'last', name: 'EndEffectiveDate' },
+        { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
         { displayname: 'Code Set', name: 'CodeSetDescription' }
     ]
     $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
