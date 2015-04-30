@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(GetStoreSuspiciousNumbersInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start StoreSuspiciousNumbers.DoWork.Start {0}", DateTime.Now);
-            IFraudDataManager dataManager = FraudDataManagerFactory.GetDataManager<IFraudDataManager>();
+            ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
             
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (item) =>
                         {
                             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.Dequeued {0}", DateTime.Now);
-                            dataManager.StoreSuspiciousNumbers(item.suspiciousNumbers);
+                            //dataManager.StoreSuspiciousNumbers(item.suspiciousNumbers);
                             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDB {0}", DateTime.Now);
                         });
                 }
