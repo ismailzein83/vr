@@ -91,16 +91,17 @@ namespace TOne.CDRProcess.Activities
                         CDRInvalids.InvalidCDRs = new List<BillingCDRInvalid>();
 
 
-                        TABS.Switch cdrSwitch;
-                        if (!TABS.Switch.All.TryGetValue(cdrBatch.SwitchId, out cdrSwitch))
-                        {
-                            throw new Exception("Switch Not Exist");
-                        }
+                        TABS.Switch cdrSwitch = null;
+                        if (cdrBatch.SwitchId != 0)
+                            if (!TABS.Switch.All.TryGetValue(cdrBatch.SwitchId, out cdrSwitch))
+                                throw new Exception("Switch Not Exist");
 
 
                         foreach (TABS.CDR cdr in cdrBatch.CDRs)
                         {
-                            cdr.Switch = cdrSwitch;
+                            if (cdr == null) continue;
+                            if (cdr.Switch == null)
+                                cdr.Switch = cdrSwitch;
                             Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
                             BillingCDRBase baseCDR = GetBillingCDRBase(cdrBase);
 

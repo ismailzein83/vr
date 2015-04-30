@@ -32,10 +32,10 @@ namespace TOne.CDR.Business
             TABS.CarrierAccount supplier;
             TABS.CarrierAccount customer;
 
-            if (! TABS.CarrierAccount.All.TryGetValue(main.CustomerID, out customer)) return null;
-            
-            if (! TABS.CarrierAccount.All.TryGetValue(main.SupplierID, out supplier)) return null;
-            
+            if (!TABS.CarrierAccount.All.TryGetValue(main.CustomerID, out customer)) return null;
+
+            if (!TABS.CarrierAccount.All.TryGetValue(main.SupplierID, out supplier)) return null;
+
             IList<Rate> rates;
             if (cost)
                 rates = GetRates(TABS.CarrierAccount.SYSTEM.CarrierAccountID, zoneId, main.Attempt.AddMinutes(supplier.SupplierGMTTime));
@@ -43,7 +43,7 @@ namespace TOne.CDR.Business
                 rates = GetRates(main.CustomerID, zoneId, main.Attempt);
 
             // If a rate is defined for
-            if (rates.Count > 0)
+            if (rates != null && rates.Count > 0)
             {
                 // Initialize Pricing
                 pricing.BillingCDRMainID = main.ID;
@@ -182,7 +182,7 @@ namespace TOne.CDR.Business
             bool isCost = pricing is BillingCDRCost;
 
             double accountedDuration = (double)mainDurationInSeconds;
-            pricing.Net = GetPricingNet(isCost, pricing.RateValue, mainDurationInSeconds, isCustomerCeiling,isSupplierCeiling, out accountedDuration);
+            pricing.Net = GetPricingNet(isCost, pricing.RateValue, mainDurationInSeconds, isCustomerCeiling, isSupplierCeiling, out accountedDuration);
 
             // Tariff?
             if (tarrif != null)
@@ -194,7 +194,7 @@ namespace TOne.CDR.Business
                 {
                     pricing.FirstPeriod = tarrif.FirstPeriod;
                     double firstPeriodRate = (tarrif.FirstPeriodRate > 0) ? (double)tarrif.FirstPeriodRate : pricing.RateValue;
-                    if (! tarrif.RepeatFirstPeriod)
+                    if (!tarrif.RepeatFirstPeriod)
                     {
                         // Calculate first period amount then continue normally
                         pricing.Net = firstPeriodRate;//(tarrif.FirstPeriod * firstPeriodRate) / 60
@@ -269,12 +269,12 @@ namespace TOne.CDR.Business
 
             public DateSensitiveEntityCache(DateTime pricingStart, bool IsRepricing)
             {
-                Load( null, 0, pricingStart, IsRepricing);
+                Load(null, 0, pricingStart, IsRepricing);
             }
 
             public DateSensitiveEntityCache(string customerId, int zoneId, DateTime pricingStart, bool IsRepricing)
             {
-                Load( customerId, zoneId, pricingStart, IsRepricing);
+                Load(customerId, zoneId, pricingStart, IsRepricing);
             }
 
             protected void Load(string customerId, int zoneId, DateTime pricingStart, bool IsRepricing)
@@ -285,9 +285,8 @@ namespace TOne.CDR.Business
                     TABS.CarrierAccount entityCustomer;
                     TABS.CarrierAccount entitySupplier;
 
-                    if (TABS.CarrierAccount.All.TryGetValue(entity.CustomerId, out entityCustomer)) continue;
-
-                    if (TABS.CarrierAccount.All.TryGetValue(entity.SupplierId, out entitySupplier)) continue;
+                    if (!TABS.CarrierAccount.All.TryGetValue(entity.CustomerId, out entityCustomer)) continue;
+                    if (!TABS.CarrierAccount.All.TryGetValue(entity.SupplierId, out entitySupplier)) continue;
 
                     int entityZoneID = (entity.ZoneId == null) ? AnyZone.ZoneID : entity.ZoneId;
 
@@ -343,7 +342,7 @@ namespace TOne.CDR.Business
                         {
                             List<T> entities = _ourEntities[zoneID][customerID];
                             foreach (T entity in entities)
-                                if (GetIsEffective(entity.BeginEffectiveDate , entity.EndEffectiveDate, whenEffective))
+                                if (GetIsEffective(entity.BeginEffectiveDate, entity.EndEffectiveDate, whenEffective))
                                     effective.Add(entity);
                         }
                     }
@@ -397,7 +396,7 @@ namespace TOne.CDR.Business
         {
             return GetEffectiveEntities<Tariff>(customerID, zoneID, whenEffective);
         }
-        
+
         #endregion Cacheable Entities
 
         public void Dispose()

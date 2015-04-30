@@ -14,8 +14,27 @@ namespace TOne.BusinessEntity.Data.SQL
 
         private Rate RateMapper(IDataReader reader)
         {
+            //try
+            //{
+            //Rate rate = new Rate();
+            //rate.RateId = (long)reader["RateID"];
+            //rate.SupplierId = reader["SupplierID"] as string;
+            //rate.CustomerId = reader["CustomerID"] as string;
+            //rate.ZoneId = GetReaderValue<int>(reader, "ZoneId");
+            //rate.NormalRate = GetReaderValue<decimal>(reader, "Rate");
+            //rate.OffPeakRate = GetReaderValue<decimal?>(reader, "OffPeakRate");
+            //rate.WeekendRate = GetReaderValue<decimal?>(reader, "WeekendRate");
+            //rate.PriceListId = GetReaderValue<int>(reader, "PricelistId");
+            //rate.ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
+            //rate.BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "RateBeginEffectiveDate");
+            //rate.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "RateEndEffectiveDate");
+            //rate.CurrencyID = reader["CurrencyID"] as string;
+            //rate.CurrencyLastRate = (float)GetReaderValue<double>(reader, "CurrencyLastRate");
+            //rate.Change = TOne.BusinessEntity.Entities.Change.None;
+            //return rate;
             return new Rate
             {
+
                 RateId = (long)reader["RateID"],
                 SupplierId = reader["SupplierID"] as string,
                 CustomerId = reader["CustomerID"] as string,
@@ -28,12 +47,20 @@ namespace TOne.BusinessEntity.Data.SQL
                 BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "RateBeginEffectiveDate"),
                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "RateEndEffectiveDate"),
                 CurrencyID = reader["CurrencyID"] as string,
-                CurrencyLastRate = GetReaderValue<float>(reader, "CurrencyLastRate"),
+                //CurrencyLastRate = GetReaderValue<float>(reader, "CurrencyLastRate"),
+                CurrencyLastRate = (float)GetReaderValue<double>(reader, "CurrencyLastRate"),
                 Change = TOne.BusinessEntity.Entities.Change.None
             };
+            //}
+            //catch (Exception ex)
+            //{
+            //    string s = ex.Message;
+
+            //}
+            //return new Rate();
         }
 
-        public List<Rate> GetRate(int zoneId,  string customerId, DateTime when)
+        public List<Rate> GetRate(int zoneId, string customerId, DateTime when)
         {
             return GetItemsSP("BEntity.sp_Rate_GetRates", RateMapper, zoneId, customerId, when);
         }
