@@ -11,15 +11,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     {
         private List<StrategyLevelWithCriterias> _levelsByPriority;
 
-        public FraudManager(int strategyId) 
+        public FraudManager(Strategy strategy) 
         {
-            LoadLevels(strategyId);
+            LoadLevels(strategy);
         }
 
-        void LoadLevels(int strategyId)
+        void LoadLevels(Strategy strategy)
         {
-            StrategyManager strategyManager = new StrategyManager();
-            var strategy = strategyManager.GetStrategy(strategyId);
             if (strategy == null)
                 throw new ArgumentNullException("strategy");
             if(strategy.Levels == null)
