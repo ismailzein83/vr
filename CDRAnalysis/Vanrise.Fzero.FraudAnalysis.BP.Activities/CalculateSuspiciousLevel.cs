@@ -48,42 +48,42 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(CalculateSuspiciousLevelInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            FraudManager manager = new FraudManager(inputArgument.strategy);
-            int batchSize = 20;
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
-            {
-                bool hasItem = false;
-                do
-                {
-                    List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (item) =>
-                        {
-                            SuspiciousNumber sNumber = new SuspiciousNumber();
-                            if (manager.IsNumberSuspicious(item.criteriaValues, item.number, out sNumber))
-                            {
-                                sNumbers.Add(sNumber);
-                            }
-                            if (sNumbers.Count >= batchSize)
-                            {
-                                inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch()
-                                {
-                                    suspiciousNumbers = sNumbers
-                                });
-                                sNumbers = new List<SuspiciousNumber>();
-                            }
+            //FraudManager manager = new FraudManager(inputArgument.strategy);
+            //int batchSize = 20;
+            //DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            //{
+            //    bool hasItem = false;
+            //    do
+            //    {
+            //        List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
+            //        hasItem = inputArgument.InputQueue.TryDequeue(
+            //            (item) =>
+            //            {
+            //                SuspiciousNumber sNumber = new SuspiciousNumber();
+            //                if (manager.IsNumberSuspicious(item.criteriaValues, item.number, out sNumber))
+            //                {
+            //                    sNumbers.Add(sNumber);
+            //                }
+            //                if (sNumbers.Count >= batchSize)
+            //                {
+            //                    inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch()
+            //                    {
+            //                        suspiciousNumbers = sNumbers
+            //                    });
+            //                    sNumbers = new List<SuspiciousNumber>();
+            //                }
 
-                        });
-                    if (sNumbers.Count > 0)
-                    {
-                        inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch()
-                        {
-                            suspiciousNumbers = sNumbers
-                        });
-                    }
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
+            //            });
+            //        if (sNumbers.Count > 0)
+            //        {
+            //            inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch()
+            //            {
+            //                suspiciousNumbers = sNumbers
+            //            });
+            //        }
+            //    }
+            //    while (!ShouldStop(handle) && hasItem);
+            //});
         }
 
         protected override CalculateSuspiciousLevelInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
