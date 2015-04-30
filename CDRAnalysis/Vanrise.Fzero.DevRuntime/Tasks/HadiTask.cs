@@ -42,8 +42,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             BPClient bpClient2 = new BPClient();
             bpClient2.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "TestProcess",
-                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.TestProcessInput
+                ProcessName = "ExecuteStrategyProcess",
+                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyId = 1
                 }
