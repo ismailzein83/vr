@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         public void LoadNumberProfile(DateTime from, DateTime to, int? batchSize, Action<List<Vanrise.Fzero.FraudAnalysis.Entities.NumberProfile>> onBatchReady)
         {
             MySQLManager manager =  new MySQLManager();
-            string query_GetCDRRange = "";
+            string query_GetCDRRange = "SELECT * FROM CDRAnalysisMobile.ts_NumberProfile  where FromDate   ;";
             manager.ExecuteReader(query_GetCDRRange,
                 (cmd) =>
                 {
