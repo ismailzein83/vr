@@ -78,6 +78,7 @@
     <Compile Include="Entities\CDRBillingBatch.cs" />
     <Compile Include="Entities\CDRManager.cs" />
     <Compile Include="Entities\CDRSharedQueueManager.cs" />
+    <Compile Include="GenerateTrafficStatisticsForRepricing.cs" />
     <Compile Include="GenerateTrafficStatistics.cs" />
     <Compile Include="ImportCDRs.cs" />
     <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
