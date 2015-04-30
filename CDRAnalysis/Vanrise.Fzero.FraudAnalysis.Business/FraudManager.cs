@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber)
         {
             suspiciousNumber = null;
-            return false;
+           // return false;
             //CriteriaDefinition c = new CriteriaDefinition();
             Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
             bool IsSuspicious = false;
@@ -88,7 +88,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     d = m.GetCriteriaValue(LCriteria.Criteria, profile);
 
                     Decimal ThrCri = d / LCriteria.Threshold;
-                    criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
+
+                    if (!criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out ThrCri))
+                        criteriaValues.Add(LCriteria.Criteria.CriteriaId, ThrCri);
+
                     if (LCriteria.Criteria.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
                     {
                         if (ThrCri >= LCriteria.Percentage)
