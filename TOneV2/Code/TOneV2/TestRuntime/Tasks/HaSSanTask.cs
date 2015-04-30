@@ -20,28 +20,66 @@ namespace TestRuntime
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
 
-            Console.WriteLine("Host Started");
-            BusinessProcessRuntime.Current.TerminatePendingProcesses();
+            //Console.WriteLine("Host Started");
+            //BusinessProcessRuntime.Current.TerminatePendingProcesses();
 
+            //Timer timer = new Timer(1000);
+            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            //timer.Start();
+            //int switchID = 66;
+            //System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
+            //{
+            //    TriggerProcessImportCDRProcess(switchID);
+            //    // System.Threading.Thread.Sleep(30000);
+            //});
+            //t.Start();
+
+
+         
+            BusinessProcessRuntime.Current.TerminatePendingProcesses();
             Timer timer = new Timer(1000);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
-            int switchID = 66;
+
             System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            {
-                TriggerProcess(switchID);
-                // System.Threading.Thread.Sleep(30000);
-            });
+                {
+                    for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
+                    {
+                        TriggerProcess(d);
+                        System.Threading.Thread.Sleep(30000);
+                    }
+                });
             t.Start();
 
 
             Console.ReadKey();
         }
 
+        private static void TriggerProcess(DateTime date)
+        {
+            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "DailyRepricingProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
+        }
 
 
+        private static void TriggerProcessImportCDRProcess(int SwitchID)
+        {
+            TOne.CDRProcess.Arguments.ImportCDRProcessInput inputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput { SwitchID = SwitchID };
+            CreateProcessInput input = new CreateProcessInput
+            {
+                ProcessName = "ImportCDRProcess",
+                InputArguments = inputArguments
+            };
+            ProcessManager processManager = new ProcessManager();
+            processManager.CreateNewProcess(input);
 
-
+        }
 
         private static void TriggerProcess(int SwitchID)
         {
