@@ -34,6 +34,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<NumberCriteriaBatch>());
+            base.OnBeforeExecute(context, handle);
+        }
+
         protected override void DoWork(CalculateCriteriaValuesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             int BatchSize = int.Parse( System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());

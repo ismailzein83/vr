@@ -54,7 +54,6 @@
     <Compile Include="NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueName.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="SuspiciousNumber.cs" />
     <Compile Include="SuspiciousNumberBatch.cs" />

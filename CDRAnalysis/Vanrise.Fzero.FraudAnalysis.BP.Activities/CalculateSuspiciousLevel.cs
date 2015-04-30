@@ -39,6 +39,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
+            base.OnBeforeExecute(context, handle);
+        }
+
         protected override void DoWork(CalculateSuspiciousLevelInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             FraudManager manager = new FraudManager(inputArgument.strategy);
