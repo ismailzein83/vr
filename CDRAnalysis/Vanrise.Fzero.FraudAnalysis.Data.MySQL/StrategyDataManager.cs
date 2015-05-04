@@ -19,24 +19,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        public Strategy GetStrategy(int strategyId)
+        public Strategy GetDefaultStrategy()
         {
-            string query = "SELECT `MaxValue`, `CriteriaID` FROM StrategyThreshold WHERE StrategyId = @StrategyId";
-            string query2 ="SELECT `LevelId`, `CriteriaId1`, `Cr1Per`, `CriteriaId2`, `Cr2Per`, `CriteriaId3`,"
-               + " `Cr3Per`, `CriteriaId4`, `Cr4Per`, `CriteriaId5`, `Cr5Per`, `CriteriaId6`, `Cr6Per`, `CriteriaId7`, `Cr7Per`,"
-               +" `CriteriaId8`, `Cr8Per`, `CriteriaId9`, `Cr9Per`, `CriteriaId10`, `Cr10Per`, `CriteriaId11`, `Cr11Per`,"
-               +" `CriteriaId12`, `Cr12Per`, `CriteriaId13`, `Cr13Per`, `CriteriaId14`, `Cr14Per`, `CriteriaId15`, `Cr15Per` "
-               + " FROM Strategy_Suspicion_Level WHERE StrategyId = @StrategyId";
+            string query0 = "SELECT `Id` FROM Strategy s WHERE s.IsDefault = 1";
+            string query = "SELECT `MaxValue`, `CriteriaID` FROM StrategyThreshold sl inner join Strategy s on sl.StrategyId=s.Id  WHERE s.IsDefault = 1";
+            string query2 = "SELECT `LevelId`, `CriteriaId1`, `Cr1Per`, `CriteriaId2`, `Cr2Per`, `CriteriaId3`, `Cr3Per`, `CriteriaId4`, `Cr4Per`, `CriteriaId5`, `Cr5Per`, `CriteriaId6`, `Cr6Per`, `CriteriaId7`, `Cr7Per`, `CriteriaId8`, `Cr8Per`, `CriteriaId9`, `Cr9Per`, `CriteriaId10`, `Cr10Per`, `CriteriaId11`, `Cr11Per`, `CriteriaId12`, `Cr12Per`, `CriteriaId13`, `Cr13Per`, `CriteriaId14`, `Cr14Per`, `CriteriaId15`, `Cr15Per`  FROM Strategy_Suspicion_Level sl inner join Strategy s on sl.StrategyId=s.Id  WHERE s.IsDefault = 1";
             
             Strategy st = new Strategy();
             
 
             MySQLManager manager = new MySQLManager();
 
+            st.Id = manager.GetItem(query0, (cmd) =>
+            {
+
+                //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
+
+            }, (reader) =>
+            {
+                return ParseInt(reader["Id"].ToString());
+            });
+
+
             st.Criterias = manager.GetItems(query, (cmd) =>
            {
 
-               cmd.Parameters.AddWithValue("@StrategyId", strategyId);
+               //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
 
            }, (reader) =>
            {
@@ -51,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             st.Levels = manager.GetItems(query2, (cmd) =>
             {
 
-                cmd.Parameters.AddWithValue("@StrategyId", strategyId);
+                //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
 
             }, (reader) =>
             {

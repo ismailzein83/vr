@@ -18,8 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            int strategyId = context.GetValue(StrategyId);
-            context.SetValue(Strategy,new StrategyManager().GetStrategy(strategyId));
+            context.SetValue(Strategy, new StrategyManager().GetDefaultStrategy());
         }
     }
 }

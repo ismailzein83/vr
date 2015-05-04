@@ -133,6 +133,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:StoreSuspiciousNumbers.PreviousActivityStatus>
+        <vffba1:StoreSuspiciousNumbers.strategy>
+          <InArgument x:TypeArguments="vffe:Strategy">
+            <mca:CSharpValue x:TypeArguments="vffe:Strategy">strategy</mca:CSharpValue>
+          </InArgument>
+        </vffba1:StoreSuspiciousNumbers.strategy>
       </vffba1:StoreSuspiciousNumbers>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
@@ -140,7 +145,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Execute Strategy Process {0}", Input.StrategyId)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBU6A5ABDgIBAT4FQhECAVBDBU4aAgFJTwWJARACAQaKAQWOARECAQJACUCLAQIBUUYLRl4CAU1LC0tYAgFKVgdhIwIBOmIHfCQCARZ9B4gBJwIBB4wBCYwBigECAQNeDV55AgFCWQ1ZggECATt5DXlYAgEzbw1vcQIBLGUNZXoCASV0DXR6AgEeag1qiAECAReFAQ2FAXICAQ+AAQ2AAYABAgEI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBY6A5UBDgIBAT4FQhECAVdDBU4aAgFQTwWOARACAQaPAQWTARECAQJACUCLAQIBWEYLRl4CAVRLC0tYAgFRVgdhIwIBQWIHfCQCAR19B40BJwIBB5EBCZEBigECAQNeDV55AgFJWQ1ZggECAUJ5DXlYAgE6bw1vcQIBM2UNZXoCASx0DXR6AgElag1qiAECAR6KAQ2KAVgCARaFAQ2FAXICAQ+AAQ2AAYABAgEI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

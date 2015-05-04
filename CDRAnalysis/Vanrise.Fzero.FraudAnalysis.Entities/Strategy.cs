@@ -8,15 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class Strategy
     {
-        //public string Description { get; set; }
-
-        //public int UserId { get; set; }
-
-        //public DateTime CreationDate { get; set; }
-
-        //public string Name { get; set; }
-
-        //public bool IsDefault { get; set; }
+        public int Id { get; set; }
 
         public List<StrategyCriteria> Criterias { get; set; }
 

@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers, int StrategyId)
+        public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers, Strategy strategy)
         {
             string filename = GetFilePathForBulkInsert();
 
@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
                     sw.WriteLine("0,{0},{1}{2},{3},{4},{5}",
                                   new[]  {null, cdr.Number, s, cdr.SuspectionLevel.ToString(), 
-                                       StrategyId.ToString(), ""}
+                                       strategy.Id.ToString(), ""}
                     );
                 }
                 sw.Close();

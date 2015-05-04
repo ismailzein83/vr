@@ -46,5 +46,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 });
             return rslt;
         }
+
+        public T GetItem<T>(string query, Action<MySqlCommand> prepareCmd, Func<MySqlDataReader, T> builder)
+        {
+            List<T> rslt = new List<T>();
+            ExecuteReader(query, prepareCmd, (reader) =>
+            {
+                while (reader.Read())
+                    rslt.Add(builder(reader));
+            });
+            return rslt.FirstOrDefault();
+        }
     }
 }
