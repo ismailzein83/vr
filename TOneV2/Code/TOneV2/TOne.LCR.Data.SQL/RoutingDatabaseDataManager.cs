@@ -11,17 +11,17 @@ namespace TOne.LCR.Data.SQL
 {
     public class RoutingDatabaseDataManager : BaseTOneDataManager, IRoutingDatabaseDataManager
     {
-        public int CreateDatabase(string name, RoutingDatabaseType type, DateTime effectiveTime)
+        public int CreateDatabase(string name, RoutingDatabaseType type, DateTime effectiveTime, bool isLcrOnly)
         {
             object obj;
-            if (ExecuteNonQuerySP("LCR.sp_RoutingDatabase_Insert", out obj, name, (int)type, effectiveTime) > 0)
+            if (ExecuteNonQuerySP("LCR.sp_RoutingDatabase_Insert", out obj, name, (int)type, effectiveTime, isLcrOnly) > 0)
             {
                 int databaseId = (int)obj;
                 RoutingDataManager routingDataManager = new RoutingDataManager();
                 routingDataManager.DatabaseId = databaseId;
                 routingDataManager.CreateDatabase();
                 return databaseId;
-            }                
+            }
             else
                 throw new Exception(String.Format("Could not add Routing Database '{0}' to database table", name));
         }
@@ -50,7 +50,7 @@ namespace TOne.LCR.Data.SQL
         {
             RoutingDataManager routingDataManager = new RoutingDataManager();
             routingDataManager.DatabaseId = databaseId;
-            routingDataManager.DropDatabaseIfExists();            
+            routingDataManager.DropDatabaseIfExists();
             ExecuteNonQuerySP("[LCR].[sp_RoutingDatabase_Delete]", databaseId);
         }
 
@@ -63,6 +63,7 @@ namespace TOne.LCR.Data.SQL
                 ID = (int)reader["ID"],
                 Title = reader["Title"] as string,
                 IsReady = GetReaderValue<bool>(reader, "IsReady"),
+                IsLcrOnly = GetReaderValue<bool>(reader, "IsLcrOnly"),
                 Type = (RoutingDatabaseType)reader["Type"],
                 EffectiveTime = (DateTime)reader["EffectiveTime"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),

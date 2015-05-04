@@ -80,10 +80,15 @@
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
+    <Compile Include="GetCodeCustomers.cs" />
     <Compile Include="GetCodes.cs" />
+    <Compile Include="GetCurrentDatabaseId.cs" />
+    <Compile Include="GetDifferentialRouteRules.cs" />
+    <Compile Include="GetRouteCodesFromRules.cs" />
     <Compile Include="GetRouteRules.cs" />
     <Compile Include="GetSupplierZoneRates.cs" />
     <Compile Include="GetCustomerZoneRates.cs" />
+    <Compile Include="LoadCodeMatches.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
     <Compile Include="PrepareRouteDetailsForDBApply.cs" />
     <Compile Include="PrepareRoutesForDBApply.cs" />
@@ -92,6 +97,7 @@
     <Compile Include="SaveZoneRatesToDB.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateRouteDetails.cs" />
     <Compile Include="UpdateZoneMatchInDB.cs" />
     <Compile Include="ApplyCodeMatchesToDB.cs" />
   </ItemGroup>

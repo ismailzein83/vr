@@ -1,0 +1,191 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.DifferentailRoutingProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.DifferentailRoutingProcess_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.LCRProcess"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
+ xmlns:tler="clr-namespace:TOne.LCR.Entities.Routing;assembly=TOne.LCR.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.LCR.Entities</x:String>
+      <x:String>TOne.LCRProcess.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.LCR.Entities.Routing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.BProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCR.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Main" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="tle:RoutingDatabaseType" Name="routingDatabaseType">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="tle:RoutingDatabaseType">RoutingDatabaseType.Current</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:Int32" Name="routingDatabaseId" />
+      <Variable x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)" Name="routingBatchDetailQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">new MemoryQueue&lt;RouteDetailBatch&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="differtentialBuildLCRandRoutesTaskStatus">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="tler:DifferentialRouteState" Name="differentialRouteState" />
+    </Sequence.Variables>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
+      <InArgument x:TypeArguments="x:String">
+        <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: process started", DateTime.Now)</mca:CSharpValue>
+      </InArgument>
+    </WriteLine>
+    <vbw:GetDefinitionObjectState x:TypeArguments="tler:DifferentialRouteState" ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="GetDefinitionObjectState`1_1">
+      <vbw:GetDefinitionObjectState.Result>
+        <OutArgument x:TypeArguments="tler:DifferentialRouteState">
+          <mca:CSharpReference x:TypeArguments="tler:DifferentialRouteState">differentialRouteState</mca:CSharpReference>
+        </OutArgument>
+      </vbw:GetDefinitionObjectState.Result>
+    </vbw:GetDefinitionObjectState>
+    <tla:GetCurrentDatabaseId sap2010:WorkflowViewState.IdRef="GetCurrentDatabaseId_1">
+      <tla:GetCurrentDatabaseId.RoutingDatabaseId>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>
+        </OutArgument>
+      </tla:GetCurrentDatabaseId.RoutingDatabaseId>
+      <tla:GetCurrentDatabaseId.RoutingDatabaseType>
+        <InArgument x:TypeArguments="tle:RoutingDatabaseType">
+          <mca:CSharpValue x:TypeArguments="tle:RoutingDatabaseType">routingDatabaseType</mca:CSharpValue>
+        </InArgument>
+      </tla:GetCurrentDatabaseId.RoutingDatabaseType>
+    </tla:GetCurrentDatabaseId>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <local:BuildDifferentialLCRandRoutes sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1">
+          <local:BuildDifferentialLCRandRoutes.LastRun>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">differentialRouteState.LastRun</mca:CSharpValue>
+            </InArgument>
+          </local:BuildDifferentialLCRandRoutes.LastRun>
+          <local:BuildDifferentialLCRandRoutes.RouteDetailBatchQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">routingBatchDetailQueue</mca:CSharpValue>
+            </InArgument>
+          </local:BuildDifferentialLCRandRoutes.RouteDetailBatchQueue>
+          <local:BuildDifferentialLCRandRoutes.RoutingDatabaseId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+            </InArgument>
+          </local:BuildDifferentialLCRandRoutes.RoutingDatabaseId>
+          <sap2010:WorkflowViewState.ViewStateManager>
+            <sap2010:ViewStateManager>
+              <sap2010:ViewStateData Id="GetDifferentialRouteRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+              <sap2010:ViewStateData Id="GetCodeCustomers_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+              <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+              <sap2010:ViewStateData Id="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+            </sap2010:ViewStateManager>
+          </sap2010:WorkflowViewState.ViewStateManager>
+        </local:BuildDifferentialLCRandRoutes>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">differtentialBuildLCRandRoutesTaskStatus.IsComplete</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+          </Assign.Value>
+        </Assign>
+      </Sequence>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>dw1DOlxFbXB0eS54YW1sAA==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="378,62" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="378,22" />
+      <sap2010:ViewStateData Id="GetCurrentDatabaseId_1" sap:VirtualizedContainerService.HintSize="378,22" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="262,288" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="378,294" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="400,644">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.LCRProcess.DifferentailRoutingProcess_1" sap:VirtualizedContainerService.HintSize="440,724" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

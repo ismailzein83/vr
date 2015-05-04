@@ -10,5 +10,7 @@ namespace TOne.LCRProcess.Arguments
         public DateTime EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
+
+        public bool IsLcrOnly { get; set; }
     }
 }

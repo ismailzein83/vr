@@ -62,6 +62,7 @@
     <Compile Include="RoutingRules\CodeSet\SupplierZoneSelectionSet.cs" />
     <Compile Include="RoutingRules\Actions\IRouteOptionBuildContext.cs" />
     <Compile Include="Routing\DifferentialRouteState.cs" />
+    <Compile Include="Routing\RouteInfo.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />
     <Compile Include="ZoneRates\ZoneCustomerRates.cs" />

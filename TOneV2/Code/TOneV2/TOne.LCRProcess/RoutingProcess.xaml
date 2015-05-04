@@ -107,6 +107,11 @@
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
           </InArgument>
         </tla1:CreateRoutingDatabase.EffectiveTime>
+        <tla1:CreateRoutingDatabase.IsLcrOnly>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsLcrOnly</mca:CSharpValue>
+          </InArgument>
+        </tla1:CreateRoutingDatabase.IsLcrOnly>
         <tla1:CreateRoutingDatabase.Type>
           <InArgument x:TypeArguments="tle:RoutingDatabaseType">
             <mca:CSharpValue x:TypeArguments="tle:RoutingDatabaseType">Input.IsFuture ? TOne.LCR.Entities.RoutingDatabaseType.Future : TOne.LCR.Entities.RoutingDatabaseType.Current</mca:CSharpValue>
@@ -265,6 +270,11 @@
                   <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
                 </InArgument>
               </local:BuildLCRandRoutes.IsFuture>
+              <local:BuildLCRandRoutes.IsLcrOnly>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsLcrOnly</mca:CSharpValue>
+                </InArgument>
+              </local:BuildLCRandRoutes.IsLcrOnly>
               <local:BuildLCRandRoutes.RouteDetailsBatchQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">routeDetailsBatch</mca:CSharpValue>
@@ -350,50 +360,61 @@
           </InArgument>
         </tla1:ApplyCodeMatchesToDB.RoutingDatabaseId>
       </tla1:ApplyCodeMatchesToDB>
-      <tla1:PrepareRouteDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareRouteDetailsForDBApply_1">
-        <tla1:PrepareRouteDetailsForDBApply.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">routeDetailsBatch</mca:CSharpValue>
+      <If sap2010:WorkflowViewState.IdRef="If_1">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">!Input.IsLcrOnly</mca:CSharpValue>
           </InArgument>
-        </tla1:PrepareRouteDetailsForDBApply.InputQueue>
-        <tla1:PrepareRouteDetailsForDBApply.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpReference>
-          </InOutArgument>
-        </tla1:PrepareRouteDetailsForDBApply.OutputQueue>
-        <tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildLCRandRoutesTaskStatus</mca:CSharpValue>
-          </InArgument>
-        </tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
-        <tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-          </InArgument>
-        </tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
-        <tla1:PrepareRouteDetailsForDBApply.Status>
-          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpReference>
-          </OutArgument>
-        </tla1:PrepareRouteDetailsForDBApply.Status>
-      </tla1:PrepareRouteDetailsForDBApply>
-      <tla1:ApplyRouteDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRouteDetailsToDB_1">
-        <tla1:ApplyRouteDetailsToDB.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpValue>
-          </InArgument>
-        </tla1:ApplyRouteDetailsToDB.InputQueue>
-        <tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpValue>
-          </InArgument>
-        </tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
-        <tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-          </InArgument>
-        </tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
-      </tla1:ApplyRouteDetailsToDB>
+        </If.Condition>
+        <If.Then>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_5">
+            <tla1:PrepareRouteDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareRouteDetailsForDBApply_1">
+              <tla1:PrepareRouteDetailsForDBApply.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">routeDetailsBatch</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.InputQueue>
+              <tla1:PrepareRouteDetailsForDBApply.OutputQueue>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpReference>
+                </InOutArgument>
+              </tla1:PrepareRouteDetailsForDBApply.OutputQueue>
+              <tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildLCRandRoutesTaskStatus</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
+              <tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
+              <tla1:PrepareRouteDetailsForDBApply.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpReference>
+                </OutArgument>
+              </tla1:PrepareRouteDetailsForDBApply.Status>
+            </tla1:PrepareRouteDetailsForDBApply>
+            <tla1:ApplyRouteDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRouteDetailsToDB_1">
+              <tla1:ApplyRouteDetailsToDB.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.InputQueue>
+              <tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
+              <tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
+            </tla1:ApplyRouteDetailsToDB>
+          </Parallel>
+        </If.Then>
+      </If>
     </Parallel>
     <tla1:UpdateZoneMatchInDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateZoneMatchInDB_1">
       <tla1:UpdateZoneMatchInDB.RoutingDatabaseId>
@@ -417,15 +438,23 @@
           </InArgument>
         </tla1:CreateIndexesOnZoneMatchTable.RoutingDatabaseId>
       </tla1:CreateIndexesOnZoneMatchTable>
-      <tla1:CreateIndexesOnRouteTable Status="{x:Null}">
-        <tla1:CreateIndexesOnRouteTable.RoutingDatabaseId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-          </InArgument>
-        </tla1:CreateIndexesOnRouteTable.RoutingDatabaseId>
-        <sap2010:WorkflowViewState.IdRef>CreateIndexesOnRouteTable_1</sap2010:WorkflowViewState.IdRef>
-      </tla1:CreateIndexesOnRouteTable>
     </Parallel>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">!Input.IsLcrOnly</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <tla1:CreateIndexesOnRouteTable Status="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateIndexesOnRouteTable_1">
+          <tla1:CreateIndexesOnRouteTable.RoutingDatabaseId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+            </InArgument>
+          </tla1:CreateIndexesOnRouteTable.RoutingDatabaseId>
+        </tla1:CreateIndexesOnRouteTable>
+      </If.Then>
+    </If>
     <tla1:SetRoutingDatabaseReady sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_1">
       <tla1:SetRoutingDatabaseReady.RoutingDatabaseId>
         <InArgument x:TypeArguments="x:Int32">
@@ -438,16 +467,16 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: Process done in {1}", DateTime.Now, (DateTime.Now - processStart))</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sUUwDugMOAgEBUAtQVwIBCVULVXsCAQJcBWARAwHNBGEFYWEDAcwEYgWRARADAZAEkgEF0AEQAwHcA9EBBY0DEAIBQY4DBZQDIAIBOZUDBawDEAIBIK0DBbMDJAIBGLQDBbgDEQIBEF4JXnoDAc4EYwdzJAMBtgR0B3olAwGuBHsHkAEmAwGRBJMBB7MBJAMB8wO0AQfPASUDAd0D1QEN1QGqAQIBXtoBDdoBcgIBUOEBDeEBoAECAULnAQe0AhIDAdACtQIHzwIrAwGJAtACB+ACIwMB3gHhAgf7AiwDAZcB/AIHjAMkAgFskQMLkQNZAgE6lgMHnAMsAgExnQMHowMsAgEppAMHqwMoAgEhsAMLsANZAgEZtgMJtgOdAQIBEWsNa2ADAcUEZg1mYwMBvgRwDXDHAQMBtwR3DXd6AwGvBIMBDYMBbQMBpwR+DX6OAQMBoASIAQ2IAWADAZkEjQENjQFaAwGSBJYBDZYBcgMBiQSlAQ2lAVsDAYIEmwENmwFgAwH7A6ABDaABWgMB9APBAQ3BAVsDAewDtwENtwFgAwHlA7wBDbwBWgMB3gPoAQmpAh8DAeECqgIJswISAwHRAsICDcICdAMBwgK4Ag24AngDAbQCxwINxwJbAwGmAswCDcwCfQMBmAK9Ag29AoMBAwGKAtgCDdgCdQMB+wHTAg3TAnsDAe0B3QIN3QJbAwHfAe4CDe4CdAMB0AHkAg3kAnYDAcIB8wIN8wJbAwG0AfgCDfgCfgMBpgHpAg3pAoQBAwGYAYQDDYQDdgMBiQH/Ag3/AnwCAXuJAw2JA1sCAW2ZAw2ZA1sCATKgAw2gA1sCASqnAw2nA1sCASLrAQ/rAW4DAc4D6AHRAegB1AEDAc0D6AG2AegBuQEDAcwD8gENpwInAwHiArECNbECOQMB4AKtAg+tAnwDAdIC9QET9QF4AwG9A5MCE5MCYQMBrgP6ARP6AX4DAZ8DjgITjgJ8AwGQA/8BE/8BWwMBgQOEAhOEAmYDAfICiQITiQJgAwHjAg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz1DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nUHJvY2Vzcy54YW1sWEwD1wMOAgEBUAtQVwIBCVULVXsCAQJcBWARAwH7BGEFYWEDAfoEYgWWARADAbcElwEF1QEQAwGDBNYBBaIDEAIBSaMDBakDIAIBQaoDBbkDEAIBMLoDBckDCgIBIMoDBdADJAIBGNEDBdUDEQIBEF4JXnoDAfwEYwd4JAMB3QR5B38lAwHVBIABB5UBJgMBuASYAQe4ASQDAZoEuQEH1AElAwGEBNoBDdoBqgECAWbfAQ3fAXICAVjmAQ3mAaABAgFK7AEHvgISAwHoAr8CB9kCKwMBoQLaAgfqAiMDAfYB6wIHoQMMAgF0pgMLpgNZAgFCqwMHsQMsAgE5sgMHuAMsAgExvQMLvQNaAgEhwQMJxwMqAgEozQMLzQNZAgEZ0wMJ0wOdAQIBEXANcFsDAfMEaw1rYAMB7ARmDWZjAwHlBHUNdccBAwHeBHwNfHoDAdYEiAENiAFtAwHOBIMBDYMBjgEDAccEjQENjQFgAwHABJIBDZIBWgMBuQSbAQ2bAXIDAbAEqgENqgFbAwGpBKABDaABYAMBogSlAQ2lAVoDAZsExgENxgFbAwGTBLwBDbwBYAMBjATBAQ3BAVoDAYUE7QEJswIfAwH5ArQCCb0CEgMB6QLMAg3MAnQDAdoCwgINwgJ4AwHMAtECDdECWwMBvgLWAg3WAn0DAbACxwINxwKDAQMBogLiAg3iAnUDAZMC3QIN3QJ7AwGFAucCDecCWwMB9wHuAg3uAlwCAXXyAgufAxYDAYMBrgMNrgNbAgE6tQMNtQNbAgEyxAMPxANdAgEp8AEP8AFuAwH1A+0B0QHtAdQBAwH0A+0BtgHtAbkBAwHzA/cBDbECJwMB+gK7AjW7AjkDAfgCtwIPtwJ8AwHqAvMCDY0DMgMBrwGOAw2eAyoDAYQB+gET+gF4AwHkA50CE50CYQMB1QP/ARP/AX4DAcYDmAITmAJ8AwG3A5MCE5MCYQMBqAOEAhOEAlsDAZkDiQITiQJmAwGKA44CE44CYAMB+wKAAxOAA3oDAegB9gIT9gJ8AwHaAYUDE4UDYQMBzAGKAxOKA4QBAwG+AfsCE/sCigEDAbABlgMTlgN8AwGhAZEDE5EDggEDAZMBmwMTmwNhAwGFAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="1383,62" />
-      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1383,22" />
+      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="1622,62" />
+      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1622,22" />
       <sap2010:ViewStateData Id="CreateRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSuppliersInfo_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetDistinctCodePrefixes_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1383,86">
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1622,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -483,7 +512,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_14" sap:VirtualizedContainerService.HintSize="856,392" />
       <sap2010:ViewStateData Id="TOne.LCRProcess.GenerateZoneRatesInDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1383,86">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1622,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -529,14 +558,15 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="PrepareCodeMatchesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,436" />
       <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,436" />
-      <sap2010:ViewStateData Id="PrepareRouteDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,436" />
-      <sap2010:ViewStateData Id="ApplyRouteDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,436" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1383,482" />
-      <sap2010:ViewStateData Id="UpdateZoneMatchInDB_1" sap:VirtualizedContainerService.HintSize="1383,22" />
+      <sap2010:ViewStateData Id="PrepareRouteDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyRouteDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="679,436" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1622,482" />
+      <sap2010:ViewStateData Id="UpdateZoneMatchInDB_1" sap:VirtualizedContainerService.HintSize="1622,22" />
       <sap2010:ViewStateData Id="CreateIndexesOnCodeMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateIndexesOnZoneMatchTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="CreateIndexesOnRouteTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1383,86">
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1622,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -544,16 +574,25 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1383,22" />
-      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="1383,62" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1405,1374">
+      <sap2010:ViewStateData Id="CreateIndexesOnRouteTable_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1622,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1622,22" />
+      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="1622,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1644,1465">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1445,1454" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1684,1545" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

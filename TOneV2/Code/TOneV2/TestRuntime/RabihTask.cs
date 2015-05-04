@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
+
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
@@ -45,7 +48,27 @@ namespace TestRuntime
             //////        }
             //////    });
             //////t.Start();
+            //char key;
+            //Console.WriteLine("Enter 'c' for Build Complete Route Build or 'p' for partial");
+            //do
+            //{
 
+            //    key = Console.ReadKey().KeyChar;
+            //    if (key == 'p')
+            //        RunPartialRouteBuild();
+            //    else if (key == 'c')
+            //        RunCompleteRouteBuild();
+            //    else
+            //        Console.WriteLine("Enter 'c' for Build Complete Route Build or 'p' for partial");
+            //} while (key != 'p' || key != 'c');
+
+
+
+            //RunCompleteRouteBuild();
+        }
+
+        private static void RunCompleteRouteBuild()
+        {
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
@@ -53,8 +76,18 @@ namespace TestRuntime
                 InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
                 {
                     EffectiveTime = DateTime.Now,
-                    IsFuture = false
+                    IsFuture = false,
+                    IsLcrOnly = true
                 }
+            });
+        }
+
+        private static void RunPartialRouteBuild()
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "DifferentailRoutingProcess"
             });
         }
     }

@@ -7,9 +7,9 @@ using TOne.LCR.Entities;
 
 namespace TOne.LCR.Data
 {
-    public interface IRoutingDataManager
+    public interface IRoutingDataManager : IDataManager
     {
-        int DatabaseId { set; }
+        int DatabaseId { get; set; }
         RoutingDatabaseType RoutingDatabaseType { set;  }
     }
 }

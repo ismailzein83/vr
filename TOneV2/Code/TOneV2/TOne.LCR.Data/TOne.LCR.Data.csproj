@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICodePrefixGroupDataManager.cs" />
+    <Compile Include="IOldRoutingDataManager.cs" />
     <Compile Include="IRouteDetailDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
     <Compile Include="IRoutingDataManager.cs" />

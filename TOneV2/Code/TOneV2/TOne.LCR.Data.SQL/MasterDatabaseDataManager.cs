@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +25,22 @@ namespace TOne.LCR.Data.SQL
             return _connectionString;
         }
 
-        public void CreateDatabase(string databaseName)
+        public void CreateDatabase(string databaseName, string dataFileDirectory, string logFileDirectory)
         {
-            ExecuteNonQueryText(String.Format(@"CREATE DATABASE {0}", databaseName), null);
+            if (dataFileDirectory != null && logFileDirectory != null)
+            {
+                string dataFilePath = Path.Combine(dataFileDirectory, databaseName);
+                string logFilePath = Path.Combine(logFileDirectory, databaseName);
+                string createDBWithPath = String.Format(@"
+                                                        CREATE DATABASE {0} ON PRIMARY
+                                                        ( NAME = '{0}', FILENAME = N'{1}.mdf')
+                                                         LOG ON 
+                                                        ( NAME = '{0}_log',FILENAME = N'{2}_log.ldf' )", 
+                                                         databaseName, dataFilePath, logFilePath);
+                ExecuteNonQueryText(createDBWithPath, null);
+            }
+            else
+                ExecuteNonQueryText(String.Format(@"CREATE DATABASE {0}", databaseName), null);
         }
 
         internal void DropDatabaseWithForceIfExists(string databaseName)

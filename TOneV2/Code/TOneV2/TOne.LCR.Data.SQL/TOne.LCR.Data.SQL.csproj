@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +56,7 @@
   <ItemGroup>
     <Compile Include="CodePrefixGroupDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />
+    <Compile Include="OldRoutingDataManager.cs" />
     <Compile Include="RouteDetailDataManager.cs" />
     <Compile Include="RouteRulesDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />

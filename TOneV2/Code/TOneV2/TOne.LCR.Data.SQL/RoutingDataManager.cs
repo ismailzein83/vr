@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace TOne.LCR.Data.SQL
 {
     public class RoutingDataManager : BaseTOneDataManager, IRoutingDataManager
     {
-        public RoutingDataManager() : 
+        public RoutingDataManager() :
             base("RoutingDBConnStringTemplateKey")
         {
 
@@ -22,6 +23,17 @@ namespace TOne.LCR.Data.SQL
 
         public int DatabaseId
         {
+            get
+            {
+
+                if (_databaseId <= 0)
+                {
+                    RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
+                    _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, DateTime.Now);
+                }
+                return _databaseId;
+            }
+
             set
             {
                 _databaseId = value;
@@ -35,11 +47,11 @@ namespace TOne.LCR.Data.SQL
                 _routingDatabaseType = value;
             }
         }
-        
+
         internal void CreateDatabase()
         {
             MasterDatabaseDataManager masterDataManager = new MasterDatabaseDataManager(GetConnectionString());
-            masterDataManager.CreateDatabase(GetDatabaseName());
+            masterDataManager.CreateDatabase(GetDatabaseName(), ConfigurationManager.AppSettings["RoutingDBDataFileDirectory"], ConfigurationManager.AppSettings["RoutingDBLogFileDirectory"]);
             CreateDatabaseSchema();
         }
 
@@ -55,7 +67,7 @@ namespace TOne.LCR.Data.SQL
             {
                 if (!_routingDatabaseType.HasValue)
                     throw new Exception("you need to set the DatabaseId or the RoutingDatabaseType property of the Data Manager before calling any operation on the Routing database");
-              
+
                 RoutingDatabaseDataManager routingDatabaseManager = new RoutingDatabaseDataManager();
                 _databaseId = routingDatabaseManager.GetIDByType(_routingDatabaseType.Value, DateTime.Now);
 
@@ -78,7 +90,11 @@ namespace TOne.LCR.Data.SQL
 
         #region Constants
 
-        const string query_CreateDatabaseSchema = @"CREATE TABLE [dbo].[ZoneInfo](
+        const string query_CreateDatabaseSchema = @"
+
+
+
+CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ZoneID] [int] NOT NULL,
 	                                                    [Name] [nvarchar](255) NOT NULL,
                                                      CONSTRAINT [PK_ZoneInfo] PRIMARY KEY CLUSTERED 
@@ -86,7 +102,7 @@ namespace TOne.LCR.Data.SQL
 	                                                    [ZoneID] ASC
                                                      )
                                                     ) 
-                                                    CREATE TABLE [SupplierZoneRate](
+                                                    CREATE TABLE [dbo].[SupplierZoneRate](
 	                                                    [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
@@ -94,7 +110,7 @@ namespace TOne.LCR.Data.SQL
 	                                                    [NormalRate] float NULL,
 	                                                    [ServicesFlag] [smallint] NULL
                                                     ) 
-                                                    CREATE TABLE [CustomerZoneRate](
+                                                    CREATE TABLE [dbo].[CustomerZoneRate](
 	                                                    [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
@@ -102,12 +118,12 @@ namespace TOne.LCR.Data.SQL
 	                                                    [NormalRate] [float] NULL,
 	                                                    [ServicesFlag] [smallint] NULL
                                                     ) 
-                                                    CREATE TABLE [ZoneMatch](
+                                                    CREATE TABLE [dbo].[ZoneMatch](
 	                                                    [OurZoneID] [int] NOT NULL,
 	                                                    [SupplierZoneID] [int] NOT NULL,
 	                                                    [SupplierID] [varchar](5) NOT NULL
                                                     ) 
-                                                    CREATE TABLE [CodeMatch](
+                                                    CREATE TABLE [dbo].[CodeMatch](
 	                                                    [Code] [varchar](30) NOT NULL,
 	                                                    [SupplierID] [varchar](5) NOT NULL,
 	                                                    [SupplierCode] [varchar](30) NOT NULL,
@@ -117,7 +133,7 @@ namespace TOne.LCR.Data.SQL
 	                                                    [ServicesFlag] [smallint] NULL,
 	                                                    [PriceListID] [int] NULL
                                                     )
-                                                    CREATE TABLE [Route](
+                                                    CREATE TABLE [dbo].[Route](
 	                                                   
 	                                                    [CustomerID] [varchar](5) NOT NULL,
 	                                                    [Code] [varchar](30) NULL,
@@ -127,7 +143,7 @@ namespace TOne.LCR.Data.SQL
 	                                                    [Options] varchar(500)
                                                     )
 
-                                                    CREATE TYPE [SuppliersCodeInfoType] AS TABLE(
+                                                    CREATE TYPE [dbo].[SuppliersCodeInfoType] AS TABLE(
 	                                                    [SupplierID] [varchar](5) NOT NULL,
 	                                                    [HasUpdatedCodes] [bit] NOT NULL,
 	                                                    PRIMARY KEY CLUSTERED 
@@ -136,15 +152,24 @@ namespace TOne.LCR.Data.SQL
                                                         )
                                                     )
 
-                                                    CREATE TYPE [IntIDType] AS TABLE(
+                                                    CREATE TYPE [dbo].[IntIDType] AS TABLE(
 	                                                    [ID] [int] NOT NULL
 	                                                    PRIMARY KEY CLUSTERED 
                                                         (
 	                                                        [ID] ASC
                                                         )
                                                     )
-                                                    ";
+                                                    
+                                                    CREATE TYPE [dbo].[CodeType] AS TABLE(
+	                                                        [Code] [varchar](20) NOT NULL,
+	                                                        [IncludeSubCodes] BIT
+	                                                        PRIMARY KEY CLUSTERED 
+                                                        (
+	                                                        [Code] ASC
+                                                        )WITH (IGNORE_DUP_KEY = OFF)
+                                                        )";
 
         #endregion
+
     }
 }

@@ -17,7 +17,6 @@ namespace TOne.LCRProcess.Activities
     public class BuildCodeMatchByCodeGroupInput
     {
 
-
         public DateTime EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
@@ -31,6 +30,8 @@ namespace TOne.LCRProcess.Activities
         public SuppliersCodes SuppliersCodes { get; set; }
 
         public SupplierZoneRates SupplierZoneRates { get; set; }
+
+        public bool IsLcrOnly { get; set; }
     }
 
     public class BuildCodeMatchByCodeGroup : BaseAsyncActivity<BuildCodeMatchByCodeGroupInput>
@@ -51,6 +52,9 @@ namespace TOne.LCRProcess.Activities
 
         [RequiredArgument]
         public InArgument<SupplierZoneRates> SupplierZoneRates { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> IsLcrOnly { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<List<CodeMatch>>> OutputQueue { get; set; }
@@ -80,6 +84,7 @@ namespace TOne.LCRProcess.Activities
                 DistinctCodes = this.DistinctCodes.Get(context),
                 EffectiveTime = this.EffectiveTime.Get(context),
                 IsFuture = this.IsFuture.Get(context),
+                IsLcrOnly = this.IsLcrOnly.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 OutputQueueForRouting = this.OutputQueueForRouting.Get(context)
             };
@@ -88,19 +93,7 @@ namespace TOne.LCRProcess.Activities
         protected override void DoWork(BuildCodeMatchByCodeGroupInput inputArgument, AsyncActivityHandle handle)
         {
             CodeList distinctCodesList = new CodeList(inputArgument.DistinctCodes);
-            
-            //MemoryQueue<List<CodeMatch>> outputQueue = inputArgument.OutputQueue as MemoryQueue<List<CodeMatch>>;
-            //MemoryQueue<SingleDestinationCodeMatches> outputQueueForRouting = inputArgument.OutputQueueForRouting as MemoryQueue<SingleDestinationCodeMatches>;
-            //if(outputQueue != null)
-            //{
-            //    while (outputQueue.Count > 3)
-            //        System.Threading.Thread.Sleep(1000);
-            //}
-            //if (outputQueueForRouting != null)
-            //{
-            //    while (outputQueueForRouting.Count > 1000)
-            //        System.Threading.Thread.Sleep(1000);
-            //}
+
             foreach (var dCode in distinctCodesList.CodesWithPossibleMatches)
             {
                 List<CodeMatch> codeMatches = new List<CodeMatch>();
@@ -108,7 +101,7 @@ namespace TOne.LCRProcess.Activities
                 {
                     RouteCode = dCode.Key,
                     CodeMatchesBySupplierId = new CodeMatchesBySupplierId(),
-                    OrderedCodeMatches= new List<CodeMatch>()
+                    OrderedCodeMatches = new List<CodeMatch>()
                 };
                 foreach (var suppCodes in inputArgument.SuppliersCodes.Codes)
                 {
@@ -128,6 +121,7 @@ namespace TOne.LCRProcess.Activities
                                 SupplierZoneId = supplierMatch.ZoneId,
                                 SupplierCodeId = supplierMatch.ID
                             };
+
                             if (String.Compare(codeMatch.SupplierId, "SYS", true) == 0)
                                 singleDestinationCodeMatches.SysCodeMatch = codeMatch;
                             else
@@ -136,23 +130,27 @@ namespace TOne.LCRProcess.Activities
                                 if (inputArgument.SupplierZoneRates.RatesByZoneId.TryGetValue(supplierMatch.ZoneId, out rate))
                                 {
                                     codeMatch.SupplierRate = rate;
-                                    singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
-                                    decimal rateValue = rate.Rate;
-                                    bool isAddedToOrderedList = false;
-                                    for (int i = 0; i < singleDestinationCodeMatches.OrderedCodeMatches.Count; i++)
+                                    if (!inputArgument.IsLcrOnly)
                                     {
-                                        decimal currentRate = singleDestinationCodeMatches.OrderedCodeMatches[i].SupplierRate.Rate;
-                                        if (currentRate >= rateValue)
+                                        singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                                        decimal rateValue = rate.Rate;
+                                        bool isAddedToOrderedList = false;
+                                        for (int i = 0; i < singleDestinationCodeMatches.OrderedCodeMatches.Count; i++)
                                         {
-                                            singleDestinationCodeMatches.OrderedCodeMatches.Insert(i, codeMatch);
-                                            isAddedToOrderedList = true;
-                                            break;
+                                            decimal currentRate = singleDestinationCodeMatches.OrderedCodeMatches[i].SupplierRate.Rate;
+                                            if (currentRate >= rateValue)
+                                            {
+                                                singleDestinationCodeMatches.OrderedCodeMatches.Insert(i, codeMatch);
+                                                isAddedToOrderedList = true;
+                                                break;
+                                            }
                                         }
+                                        if (!isAddedToOrderedList)
+                                            singleDestinationCodeMatches.OrderedCodeMatches.Add(codeMatch);
                                     }
-                                    if (!isAddedToOrderedList)
-                                        singleDestinationCodeMatches.OrderedCodeMatches.Add(codeMatch);
                                 }
                             }
+
                             codeMatches.Add(codeMatch);
                         }
                         index++;
@@ -161,11 +159,12 @@ namespace TOne.LCRProcess.Activities
                 }
                 if (codeMatches.Count > 0)
                 {
-                    if (singleDestinationCodeMatches.SysCodeMatch != null)
+                    if (!inputArgument.IsLcrOnly && singleDestinationCodeMatches.SysCodeMatch != null)
                         inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
-                    inputArgument.OutputQueue.Enqueue(codeMatches);
+                    if (singleDestinationCodeMatches.SysCodeMatch != null)
+                        inputArgument.OutputQueue.Enqueue(codeMatches);
                 }
-            }           
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace TOne.LCR.Entities
 
         public bool IsReady { get; set; }
 
+        public bool IsLcrOnly { get; set; }
         public DateTime CreatedTime { get; set; }
 
         public DateTime ReadyTime { get; set; }

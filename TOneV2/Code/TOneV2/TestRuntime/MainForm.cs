@@ -21,6 +21,7 @@ namespace TestRuntime
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.RealTime;
             string filePath = String.Format(@"{0}\selectedTask", Directory.GetCurrentDirectory());
             
 

@@ -18,12 +18,15 @@ namespace TOne.LCRProcess.Activities
         public InArgument<DateTime> EffectiveTime { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> IsLcrOnly { get; set; }
+
+        [RequiredArgument]
         public OutArgument<int> DatabaseId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IRoutingDatabaseDataManager routingDatabaseManager = LCRDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1:yyyyMMdd-HHmm}", this.Type.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.EffectiveTime.Get(context));
+            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1:yyyyMMdd-HHmm}", this.Type.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.EffectiveTime.Get(context), this.IsLcrOnly.Get(context));
             this.DatabaseId.Set(context, databaseId);
         }
     }
