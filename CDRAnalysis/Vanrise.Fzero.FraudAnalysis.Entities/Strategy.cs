@@ -10,9 +10,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int Id { get; set; }
 
-        public List<StrategyCriteria> Criterias { get; set; }
+        public List<StrategyCriteria> StrategyCriterias { get; set; }
 
-        public List<StrategyLevel> Levels { get; set; }
+        public List<StrategyLevel> StrategyLevels { get; set; }
     }
 
     public class StrategyCriteria
@@ -24,9 +24,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public class StrategyLevel
     {
-        public int SuspectionLevel { get; set; }
+        public int SuspectionLevelId { get; set; }
 
-        public List<StrategyLevelCriteria> Criterias { get; set; }
+        public List<StrategyLevelCriteria> StrategyLevelCriterias { get; set; }
     }
 
     public class StrategyLevelCriteria

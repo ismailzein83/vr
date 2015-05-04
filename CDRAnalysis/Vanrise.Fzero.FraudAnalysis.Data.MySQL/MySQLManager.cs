@@ -24,6 +24,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
+                    cmd.CommandTimeout = int.MaxValue;
                     prepareCmd(cmd);
 
                     using (MySqlDataReader dataReader = cmd.ExecuteReader())

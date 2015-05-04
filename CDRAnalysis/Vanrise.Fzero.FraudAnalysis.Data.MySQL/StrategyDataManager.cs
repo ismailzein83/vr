@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             });
 
 
-            st.Criterias = manager.GetItems(query, (cmd) =>
+            st.StrategyCriterias = manager.GetItems(query, (cmd) =>
            {
 
                //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
            });
 
 
-            st.Levels = manager.GetItems(query2, (cmd) =>
+            st.StrategyLevels = manager.GetItems(query2, (cmd) =>
             {
 
                 //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
@@ -67,7 +67,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
                 List<StrategyLevelCriteria> Lstslc = new List<StrategyLevelCriteria>();
 
-                sl.SuspectionLevel = ParseInt(reader["LevelId"].ToString());
+                sl.SuspectionLevelId = ParseInt(reader["LevelId"].ToString());
 
                 for (int i = 1; i <= 15; i++)
                 {
@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                         Lstslc.Add(slc);
                     }
                 }
-                sl.Criterias = Lstslc;
+                sl.StrategyLevelCriterias = Lstslc;
                 return sl;
             });
 
