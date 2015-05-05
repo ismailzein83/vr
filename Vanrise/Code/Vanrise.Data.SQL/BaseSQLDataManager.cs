@@ -14,8 +14,10 @@ namespace Vanrise.Data.SQL
 {
     public class BaseSQLDataManager : BaseDataManager
     {
+        static string _bcpCommandName;
         static BaseSQLDataManager()
         {
+            _bcpCommandName = ConfigurationManager.AppSettings["BCPCommandName"];
             AddBCPIfNotAdded();
         }
 
@@ -355,8 +357,14 @@ namespace Vanrise.Data.SQL
                 args.Append(" -E");
             
             System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
+            
+            string bcpPath;
+            if (string.IsNullOrEmpty(_bcpCommandName))
+                bcpPath = Path.Combine(s_bcpDirectory, "v_bcp");
+            else
+                bcpPath = _bcpCommandName;
 
-            var procStartInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(s_bcpDirectory, "v_bcp"), args.ToString());
+            var procStartInfo = new System.Diagnostics.ProcessStartInfo(bcpPath, args.ToString());
             
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
