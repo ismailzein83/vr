@@ -6,54 +6,54 @@
     <edmx:StorageModels>
     <Schema Namespace="CDRAnalysisMobileModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="CDRAnalysisMobileModelStoreContainer">
-          <EntitySet Name="CDR" EntityType="CDRAnalysisMobileModel.Store.CDR" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="CDR_Old" EntityType="CDRAnalysisMobileModel.Store.CDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="CellProfile" EntityType="CDRAnalysisMobileModel.Store.CellProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="ControlTable" EntityType="CDRAnalysisMobileModel.Store.ControlTable" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Criteria_Profile" EntityType="CDRAnalysisMobileModel.Store.Criteria_Profile" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="delete_NumberProfile" EntityType="CDRAnalysisMobileModel.Store.delete_NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="delete_Peak_Hours" EntityType="CDRAnalysisMobileModel.Store.delete_Peak_Hours" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="EmailReceivers" EntityType="CDRAnalysisMobileModel.Store.EmailReceivers" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="EmailReceiverTypes" EntityType="CDRAnalysisMobileModel.Store.EmailReceiverTypes" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="EmailTemplates" EntityType="CDRAnalysisMobileModel.Store.EmailTemplates" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="EmailTokens" EntityType="CDRAnalysisMobileModel.Store.EmailTokens" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Imports" EntityType="CDRAnalysisMobileModel.Store.Imports" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="ImportTypes" EntityType="CDRAnalysisMobileModel.Store.ImportTypes" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="NormalCDR" EntityType="CDRAnalysisMobileModel.Store.NormalCDR" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="NormalCDR_Old" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="NormalCDR_ToDelete" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_ToDelete" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="NormalizationRules" EntityType="CDRAnalysisMobileModel.Store.NormalizationRules" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="NumberProfile" EntityType="CDRAnalysisMobileModel.Store.NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="OperationType" EntityType="CDRAnalysisMobileModel.Store.OperationType" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Peak_Time" EntityType="CDRAnalysisMobileModel.Store.Peak_Time" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Periods" EntityType="CDRAnalysisMobileModel.Store.Periods" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Permissions" EntityType="CDRAnalysisMobileModel.Store.Permissions" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="PredefinedColumns" EntityType="CDRAnalysisMobileModel.Store.PredefinedColumns" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Related_Criteria" EntityType="CDRAnalysisMobileModel.Store.Related_Criteria" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Report" EntityType="CDRAnalysisMobileModel.Store.Report" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="ReportDetails" EntityType="CDRAnalysisMobileModel.Store.ReportDetails" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="ReportingStatus" EntityType="CDRAnalysisMobileModel.Store.ReportingStatus" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Set_CallClass" EntityType="CDRAnalysisMobileModel.Store.Set_CallClass" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Set_CallType" EntityType="CDRAnalysisMobileModel.Store.Set_CallType" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Set_SubType" EntityType="CDRAnalysisMobileModel.Store.Set_SubType" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="SourceMappings" EntityType="CDRAnalysisMobileModel.Store.SourceMappings" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Strategy" EntityType="CDRAnalysisMobileModel.Store.Strategy" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Strategy_Min_Values" EntityType="CDRAnalysisMobileModel.Store.Strategy_Min_Values" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Strategy_Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Strategy_Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.Store.StrategyPeriods" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="StrategyThreshold" EntityType="CDRAnalysisMobileModel.Store.StrategyThreshold" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Store.Subscriber_Values" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Store.Subscriber_ValuesNew" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholds" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="SubscriberThresholdstest" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.Store.SwitchProfiles" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="sysdiagrams" EntityType="CDRAnalysisMobileModel.Store.sysdiagrams" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="ts_NumberProfile" EntityType="CDRAnalysisMobileModel.Store.ts_NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="UserPermissions" EntityType="CDRAnalysisMobileModel.Store.UserPermissions" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="Users" EntityType="CDRAnalysisMobileModel.Store.Users" store:Type="Tables" Schema="CDRAnalysisMobile" />
-          <EntitySet Name="vwDashboard" EntityType="CDRAnalysisMobileModel.Store.vwDashboard" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwDashboard">
+          <EntitySet Name="CDR" EntityType="CDRAnalysisMobileModel.Store.CDR" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="CDR_Old" EntityType="CDRAnalysisMobileModel.Store.CDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="CellProfile" EntityType="CDRAnalysisMobileModel.Store.CellProfile" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="ControlTable" EntityType="CDRAnalysisMobileModel.Store.ControlTable" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Criteria_Profile" EntityType="CDRAnalysisMobileModel.Store.Criteria_Profile" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="delete_NumberProfile" EntityType="CDRAnalysisMobileModel.Store.delete_NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="delete_Peak_Hours" EntityType="CDRAnalysisMobileModel.Store.delete_Peak_Hours" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="EmailReceivers" EntityType="CDRAnalysisMobileModel.Store.EmailReceivers" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="EmailReceiverTypes" EntityType="CDRAnalysisMobileModel.Store.EmailReceiverTypes" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="EmailTemplates" EntityType="CDRAnalysisMobileModel.Store.EmailTemplates" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="EmailTokens" EntityType="CDRAnalysisMobileModel.Store.EmailTokens" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Imports" EntityType="CDRAnalysisMobileModel.Store.Imports" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="ImportTypes" EntityType="CDRAnalysisMobileModel.Store.ImportTypes" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="NormalCDR" EntityType="CDRAnalysisMobileModel.Store.NormalCDR" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="NormalCDR_Old" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_Old" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="NormalCDR_ToDelete" EntityType="CDRAnalysisMobileModel.Store.NormalCDR_ToDelete" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="NormalizationRules" EntityType="CDRAnalysisMobileModel.Store.NormalizationRules" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="NumberProfile" EntityType="CDRAnalysisMobileModel.Store.NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="OperationType" EntityType="CDRAnalysisMobileModel.Store.OperationType" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Peak_Time" EntityType="CDRAnalysisMobileModel.Store.Peak_Time" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Periods" EntityType="CDRAnalysisMobileModel.Store.Periods" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Permissions" EntityType="CDRAnalysisMobileModel.Store.Permissions" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="PredefinedColumns" EntityType="CDRAnalysisMobileModel.Store.PredefinedColumns" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Related_Criteria" EntityType="CDRAnalysisMobileModel.Store.Related_Criteria" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Report" EntityType="CDRAnalysisMobileModel.Store.Report" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="ReportDetails" EntityType="CDRAnalysisMobileModel.Store.ReportDetails" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="ReportingStatus" EntityType="CDRAnalysisMobileModel.Store.ReportingStatus" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Set_CallClass" EntityType="CDRAnalysisMobileModel.Store.Set_CallClass" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Set_CallType" EntityType="CDRAnalysisMobileModel.Store.Set_CallType" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Set_SubType" EntityType="CDRAnalysisMobileModel.Store.Set_SubType" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="SourceMappings" EntityType="CDRAnalysisMobileModel.Store.SourceMappings" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Strategy" EntityType="CDRAnalysisMobileModel.Store.Strategy" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Strategy_Min_Values" EntityType="CDRAnalysisMobileModel.Store.Strategy_Min_Values" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Strategy_Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Strategy_Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="StrategyPeriods" EntityType="CDRAnalysisMobileModel.Store.StrategyPeriods" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="StrategyThreshold" EntityType="CDRAnalysisMobileModel.Store.StrategyThreshold" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Subscriber_Values" EntityType="CDRAnalysisMobileModel.Store.Subscriber_Values" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Subscriber_ValuesNew" EntityType="CDRAnalysisMobileModel.Store.Subscriber_ValuesNew" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="SubscriberThresholds" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholds" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="SubscriberThresholdstest" EntityType="CDRAnalysisMobileModel.Store.SubscriberThresholdstest" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Suspicion_Level" EntityType="CDRAnalysisMobileModel.Store.Suspicion_Level" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Switch_DatabaseConnections" EntityType="CDRAnalysisMobileModel.Store.Switch_DatabaseConnections" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="SwitchProfiles" EntityType="CDRAnalysisMobileModel.Store.SwitchProfiles" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="sysdiagrams" EntityType="CDRAnalysisMobileModel.Store.sysdiagrams" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="ts_NumberProfile" EntityType="CDRAnalysisMobileModel.Store.ts_NumberProfile" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="UserPermissions" EntityType="CDRAnalysisMobileModel.Store.UserPermissions" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="Users" EntityType="CDRAnalysisMobileModel.Store.Users" store:Type="Tables" Schema="CDRAnalysisMobile_WF" />
+          <EntitySet Name="vwDashboard" EntityType="CDRAnalysisMobileModel.Store.vwDashboard" store:Type="Views" store:Schema="CDRAnalysisMobile_WF" store:Name="vwDashboard">
             <DefiningQuery>SELECT
       `vwDashboard`.`CountNewCDRs`, 
       `vwDashboard`.`MaxAttemptDateTime`, 
@@ -61,7 +61,7 @@
       `vwDashboard`.`CountCGPN`
       FROM `vwDashboard` AS `vwDashboard`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vwReportedNumber" EntityType="CDRAnalysisMobileModel.Store.vwReportedNumber" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwReportedNumber">
+          <EntitySet Name="vwReportedNumber" EntityType="CDRAnalysisMobileModel.Store.vwReportedNumber" store:Type="Views" store:Schema="CDRAnalysisMobile_WF" store:Name="vwReportedNumber">
             <DefiningQuery>SELECT
       `vwReportedNumber`.`CLI`, 
       `vwReportedNumber`.`Date_Day`, 
@@ -73,20 +73,20 @@
       `vwReportedNumber`.`MonthYear`
       FROM `vwReportedNumber` AS `vwReportedNumber`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vwReportedNumberNormalCDR" EntityType="CDRAnalysisMobileModel.Store.vwReportedNumberNormalCDR" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwReportedNumberNormalCDR">
+          <EntitySet Name="vwReportedNumberNormalCDR" EntityType="CDRAnalysisMobileModel.Store.vwReportedNumberNormalCDR" store:Type="Views" store:Schema="CDRAnalysisMobile_WF" store:Name="vwReportedNumberNormalCDR">
             <DefiningQuery>SELECT
       `vwReportedNumberNormalCDR`.`Id`, 
       `vwReportedNumberNormalCDR`.`ReportID`
       FROM `vwReportedNumberNormalCDR` AS `vwReportedNumberNormalCDR`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vwReportVariables" EntityType="CDRAnalysisMobileModel.Store.vwReportVariables" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwReportVariables">
+          <EntitySet Name="vwReportVariables" EntityType="CDRAnalysisMobileModel.Store.vwReportVariables" store:Type="Views" store:Schema="CDRAnalysisMobile_WF" store:Name="vwReportVariables">
             <DefiningQuery>SELECT
       `vwReportVariables`.`Id`, 
       `vwReportVariables`.`ReportDate`, 
       `vwReportVariables`.`ReportNumber`
       FROM `vwReportVariables` AS `vwReportVariables`</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vwSuspectionAnalysis" EntityType="CDRAnalysisMobileModel.Store.vwSuspectionAnalysis" store:Type="Views" store:Schema="CDRAnalysisMobile" store:Name="vwSuspectionAnalysis">
+          <EntitySet Name="vwSuspectionAnalysis" EntityType="CDRAnalysisMobileModel.Store.vwSuspectionAnalysis" store:Type="Views" store:Schema="CDRAnalysisMobile_WF" store:Name="vwSuspectionAnalysis">
             <DefiningQuery>SELECT
       `vwSuspectionAnalysis`.`strategyId`, 
       `vwSuspectionAnalysis`.`SubscriberNumber`, 
@@ -1061,15 +1061,15 @@
           <Property Name="definition" Type="longblob" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'InCalls_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'DiffDest_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutInter_Vs_OutCalls' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Call_Out_Dur_Avg' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'AvrDurIn_Vs_AvrDurOut' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutOffNet_Vs_OutOnNet' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Out_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_In_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
-      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Data_Volume' in table 'def.CDRAnalysisMobile.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'InCalls_Vs_OutCalls' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'DiffDest_Vs_OutCalls' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutInter_Vs_OutCalls' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Call_Out_Dur_Avg' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'AvrDurIn_Vs_AvrDurOut' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'OutOffNet_Vs_OutOnNet' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Out_Volume' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_In_Volume' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
+      warning 6005: The data type 'udecimal' is currently not supported for the target .NET Framework version; the column 'Total_Data_Volume' in table 'def.CDRAnalysisMobile_WF.ts_NumberProfile' was excluded.
       -->
         <EntityType Name="ts_NumberProfile">
           <Key>
@@ -1126,7 +1126,7 @@
           <Property Name="MobileNumber" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'def.CDRAnalysisMobile.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'def.CDRAnalysisMobile_WF.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="vwDashboard">
           <Key>
@@ -1141,7 +1141,7 @@
           <Property Name="CountCGPN" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'def.CDRAnalysisMobile.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'def.CDRAnalysisMobile_WF.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="vwReportedNumber">
           <Key>
@@ -1158,13 +1158,13 @@
           <Property Name="MonthYear" Type="varchar" MaxLength="37" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'A_Temp' in the table 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'In_Trunk' in the table 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded.
-      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'Switch' in the table 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded.
-      warning 6031: The column 'A_Temp' on the table/view 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
-      warning 6031: The column 'In_Trunk' on the table/view 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
-      warning 6031: The column 'Switch' on the table/view 'def.CDRAnalysisMobile.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
+      warning 6002: The table/view 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'A_Temp' in the table 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded.
+      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'In_Trunk' in the table 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded.
+      warning 6006: The facet 'MaxLength' with a value '0' is outside the range 1-255 specified by the facet description.  The column 'Switch' in the table 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded.
+      warning 6031: The column 'A_Temp' on the table/view 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
+      warning 6031: The column 'In_Trunk' on the table/view 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
+      warning 6031: The column 'Switch' on the table/view 'def.CDRAnalysisMobile_WF.vwReportedNumberNormalCDR' was excluded, and is a key column.  The remaining key(s) were used and table/view has been created as read-only.
       -->
         <EntityType Name="vwReportedNumberNormalCDR">
           <Key>
@@ -1175,7 +1175,7 @@
           <Property Name="ReportID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'def.CDRAnalysisMobile.vwReportVariables' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'def.CDRAnalysisMobile_WF.vwReportVariables' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="vwReportVariables">
           <Key>
@@ -1186,7 +1186,7 @@
           <Property Name="ReportNumber" Type="varchar" MaxLength="12" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'def.CDRAnalysisMobile.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'def.CDRAnalysisMobile_WF.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="vwSuspectionAnalysis">
           <Key>
@@ -2184,54 +2184,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="prCollectNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prCollectNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
-        <Function Name="prFillDailySubscriberThresholdstest2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prFillDailySubscriberThresholdstest2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
-        <Function Name="prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
-        <Function Name="prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="p_fromDate" Type="datetime" Mode="In" />
           <Parameter Name="p_ToDate" Type="datetime" Mode="In" />
           <Parameter Name="p_strategyId" Type="int" Mode="In" />
           <Parameter Name="p_SuspectionList" Type="varchar" Mode="In" />
           <Parameter Name="p_MinimumOccurance" Type="int" Mode="In" />
         </Function>
-        <Function Name="prGetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prGetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="p_ReportID" Type="int" Mode="In" />
         </Function>
-        <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="prGetUnNormalizedCDPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="prGetUnNormalizedCDPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="p_FromDate" Type="datetime" Mode="In" />
           <Parameter Name="p_ToDate" Type="datetime" Mode="In" />
           <Parameter Name="p_SwitchID" Type="int" Mode="In" />
         </Function>
-        <Function Name="prGetUnNormalizedCGPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prGetUnNormalizedCGPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="p_FromDate" Type="datetime" Mode="In" />
           <Parameter Name="p_ToDate" Type="datetime" Mode="In" />
           <Parameter Name="p_SwitchID" Type="int" Mode="In" />
         </Function>
-        <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="todelete_prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="todelete_prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="ts_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="todelete_prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="todelete_prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="ts_FillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
-        <Function Name="ts_prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="ts_prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile" />
-        <Function Name="ts_prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile">
+        <Function Name="ts_prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="ts_prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF" />
+        <Function Name="ts_prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="CDRAnalysisMobile_WF">
           <Parameter Name="v_StrategyId" Type="int" Mode="In" />
         </Function>
         <!--Errors Found During Generation:
-      warning 6013: The table/view 'def.CDRAnalysisMobile.CDR_DAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      warning 6013: The table/view 'def.CDRAnalysisMobile_WF.CDR_DAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
       
       <EntityType Name="CDR_DAT">
         <Property Name="Source_Type" Type="varchar" MaxLength="10" />
@@ -2275,7 +2275,7 @@
         <Property Name="Longitude" Type="varchar" MaxLength="9" />
       </EntityType>
       Errors Found During Generation:
-      warning 6013: The table/view 'def.CDRAnalysisMobile.filesDAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      warning 6013: The table/view 'def.CDRAnalysisMobile_WF.filesDAT' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
       
       <EntityType Name="filesDAT">
         <Property Name="content" Type="varchar" />

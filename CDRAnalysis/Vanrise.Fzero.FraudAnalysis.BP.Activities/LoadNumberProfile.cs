@@ -42,24 +42,21 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
         {
            int BatchSize = int.Parse( System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
-           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Start {0}", DateTime.Now);
+           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-           dataManager.LoadNumberProfile(DateTime.Parse("2015-03-10 04:00:00"), DateTime.Parse("2015-03-20 06:00:00"), BatchSize, (x) =>
+           dataManager.LoadNumberProfile(DateTime.Parse("2015-03-10 04:00:00"), DateTime.Parse("2015-03-20 06:00:00"), BatchSize, (numberProfiles) =>
            {
-
-                NumberProfileBatch numberProfileBatch = new NumberProfileBatch();
-
+              
                inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                {
-                   numberProfiles = x
+                   numberProfiles = numberProfiles
                });
 
 
-               if (numberProfileBatch.numberProfiles !=null) 
-                 handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfileBatch.numberProfiles.Count.ToString());
+               handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfiles.Count);
            });
-           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.End {0}", DateTime.Now);
+           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
           
         }
 

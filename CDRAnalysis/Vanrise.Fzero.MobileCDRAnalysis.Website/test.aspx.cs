@@ -278,7 +278,7 @@ class DBConnect
 
     private void ErrorLogger(string message)
     {
-        string cs = "CDRAnalysisMobile";
+        string cs = "CDRAnalysisMobile_WF";
         EventLog elog = new EventLog();
         if (!EventLog.SourceExists(cs))
         {
@@ -299,7 +299,7 @@ class DBConnect
 
     private void ErrorLog(string message)
     {
-        string cs = "CDRAnalysisMobile";
+        string cs = "CDRAnalysisMobile_WF";
         EventLog elog = new EventLog();
         if (!EventLog.SourceExists(cs))
         {
