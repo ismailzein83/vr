@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start LoadNumberProfiles.DoWork.Start {0}", DateTime.Now);
 
            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-           dataManager.LoadNumberProfile( DateTime.Parse("2015-03-14 05:00:00"), DateTime.Parse("2015-03-14 06:00:00"), BatchSize, (numberProfiles) =>
+           dataManager.LoadNumberProfile( DateTime.Parse("2015-03-10 04:00:00"), DateTime.Parse("2015-03-20 06:00:00"), BatchSize, (numberProfiles) =>
            {
                inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                {
