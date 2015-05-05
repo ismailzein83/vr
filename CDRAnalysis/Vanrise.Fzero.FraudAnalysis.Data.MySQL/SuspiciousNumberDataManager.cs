@@ -28,15 +28,24 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 foreach (SuspiciousNumber cdr in suspiciousNumbers)
                 {
                     string s = "";
-                    foreach (KeyValuePair<int, Decimal> pair in cdr.CriteriaValues)
+
+                    for (int i = 1; i <= 15; i++)
                     {
-                        s = "," + s + pair.Value;
+                        if (cdr.CriteriaValues.Where(x => x.Key == i).Count()==1)
+                        {
+                            s = s + "," + cdr.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString();
+                        }
+                        else
+                        {
+                            s = s + ", null";
+                        }
                     }
 
-                    sw.WriteLine("0,{0},{1}{2},{3},{4},{5}",
-                                  new[]  {null, cdr.Number, s, cdr.SuspectionLevel.ToString(), 
-                                       strategy.Id.ToString(), ""}
-                    );
+                    sw.WriteLine("0, null, "+cdr.Number+" " + s + ", " + cdr.SuspectionLevel.ToString() + ", " + strategy.Id.ToString() + ", 6");
+
+                    //Id, DateDay, SubscriberNumber, Criteria1, Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7, Criteria8, Criteria9, Criteria10, Criteria11, Criteria12, Criteria13, Criteria14, Criteria15, SuspectionLevelId, StrategyId, PeriodId
+
+                    
                 }
                 sw.Close();
             }
