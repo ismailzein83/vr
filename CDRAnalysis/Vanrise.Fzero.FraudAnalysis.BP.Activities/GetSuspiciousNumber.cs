@@ -49,38 +49,53 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            Console.WriteLine("GetSuspiciousNumber: (1) " + DateTime.Now.ToString());
+
             FraudManager manager = new FraudManager(inputArgument.strategy);
+
+            Console.WriteLine("GetSuspiciousNumber: (2) " + DateTime.Now.ToString());
+
+            int index = 0;
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
                 do
                 {
+                    index++;
+
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (item) =>
                         {
+                            Console.WriteLine("GetSuspiciousNumber: (3) " + DateTime.Now.ToString() + ", index : " + index.ToString());
+
                             List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
 
                             foreach (NumberProfile number in item.numberProfiles)
-                            { 
+                            {
+                                Console.WriteLine("GetSuspiciousNumber: (4) " + DateTime.Now.ToString() + ", index : " + index.ToString());
                                 SuspiciousNumber sNumber = new SuspiciousNumber();
                                 if (manager.IsNumberSuspicious(number, out sNumber))
                                 {
+                                    Console.WriteLine("GetSuspiciousNumber: (5) " + DateTime.Now.ToString() + ", index : " + index.ToString());
                                     sNumbers.Add(sNumber);   
                                 }
                             }
-
+                            Console.WriteLine("GetSuspiciousNumber: (6) " + DateTime.Now.ToString() + ", index : " + index.ToString());
                             if (sNumbers.Count > 0)
                             {
+                                Console.WriteLine("GetSuspiciousNumber: (7) " + DateTime.Now.ToString() + ", index : " + index.ToString());
                                 inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
                                     suspiciousNumbers = sNumbers
                                 });
+                                Console.WriteLine("GetSuspiciousNumber: (8) " + DateTime.Now.ToString() + ", index : " + index.ToString());
                             }
 
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
+            Console.WriteLine("GetSuspiciousNumber: (9) " + DateTime.Now.ToString());
         }
 
         protected override GetSuspiciousNumberInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)

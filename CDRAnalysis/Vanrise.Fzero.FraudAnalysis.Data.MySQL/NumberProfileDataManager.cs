@@ -32,7 +32,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 }, (reader) =>
             {
                 List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-
                 while (reader.Read())
                 {
                     NumberProfile numberProfile = new NumberProfile
@@ -72,6 +71,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 }
                 if (numberProfileBatch.Count > 0)
                     onBatchReady(numberProfileBatch);
+
             });
         }
 
