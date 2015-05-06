@@ -13,5 +13,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public int SuspectionLevel { get; set; }
 
         public Dictionary<int,Decimal> CriteriaValues { get; set; }
+
+        public DateTime? DateDay { get; set; }
+
+
+        public int? PeriodId { get; set; }
     }
 }

@@ -120,6 +120,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     suspiciousNumber.Number = profile.subscriberNumber;
                     suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspectionLevelId;
                     suspiciousNumber.CriteriaValues = dict_criteriaValues;
+                    suspiciousNumber.DateDay = profile.fromDate;
+                    suspiciousNumber.PeriodId = profile.periodId;
                     return IsSuspicious;
                 }
             }
