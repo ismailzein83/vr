@@ -25,7 +25,7 @@ namespace Vanrise.BusinessProcess
         private static void StartService()
         {
             ServiceHost serviceHost = new ServiceHost(typeof(BPService));
-            if (String.IsNullOrEmpty(ConfigurationManager.AppSettings["BusinessProcessDisabledNamedPipeService"]))
+            if (ConfigurationManager.AppSettings["BusinessProcessDisabledNamedPipeService"] != "true")
                 AddNamedPipeEndPoint(serviceHost);
             string tcpServiceHost = ConfigurationManager.AppSettings["BusinessProcessServiceHost"];
             if (!String.IsNullOrEmpty(tcpServiceHost))
