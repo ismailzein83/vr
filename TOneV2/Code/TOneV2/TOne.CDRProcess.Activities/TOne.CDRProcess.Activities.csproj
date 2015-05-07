@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyTrafficStatsToDB.cs" />
     <Compile Include="ApplyInvalidCDRsToDB.cs" />
     <Compile Include="ApplyMainCDRsToDB.cs" />
     <Compile Include="ClearTimeRangeBillingRecords.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="GenerateTrafficStatistics.cs" />
     <Compile Include="ImportCDRs.cs" />
     <Compile Include="PrepareInvalidCDRsForDBApply.cs" />
+    <Compile Include="PrepareTrafficStatsForDBApply.cs" />
     <Compile Include="PrepareMainCDRsForDBApply.cs" />
     <Compile Include="ProcessBillingCDR.cs" />
     <Compile Include="InitializeObjects.cs" />
