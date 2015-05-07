@@ -11,6 +11,8 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
+
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {
@@ -73,6 +75,11 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 {
                 }
             });
+
+
+            //NumberProfileDataManager x = new NumberProfileDataManager();
+            //x.LoadNormalCDR(DateTime.Parse("2015-03-10 04:00:00"), DateTime.Parse("2015-03-20 06:00:00"), (int) Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day);
+
 
 
 

@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CriteriaDefinition.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="NumberCriteriaBatch.cs" />
+    <Compile Include="NormalCDR.cs" />
     <Compile Include="NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

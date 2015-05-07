@@ -103,6 +103,9 @@
     <Reference Include="Vanrise.Data">
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data.MySQL">
+      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.MySQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.SQL.dll</HintPath>
     </Reference>

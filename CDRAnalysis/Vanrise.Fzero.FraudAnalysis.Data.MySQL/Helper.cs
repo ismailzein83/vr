@@ -24,6 +24,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             return null;
         }
 
+
+
         public static decimal? AsNullableDecimal(this string s)
         {
             decimal value;
@@ -42,10 +44,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             return null;
         }
 
+
+        public static DateTime AsDateTime(this string s)
+        {
+            DateTime value;
+            if (DateTime.TryParse(s, out value))
+                return value;
+            else
+                return DateTime.Now;
+        }
+
         public static int AsInt(this string s)
         {
             int value;
             if (int.TryParse(s, out value))
+                return value;
+
+            return 0;
+        }
+
+
+        public static Int16 AsShortInt(this string s)
+        {
+            Int16 value;
+            if (Int16.TryParse(s, out value))
                 return value;
 
             return 0;
