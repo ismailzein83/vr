@@ -1016,3 +1016,16 @@ input.ui-grid-filter-input[type="text"] {
         pointer-events: none;
         opacity: 0.5;
     }
+
+/**************START Pagination*********/
+
+    .pagination {
+        margin: 0px !important;
+    }
+
+    .pagination > li > a, .pagination > li > span {
+        background-color: transparent;
+        border: none;
+    }
+
+/**************END Pagination*********/

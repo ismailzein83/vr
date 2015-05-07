@@ -8,15 +8,16 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
         restrict: 'E',
         scope: {
             onReady: '=',
-            hidesettings: '@'
+            hidesettings: '@',
+            menuactions: '='
         },
         controller: function ($scope, $element) {
             var controller = this;
             var chartObj;
             var currentChartSource;
             var currentChartSettings;
-            var isChartAvailable = false;           
-
+            var isChartAvailable = false;
+            var selectedDataItem;
 
             function InitializeChartSettings()
             {
@@ -40,8 +41,12 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
 
             function onDataItemClicked(dataItem) {
                 //console.log(dataItem);
-                if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function')
+                if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function') {
                     api.onDataItemClicked(dataItem);
+                    return true;
+                }
+                else
+                    return false;
             }
 
             function renderSingleDimensionChart(chartSource) {
@@ -57,7 +62,19 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                         events:
                         {
                             click: function (e) {
-                                onDataItemClicked(currentChartSource.chartData[e.point.index]);
+                                if (e.point.sliced == true) {//it is sliced when it is clicked
+                                    $scope.$apply(function () {
+                                        hideMenu();
+                                    });
+                                    return;
+                                }
+                                selectedDataItem = currentChartSource.chartData[e.point.index];
+                                if (!onDataItemClicked(currentChartSource.chartData[e.point.index])) {
+                                    $scope.$apply(function () {
+                                        $scope.selectedEntityTitle = eval('currentChartSource.chartData[e.point.index].' + sDef.titlePath);
+                                        showMenu();
+                                    });
+                                }
                             }
                         }
                     };
@@ -287,16 +304,22 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
             $scope.isSettingsVisible = function () {
                 return (controller.hidesettings == undefined || controller.hidesettings == false) && isChartAvailable;
             }
-             
+
+            function showMenu() {
+                if (controller.menuactions != undefined && controller.menuactions.length > 0)
+                    controller.showMenu = true;
+            }
+
+            function hideMenu() {
+                controller.showMenu = false;
+            }
+
+            controller.actionClicked = function (action) {
+              //  hideMenu();
+                action.clicked(selectedDataItem);
+            }
+
             var api = {};
-
-            api.showLoader = function () {
-                $scope.isLoading = true;
-            };
-
-            api.hideLoader = function () {
-                $scope.isLoading = false;
-            };
 
             api.hideChart = function () {
                 if ($element.find('#divChart').highcharts() != undefined)
@@ -335,7 +358,6 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                         
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    
                     
                 }
             }

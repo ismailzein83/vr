@@ -37,10 +37,7 @@ appControllers.controller('ZoneMonitorController',
                     return null;
             }
             $scope.testModel = 'ZoneMonitorController';
-
-            $scope.topCounts = [5, 10, 15];
-            $scope.selectedTopCount = $scope.topCounts[1];
-
+            
             $scope.switches = [];
             $scope.selectedSwitches = [];
 
@@ -53,14 +50,19 @@ appControllers.controller('ZoneMonitorController',
             $scope.suppliers = [];
             $scope.selectedSuppliers = [];
 
-            $scope.totalDataCount = 0;
-            $scope.currentPage = 1;
-
             $scope.gridAllMeasuresScope = {};
             $scope.showResult = false;
             $scope.measures = measures;
             $scope.data = [];
             $scope.overallData = [];
+
+            $scope.mainGridPagerSettings = {
+                currentPage: 1,
+                totalDataCount: 0,
+                pageChanged: function () {
+                    getData();
+                }
+            };
         }
         
         function defineScopeMethods() {
@@ -83,7 +85,7 @@ appControllers.controller('ZoneMonitorController',
             };
 
             $scope.getData = function (asyncHandle) {
-                $scope.currentPage = 1;
+                $scope.mainGridPagerSettings.currentPage = 1;
                 resultKey = null;
                 mainGridAPI.reset();
                 resetSorting();
@@ -152,13 +154,13 @@ appControllers.controller('ZoneMonitorController',
             if (withSummary == undefined)
                 withSummary = false;
             
-            chartSelectedMeasureAPI.showLoader();
+            
             if (chartSelectedEntityAPI)
                 chartSelectedEntityAPI.hideChart();
 
-            var count = $scope.selectedTopCount;
+            var count = $scope.mainGridPagerSettings.itemsPerPage;
            
-            var fromRow = ($scope.currentPage - 1) * count + 1;
+            var fromRow = ($scope.mainGridPagerSettings.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;
             var filter = buildFilter();
             var getTrafficStatisticSummaryInput = {
@@ -184,7 +186,7 @@ appControllers.controller('ZoneMonitorController',
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
 
                 resultKey = response.ResultKey;
-                $scope.totalDataCount = response.TotalCount;
+                $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
                 if (withSummary) {
                     trafficStatisticSummary = response.Summary;
                     $scope.overallData.length = 0;
@@ -204,7 +206,6 @@ appControllers.controller('ZoneMonitorController',
                 isSucceeded = true;
             })
                 .finally(function () {
-                    chartSelectedMeasureAPI.hideLoader();
                     if (asyncHandle)
                         asyncHandle.operationDone(isSucceeded);
                     $scope.isGettingData = false;
@@ -272,9 +273,8 @@ appControllers.controller('ZoneMonitorController',
             return filterIds;
         }
 
-        function getAndShowEntityStatistics() {
-           
-            chartSelectedEntityAPI.showLoader();
+        function getAndShowEntityStatistics() {           
+            $scope.isGettingEntityStatistics = true;
             AnalyticsAPIService.GetTrafficStatistics(4, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
             .then(function (response) {
                 var chartData = response;
@@ -299,7 +299,7 @@ appControllers.controller('ZoneMonitorController',
                 chartSelectedEntityAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
             })
             .finally(function () {
-                chartSelectedEntityAPI.hideLoader();
+                $scope.isGettingEntityStatistics = false;
             });;
         }
 

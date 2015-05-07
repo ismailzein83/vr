@@ -65,8 +65,7 @@
                 return;
             
             $scope.profit.length = 0;
-            $scope.chartSaleCostProfitAPI.showLoader();
-            $scope.chartProfitAPI.showLoader();
+            $scope.isGettingData = true;
             var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
             BIAPIService.GetMeasureValues(selectedTimeDimension.value, fromDate, toDate, [1, 2, 3])
                 .then(function (response) {
@@ -111,8 +110,7 @@
                     $scope.chartProfitAPI.renderChart(chartData, chartDefinition2, seriesDefinitions2, xAxisDefinition2);
                 })
                 .finally(function () {
-                    $scope.chartSaleCostProfitAPI.hideLoader();
-                    $scope.chartProfitAPI.hideLoader();
+                    $scope.isGettingData = false;
                     if (asyncHandle)
                         asyncHandle.operationDone();
                 });

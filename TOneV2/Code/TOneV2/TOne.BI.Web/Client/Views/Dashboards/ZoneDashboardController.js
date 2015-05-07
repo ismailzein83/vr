@@ -35,6 +35,35 @@
             };
 
             $scope.data = [];
+
+            var actions = [
+                    {
+                        name: "Zone Summary",
+                        clicked: function (zoneItem) {
+                            $scope.zoneId = zoneItem.EntityId;
+                            $scope.zoneName = zoneItem.EntityName;
+                            var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
+                            $scope.fromDate = selectedDateTimeFilter.fromDate;
+                            $scope.toDate = selectedDateTimeFilter.toDate;
+                            var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-fade-and-scale" });
+                        }
+                    },
+                    {
+                        name: "Zone Details",
+                        clicked: function (zoneItem) {
+                            $location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName)
+                        }
+                    }
+            ];
+            var actions1 = [{ name: 'test', clicked: function (zoneItem) { } }];
+            $scope.zoneMenuActions = 
+            function (zoneItem) {
+                if (zoneItem.Values[1] > 200000)
+                    return null;
+                if (zoneItem.Values[1] > 50000)
+                    return actions1;
+                return actions;
+            }
         }
 
         var chartTopDestinationsAPI;
@@ -78,30 +107,6 @@
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
         }
 
-        function defineGrid() {
-            columns = [];
-            var zoneColumn = {
-                headerText: 'Zone Name',
-                field: 'EntityName'
-            };
-            columns.push(zoneColumn);
-
-            var valColumnIndex = 0;
-            angular.forEach($scope.optionsMeasureTypes.datasource, function (measure) {
-                var colDef = {
-                    headerText: measure.name,
-                    field: 'Values[' + valColumnIndex++ + ']',
-                    type: "Number"
-                };
-                columns.push(colDef);
-            });
-            var gridOptions = {
-                columns: columns,
-                maxHeight: 700
-            };
-            gridMainAPI.defineGrid(gridOptions);
-        }
-
         function getAndShowTopDestination(asyncHandle) {
             if (!chartTopDestinationsAPI)
                 return;
@@ -116,17 +121,17 @@
             angular.forEach($scope.optionsMeasureTypes.datasource, function (itm) {
                 measures.push(itm.value);
             });
-            $scope.data.length = 0;
-            chartTopDestinationsAPI.showLoader();
+            $scope.isGettingData = true;
             BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
+                $scope.data.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.data.push(itm);
                 });
                 var chartData = response;
                 var chartDefinition = {
                     type: "pie",
-                  //  title: "TOP DESTINATIONS",
+                    //  title: "TOP DESTINATIONS",
                     yAxisTitle: "Value"
                 };
 
@@ -139,7 +144,7 @@
                 chartTopDestinationsAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
             })
                 .finally(function () {
-                    chartTopDestinationsAPI.hideLoader();
+                    $scope.isGettingData = false;
                     if (asyncHandle)
                         asyncHandle.operationDone();
                 });
@@ -159,7 +164,7 @@
             angular.forEach(measures, function (m) {
                 measureValues.push(m.value);
             });
-            chartZoneReadyAPI.showLoader();
+            $scope.isGettingZoneData = true;
             BIAPIService.GetEntityMeasuresValues(BIEntityTypeEnum.SaleZone.value, $scope.selectedZoneId, BITimeDimensionTypeEnum.Daily.value, $scope.fromDate, $scope.toDate, measureValues)
             .then(function (response) {
                 var chartData = response;                
@@ -186,7 +191,7 @@
                 chartZoneReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
             })
             .finally(function () {
-                chartZoneReadyAPI.hideLoader();
+                $scope.isGettingZoneData = false;
             });;
         }
     });

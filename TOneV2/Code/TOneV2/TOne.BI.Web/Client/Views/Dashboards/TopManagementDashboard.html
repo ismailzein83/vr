@@ -27,26 +27,20 @@
             </div>
         </vr-actionbar>
     </vr-row>
-    <vr-row>
-        <vr-columns colnum="12" simplecol>
-            <div class="panel-primary panel-vr">
-                <div class="panel-heading">Sale / Cost / Profit</div>
-                <div class="panel-body">
-                    <vr-chart data-on-ready="chartSaleCostProfitReady"></vr-chart>
-                </div>
-            </div>
-
-        </vr-columns>
-    </vr-row>
-
-    <vr-row>
-        <vr-columns colnum="12" simplecol>
-            <div class="panel-primary panel-vr">
-                <div class="panel-heading">Profit</div>
-                <div class="panel-body">
-                    <vr-chart data-on-ready="chartProfitReady"></vr-chart>
-                </div>
-            </div>
-        </vr-columns>
-    </vr-row>
+    <div vr-loader="isGettingData">
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-section title="Sale / Cost / Profit">
+                        <vr-chart data-on-ready="chartSaleCostProfitReady"></vr-chart>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-section title="Profit">
+                        <vr-chart data-on-ready="chartProfitReady"></vr-chart>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </div>   
 </vr-panel>

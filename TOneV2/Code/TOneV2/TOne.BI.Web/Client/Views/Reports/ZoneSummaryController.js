@@ -57,19 +57,23 @@ appControllers.controller('ZoneSummaryController',
         }
 
         function getData() {
-            $scope.data.length = 0;
+            
             var measureTypeValues = [];
             angular.forEach(measureTypes, function (measureType) {
                 measureTypeValues.push(measureType.value);
             });
+            $scope.isGettingData = true;
             BIAPIService.GetEntityMeasuresValues(BIEntityTypeEnum.SaleZone.value, $scope.zoneId, $scope.selectedTimeDimensionType.value,
                 $scope.fromDate, $scope.toDate, measureTypeValues)
             .then(function (response) {
+                $scope.data.length = 0;
                 BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
 
                 angular.forEach(response, function (itm) {
                     $scope.data.push(itm);
                 });
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
         }
 

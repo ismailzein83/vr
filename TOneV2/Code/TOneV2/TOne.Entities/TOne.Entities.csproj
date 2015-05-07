@@ -106,6 +106,7 @@
     <Compile Include="CacheObjectType.cs" />
     <Compile Include="GenericEntity.cs" />
     <Compile Include="GenericEntityStatus.cs" />
+    <Compile Include="Security\SecureActionAttribute.cs" />
     <Compile Include="Security\AuthenticationOutput.cs" />
     <Compile Include="CodeList.cs" />
     <Compile Include="CodeNode.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Security\RolePermission.cs" />
     <Compile Include="Security\Role.cs" />
     <Compile Include="Security\RoleMember.cs" />
+    <Compile Include="Security\SecureControllerAttribute.cs" />
     <Compile Include="SwitchInfo.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="TOneQueue.cs" />

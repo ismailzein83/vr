@@ -37,6 +37,25 @@
                 ]
             };
 
+            $scope.chartTopDestinationMenuActions = [
+                {
+                    name: "Zone Summary",
+                    clicked: function (zoneItem) {
+                        $scope.zoneId = zoneItem.EntityId;
+                        $scope.zoneName = zoneItem.EntityName;
+                        var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
+                        $scope.fromDate = selectedDateTimeFilter.fromDate;
+                        $scope.toDate = selectedDateTimeFilter.toDate;
+                        var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-fade-and-scale" });
+                    }
+                },
+                {
+                    name: "Zone Details",
+                    clicked: function (zoneItem) {
+                        $location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName)
+                    }
+                }
+            ];
         }
         var chartTopDestinationsAPI;
         var chartTopCustomersAPI;
@@ -45,33 +64,17 @@
 
             $scope.chartTopDestinationsReady = function (api) {
                 chartTopDestinationsAPI = api;
-                chartTopDestinationsAPI.onDataItemClicked = function (zoneItem) {
-                   
-                    //$scope.$root.$apply(function () {
-                        $scope.zoneId = zoneItem.EntityId;
-                        $scope.zoneName = zoneItem.EntityName;
-                        var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
-                        $scope.fromDate = selectedDateTimeFilter.fromDate;
-                        $scope.toDate = selectedDateTimeFilter.toDate;
-                        var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-fade-and-scale" });
-                       // $animate.enabled(true);
-                      //  addModal.$promise.then(addModal.show);
-                        //$location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName).replace();
-                    //});
-                   
-                   
-                };
-                updateTopDestinationsChart();
+                updateCharts();
             };
 
             $scope.chartTopCustomersReady = function (api) {
                 chartTopCustomersAPI = api;
-                updateTopCustomersChart();
+                updateCharts();
             };
 
             $scope.chartTopSuppliersReady = function (api) {
                 chartTopSuppliersAPI = api
-                updateTopSuppliersChart();
+                updateCharts();
             };
 
             $scope.updateCharts = function (asyncHandle) {
@@ -87,15 +90,20 @@
         }
 
         function updateCharts(asyncHandle) {
+            if (chartTopDestinationsAPI == undefined || chartTopCustomersAPI == undefined || chartTopSuppliersAPI == undefined)
+                return;
             var finishedTasks = 0;
             var taskHandle = {
                 operationDone: function () {
                     finishedTasks++;
-                    if (finishedTasks == 3)
+                    if (finishedTasks == 3) {
                         if (asyncHandle)
                             asyncHandle.operationDone();
+                        $scope.isGettingData = false;
+                    }
                 }
             };
+            $scope.isGettingData = true;
             updateTopDestinationsChart(taskHandle);
             updateTopCustomersChart(taskHandle);
             updateTopSuppliersChart(taskHandle);
@@ -129,7 +137,6 @@
             if (measureType == undefined || measureType == null || measureType.length == 0)
                 return;
 
-            chartAPI.showLoader();
             var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
             BIAPIService.GetTopEntities(entityType, measureType.value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.value])
                 .then(function (response) {
@@ -153,7 +160,6 @@
                     chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
                 })
                 .finally(function () {
-                    chartAPI.hideLoader();
                     if (asyncHandle)
                         asyncHandle.operationDone();
                 });

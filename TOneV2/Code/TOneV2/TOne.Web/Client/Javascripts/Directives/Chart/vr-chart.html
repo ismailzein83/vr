@@ -1,11 +1,21 @@
-﻿<div style="position:relative">
-    <img src="/images/loader-mask.gif" ng-show="isLoading" style="position:absolute;top:45%;left:45%" />
-    <div ng-class="{'divLoading': isLoading}">
-        <div ng-show="isSettingsVisible()" style="z-index: 90; position: relative; ">
-            <div style="position: absolute; bottom: -32px;right:35px;cursor:pointer"><span class="glyphicon  glyphicon-cog" ng-click="changeSettings()"></span></div>
-        </div>
-        <div id="divChart" />
+﻿<div >
+    <div>
+        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenu" style="position: absolute;">
+            <li role="presentation">
+                <span style="padding: 3px; font-weight: bold; font-size: 11px">
+                    {{selectedEntityTitle}}
+                </span>
+                <div ng-repeat="action in ctrl.menuactions" class="mark-select " style="padding-left: 2px; ">
+                    <div class=" hand-cursor" ng-click="ctrl.actionClicked(action)"><span style="font-size:11px">{{action.name}}</span></div>
+                </div>
+            </li>
+        </ul>
     </div>
-    
+
+    <div ng-show="isSettingsVisible()" style="z-index: 90; position: relative; ">
+        <div style="position: absolute; bottom: -32px;right:35px;cursor:pointer"><span class="glyphicon  glyphicon-cog" ng-click="changeSettings()"></span></div>
+    </div>
+    <div id="divChart" />
+
 </div>
 

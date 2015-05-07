@@ -8,7 +8,6 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
         scope: {
             onclick: '=',
             isasynchronous: '=',
-            isdisabled: '=',
             formname: '@'
         },
         controller: function ($scope, $element) {
@@ -51,8 +50,6 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
                     isDisabled = true;
                 else
                     isDisabled = false;
-                if (this.isdisabled != undefined)
-                    this.isdisabled = isDisabled;
                 return isDisabled;
             };
 

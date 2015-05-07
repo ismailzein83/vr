@@ -2,18 +2,10 @@
 var RoutingAPIService = function (BaseAPIService) {
 
     return ({
-        getAllRouteRule:getAllRouteRule,
         getRouteRuleDetails: getRouteRuleDetails,
         saveRouteRule: saveRouteRule,
         GetFilteredRouteRules: GetFilteredRouteRules,
     });
-    function getAllRouteRule(page, pageSize) {      
-        return BaseAPIService.get("/api/routing/GetAllRouteRule",
-            {
-                pageNumber: page,
-                pageSize: pageSize
-            });
-    }
     function getRouteRuleDetails(RouteRuleId) {
         return BaseAPIService.get("/api/routing/GetRouteRuleDetails",
             {

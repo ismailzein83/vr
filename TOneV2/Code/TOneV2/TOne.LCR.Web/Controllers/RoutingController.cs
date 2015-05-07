@@ -12,6 +12,7 @@ using System.Web.Http.Controllers;
 
 namespace TOne.LCR.Web.Controllers
 {
+    [TOne.Entities.SecureController("/Routing/RouteRuleManagement")]
     [CustomJSONTypeHandlingAttribure]
     public class RoutingController : ApiController
     {
@@ -30,21 +31,9 @@ namespace TOne.LCR.Web.Controllers
           
 
         }
-        [HttpGet]
-        public IEnumerable<RouteRuleSummaryModel> GetAllRouteRule( int pageNumber, int pageSize)
-        {
-            System.Threading.Thread.Sleep(1000);
-
-            RouteRuleManager manager = new RouteRuleManager();
-            IEnumerable<RouteRuleSummaryModel> rows = Mappers.MapRouteRules(manager.GetAllRouteRule());
-            rows = rows.Skip((pageNumber) * pageSize).Take(pageSize);
-            return rows;
-           
-           // return Mappers.MapRouteRules(manager.GetAllRouteRule());
-
-        }
 
         [HttpPost]
+        [TOne.Entities.SecureAction("View")]
         public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRouteRulesInput filter)
         {
             RouteRuleManager manager = new RouteRuleManager();
@@ -56,6 +45,7 @@ namespace TOne.LCR.Web.Controllers
         }
 
         [HttpGet]
+        [TOne.Entities.SecureAction("View")]
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
            
