@@ -11,11 +11,15 @@ namespace TOne.CDR.Data
 
         void ApplyInvalidCDRsToDB(Object preparedInvalidCDRs);
 
+        void ApplyTrafficStatsToDB(Object preparedTrafficStats);
+
         Object PrepareCDRsForDBApply(System.Collections.Generic.List<TABS.CDR> cdrs,int SwitchID);
 
         void ApplyCDRsToDB(Object preparedCDRs);
 
         Object PrepareMainCDRsForDBApply(System.Collections.Generic.List<TOne.CDR.Entities.BillingCDRMain> cdrs);
+
+        Object PrepareTrafficStatsForDBApply(System.Collections.Generic.List<TOne.CDR.Entities.TrafficStatistic> trafficStatistics);
 
     }
 }

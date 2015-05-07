@@ -48,6 +48,7 @@ namespace TOne.CDRProcess.Activities
         protected override void DoWork(PrepareTrafficStatsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             TimeSpan totalTime = default(TimeSpan);
+            //ITrafficStatisticDataManager dataManager=TrafficStatisticDataManager.
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
