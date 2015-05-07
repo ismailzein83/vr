@@ -65,6 +65,31 @@ namespace TOne.CDR.Entities
 
         public int SubscriberID { get; set; }
 
+
+        public static DateTime? GetFirstValidDateTime(params DateTime?[] times)
+        {
+            DateTime? result = null;
+            foreach (var time in times)
+                if (time.HasValue) return time;
+            return result;
+        }
+
+        /// <summary>
+        /// Calculated PDD in seconds
+        /// </summary>
+        public virtual decimal PDDInSeconds
+        {
+            get
+            {
+                // If not alert, connect
+                var time = GetFirstValidDateTime(Alert, Connect);
+                var pdd = time.HasValue ? // alert or connect
+                        (decimal)time.Value.Subtract(Attempt).TotalSeconds
+                        : (Disconnect.HasValue ? (decimal)Disconnect.Value.Subtract(Attempt).TotalSeconds - DurationInSeconds : 0);
+                return pdd < 0 ? 0 : pdd;
+            }
+        }
+
         public BillingCDRBase()
         {
         }
