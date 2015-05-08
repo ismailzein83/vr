@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
 
             MySQLManager manager = new MySQLManager();
-            string query_GetCDRRange = "SELECT * FROM NormalCDR  where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
+            string query_GetCDRRange = "SELECT SQL_BIG_RESULT * FROM NormalCDR  where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
             manager.ExecuteReader(query_GetCDRRange,
                 (cmd) =>
                 {
