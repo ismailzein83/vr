@@ -224,9 +224,11 @@ namespace TOne.CDR.Data.SQL
                          cdr.OurCode,
                           cdr.SupplierCode,
                           cdr.CDPNOut,
-                        cdr.SubscriberID,
-                        cdr.SIP,
-                        0));//
+                           cdr.SIP,
+                        cdr.SubscriberID));//
+                        //cdr.SubscriberID,
+                        //cdr.SIP,
+                        //0));//
 
         }
 
