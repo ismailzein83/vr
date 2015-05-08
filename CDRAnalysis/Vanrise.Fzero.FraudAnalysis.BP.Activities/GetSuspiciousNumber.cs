@@ -51,7 +51,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
             FraudManager manager = new FraudManager(inputArgument.strategy);
-
+            int index = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -69,6 +69,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 SuspiciousNumber sNumber = new SuspiciousNumber();
                                 if (manager.IsNumberSuspicious(number, out sNumber))
                                 {
+                                    //Console.WriteLine("sNumber: " + ++index);
                                     sNumbers.Add(sNumber);   
                                 }
                             }
