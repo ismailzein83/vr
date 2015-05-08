@@ -145,7 +145,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         //Console.WriteLine((++index).ToString());
 
                         _destination = reader["Destination"].ToString();
-                        _callType = Helper.AsInt(reader["Call_Type"].ToString());
+                        _callType = GetReaderValue<int>(reader, "Call_Type");
                         _bTSId = Helper.AsInt(reader["BTS_Id"].ToString());
                         _connectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
                         _id = Helper.AsInt(reader["Id"].ToString());
