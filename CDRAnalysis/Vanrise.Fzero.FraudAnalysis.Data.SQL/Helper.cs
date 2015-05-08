@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Data;
-using MySql.Data.MySqlClient;
 using System.IO;
 using Vanrise.Data.SQL;
 

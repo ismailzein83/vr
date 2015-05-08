@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         static ObjectFactory s_objectFactory;
         static FraudDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.FraudAnalysis.Data.MYSQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.FraudAnalysis.Data.SQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager

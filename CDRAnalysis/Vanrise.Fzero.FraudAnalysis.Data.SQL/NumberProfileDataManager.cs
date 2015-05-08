@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using System.IO;
 using Vanrise.Data.SQL;
 
@@ -79,16 +79,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
 
             int PeriodId = 6;
+            
 
-
-            SQLManager manager = new SQLManager();
             string query_GetCDRRange = "SELECT * FROM NormalCDR  where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
-            manager.ExecuteReader(query_GetCDRRange,
-                (cmd) =>
-                {
-                    cmd.Parameters.AddWithValue("@From", from);
-                    cmd.Parameters.AddWithValue("@To", to);
-                }, (reader) =>
+            ExecuteReaderText(query_GetCDRRange, (reader) =>
                 {
                     List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
 
@@ -302,6 +296,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     if (numberProfileBatch.Count > 0)
                         onBatchReady(numberProfileBatch);
 
+                },
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@From", from));
+                    cmd.Parameters.Add(new SqlParameter("@To", to));
                 });
         }
 
