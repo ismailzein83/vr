@@ -1559,7 +1559,7 @@ namespace TABS
                         index++; //C.PaymentTerms = reader[index].ToString() == "0.00" ? 0 : int.Parse(reader[index].ToString());
                         index++; //C.Tax1 = decimal.Parse(reader[index].ToString());
                         index++; //C.Tax2 = decimal.Parse(reader[index].ToString());
-                        index++; C.IsTaxAffectsCost = char.Parse(reader[index].ToString()) == 'Y' ? true : false;
+                        index++; C.IsTaxAffectsCost = reader.IsDBNull(index) ? false : char.Parse(reader[index].ToString()) == 'Y' ? true : false;
                         index++; //C.TaxFormula = reader.IsDBNull(index) ? "" : reader[index].ToString();
                         index++; C.VAT = decimal.Parse(reader[index].ToString());
                         index++; index++; index++; C.IsDeleted = char.Parse(reader[index].ToString()) == 'Y' ? true : false;
