@@ -8,9 +8,9 @@ using Vanrise.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
 using Vanrise.Data.SQL;
-using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
 
-namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
+
+namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class NumberProfileDataManager : BaseSQLDataManager, INumberProfileDataManager
     {
@@ -81,7 +81,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             int PeriodId = 6;
 
 
-            MySQLManager manager = new MySQLManager();
+            SQLManager manager = new SQLManager();
             string query_GetCDRRange = "SELECT * FROM NormalCDR  where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
             manager.ExecuteReader(query_GetCDRRange,
                 (cmd) =>

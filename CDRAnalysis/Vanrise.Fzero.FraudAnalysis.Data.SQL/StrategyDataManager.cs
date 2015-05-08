@@ -7,14 +7,14 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
-using Vanrise.Data.MySQL;
+using Vanrise.Data.SQL;
 
-namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
+namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class StrategyDataManager : BaseMySQLDataManager, IStrategyDataManager 
+    public class StrategyDataManager : BaseSQLDataManager, IStrategyDataManager 
     {
         public StrategyDataManager()
-            : base("CDRDBConnectionStringMySQL")
+            : base("CDRDBConnectionString")
         {
 
         }
@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             Strategy st = new Strategy();
             
 
-            MySQLManager manager = new MySQLManager();
+            SQLManager manager = new SQLManager();
 
             st.Id = manager.GetItem(query0, (cmd) =>
             {

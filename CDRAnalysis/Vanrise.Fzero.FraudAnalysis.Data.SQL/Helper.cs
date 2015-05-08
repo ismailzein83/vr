@@ -7,10 +7,10 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
-using Vanrise.Data.MySQL;
-using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
+using Vanrise.Data.SQL;
 
-namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
+
+namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public static class Helper
     {
