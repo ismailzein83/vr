@@ -24,47 +24,47 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {
 
-            decimal result = 0;
+            decimal? result = 0;
 
             switch ((Enums.Criteria)criteria.CriteriaId)
             {
                 case Enums.Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls://1
                     if (numberProfile.totalInVolume != 0 && numberProfile.totalOutVolume != 0)
-                        result = (decimal)(numberProfile.countInCalls / numberProfile.countOutCalls);
+                        result = (decimal?)(numberProfile.countInCalls / numberProfile.countOutCalls);
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Count_of_Distinct_Destinations://2
-                    result = (decimal)numberProfile.diffOutputNumb;
+                    result = (decimal?)numberProfile.diffOutputNumb;
                     break;
 
 
                 case Enums.Criteria.Count_outgoing_calls://3
-                    result = (decimal)numberProfile.countOutCalls;
+                    result = (decimal?)numberProfile.countOutCalls;
                     break;
 
                 case Enums.Criteria.Count_of_Total_BTS_Per_MSISDN://4
                     if (numberProfile.totalBTS != null)
-                        result = (decimal)numberProfile.totalBTS;
+                        result = (decimal?)numberProfile.totalBTS;
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Total_Originated_Volume://5
-                    result = (decimal)numberProfile.totalOutVolume;
+                    result = (decimal?)numberProfile.totalOutVolume;
                     break;
 
                 case Enums.Criteria.Count_of_Total_IMEI_Per_MSISDN://6
-                    result = (decimal)numberProfile.totalIMEI;
+                    result = (decimal?)numberProfile.totalIMEI;
                     break;
 
 
                 case Enums.Criteria.Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration://7
                     if (numberProfile.callInDurAvg != 0 && numberProfile.callOutDurAvg != 0)
-                        result = (decimal)(numberProfile.callInDurAvg / numberProfile.callOutDurAvg);
+                        result = (decimal?)(numberProfile.callInDurAvg / numberProfile.callOutDurAvg);
                     else
                         result = 0;
                     break;
@@ -72,7 +72,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 case Enums.Criteria.Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls://8
                     if (numberProfile.countInOffNet != 0 && numberProfile.countOutOffNet != 0)
-                        result = (decimal)(numberProfile.countInOffNet / numberProfile.countOutOffNet);
+                        result = (decimal?)(numberProfile.countInOffNet / numberProfile.countOutOffNet);
                     else
                         result = 0;
                     break;
@@ -99,7 +99,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 case Enums.Criteria.Voice_Only_Service_Usage://11
                     if (numberProfile.countOutSMS != null)
-                        result = (decimal)numberProfile.countOutSMS;
+                        result = (decimal?)numberProfile.countOutSMS;
                     else
                         result = 0;
                 break;
@@ -107,7 +107,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 case Enums.Criteria.Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls://12
                     if (numberProfile.diffOutputNumb != 0 && numberProfile.countOutCalls != 0)
-                        result = (decimal)(numberProfile.diffOutputNumb / numberProfile.countOutCalls);
+                        result = (decimal?)(numberProfile.diffOutputNumb / numberProfile.countOutCalls);
                     else
                         result = 0;
                 break;
@@ -115,7 +115,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 case Enums.Criteria.Ratio_International_Originated_Vs_Outgoing_Calls://13
                     if (numberProfile.countInInter != 0 && numberProfile.countOutCalls != 0)
-                        result = (decimal)(numberProfile.countInInter / numberProfile.countOutCalls);
+                        result = (decimal?)(numberProfile.countInInter / numberProfile.countOutCalls);
                     else
                         result = 0;
                 break;
@@ -129,12 +129,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 break;
 
                 case Enums.Criteria.Data_Usage://15
-                    result = (decimal)(numberProfile.totalDataVolume);
+                result = (decimal?)(numberProfile.totalDataVolume);
                 break;
 
             }
 
-            return result;
+             if ( result==null)
+                result=0;
+            
+            return result.Value;
         }
 
         public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
