@@ -8,10 +8,10 @@ namespace TOne.CDR.Data.SQL
 {
     public class CDRTargetDataManager : BaseTOneDataManager, ICDRTargetDataManager
     {
-        public CDRTargetDataManager()
-            : base("CDRTargetDBConnString")
-        {
-        }
+        //public CDRTargetDataManager()
+        //    : base("CDRTargetDBConnString")
+        //{
+        //}
 
         public long GetMinCDRMainID()
         {
