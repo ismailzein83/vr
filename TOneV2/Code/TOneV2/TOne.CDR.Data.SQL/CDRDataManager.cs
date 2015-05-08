@@ -28,9 +28,9 @@ namespace TOne.CDR.Data.SQL
                     if (cdr.cost != null)
                     {
                         wrCost.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}",
-                                cdr.cost.ID,
+                                cdr.ID,
                                 cdr.cost.ZoneID.ToString(),
-                                cdr.cost.Net,
+                                Math.Round(cdr.cost.Net, 5),
                                 cdr.cost.CurrencySymbol != null ? cdr.cost.CurrencySymbol.ToString() : "",
                                 cdr.cost.RateValue,
                                 cdr.cost.RateID.ToString(),
@@ -45,7 +45,7 @@ namespace TOne.CDR.Data.SQL
                                 cdr.cost.CommissionID.ToString(),
                                 cdr.cost.ExtraChargeValue,
                                 cdr.cost.ExtraChargeID.ToString(),
-                                cdr.cost.Updated.ToString("yyyy-MM-dd HH:mm:ss"),//ToShortDateString
+                                cdr.cost.Updated.ToShortDateString(),
                                 cdr.cost.DurationInSeconds,
                                 cdr.cost.Code,
                                 cdr.cost.Attempt.ToString("yyyy-MM-dd HH:mm:ss.fff")));
@@ -54,9 +54,9 @@ namespace TOne.CDR.Data.SQL
                     if (cdr.sale != null)
                     {
                         wrSale.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}",
-                            cdr.sale.ID,
+                            cdr.ID,
                             cdr.sale.ZoneID.ToString(),
-                            cdr.sale.Net,
+                            Math.Round(cdr.sale.Net, 5),
                             cdr.sale.CurrencySymbol != null ? cdr.sale.CurrencySymbol : "",
                             cdr.sale.RateValue,
                             cdr.sale.RateID.ToString(),
@@ -71,7 +71,7 @@ namespace TOne.CDR.Data.SQL
                             cdr.sale.CommissionID.ToString(),
                             cdr.sale.ExtraChargeValue,
                             cdr.sale.ExtraChargeID.ToString(),
-                            cdr.sale.Updated.ToString("yyyy-MM-dd HH:mm:ss"),//ToShortDateString
+                            cdr.sale.Updated.ToShortDateString(),
                             cdr.sale.DurationInSeconds,
                             cdr.sale.Code,
                             cdr.sale.Attempt.ToString("yyyy-MM-dd HH:mm:ss.fff")));
@@ -112,12 +112,18 @@ namespace TOne.CDR.Data.SQL
 
         private BulkInsertInfo PrepareMainCDRsForDBApply2(List<TOne.CDR.Entities.BillingCDRMain> cdrs)
         {
+            CDRTargetDataManager cDRTargetDataManager = new CDRTargetDataManager();
+            long lastPricedMainID = cDRTargetDataManager.GetMinCDRMainID();
+            lastPricedMainID = lastPricedMainID - 1;
             string filePath = GetFilePathForBulkInsert();
 
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
+
                 foreach (TOne.CDR.Entities.BillingCDRMain cdr in cdrs)
                 {
+                    cdr.ID = lastPricedMainID;
+                    lastPricedMainID = lastPricedMainID - 1;
                     PrepareCDRBillingMainBaseForDBApply(cdr, wr);
                 }
                 wr.Close();
@@ -227,11 +233,14 @@ namespace TOne.CDR.Data.SQL
         public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
-
+            CDRTargetDataManager cDRTargetDataManager = new CDRTargetDataManager();
+            long lastPricedInvalidID = cDRTargetDataManager.GetMinCDRInvalidID();
+            lastPricedInvalidID = lastPricedInvalidID - 1;
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (TOne.CDR.Entities.BillingCDRInvalid cdr in cdrs)
                 {
+                    cdr.ID = --lastPricedInvalidID;
                     PrepareCDRBillingInvalidBaseForDBApply(cdr, wr);
                 }
                 wr.Close();

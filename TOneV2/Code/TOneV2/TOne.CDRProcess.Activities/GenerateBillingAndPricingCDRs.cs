@@ -121,7 +121,16 @@ namespace TOne.CDRProcess.Activities
 
                                 if (main != null && main.sale != null && main.OurCode != null)
                                     main.sale.Code = main.OurCode;
-
+                                if (main.sale != null)
+                                {
+                                    main.sale.Attempt = main.Attempt;
+                                    main.sale.Updated = DateTime.Now;
+                                }
+                                if (main.cost != null)
+                                {
+                                    main.cost.Attempt = main.Attempt;
+                                    main.cost.Updated = DateTime.Now;
+                                }
                                 CDRMains.MainCDRs.Add(main);
 
                             }
