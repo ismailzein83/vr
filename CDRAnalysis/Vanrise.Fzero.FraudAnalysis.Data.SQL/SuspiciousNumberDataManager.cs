@@ -21,49 +21,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers, Strategy strategy)
         {
-            string filename = GetFilePathForBulkInsert();
-            string sFields = "";
 
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            foreach (SuspiciousNumber suspiciousNumber in suspiciousNumbers)
+            {
+                string sValues = "";
 
                 for (int i = 1; i <= 15; i++)
                 {
-                    if (suspiciousNumbers.FirstOrDefault().CriteriaValues.Where(x => x.Key == i).Count() == 1)
+                    if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
-                        sFields = sFields + ", Criteria" + i.ToString();
+                        sValues = sValues + ", '" + suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString() + "'";
+                    }
+                    else
+                    {
+                        sValues = sValues + ", null";
                     }
                 }
 
+                stream.WriteRecord("'0', '" + suspiciousNumber.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + suspiciousNumber.Number + "' " + sValues + ", '" + suspiciousNumber.SuspectionLevel.ToString() + "', '" + strategy.Id.ToString() + "', '" + suspiciousNumber.PeriodId.ToString() + "'");
 
-
-            using (StreamWriter sw = new StreamWriter(filename))
-            {
-                foreach (SuspiciousNumber sn in suspiciousNumbers)
-                {
-                    string sValues = "";
-
-                    for (int i = 1; i <= 15; i++)
-                    {
-                        if (sn.CriteriaValues.Where(x => x.Key == i).Count() == 1)
-                        {
-                            sValues = sValues + ", '" + sn.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString() +"'";
-                        }
-                    }
-
-                    sw.WriteLine("'0', '" + sn.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + sn.Number + "' " + sValues + ", '" + sn.SuspectionLevel.ToString() + "', '" + strategy.Id.ToString() + "', '" + sn.PeriodId.ToString() +"'");
-
-
-                    //Id, DateDay, SubscriberNumber, Criteria1, Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7, Criteria8, Criteria9, Criteria10, Criteria11, Criteria12, Criteria13, Criteria14, Criteria15, SuspectionLevelId, StrategyId, PeriodId
-                }
-                sw.Close();
             }
 
-            MySqlConnection connection = new MySqlConnection(GetConnectionString());
-            string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE SubscriberThresholds FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspectionLevelId, StrategyId, PeriodId)  ;", filename.Replace(@"\", @"\\"));
-            connection.Open();
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.CommandTimeout = int.MaxValue;
-            cmd.ExecuteNonQuery();
-           connection.Close();
+            stream.Close();
+
+            InsertBulkToTable(
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[dbo].[SubscriberThresholds]",
+                    Stream = stream,
+                    TabLock = false,
+                    KeepIdentity = false,
+                    FieldSeparator = ','
+                });
         }
 
     }
