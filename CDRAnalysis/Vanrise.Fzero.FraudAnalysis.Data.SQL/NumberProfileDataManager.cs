@@ -103,7 +103,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
       ,[In_Trunk]
       ,[Out_Trunk]
       ,[Service_Type]
-      ,[Service_VAS_Name] FROM NormalCDR with(nolock) ";//  where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
+      ,[Service_VAS_Name] FROM NormalCDR2 with(nolock)    where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
             ExecuteReaderText(query_GetCDRRange, (reader) =>
                 {
                     List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
@@ -171,42 +171,43 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                             currentIndex = 0;
                             Console.WriteLine("{0} rows read", count);
                         }
-                        continue;
+                        //continue;
                         //Console.WriteLine((++index).ToString());
 
-                        _destination = reader["Destination"].ToString();
-                        _callType = GetReaderValue<int>(reader, "Call_Type");
-                        _bTSId = Helper.AsInt(reader["BTS_Id"].ToString());
-                        _connectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
-                        _id = Helper.AsInt(reader["Id"].ToString());
-                        _iMSI = reader["IMSI"].ToString();
-                        _durationInSeconds = Helper.AsDecimal(reader["DurationInSeconds"].ToString());
-                        _disconnectDateTime = Helper.AsDateTime(reader["DisconnectDateTime"].ToString());
-                        _callClass = reader["Call_Class"].ToString();
-                        _isOnNet = Helper.AsShortInt(reader["IsOnNet"].ToString());
-                        _subType = reader["Sub_Type"].ToString();
-                        _iMEI = reader["IMEI"].ToString();
-                        _cellId = reader["Cell_Id"].ToString();
-                        _switchRecordId = Helper.AsInt(reader["SwitchRecordId"].ToString());
-                        _upVolume = Helper.AsDecimal(reader["Up_Volume"].ToString());
-                        _downVolume = Helper.AsDecimal(reader["Down_Volume"].ToString());
-                        _cellLatitude = Helper.AsDecimal(reader["Cell_Latitude"].ToString());
-                        _cellLongitude = Helper.AsDecimal(reader["Cell_Longitude"].ToString());
-                        _inTrunk = reader["In_Trunk"].ToString();
-                        _outTrunk = reader["Out_Trunk"].ToString();
-                        _serviceType = Helper.AsInt(reader["Service_Type"].ToString());
-                        _serviceVASName = reader["Service_VAS_Name"].ToString();
-
+                        _destination = reader["Destination"] as string;
                         
+                        _callType = GetReaderValue<int>(reader, "Call_Type");
+                        _bTSId = GetReaderValue<int>(reader, "BTS_Id");
+                        _connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                        _id = (int)reader["Id"];
+                        _iMSI = reader["IMSI"] as string;
+                        _durationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                        _disconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
+                        _callClass = reader[ "Call_Class"] as string;
+                        _isOnNet = GetReaderValue<Byte>(reader, "IsOnNet");
+                        _subType = reader[ "Sub_Type"] as string;
+                        _iMEI = reader[ "IMEI"] as string;
+                        _cellId = reader[ "Cell_Id"] as string;
+                        _switchRecordId = GetReaderValue<int>(reader, "SwitchRecordId");
+                        _upVolume = GetReaderValue<Decimal>(reader, "Up_Volume");
+                        _downVolume = GetReaderValue<Decimal>(reader, "Down_Volume");
+                        _cellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude");
+                        _cellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude");
+                        _inTrunk = reader[ "In_Trunk"] as string;
+                        _outTrunk = reader[ "Out_Trunk"] as string;
+                        _serviceType = GetReaderValue<int>(reader, "Service_Type");
+                        _serviceVASName = reader[ "Service_VAS_Name"] as string;
+
+                        //continue;
                         //Check if New MSISDN
                         if (_mSISDN == string.Empty)
                         {
                             numberProfie = new NumberProfile();
-                            _mSISDN = reader["MSISDN"].ToString();
+                            _mSISDN = reader["MSISDN"] as string;
                             countOutCalls=0;
                         }
 
-                        else if (_mSISDN != reader["MSISDN"].ToString())
+                        else if (_mSISDN != reader["MSISDN"] as string)
                         {
                             numberProfileBatch.Add(numberProfie);
                             //Console.WriteLine("numberProfie: " + ++index);
@@ -218,7 +219,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                             }
 
                             numberProfie = new NumberProfile();
-                            _mSISDN = reader["MSISDN"].ToString();
+                            _mSISDN = reader["MSISDN"] as string;
                         }
 
 
