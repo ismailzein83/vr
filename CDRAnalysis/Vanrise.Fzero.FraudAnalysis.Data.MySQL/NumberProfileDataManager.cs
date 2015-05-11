@@ -253,7 +253,66 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<NormalCDR> onBatchReady)
         {
-            throw new NotImplementedException();
+            MySQLManager manager = new MySQLManager();
+            string query_GetCDRRange = @"SELECT  'Id' ,'MSISDN' ,'IMSI' ,'ConnectDateTime' ,'Destination' ,'DurationInSeconds' ,'DisconnectDateTime' ,'Call_Class'  ,'IsOnNet' ,'Call_Type' ,'Sub_Type' ,'IMEI'
+                                                ,'BTS_Id'  ,'Cell_Id'  ,'SwitchRecordId'  ,'Up_Volume'  ,'Down_Volume' ,'Cell_Latitude'  ,'Cell_Longitude'  ,'In_Trunk'  ,'Out_Trunk'  ,'Service_Type'  ,'Service_VAS_Name' FROM NormalCDR
+                                                    where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN; ";
+
+
+
+            manager.ExecuteReader(query_GetCDRRange,
+                (cmd) =>
+                {
+                    cmd.Parameters.AddWithValue("@From", from);
+                    cmd.Parameters.AddWithValue("@To", to);
+                }, (reader) =>
+            {
+
+                NormalCDR normalCDR = new NormalCDR();
+                int count = 0;
+                int currentIndex = 0;
+
+
+                while (reader.Read())
+                {
+                    normalCDR.mSISDN = reader["MSISDN"] as string;
+                    normalCDR.destination = reader["Destination"].ToString();
+                    normalCDR.callType = Helper.AsInt(reader["Call_Type"].ToString());
+                    normalCDR.bTSId = Helper.AsInt(reader["BTS_Id"].ToString());
+                    normalCDR.connectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
+                    normalCDR.id = Helper.AsInt(reader["Id"].ToString());
+                    normalCDR.iMSI = reader["IMSI"].ToString();
+                    normalCDR.durationInSeconds = Helper.AsDecimal(reader["DurationInSeconds"].ToString());
+                    normalCDR.disconnectDateTime = Helper.AsDateTime(reader["DisconnectDateTime"].ToString());
+                    normalCDR.callClass = reader["Call_Class"].ToString();
+                    normalCDR.isOnNet = Helper.AsShortInt(reader["IsOnNet"].ToString());
+                    normalCDR.subType = reader["Sub_Type"].ToString();
+                    normalCDR.iMEI = reader["IMEI"].ToString();
+                    normalCDR.cellId = reader["Cell_Id"].ToString();
+                    normalCDR.switchRecordId = Helper.AsInt(reader["SwitchRecordId"].ToString());
+                    normalCDR.upVolume = Helper.AsDecimal(reader["Up_Volume"].ToString());
+                    normalCDR.downVolume = Helper.AsDecimal(reader["Down_Volume"].ToString());
+                    normalCDR.cellLatitude = Helper.AsDecimal(reader["Cell_Latitude"].ToString());
+                    normalCDR.cellLongitude = Helper.AsDecimal(reader["Cell_Longitude"].ToString());
+                    normalCDR.inTrunk = reader["In_Trunk"].ToString();
+                    normalCDR.outTrunk = reader["Out_Trunk"].ToString();
+                    normalCDR.serviceType = Helper.AsInt(reader["Service_Type"].ToString());
+                    normalCDR.serviceVASName = reader["Service_VAS_Name"].ToString();
+
+                    currentIndex++;
+                    if (currentIndex == 10000)
+                    {
+                        count += currentIndex;
+                        currentIndex = 0;
+                        Console.WriteLine("{0} rows read", count);
+                    }
+
+                    onBatchReady(normalCDR);
+                }
+
+
+
+            });
         }
     }
 }
