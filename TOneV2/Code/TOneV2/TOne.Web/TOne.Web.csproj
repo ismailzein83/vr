@@ -670,6 +670,10 @@
       <Project>{c548bf24-a8fe-4bb5-aced-0aaf538da6ab}</Project>
       <Name>TOne.LCR.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Main.Web\TOne.Main.Web.csproj">
+      <Project>{afd16f53-67b6-4484-927a-78848377aaf9}</Project>
+      <Name>TOne.Main.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
