@@ -73,19 +73,13 @@ var TestViewController = function ($scope, CarriersService, ZonesService, Routin
     var last = false;
 
     $scope.columns = [
-        { displayname: 'last', name: 'EndEffectiveDate' },
-        { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
-        { displayname: 'Code Set', name: 'CodeSetDescription' },
-        { displayname: 'last', name: 'EndEffectiveDate' },
-        { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
-        { displayname: 'Code Set', name: 'CodeSetDescription' },
-         { displayname: 'last', name: 'EndEffectiveDate' },
+        { displayname: 'EndEffectiveDate', name: 'EndEffectiveDate' },
         { displayname: 'Carrier Account', name: 'CarrierAccountDescription' },
         { displayname: 'Code Set', name: 'CodeSetDescription' }
     ]
     $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
     $scope.tabdata = []
-    RoutingAPIService.getAllRouteRule(page, pageSize)
+    RoutingAPIService.GetFilteredRouteRules({ "PageNumber": page, "PageSize": pageSize })
         .then(function (data) {             
             $scope.gridOptionsRouteRule.data = data;
             $scope.tabdata = data;
@@ -122,7 +116,7 @@ var TestViewController = function ($scope, CarriersService, ZonesService, Routin
 
     $scope.getwidth = function () {             
         var gridwidth = $('#gridtest').width();
-        return (gridwidth / $scope.columns.length);
+        return (100 / $scope.columns.length);
     }
     //$scope.increaseWidth = function (c) {
        

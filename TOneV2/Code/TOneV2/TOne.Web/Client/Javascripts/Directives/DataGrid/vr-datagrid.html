@@ -13,10 +13,10 @@
         <div class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
             <div>
                 <div ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
-                    <label class=" hand-cursor" ng-click="ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
+                    <label style="height:9px" class=" hand-cursor" ng-click="ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
                         <span class="glyphicon glyphicon-plus"></span>
                     </label>
-                    <label class=" hand-cursor" ng-click="ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
+                    <label style="height:9px" class=" hand-cursor" ng-click="ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
                         <span class="glyphicon glyphicon-minus"></span>
                     </label>
                 </div>
@@ -32,7 +32,7 @@
                     <div class="vr-datagrid-cell">
                         <div class="vr-datagrid-celltext">
                             <div ng-mouseleave="show = false">
-                                <label class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;">
+                                <label style="height:9px" class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;ctrl.adjustPosition($event)">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </label>
                                 <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">

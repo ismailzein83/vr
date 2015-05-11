@@ -68,7 +68,16 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     var actions = ctrl.getMenuActions(dataItem);
                     return actions != undefined && actions != null && actions.length > 0;
                 }
-
+                ctrl.adjustPosition = function (e) {
+                    var self = angular.element(e.currentTarget);
+                    var selfHeight = $(this).parent().height() + 12;
+                    var selfWidth = $(this).parent().width();
+                    var selfOffset = $(self).offset();
+                    var w = $(window);
+                    var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+                    var dropDown = self.parent().find('ul');
+                    $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop() ) + selfHeight, left: 'auto' });
+                }
                 var actionsAttribute = $scope.$parent.$eval($attrs.menuactions);
                 ctrl.getMenuActions = function(dataItem)
                 {                    
@@ -198,7 +207,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
     };
 
-    var cellTemplate = '<div style="text-align: #TEXTALIGN#">'
+    var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
       + '<a ng-show="colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{colDef.getValue(dataItem) #CELLFILTER#}}</a>'
       + '<span ng-hide="colDef.isClickable(dataItem)" class="span-summary"> {{colDef.getValue(dataItem) #CELLFILTER#}}</span>'
