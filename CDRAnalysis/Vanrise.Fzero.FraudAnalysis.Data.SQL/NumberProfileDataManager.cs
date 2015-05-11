@@ -32,32 +32,51 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 {
 
                     NormalCDR normalCDR = new NormalCDR();
+                    int count = 0;
+                    int currentIndex = 0;
 
-                    normalCDR.callType = GetReaderValue<int>(reader, "Call_Type");
-                    normalCDR.bTSId = GetReaderValue<int>(reader, "BTS_Id");
-                    normalCDR.connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
-                    normalCDR.id = (int)reader["Id"];
-                    normalCDR.iMSI = reader["IMSI"] as string;
-                    normalCDR.durationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
-                    normalCDR.disconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
-                    normalCDR.callClass = reader["Call_Class"] as string;
-                    normalCDR.isOnNet = GetReaderValue<Byte>(reader, "IsOnNet");
-                    normalCDR.subType = reader["Sub_Type"] as string;
-                    normalCDR.iMEI = reader["IMEI"] as string;
-                    normalCDR.cellId = reader["Cell_Id"] as string;
-                    normalCDR.switchRecordId = GetReaderValue<int>(reader, "SwitchRecordId");
-                    normalCDR.upVolume = GetReaderValue<Decimal>(reader, "Up_Volume");
-                    normalCDR.downVolume = GetReaderValue<Decimal>(reader, "Down_Volume");
-                    normalCDR.cellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude");
-                    normalCDR.cellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude");
-                    normalCDR.inTrunk = reader["In_Trunk"] as string;
-                    normalCDR.outTrunk = reader["Out_Trunk"] as string;
-                    normalCDR.serviceType = GetReaderValue<int>(reader, "Service_Type");
-                    normalCDR.serviceVASName = reader["Service_VAS_Name"] as string;
-                    normalCDR.destination = reader["Destination"] as string;
-                    normalCDR.mSISDN = reader["MSISDN"] as string;
 
-                    onBatchReady(normalCDR);
+                    while (reader.Read())
+                    {
+                        normalCDR.callType = GetReaderValue<int>(reader, "Call_Type");
+                        normalCDR.bTSId = GetReaderValue<int>(reader, "BTS_Id");
+                        normalCDR.connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                        normalCDR.id = (int)reader["Id"];
+                        normalCDR.iMSI = reader["IMSI"] as string;
+                        normalCDR.durationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                        normalCDR.disconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
+                        normalCDR.callClass = reader["Call_Class"] as string;
+                        normalCDR.isOnNet = GetReaderValue<Byte>(reader, "IsOnNet");
+                        normalCDR.subType = reader["Sub_Type"] as string;
+                        normalCDR.iMEI = reader["IMEI"] as string;
+                        normalCDR.cellId = reader["Cell_Id"] as string;
+                        normalCDR.switchRecordId = GetReaderValue<int>(reader, "SwitchRecordId");
+                        normalCDR.upVolume = GetReaderValue<Decimal>(reader, "Up_Volume");
+                        normalCDR.downVolume = GetReaderValue<Decimal>(reader, "Down_Volume");
+                        normalCDR.cellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude");
+                        normalCDR.cellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude");
+                        normalCDR.inTrunk = reader["In_Trunk"] as string;
+                        normalCDR.outTrunk = reader["Out_Trunk"] as string;
+                        normalCDR.serviceType = GetReaderValue<int>(reader, "Service_Type");
+                        normalCDR.serviceVASName = reader["Service_VAS_Name"] as string;
+                        normalCDR.destination = reader["Destination"] as string;
+                        normalCDR.mSISDN = reader["MSISDN"] as string;
+
+
+                        
+
+                        currentIndex++;
+                        if (currentIndex == 10000)
+                        {
+                            count += currentIndex;
+                            currentIndex = 0;
+                            Console.WriteLine("{0} rows read", count);
+                        }
+
+                        onBatchReady(normalCDR);
+                    }
+
+                  
 
 
 

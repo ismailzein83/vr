@@ -48,14 +48,42 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
            int? BatchSize = int.Parse( System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
+
+           List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+           NumberProfile numberProfie = new NumberProfile();
+           HashSet<string> DestinationsIn = new HashSet<string>();
+           HashSet<string> DestinationsOut = new HashSet<string>();
+
+           HashSet<string> MSISDNsIn = new HashSet<string>();
+           HashSet<string> MSISDNsOut = new HashSet<string>();
+
+           HashSet<int> BTSIds = new HashSet<int>();
+           HashSet<string> IMEIs = new HashSet<string>();
+           HashSet<decimal> callOutDurs = new HashSet<decimal>();
+           HashSet<decimal> callInDurs = new HashSet<decimal>();
+           int countOutCalls = 0;
+           int countInCalls = 0;
+           int countOutFails = 0;
+           int countInFails = 0;
+           int countInOffNets = 0;
+           int countOutOffNets = 0;
+           int countInOnNets = 0;
+           int countOutOnNets = 0;
+           int countInInters = 0;
+           int countOutInters = 0;
+           int countOutSMSs = 0;
+           decimal totalDataVolume = 0;
+           string _mSISDN = string.Empty;
+
+
            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
            dataManager.LoadCDR(DateTime.Parse("2010-03-10 04:00:00"), DateTime.Parse("2019-03-20 06:00:00"), BatchSize, (normalCDR) =>
            {
 
-               List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+               
 
                // CDR Facts
-               string _mSISDN = string.Empty;
+               
                string _destination = string.Empty;
                int _callType = 0;
                int _bTSId = 0;
@@ -83,40 +111,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
                // Agregates
-               NumberProfile numberProfie = new NumberProfile();
-               HashSet<string> DestinationsIn = new HashSet<string>();
-               HashSet<string> DestinationsOut = new HashSet<string>();
-
-               HashSet<string> MSISDNsIn = new HashSet<string>();
-               HashSet<string> MSISDNsOut = new HashSet<string>();
-
-               HashSet<int> BTSIds = new HashSet<int>();
-               HashSet<string> IMEIs = new HashSet<string>();
-               HashSet<decimal> callOutDurs = new HashSet<decimal>();
-               HashSet<decimal> callInDurs = new HashSet<decimal>();
-               int countOutCalls = 0;
-               int countInCalls = 0;
-               int countOutFails = 0;
-               int countInFails = 0;
-               int countInOffNets = 0;
-               int countOutOffNets = 0;
-               int countInOnNets = 0;
-               int countOutOnNets = 0;
-               int countInInters = 0;
-               int countOutInters = 0;
-               int countOutSMSs = 0;
-               decimal totalDataVolume = 0;
-
-               int count = 0;
-               int currentIndex = 0;
               
-                   currentIndex++;
-                   if (currentIndex == 10000)
-                   {
-                       count += currentIndex;
-                       currentIndex = 0;
-                       Console.WriteLine("{0} rows read", count);
-                   }
+
+             
 
                    _callType = normalCDR.callType;
                    _bTSId = normalCDR.bTSId;
@@ -305,19 +302,22 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                        numberProfie.totalBTS = BTSIds.Count();
                    }
 
-               if (numberProfileBatch.Count > 0)
-               {
-                   inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
-                   {
-                       numberProfiles = numberProfileBatch
-                       
-
-                   });
-                   handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfileBatch.Count);
-               }
+             
 
 
            });
+
+           if (numberProfileBatch.Count > 0)
+           {
+               inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
+               {
+                   numberProfiles = numberProfileBatch
+
+
+               });
+               handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfileBatch.Count);
+           }
+
            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
           
         }
