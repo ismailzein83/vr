@@ -81,29 +81,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             int PeriodId = 6;
 
 
-            string query_GetCDRRange = @"SELECT  [Id]
-      ,[MSISDN]
-      ,[IMSI]
-      ,[ConnectDateTime]
-      ,[Destination]
-      ,[DurationInSeconds]
-      ,[DisconnectDateTime]
-      ,[Call_Class]
-      ,[IsOnNet]
-      ,[Call_Type]
-      ,[Sub_Type]
-      ,[IMEI]
-      ,[BTS_Id]
-      ,[Cell_Id]
-      ,[SwitchRecordId]
-      ,[Up_Volume]
-      ,[Down_Volume]
-      ,[Cell_Latitude]
-      ,[Cell_Longitude]
-      ,[In_Trunk]
-      ,[Out_Trunk]
-      ,[Service_Type]
-      ,[Service_VAS_Name] FROM NormalCDR2 with(nolock)    where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
+            string query_GetCDRRange = @"SELECT  [Id] ,[MSISDN] ,[IMSI] ,[ConnectDateTime] ,[Destination] ,[DurationInSeconds] ,[DisconnectDateTime] ,[Call_Class]  ,[IsOnNet] ,[Call_Type] ,[Sub_Type] ,[IMEI]
+                                                ,[BTS_Id]  ,[Cell_Id]  ,[SwitchRecordId]  ,[Up_Volume]  ,[Down_Volume] ,[Cell_Latitude]  ,[Cell_Longitude]  ,[In_Trunk]  ,[Out_Trunk]  ,[Service_Type]  ,[Service_VAS_Name] FROM NormalCDR
+                                                 with(nolock)    where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
             ExecuteReaderText(query_GetCDRRange, (reader) =>
                 {
                     List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
@@ -133,9 +113,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     string _serviceVASName = string.Empty;
                     DateTime _connectDateTime = new DateTime();
 
-
-
-                    int index=0;
 
 
 
@@ -171,11 +148,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                             currentIndex = 0;
                             Console.WriteLine("{0} rows read", count);
                         }
-                        //continue;
-                        //Console.WriteLine((++index).ToString());
 
                         _destination = reader["Destination"] as string;
-                        
                         _callType = GetReaderValue<int>(reader, "Call_Type");
                         _bTSId = GetReaderValue<int>(reader, "BTS_Id");
                         _connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
@@ -210,8 +184,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         else if (_mSISDN != reader["MSISDN"] as string)
                         {
                             numberProfileBatch.Add(numberProfie);
-                            //Console.WriteLine("numberProfie: " + ++index);
-
                             if (batchSize.HasValue && numberProfileBatch.Count == batchSize)
                             {
                                 onBatchReady(numberProfileBatch);
