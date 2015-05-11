@@ -64,6 +64,14 @@
                     return actions1;
                 return actions;
             }
+
+            $scope.actions = actions;
+
+            var values = ['rrr', 'rttt'];
+            $scope.values = values;
+            $scope.getValues = function () {
+                return values;
+            }
         }
 
         var chartTopDestinationsAPI;

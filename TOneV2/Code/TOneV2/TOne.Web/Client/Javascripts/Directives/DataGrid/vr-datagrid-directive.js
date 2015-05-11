@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
+app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -18,13 +18,44 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
             var maxHeight;
             var lastSortColumnDef;
             var actionMenuWidth;
+            var expandableColumnWidth;
+            var expandableRowTemplate;
             ctrl.columnDefs = [];
             ctrl.addColumn = addColumn;
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
                 ctrl.gridStyle['max-height'] = ctrl.maxheight;
             }
-            
+
+            function defineExpandableRow() {
+                ctrl.setExpandableRowTemplate = function (template) {
+                    expandableRowTemplate = template;
+                    expandableColumnWidth = 2;
+                    ctrl.expandableColumnWidth = expandableColumnWidth + '%';
+                    ctrl.expandableSectionWidth = (100 - expandableColumnWidth - 1) + '%';
+                };
+                
+
+                ctrl.expandRow = function (rowIndex, dataItem) {
+                    dataItem.expandableRowTemplate = expandableRowTemplate;
+                    //if (dataItem.expandableRowContext == undefined)
+                    //{                        
+                    //    var expandableRowDiv = $element.find("divExpandableRowContent_" + rowIndex)
+                    //    expandableRowDiv.append(expandableRowTemplate);
+                    //    //var divScope = $scope.$root.$new();
+                    //    //divScope.dataItem = dataItem;
+                    //    $compile($element.contents())($scope);
+                    //    dataItem.expandableRowContext = {};
+                    //    console.log(dataItem);
+                    //}                    
+                };
+
+                ctrl.collapseRow = function (rowIndex) {
+
+                };
+            }
+
+            defineExpandableRow();
             defineMenuColumn();
             function defineMenuColumn() {
                 var hasActionMenu = $attrs.menuactions != undefined;
@@ -125,9 +156,14 @@ app.directive('vrDatagrid', ['UtilsService', function (UtilsService) {
                 angular.forEach(ctrl.columnDefs, function (col) {
                     totalWidthFactors += col.widthFactor;
                 });
-                var totalWidth = 100;
+                var initialTotalWidth = 97;
+                var totalWidth = initialTotalWidth;
                 if (actionMenuWidth > 0)
-                    totalWidth = 100 - actionMenuWidth - 1;
+                    totalWidth -= actionMenuWidth;
+                if (expandableColumnWidth > 0)
+                    totalWidth -= expandableColumnWidth;
+                if (totalWidth < initialTotalWidth)
+                    totalWidth -= 1;
                 angular.forEach(ctrl.columnDefs, function (col) {
 
                     col.width = (totalWidth * col.widthFactor / totalWidthFactors) + '%';

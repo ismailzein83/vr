@@ -26,6 +26,7 @@ namespace TestRuntime
             ////codeMatchDataManager.FillCodeMatchesFromCodes(new CodeList(distinctCodes), suppliersCodeInfo, DateTime.Today);
             ////Console.ReadKey();
             ////return;
+            System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
             
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
@@ -58,14 +59,21 @@ namespace TestRuntime
             //////t.Start();
 
             BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "RoutingProcess",
+            //    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+            //    {
+            //        EffectiveTime = DateTime.Now,
+            //        IsFuture = false,
+            //        IsLcrOnly = false
+            //    }
+            //});
+
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "RoutingProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-                {
-                    EffectiveTime = DateTime.Now,
-                    IsFuture = false
-                }
+                ProcessName = "DailyRepricingProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = DateTime.Parse("2014-07-07") }
             });
 
             //bpClient.CreateNewProcess(new CreateProcessInput

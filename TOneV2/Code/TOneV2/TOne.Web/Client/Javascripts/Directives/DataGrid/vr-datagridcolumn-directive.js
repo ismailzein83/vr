@@ -2,27 +2,33 @@
     return {
         restrict: 'E',
         require: '^vrDatagrid',
-        link: function (scope, elem, attrs, dataGridCtrl) {
-            var headerText = attrs.headertext != undefined ? scope.$eval(attrs.headertext) : undefined;
-            var field = attrs.field != undefined ? scope.$eval(attrs.field) : undefined;
-            var enableHiding = attrs.enablehiding != undefined ? scope.$eval(attrs.enablehiding) : undefined;
-            var isClickable = attrs.isclickable != undefined ? scope.$eval(attrs.isclickable) : undefined;
-            var onClicked = attrs.onclicked != undefined ? scope.$eval(attrs.onclicked) : undefined;
-            var type = attrs.type != undefined ? scope.$eval(attrs.type) : undefined;
-            var tag = attrs.tag != undefined ? scope.$eval(attrs.tag) : undefined;
-            var onSortChanged = attrs.onsortchanged != undefined ? scope.$eval(attrs.onsortchanged) : undefined;
+        compile: function (element, attrs) {
+            var cellTemplate = element.context.innerHTML.trim();
+            element.html('');
+            return {
+                pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
+                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined;
+                    var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
+                    var enableHiding = iAttrs.enablehiding != undefined ? $scope.$eval(iAttrs.enablehiding) : undefined;
+                    var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
+                    var onClicked = iAttrs.onclicked != undefined ? $scope.$eval(iAttrs.onclicked) : undefined;
+                    var type = iAttrs.type != undefined ? $scope.$eval(iAttrs.type) : undefined;
+                    var tag = iAttrs.tag != undefined ? $scope.$eval(iAttrs.tag) : undefined;
+                    var onSortChanged = iAttrs.onsortchanged != undefined ? $scope.$eval(iAttrs.onsortchanged) : undefined;
 
-            dataGridCtrl.addColumn({
-                headerText: headerText,
-                field: field,
-                enableHiding: enableHiding,
-                isClickable: isClickable,
-                onClicked: onClicked,
-                type: type,
-                tag: tag,
-                onSortChanged: onSortChanged,
-                cellTemplate: elem.context.innerHTML.trim()
-            });
+                    dataGridCtrl.addColumn({
+                        headerText: headerText,
+                        field: field,
+                        enableHiding: enableHiding,
+                        isClickable: isClickable,
+                        onClicked: onClicked,
+                        type: type,
+                        tag: tag,
+                        onSortChanged: onSortChanged,
+                        cellTemplate: cellTemplate
+                    });
+                }
+            }
         }
     }
 });

@@ -192,7 +192,9 @@
     <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-section-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-htmlcompiler-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcell-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridexpandablerow-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcolumn-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridrows-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />

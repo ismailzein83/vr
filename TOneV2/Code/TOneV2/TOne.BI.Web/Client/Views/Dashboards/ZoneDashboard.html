@@ -1,4 +1,5 @@
-﻿<vr-panel>
+﻿<vr-panel ng-controller="ZoneDashboardController">
+    <h1>{{dataItem.EntityName}}</h1>
     <div class="am-collapse" ng-hide="filterSectionCollapsed" ng-init="filterSectionCollapsed=true">
         <vr-form name="filterForm">
             <vr-row removeline>
@@ -51,9 +52,12 @@
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="data" maxheight="700px" menuactions="zoneMenuActions">
+                <vr-datagrid datasource="data"  menuactions="zoneMenuActions">
                     <vr-datagridcolumn headertext="'Zone Name'" field="'EntityName'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="measureType in optionsMeasureTypes.datasource" headertext="measureType.name" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridexpandablerow>
+                        <div ng-include="'/Client/Modules/BI/Views/Dashboards/ZoneDashboard.html'"></div>
+                    </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
