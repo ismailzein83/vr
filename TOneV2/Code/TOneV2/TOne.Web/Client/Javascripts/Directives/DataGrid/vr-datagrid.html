@@ -1,11 +1,14 @@
 ﻿<div class="vr-datagrid">
-    <div class="vr-datagrid-header" ng-sortable="itemsSortable" ng-hide="ctrl.hideheader">
+    <div class="vr-datagrid-header"  ng-hide="ctrl.hideheader">
         <div ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
 
         </div>
-        <div ng-repeat="colDef in ctrl.columnDefs" ng-style="{'width': colDef.width, 'display':'inline-block'}">
-            <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
+        <div style="display:inline" ng-sortable="itemsSortable">
+            <div ng-repeat="colDef in ctrl.columnDefs" ng-style="{'width': colDef.width, 'display':'inline-block'}">
+                <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
+            </div>
         </div>
+
     </div>
 
 
