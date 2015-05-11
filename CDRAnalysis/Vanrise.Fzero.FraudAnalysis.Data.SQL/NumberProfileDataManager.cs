@@ -196,7 +196,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         //continue;
                         //Check if New MSISDN
 
-                        if (_mSISDN == "7700002513")
+                        if (_mSISDN == "7800007226")
                         {
 
                         }
