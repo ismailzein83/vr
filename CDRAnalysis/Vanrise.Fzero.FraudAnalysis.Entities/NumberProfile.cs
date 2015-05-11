@@ -8,6 +8,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class NumberProfile
     {
+
+        Dictionary<string, Decimal> Aggregates = new Dictionary<string, decimal>();
+
+
+
+
         public string subscriberNumber { get; set; }
         public DateTime? fromDate { get; set; }
         public DateTime? toDate { get; set; }

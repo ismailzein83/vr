@@ -49,8 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateDefinition.cs" />
     <Compile Include="CriteriaDefinition.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="IAggregate.cs" />
     <Compile Include="NumberCriteriaBatch.cs" />
     <Compile Include="NormalCDR.cs" />
     <Compile Include="NumberProfileBatch.cs" />
