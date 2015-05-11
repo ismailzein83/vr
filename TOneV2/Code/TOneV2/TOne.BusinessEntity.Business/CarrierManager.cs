@@ -20,5 +20,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCarriers(carrierType);
         }
+
+        public int InsertCarrierTest(string CarrierAccountID, string Name)
+        {
+           return _dataManager.InsertCarrierTest(CarrierAccountID, Name);
+        }
     }
 }

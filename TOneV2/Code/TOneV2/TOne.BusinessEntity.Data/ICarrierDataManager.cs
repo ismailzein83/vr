@@ -13,6 +13,8 @@ namespace TOne.BusinessEntity.Data
 
         List<CarrierInfo> GetCarriers(CarrierType carrierType);
 
+        int InsertCarrierTest(string CarrierAccountID, string Name);
+
         string GetCarrierAccountName(string carrierAccountId);
     }
 }

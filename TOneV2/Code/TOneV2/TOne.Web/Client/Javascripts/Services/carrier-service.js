@@ -6,7 +6,12 @@ app.service('CarriersService', function (HttpService, MainService) {
         getCustomers: getCustomers,
         getSuppliers: getSuppliers
     });
-
+    function insertCarrierTest() {
+        var CarrierAccountID = $scope.CarrierAccountID;
+        var Name = $scope.Name;
+        var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/insertCarrierTest";
+        return HttpService.post(getCarriersURL, CarrierAccountID, Name);
+    }
     function getCustomers() {
 
         var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/GetCarriers";

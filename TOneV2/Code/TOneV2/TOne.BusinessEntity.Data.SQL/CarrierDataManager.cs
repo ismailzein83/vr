@@ -34,10 +34,17 @@ namespace TOne.BusinessEntity.Data.SQL
                 (reader) =>
                 {
                     return string.Format("{0}{1}", reader["Name"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"] as string) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty);
-                }, 
+                },
                 carrierAccountId);
 
             return carrierAccountName;
+        }
+
+        public int InsertCarrierTest(string carrierAccountID, string Name)
+        {
+
+            int rowEffected = ExecuteNonQuerySP("BEntity.sp_InsertCarrierInfoTest", carrierAccountID, Name);
+            return rowEffected;
         }
 
         #region Private Methods

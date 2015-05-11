@@ -4,7 +4,8 @@ var serviceObj = function (BaseAPIService) {
     return ({
         GetCarriers: GetCarriers,
         GetCodeGroups: GetCodeGroups,
-        GetSwitches: GetSwitches
+        GetSwitches: GetSwitches,
+        insertCarrierTest: insertCarrierTest
     });
 
     function GetCarriers(carrierType) {
@@ -13,7 +14,13 @@ var serviceObj = function (BaseAPIService) {
                 carrierType: carrierType
             });
     }
-    
+    function insertCarrierTest(CarrierAccountID, Name) {
+        return BaseAPIService.post("/api/BusinessEntity/insertCarrierTest",
+            {
+                CarrierAccountID: CarrierAccountID,
+                Name: Name
+            });
+    }
     function GetCodeGroups() {
         return BaseAPIService.get("/api/BusinessEntity/GetCodeGroups",
             {

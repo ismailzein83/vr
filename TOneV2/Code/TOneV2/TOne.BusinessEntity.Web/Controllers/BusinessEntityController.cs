@@ -14,7 +14,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         [HttpGet]
         public List<CarrierInfo> GetCarriers(CarrierType carrierType)
         {
-            
+
             CarrierManager manager = new CarrierManager();
             return manager.GetCarriers(carrierType);
         }
@@ -29,7 +29,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         [HttpGet]
         public List<ZoneInfo> GetZoneList([FromUri]int[] zonesIds)
         {
-            
+
             ZoneManager manager = new ZoneManager();
             return manager.GetZoneList(zonesIds);
         }
@@ -44,6 +44,13 @@ namespace TOne.BusinessEntity.Web.Controllers
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitches();
+        }
+
+        [HttpPost]
+        public int insertCarrierTest(CarrierInfo carrierInfo)
+        {
+            CarrierManager manager = new CarrierManager();
+            return manager.InsertCarrierTest(carrierInfo.CarrierAccountID, carrierInfo.Name);
         }
     }
 }
