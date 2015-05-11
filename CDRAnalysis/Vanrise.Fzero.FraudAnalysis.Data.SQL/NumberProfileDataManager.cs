@@ -75,7 +75,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         //    });
         //}
 
-        public void LoadNumberProfile(DateTime from, DateTime to,  int? batchSize, Action<List<Vanrise.Fzero.FraudAnalysis.Entities.NumberProfile>> onBatchReady)
+        public void LoadNumberProfile(DateTime from, DateTime to, int? batchSize, Action<List<Vanrise.Fzero.FraudAnalysis.Entities.NumberProfile>> onBatchReady)
+        {
+            LoadNumberProfile((int)Enums.EntityType.SubscriberNumber,  from,  to, batchSize,  onBatchReady);
+            LoadNumberProfile((int)Enums.EntityType.Destination,  from,  to,  batchSize,  onBatchReady);
+        }
+
+
+        public void LoadNumberProfile(int entityTypeID, DateTime from, DateTime to, int? batchSize, Action<List<Vanrise.Fzero.FraudAnalysis.Entities.NumberProfile>> onBatchReady)
         {
 
             int PeriodId = 6;
@@ -83,7 +90,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             string query_GetCDRRange = @"SELECT  [Id] ,[MSISDN] ,[IMSI] ,[ConnectDateTime] ,[Destination] ,[DurationInSeconds] ,[DisconnectDateTime] ,[Call_Class]  ,[IsOnNet] ,[Call_Type] ,[Sub_Type] ,[IMEI]
                                                 ,[BTS_Id]  ,[Cell_Id]  ,[SwitchRecordId]  ,[Up_Volume]  ,[Down_Volume] ,[Cell_Latitude]  ,[Cell_Longitude]  ,[In_Trunk]  ,[Out_Trunk]  ,[Service_Type]  ,[Service_VAS_Name] FROM NormalCDR
-                                                 with(nolock)    where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN ;";
+                                                 with(nolock)    where connectDateTime >= @From and connectDateTime <=@To";
+
+
+            if (entityTypeID == (int)Enums.EntityType.SubscriberNumber)
+            {
+                query_GetCDRRange = query_GetCDRRange + " and MSISDN is not null  order by MSISDN ;";
+            }
+            else
+            {
+                query_GetCDRRange = query_GetCDRRange + " and Destination is not null  order by Destination ;";
+            }
+
             ExecuteReaderText(query_GetCDRRange, (reader) =>
                 {
                     List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
@@ -120,6 +138,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     NumberProfile numberProfie = new NumberProfile();
                     HashSet<string> DestinationsIn = new HashSet<string>();
                     HashSet<string> DestinationsOut = new HashSet<string>();
+
+                    HashSet<string> MSISDNsIn = new HashSet<string>();
+                    HashSet<string> MSISDNsOut = new HashSet<string>();
+
                     HashSet<int> BTSIds= new HashSet<int>();
                     HashSet<string> IMEIs = new HashSet<string>();
                     HashSet<decimal> callOutDurs= new HashSet<decimal>();
@@ -149,7 +171,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                             Console.WriteLine("{0} rows read", count);
                         }
 
-                        _destination = reader["Destination"] as string;
                         _callType = GetReaderValue<int>(reader, "Call_Type");
                         _bTSId = GetReaderValue<int>(reader, "BTS_Id");
                         _connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
@@ -174,25 +195,73 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                         //continue;
                         //Check if New MSISDN
-                        if (_mSISDN == string.Empty)
+
+                        if (_mSISDN == "7700002513")
                         {
-                            numberProfie = new NumberProfile();
-                            _mSISDN = reader["MSISDN"] as string;
-                            countOutCalls=0;
+
                         }
 
-                        else if (_mSISDN != reader["MSISDN"] as string)
+
+
+                        if (entityTypeID == (int)Enums.EntityType.SubscriberNumber)
                         {
-                            numberProfileBatch.Add(numberProfie);
-                            if (batchSize.HasValue && numberProfileBatch.Count == batchSize)
+                            if (_mSISDN == string.Empty)
                             {
-                                onBatchReady(numberProfileBatch);
-                                numberProfileBatch = new List<NumberProfile>();
+                                numberProfie = new NumberProfile();
+                                _mSISDN = reader["MSISDN"] as string;
+                                countOutCalls = 0;
                             }
 
-                            numberProfie = new NumberProfile();
-                            _mSISDN = reader["MSISDN"] as string;
+                            else if (_mSISDN != reader["MSISDN"] as string)
+                            {
+                                numberProfileBatch.Add(numberProfie);
+                                if (batchSize.HasValue && numberProfileBatch.Count == batchSize)
+                                {
+                                    onBatchReady(numberProfileBatch);
+                                    numberProfileBatch = new List<NumberProfile>();
+                                }
+
+                                numberProfie = new NumberProfile();
+                                _mSISDN = reader["MSISDN"] as string;
+                            }
+
+
+                            numberProfie.subscriberNumber = _mSISDN;
+                            _destination = reader["Destination"] as string;
+
                         }
+                        else
+                        {
+                            if (_destination == string.Empty)
+                            {
+                                numberProfie = new NumberProfile();
+                                _destination = reader["Destination"] as string;
+                                countOutCalls = 0;
+                            }
+
+                            else if (_destination != reader["Destination"] as string)
+                            {
+                                numberProfileBatch.Add(numberProfie);
+                                if (batchSize.HasValue && numberProfileBatch.Count == batchSize)
+                                {
+                                    onBatchReady(numberProfileBatch);
+                                    numberProfileBatch = new List<NumberProfile>();
+                                }
+
+                                numberProfie = new NumberProfile();
+                                _destination = reader["Destination"] as string;
+                            }
+
+
+
+                            numberProfie.subscriberNumber = _destination;
+                            _mSISDN = reader["MSISDN"] as string;
+
+                        }
+
+
+
+                       
 
 
 
@@ -200,7 +269,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                        
 
                       // Filling Agregates
-                        numberProfie.subscriberNumber = _mSISDN;
+                        
                         numberProfie.periodId = PeriodId;
                         numberProfie.fromDate=_connectDateTime;
                         numberProfie.isOnNet = 1;
@@ -221,11 +290,27 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         {
                             numberProfie.countOutCalls = ++countOutCalls;
 
-                            if (!DestinationsOut.Contains(_destination))
+
+                            if (entityTypeID == (int)Enums.EntityType.SubscriberNumber)
                             {
-                                DestinationsOut.Add(_destination);
-                                numberProfie.diffOutputNumb = DestinationsOut.Count();
+                                if (!DestinationsOut.Contains(_destination))
+                                {
+                                    DestinationsOut.Add(_destination);
+                                    numberProfie.diffOutputNumb = DestinationsOut.Count();
+                                }
                             }
+                            else
+                            {
+                                if (!MSISDNsOut.Contains(_mSISDN))
+                                {
+                                    MSISDNsOut.Add(_mSISDN);
+                                    numberProfie.diffOutputNumb = MSISDNsOut.Count();
+                                }
+                            }
+
+
+
+                          
                                    
 
                             if (_durationInSeconds == 0)
@@ -250,10 +335,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         {
                             numberProfie.countOutCalls = ++countInCalls;
 
-                            if (!DestinationsIn.Contains(_destination))
+                            if (entityTypeID == (int)Enums.EntityType.SubscriberNumber)
                             {
-                                DestinationsIn.Add(_destination);
-                                numberProfie.diffInputNumbers = DestinationsIn.Count();
+                                if (!DestinationsIn.Contains(_destination))
+                                {
+                                    DestinationsIn.Add(_destination);
+                                    numberProfie.diffInputNumbers = DestinationsIn.Count();
+                                }
+                            }
+                            else
+                            {
+                                if (!MSISDNsIn.Contains(_mSISDN))
+                                {
+                                    MSISDNsIn.Add(_mSISDN);
+                                    numberProfie.diffInputNumbers = MSISDNsIn.Count();
+                                }
                             }
                                    
 

@@ -57,6 +57,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             ASIACELL = 26 //0
         };
 
+        public enum EntityType
+        {
+            SubscriberNumber = 1,
+            Destination = 2
+        };
+
 
     }
 }
