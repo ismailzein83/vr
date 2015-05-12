@@ -1,34 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class DistinctCountAggregate:IAggregate
+    public class DistinctCountAggregate : IAggregate
     {
 
-        public DistinctCountAggregate(string property, string conditionExpression)
-        {
+        Func<NormalCDR, bool> _condition;
+        MethodInfo _propertyGetMethod;
+        Func<NormalCDR, String> _cdrExpressionToCountDistinct;
+        HashSet<string> DistinctItems = new HashSet<string>();
 
+        public DistinctCountAggregate(string propertyName, Func<NormalCDR, bool> condition)
+        {
+            _propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
+            _condition = condition;
+        }
+
+        public DistinctCountAggregate(Func<NormalCDR, String> cdrExpressionToCountDistinct, Func<NormalCDR, bool> condition)
+        {
+            _cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
+            _condition = condition;
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            DistinctItems.Clear();
         }
 
-        public void EvaluateCDR(NormalCDR normalCDR)
+        public void EvaluateCDR(NormalCDR cdr)
         {
-            throw new NotImplementedException();
+            if (_condition == null || _condition(cdr))
+            {
+                if (_cdrExpressionToCountDistinct != null)
+                {
+                    DistinctItems.Add(_cdrExpressionToCountDistinct(cdr));
+                }
+
+                else
+                {
+                    DistinctItems.Add( (String)_propertyGetMethod.Invoke(cdr, null));
+                }
+            }
         }
 
         public decimal GetResult()
         {
-            throw new NotImplementedException();
+            return decimal.Parse(DistinctItems.Count().ToString());
         }
-    }
 
+
+    }
     
 }
