@@ -122,7 +122,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 { name: "FusionChart", location: '#/FusionChart' },
                 { name: "CanvasJSChart", location: '#/CanvasJSChart' },
                 { name: "AMChart", location: '#/AMChart' },
-                { name: "Tree", location: '#/Tree' }
+                { name: "Tree", location: '#/Tree' },
+                {
+                    name: "For test", location: '', childs: [
+                         { name: "test1", location: '#/CanvasJSChart' },
+                         { name: "test2", location: '#/AMChart' },
+                    ]
+                }
             ]
         }
     ];
