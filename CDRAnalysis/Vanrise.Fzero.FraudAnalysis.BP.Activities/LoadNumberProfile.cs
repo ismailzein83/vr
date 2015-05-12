@@ -400,9 +400,62 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
 
-          
+
+            IAggregate callOutDurs = new SumAggregate(
+               (cdr) =>
+                {
+                    return cdr.durationInSeconds / 60;
+                },
+
+               (cdr) =>
+                {
+                   return ( cdr.durationInSeconds!=0  && cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
+                }
+            );
 
 
+
+            IAggregate totalOutVolume = new SumAggregate(
+                (cdr) =>
+                    {
+                        return cdr.durationInSeconds;
+                    },
+
+                (cdr) =>
+                     {
+                         return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
+                     }
+            );
+
+
+
+
+
+            IAggregate callInDurs = new SumAggregate(
+               (cdr) =>
+               {
+                   return cdr.durationInSeconds / 60;
+               },
+
+               (cdr) =>
+               {
+                   return (cdr.durationInSeconds != 0 && cdr.callType == (int)Enums.CallType.incomingVoiceCall);
+               }
+            );
+
+
+
+            IAggregate totalInVolume = new SumAggregate(
+                (cdr) =>
+                {
+                    return cdr.durationInSeconds;
+                },
+
+                (cdr) =>
+                {
+                    return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
+                }
+            );
 
 
 
@@ -411,13 +464,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             HashSet<string> DestinationsIn = new HashSet<string>();
             HashSet<string> DestinationsOut = new HashSet<string>();
 
-            HashSet<string> MSISDNsIn = new HashSet<string>();
-            HashSet<string> MSISDNsOut = new HashSet<string>();
-
             HashSet<int> BTSIds = new HashSet<int>();
             HashSet<string> IMEIs = new HashSet<string>();
-            HashSet<decimal> callOutDurs = new HashSet<decimal>();
-            HashSet<decimal> callInDurs = new HashSet<decimal>();
             
            
          
@@ -428,66 +476,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             dataManager.LoadCDR(DateTime.Parse("2010-03-10 04:00:00"), DateTime.Parse("2019-03-20 06:00:00"), BatchSize, (normalCDR) =>
             {
                 
-                
-
-                // CDR Facts
-
-                string _destination = string.Empty;
-                int _callType = 0;
-                int _bTSId = 0;
-                int _id = 0;
-                string _iMSI = string.Empty;
-                decimal _durationInSeconds = 0;
-                DateTime _disconnectDateTime = new DateTime();
-                string _callClass = string.Empty;
-                short _isOnNet = 0;
-                string _subType = string.Empty;
-                string _iMEI = string.Empty;
-                string _cellId = string.Empty;
-                int _switchRecordId = 0;
-                decimal _upVolume = 0;
-                decimal _downVolume = 0;
-                decimal _cellLatitude = 0;
-                decimal _cellLongitude = 0;
-                string _inTrunk = string.Empty;
-                string _outTrunk = string.Empty;
-                int _serviceType = 0;
-                string _serviceVASName = string.Empty;
-                DateTime _connectDateTime = new DateTime();
-
-
-
 
                 // Agregates
-
-
-
-
-                _callType = normalCDR.callType;
-                _bTSId = normalCDR.bTSId;
-                _connectDateTime = normalCDR.connectDateTime;
-                _id = normalCDR.id;
-                _iMSI = normalCDR.iMSI;
-                _durationInSeconds = normalCDR.durationInSeconds;
-                _disconnectDateTime = normalCDR.disconnectDateTime;
-                _callClass = normalCDR.callClass;
-                _isOnNet = normalCDR.isOnNet;
-                _subType = normalCDR.subType;
-                _iMEI = normalCDR.iMEI;
-                _cellId = normalCDR.cellId;
-                _switchRecordId = normalCDR.switchRecordId;
-                _upVolume = normalCDR.upVolume;
-                _downVolume = normalCDR.downVolume;
-                _cellLatitude = normalCDR.cellLatitude;
-                _cellLongitude = normalCDR.cellLongitude;
-                _inTrunk = normalCDR.inTrunk;
-                _outTrunk = normalCDR.outTrunk;
-                _serviceType = normalCDR.serviceType;
-                _serviceVASName = normalCDR.serviceVASName;
-                _destination = normalCDR.destination;
-
-
-
 
                 if (_mSISDN == string.Empty)
                 {
@@ -505,6 +495,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     countInInters.Reset();
                     countOutInters.Reset();
                     countOutSMSs.Reset();
+                    totalOutVolume.Reset();
+                    totalInVolume.Reset();
+                    callOutDurs.Reset();
+                    callInDurs.Reset();
 
 
                     _mSISDN = normalCDR.mSISDN;
@@ -537,17 +531,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     countInInters.Reset();
                     countOutInters.Reset();
                     countOutSMSs.Reset();
+                    totalOutVolume.Reset();
+                    totalInVolume.Reset();
+                    callOutDurs.Reset();
+                    callInDurs.Reset();
 
                     DestinationsIn = new HashSet<string>();
                     DestinationsOut = new HashSet<string>();
-                    MSISDNsIn = new HashSet<string>();
-                    MSISDNsOut = new HashSet<string>();
                     BTSIds = new HashSet<int>();
                     IMEIs = new HashSet<string>();
-                    callOutDurs = new HashSet<decimal>();
-                    callInDurs = new HashSet<decimal>();
-                  
-                  
                     
 
                     _mSISDN = normalCDR.mSISDN;
@@ -566,18 +558,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 // New Filling Aggregates
 
-                //IAggregate SumAggregate = new SumAggregate("");
                 //IAggregate DistinctCountAggregate = new DistinctCountAggregate("", "");
-                //IAggregate AverageAggregate = new AverageAggregate("");
 
 
                 if ((int)Enums.Period.Day == (int)Enums.Period.Day)
                 {
-                    numberProfile.toDate = _connectDateTime.AddDays(1);
+                    numberProfile.toDate = normalCDR.connectDateTime.AddDays(1);
                 }
 
                 numberProfile.periodId = (int)Enums.Period.Day;
-                numberProfile.fromDate = _connectDateTime;
+                numberProfile.fromDate = normalCDR.connectDateTime;
                 numberProfile.isOnNet = 1;
 
                 countInCalls.EvaluateCDR(normalCDR);
@@ -615,66 +605,65 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 countOutSMSs.EvaluateCDR(normalCDR);
                 numberProfile.countOutSMS = int.Parse(countOutSMSs.GetResult().ToString());
 
+                totalOutVolume.EvaluateCDR(normalCDR);
+                numberProfile.totalOutVolume = int.Parse(totalOutVolume.GetResult().ToString());
+
+
+                totalInVolume.EvaluateCDR(normalCDR);
+                numberProfile.totalInVolume = int.Parse(totalInVolume.GetResult().ToString());
+
+
+                callOutDurs.EvaluateCDR(normalCDR);
+                numberProfile.callOutDurAvg = int.Parse(callOutDurs.GetResult().ToString());
+
+
+                callInDurs.EvaluateCDR(normalCDR);
+                numberProfile.callInDurAvg = int.Parse(callInDurs.GetResult().ToString());
+
+
+
+
+
+
 
                 // Filling Agregates
-                             
 
-                if (_callType == (int)Enums.CallType.outgoingVoiceCall)
+
+                if (normalCDR.callType == (int)Enums.CallType.outgoingVoiceCall)
                 {
-                    if (!DestinationsOut.Contains(_destination))
+                    if (!DestinationsOut.Contains(normalCDR.destination))
                     {
-                        DestinationsOut.Add(_destination);
+                        DestinationsOut.Add(normalCDR.destination);
                         numberProfile.diffOutputNumb = DestinationsOut.Count();
                     }
-
-
-                    
-                    if (_durationInSeconds != 0)
-                    {
-                        callOutDurs.Add(_durationInSeconds / 60);
-                        numberProfile.callOutDurAvg = callOutDurs.Average();
-                        numberProfile.totalOutVolume = callOutDurs.Sum();
-                    }
-
                   
                 }
 
 
-                if (_callType == (int)Enums.CallType.incomingVoiceCall)
+                if (normalCDR.callType == (int)Enums.CallType.incomingVoiceCall)
                 {
 
-                    if (!DestinationsIn.Contains(_destination))
+                    if (!DestinationsIn.Contains(normalCDR.destination))
                     {
-                        DestinationsIn.Add(_destination);
+                        DestinationsIn.Add(normalCDR.destination);
                         numberProfile.diffInputNumbers = DestinationsIn.Count();
-                    }
-
-
-                    if (_durationInSeconds != 0)
-                    {
-                        callInDurs.Add(_durationInSeconds / 60);
-                        numberProfile.callInDurAvg = callInDurs.Average();
-                        numberProfile.totalInVolume = callInDurs.Sum();
                     }
                  
                 }
 
-               
 
 
 
-
-
-                if ((_callType == (int)Enums.CallType.incomingVoiceCall || _callType == (int)Enums.CallType.outgoingVoiceCall || _callType == (int)Enums.CallType.incomingSms || _callType == (int)Enums.CallType.outgoingSms))
+                if ((normalCDR.callType == (int)Enums.CallType.incomingVoiceCall || normalCDR.callType == (int)Enums.CallType.outgoingVoiceCall || normalCDR.callType == (int)Enums.CallType.incomingSms || normalCDR.callType == (int)Enums.CallType.outgoingSms))
                 {
-                    if (!IMEIs.Contains(_iMEI))
-                        IMEIs.Add(_iMEI);
+                    if (!IMEIs.Contains(normalCDR.iMEI))
+                        IMEIs.Add(normalCDR.iMEI);
                     numberProfile.totalIMEI = IMEIs.Count();
 
 
 
-                    if (!BTSIds.Contains(_bTSId))
-                        BTSIds.Add(_bTSId);
+                    if (!BTSIds.Contains(normalCDR.bTSId))
+                        BTSIds.Add(normalCDR.bTSId);
                     numberProfile.totalBTS = BTSIds.Count();
                 }
 
