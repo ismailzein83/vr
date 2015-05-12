@@ -15,7 +15,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         $scope.toogled = !$scope.toogled;
         
         
-    }
+    } 
 
     $scope.showMenu = function (e) {
        
@@ -97,6 +97,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         {
             name: "Routing", location: '', icon: 'glyphicon-certificate', childs: [
                { name: "Rule Management", location: '#/RouteRuleManager' },
+               { name: "Rate Plan", location: '#/RatePlanning' },
                { name: "Route Manager", location: '' }
             ]
         },
