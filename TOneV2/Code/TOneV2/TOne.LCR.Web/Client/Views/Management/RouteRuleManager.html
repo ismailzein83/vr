@@ -34,7 +34,6 @@
 
     </vr-row>
     <vr-row removeline>
-        <vr-columns colnum="12" nopadding nomargin>
 
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="leftSection">
@@ -68,7 +67,7 @@
                         </span>
                     </button>
 
-                   
+
 
                     <vr-button type="Search" data-onclick="getDatalistFilterd"></vr-button>
                     <vr-button type="Reset" data-onclick="resetDatalistFilterd"></vr-button>
@@ -76,11 +75,9 @@
 
                 </div>
             </vr-actionbar>
-            
-        </vr-columns>
     </vr-row>
     <vr-row>
-        <vr-columns colnum="12" nopadding nomargin class="am-fade" ng-show="showMain==true">
+        <div  class="am-fade" ng-show="showMain==true">
 
             <div class="loader" ng-show="isloadingdata">
                 <img src="~/../images/loader-mask.gif" />
@@ -90,13 +87,13 @@
             <div id="grid1" class="gridroute vr-grid" ui-grid="gridOptionsRouteRule" ui-grid-selection ui-grid-infinite-scroll ui-grid-resize-columns ui-grid-auto-resize ui-grid-save-state>
             </div>
 
-        </vr-columns>
-        <vr-columns colnum="12" nopadding nomargin>
+        </div>
+        <div ng-if="showHis">
 
-            <div ui-grid="gridOptionsHistory" class="vr-grid" ng-if="showHis">
+            <div ui-grid="gridOptionsHistory" class="vr-grid">
             </div>
 
-        </vr-columns>
+        </div>
     </vr-row>
 </vr-panel>
 
