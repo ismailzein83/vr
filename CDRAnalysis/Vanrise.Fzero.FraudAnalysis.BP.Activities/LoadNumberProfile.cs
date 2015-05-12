@@ -323,7 +323,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
-            IAggregate countInCalls = new CountAggregate(@" output.Result = (normalCDR.callType == incomingVoiceCall); ");
+            //IAggregate countInCalls = new CountAggregate(@" output.Result = (normalCDR.callType == incomingVoiceCall); ");
+
+
+
+
+
+            IAggregate countInCalls = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
+            });
+
+
+            IAggregate countOutCalls = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
+            });
+
+
+
             int? BatchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
@@ -340,8 +358,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             HashSet<string> IMEIs = new HashSet<string>();
             HashSet<decimal> callOutDurs = new HashSet<decimal>();
             HashSet<decimal> callInDurs = new HashSet<decimal>();
-            int countOutCalls = 0;
-            //int countInCalls = 0;
+            
             int countOutFails = 0;
             int countInFails = 0;
             int countInOffNets = 0;
@@ -358,8 +375,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             dataManager.LoadCDR(DateTime.Parse("2010-03-10 04:00:00"), DateTime.Parse("2019-03-20 06:00:00"), BatchSize, (normalCDR) =>
             {
-                decimal x = 0;
-                if (normalCDR.callType == 2) numberProfile.countInCalls = int.Parse(x.ToString()) + 1;
+                
                 
 
                 // CDR Facts
@@ -425,6 +441,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 {
                     numberProfile = new NumberProfile();
                     countInCalls.Reset();
+                    countOutCalls.Reset();
+
                     _mSISDN = normalCDR.mSISDN;
                 }
 
@@ -443,6 +461,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                     numberProfile = new NumberProfile();
                     countInCalls.Reset();
+                    countOutCalls.Reset();
                     DestinationsIn = new HashSet<string>();
                     DestinationsOut = new HashSet<string>();
                     MSISDNsIn = new HashSet<string>();
@@ -451,7 +470,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     IMEIs = new HashSet<string>();
                     callOutDurs = new HashSet<decimal>();
                     callInDurs = new HashSet<decimal>();
-                    countOutCalls = 0;
                     countOutFails = 0;
                     countInFails = 0;
                     countInOffNets = 0;
@@ -485,6 +503,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 countInCalls.EvaluateCDR(normalCDR);
                 numberProfile.countInCalls = int.Parse(countInCalls.GetResult().ToString());
+
+
+                countOutCalls.EvaluateCDR(normalCDR);
+                numberProfile.countOutCalls = int.Parse(countOutCalls.GetResult().ToString());
                
 
                 // Filling Agregates
@@ -507,7 +529,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 if (_callType == (int)Enums.CallType.outgoingVoiceCall)
                 {
-                    numberProfile.countOutCalls = ++countOutCalls;
 
 
                     if (!DestinationsOut.Contains(_destination))
@@ -544,7 +565,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 if (_callType == (int)Enums.CallType.incomingVoiceCall)
                 {
-                    numberProfile.countOutCalls = ++countOutCalls;
 
                     if (!DestinationsIn.Contains(_destination))
                     {
