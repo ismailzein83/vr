@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateManager.cs" />
     <Compile Include="CriteriaManager.cs" />
     <Compile Include="FraudManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
