@@ -323,7 +323,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
-            IAggregate countInCalls = new CountAggregate(@" return (normalCDR.callType == incomingVoiceCall); ");
+            IAggregate countInCalls = new CountAggregate(@" output.Result = (normalCDR.callType == incomingVoiceCall); ");
             int? BatchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 

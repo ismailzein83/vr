@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
+    public class Condition
+    {
+        public bool Result { get; set; }
+    }
     public class CountAggregate:IAggregate
     {
         string _conditionExpression;
@@ -24,8 +28,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public void EvaluateCDR(NormalCDR normalCDR)
         {
+            Condition output = new Condition();
             ExpressionEvaluator.TypeRegistry tRegistry =  new ExpressionEvaluator.TypeRegistry();
             tRegistry.RegisterSymbol("normalCDR", normalCDR);
+            tRegistry.RegisterSymbol("output", output);
             tRegistry.RegisterSymbol("incomingVoiceCall", (int)Enums.CallType.incomingVoiceCall);
 
             ExpressionEvaluator.CompiledExpression expression = new ExpressionEvaluator.CompiledExpression
@@ -36,7 +42,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             };
             expression.Compile();
 
-            if (bool.Parse(expression.Eval().ToString()))
+            if (output.Result)
                 Count++;
         }
 
