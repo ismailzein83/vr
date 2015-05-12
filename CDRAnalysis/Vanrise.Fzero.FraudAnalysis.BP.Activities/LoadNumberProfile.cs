@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Data;
@@ -50,7 +51,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-           NumberProfile numberProfie = new NumberProfile();
+           NumberProfile numberProfile = new NumberProfile();
            HashSet<string> DestinationsIn = new HashSet<string>();
            HashSet<string> DestinationsOut = new HashSet<string>();
 
@@ -143,13 +144,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                    if (_mSISDN == string.Empty)
                    {
-                       numberProfie = new NumberProfile();
+                       numberProfile = new NumberProfile();
                        _mSISDN = normalCDR.mSISDN;
                    }
 
                    else if (_mSISDN != normalCDR.mSISDN)
                    {
-                       numberProfileBatch.Add(numberProfie);
+                       numberProfileBatch.Add(numberProfile);
                        if (BatchSize.HasValue && numberProfileBatch.Count == BatchSize)
                        {
                            inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
@@ -160,7 +161,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                            numberProfileBatch = new List<NumberProfile>();
                        }
 
-                       numberProfie = new NumberProfile();
+                       numberProfile = new NumberProfile();
                        DestinationsIn = new HashSet<string>();
                        DestinationsOut = new HashSet<string>();
                        MSISDNsIn = new HashSet<string>();
@@ -186,7 +187,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                    }
 
 
-                   numberProfie.subscriberNumber = _mSISDN;
+                   numberProfile.subscriberNumber = _mSISDN;
 
 
 
@@ -195,94 +196,114 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
+
+               // New Filling Aggregates
+                   
+                   IAggregate SumAggregate = new SumAggregate("");
+                   IAggregate DistinctCountAggregate = new DistinctCountAggregate("", "");
+                   IAggregate AverageAggregate = new AverageAggregate("");
+
+
+
+                   
+
+                 
+                   ExpressionEvaluator.TypeRegistry tRegistry = new ExpressionEvaluator.TypeRegistry();
+
+                   tRegistry.RegisterSymbol("_numberProfile", numberProfile);
+                   tRegistry.RegisterSymbol("_normalCDR", normalCDR);
+                   tRegistry.RegisterSymbol("_inGoingVoiceCall", (int)Enums.CallType.incomingVoiceCall);
+                   tRegistry.RegisterSymbol("countInCalls", countInCalls);
+
+                   IAggregate CountAggregate = new CountAggregate(@"if (_normalCDR.callType == _inGoingVoiceCall) _numberProfile.countInCalls = countInCalls+1; ", tRegistry);
 
 
                    // Filling Agregates
 
-                   numberProfie.periodId = (int) Enums.Period.Day;
-                   numberProfie.fromDate = _connectDateTime;
-                   numberProfie.isOnNet = 1;
+                   numberProfile.periodId = (int)Enums.Period.Day;
+                   numberProfile.fromDate = _connectDateTime;
+                   numberProfile.isOnNet = 1;
 
                    totalDataVolume += (_upVolume + _downVolume);
-                   numberProfie.totalDataVolume = totalDataVolume;
+                   numberProfile.totalDataVolume = totalDataVolume;
 
 
 
 
                    if ((int)Enums.Period.Day == (int)Enums.Period.Day)
                    {
-                       numberProfie.toDate = _connectDateTime.AddDays(1);
+                       numberProfile.toDate = _connectDateTime.AddDays(1);
                    }
 
 
                    if (_callType == (int)Enums.CallType.outgoingVoiceCall)
                    {
-                       numberProfie.countOutCalls = ++countOutCalls;
+                       numberProfile.countOutCalls = ++countOutCalls;
 
 
                        if (!DestinationsOut.Contains(_destination))
                        {
                            DestinationsOut.Add(_destination);
-                           numberProfie.diffOutputNumb = DestinationsOut.Count();
+                           numberProfile.diffOutputNumb = DestinationsOut.Count();
                        }
 
                        if (!DestinationsOut.Contains(_destination))
                        {
                            DestinationsOut.Add(_destination);
-                           numberProfie.diffOutputNumb = DestinationsOut.Count();
+                           numberProfile.diffOutputNumb = DestinationsOut.Count();
                        }
 
 
 
                        if (_durationInSeconds == 0)
-                           numberProfie.countOutFail = ++countOutFails;
+                           numberProfile.countOutFail = ++countOutFails;
                        else
                        {
                            callOutDurs.Add(_durationInSeconds / 60);
-                           numberProfie.callOutDurAvg = callOutDurs.Average();
-                           numberProfie.totalInVolume = callOutDurs.Sum();
+                           numberProfile.callOutDurAvg = callOutDurs.Average();
+                           numberProfile.totalInVolume = callOutDurs.Sum();
                        }
 
                        if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)))
-                           numberProfie.countOutOffNet = ++countOutOffNets;
+                           numberProfile.countOutOffNet = ++countOutOffNets;
                        else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV)))
-                           numberProfie.countOutOnNet = ++countOutOnNets;
+                           numberProfile.countOutOnNet = ++countOutOnNets;
                        else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)))
-                           numberProfie.countOutInter = ++countOutInters;
+                           numberProfile.countOutInter = ++countOutInters;
                    }
 
 
                    if (_callType == (int)Enums.CallType.incomingVoiceCall)
                    {
-                       numberProfie.countOutCalls = ++countInCalls;
+                       numberProfile.countOutCalls = ++countInCalls;
 
                        if (!DestinationsIn.Contains(_destination))
                        {
                            DestinationsIn.Add(_destination);
-                           numberProfie.diffInputNumbers = DestinationsIn.Count();
+                           numberProfile.diffInputNumbers = DestinationsIn.Count();
                        }
 
 
                        if (_durationInSeconds == 0)
-                           numberProfie.countInFail = ++countInFails;
+                           numberProfile.countInFail = ++countInFails;
                        else
                        {
                            callInDurs.Add(_durationInSeconds / 60);
-                           numberProfie.callInDurAvg = callInDurs.Average();
-                           numberProfie.totalInVolume = callInDurs.Sum();
+                           numberProfile.callInDurAvg = callInDurs.Average();
+                           numberProfile.totalInVolume = callInDurs.Sum();
                        }
 
                        if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)))
-                           numberProfie.countInOffNet = ++countInOffNets;
+                           numberProfile.countInOffNet = ++countInOffNets;
                        else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV)))
-                           numberProfie.countInOnNet = ++countInOnNets;
+                           numberProfile.countInOnNet = ++countInOnNets;
                        else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)))
-                           numberProfie.countInInter = ++countInInters;
+                           numberProfile.countInInter = ++countInInters;
                    }
 
                    else if (_callType == (int)Enums.CallType.outgoingSms)
                    {
-                       numberProfie.countOutSMS = ++countOutSMSs;
+                       numberProfile.countOutSMS = ++countOutSMSs;
                    }
 
 
@@ -293,13 +314,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                    {
                        if (!IMEIs.Contains(_iMEI))
                            IMEIs.Add(_iMEI);
-                       numberProfie.totalIMEI = IMEIs.Count();
+                       numberProfile.totalIMEI = IMEIs.Count();
 
 
 
                        if (!BTSIds.Contains(_bTSId))
                            BTSIds.Add(_bTSId);
-                       numberProfie.totalBTS = BTSIds.Count();
+                       numberProfile.totalBTS = BTSIds.Count();
                    }
 
              

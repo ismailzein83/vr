@@ -46,6 +46,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\Antlr3.Runtime.dll" />
+    <Content Include="Libraries\ExpressionEvaluator.dll" />
     <Content Include="Libraries\log4net.dll" />
     <Content Include="Libraries\log4net.xml" />
     <Content Include="Libraries\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
