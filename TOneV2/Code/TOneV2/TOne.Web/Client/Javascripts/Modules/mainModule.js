@@ -56,6 +56,17 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         }
        
     }
+    $scope.menusubItemsCurrent = -1;
+    $scope.setIndexSub = function (i, e) {
+        if ($scope.menusubItemsCurrent == i) {
+            $scope.menusubItemsCurrent = -1;
+        }
+        else {
+            $scope.menusubItemsCurrent = i;
+
+        }
+
+    }
     $scope.parent = null;
     $scope.child = null;
     $scope.setActiveClass = function (e, p, c) {
@@ -65,7 +76,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             $this.addClass('active-menu');
         }      
         $scope.parent = p;
-        $scope.child = c; 
+        $scope.child = c;       
 
     }
     $rootScope.hisnav = [];
@@ -129,7 +140,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                          { name: "test1", location: '#/CanvasJSChart' },
                          { name: "test2", location: '#/AMChart' },
                     ]
-                }
+                },
+                 {
+                     name: "For test 22", location: '', childs: [
+                          { name: "an other 1", location: '#/CanvasJSChart' },
+                          { name: "an other 2 ", location: '#/AMChart' },
+                     ]
+                 }
             ]
         }
     ];

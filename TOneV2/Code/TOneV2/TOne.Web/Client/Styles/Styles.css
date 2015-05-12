@@ -705,6 +705,20 @@ input.ui-grid-filter-input[type="text"] {
     position: relative;
 
 }
+.dll-menu a.down:before{
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid ;
+    border-bottom: 0px solid transparent;
+    border-left:0.35em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+
+}
 .leftdiv {   
     color: #666 !important;
     border-bottom: 1px #CBC8C8 solid;
@@ -735,6 +749,19 @@ input.ui-grid-filter-input[type="text"] {
     border-color: transparent #111;
     border-style: solid;
     border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
+.innerlist a.down:before { 
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid ;
+    border-bottom: 0px solid transparent;
+    border-left:0.35em solid transparent;
     display: inline-block;
     height: 0;
     width: 0px;
