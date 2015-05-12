@@ -459,14 +459,47 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
+
+
+            IAggregate totalIMEI = new DistinctCountAggregate(
+               (cdr) =>
+               {
+                   return cdr.iMEI;
+               },
+
+               (cdr) =>
+               {
+                   return ((cdr.callType == (int)Enums.CallType.incomingVoiceCall || cdr.callType == (int)Enums.CallType.outgoingVoiceCall || cdr.callType == (int)Enums.CallType.incomingSms || cdr.callType == (int)Enums.CallType.outgoingSms));
+               }
+           );
+
+
+            IAggregate totalBTS = new DistinctCountAggregate(
+              (cdr) =>
+              {
+                  return cdr.bTSId;
+              },
+
+              (cdr) =>
+              {
+                  return ((cdr.callType == (int)Enums.CallType.incomingVoiceCall || cdr.callType == (int)Enums.CallType.outgoingVoiceCall || cdr.callType == (int)Enums.CallType.incomingSms || cdr.callType == (int)Enums.CallType.outgoingSms));
+              }
+          );
+
+
+
+
+
+
+
+
+
+
            
             NumberProfile numberProfile = new NumberProfile();
             HashSet<string> DestinationsIn = new HashSet<string>();
             HashSet<string> DestinationsOut = new HashSet<string>();
 
-            HashSet<int> BTSIds = new HashSet<int>();
-            HashSet<string> IMEIs = new HashSet<string>();
-            
            
          
             string _mSISDN = string.Empty;
@@ -499,6 +532,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     totalInVolume.Reset();
                     callOutDurs.Reset();
                     callInDurs.Reset();
+                    totalBTS.Reset();
+                    totalIMEI.Reset();
 
 
                     _mSISDN = normalCDR.mSISDN;
@@ -535,13 +570,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     totalInVolume.Reset();
                     callOutDurs.Reset();
                     callInDurs.Reset();
+                    totalBTS.Reset();
+                    totalIMEI.Reset();
 
                     DestinationsIn = new HashSet<string>();
                     DestinationsOut = new HashSet<string>();
-                    BTSIds = new HashSet<int>();
-                    IMEIs = new HashSet<string>();
-                    
-
                     _mSISDN = normalCDR.mSISDN;
                 }
 
@@ -623,6 +656,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
+                totalIMEI.EvaluateCDR(normalCDR);
+                numberProfile.totalIMEI = int.Parse(totalIMEI.GetResult().ToString());
+
+
+                totalBTS.EvaluateCDR(normalCDR);
+                numberProfile.totalBTS = int.Parse(totalBTS.GetResult().ToString());
+
+
+
+
 
 
 
@@ -654,18 +697,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
-                if ((normalCDR.callType == (int)Enums.CallType.incomingVoiceCall || normalCDR.callType == (int)Enums.CallType.outgoingVoiceCall || normalCDR.callType == (int)Enums.CallType.incomingSms || normalCDR.callType == (int)Enums.CallType.outgoingSms))
-                {
-                    if (!IMEIs.Contains(normalCDR.iMEI))
-                        IMEIs.Add(normalCDR.iMEI);
-                    numberProfile.totalIMEI = IMEIs.Count();
-
-
-
-                    if (!BTSIds.Contains(normalCDR.bTSId))
-                        BTSIds.Add(normalCDR.bTSId);
-                    numberProfile.totalBTS = BTSIds.Count();
-                }
+              
 
 
 

@@ -12,8 +12,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         Func<NormalCDR, bool> _condition;
         MethodInfo _propertyGetMethod;
-        Func<NormalCDR, String> _cdrExpressionToCountDistinct;
-        HashSet<string> DistinctItems = new HashSet<string>();
+        Func<NormalCDR, Object> _cdrExpressionToCountDistinct;
+        HashSet<Object> DistinctItems = new HashSet<Object>();
 
         public DistinctCountAggregate(string propertyName, Func<NormalCDR, bool> condition)
         {
@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             _condition = condition;
         }
 
-        public DistinctCountAggregate(Func<NormalCDR, String> cdrExpressionToCountDistinct, Func<NormalCDR, bool> condition)
+        public DistinctCountAggregate(Func<NormalCDR, Object> cdrExpressionToCountDistinct, Func<NormalCDR, bool> condition)
         {
             _cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             _condition = condition;
