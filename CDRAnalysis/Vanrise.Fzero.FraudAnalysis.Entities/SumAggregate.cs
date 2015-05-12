@@ -10,7 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class SumAggregate:IAggregate
     {
 
-        string _conditionExpression;
         Func<NormalCDR, bool> _condition;
         MethodInfo _propertyGetMethod;
         Func<NormalCDR, Decimal> _cdrExpressionToSum;
