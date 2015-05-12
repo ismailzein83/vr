@@ -321,18 +321,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
         {
 
+            int? BatchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
 
-            //IAggregate countInCalls = new CountAggregate(@" output.Result = (normalCDR.callType == incomingVoiceCall); ");
-
-
-
-
-
-            IAggregate countInCalls = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
-            });
+            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
 
 
             IAggregate countOutCalls = new CountAggregate((cdr) =>
@@ -341,12 +334,79 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
 
+            IAggregate countInCalls = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
+            });
 
-            int? BatchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
+
+            IAggregate totalDataVolume = new SumAggregate((cdr) =>
+            {
+                return cdr.upVolume + cdr.downVolume;
+            }, null);
 
 
-            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+            IAggregate countOutFails = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall)  && (cdr.durationInSeconds==0) ;
+            });
+
+
+            IAggregate countInFails = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall) && (cdr.durationInSeconds == 0);
+            });
+
+
+            IAggregate countOutSMSs = new CountAggregate((cdr) =>
+            {
+                return (cdr.callType == (int)Enums.CallType.outgoingSms) ;
+            });
+
+
+            IAggregate countOutOffNets = new CountAggregate((cdr) =>
+            {
+                 return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
+            });
+
+
+            IAggregate countOutOnNets = new CountAggregate((cdr) =>
+            {
+            return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && ((cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
+            });
+
+
+            IAggregate countOutInters = new CountAggregate((cdr) =>
+            {
+            return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
+            });
+
+
+             IAggregate countInOffNets = new CountAggregate((cdr) =>
+            {
+                 return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
+            });
+
+
+            IAggregate countInOnNets = new CountAggregate((cdr) =>
+            {
+            return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && ((cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
+            });
+
+
+            IAggregate countInInters = new CountAggregate((cdr) =>
+            {
+            return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
+            });
+
+
+          
+
+
+
+
+
+           
             NumberProfile numberProfile = new NumberProfile();
             HashSet<string> DestinationsIn = new HashSet<string>();
             HashSet<string> DestinationsOut = new HashSet<string>();
@@ -359,16 +419,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             HashSet<decimal> callOutDurs = new HashSet<decimal>();
             HashSet<decimal> callInDurs = new HashSet<decimal>();
             
-            int countOutFails = 0;
-            int countInFails = 0;
-            int countInOffNets = 0;
-            int countOutOffNets = 0;
-            int countInOnNets = 0;
-            int countOutOnNets = 0;
-            int countInInters = 0;
-            int countOutInters = 0;
-            int countOutSMSs = 0;
-            decimal totalDataVolume = 0;
+           
+         
             string _mSISDN = string.Empty;
 
 
@@ -442,6 +494,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     numberProfile = new NumberProfile();
                     countInCalls.Reset();
                     countOutCalls.Reset();
+                    totalDataVolume.Reset();
+                    countOutFails.Reset();
+                    countInFails.Reset();
+                    countOutSMSs.Reset();
+                    countInOffNets.Reset();
+                    countOutOffNets.Reset();
+                    countInOnNets.Reset();
+                    countOutOnNets.Reset();
+                    countInInters.Reset();
+                    countOutInters.Reset();
+                    countOutSMSs.Reset();
+
 
                     _mSISDN = normalCDR.mSISDN;
                 }
@@ -462,6 +526,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     numberProfile = new NumberProfile();
                     countInCalls.Reset();
                     countOutCalls.Reset();
+                    totalDataVolume.Reset();
+                    countOutFails.Reset();
+                    countInFails.Reset();
+                    countOutSMSs.Reset();
+                    countInOffNets.Reset();
+                    countOutOffNets.Reset();
+                    countInOnNets.Reset();
+                    countOutOnNets.Reset();
+                    countInInters.Reset();
+                    countOutInters.Reset();
+                    countOutSMSs.Reset();
+
                     DestinationsIn = new HashSet<string>();
                     DestinationsOut = new HashSet<string>();
                     MSISDNsIn = new HashSet<string>();
@@ -470,16 +546,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     IMEIs = new HashSet<string>();
                     callOutDurs = new HashSet<decimal>();
                     callInDurs = new HashSet<decimal>();
-                    countOutFails = 0;
-                    countInFails = 0;
-                    countInOffNets = 0;
-                    countOutOffNets = 0;
-                    countInOnNets = 0;
-                    countOutOnNets = 0;
-                    countInInters = 0;
-                    countOutInters = 0;
-                    countOutSMSs = 0;
-                    totalDataVolume = 0;
+                  
+                  
+                    
 
                     _mSISDN = normalCDR.mSISDN;
                 }
@@ -501,42 +570,57 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 //IAggregate DistinctCountAggregate = new DistinctCountAggregate("", "");
                 //IAggregate AverageAggregate = new AverageAggregate("");
 
-                countInCalls.EvaluateCDR(normalCDR);
-                numberProfile.countInCalls = int.Parse(countInCalls.GetResult().ToString());
-
-
-                countOutCalls.EvaluateCDR(normalCDR);
-                numberProfile.countOutCalls = int.Parse(countOutCalls.GetResult().ToString());
-               
-
-                // Filling Agregates
-
-                numberProfile.periodId = (int)Enums.Period.Day;
-                numberProfile.fromDate = _connectDateTime;
-                numberProfile.isOnNet = 1;
-
-                totalDataVolume += (_upVolume + _downVolume);
-                numberProfile.totalDataVolume = totalDataVolume;
-
-
-
 
                 if ((int)Enums.Period.Day == (int)Enums.Period.Day)
                 {
                     numberProfile.toDate = _connectDateTime.AddDays(1);
                 }
 
+                numberProfile.periodId = (int)Enums.Period.Day;
+                numberProfile.fromDate = _connectDateTime;
+                numberProfile.isOnNet = 1;
+
+                countInCalls.EvaluateCDR(normalCDR);
+                numberProfile.countInCalls = int.Parse(countInCalls.GetResult().ToString());
+
+
+                countOutCalls.EvaluateCDR(normalCDR);
+                numberProfile.countOutCalls = int.Parse(countOutCalls.GetResult().ToString());
+
+
+                countInOffNets.EvaluateCDR(normalCDR);
+                numberProfile.countInOffNet = int.Parse(countInOffNets.GetResult().ToString());
+
+
+                countOutOffNets.EvaluateCDR(normalCDR);
+                numberProfile.countOutOffNet = int.Parse(countOutOffNets.GetResult().ToString());
+
+
+                countInOnNets.EvaluateCDR(normalCDR);
+                numberProfile.countInOnNet = int.Parse(countInOnNets.GetResult().ToString());
+
+
+                countOutOnNets.EvaluateCDR(normalCDR);
+                numberProfile.countOutOnNet = int.Parse(countOutOnNets.GetResult().ToString());
+
+
+                countInInters.EvaluateCDR(normalCDR);
+                numberProfile.countInInter = int.Parse(countInInters.GetResult().ToString());
+
+
+                countOutInters.EvaluateCDR(normalCDR);
+                numberProfile.countOutInter = int.Parse(countOutInters.GetResult().ToString());
+
+
+                countOutSMSs.EvaluateCDR(normalCDR);
+                numberProfile.countOutSMS = int.Parse(countOutSMSs.GetResult().ToString());
+
+
+                // Filling Agregates
+                             
 
                 if (_callType == (int)Enums.CallType.outgoingVoiceCall)
                 {
-
-
-                    if (!DestinationsOut.Contains(_destination))
-                    {
-                        DestinationsOut.Add(_destination);
-                        numberProfile.diffOutputNumb = DestinationsOut.Count();
-                    }
-
                     if (!DestinationsOut.Contains(_destination))
                     {
                         DestinationsOut.Add(_destination);
@@ -544,22 +628,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     }
 
 
-
-                    if (_durationInSeconds == 0)
-                        numberProfile.countOutFail = ++countOutFails;
-                    else
+                    
+                    if (_durationInSeconds != 0)
                     {
                         callOutDurs.Add(_durationInSeconds / 60);
                         numberProfile.callOutDurAvg = callOutDurs.Average();
-                        numberProfile.totalInVolume = callOutDurs.Sum();
+                        numberProfile.totalOutVolume = callOutDurs.Sum();
                     }
 
-                    if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)))
-                        numberProfile.countOutOffNet = ++countOutOffNets;
-                    else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV)))
-                        numberProfile.countOutOnNet = ++countOutOnNets;
-                    else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)))
-                        numberProfile.countOutInter = ++countOutInters;
+                  
                 }
 
 
@@ -573,27 +650,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     }
 
 
-                    if (_durationInSeconds == 0)
-                        numberProfile.countInFail = ++countInFails;
-                    else
+                    if (_durationInSeconds != 0)
                     {
                         callInDurs.Add(_durationInSeconds / 60);
                         numberProfile.callInDurAvg = callInDurs.Average();
                         numberProfile.totalInVolume = callInDurs.Sum();
                     }
-
-                    if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)))
-                        numberProfile.countInOffNet = ++countInOffNets;
-                    else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || _callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV)))
-                        numberProfile.countInOnNet = ++countInOnNets;
-                    else if ((_callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)))
-                        numberProfile.countInInter = ++countInInters;
+                 
                 }
 
-                else if (_callType == (int)Enums.CallType.outgoingSms)
-                {
-                    numberProfile.countOutSMS = ++countOutSMSs;
-                }
+               
 
 
 
