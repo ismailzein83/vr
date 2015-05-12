@@ -488,11 +488,31 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
+            IAggregate diffOutputNumb = new DistinctCountAggregate(
+             (cdr) =>
+             {
+                 return cdr.destination;
+             },
+
+             (cdr) =>
+             {
+                 return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
+             }
+         );
 
 
 
+            IAggregate diffInputNumbers = new DistinctCountAggregate(
+             (cdr) =>
+             {
+                 return cdr.destination;
+             },
 
-
+             (cdr) =>
+             {
+                 return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
+             }
+         );
 
 
            
@@ -534,6 +554,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     callInDurs.Reset();
                     totalBTS.Reset();
                     totalIMEI.Reset();
+                    diffOutputNumb.Reset();
+                    diffInputNumbers.Reset();
+
 
 
                     _mSISDN = normalCDR.mSISDN;
@@ -572,9 +595,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     callInDurs.Reset();
                     totalBTS.Reset();
                     totalIMEI.Reset();
-
-                    DestinationsIn = new HashSet<string>();
-                    DestinationsOut = new HashSet<string>();
+                    diffOutputNumb.Reset();
+                    diffInputNumbers.Reset();
                     _mSISDN = normalCDR.mSISDN;
                 }
 
@@ -583,15 +605,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
-
-
-
-
-
-
-                // New Filling Aggregates
-
-                //IAggregate DistinctCountAggregate = new DistinctCountAggregate("", "");
+               
 
 
                 if ((int)Enums.Period.Day == (int)Enums.Period.Day)
@@ -666,36 +680,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
 
+                diffOutputNumb.EvaluateCDR(normalCDR);
+                numberProfile.diffOutputNumb = int.Parse(diffOutputNumb.GetResult().ToString());
 
 
-
-                // Filling Agregates
-
-
-                if (normalCDR.callType == (int)Enums.CallType.outgoingVoiceCall)
-                {
-                    if (!DestinationsOut.Contains(normalCDR.destination))
-                    {
-                        DestinationsOut.Add(normalCDR.destination);
-                        numberProfile.diffOutputNumb = DestinationsOut.Count();
-                    }
-                  
-                }
-
-
-                if (normalCDR.callType == (int)Enums.CallType.incomingVoiceCall)
-                {
-
-                    if (!DestinationsIn.Contains(normalCDR.destination))
-                    {
-                        DestinationsIn.Add(normalCDR.destination);
-                        numberProfile.diffInputNumbers = DestinationsIn.Count();
-                    }
-                 
-                }
-
-
-
+                diffInputNumbers.EvaluateCDR(normalCDR);
+                numberProfile.diffInputNumbers = int.Parse(diffInputNumbers.GetResult().ToString());
 
               
 
