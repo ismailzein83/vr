@@ -15,5 +15,7 @@ namespace TOne.Analytics.Entities
         public List<string> SupplierIds { get; set; }
 
         public List<string> CodeGroups { get; set; }
+
+        public List<int> ZoneIds { get; set; }
     }
 }

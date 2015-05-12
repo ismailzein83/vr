@@ -6,7 +6,6 @@
         load();
 
         function defineScopeObjects() {
-
             //  $scope.zoneName = $routeParams.ZoneName;
             $scope.testModel = 'ZoneDashboardController ';
 

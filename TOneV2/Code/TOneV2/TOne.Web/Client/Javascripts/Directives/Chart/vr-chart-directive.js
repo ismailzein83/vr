@@ -8,10 +8,9 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
         restrict: 'E',
         scope: {
             onReady: '=',
-            hidesettings: '@',
-            menuactions: '='
+            hidesettings: '@'
         },
-        controller: function ($scope, $element) {
+        controller: function ($scope, $element, $attrs) {
             var controller = this;
             var chartObj;
             var currentChartSource;
@@ -69,10 +68,10 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                                     return;
                                 }
                                 selectedDataItem = currentChartSource.chartData[e.point.index];
-                                if (!onDataItemClicked(currentChartSource.chartData[e.point.index])) {
+                                if (!onDataItemClicked(selectedDataItem)) {
                                     $scope.$apply(function () {
                                         $scope.selectedEntityTitle = eval('currentChartSource.chartData[e.point.index].' + sDef.titlePath);
-                                        showMenu();
+                                        showMenu(selectedDataItem);
                                     });
                                 }
                             }
@@ -305,9 +304,15 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                 return (controller.hidesettings == undefined || controller.hidesettings == false) && isChartAvailable;
             }
 
-            function showMenu() {
-                if (controller.menuactions != undefined && controller.menuactions.length > 0)
-                    controller.showMenu = true;
+            function showMenu(dataItem) {
+                if ($attrs.menuactions != undefined) {
+                    var actionsAttribute = $scope.$parent.$eval($attrs.menuactions);
+                    var actions = typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute;
+                    if (actions != undefined && actions != null && actions.length > 0) {
+                        controller.menuActions = actions;
+                        controller.showMenu = true;
+                    }
+                }
             }
 
             function hideMenu() {

@@ -1,7 +1,7 @@
 ﻿/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticsMeasureEnum, CarrierTypeEnum) {
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum) {
 
 
         var chartSelectedMeasureAPI;
@@ -12,7 +12,6 @@ appControllers.controller('ZoneMonitorController',
         var sortColumn;
         var sortDescending = true;
         var currentSortedColDef;
-        var trafficStatisticSummary;
         var measures = [];
         var currentData;
 
@@ -20,6 +19,9 @@ appControllers.controller('ZoneMonitorController',
         defineScopeMethods();
         load();
         function defineScopeObjects() {
+            $scope.currentSearchCriteria = {
+                groupKeys: []
+            };
             $scope.customvalidateTestFrom = function (fromDate) {
                 return validateDates(fromDate, $scope.toDate);
             };
@@ -38,6 +40,25 @@ appControllers.controller('ZoneMonitorController',
             }
             $scope.testModel = 'ZoneMonitorController';
             
+            $scope.groupKeys = [
+                {
+                    title: "Zone",
+                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
+                    gridHeader: "Zone"
+                },
+                {
+                    title: "Customer",
+                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
+                    gridHeader: "Customer"
+                },
+                {
+                    title: "Supplier",
+                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
+                    gridHeader: "Supplier"
+                }];
+            $scope.selectedGroupKeys = [];
+            $scope.selectedGroupKeys.push($scope.groupKeys[0]);
+
             $scope.switches = [];
             $scope.selectedSwitches = [];
 
@@ -63,25 +84,29 @@ appControllers.controller('ZoneMonitorController',
                     getData();
                 }
             };
+
+            $scope.gridMenuActions = [{
+                name: "CDRs"
+            }];
         }
         
         function defineScopeMethods() {
 
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
-                chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
-                    if (selectedEntity.zoneId == undefined)
-                        return;
-                    $scope.selectedEntityId = selectedEntity.zoneId;
-                    $scope.selectedEntityName = selectedEntity.zoneName;
-                    //console.log($scope.selectedEntityName);
-                    getAndShowEntityStatistics();
-                };
+                //chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
+                //    if (selectedEntity.zoneId == undefined)
+                //        return;
+                //    $scope.selectedEntityId = selectedEntity.zoneId;
+                //    $scope.selectedEntityName = selectedEntity.zoneName;
+                //    //console.log($scope.selectedEntityName);
+                //    getAndShowEntityStatistics();
+                //};
             };
 
             $scope.chartSelectedEntityReady = function (api) {
                 chartSelectedEntityAPI = api;
-                
+
             };
 
             $scope.getData = function (asyncHandle) {
@@ -91,17 +116,30 @@ appControllers.controller('ZoneMonitorController',
                 resetSorting();
                 getData(asyncHandle, true);
             };
-            
+
             $scope.pageChanged = function () {
                 getData();
             };
-            
+
             $scope.onMainGridReady = function (api) {
                 mainGridAPI = api;
             }
 
             $scope.onZoneClicked = function (dataItem) {
                 selectZone(dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name);
+            };
+
+            $scope.onGroupKeyClicked = function (dataItem, colDef) {
+                var group = colDef.tag;
+                var groupIndex = $scope.currentSearchCriteria.groupKeys.indexOf(group);
+                $scope.selectEntity(group, dataItem.GroupKeyValues[groupIndex].Id, dataItem.GroupKeyValues[groupIndex].Name);
+            };
+
+            $scope.selectEntity = function (groupKey, entityId, entityName) {
+                $scope.selectedEntityType = groupKey.title;
+                $scope.selectedEntityId = entityId;
+                $scope.selectedEntityName = entityName;
+                getAndShowEntityStatistics(groupKey);
             };
 
             $scope.onMainGridSortChanged = function (colDef, sortDirection, handle) {
@@ -118,12 +156,28 @@ appControllers.controller('ZoneMonitorController',
                 overallSelectedMeasure = dataItem.measure;
                 renderOverallChart();
             };
+
+            $scope.getChartMenuActions = function (dataItem) {
+                var menuActions = [];
+                angular.forEach($scope.currentSearchCriteria.groupKeys, function (groupKey) {
+                    var valueIndex = $scope.currentSearchCriteria.groupKeys.indexOf(groupKey);
+                    if (dataItem.groupKeyValues[valueIndex].Name != null) {
+                        menuActions.push({
+                            name: groupKey.title + ' (' + dataItem.groupKeyValues[valueIndex].Name + ')',
+                            clicked: function (dataItem) {
+                                $scope.selectEntity(groupKey, dataItem.groupKeyValues[valueIndex].Id, dataItem.groupKeyValues[valueIndex].Name)
+                            }
+                        });
+                    }
+                });
+                return menuActions;
+            };
         }
 
         function load() {
             loadMeasures();
             overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
-            $scope.fromDate = '2014-04-27';
+            $scope.fromDate = '2012-04-27';
             $scope.toDate = '2014-04-29';
             loadCodeGroups();
             loadSwitches();
@@ -159,6 +213,11 @@ appControllers.controller('ZoneMonitorController',
                 chartSelectedEntityAPI.hideChart();
 
             var count = $scope.mainGridPagerSettings.itemsPerPage;
+            var groupKeys = [];
+            
+            angular.forEach($scope.selectedGroupKeys, function (group) {
+                groupKeys.push(group.groupKeyEnumValue);
+            });
            
             var fromRow = ($scope.mainGridPagerSettings.currentPage - 1) * count + 1;
             var toRow = fromRow + count - 1;
@@ -167,7 +226,7 @@ appControllers.controller('ZoneMonitorController',
                 TempTableKey: resultKey,
                 Filter: filter,
                 WithSummary: withSummary,
-                GroupKeys: [4],
+                GroupKeys: groupKeys,
                 From: $scope.fromDate,
                 To: $scope.toDate,
                 FromRow: fromRow,
@@ -178,9 +237,16 @@ appControllers.controller('ZoneMonitorController',
             var isSucceeded;
             $scope.showResult = true;
             $scope.isGettingData = true;
+            $scope.data.length = 0;
+            $scope.currentSearchCriteria.groupKeys.length = 0;
+            angular.forEach($scope.selectedGroupKeys, function (group) {
+                $scope.currentSearchCriteria.groupKeys.push(group);
+            });
+
             AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
-                $scope.data.length = 0;
+                                
+
                 currentData = response.Data;
                 if (currentSortedColDef != undefined)
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
@@ -188,15 +254,8 @@ appControllers.controller('ZoneMonitorController',
                 resultKey = response.ResultKey;
                 $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
                 if (withSummary) {
-                    trafficStatisticSummary = response.Summary;
-                    $scope.overallData.length = 0;
-                    angular.forEach(measures, function (measure) {
-                        $scope.overallData.push({
-                            measure: measure,
-                            measureDescription: measure.description,
-                            value: trafficStatisticSummary[measure.propertyName]
-                        });
-                    });
+                    $scope.trafficStatisticSummary = response.Summary;
+                    $scope.overallData[0] = response.Summary;
                 }
                 angular.forEach(response.Data, function (itm) {
                     itm.zoneName = itm.GroupKeyValues[0].Name;
@@ -215,13 +274,20 @@ appControllers.controller('ZoneMonitorController',
         function renderOverallChart(){
             var chartData = [];
             var measure = overallSelectedMeasure;
-            var othersValue = trafficStatisticSummary[measure.propertyName];
+            var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
             angular.forEach(currentData, function (itm) {
-                chartData.push({
-                    zoneId: itm.GroupKeyValues[0].Id,
-                    zoneName: itm.GroupKeyValues[0].Name,
+                var dataItem = {
+                    groupKeyValues: itm.GroupKeyValues,
+                    entityName: '',
                     value: itm[measure.propertyName]
-                });
+                };
+                
+                for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {                    
+                    if (dataItem.entityName.length > 0)
+                        dataItem.entityName += ' - ';
+                    dataItem.entityName += itm.GroupKeyValues[i].Name;
+                };
+                chartData.push(dataItem);
                 othersValue -= itm[measure.propertyName];
             });
             chartData.sort(function (a, b) {
@@ -235,7 +301,7 @@ appControllers.controller('ZoneMonitorController',
                 return 0;
             });
             chartData.push({
-                zoneName: "Other Destinations",
+                entityName: "Others",
                 value: othersValue
             });
             var chartDefinition = {
@@ -246,7 +312,7 @@ appControllers.controller('ZoneMonitorController',
 
             var seriesDefinitions = [{
                 title: measure.description,
-                titlePath: "zoneName",
+                titlePath: "entityName",
                 valuePath: "value"
             }];
             //console.log(chartData.length);
@@ -273,9 +339,9 @@ appControllers.controller('ZoneMonitorController',
             return filterIds;
         }
 
-        function getAndShowEntityStatistics() {           
+        function getAndShowEntityStatistics(groupKey) {
             $scope.isGettingEntityStatistics = true;
-            AnalyticsAPIService.GetTrafficStatistics(4, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
+            AnalyticsAPIService.GetTrafficStatistics(groupKey.groupKeyEnumValue, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
             .then(function (response) {
                 var chartData = response;
 

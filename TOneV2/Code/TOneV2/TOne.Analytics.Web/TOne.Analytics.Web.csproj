@@ -123,8 +123,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Client\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Client\Services\APIServices\AnalyticsAPIService.js" />
+    <Content Include="Client\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
+    <Content Include="Client\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Client\Views\Traffic Statistics\ZoneMonitor.html" />
     <Content Include="Client\Views\Traffic Statistics\ZoneMonitorController.js" />
     <Content Include="Web.config" />

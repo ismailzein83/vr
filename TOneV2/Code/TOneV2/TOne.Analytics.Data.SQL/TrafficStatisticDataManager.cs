@@ -73,12 +73,15 @@ namespace TOne.Analytics.Data.SQL
 	                            BEGIN
 
                             WITH OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+                            CarrierInfo AS
+                            (
+                                Select P.Name + ' (' + A.NameSuffix + ')' AS Name, A.CarrierAccountID AS CarrierAccountID from CarrierAccount A LEFT JOIN CarrierProfile P on P.ProfileID=A.ProfileID
+                            ),
 		                        AllResult AS
 		                        (
 			                        SELECT
-					                       ts.OurZoneID
-					                       ,z.Name as ZoneName
-                                           ,Min(FirstCDRAttempt) AS FirstCDRAttempt
+                                            #SELECTPART#
+                                           Min(FirstCDRAttempt) AS FirstCDRAttempt
 				                           , Max(ts.LastCDRAttempt) AS LastCDRAttempt
 				                           , Sum(ts.Attempts) AS Attempts
 				                           , Sum(ts.DeliveredAttempts) AS DeliveredAttempts
@@ -92,17 +95,37 @@ namespace TOne.Analytics.Data.SQL
 				                           , AVG(ts.PGAD) AS PGAD
 
 			                        FROM TrafficStats ts WITH(NOLOCK ,INDEX(IX_TrafficStats_DateTimeFirst))
-			                        JOIN OurZones z ON ts.OurZoneID = z.ZoneID
+                                    #JOINPART# 
 			                        WHERE
 			                        FirstCDRAttempt BETWEEN @FromDate AND @ToDate
                                     #FILTER#
-			                        GROUP BY ts.OurZoneID, z.Name
+			                        GROUP BY #GROUPBYPART#
 		                        )
 		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
+            StringBuilder groupKeysSelectPart = new StringBuilder();
+            StringBuilder groupKeysJoinPart = new StringBuilder();
+            StringBuilder groupKeysGroupByPart = new StringBuilder();
+            foreach(var groupKey in groupKeys)
+            {
+                string selectStatement ;
+                string joinStatement ;
+                string groupByStatement;
+                GetColumnStatements(groupKey, out selectStatement, out joinStatement, out groupByStatement);
+                groupKeysSelectPart.Append(selectStatement);
+                groupKeysJoinPart.Append(joinStatement);
+               if (groupKeysGroupByPart.Length > 0)
+                    groupKeysGroupByPart.Append(",");
+                groupKeysGroupByPart.Append(groupByStatement);
+            }
+
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
+            queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
+            queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
+            queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
+
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", from));
@@ -116,6 +139,7 @@ namespace TOne.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
             AddFilter(whereBuilder, filter.CodeGroups, "z.CodeGroup");
+            AddFilter(whereBuilder, filter.ZoneIds, "ts.OurZoneID");
         }
 
         void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
@@ -199,6 +223,10 @@ namespace TOne.Analytics.Data.SQL
             {
                 case TrafficStatisticGroupKeys.OurZone:
                     return String.Format("{0} = '{1}'", OurZoneIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.CustomerId:
+                    return String.Format("{0} = '{1}'", CustomerIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.SupplierId:
+                    return String.Format("{0} = '{1}'", SupplierIDColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -237,9 +265,46 @@ namespace TOne.Analytics.Data.SQL
                     idColumn = OurZoneIDColumnName;
                     nameColumn = OurZoneNameColumnName;
                     break;
+                case TrafficStatisticGroupKeys.CustomerId:
+                    idColumn = CustomerIDColumnName;
+                    nameColumn = CustomerNameColumnName;
+                    break;
+
+                case TrafficStatisticGroupKeys.SupplierId:
+                    idColumn = SupplierIDColumnName;
+                    nameColumn = SupplierNameColumnName;
+                    break;
                 default:
                     idColumn = null;
                     nameColumn = null;
+                    break;
+            }
+        }
+
+        private void GetColumnStatements(TrafficStatisticGroupKeys column, out string selectStatement, out string joinStatement, out string groupByStatement)
+        {
+            switch (column)
+            {
+                case TrafficStatisticGroupKeys.OurZone:
+                    selectStatement = String.Format(" ts.OurZoneID as {0}, z.Name as {1}, ", OurZoneIDColumnName, OurZoneNameColumnName);
+                    joinStatement = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID";
+                    groupByStatement = "ts.OurZoneID, z.Name";
+                    break;
+                case TrafficStatisticGroupKeys.CustomerId:
+                    selectStatement = String.Format(" ts.CustomerID as {0}, cust.Name as {1}, ", CustomerIDColumnName, CustomerNameColumnName);
+                    joinStatement = " LEFT JOIN CarrierInfo cust ON ts.CustomerID = cust.CarrierAccountID";
+                    groupByStatement = "ts.CustomerID, cust.Name";
+                    break;
+
+                case TrafficStatisticGroupKeys.SupplierId:
+                    selectStatement = String.Format(" ts.SupplierID as {0}, supp.Name as {1}, ", SupplierIDColumnName, SupplierNameColumnName);
+                    joinStatement = " LEFT JOIN CarrierInfo supp ON ts.SupplierID = supp.CarrierAccountID";
+                    groupByStatement = "ts.SupplierID, supp.Name";
+                    break;
+                default:
+                    selectStatement = null;
+                    joinStatement = null;
+                    groupByStatement = null;
                     break;
             }
         }
@@ -248,5 +313,9 @@ namespace TOne.Analytics.Data.SQL
 
         const string OurZoneIDColumnName = "OurZoneID";
         const string OurZoneNameColumnName = "ZoneName";
+        const string CustomerIDColumnName = "CustomerID";
+        const string CustomerNameColumnName = "CustomerName";
+        const string SupplierIDColumnName = "SupplierID";
+        const string SupplierNameColumnName = "SupplierName";
     }
 }
