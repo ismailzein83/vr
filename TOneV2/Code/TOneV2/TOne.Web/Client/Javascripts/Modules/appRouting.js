@@ -23,6 +23,10 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/Routing/Views/Management/RouteRuleEditor.html',
             controller: 'RouteRuleEditorController'
         }).
+            when('/RatePlanning', {
+                templateUrl: '/Client/Modules/Routing/Views/Management/RatePlanning.html',
+                controller: 'RatePlanningController'
+            }).
         when('/ZingChart', {
             templateUrl: '/Client/Views/ChartPrototypes/ZingChart.html',
             controller: 'ZingChartController'
