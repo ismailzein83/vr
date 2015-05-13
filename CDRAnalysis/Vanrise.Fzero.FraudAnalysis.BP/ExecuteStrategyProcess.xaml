@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -84,16 +85,31 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetSuspiciousNumberStatus" />
       </Parallel.Variables>
       <vffba1:LoadNumberProfiles sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
+        <vffba1:LoadNumberProfiles.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadNumberProfiles.FromDate>
         <vffba1:LoadNumberProfiles.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:LoadNumberProfiles.OutputQueue>
+        <vffba1:LoadNumberProfiles.PeriodId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.PeriodId</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadNumberProfiles.PeriodId>
         <vffba1:LoadNumberProfiles.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpReference>
           </OutArgument>
         </vffba1:LoadNumberProfiles.Status>
+        <vffba1:LoadNumberProfiles.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadNumberProfiles.ToDate>
       </vffba1:LoadNumberProfiles>
       <vffba1:GetSuspiciousNumber sap2010:WorkflowViewState.IdRef="GetSuspiciousNumber_1">
         <vffba1:GetSuspiciousNumber.InputQueue>
@@ -145,7 +161,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Execute Strategy Process {0}", Input.StrategyId)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBY6A5UBDgIBAT4FQhECAVdDBU4aAgFQTwWOARACAQaPAQWTARECAQJACUCLAQIBWEYLRl4CAVRLC0tYAgFRVgdhIwIBQWIHfCQCAR19B40BJwIBB5EBCZEBigECAQNeDV55AgFJWQ1ZggECAUJ5DXlYAgE6bw1vcQIBM2UNZXoCASx0DXR6AgElag1qiAECAR6KAQ2KAVgCARaFAQ2FAXICAQ+AAQ2AAYABAgEI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBk7A6UBDgIBAT8FQxECAWxEBU8aAgFlUAWeARACAQafAQWjARECAQJBCUGLAQIBbUcLR14CAWlMC0xYAgFmVwdxIwIBQXIHjAEkAgEdjQEHnQEnAgEHoQEJoQGKAQIBA1oNWlsCAV5pDWl5AgFXXw1fggECAVBkDWRYAgFJbg1uWQIBQokBDYkBWAIBOn8Nf3ECATN1DXV6AgEshAENhAF6AgEleg16iAECAR6aAQ2aAVgCARaVAQ2VAXICAQ+QAQ2QAYABAgEI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

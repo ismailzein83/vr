@@ -45,7 +45,10 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
-                    StrategyId = 1
+                      StrategyId = 1, 
+                      //FromDate = DateTime.Now,
+                      //ToDate = DateTime.Now,
+                      //PeriodId =(int) Enums.Period.Day
                 }
             });
 
