@@ -38,7 +38,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     expandableRowTemplate = template;
                     expandableColumnWidth = 2;
                     ctrl.expandableColumnWidth = expandableColumnWidth + '%';
-                    ctrl.expandableSectionWidth = (100 - expandableColumnWidth - 1) + '%';
+                    ctrl.expandableSectionWidth = (100 - expandableColumnWidth) + '%';
                     calculateDataColumnsSectionWidth();
                 };                
 
@@ -63,7 +63,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
             function defineMenuColumn() {
                 var hasActionMenu = $attrs.menuactions != undefined;
-                actionMenuWidth = hasActionMenu ? 2 : 0;
+                actionMenuWidth = hasActionMenu ? 3 : 0;
                 ctrl.actionsColumnWidth = actionMenuWidth + '%';
 
                 ctrl.isActionMenuVisible = function (dataItem) {
@@ -91,8 +91,8 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
             function calculateDataColumnsSectionWidth() {
                 var width = (100 - actionMenuWidth - expandableColumnWidth);
-                if (width < 100)
-                    width -= 1;
+                //if (width < 100)
+                //    width -= 1;
                 ctrl.dataColumnsSectionWidth = width + '%';
             }
 

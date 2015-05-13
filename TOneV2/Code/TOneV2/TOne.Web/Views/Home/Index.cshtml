@@ -72,7 +72,7 @@
                                     <a class=" menulink " ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{c.name}}</a>
                                     <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
                                         <li ng-repeat="a in c.childs">
-                                            <a  class=" menulink" ng-href="{{a.location}}">{{a.name}}</a>
+                                            <a class=" menulink" style="color:#333;" ng-href="{{a.location}}">{{a.name}}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -106,7 +106,7 @@
                             <a ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub($index,$event) ; setActiveClass(null,item , c);" href="">{{c.name}}</a>
                             <ul class="nav"  ng-show="menusubItemsCurrent == $index">
                                 <li ng-repeat="a in c.childs" class="innerlist">
-                                    <a class="menulink" style="padding:0px 0px 0px 30px !important" ng-href="{{a.location}}">{{a.name}}</a>
+                                    <a class="menulink" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{a.location}}">{{a.name}}</a>
                                 </li>
                             </ul>
                         </li>

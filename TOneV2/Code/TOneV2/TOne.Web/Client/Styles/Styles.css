@@ -737,11 +737,15 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .menulink:hover{
-    color:#000;
+    color: #666;
     text-decoration:none;
 }
 .menulink:active{
-    color:#000;
+    color:#000 ;
+    text-decoration:none;
+}
+..menulink:visited{
+    color:#000 ;
     text-decoration:none;
 }
 .innerlist a:before { 

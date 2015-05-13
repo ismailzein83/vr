@@ -1,6 +1,6 @@
 ﻿<div class="vr-datagrid">
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle">
-        <div ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
+        <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
 
         </div>
         <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}" ng-sortable="itemsSortable">
@@ -12,10 +12,10 @@
     </div>
 
 
-    <div ng-style="ctrl.gridStyle" style="overflow-y:auto">
+    <div ng-style="ctrl.gridStyle" >
         <div class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
-            <div ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
-                <div ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
+            <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
+                <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
                     <label style="height: 9px;" class=" hand-cursor" ng-click="ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
                         <span class="glyphicon glyphicon-plus" style="top: -4px; left: 2px"></span>
                     </label>
@@ -52,9 +52,9 @@
                     </div>
                 </div>
             </div>
-            <div id="divExpandableRowContent_{{$index}}" ng-show="isRowExpanded" style="border-top: 1px solid #D0D0D0">
-                <div ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}"></div>
-                <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #F5F5F5'}"></div>
+            <div id="divExpandableRowContent_{{$index}}" ng-show="isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
+                <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
+                <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}"></div>
             </div>
         </div>
 
