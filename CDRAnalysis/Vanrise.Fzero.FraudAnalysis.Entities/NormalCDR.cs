@@ -11,29 +11,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
 
 
-        public int id { get; set; }
-        public string mSISDN { get; set; }
-        public string iMSI { get; set; }
-        public DateTime connectDateTime { get; set; }
-        public  string destination { get; set; }
-        public  decimal durationInSeconds { get; set; }
-        public  DateTime disconnectDateTime { get; set; }
-        public  string callClass { get; set; }
-        public  Int16 isOnNet { get; set; }
-        public  int callType { get; set; }
-        public  string subType { get; set; }
-        public  string iMEI { get; set; }
-        public  int bTSId { get; set; }
-        public  string cellId { get; set; }
-        public  int switchRecordId { get; set; }
-        public  decimal upVolume { get; set; }
-        public  decimal downVolume { get; set; }
-        public  decimal cellLatitude { get; set; }
-        public  decimal cellLongitude { get; set; }
-        public  string inTrunk { get; set; }
-        public  string outTrunk { get; set; }
-        public  int serviceType { get; set; }
-        public string serviceVASName { get; set; }
+        public int Id { get; set; }
+        public string MSISDN { get; set; }
+        public string IMSI { get; set; }
+        public DateTime ConnectDateTime { get; set; }
+        public  string Destination { get; set; }
+        public  decimal DurationInSeconds { get; set; }
+        public  DateTime DisconnectDateTime { get; set; }
+        public  string CallClass { get; set; }
+        public  Int16 IsOnNet { get; set; }
+        public  int CallType { get; set; }
+        public  string SubType { get; set; }
+        public  string IMEI { get; set; }
+        public  int BTSId { get; set; }
+        public  string CellId { get; set; }
+        public  int SwitchRecordId { get; set; }
+        public  decimal UpVolume { get; set; }
+        public  decimal DownVolume { get; set; }
+        public  decimal CellLatitude { get; set; }
+        public  decimal CellLongitude { get; set; }
+        public  string InTrunk { get; set; }
+        public  string OutTrunk { get; set; }
+        public  int ServiceType { get; set; }
+        public string ServiceVASName { get; set; }
 
     }
 }

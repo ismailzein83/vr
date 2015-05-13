@@ -275,29 +275,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
                 while (reader.Read())
                 {
-                    normalCDR.mSISDN = reader["MSISDN"] as string;
-                    normalCDR.destination = reader["Destination"].ToString();
-                    normalCDR.callType = Helper.AsInt(reader["Call_Type"].ToString());
-                    normalCDR.bTSId = Helper.AsInt(reader["BTS_Id"].ToString());
-                    normalCDR.connectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
-                    normalCDR.id = Helper.AsInt(reader["Id"].ToString());
-                    normalCDR.iMSI = reader["IMSI"].ToString();
-                    normalCDR.durationInSeconds = Helper.AsDecimal(reader["DurationInSeconds"].ToString());
-                    normalCDR.disconnectDateTime = Helper.AsDateTime(reader["DisconnectDateTime"].ToString());
-                    normalCDR.callClass = reader["Call_Class"].ToString();
-                    normalCDR.isOnNet = Helper.AsShortInt(reader["IsOnNet"].ToString());
-                    normalCDR.subType = reader["Sub_Type"].ToString();
-                    normalCDR.iMEI = reader["IMEI"].ToString();
-                    normalCDR.cellId = reader["Cell_Id"].ToString();
-                    normalCDR.switchRecordId = Helper.AsInt(reader["SwitchRecordId"].ToString());
-                    normalCDR.upVolume = Helper.AsDecimal(reader["Up_Volume"].ToString());
-                    normalCDR.downVolume = Helper.AsDecimal(reader["Down_Volume"].ToString());
-                    normalCDR.cellLatitude = Helper.AsDecimal(reader["Cell_Latitude"].ToString());
-                    normalCDR.cellLongitude = Helper.AsDecimal(reader["Cell_Longitude"].ToString());
-                    normalCDR.inTrunk = reader["In_Trunk"].ToString();
-                    normalCDR.outTrunk = reader["Out_Trunk"].ToString();
-                    normalCDR.serviceType = Helper.AsInt(reader["Service_Type"].ToString());
-                    normalCDR.serviceVASName = reader["Service_VAS_Name"].ToString();
+                    normalCDR.MSISDN = reader["MSISDN"] as string;
+                    normalCDR.Destination = reader["Destination"].ToString();
+                    normalCDR.CallType = Helper.AsInt(reader["Call_Type"].ToString());
+                    normalCDR.BTSId = Helper.AsInt(reader["BTS_Id"].ToString());
+                    normalCDR.ConnectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
+                    normalCDR.Id = Helper.AsInt(reader["Id"].ToString());
+                    normalCDR.IMSI = reader["IMSI"].ToString();
+                    normalCDR.DurationInSeconds = Helper.AsDecimal(reader["DurationInSeconds"].ToString());
+                    normalCDR.DisconnectDateTime = Helper.AsDateTime(reader["DisconnectDateTime"].ToString());
+                    normalCDR.CallClass = reader["Call_Class"].ToString();
+                    normalCDR.IsOnNet = Helper.AsShortInt(reader["IsOnNet"].ToString());
+                    normalCDR.SubType = reader["Sub_Type"].ToString();
+                    normalCDR.IMEI = reader["IMEI"].ToString();
+                    normalCDR.CellId = reader["Cell_Id"].ToString();
+                    normalCDR.SwitchRecordId = Helper.AsInt(reader["SwitchRecordId"].ToString());
+                    normalCDR.UpVolume = Helper.AsDecimal(reader["Up_Volume"].ToString());
+                    normalCDR.DownVolume = Helper.AsDecimal(reader["Down_Volume"].ToString());
+                    normalCDR.CellLatitude = Helper.AsDecimal(reader["Cell_Latitude"].ToString());
+                    normalCDR.CellLongitude = Helper.AsDecimal(reader["Cell_Longitude"].ToString());
+                    normalCDR.InTrunk = reader["In_Trunk"].ToString();
+                    normalCDR.OutTrunk = reader["Out_Trunk"].ToString();
+                    normalCDR.ServiceType = Helper.AsInt(reader["Service_Type"].ToString());
+                    normalCDR.ServiceVASName = reader["Service_VAS_Name"].ToString();
 
                     currentIndex++;
                     if (currentIndex == 10000)

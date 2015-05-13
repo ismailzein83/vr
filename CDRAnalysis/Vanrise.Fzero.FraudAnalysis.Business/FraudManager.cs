@@ -117,11 +117,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 if (IsSuspicious)
                 {
                     suspiciousNumber = new SuspiciousNumber();
-                    suspiciousNumber.Number = profile.subscriberNumber;
+                    suspiciousNumber.Number = profile.SubscriberNumber;
                     suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspectionLevelId;
                     suspiciousNumber.CriteriaValues = dict_criteriaValues;
-                    suspiciousNumber.DateDay = profile.fromDate;
-                    suspiciousNumber.PeriodId = profile.periodId;
+                    suspiciousNumber.DateDay = profile.FromDate;
+                    suspiciousNumber.PeriodId = profile.PeriodId;
                     return IsSuspicious;
                 }
             }

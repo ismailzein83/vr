@@ -38,29 +38,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                     while (reader.Read())
                     {
-                        normalCDR.callType = GetReaderValue<int>(reader, "Call_Type");
-                        normalCDR.bTSId = GetReaderValue<int>(reader, "BTS_Id");
-                        normalCDR.connectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
-                        normalCDR.id = (int)reader["Id"];
-                        normalCDR.iMSI = reader["IMSI"] as string;
-                        normalCDR.durationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
-                        normalCDR.disconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
-                        normalCDR.callClass = reader["Call_Class"] as string;
-                        normalCDR.isOnNet = GetReaderValue<Byte>(reader, "IsOnNet");
-                        normalCDR.subType = reader["Sub_Type"] as string;
-                        normalCDR.iMEI = reader["IMEI"] as string;
-                        normalCDR.cellId = reader["Cell_Id"] as string;
-                        normalCDR.switchRecordId = GetReaderValue<int>(reader, "SwitchRecordId");
-                        normalCDR.upVolume = GetReaderValue<Decimal>(reader, "Up_Volume");
-                        normalCDR.downVolume = GetReaderValue<Decimal>(reader, "Down_Volume");
-                        normalCDR.cellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude");
-                        normalCDR.cellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude");
-                        normalCDR.inTrunk = reader["In_Trunk"] as string;
-                        normalCDR.outTrunk = reader["Out_Trunk"] as string;
-                        normalCDR.serviceType = GetReaderValue<int>(reader, "Service_Type");
-                        normalCDR.serviceVASName = reader["Service_VAS_Name"] as string;
-                        normalCDR.destination = reader["Destination"] as string;
-                        normalCDR.mSISDN = reader["MSISDN"] as string;
+                        normalCDR.CallType = GetReaderValue<int>(reader, "Call_Type");
+                        normalCDR.BTSId = GetReaderValue<int>(reader, "BTS_Id");
+                        normalCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                        normalCDR.Id = (int)reader["Id"];
+                        normalCDR.IMSI = reader["IMSI"] as string;
+                        normalCDR.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                        normalCDR.DisconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime");
+                        normalCDR.CallClass = reader["Call_Class"] as string;
+                        normalCDR.IsOnNet = GetReaderValue<Byte>(reader, "IsOnNet");
+                        normalCDR.SubType = reader["Sub_Type"] as string;
+                        normalCDR.IMEI = reader["IMEI"] as string;
+                        normalCDR.CellId = reader["Cell_Id"] as string;
+                        normalCDR.SwitchRecordId = GetReaderValue<int>(reader, "SwitchRecordId");
+                        normalCDR.UpVolume = GetReaderValue<Decimal>(reader, "Up_Volume");
+                        normalCDR.DownVolume = GetReaderValue<Decimal>(reader, "Down_Volume");
+                        normalCDR.CellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude");
+                        normalCDR.CellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude");
+                        normalCDR.InTrunk = reader["In_Trunk"] as string;
+                        normalCDR.OutTrunk = reader["Out_Trunk"] as string;
+                        normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
+                        normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
+                        normalCDR.Destination = reader["Destination"] as string;
+                        normalCDR.MSISDN = reader["MSISDN"] as string;
 
 
                         

@@ -9,35 +9,278 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AggregateManager
     {
-        public Dictionary<int, AggregateDefinition> GetAggregateDefinitions()
+        public List<AggregateDefinition> GetAggregateDefinitions()
         {
-            Dictionary<int, AggregateDefinition> dictionary = new Dictionary<int, AggregateDefinition>();
-            dictionary.Add(1, new AggregateDefinition()
+            List<AggregateDefinition> AggregateDefinitions = new List<AggregateDefinition>();
+
+            AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Name = "countOutCalls",
+                Name = "CountOutCalls",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall);
                 })
             });
 
-            //dictionary.Add(1, new AggregateDefinition() { Aggregation= AggregateId = 1, Description = "Ratio_Incoming_Calls_vs_Outgoing_Calls", CompareOperator= AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(2, new AggregateDefinition() { AggregateId = 2, Description = "Count_of_Distinct_Destinations", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(3, new AggregateDefinition() { AggregateId = 3, Description = "Count_outgoing_calls", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(4, new AggregateDefinition() { AggregateId = 4, Description = "Count_of_Total_BTS_Per_MSISDN", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(5, new AggregateDefinition() { AggregateId = 5, Description = "Total_Originated_Volume", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(6, new AggregateDefinition() { AggregateId = 6, Description = "Count_of_Total_IMEI_Per_MSISDN", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(7, new AggregateDefinition() { AggregateId = 7, Description = "Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(8, new AggregateDefinition() { AggregateId = 8, Description = "Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(9, new AggregateDefinition() { AggregateId = 9, Description = "Count_of_daily_active_hours", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(10, new AggregateDefinition() { AggregateId = 10, Description = "Distinct_Destination_of_Night_Calls", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(11, new AggregateDefinition() { AggregateId = 11, Description = "Voice_Only_Service_Usage", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(12, new AggregateDefinition() { AggregateId = 12, Description = "Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls", CompareOperator = AggregateCompareOperator.GreaterThanorEqual });
-            //dictionary.Add(13, new AggregateDefinition() { AggregateId = 13, Description = "Ratio_International_Originated_Vs_Outgoing_Calls", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(14, new AggregateDefinition() { AggregateId = 14, Description = "Count_of_outgoing_during_peak_hours", CompareOperator = AggregateCompareOperator.LessThanorEqual });
-            //dictionary.Add(15, new AggregateDefinition() { AggregateId = 15, Description = "Data_Usage", CompareOperator = AggregateCompareOperator.LessThanorEqual });
 
-            return dictionary; 
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountInCalls",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall);
+                })
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "TotalDataVolume",
+                Aggregation = new SumAggregate((cdr) =>
+                {
+                    return cdr.UpVolume + cdr.DownVolume;
+                }, null)
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutFails",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall) && (cdr.DurationInSeconds == 0);
+                })
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountInFails",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall) && (cdr.DurationInSeconds == 0);
+                })
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutSMSs",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingSms);
+                })
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutOffNets",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall && (cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
+                })
+            });
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutOnNets",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall && ((cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
+                })
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutInters",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall && (cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
+                })
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountInOffNets",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall && (cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
+                })
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountInOnNets",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall && ((cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
+                })
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountInInters",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall && (cdr.CallClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
+                })
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CallOutDurs",
+                Aggregation = new SumAggregate(
+               (cdr) =>
+               {
+                   return cdr.DurationInSeconds / 60;
+               },
+
+               (cdr) =>
+               {
+                   return (cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.outgoingVoiceCall);
+               }
+            )
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "TotalOutVolume",
+                Aggregation = new SumAggregate(
+                (cdr) =>
+                {
+                    return cdr.DurationInSeconds;
+                },
+
+                (cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall);
+                }
+            )
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CallInDurs",
+                Aggregation = new SumAggregate(
+               (cdr) =>
+               {
+                   return cdr.DurationInSeconds / 60;
+               },
+
+               (cdr) =>
+               {
+                   return (cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.incomingVoiceCall);
+               }
+            )
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "TotalInVolume",
+                Aggregation = new SumAggregate(
+                (cdr) =>
+                {
+                    return cdr.DurationInSeconds;
+                },
+
+                (cdr) =>
+                {
+                    return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall);
+                }
+            )
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "TotalIMEI",
+                Aggregation = new DistinctCountAggregate(
+                   (cdr) =>
+                   {
+                       return cdr.IMEI;
+                   },
+
+                   (cdr) =>
+                   {
+                       return ((cdr.CallType == (int)Enums.CallType.incomingVoiceCall || cdr.CallType == (int)Enums.CallType.outgoingVoiceCall || cdr.CallType == (int)Enums.CallType.incomingSms || cdr.CallType == (int)Enums.CallType.outgoingSms));
+                   }
+               )
+            });
+
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "TotalBTS",
+                Aggregation = new DistinctCountAggregate(
+                      (cdr) =>
+                      {
+                          return cdr.BTSId;
+                      },
+
+                      (cdr) =>
+                      {
+                          return ((cdr.CallType == (int)Enums.CallType.incomingVoiceCall || cdr.CallType == (int)Enums.CallType.outgoingVoiceCall || cdr.CallType == (int)Enums.CallType.incomingSms || cdr.CallType == (int)Enums.CallType.outgoingSms));
+                      }
+                  )
+            });
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "DiffOutputNumb",
+                Aggregation = new DistinctCountAggregate(
+                     (cdr) =>
+                     {
+                         return cdr.Destination;
+                     },
+
+                     (cdr) =>
+                     {
+                         return (cdr.CallType == (int)Enums.CallType.outgoingVoiceCall);
+                     }
+                 )
+            });
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "DiffInputNumbers",
+                Aggregation = new DistinctCountAggregate(
+                     (cdr) =>
+                     {
+                         return cdr.Destination;
+                     },
+
+                     (cdr) =>
+                     {
+                         return (cdr.CallType == (int)Enums.CallType.incomingVoiceCall);
+                     }
+                 )
+            });
+
+
+
+            return AggregateDefinitions; 
         }
 
     }

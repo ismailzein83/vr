@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Queueing;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
@@ -327,242 +328,33 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
 
-
-            IAggregate countOutCalls = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
-            });
-
-
-            IAggregate countInCalls = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
-            });
-
-
-            IAggregate totalDataVolume = new SumAggregate((cdr) =>
-            {
-                return cdr.upVolume + cdr.downVolume;
-            }, null);
-
-
-            IAggregate countOutFails = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall)  && (cdr.durationInSeconds==0) ;
-            });
-
-
-            IAggregate countInFails = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.incomingVoiceCall) && (cdr.durationInSeconds == 0);
-            });
-
-
-            IAggregate countOutSMSs = new CountAggregate((cdr) =>
-            {
-                return (cdr.callType == (int)Enums.CallType.outgoingSms) ;
-            });
-
-
-            IAggregate countOutOffNets = new CountAggregate((cdr) =>
-            {
-                 return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
-            });
-
-
-            IAggregate countOutOnNets = new CountAggregate((cdr) =>
-            {
-            return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && ((cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
-            });
-
-
-            IAggregate countOutInters = new CountAggregate((cdr) =>
-            {
-            return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
-            });
-
-
-             IAggregate countInOffNets = new CountAggregate((cdr) =>
-            {
-                 return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ASIACELL) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.KOREKTEL)));
-            });
-
-
-            IAggregate countInOnNets = new CountAggregate((cdr) =>
-            {
-            return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && ((cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.ZAINIQ) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.VAS) || cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INV))));
-            });
-
-
-            IAggregate countInInters = new CountAggregate((cdr) =>
-            {
-            return (cdr.callType == (int)Enums.CallType.incomingVoiceCall && (cdr.callClass == Enum.GetName(typeof(Enums.CallClass), (int)Enums.CallClass.INTL)));
-            });
-
-
-
-            IAggregate callOutDurs = new SumAggregate(
-               (cdr) =>
-                {
-                    return cdr.durationInSeconds / 60;
-                },
-
-               (cdr) =>
-                {
-                   return ( cdr.durationInSeconds!=0  && cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
-                }
-            );
-
-
-
-            IAggregate totalOutVolume = new SumAggregate(
-                (cdr) =>
-                    {
-                        return cdr.durationInSeconds;
-                    },
-
-                (cdr) =>
-                     {
-                         return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
-                     }
-            );
-
-
-
-
-
-            IAggregate callInDurs = new SumAggregate(
-               (cdr) =>
-               {
-                   return cdr.durationInSeconds / 60;
-               },
-
-               (cdr) =>
-               {
-                   return (cdr.durationInSeconds != 0 && cdr.callType == (int)Enums.CallType.incomingVoiceCall);
-               }
-            );
-
-
-
-            IAggregate totalInVolume = new SumAggregate(
-                (cdr) =>
-                {
-                    return cdr.durationInSeconds;
-                },
-
-                (cdr) =>
-                {
-                    return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
-                }
-            );
-
-
-
-
-
-            IAggregate totalIMEI = new DistinctCountAggregate(
-               (cdr) =>
-               {
-                   return cdr.iMEI;
-               },
-
-               (cdr) =>
-               {
-                   return ((cdr.callType == (int)Enums.CallType.incomingVoiceCall || cdr.callType == (int)Enums.CallType.outgoingVoiceCall || cdr.callType == (int)Enums.CallType.incomingSms || cdr.callType == (int)Enums.CallType.outgoingSms));
-               }
-           );
-
-
-            IAggregate totalBTS = new DistinctCountAggregate(
-              (cdr) =>
-              {
-                  return cdr.bTSId;
-              },
-
-              (cdr) =>
-              {
-                  return ((cdr.callType == (int)Enums.CallType.incomingVoiceCall || cdr.callType == (int)Enums.CallType.outgoingVoiceCall || cdr.callType == (int)Enums.CallType.incomingSms || cdr.callType == (int)Enums.CallType.outgoingSms));
-              }
-          );
-
-
-
-            IAggregate diffOutputNumb = new DistinctCountAggregate(
-             (cdr) =>
-             {
-                 return cdr.destination;
-             },
-
-             (cdr) =>
-             {
-                 return (cdr.callType == (int)Enums.CallType.outgoingVoiceCall);
-             }
-         );
-
-
-
-            IAggregate diffInputNumbers = new DistinctCountAggregate(
-             (cdr) =>
-             {
-                 return cdr.destination;
-             },
-
-             (cdr) =>
-             {
-                 return (cdr.callType == (int)Enums.CallType.incomingVoiceCall);
-             }
-         );
+            List<AggregateDefinition> AggregateDefinitions = new AggregateManager().GetAggregateDefinitions();
+           
 
 
            
             NumberProfile numberProfile = new NumberProfile();
-            HashSet<string> DestinationsIn = new HashSet<string>();
-            HashSet<string> DestinationsOut = new HashSet<string>();
-
-           
-         
             string _mSISDN = string.Empty;
 
 
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             dataManager.LoadCDR(DateTime.Parse("2010-03-10 04:00:00"), DateTime.Parse("2019-03-20 06:00:00"), BatchSize, (normalCDR) =>
             {
-                
 
                 // Agregates
 
                 if (_mSISDN == string.Empty)
                 {
                     numberProfile = new NumberProfile();
-                    countInCalls.Reset();
-                    countOutCalls.Reset();
-                    totalDataVolume.Reset();
-                    countOutFails.Reset();
-                    countInFails.Reset();
-                    countOutSMSs.Reset();
-                    countInOffNets.Reset();
-                    countOutOffNets.Reset();
-                    countInOnNets.Reset();
-                    countOutOnNets.Reset();
-                    countInInters.Reset();
-                    countOutInters.Reset();
-                    countOutSMSs.Reset();
-                    totalOutVolume.Reset();
-                    totalInVolume.Reset();
-                    callOutDurs.Reset();
-                    callInDurs.Reset();
-                    totalBTS.Reset();
-                    totalIMEI.Reset();
-                    diffOutputNumb.Reset();
-                    diffInputNumbers.Reset();
+                    foreach (var i in AggregateDefinitions)
+                    {
+                        i.Aggregation.Reset();
+                    }
 
-
-
-                    _mSISDN = normalCDR.mSISDN;
+                    _mSISDN = normalCDR.MSISDN;
                 }
 
-                else if (_mSISDN != normalCDR.mSISDN)
+                else if (_mSISDN != normalCDR.MSISDN)
                 {
                     numberProfileBatch.Add(numberProfile);
                     if (BatchSize.HasValue && numberProfileBatch.Count == BatchSize)
@@ -576,121 +368,38 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     }
 
                     numberProfile = new NumberProfile();
-                    countInCalls.Reset();
-                    countOutCalls.Reset();
-                    totalDataVolume.Reset();
-                    countOutFails.Reset();
-                    countInFails.Reset();
-                    countOutSMSs.Reset();
-                    countInOffNets.Reset();
-                    countOutOffNets.Reset();
-                    countInOnNets.Reset();
-                    countOutOnNets.Reset();
-                    countInInters.Reset();
-                    countOutInters.Reset();
-                    countOutSMSs.Reset();
-                    totalOutVolume.Reset();
-                    totalInVolume.Reset();
-                    callOutDurs.Reset();
-                    callInDurs.Reset();
-                    totalBTS.Reset();
-                    totalIMEI.Reset();
-                    diffOutputNumb.Reset();
-                    diffInputNumbers.Reset();
-                    _mSISDN = normalCDR.mSISDN;
+                    foreach (var i in AggregateDefinitions)
+                    {
+                        i.Aggregation.Reset();
+                    }
+                    _mSISDN = normalCDR.MSISDN;
                 }
 
 
-                numberProfile.subscriberNumber = _mSISDN;
-
-
-
-               
+                numberProfile.SubscriberNumber = _mSISDN;
 
 
                 if ((int)Enums.Period.Day == (int)Enums.Period.Day)
                 {
-                    numberProfile.toDate = normalCDR.connectDateTime.AddDays(1);
+                    numberProfile.ToDate = normalCDR.ConnectDateTime.AddDays(1);
                 }
 
-                numberProfile.periodId = (int)Enums.Period.Day;
-                numberProfile.fromDate = normalCDR.connectDateTime;
-                numberProfile.isOnNet = 1;
-
-                countInCalls.EvaluateCDR(normalCDR);
-                numberProfile.countInCalls = int.Parse(countInCalls.GetResult().ToString());
+                numberProfile.PeriodId = (int)Enums.Period.Day;
+                numberProfile.FromDate = normalCDR.ConnectDateTime;
+                numberProfile.IsOnNet = 1;
 
 
-                countOutCalls.EvaluateCDR(normalCDR);
-                numberProfile.countOutCalls = int.Parse(countOutCalls.GetResult().ToString());
+                foreach (var i in AggregateDefinitions)
+                {
+                    i.Aggregation.EvaluateCDR(normalCDR);
+                }
 
+                
 
-                countInOffNets.EvaluateCDR(normalCDR);
-                numberProfile.countInOffNet = int.Parse(countInOffNets.GetResult().ToString());
-
-
-                countOutOffNets.EvaluateCDR(normalCDR);
-                numberProfile.countOutOffNet = int.Parse(countOutOffNets.GetResult().ToString());
-
-
-                countInOnNets.EvaluateCDR(normalCDR);
-                numberProfile.countInOnNet = int.Parse(countInOnNets.GetResult().ToString());
-
-
-                countOutOnNets.EvaluateCDR(normalCDR);
-                numberProfile.countOutOnNet = int.Parse(countOutOnNets.GetResult().ToString());
-
-
-                countInInters.EvaluateCDR(normalCDR);
-                numberProfile.countInInter = int.Parse(countInInters.GetResult().ToString());
-
-
-                countOutInters.EvaluateCDR(normalCDR);
-                numberProfile.countOutInter = int.Parse(countOutInters.GetResult().ToString());
-
-
-                countOutSMSs.EvaluateCDR(normalCDR);
-                numberProfile.countOutSMS = int.Parse(countOutSMSs.GetResult().ToString());
-
-                totalOutVolume.EvaluateCDR(normalCDR);
-                numberProfile.totalOutVolume = int.Parse(totalOutVolume.GetResult().ToString());
-
-
-                totalInVolume.EvaluateCDR(normalCDR);
-                numberProfile.totalInVolume = int.Parse(totalInVolume.GetResult().ToString());
-
-
-                callOutDurs.EvaluateCDR(normalCDR);
-                numberProfile.callOutDurAvg = int.Parse(callOutDurs.GetResult().ToString());
-
-
-                callInDurs.EvaluateCDR(normalCDR);
-                numberProfile.callInDurAvg = int.Parse(callInDurs.GetResult().ToString());
-
-
-
-
-                totalIMEI.EvaluateCDR(normalCDR);
-                numberProfile.totalIMEI = int.Parse(totalIMEI.GetResult().ToString());
-
-
-                totalBTS.EvaluateCDR(normalCDR);
-                numberProfile.totalBTS = int.Parse(totalBTS.GetResult().ToString());
-
-
-
-
-                diffOutputNumb.EvaluateCDR(normalCDR);
-                numberProfile.diffOutputNumb = int.Parse(diffOutputNumb.GetResult().ToString());
-
-
-                diffInputNumbers.EvaluateCDR(normalCDR);
-                numberProfile.diffInputNumbers = int.Parse(diffInputNumbers.GetResult().ToString());
-
-              
-
-
-
+                foreach (var i in AggregateDefinitions)
+                {
+                    numberProfile.AggregateValues.Add(i.Name, i.Aggregation.GetResult());
+                }
 
             });
 

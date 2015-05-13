@@ -26,71 +26,109 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             decimal? result = 0;
 
+            decimal CountOutCalls = numberProfile.AggregateValues.Where(x => x.Key == "CountOutCalls").FirstOrDefault().Value;
+            decimal DiffOutputNumb = numberProfile.AggregateValues.Where(x => x.Key == "DiffOutputNumb").FirstOrDefault().Value;
+            decimal CountOutInter = numberProfile.AggregateValues.Where(x => x.Key == "CountOutInter").FirstOrDefault().Value;
+            decimal CountInInter = numberProfile.AggregateValues.Where(x => x.Key == "CountInInter").FirstOrDefault().Value;
+            decimal CallOutDurAvg = numberProfile.AggregateValues.Where(x => x.Key == "CallOutDurAvg").FirstOrDefault().Value;
+            decimal CountOutFail = numberProfile.AggregateValues.Where(x => x.Key == "CountOutFail").FirstOrDefault().Value;
+            decimal CountInFail = numberProfile.AggregateValues.Where(x => x.Key == "CountInFail").FirstOrDefault().Value;
+            decimal TotalOutVolume = numberProfile.AggregateValues.Where(x => x.Key == "TotalOutVolume").FirstOrDefault().Value;
+            decimal TotalInVolume = numberProfile.AggregateValues.Where(x => x.Key == "TotalInVolume").FirstOrDefault().Value;
+            decimal DiffInputNumbers = numberProfile.AggregateValues.Where(x => x.Key == "DiffInputNumbers").FirstOrDefault().Value;
+            decimal CountOutSMS = numberProfile.AggregateValues.Where(x => x.Key == "CountOutSMS").FirstOrDefault().Value;
+            decimal TotalIMEI = numberProfile.AggregateValues.Where(x => x.Key == "TotalIMEI").FirstOrDefault().Value;
+            decimal TotalBTS = numberProfile.AggregateValues.Where(x => x.Key == "TotalBTS").FirstOrDefault().Value;
+            decimal CountInCalls = numberProfile.AggregateValues.Where(x => x.Key == "CountInCalls").FirstOrDefault().Value;
+            decimal CallInDurAvg = numberProfile.AggregateValues.Where(x => x.Key == "CallInDurAvg").FirstOrDefault().Value;
+            decimal CountOutOnNet = numberProfile.AggregateValues.Where(x => x.Key == "CountOutOnNet").FirstOrDefault().Value;
+            decimal CountInOnNet = numberProfile.AggregateValues.Where(x => x.Key == "CountInOnNet").FirstOrDefault().Value;
+            decimal CountOutOffNet = numberProfile.AggregateValues.Where(x => x.Key == "CountOutOffNet").FirstOrDefault().Value;
+            decimal CountInOffNet = numberProfile.AggregateValues.Where(x => x.Key == "CountInOffNet").FirstOrDefault().Value;
+            decimal TotalDataVolume = numberProfile.AggregateValues.Where(x => x.Key == "TotalDataVolume").FirstOrDefault().Value;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             switch ((Enums.Criteria)criteria.CriteriaId)
             {
                 case Enums.Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls://1
-                    if (numberProfile.totalInVolume != 0 && numberProfile.totalOutVolume != 0)
-                        result = (decimal?)(numberProfile.countInCalls / numberProfile.countOutCalls);
+                    if (TotalInVolume != 0 && TotalOutVolume != 0)
+                        result = (decimal?)(CountInCalls / CountOutCalls);
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Count_of_Distinct_Destinations://2
-                    result = (decimal?)numberProfile.diffOutputNumb;
+                    result = (decimal?)DiffOutputNumb;
                     break;
 
 
                 case Enums.Criteria.Count_outgoing_calls://3
-                    result = (decimal?)numberProfile.countOutCalls;
+                    result = (decimal?)CountOutCalls;
                     break;
 
                 case Enums.Criteria.Count_of_Total_BTS_Per_MSISDN://4
-                    if (numberProfile.totalBTS != null)
-                        result = (decimal?)numberProfile.totalBTS;
+                    if (TotalBTS != null)
+                        result = (decimal?)TotalBTS;
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Total_Originated_Volume://5
-                    result = (decimal?)numberProfile.totalOutVolume;
+                    result = (decimal?)TotalOutVolume;
                     break;
 
                 case Enums.Criteria.Count_of_Total_IMEI_Per_MSISDN://6
-                    result = (decimal?)numberProfile.totalIMEI;
+                    result = (decimal?)TotalIMEI;
                     break;
 
 
                 case Enums.Criteria.Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration://7
-                    if (numberProfile.callInDurAvg != 0 && numberProfile.callOutDurAvg != 0)
-                        result = (decimal?)(numberProfile.callInDurAvg / numberProfile.callOutDurAvg);
+                    if (CallInDurAvg != 0 && CallOutDurAvg != 0)
+                        result = (decimal?)(CallInDurAvg / CallOutDurAvg);
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls://8
-                    if (numberProfile.countInOffNet != 0 && numberProfile.countOutOffNet != 0)
-                        result = (decimal?)(numberProfile.countInOffNet / numberProfile.countOutOffNet);
+                    if (CountInOffNet != 0 && CountOutOffNet != 0)
+                        result = (decimal?)(CountInOffNet / CountOutOffNet);
                     else
                         result = 0;
                     break;
 
 
                 case Enums.Criteria.Count_of_daily_active_hours://9
-                    if (numberProfile.periodId == (int)Enums.Period.Day)
+                    if (numberProfile.PeriodId == (int)Enums.Period.Day)
                     {
                         // not developed yet
                     }
                     break;
 
                 case Enums.Criteria.Distinct_Destination_of_Night_Calls://10
-                    if (numberProfile.periodId == (int)Enums.Period.Day)
+                    if (numberProfile.PeriodId == (int)Enums.Period.Day)
                     {
                         // not developed yet
                     }
-                    else if (numberProfile.periodId == (int)Enums.Period.Hour)
+                    else if (numberProfile.PeriodId == (int)Enums.Period.Hour)
                     {
                         // not developed yet
                     }
@@ -98,38 +136,38 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
                 case Enums.Criteria.Voice_Only_Service_Usage://11
-                    if (numberProfile.countOutSMS != null)
-                        result = (decimal?)numberProfile.countOutSMS;
+                    if (CountOutSMS != null)
+                        result = (decimal?)CountOutSMS;
                     else
                         result = 0;
                 break;
 
 
                 case Enums.Criteria.Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls://12
-                    if (numberProfile.diffOutputNumb != 0 && numberProfile.countOutCalls != 0)
-                        result = (decimal?)(numberProfile.diffOutputNumb / numberProfile.countOutCalls);
+                    if (DiffOutputNumb != 0 && CountOutCalls != 0)
+                        result = (decimal?)(DiffOutputNumb / CountOutCalls);
                     else
                         result = 0;
                 break;
 
 
                 case Enums.Criteria.Ratio_International_Originated_Vs_Outgoing_Calls://13
-                    if (numberProfile.countInInter != 0 && numberProfile.countOutCalls != 0)
-                        result = (decimal?)(numberProfile.countInInter / numberProfile.countOutCalls);
+                    if (CountInInter != 0 && CountOutCalls != 0)
+                        result = (decimal?)(CountInInter / CountOutCalls);
                     else
                         result = 0;
                 break;
 
 
                 case Enums.Criteria.Count_of_outgoing_during_peak_hours://14
-                if (numberProfile.periodId == (int)Enums.Period.Day)
+                if (numberProfile.PeriodId == (int)Enums.Period.Day)
                     {
                         // not developed yet
                     }
                 break;
 
                 case Enums.Criteria.Data_Usage://15
-                result = (decimal?)(numberProfile.totalDataVolume);
+                result = (decimal?)(TotalDataVolume);
                 break;
 
             }
