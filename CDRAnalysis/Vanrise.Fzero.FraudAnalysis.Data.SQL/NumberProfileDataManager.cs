@@ -63,15 +63,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         normalCDR.MSISDN = reader["MSISDN"] as string;
 
 
-                        
-
-                        currentIndex++;
-                        if (currentIndex == 10000)
+                        Console.WriteLine("{0} rows read", currentIndex++);
+                        if (currentIndex == 208834)
                         {
-                            count += currentIndex;
-                            currentIndex = 0;
-                            Console.WriteLine("{0} rows read", count);
                         }
+
+                        //currentIndex++;
+                        //if (currentIndex == 10000)
+                        //{
+                        //    count += currentIndex;
+                        //    currentIndex = 0;
+                        //    Console.WriteLine("{0} rows read", count);
+                        //}
 
                         onBatchReady(normalCDR);
                     }
