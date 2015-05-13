@@ -1,63 +1,74 @@
 ﻿'use strict';
 
-var INTEGER_REGEXP = /^\-?\d+$/;
-app.directive('integer', function () {
-    return {
-        require: 'ngModel',
-        link: function (scope, elm, attrs, ctrl) {
-            ctrl.$validators.integer = function (modelValue, viewValue) {
-                if (ctrl.$isEmpty(modelValue)) {
-                    // consider empty models to be valid
-                    return true;
-                }
-
-                if (INTEGER_REGEXP.test(viewValue)) {
-                    // it is valid
-                    return true;
-                }
-
-                // it is invalid
-                return false;
-            };
-        }
-    };
-});
-
-
-app.directive('vrTextbox', ['TextBoxService', function (TextBoxService) {
+app.directive('vrTextbox', ['ValidationMessagesEnum', 'BaseDirService', function (ValidationMessagesEnum, BaseDirService) {
 
     var directiveDefinitionObject = {
-
-        require: '^form',
         restrict: 'E',
+        require: '^form',
         scope: {
-            placeholder: '@',
-            label: '@',
-            icon: '@',
-            buttontext: '@',
             value: '=',
-            btnClick: '&'
+            customvalidate: '&'
         },
-        controller: function () {
+        controller: function ($scope, $element) {
+
         },
-        controllerAs: 'ctrl',
-        bindToController: true,
         compile: function (element, attrs) {
-            TextBoxService.allDirective.forEach(function (item) { attrs = TextBoxService.setDefaultAttributes(attrs, item); });
 
+            var inputElement = element.find('#mainInput');
+            var validationOptions = {};
+            if (attrs.isrequired !== undefined)
+                validationOptions.requiredValue = true;
+            if (attrs.customvalidate !== undefined)
+                validationOptions.customValidation = true;
+
+            var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, element.find('#rootDiv'));
             return {
-                pre: function (scope, elem, attrs, formCtrl) {
+                pre: function ($scope, iElem, iAttrs, formCtrl) {
+                    var ctrl = $scope.ctrl;
 
-                    scope.valelement = function () {
-                        //console.log(formCtrl.inputValue.$valid);
-                        //console.log(formCtrl.$valid);
+                    var isUserChange;
+                    $scope.$watch('ctrl.value', function () {
+                        //if (!isValidElem())
+                        //    return;
+
+                        if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
+                            return;
+                        isUserChange = false;//reset the flag
+                        if (iAttrs.onvaluechanged != undefined) {
+                            var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
+                            if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                                onvaluechangedMethod();
+                            }
+                        }
+                    });
+
+                    ctrl.notifyUserChange = function () {
+                        isUserChange = true;
                     };
+
+                    BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
             }
         },
-        templateUrl: function (element, attrs) {
-            return TextBoxService.getTemplateUrl(attrs.type);
+
+        controllerAs: 'ctrl',
+        bindToController: true,
+        template: function (element, attrs) {
+            var startTemplate = '<div id="rootDiv" style="position: relative;">';
+            var endTemplate = '</div>';
+
+            var labelTemplate = '';
+            if (attrs.label != undefined)
+                labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+
+            var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                                + '<input id="mainInput" ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control" data-autoclose="1" type="text" >'
+                            + '</div>';
+
+            var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true);
+
+            return startTemplate + labelTemplate + textboxTemplate + validationTemplate + endTemplate;
         }
 
     };
