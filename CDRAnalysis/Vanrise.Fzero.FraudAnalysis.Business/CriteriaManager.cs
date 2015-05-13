@@ -10,189 +10,142 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class CriteriaManager
     {
 
-        public Dictionary<int, decimal> GetCriteriaValues(NumberProfile numberProfile)
-        {
-            Dictionary<int, decimal> criteriaValues = new Dictionary<int,decimal>();
-
-            foreach( var i in GetCriteriaDefinitions())
-            {
-                criteriaValues.Add(i.Key, GetCriteriaValue(new CriteriaDefinition(){ CriteriaId=i.Value.CriteriaId, CompareOperator=i.Value.CompareOperator,  Description=i.Value.Description }, numberProfile));
-            }
-            return criteriaValues;
-        }
-
         public Decimal GetCriteriaValue(CriteriaDefinition criteria, NumberProfile numberProfile)
         {
-
-            decimal? result = 0;
-
-            decimal CountOutCalls = numberProfile.AggregateValues["CountOutCalls"];
-            decimal DiffOutputNumb = numberProfile.AggregateValues["DiffOutputNumb"];
-            decimal CountOutInter = numberProfile.AggregateValues["CountOutInter"];
-            decimal CountInInter = numberProfile.AggregateValues["CountInInter"];
-            decimal CallOutDurAvg = numberProfile.AggregateValues["CallOutDurAvg"];
-            decimal CountOutFail = numberProfile.AggregateValues["CountOutFail"];
-            decimal CountInFail = numberProfile.AggregateValues["CountInFail"];
-            decimal TotalOutVolume = numberProfile.AggregateValues["TotalOutVolume"];
-            decimal TotalInVolume = numberProfile.AggregateValues["TotalInVolume"];
-            decimal DiffInputNumbers = numberProfile.AggregateValues["DiffInputNumbers"];
-            decimal CountOutSMS = numberProfile.AggregateValues["CountOutSMS"];
-            decimal TotalIMEI = numberProfile.AggregateValues["TotalIMEI"];
-            decimal TotalBTS = numberProfile.AggregateValues["TotalBTS"];
-            decimal CountInCalls = numberProfile.AggregateValues["CountInCalls"];
-            decimal CallInDurAvg = numberProfile.AggregateValues["CallInDurAvg"];
-            decimal CountOutOnNet = numberProfile.AggregateValues["CountOutOnNet"];
-            decimal CountInOnNet = numberProfile.AggregateValues["CountInOnNet"];
-            decimal CountOutOffNet = numberProfile.AggregateValues["CountOutOffNet"];
-            decimal CountInOffNet = numberProfile.AggregateValues["CountInOffNet"];
-            decimal TotalDataVolume = numberProfile.AggregateValues["TotalDataVolume"];
-
-
-
-
-
-
-
-
-
-
-            switch ((Enums.Criteria)criteria.CriteriaId)
-            {
-                case Enums.Criteria.Ratio_Incoming_Calls_vs_Outgoing_Calls://1
-                    if (TotalInVolume != 0 && TotalOutVolume != 0)
-                        result = (decimal?)(CountInCalls / CountOutCalls);
-                    else
-                        result = 0;
-                    break;
-
-
-                case Enums.Criteria.Count_of_Distinct_Destinations://2
-                    result = (decimal?)DiffOutputNumb;
-                    break;
-
-
-                case Enums.Criteria.Count_outgoing_calls://3
-                    result = (decimal?)CountOutCalls;
-                    break;
-
-                case Enums.Criteria.Count_of_Total_BTS_Per_MSISDN://4
-                    if (TotalBTS != null)
-                        result = (decimal?)TotalBTS;
-                    else
-                        result = 0;
-                    break;
-
-
-                case Enums.Criteria.Total_Originated_Volume://5
-                    result = (decimal?)TotalOutVolume;
-                    break;
-
-                case Enums.Criteria.Count_of_Total_IMEI_Per_MSISDN://6
-                    result = (decimal?)TotalIMEI;
-                    break;
-
-
-                case Enums.Criteria.Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration://7
-                    if (CallInDurAvg != 0 && CallOutDurAvg != 0)
-                        result = (decimal?)(CallInDurAvg / CallOutDurAvg);
-                    else
-                        result = 0;
-                    break;
-
-
-                case Enums.Criteria.Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls://8
-                    if (CountInOffNet != 0 && CountOutOffNet != 0)
-                        result = (decimal?)(CountInOffNet / CountOutOffNet);
-                    else
-                        result = 0;
-                    break;
-
-
-                case Enums.Criteria.Count_of_daily_active_hours://9
-                    if (numberProfile.PeriodId == (int)Enums.Period.Day)
-                    {
-                        // not developed yet
-                    }
-                    break;
-
-                case Enums.Criteria.Distinct_Destination_of_Night_Calls://10
-                    if (numberProfile.PeriodId == (int)Enums.Period.Day)
-                    {
-                        // not developed yet
-                    }
-                    else if (numberProfile.PeriodId == (int)Enums.Period.Hour)
-                    {
-                        // not developed yet
-                    }
-                    break;
-
-
-                case Enums.Criteria.Voice_Only_Service_Usage://11
-                    if (CountOutSMS != null)
-                        result = (decimal?)CountOutSMS;
-                    else
-                        result = 0;
-                break;
-
-
-                case Enums.Criteria.Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls://12
-                    if (DiffOutputNumb != 0 && CountOutCalls != 0)
-                        result = (decimal?)(DiffOutputNumb / CountOutCalls);
-                    else
-                        result = 0;
-                break;
-
-
-                case Enums.Criteria.Ratio_International_Originated_Vs_Outgoing_Calls://13
-                    if (CountInInter != 0 && CountOutCalls != 0)
-                        result = (decimal?)(CountInInter / CountOutCalls);
-                    else
-                        result = 0;
-                break;
-
-
-                case Enums.Criteria.Count_of_outgoing_during_peak_hours://14
-                if (numberProfile.PeriodId == (int)Enums.Period.Day)
-                    {
-                        // not developed yet
-                    }
-                break;
-
-                case Enums.Criteria.Data_Usage://15
-                result = (decimal?)(TotalDataVolume);
-                break;
-
-            }
-
-             if ( result==null)
-                result=0;
-            
-            return result.Value;
+            Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
+            dictionary = GetCriteriaDefinitions();
+            return  dictionary[criteria.CriteriaId].Expression(numberProfile);
         }
 
+        
         public Dictionary<int, CriteriaDefinition> GetCriteriaDefinitions()
         {
             Dictionary<int, CriteriaDefinition> dictionary = new Dictionary<int, CriteriaDefinition>();
 
-            dictionary.Add(1, new CriteriaDefinition() { CriteriaId = 1, Description = "Ratio_Incoming_Calls_vs_Outgoing_Calls", CompareOperator= CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(2, new CriteriaDefinition() { CriteriaId = 2, Description = "Count_of_Distinct_Destinations", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(3, new CriteriaDefinition() { CriteriaId = 3, Description = "Count_outgoing_calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(4, new CriteriaDefinition() { CriteriaId = 4, Description = "Count_of_Total_BTS_Per_MSISDN", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(5, new CriteriaDefinition() { CriteriaId = 5, Description = "Total_Originated_Volume", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(6, new CriteriaDefinition() { CriteriaId = 6, Description = "Count_of_Total_IMEI_Per_MSISDN", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(7, new CriteriaDefinition() { CriteriaId = 7, Description = "Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(8, new CriteriaDefinition() { CriteriaId = 8, Description = "Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(9, new CriteriaDefinition() { CriteriaId = 9, Description = "Count_of_daily_active_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(10, new CriteriaDefinition() { CriteriaId = 10, Description = "Distinct_Destination_of_Night_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(11, new CriteriaDefinition() { CriteriaId = 11, Description = "Voice_Only_Service_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(12, new CriteriaDefinition() { CriteriaId = 12, Description = "Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual });
-            dictionary.Add(13, new CriteriaDefinition() { CriteriaId = 13, Description = "Ratio_International_Originated_Vs_Outgoing_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(14, new CriteriaDefinition() { CriteriaId = 14, Description = "Count_of_outgoing_during_peak_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
-            dictionary.Add(15, new CriteriaDefinition() { CriteriaId = 15, Description = "Data_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual });
+            dictionary.Add(1, new CriteriaDefinition() { CriteriaId = 1, Description = "Ratio_Incoming_Calls_vs_Outgoing_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Ratio_Incoming_Calls_vs_Outgoing_Calls });
+            dictionary.Add(2, new CriteriaDefinition() { CriteriaId = 2, Description = "Count_of_Distinct_Destinations", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Count_of_Distinct_Destinations });
+            dictionary.Add(3, new CriteriaDefinition() { CriteriaId = 3, Description = "Count_outgoing_calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Count_outgoing_calls });
+            dictionary.Add(4, new CriteriaDefinition() { CriteriaId = 4, Description = "Count_of_Total_BTS_Per_MSISDN", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Count_of_Total_BTS_Per_MSISDN });
+            dictionary.Add(5, new CriteriaDefinition() { CriteriaId = 5, Description = "Total_Originated_Volume", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Total_Originated_Volume });
+            dictionary.Add(6, new CriteriaDefinition() { CriteriaId = 6, Description = "Count_of_Total_IMEI_Per_MSISDN", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Count_of_Total_IMEI_Per_MSISDN });
+            dictionary.Add(7, new CriteriaDefinition() { CriteriaId = 7, Description = "Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration });
+            dictionary.Add(8, new CriteriaDefinition() { CriteriaId = 8, Description = "Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls });
+            dictionary.Add(9, new CriteriaDefinition() { CriteriaId = 9, Description = "Count_of_daily_active_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Count_of_daily_active_hours });
+            dictionary.Add(10, new CriteriaDefinition() { CriteriaId = 10, Description = "Distinct_Destination_of_Night_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Distinct_Destination_of_Night_Calls });
+            dictionary.Add(11, new CriteriaDefinition() { CriteriaId = 11, Description = "Voice_Only_Service_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Voice_Only_Service_Usage });
+            dictionary.Add(12, new CriteriaDefinition() { CriteriaId = 12, Description = "Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls });
+            dictionary.Add(13, new CriteriaDefinition() { CriteriaId = 13, Description = "Ratio_International_Originated_Vs_Outgoing_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Ratio_International_Originated_Vs_Outgoing_Calls });
+            dictionary.Add(14, new CriteriaDefinition() { CriteriaId = 14, Description = "Count_of_outgoing_during_peak_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Count_of_outgoing_during_peak_hours });
+            dictionary.Add(15, new CriteriaDefinition() { CriteriaId = 15, Description = "Data_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = Data_Usage });
 
             return dictionary; 
         }
 
+        
+        // Funcs
+        static decimal Ratio_Incoming_Calls_vs_Outgoing_Calls(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["TotalInVolume"] != 0 && numberProfile.AggregateValues["TotalOutVolume"] != 0)
+                return (numberProfile.AggregateValues["CountInCalls"] / numberProfile.AggregateValues["CountOutCalls"]);
+            else
+                return 0;
+        }
+
+        static decimal Count_of_Distinct_Destinations(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["DiffOutputNumb"];
+        }
+
+        static decimal Count_outgoing_calls(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["CountOutCalls"];
+        }
+
+        static decimal Count_of_Total_BTS_Per_MSISDN(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["TotalBTS"];
+        }
+
+        static decimal Total_Originated_Volume(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["TotalOutVolume"];
+        }
+
+        static decimal Count_of_Total_IMEI_Per_MSISDN(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["TotalIMEI"];
+        }
+
+        static decimal Ratio_Average_Incoming_Duration_vs_Average_Outgoing_Duration(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["CallInDurAvg"] != 0 && numberProfile.AggregateValues["CallOutDurAvg"] != 0)
+                return (numberProfile.AggregateValues["CallInDurAvg"] / numberProfile.AggregateValues["CallOutDurAvg"]);
+            else
+                return 0;
+        }
+
+        static decimal Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["CountInOffNet"] != 0 && numberProfile.AggregateValues["CountOutOffNet"] != 0)
+                return (numberProfile.AggregateValues["CountInOffNet"] / numberProfile.AggregateValues["CountOutOffNet"]);
+            else
+                return 0;
+        }
+
+        static decimal Count_of_daily_active_hours(NumberProfile numberProfile)
+        {
+            // not developed yet
+            return 0;
+        }
+
+        static decimal Distinct_Destination_of_Night_Calls(NumberProfile numberProfile)
+        {
+            if (numberProfile.PeriodId == (int)Enums.Period.Day)
+            {
+                // not developed yet
+            }
+            else if (numberProfile.PeriodId == (int)Enums.Period.Hour)
+            {
+                // not developed yet
+            }
+            return 0;
+
+        }
+
+        static decimal Voice_Only_Service_Usage(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["CountOutSMS"];
+        }
+
+        static decimal Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["DiffOutputNumb"] != 0 && numberProfile.AggregateValues["CountOutCalls"] != 0)
+                return (numberProfile.AggregateValues["DiffOutputNumb"] / numberProfile.AggregateValues["CountOutCalls"]);
+            else
+                return 0;
+        }
+
+        static decimal Ratio_International_Originated_Vs_Outgoing_Calls(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["CountInInter"] != 0 && numberProfile.AggregateValues["CountOutCalls"] != 0)
+                return (numberProfile.AggregateValues["CountInInter"] / numberProfile.AggregateValues["CountOutCalls"]);
+            else
+                return 0;
+        }
+
+        static decimal Count_of_outgoing_during_peak_hours(NumberProfile numberProfile)
+        {
+            if (numberProfile.PeriodId == (int)Enums.Period.Day)
+            {
+                // not developed yet
+            }
+            return 0;
+        }
+
+        static decimal Data_Usage(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["TotalDataVolume"];
+        }
 
         
 

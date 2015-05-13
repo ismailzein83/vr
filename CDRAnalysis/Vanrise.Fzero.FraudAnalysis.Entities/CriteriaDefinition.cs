@@ -15,5 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public CriteriaCompareOperator CompareOperator { get; set; }
 
         public string Description { get; set; }
+
+        public Func<NumberProfile, Decimal> Expression;
     }
 }
