@@ -367,12 +367,12 @@ namespace TOne.CDR.Business
 
         public List<T> GetEffectiveEntities<T>(String customerID, int zoneID, DateTime whenEffective) where T : IZoneSupplied
         {
-            return _cacheManager.GetOrCreateObject(String.Format("GetEffectiveEntities_{0}_{1}_{2}_{3:ddMMMyy}", typeof(T).Name, customerID, zoneID, whenEffective.Date),
+            return _cacheManager.GetOrCreateObject(String.Format("GetEffectiveEntities_{0}_{1}_{2:ddMMMyy}", typeof(T).Name, customerID, whenEffective.Date),
                 CacheObjectType.Pricing,
                 () =>
                 {
                     DateSensitiveEntityCache<T> rates = null;
-                    rates = new DateSensitiveEntityCache<T>(customerID, zoneID, whenEffective, true);
+                    rates = new DateSensitiveEntityCache<T>(customerID, 0, whenEffective, true);
                     return rates;
                 }).GetEffectiveEntities(customerID, zoneID, whenEffective);
         }
