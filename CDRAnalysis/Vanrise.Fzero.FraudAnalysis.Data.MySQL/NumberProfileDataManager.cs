@@ -254,8 +254,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<NormalCDR> onBatchReady)
         {
             MySQLManager manager = new MySQLManager();
-            string query_GetCDRRange = @"SELECT  'Id' ,'MSISDN' ,'IMSI' ,'ConnectDateTime' ,'Destination' ,'DurationInSeconds' ,'DisconnectDateTime' ,'Call_Class'  ,'IsOnNet' ,'Call_Type' ,'Sub_Type' ,'IMEI'
-                                                ,'BTS_Id'  ,'Cell_Id'  ,'SwitchRecordId'  ,'Up_Volume'  ,'Down_Volume' ,'Cell_Latitude'  ,'Cell_Longitude'  ,'In_Trunk'  ,'Out_Trunk'  ,'Service_Type'  ,'Service_VAS_Name' FROM NormalCDR
+            string query_GetCDRRange = @"SELECT  `Id` ,`MSISDN` ,`IMSI` ,`ConnectDateTime` ,`Destination` ,`DurationInSeconds` ,`DisconnectDateTime` ,`Call_Class`  ,`IsOnNet` ,`Call_Type` ,`Sub_Type` ,`IMEI`
+                                                ,`BTS_Id`  ,`Cell_Id`  ,`SwitchRecordId`  ,`Up_Volume`  ,`Down_Volume` ,`Cell_Latitude`  ,`Cell_Longitude`  ,`In_Trunk`  ,`Out_Trunk`  ,`Service_Type`  ,`Service_VAS_Name` FROM NormalCDR
                                                     where connectDateTime >= @From and connectDateTime <=@To  order by MSISDN; ";
 
 
