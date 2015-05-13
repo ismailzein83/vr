@@ -145,6 +145,13 @@ namespace TOne.CDR.Data.SQL
 
             Parallel.ForEach(listPreparedCDRs, item =>
             {
+                //if (item.TableName == "[dbo].[Billing_CDR_Sale]")
+                //{
+                //    string tempFilePath = item.GetDataFilePath();
+                //    string fileContant = System.IO.File.ReadAllText(tempFilePath);
+                //    tempFilePath = tempFilePath.Replace(".tmp", "SaleFile.tmp");
+                //    System.IO.File.WriteAllText(tempFilePath, fileContant);
+                //}
                 InsertBulkToTable(item);
             });
 
@@ -226,9 +233,9 @@ namespace TOne.CDR.Data.SQL
                           cdr.CDPNOut,
                            cdr.SIP,
                         cdr.SubscriberID));//
-                        //cdr.SubscriberID,
-                        //cdr.SIP,
-                        //0));//
+            //cdr.SubscriberID,
+            //cdr.SIP,
+            //0));//
 
         }
 
