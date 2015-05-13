@@ -356,6 +356,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 else if (_mSISDN != normalCDR.MSISDN)
                 {
+
+                    foreach (var i in AggregateDefinitions)
+                    {
+                        numberProfile.AggregateValues.Add(i.Name, i.Aggregation.GetResult());
+                    }
+
                     numberProfileBatch.Add(numberProfile);
                     if (BatchSize.HasValue && numberProfileBatch.Count == BatchSize)
                     {
@@ -396,10 +402,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 
 
-                foreach (var i in AggregateDefinitions)
-                {
-                    numberProfile.AggregateValues.Add(i.Name, i.Aggregation.GetResult());
-                }
+                
 
             });
 
