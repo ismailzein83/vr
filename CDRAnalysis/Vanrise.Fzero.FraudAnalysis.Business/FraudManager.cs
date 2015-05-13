@@ -84,8 +84,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                     Decimal ThrCri = d / levelCriteria.Threshold;
 
-                    if (!dict_criteriaValues.TryGetValue(levelCriteria.CriteriaDefinitions.CriteriaId, out ThrCri))
-                        dict_criteriaValues.Add(levelCriteria.CriteriaDefinitions.CriteriaId, ThrCri);
+                    dict_criteriaValues.Add(levelCriteria.CriteriaDefinitions.CriteriaId, ThrCri);
 
                     if (levelCriteria.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
                     {

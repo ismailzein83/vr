@@ -338,7 +338,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-            dataManager.LoadCDR(DateTime.Parse("2010-03-10 04:00:00"), DateTime.Parse("2019-03-20 06:00:00"), BatchSize, (normalCDR) =>
+            dataManager.LoadCDR(DateTime.Parse("2014-12-01 00:00:00"), DateTime.Parse("2014-12-10 10:00:00"), BatchSize, (normalCDR) =>
             {
 
                 // Agregates

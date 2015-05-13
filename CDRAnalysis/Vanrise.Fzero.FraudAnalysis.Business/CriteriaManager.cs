@@ -86,8 +86,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal Ratio_OffNet_Originated_Calls_vs_OnNet_Originated_Calls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountInOffNet"] != 0 && numberProfile.AggregateValues["CountOutOffNet"] != 0)
-                return (numberProfile.AggregateValues["CountInOffNet"] / numberProfile.AggregateValues["CountOutOffNet"]);
+            if (numberProfile.AggregateValues["CountInOffNets"] != 0 && numberProfile.AggregateValues["CountOutOffNets"] != 0)
+                return (numberProfile.AggregateValues["CountInOffNets"] / numberProfile.AggregateValues["CountOutOffNets"]);
             else
                 return 0;
         }
@@ -114,7 +114,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal Voice_Only_Service_Usage(NumberProfile numberProfile)
         {
-            return numberProfile.AggregateValues["CountOutSMS"];
+            return numberProfile.AggregateValues["CountOutSMSs"];
         }
 
         static decimal Ratio_of_Distinct_Destination_vs_Total_Number_of_Calls(NumberProfile numberProfile)
@@ -127,8 +127,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal Ratio_International_Originated_Vs_Outgoing_Calls(NumberProfile numberProfile)
         {
-            if (numberProfile.AggregateValues["CountInInter"] != 0 && numberProfile.AggregateValues["CountOutCalls"] != 0)
-                return (numberProfile.AggregateValues["CountInInter"] / numberProfile.AggregateValues["CountOutCalls"]);
+            if (numberProfile.AggregateValues["CountInInters"] != 0 && numberProfile.AggregateValues["CountOutCalls"] != 0)
+                return (numberProfile.AggregateValues["CountInInters"] / numberProfile.AggregateValues["CountOutCalls"]);
             else
                 return 0;
         }

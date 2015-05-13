@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 {
                     if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
-                        sValues.Add(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString());
+                        sValues.Add(Math.Round(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value).ToString());
                     }
                     else
                     {
