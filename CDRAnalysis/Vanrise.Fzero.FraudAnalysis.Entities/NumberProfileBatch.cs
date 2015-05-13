@@ -12,10 +12,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         static NumberProfileBatch()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfileBatch), "numberProfiles");
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfile), "subscriberNumber", "fromDate", "toDate", "countOutCalls", "diffOutputNumb",
-                "countOutInter","diffOutputNumb", "countOutInter", "countInInter", "callOutDurAvg", "countOutFail", "countInFail", "totalOutVolume",
-                "totalInVolume", "diffInputNumbers", "countOutSMS", "totalIMEI", "totalBTS", "isOnNet", "totalDataVolume",
-                "periodId", "countInCalls", "callInDurAvg", "countOutOnNet", "countInOnNet", "countOutOffNet", "countInOffNet");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfile), "SubscriberNumber", "FromDate", "ToDate", "CountOutCalls", "DiffOutputNumb",
+                "CountOutInter","DiffOutputNumb", "CountOutInter", "CountInInter", "CallOutDurAvg", "CountOutFail", "CountInFail", "TotalOutVolume",
+                "TotalInVolume", "DiffInputNumbers", "CountOutSMS", "TotalIMEI", "TotalBTS", "IsOnNet", "TotalDataVolume",
+                "PeriodId", "CountInCalls", "CallInDurAvg", "CountOutOnNet", "CountInOnNet", "CountOutOffNet", "CountInOffNet");
         }
 
         public override string GenerateDescription()
