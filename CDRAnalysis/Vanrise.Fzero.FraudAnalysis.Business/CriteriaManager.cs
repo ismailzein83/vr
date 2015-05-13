@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             decimal? result = 0;
 
-            decimal CountOutCalls = numberProfile.AggregateValues.Where(x => x.Key == "CountOutCalls").FirstOrDefault().Value;
+            decimal CountOutCalls = numberProfile.AggregateValues["CountOutCalls"];
             decimal DiffOutputNumb = numberProfile.AggregateValues.Where(x => x.Key == "DiffOutputNumb").FirstOrDefault().Value;
             decimal CountOutInter = numberProfile.AggregateValues.Where(x => x.Key == "CountOutInter").FirstOrDefault().Value;
             decimal CountInInter = numberProfile.AggregateValues.Where(x => x.Key == "CountInInter").FirstOrDefault().Value;
