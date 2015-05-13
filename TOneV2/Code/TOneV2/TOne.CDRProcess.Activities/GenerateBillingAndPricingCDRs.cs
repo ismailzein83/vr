@@ -96,13 +96,20 @@ namespace TOne.CDRProcess.Activities
                             if (!TABS.Switch.All.TryGetValue(cdrBatch.SwitchId, out cdrSwitch))
                                 throw new Exception("Switch Not Exist");
 
-
+                        DateTime startPricing = DateTime.Now;
+                        double totalsecondsforidentifications = 0;
+                        double totalsecondsforpricing = 0;
                         foreach (TABS.CDR cdr in cdrBatch.CDRs)
                         {
                             if (cdr == null) continue;
                             if (cdr.Switch == null)
                                 cdr.Switch = cdrSwitch;
+
+                            DateTime StartIdentification = DateTime.Now;
+
                             Billing_CDR_Base cdrBase = GenerateBillingCdr(codeMap, cdr);
+                            TimeSpan spentIndentification = DateTime.Now.Subtract(StartIdentification);
+                            totalsecondsforidentifications += spentIndentification.TotalSeconds;
                             BillingCDRBase baseCDR = GetBillingCDRBase(cdrBase);
 
                             billingCDRs.CDRs.Add(baseCDR);
@@ -110,10 +117,11 @@ namespace TOne.CDRProcess.Activities
                             if (baseCDR.IsValid)
                             {
                                 BillingCDRMain main = new BillingCDRMain(baseCDR);
-
+                                DateTime timePricing = DateTime.Now;
                                 main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
-
+                                TimeSpan spentPricingPerCDR = DateTime.Now.Subtract(timePricing);
+                                totalsecondsforpricing += spentPricingPerCDR.TotalSeconds;
                                 HandlePassThrough(main);
 
                                 if (main != null && main.cost != null && main.SupplierCode != null)
@@ -138,7 +146,9 @@ namespace TOne.CDRProcess.Activities
                                 CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(baseCDR));
 
                         }
-
+                        TimeSpan spent = DateTime.Now.Subtract(startPricing);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Pricing and billings cdrs({0}-Main:{1},Invalid:{2}) done and takes:{3}", cdrBatch.CDRs.Count, CDRMains.MainCDRs.Count, CDRInvalids.InvalidCDRs.Count, spent);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Pricing and billings cdrs({0}) Identifications:{1},Pricing:{2}", cdrBatch.CDRs.Count, totalsecondsforidentifications, totalsecondsforpricing);
                         inputArgument.OutputBillingQueue.Enqueue(billingCDRs);
                         if (CDRMains.MainCDRs.Count > 0) inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);
                         if (CDRInvalids.InvalidCDRs.Count > 0) inputArgument.OutputInvalidCDRQueue.Enqueue(CDRInvalids);

@@ -22,13 +22,14 @@ namespace TOne.CDRProcess.Activities
 
     public sealed class ClearTimeRangeBillingRecords : BaseAsyncActivity<ClearTimeRangeBillingRecordsInput>
     {
-        
+
         [RequiredArgument]
         public InArgument<TimeRange> TimeRange { get; set; }
 
-        
+
         protected override void DoWork(ClearTimeRangeBillingRecordsInput inputArgument, AsyncActivityHandle handle)
         {
+            DateTime startClearing = DateTime.Now;
             CDRManager cdrManager = new CDRManager();
             DateTime deletionStart = DateTime.Now;
             DateTime from = inputArgument.TimeRange.From;
@@ -47,6 +48,8 @@ namespace TOne.CDRProcess.Activities
             {
                 action();
             });
+            TimeSpan spent = DateTime.Now.Subtract(startClearing);
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.BusinessProcess.Entities.BPTrackingSeverity.Information, "Clear TimeRange billings({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
         }
 
         protected override ClearTimeRangeBillingRecordsInput GetInputArgument(AsyncCodeActivityContext context)
@@ -56,5 +59,6 @@ namespace TOne.CDRProcess.Activities
                 TimeRange = this.TimeRange.Get(context)
             };
         }
+
     }
 }
