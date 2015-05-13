@@ -21,7 +21,7 @@ DECLARE @Sql nvarchar(4000)
 	declare @tempTableName nvarchar(1000)
 	declare @PageIndexTemp bit
 	declare @exists bit
-	
+	SET @todate=DATEADD(dd,1,@todate)
 	set @Sql=''
 	set @tempTableName='tempdb.dbo.['+@TableName + ']'
 	set @exists=dbo.CheckGlobalTableExists (@TableName)
@@ -139,7 +139,11 @@ BEGIN
 	set @Sql = @Sql +
 	--' select count(1) from ' + @tempTableName + ' 
 	'
-	;with final as ( select *,ROW_NUMBER()  OVER ( ORDER BY (SELECT 1) )AS rowNumber from ' + @tempTableName + ')
-	select top ' + CAST( @TopRecord as varchar) + '* from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar)	
-	--PRINT @Sql		 
+	;with final as ( select *,ROW_NUMBER()  OVER ( ORDER BY (SELECT 1) )AS rowNumber from ' + @tempTableName + ')'
+	
+	if(@TopRecord IS NULL)
+		set @Sql = @Sql + ' select * from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar)	
+	ELSE
+		set @Sql = @Sql + ' select top ' + CAST( @TopRecord as varchar) + '* from final WHERE rowNumber  between '+CAST( @From AS varchar) +' AND '+CAST( @To as varchar) + 'Order by DurationsInMinutes ' + @sortOrder
+	PRINT @Sql		 
 	execute sp_executesql @Sql

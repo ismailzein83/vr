@@ -8,6 +8,7 @@ WITH recompile
 AS
 BEGIN
 
+SET @ToDateTime=DATEADD(dd,1,@todatetime)
 	DECLARE @Results TABLE(
 			CarrierAccountID VARCHAR(5),
 			NameSuffix VARCHAR(100),

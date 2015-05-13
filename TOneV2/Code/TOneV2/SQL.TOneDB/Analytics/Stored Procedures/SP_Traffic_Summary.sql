@@ -8,7 +8,7 @@ AS
 BEGIN	
 	SET NOCOUNT ON
 	
-	
+	SET @todate = dateadd(dd,1,@todate)
 	
 	DECLARE @ExchangeRates TABLE(
 		Currency VARCHAR(3),

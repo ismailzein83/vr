@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Analytics].[SP_Traffic_CarrierSummary]
-   @CarrierType VARCHAR(10),
+   @CarrierType VARCHAR(10) = NULL,
    @fromDate datetime ,
    @ToDate datetime,
    @CustomerID varchar(15)=null,
@@ -7,12 +7,15 @@
    @TopRecord INT =NULL,
    @GroupByProfile char(1) = 'N',
    @CustomerAmuID int = NULL,
-   @SupplierAmuID int = NULL
+   @SupplierAmuID int = NULL,
+   @From INT = 1,
+   @To INT = 10
 AS
 BEGIN
 	DECLARE @CustomerIDs TABLE( CarrierAccountID VARCHAR(5) )
 	DECLARE @SupplierIDs TABLE( CarrierAccountID VARCHAR(5) )
 	
+	SET @todate = dateadd(dd,1,@todate)
 	IF(@CustomerAMUID IS NOT NULL)
 	BEGIN
 		DECLARE @customerAmuFlag VARCHAR(20)
@@ -55,90 +58,91 @@ CID VARCHAR(5)
 )
 INSERT INTO  @RepresentedAsSwitchCarriers SELECT ca.CarrierAccountID FROM CarrierAccount ca WITH (NOLOCK)
                  WHERE ca.RepresentsASwitch='Y'
+IF(@CarrierType = 'Supplier')
                  
 IF @GroupByProfile = 'N'
-	IF(@CarrierType = 'Supplier')
-	 
-
 	
-BEGIN
-;WITH Traffic_ AS
-	(
-		
-		SELECT
-			SupplierID,
-			CallDate,
-			Attempts,
-			DeliveredAttempts,
-			SuccessfulAttempts,
-			DurationsInSeconds,
-			PDDInSeconds,
-			NumberOfCalls
-			
-		FROM
-			TrafficStatsDaily ts  WITH(NOLOCK,INDEX(IX_TrafficStatsDaily_DateTimeFirst))
-        WHERE ( CallDate >= @fromDate AND CallDate <  @ToDate )
-			AND (@SupplierID IS NULL OR ts.SupplierID= @SupplierID)
-			AND CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
-			AND(@CustomerAmuID IS NULL OR CustomerID IN (SELECT * FROM @CustomerIDs))
-			AND(@SupplierAmuID IS NULL OR SupplierID IN (SELECT * FROM @SupplierIDs))
-		) 
-, Traffic AS 
-( 
-		 SELECT 
-           ISNULL(TS.SupplierID, '') AS SupplierID, 
-		   Sum(Attempts) as Attempts,
-		   Sum(SuccessfulAttempts) as SuccessfulAttempts, 
-		   Sum(DurationsInSeconds/60.) as DurationsInMinutes, 
-		   Sum(SuccessfulAttempts)*100.0 / Sum(Attempts) as ASR, 
-		   case when Sum(SuccessfulAttempts) > 0 then Sum(DurationsInSeconds)/(60.0*Sum(SuccessfulAttempts)) ELSE 0 end as ACD, 
-		   Sum(deliveredAttempts) * 100.0 / SUM(Attempts) as DeliveredASR, 
-		   Avg(PDDinSeconds) as AveragePDD 
-		FROM Traffic_ TS WITH(NOLOCK,INDEX(IX_TrafficStatsDaily_DateTimeFirst))
-		  where  (@SupplierID IS NULL OR ts.SupplierID = @SupplierID)
-	   
-	 GROUP BY ISNULL(TS.SupplierID, '')  
-), 
-Billing AS 
-(
-	SELECT
-	           BS.SupplierID AS SupplierID,
-			  ISNULL(SUM(BS.NumberOfCalls),0) AS Calls,
-			  ISNULL(SUM(bs.CostDuration)/60,0) AS PricedDuration,
-			  ISNULL(SUM(BS.Sale_Nets/ISNULL(ERS.Rate, 1)),0) AS Sale,
-			  ISNULL(SUM(BS.Cost_Nets/ISNULL(ERC.Rate, 1)),0) AS Cost,
-			  ISNULL(SUM(BS.Sale_Nets/ISNULL(ERS.Rate, 1)),0)-ISNULL(SUM(BS.Cost_Nets/ISNULL(ERC.Rate, 1)),0) AS Profit,
-			  0 AS PercentageProfit
-	FROM
-		 Billing_Stats BS WITH(NOLOCK,Index(IX_Billing_Stats_Date)) 
-	     LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate
-         LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate
-	WHERE  (BS.CallDate >= @fromDate AND BS.CallDate < @ToDate)
-		AND (@SupplierID IS NULL OR BS.SupplierID =  @SupplierID)
-		AND CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
-		AND SupplierID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
-		AND(@CustomerAmuID IS NULL OR CustomerID IN (SELECT * FROM @CustomerIDs))
-		AND(@SupplierAmuID IS NULL OR SupplierID IN (SELECT * FROM @SupplierIDs))
-	GROUP BY BS.SupplierID
-	)
-,
- Results AS 
-(
-	SELECT  T.SupplierID, T.Attempts, T.SuccessfulAttempts, T.DurationsInMinutes, T.ASR, T.ACD, T.DeliveredASR, T.AveragePDD,
-	       B.Calls AS NumberOfCalls,B.PricedDuration AS PricedDuration,ISNULL( B.Sale,0) AS Sale_Nets,ISNULL( B.Cost,0) AS Cost_Nets,ISNULL( B.Profit,0) AS Profit,0 AS Percentage
-	       ,  ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
-	         
-	FROM Traffic T WITH(NOLOCK)
-	LEFT JOIN Billing B ON T.SupplierID= B.SupplierID
-	
-	)
+		BEGIN
+			;WITH Traffic_ AS
+				(
+					
+					SELECT
+						SupplierID,
+						CallDate,
+						Attempts,
+						DeliveredAttempts,
+						SuccessfulAttempts,
+						DurationsInSeconds,
+						PDDInSeconds,
+						NumberOfCalls
+						
+					FROM
+						TrafficStatsDaily ts  WITH(NOLOCK,INDEX(IX_TrafficStatsDaily_DateTimeFirst))
+					WHERE ( CallDate >= @fromDate AND CallDate <  @ToDate )
+						AND (@SupplierID IS NULL OR ts.SupplierID= @SupplierID)
+						AND CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
+						AND(@CustomerAmuID IS NULL OR CustomerID IN (SELECT * FROM @CustomerIDs))
+						AND(@SupplierAmuID IS NULL OR SupplierID IN (SELECT * FROM @SupplierIDs))
+					) 
+			, Traffic AS 
+			( 
+					 SELECT 
+					   ISNULL(TS.SupplierID, '') AS SupplierID, 
+					   Sum(Attempts) as Attempts,
+					   Sum(SuccessfulAttempts) as SuccessfulAttempts, 
+					   Sum(DurationsInSeconds/60.) as DurationsInMinutes, 
+					   Sum(SuccessfulAttempts)*100.0 / Sum(Attempts) as ASR, 
+					   case when Sum(SuccessfulAttempts) > 0 then Sum(DurationsInSeconds)/(60.0*Sum(SuccessfulAttempts)) ELSE 0 end as ACD, 
+					   Sum(deliveredAttempts) * 100.0 / SUM(Attempts) as DeliveredASR, 
+					   Avg(PDDinSeconds) as AveragePDD 
+					FROM Traffic_ TS WITH(NOLOCK,INDEX(IX_TrafficStatsDaily_DateTimeFirst))
+					  where  (@SupplierID IS NULL OR ts.SupplierID = @SupplierID)
+				   
+				 GROUP BY ISNULL(TS.SupplierID, '')  
+			), 
+			Billing AS 
+			(
+				SELECT
+						   BS.SupplierID AS SupplierID,
+						  ISNULL(SUM(BS.NumberOfCalls),0) AS Calls,
+						  ISNULL(SUM(bs.CostDuration)/60,0) AS PricedDuration,
+						  ISNULL(SUM(BS.Sale_Nets/ISNULL(ERS.Rate, 1)),0) AS Sale,
+						  ISNULL(SUM(BS.Cost_Nets/ISNULL(ERC.Rate, 1)),0) AS Cost,
+						  ISNULL(SUM(BS.Sale_Nets/ISNULL(ERS.Rate, 1)),0)-ISNULL(SUM(BS.Cost_Nets/ISNULL(ERC.Rate, 1)),0) AS Profit,
+						  0 AS PercentageProfit
+				FROM
+					 Billing_Stats BS WITH(NOLOCK,Index(IX_Billing_Stats_Date)) 
+					 LEFT JOIN @ExchangeRates ERC ON ERC.Currency = bs.Cost_Currency AND ERC.Date = bs.CallDate
+					 LEFT JOIN @ExchangeRates ERS ON ERS.Currency = bs.Sale_Currency AND ERS.Date = bs.CallDate
+				WHERE  (BS.CallDate >= @fromDate AND BS.CallDate < @ToDate)
+					AND (@SupplierID IS NULL OR BS.SupplierID =  @SupplierID)
+					AND CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
+					AND SupplierID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)
+					AND(@CustomerAmuID IS NULL OR CustomerID IN (SELECT * FROM @CustomerIDs))
+					AND(@SupplierAmuID IS NULL OR SupplierID IN (SELECT * FROM @SupplierIDs))
+				GROUP BY BS.SupplierID
+				)
+			,
+			 Results AS 
+			(
+				SELECT  T.SupplierID, CA.NameSuffix, CP.Name AS ProfileName, T.Attempts, T.SuccessfulAttempts, T.DurationsInMinutes, T.ASR, T.ACD, T.DeliveredASR, T.AveragePDD,
+					   B.Calls AS NumberOfCalls,B.PricedDuration AS PricedDuration,ISNULL( B.Sale,0) AS Sale_Nets,ISNULL( B.Cost,0) AS Cost_Nets,ISNULL( B.Profit,0) AS Profit,0 AS Percentage
+					   ,  ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
+				         
+				FROM Traffic T WITH(NOLOCK)
+				LEFT JOIN CarrierAccount AS CA WITH (NOLOCK) ON T.SupplierID = CA.CarrierAccountID
+				LEFT JOIN CarrierProfile AS CP ON CA.ProfileID = CP.ProfileID
+				LEFT JOIN Billing B ON T.SupplierID= B.SupplierID
+				
+				)
 
 
-SELECT * FROM Results 
-WHERE rownIndex <= @TopRecord
-END
+			SELECT * FROM Results 
+			WHERE (@TopRecord IS NULL OR rownIndex <= @TopRecord)
+			AND (rownIndex BETWEEN @From AND @To)
+		END
 
-IF @GroupByProfile= 'Y'
+ELSE IF @GroupByProfile= 'Y'
 BEGIN
 
 ;WITH Traffic_ AS
@@ -212,9 +216,10 @@ Billing AS
 	
 	)
 	, Final AS
-(
+	(	
 	SELECT
 		 P.ProfileID AS ProfileID,
+		 P.Name AS ProfileName,
 		 SUM(R.Attempts) AS Attempts,
 		 Sum(R.SuccessfulAttempts) as SuccessfulAttempts,
 		 SUM(R.DurationsInMinutes) AS DurationsInMinutes,
@@ -228,14 +233,20 @@ Billing AS
 		 SUM(R.Cost_Nets) AS Cost_Nets,
 		 SUM(R.Profit) AS Profit,
 		 AVG(R.Percentage) AS Percentage
-		 --ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
+		 
 	FROM
 		Results R LEFT JOIN CarrierAccount C ON R.SupplierID = C.CarrierAccountID
 		LEFT JOIN CarrierProfile P ON C.ProfileID = P.ProfileID
-	GROUP BY P.ProfileID
+	GROUP BY P.ProfileID, P.Name
 	
-)
-SELECT top (@TopRecord) * FROM Final-- WHERE  
+	), FinalResult AS (
+	
+		SELECT *, ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
+		FROM Final
+	)
+SELECT * FROM FinalResult
+	WHERE (@TopRecord IS NULL OR rownIndex <= @TopRecord)
+		AND (rownIndex BETWEEN @From AND @To)
 	ORDER BY DurationsInMinutes DESC
 END
 END
@@ -308,16 +319,19 @@ Billing AS
 	)
 , Results AS 
 (
-	SELECT  T.CustomerID, T.Attempts, T.SuccessfulAttempts, T.DurationsInMinutes, T.ASR, T.ACD, T.DeliveredASR, T.AveragePDD,
+	SELECT  T.CustomerID, CA.NameSuffix, CP.Name AS ProfileName, T.Attempts, T.SuccessfulAttempts, T.DurationsInMinutes, T.ASR, T.ACD, T.DeliveredASR, T.AveragePDD,
 	        B.Calls AS NumberOfCalls,B.PricedDuration AS PricedDuration, isnull(B.Sale,0) AS Sale_Nets,isnull(B.Cost,0) AS Cost_Nets,isnull(B.Profit,0) AS Profit,0 AS Percentage
 	         ,  ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
 	FROM Traffic T WITH(NOLOCK)
+	LEFT JOIN CarrierAccount AS CA WITH (NOLOCK) ON T.CustomerID = CA.CarrierAccountID
+	LEFT JOIN CarrierProfile AS CP ON CA.ProfileID = CP.ProfileID
 	LEFT JOIN Billing B ON T.CustomerID = B.CustomerID
 	)
 	
-	SELECT * FROM Results WHERE  
-rownIndex <= @TopRecord
-and CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)  
+	SELECT * FROM Results 
+	WHERE (@TopRecord IS NULL OR rownIndex <= @TopRecord)
+	AND (rownIndex BETWEEN @From AND @To)
+	and CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)  
 END
 ELSE
 IF @GroupByProfile = 'Y'
@@ -393,6 +407,7 @@ Billing AS
 (
 	SELECT
 		 P.ProfileID AS ProfileID,
+		 P.Name AS ProfileName,
 		 SUM(R.Attempts) AS Attempts,
 		 Sum(R.SuccessfulAttempts) as SuccessfulAttempts,
 		 SUM(R.DurationsInMinutes) AS DurationsInMinutes,
@@ -406,15 +421,20 @@ Billing AS
 		 SUM(R.Cost_Nets) AS Cost_Nets,
 		 SUM(R.Profit) AS Profit,
 		 AVG(R.Percentage) AS Percentage
-		 --ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
+		 
 	FROM
 		Results R LEFT JOIN CarrierAccount C ON R.CustomerID = C.CarrierAccountID
 		LEFT JOIN CarrierProfile P ON C.ProfileID = P.ProfileID
-	GROUP BY P.ProfileID
+	GROUP BY P.ProfileID, P.Name
 	
-)
+	), FinalResult AS (
+		SELECT *, ROW_NUMBER() OVER (ORDER BY DurationsInMinutes DESC) AS rownIndex
+		FROM Final
+	)
 	
-	SELECT top (@TopRecord) * FROM Final-- WHERE  
+	SELECT * FROM FinalResult
+	WHERE (@TopRecord IS NULL OR rownIndex <= @TopRecord)
+		AND (rownIndex BETWEEN @From AND @To)  
 	ORDER BY DurationsInMinutes DESC
 --rownIndex <= @TopRecord
 --and CustomerID NOT IN (SELECT grasc.CID FROM dbo.GetRepresentedAsSwitchCarriers() grasc)  
