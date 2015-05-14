@@ -1,18 +1,24 @@
 ﻿appControllers.controller('ZoneDetailsController',
-    function ZoneDetailsController($scope, $routeParams, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
+    function ZoneDetailsController($scope, VRNavigationService, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
 
         var zoneId;
         var maxTimeDimension = 0;
         var currentDimensionValue;
         var gridMainAPI;
 
+        loadParameters();
         defineScopeObjects();
         defineScopeMethods();
         load();
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            zoneId = parameters.zoneId;
+            $scope.zoneName = parameters.zoneName;
+        }
+
         function defineScopeObjects() {
-            zoneId = $routeParams.zoneId;
-              $scope.zoneName = $routeParams.zoneName;
-            $scope.testModel = 'ZoneDashboardController: ' + zoneId;
+            
             $scope.timeDimensionTypesOption = {
                 datasource: []
             };

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService, $modal) {
+app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDirService, VRModalService) {
 
     var directiveDefinitionObject = {
 
@@ -264,7 +264,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
            
             $scope.changeSettings = function () {
                
-                var modalScope = $scope.$root.$new();
+                var modalScope = VRModalService.showModal('/Client/Javascripts/Directives/Chart/vr-chart-settings.html', false)
                 modalScope.title = 'Chart Settings';
                 modalScope.config = (JSON.parse(JSON.stringify(currentChartSettings)));
                 var seriesTypes = [{ value: "column" },
@@ -285,7 +285,7 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                 });
 
                 modalScope.save = function () {
-                    modalInstance.hide();
+                    modalScope.modalContext.closeModal();
                     currentChartSettings = modalScope.config;
                     if (currentChartSettings.isSingleDimension) {
                         renderSingleDimensionChart(currentChartSource);
@@ -297,7 +297,6 @@ app.directive('vrChart', ['ChartDirService', '$modal', function (ChartDirService
                         renderChart(currentChartSource);
                     }
                 };
-                var modalInstance = $modal({ scope: modalScope, template: '/Client/Javascripts/Directives/Chart/vr-chart-settings.html', show: true, animation: "am-fade-and-scale" });
             }
 
             $scope.isSettingsVisible = function () {

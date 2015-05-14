@@ -43,7 +43,7 @@
                                 <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
                                     <li role="presentation">
                                         <div ng-repeat="action in ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
-                                            <div class=" hand-cursor" ng-click="ctrl.actionClicked(action)"><span style="font-size:11px">{{action.name}}</span></div>
+                                            <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
                                         </div>
                                     </li>
                                 </ul>

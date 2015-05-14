@@ -1,19 +1,26 @@
 ﻿/// <reference path="../../../../Templates/Grid/HeaderTemplate.html" />
 /// <reference path="../../../../Templates/Grid/HeaderTemplate.html" />
 appControllers.controller('ZoneSummaryController',
-    function ZoneSummaryController($scope, $location, $routeParams, $interval, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
+    function ZoneSummaryController($scope, VRNavigationService, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
         var measureTypes = [BIMeasureTypeEnum.DurationInMinutes, BIMeasureTypeEnum.Sale, BIMeasureTypeEnum.Cost, BIMeasureTypeEnum.Profit];
         var gridApi;
 
+        loadParameters();
         defineScopeObjects();
         defineScopeMethods();
         load();
 
+        function loadParameters()
+        {
+            var parameters = VRNavigationService.getParameters($scope);
+            $scope.zoneId = parameters.zoneId;
+            $scope.fromDate = parameters.fromDate;
+            $scope.toDate = parameters.toDate;
+        }
+
         
         function defineScopeObjects() {
-
-          //  $scope.zoneName = $routeParams.ZoneName;
-            $scope.testModel = 'ZoneDetailsController: ' + $scope.zoneId;
+            
 
             $scope.timeDimensionTypes = [];
             for (prop in BITimeDimensionTypeEnum) {
@@ -45,10 +52,12 @@ appControllers.controller('ZoneSummaryController',
             };
             
             $scope.gotoDetails = function () {
-                //$scope.$root.$apply(function () {
                 $scope.$hide();
-                    $location.path("/BI/ZoneDetails/" + $scope.zoneId + "/" + $scope.zoneName).replace();
-                //});
+                var parameters = {
+                    zoneId: $scope.zoneId,
+                    zoneName: $scope.zoneName
+                };
+                VRNavigationService.goto("/BI/ZoneDetails", parameters);
             };
         }
 

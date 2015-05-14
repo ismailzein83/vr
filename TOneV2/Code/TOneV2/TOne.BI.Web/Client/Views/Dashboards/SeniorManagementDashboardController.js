@@ -1,5 +1,5 @@
 ﻿appControllers.controller('SeniorManagementDashboardController',
-    function SeniorManagementDashboardController($scope, $location, $modal, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum, $animate) {
+    function SeniorManagementDashboardController($scope, VRNavigationService, VRModalService, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum, $animate) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -41,18 +41,26 @@
                 {
                     name: "Zone Summary",
                     clicked: function (zoneItem) {
-                        $scope.zoneId = zoneItem.EntityId;
-                        $scope.zoneName = zoneItem.EntityName;
                         var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
-                        $scope.fromDate = selectedDateTimeFilter.fromDate;
-                        $scope.toDate = selectedDateTimeFilter.toDate;
-                        var addModal = $modal({ scope: $scope, template: '/Client/Modules/BI/Views/Reports/ZoneSummary.html', show: true, animation: "am-fade-and-scale" });
+
+                        var parameters = {
+                            zoneId: zoneItem.EntityId,
+                            fromDate : selectedDateTimeFilter.fromDate,
+                            toDate : selectedDateTimeFilter.toDate
+                        }
+
+                        var modalScope = VRModalService.showModal('/Client/Modules/BI/Views/Reports/ZoneSummary.html', true, parameters);
+                        modalScope.title = zoneItem.EntityName;
                     }
                 },
                 {
                     name: "Zone Details",
                     clicked: function (zoneItem) {
-                        $location.path("/BI/ZoneDetails/" + zoneItem.EntityId + "/" + zoneItem.EntityName)
+                        var parameters = {
+                            zoneId: zoneItem.EntityId,
+                            zoneName: zoneItem.EntityName
+                        };
+                        VRNavigationService.goto("/BI/ZoneDetails", parameters);
                     }
                 }
             ];

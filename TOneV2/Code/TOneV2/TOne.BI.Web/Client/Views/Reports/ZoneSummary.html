@@ -1,36 +1,9 @@
-﻿<div id="summaryDetails" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" ng-show="title">
-                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" ng-bind="title"></h4>
-            </div>
-
-            <div class="modal-body">
-
-
-                <div ng-controller="ZoneSummaryController" vr-loader="isGettingData">
-                    <h3>Zone Name: {{zoneName}}</h3>
-                    <select ng-options="itm as itm.name for itm in timeDimensionTypes"
-                            ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
-                    <!--<div id="custom" class="gridroute" ui-grid="gridOptionsZoneDetails" style="height:400px"></div>-->
-                    <vr-datagrid datasource="data" maxheight="600px">
-                        <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
-                        <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
-                    </vr-datagrid>
-                    <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
-                </div>
-
-
-            </div>
-            <div>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
-                        <vr-button type="Close" data-onclick="$hide"></vr-button>
-                    </div>
-                </vr-actionbar>
-            </div>
-        </div>
-    </div>
+﻿<div ng-controller="ZoneSummaryController" vr-loader="isGettingData">
+    <select ng-options="itm as itm.name for itm in timeDimensionTypes"
+            ng-model="selectedTimeDimensionType" ng-change="updateReport()"></select>
+    <vr-datagrid datasource="data" maxheight="600px">
+        <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
+    </vr-datagrid>
+    <a ng-click="gotoDetails()" style="cursor: pointer; ">More Details</a>
 </div>
-

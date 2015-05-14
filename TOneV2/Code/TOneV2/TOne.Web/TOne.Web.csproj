@@ -214,6 +214,8 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationCustom.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationValue.js" />
     <Content Include="Client\Javascripts\Directives\Loader\vr-loader-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Modal\vr-modalbody-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Modal\vr-modalcontent-directive.js" />
     <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
     <Content Include="Client\Javascripts\Directives\Old\vr-gridview-directive.js" />
@@ -232,13 +234,15 @@
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
     <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
-    <Content Include="Client\Javascripts\Services\modal-service.js" />
+    <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.html" />
+    <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.js" />
     <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
     <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\dropdown-dir-service.js" />
     <Content Include="Client\Javascripts\Services\main-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Textbox\textbox-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\NavigationService\vr-navigation-service.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
     <Content Include="Client\Javascripts\Services\zone-service.js" />

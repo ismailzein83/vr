@@ -67,7 +67,7 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/BI/Views/Dashboards/ZoneDashboard.html',
             controller: 'ZoneDashboardController'
         }).
-        when('/BI/ZoneDetails/:zoneId/:zoneName', {
+        when('/BI/ZoneDetails/:params', {
             templateUrl: '/Client/Modules/BI/Views/Reports/ZoneDetails.html',
             controller: 'ZoneDetailsController'
         }).

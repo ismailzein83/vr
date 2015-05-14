@@ -1,8 +1,8 @@
 ﻿/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum) {
-
+    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
+        CarrierTypeEnum, VRModalService) {
 
         var chartSelectedMeasureAPI;
         var chartSelectedEntityAPI;
@@ -86,7 +86,10 @@ appControllers.controller('ZoneMonitorController',
             };
 
             $scope.gridMenuActions = [{
-                name: "CDRs"
+                name: "CDRs",
+                clicked: function (dataItem) {
+                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', true, null, {width:"80%", maxHeight: "800px"});
+                }
             }];
         }
         
@@ -124,10 +127,6 @@ appControllers.controller('ZoneMonitorController',
             $scope.onMainGridReady = function (api) {
                 mainGridAPI = api;
             }
-
-            $scope.onZoneClicked = function (dataItem) {
-                selectZone(dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name);
-            };
 
             $scope.onGroupKeyClicked = function (dataItem, colDef) {
                 var group = colDef.tag;
@@ -185,12 +184,6 @@ appControllers.controller('ZoneMonitorController',
             loadSuppliers();
         }
 
-        function selectZone(zoneId, zoneName) {
-            $scope.selectedEntityId = zoneId;
-            $scope.selectedEntityName = zoneName;
-            getAndShowEntityStatistics();
-        }
-
         function resetSorting() {
             sortColumn = TrafficStatisticsMeasureEnum.Attempts;
             sortDescending = true;
@@ -204,6 +197,8 @@ appControllers.controller('ZoneMonitorController',
         
         function getData(asyncHandle, withSummary) {
             if (!chartSelectedMeasureAPI)
+                return;
+            if (sortColumn == undefined)
                 return;
             if (withSummary == undefined)
                 withSummary = false;
@@ -258,7 +253,6 @@ appControllers.controller('ZoneMonitorController',
                     $scope.overallData[0] = response.Summary;
                 }
                 angular.forEach(response.Data, function (itm) {
-                    itm.zoneName = itm.GroupKeyValues[0].Name;
                     $scope.data.push(itm);
                 });
                 renderOverallChart();

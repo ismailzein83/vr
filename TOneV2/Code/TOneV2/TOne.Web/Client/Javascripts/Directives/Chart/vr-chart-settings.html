@@ -1,61 +1,50 @@
-﻿<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" ng-show="title">
-                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" ng-bind="title"></h4>
+﻿<div vr-modalcontent>
+    <vr-modalbody maxheight="'500px'">
+        <vr-form name="formChartSettings">
+            <div ng-show="config.isSingleDimension">
+                <vr-row>
+                    <vr-columns colnum="12">
+                        <div>
+                            <vr-switch value="config.showValuesWithLegends" label="Show Values with Legends"></vr-switch>
+                        </div>
+                    </vr-columns>
+                </vr-row>
             </div>
 
-            <div class="modal-body" style="max-height:500px;overflow-y:auto">
 
-                <vr-form name="formChartSettings">
-                    <div ng-show="config.isSingleDimension">
-                        <vr-row>
-                            <vr-columns colnum="12">
-                                <div>
-                                    <vr-switch value="config.showValuesWithLegends" label="Show Values with Legends"></vr-switch>
-                                </div>
-                            </vr-columns>
-                        </vr-row>
-                    </div>
-
-
-                    <div ng-show="!config.isSingleDimension">
-                        <vr-row>
-                            <vr-columns colnum="12">
-                                <vr-label>
-                                    Series to draw:
-                                </vr-label>
-                                <div ng-repeat="itm in config.series">
-                                    <vr-row>
-                                        <vr-columns colnum="3">
-                                            <vr-label>
-                                                {{itm.title}}
-                                            </vr-label>
-                                        </vr-columns>
-                                        <vr-columns>
-                                            <vr-switch value="itm.selected"></vr-switch>
-                                        </vr-columns>
-                                        <vr-columns colnum="3">
-                                            <vr-dropdown datatextfield="value" datavaluefield="value"
-                                                         entityname="" type="standard" options="itm.seriesTypesOption"></vr-dropdown>
-                                        </vr-columns>
-                                    </vr-row>
-                                </div>
-                            </vr-columns>
-                        </vr-row>
-                    </div>
-                </vr-form>
+            <div ng-show="!config.isSingleDimension">
+                <vr-row>
+                    <vr-columns colnum="12">
+                        <vr-label>
+                            Series to draw:
+                        </vr-label>
+                        <div ng-repeat="itm in config.series">
+                            <vr-row>
+                                <vr-columns colnum="3">
+                                    <vr-label>
+                                        {{itm.title}}
+                                    </vr-label>
+                                </vr-columns>
+                                <vr-columns>
+                                    <vr-switch value="itm.selected"></vr-switch>
+                                </vr-columns>
+                                <vr-columns colnum="3">
+                                    <vr-dropdown datatextfield="value" datavaluefield="value"
+                                                 entityname="" type="standard" options="itm.seriesTypesOption"></vr-dropdown>
+                                </vr-columns>
+                            </vr-row>
+                        </div>
+                    </vr-columns>
+                </vr-row>
             </div>
-            <div>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
-                        <vr-button type="Save" data-onclick="save" formname="formChartSettings"></vr-button>
-                        <vr-button type="Close" data-onclick="$hide"></vr-button>
-                    </div>
-                </vr-actionbar>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="save" formname="formChartSettings"></vr-button>
+                <vr-button type="Close" data-onclick="$hide"></vr-button>
             </div>
-        </div>
+        </vr-actionbar>
     </div>
 </div>
-

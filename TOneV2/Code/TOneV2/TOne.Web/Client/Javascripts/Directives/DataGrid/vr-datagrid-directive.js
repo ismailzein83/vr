@@ -25,6 +25,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
                 ctrl.gridStyle['max-height'] = ctrl.maxheight;
+                ctrl.gridStyle['overflow'] = "auto";
             }
 
             ctrl.headerStyle = {};
@@ -87,6 +88,10 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 {                    
                     return typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute;
                 }
+
+                ctrl.menuActionClicked = function (action, dataItem) {
+                    action.clicked(dataItem);
+                };
             }
 
             function calculateDataColumnsSectionWidth() {

@@ -10,6 +10,9 @@
         <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" menuactions="menuActions" issubgrid>
             <vr-datagridcolumn headertext="groupKey.gridHeader" field="'GroupKeyValues[0].Name'" widthfactor="20" isclickable="'true'" onclicked="onEntityClicked"></vr-datagridcolumn>
             <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="'Number'"></vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </div>
     </div>
