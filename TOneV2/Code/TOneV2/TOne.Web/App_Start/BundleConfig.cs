@@ -51,6 +51,9 @@ namespace TOne.Web
              
               ));
 
+            bundles.Add(new ScriptBundle("~/bundles/AngularExtensions").IncludeDirectory(
+              "~/Client/Libraries/AngularExtensions", "*.js", true));
+
             //Helpers
             bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
                "~/Client/Libraries/Helpers", "*.js", true));

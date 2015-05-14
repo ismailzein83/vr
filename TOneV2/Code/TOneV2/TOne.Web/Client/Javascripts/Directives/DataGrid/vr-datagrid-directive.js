@@ -25,7 +25,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
                 ctrl.gridStyle['max-height'] = ctrl.maxheight;
-                ctrl.gridStyle['overflow'] = "auto";
+                ctrl.gridStyle['overflow-y'] = "auto";
             }
 
             ctrl.headerStyle = {};
@@ -33,6 +33,41 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             {
                 ctrl.headerStyle['background-color'] = '#93C572';
             }
+
+            ctrl.getMoreData = function () {
+                console.log('getMoreData');
+            }
+
+            function definePagingOnScroll() {
+                var loadMoreDataFunction;
+                if ($attrs.loadmoredata != undefined)
+                    loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
+                
+                ctrl.isLoadingMoreData = false;
+
+                ctrl.onScrolling = function () {
+                    if (loadMoreDataFunction == undefined)
+                        return;
+                    if (ctrl.isLoadingMoreData)
+                        return;
+                    $scope.$apply(function () {
+                        ctrl.isLoadingMoreData = true;
+                        var asyncHandle = {
+                            operationDone: clearLoadingMoreDataFlag
+                        };
+                        loadMoreDataFunction(asyncHandle);
+                    });
+                   
+                };
+
+                function clearLoadingMoreDataFlag() {
+                    //$scope.$apply(function () {
+                        ctrl.isLoadingMoreData = false;
+                    //});                    
+                }
+            }
+
+            definePagingOnScroll();
 
             function defineExpandableRow() {
                 ctrl.setExpandableRowTemplate = function (template) {

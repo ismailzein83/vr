@@ -103,7 +103,11 @@ var TestViewController = function ($scope, CarriersService, ZonesService, Routin
         if (last == false) {
             page = page + 1;
             datainloded = true;
-            RoutingAPIService.getAllRouteRule(page, pageSize)
+            RoutingAPIService.GetFilteredRouteRules(
+                {
+                    PageNumber: page,
+                    PageSize: pageSize
+                })
             .then(function (data) {
                 $scope.tabdata = $scope.tabdata.concat(data);
                 last = (data.length < pageSize) ? true : false;

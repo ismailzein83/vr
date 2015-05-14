@@ -1,5 +1,5 @@
 ﻿appControllers.controller('DefaultController',
-    function DefaultController($scope, $http) {
+    function DefaultController($scope, $http, BusinessEntityAPIService) {
        
         $scope.testModel = 'initial from default';
         $scope.html = '<input ng-click="click(1)" value="Click me" type="button">';
@@ -43,12 +43,32 @@
         };
 
         $scope.gridData = [];
-        for (var i = 1; i < 10; i++) {
-            $scope.gridData.push({
-                col1: "test " + i + "1",
-                col2: "test " + i + "2",
-                col3: "test " + i + "3",
-            });
-        }
+        $scope.loadMoreData = function (asyncHandle) {
+            BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+
+                for (var i = 1; i < 20; i++) {
+                    $scope.gridData.push({
+                        col1: "test " + i + "1",
+                        col2: "test " + i + "2",
+                        col3: "test " + i + "3",
+                    });
+                }
+
+                
+            })
+                .finally(function () {
+                    if (asyncHandle)
+                        asyncHandle.operationDone();
+                });
+            //setTimeout(function () {
+            //    $scope.$apply(function () {
+                    
+                    
+            //    });
+                
+            //}, 2000);
+
+        };
+        $scope.loadMoreData();
        
     });

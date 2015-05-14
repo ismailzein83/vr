@@ -17,6 +17,20 @@ app.directive('vrDatagridrows', [function () {
             scope.viewScope = scope.$parent;
             while (scope.viewScope.isGridScope)
                 scope.viewScope = scope.viewScope.$parent;
+
+            var lastScrollTop;
+            var gridBodyElement = elem.find("#gridBody");
+            elem.find("#gridBodyContainer").scroll(function () {
+                
+                var scrollTop = $(this).scrollTop();
+                var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
+
+                if (scrollTop > lastScrollTop) {
+                    if (scrollPercentage > 75)
+                        dataGridCtrl.onScrolling();
+                } 
+                lastScrollTop = scrollTop;
+            });
         },
         templateUrl: function (element, attrs) {
             return "/Client/Javascripts/Directives/DataGrid/vr-datagrid.html";
