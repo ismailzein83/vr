@@ -5,14 +5,16 @@ using System.Text;
 
 namespace TOne.LCRProcess.Arguments
 {
-    public class RoutingProcessInput
+    public class RoutingByCodeGroupProcessInput
     {
+        public int RoutingDatabaseId { get; set; }
+
+        public string CodePrefix { get; set; }
+
         public DateTime EffectiveTime { get; set; }
 
         public bool IsFuture { get; set; }
 
         public bool IsLcrOnly { get; set; }
-
-        public bool DivideProcessIntoSubProcesses { get; set; }
     }
 }

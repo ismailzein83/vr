@@ -1,0 +1,339 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.RoutingByCodeGroupProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.LCRProcess"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tbba="clr-namespace:TOne.BusinessEntity.BProcess.Activities;assembly=TOne.BusinessEntity.BProcess.Activities"
+ xmlns:tbe="clr-namespace:TOne.BusinessEntity.Entities;assembly=TOne.BusinessEntity.Entities"
+ xmlns:tla="clr-namespace:TOne.LCRProcess.Arguments;assembly=TOne.LCRProcess.Arguments"
+ xmlns:tla1="clr-namespace:TOne.LCRProcess.Activities;assembly=TOne.LCRProcess.Activities"
+ xmlns:tle="clr-namespace:TOne.LCR.Entities;assembly=TOne.LCR.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tla:RoutingByCodeGroupProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.LCRProcess.RoutingByCodeGroupProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>TOne.LCRProcess.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>NHibernate</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.BProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.Business</AssemblyReference>
+      <AssemblyReference>TOne.Caching</AssemblyReference>
+      <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCR.Entities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Arguments</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(tbe:CarrierAccountInfo)" Name="activeSuppliers" />
+    </Sequence.Variables>
+    <tbba:GetActiveSuppliersInfo sap2010:WorkflowViewState.IdRef="GetActiveSuppliersInfo_1">
+      <tbba:GetActiveSuppliersInfo.ActiveSuppliers>
+        <OutArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
+          <mca:CSharpReference x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">activeSuppliers</mca:CSharpReference>
+        </OutArgument>
+      </tbba:GetActiveSuppliersInfo.ActiveSuppliers>
+    </tbba:GetActiveSuppliersInfo>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))" Name="queueCodeMatches">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">new MemoryQueue&lt;List&lt;TOne.LCR.Entities.CodeMatch&gt;&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)" Name="queueRoutes">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">new MemoryQueue&lt;TOne.LCR.Entities.RouteDetailBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildLCRAndRoutesTaskStatus">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCodeMatchesTaskStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCodeMatchesForDBApply" />
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedRouteDetailsForDBApply" />
+      </Parallel.Variables>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <local:BuildLCRandRoutes sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.BuildLCRandRoutes_1">
+          <local:BuildLCRandRoutes.ActiveSuppliers>
+            <InArgument x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">
+              <mca:CSharpValue x:TypeArguments="scg:List(tbe:CarrierAccountInfo)">activeSuppliers</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.ActiveSuppliers>
+          <local:BuildLCRandRoutes.CodeMatchesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">queueCodeMatches</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.CodeMatchesQueue>
+          <local:BuildLCRandRoutes.CodePrefixGroup>
+            <InArgument x:TypeArguments="x:String">
+              <mca:CSharpValue x:TypeArguments="x:String">Input.CodePrefix</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.CodePrefixGroup>
+          <local:BuildLCRandRoutes.EffectiveTime>
+            <InArgument x:TypeArguments="s:DateTime">
+              <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.EffectiveTime>
+          <local:BuildLCRandRoutes.IsFuture>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsFuture</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.IsFuture>
+          <local:BuildLCRandRoutes.IsLcrOnly>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsLcrOnly</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.IsLcrOnly>
+          <local:BuildLCRandRoutes.RouteDetailsBatchQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">queueRoutes</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.RouteDetailsBatchQueue>
+          <local:BuildLCRandRoutes.RoutingDatabaseId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+            </InArgument>
+          </local:BuildLCRandRoutes.RoutingDatabaseId>
+          <sap2010:WorkflowViewState.ViewStateManager>
+            <sap2010:ViewStateManager>
+              <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+              <sap2010:ViewStateData Id="GetCodes_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+              <sap2010:ViewStateData Id="GetSupplierZoneRates_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+              <sap2010:ViewStateData Id="BuildCodeMatchByCodeGroup_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+              <sap2010:ViewStateData Id="GetCustomerZoneRates_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+              <sap2010:ViewStateData Id="GetRouteRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+              <sap2010:ViewStateData Id="Parallel_2" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+              <sap2010:ViewStateData Id="BuildRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+              <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+              <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+              <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+              <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+              <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
+              <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
+            </sap2010:ViewStateManager>
+          </sap2010:WorkflowViewState.ViewStateManager>
+        </local:BuildLCRandRoutes>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">buildLCRAndRoutesTaskStatus.IsComplete</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+          </Assign.Value>
+        </Assign>
+      </Sequence>
+      <tla1:PrepareCodeMatchesForDBApply sap2010:WorkflowViewState.IdRef="PrepareCodeMatchesForDBApply_1">
+        <tla1:PrepareCodeMatchesForDBApply.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(tle:CodeMatch))">queueCodeMatches</mca:CSharpValue>
+          </InArgument>
+        </tla1:PrepareCodeMatchesForDBApply.InputQueue>
+        <tla1:PrepareCodeMatchesForDBApply.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatchesForDBApply</mca:CSharpReference>
+          </InOutArgument>
+        </tla1:PrepareCodeMatchesForDBApply.OutputQueue>
+        <tla1:PrepareCodeMatchesForDBApply.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildLCRAndRoutesTaskStatus</mca:CSharpValue>
+          </InArgument>
+        </tla1:PrepareCodeMatchesForDBApply.PreviousActivityStatus>
+        <tla1:PrepareCodeMatchesForDBApply.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </tla1:PrepareCodeMatchesForDBApply.RoutingDatabaseId>
+        <tla1:PrepareCodeMatchesForDBApply.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesTaskStatus</mca:CSharpReference>
+          </OutArgument>
+        </tla1:PrepareCodeMatchesForDBApply.Status>
+      </tla1:PrepareCodeMatchesForDBApply>
+      <tla1:ApplyCodeMatchesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCodeMatchesToDB_1">
+        <tla1:ApplyCodeMatchesToDB.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedCodeMatchesForDBApply</mca:CSharpValue>
+          </InArgument>
+        </tla1:ApplyCodeMatchesToDB.InputQueue>
+        <tla1:ApplyCodeMatchesToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCodeMatchesTaskStatus</mca:CSharpValue>
+          </InArgument>
+        </tla1:ApplyCodeMatchesToDB.PreviousActivityStatus>
+        <tla1:ApplyCodeMatchesToDB.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </tla1:ApplyCodeMatchesToDB.RoutingDatabaseId>
+      </tla1:ApplyCodeMatchesToDB>
+      <If sap2010:WorkflowViewState.IdRef="If_1">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">!Input.IsLcrOnly</mca:CSharpValue>
+          </InArgument>
+        </If.Condition>
+        <If.Then>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
+            <Parallel.Variables>
+              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareRouteDetailsTaskStatus" />
+            </Parallel.Variables>
+            <tla1:PrepareRouteDetailsForDBApply sap2010:WorkflowViewState.IdRef="PrepareRouteDetailsForDBApply_1">
+              <tla1:PrepareRouteDetailsForDBApply.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:RouteDetailBatch)">queueRoutes</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.InputQueue>
+              <tla1:PrepareRouteDetailsForDBApply.OutputQueue>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpReference>
+                </InOutArgument>
+              </tla1:PrepareRouteDetailsForDBApply.OutputQueue>
+              <tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildLCRAndRoutesTaskStatus</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.PreviousActivityStatus>
+              <tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+                </InArgument>
+              </tla1:PrepareRouteDetailsForDBApply.RoutingDatabaseId>
+              <tla1:PrepareRouteDetailsForDBApply.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpReference>
+                </OutArgument>
+              </tla1:PrepareRouteDetailsForDBApply.Status>
+            </tla1:PrepareRouteDetailsForDBApply>
+            <tla1:ApplyRouteDetailsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRouteDetailsToDB_1">
+              <tla1:ApplyRouteDetailsToDB.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRouteDetailsForDBApply</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.InputQueue>
+              <tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareRouteDetailsTaskStatus</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.PreviousActivityStatus>
+              <tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+                </InArgument>
+              </tla1:ApplyRouteDetailsToDB.RoutingDatabaseId>
+            </tla1:ApplyRouteDetailsToDB>
+          </Parallel>
+        </If.Then>
+      </If>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xSb3V0aW5nQnlDb2RlR3JvdXBQcm9jZXNzLnhhbWwrSwObAg4CAQFPBVUjAwGaAlYFmQIQAgECUgtSeAMBmwJaDVqoAQIBFV8NX6ABAgEMZA1kcgIBA2sHsgESAwHFAbMBB80BKwMBlwHOAQfeASMCAXvfAQeYAgwCAR5sCacBIwMB0QGoAQmxARIDAcYBwAENwAF0AwG8AbYBDbYBeAMBswHFAQ3FAWEDAaoBygENygF9AwGhAbsBDbsBgwEDAZgB1gEN1gF1AwGOAdEBDdEBewMBhQHbAQ3bAWECAXziAQ3iAVwCAR/mAQuWAhYCAShvD290AwGRApIBD5IBYwMBiAJ0D3R6AwH/AY0BD40BcgMB9gGIAQ+IAV0DAe0BeQ95XQMB5AF+D35iAwHbAYMBD4MBXAMB0gGvATWvATkDAdABqwEPqwF8AwHHAeoBDYQCMgIBSIUCDZUCKgIBKfcBE/cBegIBce0BE+0BdgIBZ/wBE/wBZwIBXYECE4EChAECAVPyARPyAYoBAgFJjQITjQJ8AgE+iAITiAKCAQIBNJICE5ICZwIBKg==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetActiveSuppliersInfo_1" sap:VirtualizedContainerService.HintSize="1577,22" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,460" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="554,210" />
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="576,460">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="930,506" />
+      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="930,22" />
+      <sap2010:ViewStateData Id="ViewStateData_13" sap:VirtualizedContainerService.HintSize="952,878">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_14" sap:VirtualizedContainerService.HintSize="992,958" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.BuildLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PrepareCodeMatchesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,248" />
+      <sap2010:ViewStateData Id="ApplyCodeMatchesToDB_1" sap:VirtualizedContainerService.HintSize="200,248" />
+      <sap2010:ViewStateData Id="PrepareRouteDetailsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyRouteDetailsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="679,248" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1577,294" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1599,480">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.LCRProcess.RoutingByCodeGroupProcess_1" sap:VirtualizedContainerService.HintSize="1639,560" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

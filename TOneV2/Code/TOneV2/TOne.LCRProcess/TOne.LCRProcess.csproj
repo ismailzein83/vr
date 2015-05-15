@@ -88,6 +88,7 @@
     <Compile Include="Entities\CodeZoneMatchProcessLastRunInfo.cs" />
     <Compile Include="Entities\ZoneRateProcessLastRunInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingByCodeGroupProcess.cs" />
     <Compile Include="RoutingProcess.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="SubProcesses\BuildDifferentialLCRandRoutes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="RoutingByCodeGroupProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
