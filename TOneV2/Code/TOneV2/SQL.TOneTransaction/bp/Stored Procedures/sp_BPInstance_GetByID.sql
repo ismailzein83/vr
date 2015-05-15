@@ -13,7 +13,7 @@ BEGIN
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LoadedByRuntime]
+      ,[LockedByProcessID]
       ,[LastMessage]
       ,[RetryCount]
       ,[CreatedTime]
