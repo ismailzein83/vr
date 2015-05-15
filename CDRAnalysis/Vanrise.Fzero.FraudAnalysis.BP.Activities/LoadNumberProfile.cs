@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Queueing;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
@@ -85,7 +77,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
            
             NumberProfile numberProfile = new NumberProfile();
-            string _mSISDN = string.Empty;
+            string MSISDN = string.Empty;
 
 
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
@@ -94,7 +86,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 // Agregates
 
-                if (_mSISDN == string.Empty)
+                if (MSISDN == string.Empty)
                 {
                     numberProfile = new NumberProfile();
                     foreach (var i in AggregateDefinitions)
@@ -102,10 +94,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         i.Aggregation.Reset();
                     }
 
-                    _mSISDN = normalCDR.MSISDN;
+                    MSISDN = normalCDR.MSISDN;
                 }
 
-                else if (_mSISDN != normalCDR.MSISDN)
+                else if (MSISDN != normalCDR.MSISDN)
                 {
 
                     foreach (var i in AggregateDefinitions)
@@ -129,11 +121,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     {
                         i.Aggregation.Reset();
                     }
-                    _mSISDN = normalCDR.MSISDN;
+                    MSISDN = normalCDR.MSISDN;
                 }
 
 
-                numberProfile.SubscriberNumber = _mSISDN;
+                numberProfile.SubscriberNumber = MSISDN;
 
 
                 if ((int)Enums.Period.Day == (int)Enums.Period.Day)

@@ -1,13 +1,10 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Data;
-using MySql.Data.MySqlClient;
 using System.IO;
+using System.Linq;
 using Vanrise.Data.MySQL;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 {
@@ -35,35 +32,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
 
 
-            using (StreamWriter sw = new StreamWriter(filename))
+                using (StreamWriter streamWriter = new StreamWriter(filename))
             {
-                foreach (SuspiciousNumber sn in suspiciousNumbers)
+                foreach (SuspiciousNumber suspiciousNumber in suspiciousNumbers)
                 {
                     string sValues = "";
 
                     for (int i = 1; i <= 15; i++)
                     {
-                        if (sn.CriteriaValues.Where(x => x.Key == i).Count() == 1)
+                        if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                         {
-                            sValues = sValues + ", '" + sn.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString() +"'";
+                            sValues = sValues + ", '" + suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString() +"'";
                         }
                     }
 
-                    sw.WriteLine("'0', '" + sn.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + sn.Number + "' " + sValues + ", '" + sn.SuspectionLevel.ToString() + "', '" + strategy.Id.ToString() + "', '" + sn.PeriodId.ToString() +"'");
+                    streamWriter.WriteLine("'0', '" + suspiciousNumber.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + suspiciousNumber.Number + "' " + sValues + ", '" + suspiciousNumber.SuspectionLevel.ToString() + "', '" + strategy.Id.ToString() + "', '" + suspiciousNumber.PeriodId.ToString() + "'");
 
-
-                    //Id, DateDay, SubscriberNumber, Criteria1, Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7, Criteria8, Criteria9, Criteria10, Criteria11, Criteria12, Criteria13, Criteria14, Criteria15, SuspectionLevelId, StrategyId, PeriodId
                 }
-                sw.Close();
+                streamWriter.Close();
             }
 
-            MySqlConnection connection = new MySqlConnection(GetConnectionString());
+                MySqlConnection mySqlConnection = new MySqlConnection(GetConnectionString());
             string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE SubscriberThresholds FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspectionLevelId, StrategyId, PeriodId)  ;", filename.Replace(@"\", @"\\"));
-            connection.Open();
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.CommandTimeout = int.MaxValue;
-            cmd.ExecuteNonQuery();
-           connection.Close();
+            mySqlConnection.Open();
+            MySqlCommand mySqlCommand = new MySqlCommand(query, mySqlConnection);
+            mySqlCommand.CommandTimeout = int.MaxValue;
+            mySqlCommand.ExecuteNonQuery();
+            mySqlConnection.Close();
         }
 
     }

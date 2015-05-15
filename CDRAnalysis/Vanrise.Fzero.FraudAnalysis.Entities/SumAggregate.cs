@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
@@ -14,13 +10,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         MethodInfo _propertyGetMethod;
         Func<NormalCDR, Decimal> _cdrExpressionToSum;
         decimal Sum;
-
-
-        //public SumAggregate(string conditionExpression)
-        //{
-        //    _conditionExpression = conditionExpression;
-        //}
-
 
         public SumAggregate(string propertyName, Func<NormalCDR, bool> condition)
         {
@@ -41,20 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public void EvaluateCDR(NormalCDR cdr)
         {
-            //Condition output = new Condition();
-            //ExpressionEvaluator.TypeRegistry tRegistry = new ExpressionEvaluator.TypeRegistry();
-            //tRegistry.RegisterSymbol("normalCDR", normalCDR);
-            //tRegistry.RegisterSymbol("output", output);
-            //tRegistry.RegisterSymbol("incomingVoiceCall", (int)Enums.CallType.incomingVoiceCall);
-
-            //ExpressionEvaluator.CompiledExpression expression = new ExpressionEvaluator.CompiledExpression
-            //{
-            //    StringToParse = _conditionExpression,
-            //    TypeRegistry = tRegistry,
-            //    ExpressionType = ExpressionEvaluator.CompiledExpressionType.StatementList
-            //};
-            //expression.Compile();
-
             if (_condition == null || _condition(cdr))
             {
                 if(_cdrExpressionToSum != null)

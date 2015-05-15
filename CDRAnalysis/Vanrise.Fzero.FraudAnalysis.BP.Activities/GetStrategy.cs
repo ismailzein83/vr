@@ -1,6 +1,6 @@
-﻿using Vanrise.Fzero.FraudAnalysis.Entities;
-using System.Activities;
+﻿using System.Activities;
 using Vanrise.Fzero.FraudAnalysis.Business;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {

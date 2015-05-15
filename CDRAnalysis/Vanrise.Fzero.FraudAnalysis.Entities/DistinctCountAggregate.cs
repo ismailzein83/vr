@@ -2,55 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class DistinctCountAggregate : IAggregate
     {
 
-        Func<NormalCDR, bool> _condition;
-        MethodInfo _propertyGetMethod;
-        Func<NormalCDR, Object> _cdrExpressionToCountDistinct;
-        HashSet<Object> DistinctItems = new HashSet<Object>();
+        Func<NormalCDR, bool> condition;
+        MethodInfo propertyGetMethod;
+        Func<NormalCDR, Object> cdrExpressionToCountDistinct;
+        HashSet<Object> distinctItems = new HashSet<Object>();
 
         public DistinctCountAggregate(string propertyName, Func<NormalCDR, bool> condition)
         {
-            _propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
-            _condition = condition;
+            this.propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
+            this.condition = condition;
         }
 
         public DistinctCountAggregate(Func<NormalCDR, Object> cdrExpressionToCountDistinct, Func<NormalCDR, bool> condition)
         {
-            _cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
-            _condition = condition;
+            this.cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
+            this.condition = condition;
         }
 
         public void Reset()
         {
-            DistinctItems.Clear();
+            distinctItems.Clear();
         }
 
         public void EvaluateCDR(NormalCDR cdr)
         {
-            if (_condition == null || _condition(cdr))
+            if (this.condition == null || this.condition(cdr))
             {
-                if (_cdrExpressionToCountDistinct != null)
+                if (this.cdrExpressionToCountDistinct != null)
                 {
-                    DistinctItems.Add(_cdrExpressionToCountDistinct(cdr));
+                    distinctItems.Add(this.cdrExpressionToCountDistinct(cdr));
                 }
 
                 else
                 {
-                    DistinctItems.Add( (String)_propertyGetMethod.Invoke(cdr, null));
+                    distinctItems.Add((String)this.propertyGetMethod.Invoke(cdr, null));
                 }
             }
         }
 
         public decimal GetResult()
         {
-            return decimal.Parse(DistinctItems.Count().ToString());
+            return decimal.Parse(distinctItems.Count().ToString());
         }
 
 

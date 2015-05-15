@@ -1,9 +1,5 @@
-﻿using System;
-using System.Activities;
+﻿using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -51,7 +47,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
             FraudManager manager = new FraudManager(inputArgument.Strategy);
-            int index = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -69,7 +64,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 SuspiciousNumber sNumber = new SuspiciousNumber();
                                 if (manager.IsNumberSuspicious(number, out sNumber))
                                 {
-                                    //Console.WriteLine("sNumber: " + ++index);
                                     sNumbers.Add(sNumber);   
                                 }
                             }
