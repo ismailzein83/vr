@@ -107,7 +107,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                                     decimal Up_Volume ;
                                     if (decimal.TryParse(i.Substring(609, 9).Trim(), out Up_Volume))
-                                        cdr.Up_Volume = Up_Volume;
+                                        cdr.UpVolume = Up_Volume;
 
 
                                     decimal Cell_Longitude ;
@@ -117,7 +117,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                                     decimal Down_Volume ;
                                     if (decimal.TryParse(i.Substring(598, 10).Trim(), out Down_Volume))
-                                        cdr.Down_Volume = Down_Volume;
+                                        cdr.DownVolume = Down_Volume;
 
 
                                     CDRs.Add(cdr);

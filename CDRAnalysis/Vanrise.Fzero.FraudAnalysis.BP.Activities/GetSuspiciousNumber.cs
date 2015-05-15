@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<SuspiciousNumberBatch> OutputQueue { get; set; }
 
-        public Strategy strategy { get; set; }
+        public Strategy Strategy { get; set; }
     }
 
     #endregion
@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<Strategy> strategy { get; set; }
+        public InArgument<Strategy> Strategy { get; set; }
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
-            FraudManager manager = new FraudManager(inputArgument.strategy);
+            FraudManager manager = new FraudManager(inputArgument.Strategy);
             int index = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -98,7 +98,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
-                strategy = this.strategy.Get(context)
+                Strategy = this.Strategy.Get(context)
             };
         }
     }

@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public BaseQueue<SuspiciousNumberBatch> InputQueue { get; set; }
 
-        public Strategy strategy { get; set; }
+        public Strategy Strategy { get; set; }
 
     }
 
@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
 
         [RequiredArgument]
-        public InArgument<Strategy> strategy { get; set; }
+        public InArgument<Strategy> Strategy { get; set; }
 
         #endregion
 
@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (item) =>
                         {
                             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.Dequeued {0}", DateTime.Now);
-                            dataManager.SaveSuspiciousNumbers(item.suspiciousNumbers, inputArgument.strategy);
+                            dataManager.SaveSuspiciousNumbers(item.suspiciousNumbers, inputArgument.Strategy);
                             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDB {0}", DateTime.Now);
                         });
                 }
@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return new GetStoreSuspiciousNumbersInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                strategy = this.strategy.Get(context)
+                Strategy = this.Strategy.Get(context)
             };
         }
     }

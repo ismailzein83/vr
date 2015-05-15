@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 strategyLevelWithCriterias.SuspectionLevelId = i.SuspectionLevelId;
 
 
-                strategyLevelWithCriterias.levelCriterias_Threshold_Percentage = new List<LevelCriteria_Threshold_Percentage>();
+                strategyLevelWithCriterias.LevelCriteriasThresholdPercentage = new List<LevelCriteria_Threshold_Percentage>();
 
                 foreach (var j in i.StrategyLevelCriterias)
                 {
@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     levelCriterias_Threshold_Percentage.Percentage=j.Percentage;
                     levelCriterias_Threshold_Percentage.Threshold=strategy.StrategyCriterias.Where(x=>x.CriteriaId==j.CriteriaId).FirstOrDefault().Threshold;
                     
-                    strategyLevelWithCriterias.levelCriterias_Threshold_Percentage.Add(levelCriterias_Threshold_Percentage);
+                    strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriterias_Threshold_Percentage);
                 }
 
 
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 dict_criteriaValues = new Dictionary<int, decimal>();
 
-                foreach (LevelCriteria_Threshold_Percentage levelCriteria in strategyLevelWithCriterias.levelCriterias_Threshold_Percentage)
+                foreach (LevelCriteria_Threshold_Percentage levelCriteria in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                 {
                     Decimal d = 0;
                     //criteriaValues.TryGetValue(LCriteria.Criteria.CriteriaId, out d);
@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             public int SuspectionLevelId { get; set; }
 
-            public List<LevelCriteria_Threshold_Percentage> levelCriterias_Threshold_Percentage { get; set; }
+            public List<LevelCriteria_Threshold_Percentage> LevelCriteriasThresholdPercentage { get; set; }
         }
 
         private class LevelCriteria_Threshold_Percentage

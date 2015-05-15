@@ -20,17 +20,17 @@ namespace Vanrise.Fzero.CDRImport.Entities
           public int Call_Type { get; set; }
           public string Sub_Type { get; set; }
           public string IMEI { get; set; }
-          public string BTS_Id { get; set; }
+          public string BTSId { get; set; }
           public string Cell_Id { get; set; }
           public string SwitchRecordId { get; set; }
-          public decimal Up_Volume { get; set; }
-          public decimal Down_Volume { get; set; }
+          public decimal UpVolume { get; set; }
+          public decimal DownVolume { get; set; }
           public decimal Cell_Latitude { get; set; }
           public decimal Cell_Longitude { get; set; }
           public string In_Trunk { get; set; }
           public string Out_Trunk { get; set; }
-          public string Service_Type { get; set; }
-          public string Service_VAS_Name { get; set; }
+          public string ServiceType { get; set; }
+          public string ServiceVASName { get; set; }
                       
         
 

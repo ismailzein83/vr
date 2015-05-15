@@ -132,11 +132,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpReference>
           </OutArgument>
         </vffba1:GetSuspiciousNumber.Status>
-        <vffba1:GetSuspiciousNumber.strategy>
+        <vffba1:GetSuspiciousNumber.Strategy>
           <InArgument x:TypeArguments="vffe:Strategy">
             <mca:CSharpValue x:TypeArguments="vffe:Strategy">strategy</mca:CSharpValue>
           </InArgument>
-        </vffba1:GetSuspiciousNumber.strategy>
+        </vffba1:GetSuspiciousNumber.Strategy>
       </vffba1:GetSuspiciousNumber>
       <vffba1:StoreSuspiciousNumbers Status="{x:Null}" sap2010:WorkflowViewState.IdRef="StoreSuspiciousNumbers_1">
         <vffba1:StoreSuspiciousNumbers.InputQueue>
@@ -149,11 +149,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:StoreSuspiciousNumbers.PreviousActivityStatus>
-        <vffba1:StoreSuspiciousNumbers.strategy>
+        <vffba1:StoreSuspiciousNumbers.Strategy>
           <InArgument x:TypeArguments="vffe:Strategy">
             <mca:CSharpValue x:TypeArguments="vffe:Strategy">strategy</mca:CSharpValue>
           </InArgument>
-        </vffba1:StoreSuspiciousNumbers.strategy>
+        </vffba1:StoreSuspiciousNumbers.Strategy>
       </vffba1:StoreSuspiciousNumbers>
     </Parallel>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
