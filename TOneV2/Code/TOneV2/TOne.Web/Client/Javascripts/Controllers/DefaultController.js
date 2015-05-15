@@ -41,16 +41,16 @@
           
       });
         };
-
+        var current = 0;
         $scope.gridData = [];
         $scope.loadMoreData = function (asyncHandle) {
             BusinessEntityAPIService.GetCodeGroups().then(function (response) {
-
-                for (var i = 1; i < 20; i++) {
+                var count = current + 20;
+                for (current; current < count; current++) {
                     $scope.gridData.push({
-                        col1: "test " + i + "1",
-                        col2: "test " + i + "2",
-                        col3: "test " + i + "3",
+                        col1: "test " + current + "1",
+                        col2: "test " + current + "2",
+                        col3: "test " + current + "3",
                     });
                 }
 
@@ -70,5 +70,20 @@
 
         };
         $scope.loadMoreData();
+
+        $scope.addItem = function () {
+            var item = {
+                col1: "test " + ++current + "1",
+                col2: "test " + current + "2",
+                col3: "test " + current + "3",
+            };
+            $scope.gridData.push(item);
+            gridApi.itemAdded(item); 
+        }
+
+        var gridApi;
+        $scope.gridReady = function (api) {
+            gridApi = api;
+        };
        
     });

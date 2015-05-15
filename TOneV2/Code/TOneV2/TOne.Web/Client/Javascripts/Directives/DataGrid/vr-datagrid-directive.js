@@ -14,6 +14,9 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+
+            ctrl.updateItems = [];
+
             var gridApi = {};
             var maxHeight;
             var lastSortColumnDef;
@@ -21,6 +24,9 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             var expandableColumnWidth = 0;
             var expandableRowTemplate;
             ctrl.columnDefs = [];
+
+           
+
             ctrl.addColumn = addColumn;
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
@@ -45,6 +51,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 
                 ctrl.isLoadingMoreData = false;
 
+                //this event is called by the vrDatagridrows directive
                 ctrl.onScrolling = function () {
                     if (loadMoreDataFunction == undefined)
                         return;
@@ -170,7 +177,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 };
 
                 var columnCellTemplate;
-                if (col.cellTemplate != undefined && col.cellTemplate != null && col.cellTemplate != "") {                    
+                if (col.cellTemplate != undefined && col.cellTemplate != null && col.cellTemplate != "") {
                     columnCellTemplate = col.cellTemplate;
                 }
                 else {
@@ -201,18 +208,18 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     colDef.borderRight = 'none';
                 else
                     colDef.borderRight = '1px solid #D0D0D0';
-               
+
                 if (col.widthFactor == undefined)
                     colDef.widthFactor = 10;
                 else
                     colDef.widthFactor = col.widthFactor;
 
                 if (columnIndex == undefined)
-                    ctrl.columnDefs.push(colDef);
+                    ctrl.columnDefs.splice(ctrl.columnDefs.length - 1, 0, colDef);//to insert before the actionType column
                 else
                     ctrl.columnDefs.splice(columnIndex, 0, colDef);
-                    calculateColumnsWidth();
-                    return colDef;
+                calculateColumnsWidth();
+                return colDef;
             }
 
             ctrl.removeColumn = function (colDef) {
@@ -221,24 +228,52 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 calculateColumnsWidth();
             };
 
+            ctrl.hideColumn = function (colDef) {
+                colDef.isHidden = true;
+                calculateColumnsWidth();
+            };
+
+            ctrl.showColumn = function (colDef) {
+                colDef.isHidden = false;
+                calculateColumnsWidth();
+            };
+
             function calculateColumnsWidth() {
                 var totalWidthFactors = 0;
                 angular.forEach(ctrl.columnDefs, function (col) {
-                    totalWidthFactors += col.widthFactor;
+                    if (col.isHidden != true)
+                        totalWidthFactors += col.widthFactor;
                 });
                 var initialTotalWidth = 100;
                 var totalWidth = initialTotalWidth;
-                //if (actionMenuWidth > 0)
-                //    totalWidth -= actionMenuWidth;
-                //if (expandableColumnWidth > 0)
-                //    totalWidth -= expandableColumnWidth;
-                //if (totalWidth < initialTotalWidth)
-                //    totalWidth -= 1;
                 angular.forEach(ctrl.columnDefs, function (col) {
-
-                    col.width = (totalWidth * col.widthFactor / totalWidthFactors) + '%';
+                    if (col.isHidden != true)
+                        col.width = (totalWidth * col.widthFactor / totalWidthFactors) + '%';
                 });
             }
+
+            var actionTypeColumn;
+            function addActionTypeColumn() {
+                var col = {
+                    headerText: "Action",
+                    field: "actionType"
+                };
+                actionTypeColumn = addColumn(col, ctrl.columnDefs.length);
+                ctrl.hideColumn(actionTypeColumn);
+            }
+            addActionTypeColumn();
+
+            ctrl.isMainItemsShown = true;
+            ctrl.switchDataSource = function () {
+                if (ctrl.isMainItemsShown) {
+                    ctrl.isMainItemsShown = false;
+                    ctrl.showColumn(actionTypeColumn);
+                }
+                else {
+                    ctrl.isMainItemsShown = true;
+                    ctrl.hideColumn(actionTypeColumn);
+                }
+            };
 
             gridApi.reset = function () {
                 if (lastSortColumnDef != undefined) {
@@ -246,6 +281,24 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     lastSortColumnDef = undefined;
                 }
             }
+
+            function itemChanged(item, actionType) {
+                item.actionType = actionType;
+                ctrl.updateItems.splice(0, 0, item);
+            }
+
+            gridApi.itemAdded = function (item) {
+                itemChanged(item, "Added");
+            };
+
+            gridApi.itemUpdated = function (item) {
+                itemChanged(item, "Updated");
+            };
+
+            gridApi.itemDeleted = function (item) {
+                itemChanged(item, "Deleted");
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(gridApi);
 
