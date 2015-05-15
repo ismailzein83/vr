@@ -109,7 +109,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             name: "Routing", location: '', icon: 'glyphicon-certificate', childs: [
                { name: "Rule Management", location: '#/RouteRuleManager' },
                { name: "Rate Plan", location: '#/RatePlanning' },
-               { name: "Route Manager", location: '' }
+               { name: "Route Manager", location: '#/RouteManager' }
+
             ]
         },
         {
