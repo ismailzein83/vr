@@ -38,27 +38,27 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 while (reader.Read())
                 {
                     normalCDR.MSISDN = reader["MSISDN"] as string;
-                    normalCDR.Destination = reader["Destination"].ToString();
-                    normalCDR.CallType = Helper.AsInt(reader["Call_Type"].ToString());
-                    normalCDR.BTSId = Helper.AsInt(reader["BTS_Id"].ToString());
-                    normalCDR.ConnectDateTime = Helper.AsDateTime(reader["ConnectDateTime"].ToString());
-                    normalCDR.Id = Helper.AsInt(reader["Id"].ToString());
-                    normalCDR.IMSI = reader["IMSI"].ToString();
-                    normalCDR.DurationInSeconds = Helper.AsDecimal(reader["DurationInSeconds"].ToString());
-                    normalCDR.DisconnectDateTime = Helper.AsDateTime(reader["DisconnectDateTime"].ToString());
-                    normalCDR.CallClass = reader["Call_Class"].ToString();
-                    normalCDR.IsOnNet = Helper.AsShortInt(reader["IsOnNet"].ToString());
-                    normalCDR.SubType = reader["Sub_Type"].ToString();
-                    normalCDR.IMEI = reader["IMEI"].ToString();
-                    normalCDR.CellId = reader["Cell_Id"].ToString();
-                    normalCDR.SwitchRecordId = Helper.AsInt(reader["SwitchRecordId"].ToString());
-                    normalCDR.UpVolume = Helper.AsDecimal(reader["Up_Volume"].ToString());
-                    normalCDR.DownVolume = Helper.AsDecimal(reader["Down_Volume"].ToString());
-                    normalCDR.CellLatitude = Helper.AsDecimal(reader["Cell_Latitude"].ToString());
-                    normalCDR.CellLongitude = Helper.AsDecimal(reader["Cell_Longitude"].ToString());
-                    normalCDR.InTrunk = reader["In_Trunk"].ToString();
-                    normalCDR.OutTrunk = reader["Out_Trunk"].ToString();
-                    normalCDR.ServiceType = Helper.AsInt(reader["Service_Type"].ToString());
+                    normalCDR.Destination = reader["Destination"] as string;
+                    normalCDR.CallType = GetReaderValue<int>(reader, "Call_Type") ;
+                    normalCDR.BTSId = GetReaderValue<int>(reader, "BTS_Id")    ;
+                    normalCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime") ;
+                    normalCDR.Id =GetReaderValue<int>(reader, "Id")     ;
+                    normalCDR.IMSI = reader["IMSI"] as string;
+                    normalCDR.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds") ;
+                    normalCDR.DisconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime")   ;
+                    normalCDR.CallClass = reader["Call_Class"] as string;
+                    normalCDR.IsOnNet = GetReaderValue<short>(reader, "IsOnNet")    ;
+                    normalCDR.SubType = reader["Sub_Type"] as string;
+                    normalCDR.IMEI = reader["IMEI"] as string;
+                    normalCDR.CellId = reader["Cell_Id"] as string;
+                    normalCDR.SwitchRecordId = GetReaderValue<int>(reader, "SwitchRecordId")   ;
+                    normalCDR.UpVolume = GetReaderValue<Decimal>(reader, "Up_Volume") ;
+                    normalCDR.DownVolume = GetReaderValue<Decimal>(reader, "Down_Volume") ;
+                    normalCDR.CellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude") ;
+                    normalCDR.CellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude")  ;
+                    normalCDR.InTrunk = reader["In_Trunk"] as string;
+                    normalCDR.OutTrunk = reader["Out_Trunk"] as string;
+                    normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type")  ;
                     normalCDR.ServiceVASName = reader["Service_VAS_Name"].ToString();
 
                     currentIndex++;

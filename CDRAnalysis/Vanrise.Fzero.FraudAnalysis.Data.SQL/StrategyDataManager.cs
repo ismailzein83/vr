@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             strategy.Id = GetItemText<int>(query0, (reader) =>
             {
-                return Helper.AsInt(reader["Id"].ToString());
+                return GetReaderValue<int>(reader, "Id") ;
             } ,(cmd) =>
             {
                 //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
@@ -33,8 +33,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
            {
 
                StrategyCriteria strategyCriteria = new StrategyCriteria();
-               strategyCriteria.Threshold = Helper.AsDecimal(reader["MaxValue"].ToString());
-               strategyCriteria.CriteriaId = Helper.AsInt(reader["CriteriaID"].ToString());
+               strategyCriteria.Threshold = GetReaderValue<decimal>(reader, "MaxValue") ;
+               strategyCriteria.CriteriaId = GetReaderValue<int>(reader, "CriteriaID")  ;
                return strategyCriteria;
            }, (cmd) =>
            {
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                 List<StrategyLevelCriteria> Lstslc = new List<StrategyLevelCriteria>();
 
-                strategyLevel.SuspectionLevelId = Helper.AsInt(reader["LevelId"].ToString());
+                strategyLevel.SuspectionLevelId = GetReaderValue<int>(reader, "LevelId");
 
                 for (int i = 1; i <= 15; i++)
                 {
@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     if (reader[CrId].ToString() != "0")
                     {
                         slc.CriteriaId = i;
-                        slc.Percentage = Helper.AsDecimal(reader[CrPer].ToString());
+                        slc.Percentage = GetReaderValue<decimal>(reader, CrPer);
                         Lstslc.Add(slc);
                     }
                 }
