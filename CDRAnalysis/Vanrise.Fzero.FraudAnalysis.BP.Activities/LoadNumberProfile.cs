@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
 
                 numberProfile.PeriodId = inputArgument.PeriodId;
-                numberProfile.FromDate = normalCDR.ConnectDateTime;
+                numberProfile.FromDate = inputArgument.FromDate.Date;
                 numberProfile.IsOnNet = 1;
 
 
