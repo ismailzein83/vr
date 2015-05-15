@@ -5,7 +5,6 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPDataManager : IDataManager
     {
-        int ClearLoadedFlag();
         int DeleteEvent(long eventId);
         System.Collections.Generic.List<BPDefinition> GetDefinitions();
 
@@ -21,10 +20,16 @@ namespace Vanrise.BusinessProcess.Data
 
         int InsertEvent(long processInstanceId, string bookmarkName, object eventData);
         long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus);
-        void LoadPendingEvents(Action<BPEvent> onEventLoaded);
-        void LoadPendingProcesses(Action<BPInstance> onInstanceLoaded);
+        void LoadPendingEvents(long lastRetrievedId, Action<BPEvent> onEventLoaded);
+        void LoadPendingProcesses(List<long> excludedProcessInstanceIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses, Action<BPInstance> onInstanceLoaded);
         int UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount);
-        int UpdateLoadedFlag(long processInstanceId, bool loaded);
+        
         int UpdateWorkflowInstanceID(long processInstanceId, Guid workflowInstanceId);
+
+        bool TryLockProcessInstance(long processInstanceId, Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses);
+
+        void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId);
+
+        void UpdateProcessInstancesStatus(BPInstanceStatus fromStatus, BPInstanceStatus toStatus, IEnumerable<int> runningRuntimeProcessesIds);
     }
 }

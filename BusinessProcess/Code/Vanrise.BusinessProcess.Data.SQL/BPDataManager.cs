@@ -7,6 +7,7 @@ using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
+using System.Data.SqlClient;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
@@ -73,25 +74,24 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateWorkflowInstanceID", processInstanceId, workflowInstanceId);
         }
 
-        public int UpdateLoadedFlag(long processInstanceId, bool loaded)
+        public void LoadPendingProcesses(List<long> excludedProcessInstanceIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses, Action<BPInstance> onInstanceLoaded)
         {
-            return ExecuteNonQuerySP("bp.sp_BPInstance_UpdateLoadedFlag", processInstanceId, loaded);
-        }
-
-        public int ClearLoadedFlag()
-        {
-            return ExecuteNonQuerySP("bp.sp_BPInstance_ClearLoadedFlag");
-        }
-
-        public void LoadPendingProcesses(Action<BPInstance> onInstanceLoaded)
-        {
-            ExecuteReaderSP("bp.sp_BPInstance_GetPendings", (reader) =>
+            ExecuteReaderSPCmd("bp.sp_BPInstance_GetPendings", (reader) =>
                 {
                     while (reader.Read())
                     {
                         BPInstance instance = BPInstanceMapper(reader, true);
                         onInstanceLoaded(instance);
                     }
+                },
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ExcludeProcessInstanceIds", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(excludedProcessInstanceIds);
+                    cmd.Parameters.Add(dtPrm);
+                    dtPrm = new SqlParameter("@BPStatuses", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(acceptableBPStatuses.Select(itm => (int)itm));
+                    cmd.Parameters.Add(dtPrm);
                 });
         }
 
@@ -105,7 +105,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("bp.sp_BPEvent_Delete", eventId);
         }
 
-        public void LoadPendingEvents(Action<BPEvent> onEventLoaded)
+        public void LoadPendingEvents(long lastRetrievedId, Action<BPEvent> onEventLoaded)
         {
             ExecuteReaderSP("bp.sp_BPEvent_GetPendings", (reader) =>
             {
@@ -123,10 +123,46 @@ namespace Vanrise.BusinessProcess.Data.SQL
                         instance.Payload = Serializer.Deserialize(payload);
                     onEventLoaded(instance);
                 }
-            });
+            }, lastRetrievedId);
+        }
+        
+        public bool TryLockProcessInstance(long processInstanceId, Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableStatuses)
+        {
+            int rslt = ExecuteNonQuerySPCmd("[bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]",
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@ProcessInstanceID", processInstanceId));
+                    cmd.Parameters.Add(new SqlParameter("@WorkflowInstanceID", workflowInstanceId));
+                    cmd.Parameters.Add(new SqlParameter("@CurrentRuntimeProcessID", currentRuntimeProcessId));
+                    var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
+                    cmd.Parameters.Add(dtPrm);
+                    dtPrm = new SqlParameter("@BPStatuses", SqlDbType.Structured);
+                    dtPrm.Value = BuildIDDataTable(acceptableStatuses.Select(itm => (int)itm));
+                    cmd.Parameters.Add(dtPrm);
+                });
+            return rslt > 0;
         }
 
-        #region Mappers
+        public void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_UnLock]", processInstanceId, currentRuntimeProcessId);
+        }
+
+        public void UpdateProcessInstancesStatus(BPInstanceStatus fromStatus, BPInstanceStatus toStatus, IEnumerable<int> runningRuntimeProcessesIds)
+        {
+            ExecuteNonQuerySPCmd("[bp].[sp_BPInstance_UpdateStatuses]",
+                 (cmd) =>
+                 {
+                     cmd.Parameters.Add(new SqlParameter("@FromStatus", (int)fromStatus));
+                     cmd.Parameters.Add(new SqlParameter("@ToStatus", (int)toStatus));
+                     var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
+                     dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
+                     cmd.Parameters.Add(dtPrm);
+                 });
+        }
+
+        #region Mappers/Private Methods
 
         BPDefinition BPDefinitionMapper(IDataReader reader)
         {
@@ -169,7 +205,24 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return instance;
         }
 
+        DataTable BuildIDDataTable<T>(IEnumerable<T> ids)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(T));
+            dt.BeginLoadData();
+            if (ids != null)
+            {
+                foreach (var id in ids)
+                {
+                    dt.Rows.Add(id);
+                }
+            }
+            dt.EndLoadData();
+            return dt;
+        }
+
         #endregion
+
 
     }
 }
