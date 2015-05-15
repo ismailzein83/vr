@@ -3,28 +3,31 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [bp].[sp_BPInstance_GetPendings]	
+CREATE PROCEDURE [bp].[sp_BPInstance_GetPendings]
+	@ExcludeProcessInstanceIds bp.IDBigIntType readonly,
+	@BPStatuses bp.IDIntType readonly
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT [ID]
+    SELECT bp.[ID]
 	  ,[Title]
       ,[ParentID]
       ,[DefinitionID]
       ,[WorkflowInstanceID]
       ,[InputArgument]
       ,[ExecutionStatus]
-      ,[LoadedByRuntime]
+      ,[LockedByProcessID]
       ,[LastMessage]
       ,[RetryCount]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
-	FROM bp.[BPInstance] WITH(NOLOCK)
+	FROM bp.[BPInstance] bp WITH(NOLOCK)
+	JOIN @BPStatuses statuses ON bp.ExecutionStatus = statuses.ID
+	LEFT JOIN @ExcludeProcessInstanceIds excludedIds ON bp.ID = excludedIds.ID
 	WHERE
-	ISNULL(LoadedByRuntime, 0) = 0
-	AND ExecutionStatus < 50 --Completed = 50
+	excludedIds.ID IS NULL
 	ORDER BY ParentID, CreatedTime
 END
