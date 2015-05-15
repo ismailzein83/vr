@@ -47,6 +47,7 @@
     <Compile Include="CarrierInfo.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeGroupInfo.cs" />
+    <Compile Include="FlaggedService.cs" />
     <Compile Include="IBusinessEntityInfoManager.cs" />
     <Compile Include="IZoneSupplied.cs" />
     <Compile Include="SupplierCodes.cs" />
