@@ -88,8 +88,8 @@ appRouting.config(['$routeProvider',
               controller: 'TestPageController'
           }).
         when('/User', {
-            templateUrl: '/Client/Modules/Main/Views/User.html',
-                        controller: 'UserController'
+            templateUrl: '/Client/Modules/Main/Views/UserManagement.html',
+            controller: 'UserManagementController'
                     }).
           when('/TestNew', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/TestNew.html',
