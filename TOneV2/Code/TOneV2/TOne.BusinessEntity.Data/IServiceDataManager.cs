@@ -9,6 +9,9 @@ namespace TOne.BusinessEntity.Data
 {
     public interface IServiceDataManager : IDataManager
     {
-        List<FlaggedService> GetServiceFlag();
+        Dictionary<short, FlaggedService> GetServiceFlags();
+
+        FlaggedService GetServiceFlag(short id);
+        string GetServicesDisplayList(short serviceFlag);
     }
 }
