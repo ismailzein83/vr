@@ -21,4 +21,21 @@ namespace TOne.Web.Reports
 
         public decimal Value { get; set; }
     }
+
+    public class ReportModelMatirx
+    {
+        public void TestMethod(ReportModelMatirx model)
+        {
+
+        }
+
+        public List<ReportModelMatirx> GetReportMatrix()
+        {
+            return null;
+        }
+        public string ZoneName { get; set; }
+        public string Month { get; set; }
+
+        public decimal Attemps { get; set; }
+    }
 }

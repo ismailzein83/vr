@@ -12,6 +12,7 @@
     <form id="form1" runat="server">
     <div>
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="By Zone" />
         <rsweb:ReportViewer ID="ReportViewer1" runat="server" Width="100%" Height="100%"></rsweb:ReportViewer>
     </div>
     </form>
