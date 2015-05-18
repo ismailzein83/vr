@@ -16,9 +16,9 @@ namespace TOne.BusinessEntity.Business
             _dataManager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
         }
 
-        public List<FlaggedService> GetServiceFlag()
+        public Dictionary<short, FlaggedService> GetServiceFlags()
         {
-            return _dataManager.GetServiceFlag();
+            return _dataManager.GetServiceFlags();
         }
     }
 }
