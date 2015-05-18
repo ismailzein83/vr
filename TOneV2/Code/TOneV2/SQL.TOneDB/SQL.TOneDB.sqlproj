@@ -71,6 +71,9 @@
     <Folder Include="Analytics\" />
     <Folder Include="Analytics\Stored Procedures\" />
     <Folder Include="LCR\User Defined Types\" />
+    <Folder Include="CDR\" />
+    <Folder Include="CDR\Tables\" />
+    <Folder Include="CDR\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BEntity\Stored Procedures\sp_Rate_GetCaclulatedZoneRates.sql" />
@@ -134,5 +137,10 @@
     <Build Include="LCR\User Defined Types\CodeType.sql" />
     <Build Include="BEntity\Stored Procedures\sp_Zone_GetName.sql" />
     <Build Include="BEntity\Stored Procedures\sp_CarrierAccount_GetName.sql" />
+    <Build Include="CDR\Tables\CDRIDManager.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_FlaggedService_GetById.sql" />
+    <Build Include="BEntity\Stored Procedures\sp_FlaggedService_GetAll.sql" />
+    <Build Include="CDR\Stored Procedures\sp_CDRIDManager_ReserveIDRange.sql" />
+    <Build Include="Security\CDR.sql" />
   </ItemGroup>
 </Project>

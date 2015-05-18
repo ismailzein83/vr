@@ -7,17 +7,20 @@ CREATE PROCEDURE [LCR].[sp_RoutingDatabase_Insert]
    @Title nvarchar(255),
    @Type int,
    @EffectiveTime datetime,
+   @IsLcrOnly BIT,
    @ID int out
 AS
 BEGIN
 	INSERT INTO [LCR].[RoutingDatabase]
            ([Title]
            ,[Type]
-           ,[EffectiveTime])
+           ,[EffectiveTime]
+           ,[IsLcrOnly])
      VALUES
            (@Title,
            @Type,
-           @EffectiveTime)
+           @EffectiveTime,
+           @IsLcrOnly)
            
      SET @ID = @@IDENTITY
 END

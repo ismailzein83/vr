@@ -8,6 +8,7 @@ BEGIN
       ,[IsReady]
       ,[CreatedTime]
       ,[ReadyTime]
+      ,IsLcrOnly
   FROM [LCR].[RoutingDatabase]
   WHERE ISNULL(IsDeleted, 0) = 0
 END
