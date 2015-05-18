@@ -62,7 +62,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public List<Rate> GetRate(int zoneId, string customerId, DateTime when)
         {
-            return GetItemsSP("BEntity.sp_Rate_GetRates", RateMapper, zoneId, customerId, when);
+            return GetItemsSP("BEntity.sp_Rate_GetRates", RateMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
         public void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable)

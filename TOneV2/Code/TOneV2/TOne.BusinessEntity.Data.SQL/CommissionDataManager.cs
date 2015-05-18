@@ -63,7 +63,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public List<Commission> GetCommission(string customerId, int zoneId, DateTime when)
         {
-            return GetItemsSP("BEntity.sp_Commission_GetCommissions", CommissionMapper, zoneId, customerId, when);
+            return GetItemsSP("BEntity.sp_Commission_GetCommissions", CommissionMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
     }
 }

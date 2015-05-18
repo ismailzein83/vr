@@ -62,6 +62,11 @@ namespace TOne.Business
             return GetIntValue(ConfigParameterName.RouteBCPBatchSize);
         }
 
+        public int GetRepricingParallelThreads()
+        {
+            return GetIntValue(ConfigParameterName.RepricingParallelThreads);
+        }
+
         #endregion
 
         #region Private

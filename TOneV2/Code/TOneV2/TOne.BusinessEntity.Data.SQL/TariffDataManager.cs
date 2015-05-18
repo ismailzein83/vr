@@ -54,7 +54,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public List<Tariff> GetTariff(string customerId, int zoneId, DateTime when)
         {
-            return GetItemsSP("BEntity.sp_Tariff_GetTariffs", TariffMapper, zoneId, customerId, when);
+            return GetItemsSP("BEntity.sp_Tariff_GetTariffs", TariffMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
     }
 }

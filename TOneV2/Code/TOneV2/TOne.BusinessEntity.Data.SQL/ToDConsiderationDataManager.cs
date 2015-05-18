@@ -57,7 +57,7 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public List<ToDConsideration> GetToDConsideration(string customerId, int zoneId, DateTime when)
         {
-            return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, zoneId, customerId, when);
+            return GetItemsSP("BEntity.sp_ToDConsideration_GetToDConsiderations", ToDConsiderationMapper, ToDBNullIfDefault(zoneId), customerId, when);
         }
 
     }

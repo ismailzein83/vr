@@ -19,7 +19,9 @@ namespace TOne.Entities
         [ConfigParameterName(DefaultValue = "2")]
         RoutingCodePrefixLength = 5,
         [ConfigParameterName(DefaultValue = "1000000")]
-        RouteBCPBatchSize = 6
+        RouteBCPBatchSize = 6,
+        [ConfigParameterName(DefaultValue = "5")]
+        RepricingParallelThreads = 7
     }
 
     public class ConfigParameterNameAttribute : Attribute

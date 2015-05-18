@@ -121,6 +121,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             ]
         },
         {
+            name: "BusinessEntity", location: '', icon: 'glyphicon-cog', childs: [
+               { name: "DumySwitchs", location: '#/BusinessEntity/DumySwitchs' }
+            ]
+        },
+        {
             name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
                { name: "Zone Monitor", location: '#/NOC/ZoneMonitor' }
             ]
