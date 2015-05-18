@@ -112,9 +112,8 @@ namespace TOne.CDR.Data.SQL
 
         private BulkInsertInfo PrepareMainCDRsForDBApply2(List<TOne.CDR.Entities.BillingCDRMain> cdrs)
         {
-            CDRTargetDataManager cDRTargetDataManager = new CDRTargetDataManager();
-            long lastPricedMainID = cDRTargetDataManager.GetMinCDRMainID();
-            lastPricedMainID = lastPricedMainID - 1;
+            long lastPricedMainID;
+            ReserverIdRange(true, true, cdrs.Count, out lastPricedMainID);
             string filePath = GetFilePathForBulkInsert();
 
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -242,9 +241,9 @@ namespace TOne.CDR.Data.SQL
         public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
-            CDRTargetDataManager cDRTargetDataManager = new CDRTargetDataManager();
-            long lastPricedInvalidID = cDRTargetDataManager.GetMinCDRInvalidID();
-            lastPricedInvalidID = lastPricedInvalidID - 1;
+            long lastPricedInvalidID ;
+            ReserverIdRange(false, true, cdrs.Count, out lastPricedInvalidID);
+
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
                 foreach (TOne.CDR.Entities.BillingCDRInvalid cdr in cdrs)
@@ -363,6 +362,11 @@ namespace TOne.CDR.Data.SQL
                 TabLock = false,
                 FieldSeparator = '^'
             };
+        }
+
+        void ReserverIdRange(bool isMain, bool isNegative, int numberOfIds, out long id)
+        {
+            id = (long)ExecuteScalarSP("CDR.sp_CDRIDManager_ReserveIDRange", isMain, isNegative, numberOfIds);
         }
 
         public void LoadCDRRange(DateTime from, DateTime to, int? batchSize, Action<List<TABS.CDR>> onBatchReady)

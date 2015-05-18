@@ -9,8 +9,8 @@ namespace TOne.CDR.Data
         void DeleteCDRSale(DateTime from, DateTime to);
         void DeleteTrafficStats(DateTime from, DateTime to);
         void DeleteDailyTrafficStats(DateTime date);
-        long GetMinCDRInvalidID();
-        long GetMinCDRMainID();
+        //long GetMinCDRInvalidID();
+        //long GetMinCDRMainID();
         void UpdateDailyPostpaid(DateTime date);
         void UpdateDailyPrepaid(DateTime date);
         void UpdateDailyBillingStatistics(DateTime date);

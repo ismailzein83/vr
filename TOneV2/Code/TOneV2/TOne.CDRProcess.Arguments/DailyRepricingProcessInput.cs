@@ -8,5 +8,7 @@ namespace TOne.CDRProcess.Arguments
     public class DailyRepricingProcessInput
     {
         public DateTime RepricingDay { get; set; }
+
+        public bool DivideProcessIntoSubProcesses { get; set; }
     }
 }

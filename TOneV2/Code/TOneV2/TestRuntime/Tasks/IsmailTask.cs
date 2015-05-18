@@ -59,23 +59,27 @@ namespace TestRuntime
             //////t.Start();
 
             BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "RoutingProcess",
-                InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
-                {
-                    DivideProcessIntoSubProcesses = true,
-                    EffectiveTime = DateTime.Now,
-                    IsFuture = false,
-                    IsLcrOnly = false
-                }
-            });
-
             //bpClient.CreateNewProcess(new CreateProcessInput
             //{
-            //    ProcessName = "DailyRepricingProcess",
-            //    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = DateTime.Parse("2014-07-07") }
+            //    ProcessName = "RoutingProcess",
+            //    InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
+            //    {
+            //        DivideProcessIntoSubProcesses = true,
+            //        EffectiveTime = DateTime.Now,
+            //        IsFuture = false,
+            //        IsLcrOnly = false
+            //    }
             //});
+
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "DailyRepricingProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+                {
+                    RepricingDay = DateTime.Parse("2014-07-07")//,
+                   // DivideProcessIntoSubProcesses = true
+                }
+            });
 
             //bpClient.CreateNewProcess(new CreateProcessInput
             //{

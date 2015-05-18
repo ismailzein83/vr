@@ -11,18 +11,18 @@ namespace TOne.CDRProcess.Activities
     {
         protected override void Execute(CodeActivityContext context)
         {
-            Task t = new Task(() =>
-                {
-                    CDRManager manager = new CDRManager();
-                    manager.ReserveRePricingMainCDRIDs(0);
-                });
-            t.Start();
-            t = new Task(() =>
-            {
-                CDRManager manager = new CDRManager();
-                manager.ReserveRePricingInvalidCDRIDs(0);
-            });
-            t.Start();
+            //Task t = new Task(() =>
+            //    {
+            //        CDRManager manager = new CDRManager();
+            //        manager.ReserveRePricingMainCDRIDs(0);
+            //    });
+            //t.Start();
+            //t = new Task(() =>
+            //{
+            //    CDRManager manager = new CDRManager();
+            //    manager.ReserveRePricingInvalidCDRIDs(0);
+            //});
+            //t.Start();
         }
     }
 }

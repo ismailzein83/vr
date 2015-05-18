@@ -45,12 +45,16 @@
 
                         var parameters = {
                             zoneId: zoneItem.EntityId,
-                            fromDate : selectedDateTimeFilter.fromDate,
-                            toDate : selectedDateTimeFilter.toDate
+                            fromDate: selectedDateTimeFilter.fromDate,
+                            toDate: selectedDateTimeFilter.toDate
                         }
-
-                        var modalScope = VRModalService.showModal('/Client/Modules/BI/Views/Reports/ZoneSummary.html', true, parameters);
-                        modalScope.title = zoneItem.EntityName;
+                        var modalSettings = {
+                            useModalTemplate: true
+                        };
+                        modalSettings.onScopeReady = function (modalScope) {
+                            modalScope.title = zoneItem.EntityName;
+                        };
+                        var modalScope = VRModalService.showModal('/Client/Modules/BI/Views/Reports/ZoneSummary.html', parameters, modalSettings);
                     }
                 },
                 {

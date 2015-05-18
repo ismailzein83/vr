@@ -13,19 +13,19 @@ namespace TOne.CDR.Data.SQL
         //{
         //}
 
-        public long GetMinCDRMainID()
-        {
-            string sql = @"SELECT Min(ID) FROM Billing_CDR_Main WITH(NOLOCK)";
-            object idAsObj = ExecuteScalarText(sql, null);
-            return idAsObj != DBNull.Value ? (long)idAsObj : 0;
-        }
+        //public long GetMinCDRMainID()
+        //{
+        //    string sql = @"SELECT Min(ID) FROM Billing_CDR_Main WITH(NOLOCK)";
+        //    object idAsObj = ExecuteScalarText(sql, null);
+        //    return idAsObj != DBNull.Value ? (long)idAsObj : 0;
+        //}
 
-        public long GetMinCDRInvalidID()
-        {
-            string sql = @"SELECT Min(ID) FROM Billing_CDR_Invalid WITH(NOLOCK)";
-            object idAsObj = ExecuteScalarText(sql, null);
-            return idAsObj != DBNull.Value ? (long)idAsObj : 0;
-        }
+        //public long GetMinCDRInvalidID()
+        //{
+        //    string sql = @"SELECT Min(ID) FROM Billing_CDR_Invalid WITH(NOLOCK)";
+        //    object idAsObj = ExecuteScalarText(sql, null);
+        //    return idAsObj != DBNull.Value ? (long)idAsObj : 0;
+        //}
 
         public void DeleteCDRMain(DateTime from, DateTime to)
         {

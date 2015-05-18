@@ -48,51 +48,51 @@ namespace TOne.CDRProcess.Activities
 
         #endregion
 
-        static object s_RepricingMainCDRIDLockObj = new object();
-        static long _lastMainCDRId;
-        public long ReserveRePricingMainCDRIDs(int nbOfRecords)
-        {
-            long id;
-            lock (s_RepricingMainCDRIDLockObj)
-            {
-                if (_lastMainCDRId < 0)
-                {
-                    id = _lastMainCDRId - 1;
-                }
-                else
-                {
-                    ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    id = dataManager.GetMinCDRMainID() - 1;
-                }
-                if (id > 0)
-                    id = -1;
-                _lastMainCDRId = id - nbOfRecords;
-            }
-            return id;
-        }
+        //static object s_RepricingMainCDRIDLockObj = new object();
+        //static long _lastMainCDRId;
+        //public long ReserveRePricingMainCDRIDs(int nbOfRecords)
+        //{
+        //    long id;
+        //    lock (s_RepricingMainCDRIDLockObj)
+        //    {
+        //        if (_lastMainCDRId < 0)
+        //        {
+        //            id = _lastMainCDRId - 1;
+        //        }
+        //        else
+        //        {
+        //            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+        //            id = dataManager.GetMinCDRMainID() - 1;
+        //        }
+        //        if (id > 0)
+        //            id = -1;
+        //        _lastMainCDRId = id - nbOfRecords;
+        //    }
+        //    return id;
+        //}
 
-        static object s_RepricingInvalidCDRIDLockObj = new object();
-        static long _lastInvalidCDRId;
-        public long ReserveRePricingInvalidCDRIDs(int nbOfRecords)
-        {
-            long id;
-            lock (s_RepricingInvalidCDRIDLockObj)
-            {
-                if (_lastInvalidCDRId < 0)
-                {
-                    id = _lastInvalidCDRId - 1;
-                }
-                else
-                {
-                    ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
-                    id = dataManager.GetMinCDRInvalidID() - 1;
-                }
-                if (id > 0)
-                    id = -1;
-                _lastInvalidCDRId = id - nbOfRecords;
-            }
-            return id;
-        }
+        //static object s_RepricingInvalidCDRIDLockObj = new object();
+        //static long _lastInvalidCDRId;
+        //public long ReserveRePricingInvalidCDRIDs(int nbOfRecords)
+        //{
+        //    long id;
+        //    lock (s_RepricingInvalidCDRIDLockObj)
+        //    {
+        //        if (_lastInvalidCDRId < 0)
+        //        {
+        //            id = _lastInvalidCDRId - 1;
+        //        }
+        //        else
+        //        {
+        //            ICDRTargetDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRTargetDataManager>();
+        //            id = dataManager.GetMinCDRInvalidID() - 1;
+        //        }
+        //        if (id > 0)
+        //            id = -1;
+        //        _lastInvalidCDRId = id - nbOfRecords;
+        //    }
+        //    return id;
+        //}
 
         public void DeleteCDRMain(DateTime from, DateTime to)
         {

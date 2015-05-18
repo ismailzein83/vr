@@ -260,39 +260,43 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
            
             $scope.changeSettings = function () {
                
-                var modalScope = VRModalService.showModal('/Client/Javascripts/Directives/Chart/vr-chart-settings.html', false)
-                modalScope.title = 'Chart Settings';
-                modalScope.config = (JSON.parse(JSON.stringify(currentChartSettings)));
-                var seriesTypes = [{ value: "column" },
-                       { value: "line" },
-                       { value: "spline" },
-                       { value: "area" },
-                       { value: "areaspline" },
-                       { value: "scatter" },
-                       { value: "bar" }
-                ];
-                
-                angular.forEach(modalScope.config.series, function (s) {
-                    s.seriesTypesOption = {
-                        datasource: seriesTypes,
-                        lastselectedvalue: $.grep(seriesTypes, function(sType){return s.type == sType.value;})[0]
+                var modalSettings = {};
+                modalSettings.onScopeReady = function (modalScope) {
+                    modalScope.title = 'Chart Settings';
+                    modalScope.config = (JSON.parse(JSON.stringify(currentChartSettings)));
+                    var seriesTypes = [{ value: "column" },
+                           { value: "line" },
+                           { value: "spline" },
+                           { value: "area" },
+                           { value: "areaspline" },
+                           { value: "scatter" },
+                           { value: "bar" }
+                    ];
+
+                    angular.forEach(modalScope.config.series, function (s) {
+                        s.seriesTypesOption = {
+                            datasource: seriesTypes,
+                            lastselectedvalue: $.grep(seriesTypes, function (sType) { return s.type == sType.value; })[0]
+                        };
+
+                    });
+
+                    modalScope.save = function () {
+                        modalScope.modalContext.closeModal();
+                        currentChartSettings = modalScope.config;
+                        if (currentChartSettings.isSingleDimension) {
+                            renderSingleDimensionChart(currentChartSource);
+                        }
+                        else {
+                            angular.forEach(modalScope.config.series, function (s) {
+                                s.type = s.seriesTypesOption.lastselectedvalue.value;
+                            });
+                            renderChart(currentChartSource);
+                        }
                     };
-
-                });
-
-                modalScope.save = function () {
-                    modalScope.modalContext.closeModal();
-                    currentChartSettings = modalScope.config;
-                    if (currentChartSettings.isSingleDimension) {
-                        renderSingleDimensionChart(currentChartSource);
-                    }
-                    else {
-                        angular.forEach(modalScope.config.series, function (s) {
-                            s.type = s.seriesTypesOption.lastselectedvalue.value;
-                        });
-                        renderChart(currentChartSource);
-                    }
                 };
+
+                VRModalService.showModal('/Client/Javascripts/Directives/Chart/vr-chart-settings.html', null, modalSettings);                
             }
 
             $scope.isSettingsVisible = function () {

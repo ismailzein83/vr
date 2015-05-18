@@ -12,6 +12,7 @@
  xmlns:tc="clr-namespace:TOne.Caching;assembly=TOne.Caching"
  xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
  xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -61,14 +62,11 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
-      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
-      <AssemblyReference>TABS</AssemblyReference>
       <AssemblyReference>TOne.Business</AssemblyReference>
       <AssemblyReference>TOne.Caching</AssemblyReference>
       <AssemblyReference>TOne.CDR.Business</AssemblyReference>
@@ -76,6 +74,9 @@
       <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
       <AssemblyReference>TOne.Entities</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.CDRProcess</AssemblyReference>
     </sco:Collection>
@@ -129,51 +130,121 @@
         </OutArgument>
       </tca1:DivideDayIntoTimeRanges.Ranges>
     </tca1:DivideDayIntoTimeRanges>
-    <vbw:ParallelForEach x:TypeArguments="tca:TimeRange" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
-      <vbw:ParallelForEach.InitialConcurrentInstances>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">TOne.Business.ConfigParameterManager.Current.GetRepricingParallelThreads()</mca:CSharpValue>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.DivideProcessIntoSubProcesses</mca:CSharpValue>
         </InArgument>
-      </vbw:ParallelForEach.InitialConcurrentInstances>
-      <vbw:ParallelForEach.MaxConcurrentInstances>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">TOne.Business.ConfigParameterManager.Current.GetRepricingParallelThreads()</mca:CSharpValue>
-        </InArgument>
-      </vbw:ParallelForEach.MaxConcurrentInstances>
-      <vbw:ParallelForEach.Values>
-        <InArgument x:TypeArguments="scg:IEnumerable(tca:TimeRange)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(tca:TimeRange)">TimeRanges</mca:CSharpValue>
-        </InArgument>
-      </vbw:ParallelForEach.Values>
-      <ActivityAction x:TypeArguments="tca:TimeRange">
-        <ActivityAction.Argument>
-          <DelegateInArgument x:TypeArguments="tca:TimeRange" Name="timeRange" />
-        </ActivityAction.Argument>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-          <Sequence.Variables>
-            <Variable x:TypeArguments="tca:TimeRangeRepricingProcessOutput" Name="timeRangeRepProcessOutput" />
-          </Sequence.Variables>
-          <local:TimeRangeRepricingProcess sap2010:WorkflowViewState.IdRef="TimeRangeRepricingProcess_1" Output="[timeRangeRepProcessOutput]">
-            <local:TimeRangeRepricingProcess.Input>
-              <InArgument x:TypeArguments="tca:TimeRangeRepricingProcessInput">
-                <mca:CSharpValue x:TypeArguments="tca:TimeRangeRepricingProcessInput" xml:space="preserve">new TimeRangeRepricingProcessInput
+      </If.Condition>
+      <If.Then>
+        <ParallelForEach x:TypeArguments="tca:TimeRange" DisplayName="ParallelForEach&lt;TimeRange&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
+          <ParallelForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(tca:TimeRange)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(tca:TimeRange)">TimeRanges</mca:CSharpValue>
+            </InArgument>
+          </ParallelForEach.Values>
+          <ActivityAction x:TypeArguments="tca:TimeRange">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="tca:TimeRange" Name="timeRange" />
+            </ActivityAction.Argument>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="tca:TimeRangeRepricingProcessOutput" Name="timeRangeRepProcessOutput" />
+                <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+              </Sequence.Variables>
+              <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" ProcessName="TimeRangeRepricingProcess" WaitProcessCompleted="True">
+                <vbw:RunProcess.Input>
+                  <InArgument x:TypeArguments="x:Object">
+                    <mca:CSharpValue x:TypeArguments="x:Object" xml:space="preserve">new TimeRangeRepricingProcessInput
             {
                 Range = timeRange,
                 CacheManagerID = cacheManagerId
             }</mca:CSharpValue>
-              </InArgument>
-            </local:TimeRangeRepricingProcess.Input>
-          </local:TimeRangeRepricingProcess>
-          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
-            <vbw:WriteTrackingMessage.Message>
-              <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Succeeded in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}. {3} CDRs in {4}", timeRange.From, timeRange.To, Input.RepricingDay, timeRangeRepProcessOutput.CDRCount, timeRangeRepProcessOutput.SpentTime)</mca:CSharpValue>
-              </InArgument>
-            </vbw:WriteTrackingMessage.Message>
-          </vbw:WriteTrackingMessage>
-        </Sequence>
-      </ActivityAction>
-    </vbw:ParallelForEach>
+                  </InArgument>
+                </vbw:RunProcess.Input>
+                <vbw:RunProcess.ProcessCompletedEventPayload>
+                  <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                    <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+                  </OutArgument>
+                </vbw:RunProcess.ProcessCompletedEventPayload>
+              </vbw:RunProcess>
+              <If sap2010:WorkflowViewState.IdRef="If_1">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != BPInstanceStatus.Completed</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                    <TerminateWorkflow.Reason>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Time Range {0:HH:mm} - {1:HH:mm} failed due to error: {2}", timeRange.From, timeRange.To, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                      </InArgument>
+                    </TerminateWorkflow.Reason>
+                  </TerminateWorkflow>
+                </If.Then>
+                <If.Else>
+                  <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6">
+                    <vbw:WriteTrackingMessage.Message>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Succeeded in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}. {3} CDRs in {4}", timeRange.From, timeRange.To, Input.RepricingDay, (subProcessEventPayload.ProcessOutput as TimeRangeRepricingProcessOutput).CDRCount, (subProcessEventPayload.ProcessOutput as TimeRangeRepricingProcessOutput).SpentTime)</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:WriteTrackingMessage.Message>
+                  </vbw:WriteTrackingMessage>
+                </If.Else>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ParallelForEach>
+      </If.Then>
+      <If.Else>
+        <vbw:ParallelForEach x:TypeArguments="tca:TimeRange" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
+          <vbw:ParallelForEach.InitialConcurrentInstances>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">TOne.Business.ConfigParameterManager.Current.GetRepricingParallelThreads()</mca:CSharpValue>
+            </InArgument>
+          </vbw:ParallelForEach.InitialConcurrentInstances>
+          <vbw:ParallelForEach.MaxConcurrentInstances>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">TOne.Business.ConfigParameterManager.Current.GetRepricingParallelThreads()</mca:CSharpValue>
+            </InArgument>
+          </vbw:ParallelForEach.MaxConcurrentInstances>
+          <vbw:ParallelForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(tca:TimeRange)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(tca:TimeRange)">TimeRanges</mca:CSharpValue>
+            </InArgument>
+          </vbw:ParallelForEach.Values>
+          <ActivityAction x:TypeArguments="tca:TimeRange">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="tca:TimeRange" Name="timeRange" />
+            </ActivityAction.Argument>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="tca:TimeRangeRepricingProcessOutput" Name="timeRangeRepProcessOutput" />
+              </Sequence.Variables>
+              <local:TimeRangeRepricingProcess sap2010:WorkflowViewState.IdRef="TimeRangeRepricingProcess_1" Output="[timeRangeRepProcessOutput]">
+                <local:TimeRangeRepricingProcess.Input>
+                  <InArgument x:TypeArguments="tca:TimeRangeRepricingProcessInput">
+                    <mca:CSharpValue x:TypeArguments="tca:TimeRangeRepricingProcessInput" xml:space="preserve">new TimeRangeRepricingProcessInput
+            {
+                Range = timeRange,
+                CacheManagerID = cacheManagerId
+            }</mca:CSharpValue>
+                  </InArgument>
+                </local:TimeRangeRepricingProcess.Input>
+              </local:TimeRangeRepricingProcess>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+                <vbw:WriteTrackingMessage.Message>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Succeeded in range {0:HH:mm} - {1:HH:mm} for repricing day {2:dd-MMM-yy}. {3} CDRs in {4}", timeRange.From, timeRange.To, Input.RepricingDay, timeRangeRepProcessOutput.CDRCount, timeRangeRepProcessOutput.SpentTime)</mca:CSharpValue>
+                  </InArgument>
+                </vbw:WriteTrackingMessage.Message>
+              </vbw:WriteTrackingMessage>
+            </Sequence>
+          </ActivityAction>
+        </vbw:ParallelForEach>
+      </If.Else>
+    </If>
     <tca1:UpdateDailyTrafficStatistics sap2010:WorkflowViewState.IdRef="UpdateDailyTrafficStatistics_1">
       <tca1:UpdateDailyTrafficStatistics.CacheManagerID>
         <InArgument x:TypeArguments="s:Guid">
@@ -221,14 +292,26 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwjUwPhAQ4CAQFZBWQOAgFqZQVrIAIBZGwFch4CAV5zBYMBJAIBToQBBbABGwIBK7EBBbwBKQIBIL0BBcMBJAIBGsQBBcoBJgIBFMsBBdEBJwIBDtIBBdgBHgIBCNkBBd8BIAIBAmELYVcCAXBcC1xYAgFraAtooAECAWVvC29dAgFfewt7rQECAVmAAQuAAWoCAVR2C3ZdAgFPkQELkQFpAgFJjAELjAGSAQIBRIcBC4cBkgECAT+YAQmuARQCASy5AQu5AV0CASa0AQu0AVUCASHAAQvAAV0CARvHAQvHAV0CARXOAQvOAV0CAQ/VAQvVAVUCAQncAQvcAasBAgEDnAELpgEtAgE1pwELrQEmAgEtnAFxnAGOAQIBPZ8BEaMBIAIBNqoBEaoBvwICAS4=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwzVAOoAg4CAQFaBWUOAwGlAWYFbCADAZ8BbQVzHgMBmQF0BYQBJAMBiQGFAQX3AQoCASv4AQWDAikCASCEAgWKAiQCARqLAgWRAiYCARSSAgWYAicCAQ6ZAgWfAh4CAQigAgWmAiACAQJiC2JXAwGrAV0LXVgDAaYBaQtpoAEDAaABcAtwXQMBmgF8C3ytAQMBlAGBAQuBAWoDAY8Bdwt3XQMBigGIAQuIAW0CASyMAQnGARsCAVTJAQn1AR8CATGAAguAAl0CASb7AQv7AVUCASGHAguHAl0CARuOAguOAl0CARWVAguVAl0CAQ+cAgucAlUCAQmjAgujAqsBAgEDjwEPjwFtAwGEAZYBDcQBGAIBVdYBD9YBbQIBT9EBD9EBlgECAUrMAQ/MAZYBAgFF3QEN8wEYAgEymwEPqgEgAgFxqwEPwwEUAgFW4QEP6wExAgE77AEP8gEqAgEzngEVogEgAgF8pwEVpwGIAQIBdJsBd5sBkgECAXObAagBmwGuAQIBcq4BFa4BlgECAVeyARO4AScCAWi7ARPBAS4CAV/hAXXhAZIBAgFD5AEV6AEgAgE87wEV7wHDAgIBNLUBGbUB9QECAWm+ARm+AacDAgFg</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="287,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="CreateCacheManager`1_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="DivideDayIntoTimeRanges_1" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="828,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="CreateCacheManager`1_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="DivideDayIntoTimeRanges_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="486,396">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="516,546" />
       <sap2010:ViewStateData Id="TimeRangeRepricingProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,208">
@@ -239,20 +322,21 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="287,358" />
-      <sap2010:ViewStateData Id="UpdateDailyTrafficStatistics_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="UpdateBillingStatistics_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="UpdateDailyPrepaidAmounts_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="UpdateDailyPostpaidAmounts_1" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="828,696" />
+      <sap2010:ViewStateData Id="UpdateDailyTrafficStatistics_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="UpdateBillingStatistics_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="UpdateDailyPrepaidAmounts_1" sap:VirtualizedContainerService.HintSize="828,22" />
+      <sap2010:ViewStateData Id="UpdateDailyPostpaidAmounts_1" sap:VirtualizedContainerService.HintSize="828,22" />
       <sap2010:ViewStateData Id="RemoveCacheManager_1" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="309,1142">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="850,1480">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.DailyRepricingProcess_1" sap:VirtualizedContainerService.HintSize="349,1222" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.DailyRepricingProcess_1" sap:VirtualizedContainerService.HintSize="890,1560" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

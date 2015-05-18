@@ -88,7 +88,12 @@ appControllers.controller('ZoneMonitorController',
             $scope.gridMenuActions = [{
                 name: "CDRs",
                 clicked: function (dataItem) {
-                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', true, null, {width:"80%", maxHeight: "800px"});
+                    var modalSettings = {
+                        useModalTemplate: true,
+                        width: "80%",
+                        maxHeight: "800px"
+                    };
+                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
                 }
             }];
         }
