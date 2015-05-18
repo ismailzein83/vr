@@ -62,7 +62,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             suspiciousNumber = null;
          
-            Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
+            Dictionary<int, Decimal> criteriaValues ;
             bool IsSuspicious = false;
 
             foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in levelsByPriority)
@@ -74,15 +74,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 foreach (LevelCriteria_Threshold_Percentage LevelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                 {
 
-                    CriteriaManager m = new CriteriaManager();
+                    CriteriaManager criteriaManager = new CriteriaManager();
 
-                    Decimal ThrCri = m.GetCriteriaValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions, profile) / LevelCriteriaThresholdPercentage.Threshold;
+                    Decimal ValueoverPercentage = criteriaManager.GetCriteriaValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions, profile) / LevelCriteriaThresholdPercentage.Percentage;
 
-                    criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, ThrCri);
+                    criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, ValueoverPercentage);
 
                     if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
                     {
-                        if (ThrCri >= LevelCriteriaThresholdPercentage.Percentage)
+                        if (ValueoverPercentage >= LevelCriteriaThresholdPercentage.Threshold)
                         {
                             IsSuspicious = true;
                         }
@@ -94,7 +94,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     }
                     else if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
                     {
-                        if (ThrCri <= LevelCriteriaThresholdPercentage.Percentage)
+                        if (ValueoverPercentage <= LevelCriteriaThresholdPercentage.Threshold)
                         {
                             IsSuspicious = true;
                         }

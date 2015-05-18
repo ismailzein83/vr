@@ -65,7 +65,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //});
 
 
-
             BPClient bpClient3 = new BPClient();
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
@@ -73,8 +72,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyId = 1,
-                    FromDate =    new DateTime(2010,12,1),
-                    ToDate = new DateTime(2019,12,2),
+                    FromDate = new DateTime(2015, 3, 14, 4, 39, 24),//2015-03-14 04:39:24.000
+                    ToDate = new DateTime(2015, 3, 14, 5, 39, 25),//2015-03-14 05:39:25.000
                     PeriodId = (int) Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
                 }
             });
