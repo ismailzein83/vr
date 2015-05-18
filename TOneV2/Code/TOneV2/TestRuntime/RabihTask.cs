@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Data;
+using TOne.BusinessEntity.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
@@ -16,6 +18,12 @@ namespace TestRuntime
     {
         public void Execute()
         {
+
+            //IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
+
+            //Dictionary<short, List<short>> result = datamanager.GetServiceFlagMasks();
+
+
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
 
@@ -77,7 +85,7 @@ namespace TestRuntime
                 {
                     EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    IsLcrOnly = true
+                    IsLcrOnly = false
                 }
             });
         }

@@ -297,10 +297,6 @@
     <Compile Include="Tasks\ZeinabTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TABS\TABS.csproj">
-      <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
-      <Name>TABS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.BProcess.Activities\TOne.BusinessEntity.BProcess.Activities.csproj">
       <Project>{776bb39b-81da-466c-b247-3616ca61a66d}</Project>
       <Name>TOne.BusinessEntity.BProcess.Activities</Name>
