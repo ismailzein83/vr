@@ -42,14 +42,14 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
 
 
-            //BPClient bpClient = new BPClient();
-            //bpClient.CreateNewProcess(new CreateProcessInput
-            //{
-            //    ProcessName = "CDRImportProcess",
-            //    InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput
-            //    {
-            //    }
-            //});
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "CDRImportProcess",
+                InputArguments = new Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput
+                {
+                }
+            });
 
 
 
@@ -65,18 +65,18 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //});
 
 
-            BPClient bpClient3 = new BPClient();
-            bpClient3.CreateNewProcess(new CreateProcessInput
-            {
-                ProcessName = "ExecuteStrategyProcess",
-                InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
-                {
-                    StrategyId = 1,
-                    FromDate = new DateTime(2015, 3, 14, 4, 39, 24),//2015-03-14 04:39:24.000
-                    ToDate = new DateTime(2015, 3, 14, 5, 39, 25),//2015-03-14 05:39:25.000
-                    PeriodId = (int) Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
-                }
-            });
+            //BPClient bpClient3 = new BPClient();
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyId = 1,
+            //        FromDate = new DateTime(2015, 3, 14, 4, 39, 24),//2015-03-14 04:39:24.000
+            //        ToDate = new DateTime(2015, 3, 14, 5, 39, 25),//2015-03-14 05:39:25.000
+            //        PeriodId = (int) Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
 
 
             //NumberProfileDataManager x = new NumberProfileDataManager();
