@@ -4,36 +4,39 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using TOne.Business;
+using TOne.Entities;
 
 namespace TOne.Main.Web.Controllers
 {
     public class UserController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        [HttpGet]
+        public List<User> GetUsers()
         {
-            return new string[] { "value1", "value2", "value2", "value2" };
+            SecurityManager manager = new SecurityManager();
+            return manager.GetUsers();
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [HttpGet]
+        public void DeleteUser(int Id)
         {
-            return "value";
+            SecurityManager manager = new SecurityManager();
+            manager.DeleteUser(Id);
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [HttpPost]
+        public void SaveUser(User user)
         {
+            SecurityManager manager = new SecurityManager();
+            manager.SaveUser(user);
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [HttpGet]
+        public List<User> SearchUser(string Name, string Email)
         {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            SecurityManager manager = new SecurityManager();
+            return manager.SearchUser(Name, Email);
         }
     }
 }

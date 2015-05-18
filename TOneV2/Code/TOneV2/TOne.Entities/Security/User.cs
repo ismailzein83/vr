@@ -16,6 +16,10 @@ namespace TOne.Entities
 
         public string Name { get; set; }
 
+        public string Password { get; set; }
+
+        public DateTime LastLogin { get; set; }
+
         public string Description { get; set; }
 
         public UserStatus Status { get; set; }

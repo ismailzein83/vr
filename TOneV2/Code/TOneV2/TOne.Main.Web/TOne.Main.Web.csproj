@@ -116,8 +116,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\Services\" />
-    <Folder Include="Client\Views\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +123,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Client\Views\UserEditor.html" />
+    <Content Include="Client\Views\User.html" />
+    <Content Include="Client\Views\UserController.js" />
+    <Content Include="Client\Views\UserEditorController.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -133,9 +136,18 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
+      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
+      <Name>TOne.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

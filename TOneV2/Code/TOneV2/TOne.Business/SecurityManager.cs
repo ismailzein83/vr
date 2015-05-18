@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Entities;
+using TOne.Data;
 
 namespace TOne.Business
 {
@@ -60,6 +61,29 @@ namespace TOne.Business
                 return GetRolesPermissions<T>(userRoles.Select(itm => itm.RoleId));
             else
                 return null;
+        }
+
+        public List<TOne.Entities.User> GetUsers()
+        {
+            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
+            return datamanager.GetUsers();
+        }
+
+        public void DeleteUser(int Id)
+        {
+            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
+            datamanager.DeleteUser(Id);
+        }
+
+        public void SaveUser(User user)
+        {
+            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
+            datamanager.SaveUser(user);
+        }
+        public List<TOne.Entities.User> SearchUser(string name, string email)
+        {
+            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
+            return datamanager.SearchUser(name, email);
         }
     }
 }
