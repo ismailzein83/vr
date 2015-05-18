@@ -1,6 +1,7 @@
 ﻿<div >
-    <div>
-        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenu" style="position: absolute;">
+    <div ng-mouseleave="ctrl.showMenu = false">
+        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenu"
+            ng-style="{'position': 'absolute', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
             <li role="presentation">
                 <span style="padding: 3px; font-weight: bold; font-size: 11px">
                     {{selectedEntityTitle}}

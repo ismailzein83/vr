@@ -39,13 +39,8 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
             }
 
             function onDataItemClicked(dataItem) {
-                //console.log(dataItem);
-                if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function') {
+                if (api.onDataItemClicked && typeof (api.onDataItemClicked) == 'function')
                     api.onDataItemClicked(dataItem);
-                    return true;
-                }
-                else
-                    return false;
             }
 
             function renderSingleDimensionChart(chartSource) {
@@ -61,19 +56,20 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
                         events:
                         {
                             click: function (e) {
-                                if (e.point.sliced == true) {//it is sliced when it is clicked
-                                    $scope.$apply(function () {
-                                        hideMenu();
-                                    });
-                                    return;
-                                }
                                 selectedDataItem = currentChartSource.chartData[e.point.index];
-                                if (!onDataItemClicked(selectedDataItem)) {
-                                    $scope.$apply(function () {
-                                        $scope.selectedEntityTitle = eval('currentChartSource.chartData[e.point.index].' + sDef.titlePath);
-                                        showMenu(selectedDataItem);
-                                    });
-                                }
+                                controller.menuLeft = e.chartX;
+                                controller.menuTop = e.chartY;
+                                $scope.$apply(function () {
+                                    $scope.selectedEntityTitle = eval('currentChartSource.chartData[e.point.index].' + sDef.titlePath);
+                                    showMenu(selectedDataItem);
+                                });
+                                if (e.point.sliced == true) {//it is sliced when it is clicked
+                                    //$scope.$apply(function () {
+                                    //    hideMenu();
+                                    //});
+                                    return;
+                                }                                
+                                onDataItemClicked(selectedDataItem)
                             }
                         }
                     };
@@ -337,6 +333,11 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
                     chartDefinition: chartDefinition,
                     seriesDefinitions: seriesDefinitions
                 };
+                //currentChartSource.isSingleDimension = false;
+                //currentChartSource.chartDefinition.type = "column";
+                //currentChartSource.xAxisDefinition = {
+                //    titlePath: seriesDefinitions[0].titlePath
+                //};
                 InitializeChartSettings();
                 renderSingleDimensionChart(currentChartSource);
             };

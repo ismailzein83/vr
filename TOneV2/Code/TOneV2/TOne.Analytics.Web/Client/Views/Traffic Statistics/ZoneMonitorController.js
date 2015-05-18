@@ -160,7 +160,7 @@ appControllers.controller('ZoneMonitorController',
                 var menuActions = [];
                 angular.forEach($scope.currentSearchCriteria.groupKeys, function (groupKey) {
                     var valueIndex = $scope.currentSearchCriteria.groupKeys.indexOf(groupKey);
-                    if (dataItem.groupKeyValues[valueIndex].Name != null) {
+                    if (dataItem.groupKeyValues != undefined && dataItem.groupKeyValues[valueIndex].Name != null) {
                         menuActions.push({
                             name: groupKey.title + ' (' + dataItem.groupKeyValues[valueIndex].Name + ')',
                             clicked: function (dataItem) {
