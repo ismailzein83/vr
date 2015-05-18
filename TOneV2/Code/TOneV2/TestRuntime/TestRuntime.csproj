@@ -162,6 +162,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TABS, Version=1.0.5613.28447, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.dll</HintPath>
+    </Reference>
     <Reference Include="TABS.Addons.AlcatelSwitchLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\TABS.Addons.AlcatelSwitchLibrary.dll</HintPath>

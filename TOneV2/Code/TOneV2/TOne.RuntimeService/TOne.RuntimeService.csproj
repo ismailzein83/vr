@@ -138,6 +138,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="TABS, Version=1.0.5613.27830, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.dll</HintPath>
+    </Reference>
     <Reference Include="TABS.Addons.AlcatelSwitchLibrary">
       <HintPath>..\Resources\DLLs\TABS.Addons.AlcatelSwitchLibrary.dll</HintPath>
     </Reference>
@@ -165,11 +169,16 @@
     <Reference Include="TABS.Addons.TelesSwitchLibrary">
       <HintPath>..\Resources\DLLs\TABS.Addons.TelesSwitchLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TABS.Addons.Utilities">
+    <Reference Include="TABS.Addons.Utilities, Version=1.0.5445.31653, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="TABS.Addons.UtilitiesMultipleQueue">
       <HintPath>..\Resources\DLLs\TABS.Addons.UtilitiesMultipleQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Plugins.Framework, Version=1.0.5613.27830, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Plugins.Framework.dll</HintPath>
     </Reference>
     <Reference Include="TABS.Plugins.VoipSwitch">
       <HintPath>..\Resources\DLLs\TABS.Plugins.VoipSwitch.dll</HintPath>
@@ -256,14 +265,6 @@
     <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
-      <Project>{234abdf0-dae3-4979-8bf4-57f3eed90268}</Project>
-      <Name>TABS.Plugins.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TABS\TABS.csproj">
-      <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
-      <Name>TABS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.BProcess.Activities\TOne.BusinessEntity.BProcess.Activities.csproj">
       <Project>{776bb39b-81da-466c-b247-3616ca61a66d}</Project>
       <Name>TOne.BusinessEntity.BProcess.Activities</Name>

@@ -54,8 +54,17 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TABS.Addons.Utilities">
+    <Reference Include="TABS, Version=1.0.5613.28447, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Addons.Utilities, Version=1.0.5445.31653, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="TABS.Plugins.Framework, Version=1.0.5613.28447, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\TABS.Plugins.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
@@ -109,14 +118,6 @@
     <Compile Include="WriteReadyTableToDB.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
-      <Project>{234abdf0-dae3-4979-8bf4-57f3eed90268}</Project>
-      <Name>TABS.Plugins.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TABS\TABS.csproj">
-      <Project>{53916714-c501-4613-907f-d5f33b78c3f0}</Project>
-      <Name>TABS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
       <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
       <Name>TOne.BusinessEntity.Entities</Name>

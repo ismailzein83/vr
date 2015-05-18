@@ -81,6 +81,8 @@
     <Content Include="DLLs\TABS.Addons.TelesSwitchLibrary.dll" />
     <Content Include="DLLs\TABS.Addons.Utilities.dll" />
     <Content Include="DLLs\TABS.Addons.UtilitiesMultipleQueue.dll" />
+    <Content Include="DLLs\TABS.dll" />
+    <Content Include="DLLs\TABS.Plugins.Framework.dll" />
     <Content Include="DLLs\TABS.Plugins.VoipSwitch.dll" />
     <Content Include="DLLs\Telerik.Reporting.dll" />
     <Content Include="DLLs\Vanrise.Components.Security.dll" />

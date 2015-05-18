@@ -98,7 +98,8 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TABS.Addons.Utilities">
+    <Reference Include="TABS.Addons.Utilities, Version=1.0.5445.31653, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\TABS.Addons.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>

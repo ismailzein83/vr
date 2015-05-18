@@ -102,14 +102,6 @@
     <Compile Include="ApplyCodeMatchesToDB.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TABS.Plugins.Framework\TABS.Plugins.Framework.csproj">
-      <Project>{234ABDF0-DAE3-4979-8BF4-57F3EED90268}</Project>
-      <Name>TABS.Plugins.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TABS\TABS.csproj">
-      <Project>{53916714-C501-4613-907F-D5F33B78C3F0}</Project>
-      <Name>TABS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
       <Name>TOne.BusinessEntity.Business</Name>
