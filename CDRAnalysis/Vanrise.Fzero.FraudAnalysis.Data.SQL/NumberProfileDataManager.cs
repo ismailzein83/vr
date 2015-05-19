@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     while (reader.Read())
                     {
                         normalCDR.CallType = GetReaderValue<int>(reader, "Call_Type");
-                        normalCDR.BTSId = GetReaderValue<int>(reader, "BTS_Id");
+                        normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
                         normalCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime");
                         normalCDR.Id = (int)reader["Id"];
                         normalCDR.IMSI = reader["IMSI"] as string;

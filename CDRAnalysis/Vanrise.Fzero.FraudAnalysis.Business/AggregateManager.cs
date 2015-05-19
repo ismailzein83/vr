@@ -145,7 +145,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                (cdr) =>
                {
-                   return (cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
+                   return ( cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
                }
             )
             });
@@ -235,7 +235,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                       (cdr) =>
                       {
-                          return ((cdr.CallType == (int)Enums.CallType.IncomingVoiceCall || cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall || cdr.CallType == (int)Enums.CallType.IncomingSms || cdr.CallType == (int)Enums.CallType.OutgoingSms));
+                          return (cdr.BTSId.HasValue && (cdr.CallType == (int)Enums.CallType.IncomingVoiceCall || cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall || cdr.CallType == (int)Enums.CallType.IncomingSms || cdr.CallType == (int)Enums.CallType.OutgoingSms));
                       }
                   )
             });
