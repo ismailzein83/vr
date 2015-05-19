@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public  int CallType { get; set; }
         public  string SubType { get; set; }
         public  string IMEI { get; set; }
-        public  int BTSId { get; set; }
+        public  int? BTSId { get; set; }
         public  string CellId { get; set; }
         public  int SwitchRecordId { get; set; }
         public  decimal UpVolume { get; set; }
