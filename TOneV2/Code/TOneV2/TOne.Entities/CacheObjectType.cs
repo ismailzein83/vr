@@ -5,14 +5,14 @@ using System.Text;
 
 namespace TOne.Entities
 {
-    public enum CacheObjectType { SupplierCodes, Pricing, TempObjects, SharedMemoryQueue, Zone, CarrierAccount}
+    public enum CacheObjectType { SupplierCodes, Pricing, TempObjects, SharedMemoryQueue, Zone, CarrierAccount, FlaggedService }
     //public class CacheObjectTypes : ICacheObjectType
     //{
     //    public CacheObjectTypes(CacheObjectType objectType)
     //    {
     //        _typeUniqueValue = ((int)objectType).ToString();
     //    }
-        
+
     //    #region ICacheObjectType Members
 
     //    string _typeUniqueValue;

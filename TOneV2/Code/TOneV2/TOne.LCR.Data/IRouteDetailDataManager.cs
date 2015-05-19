@@ -18,5 +18,9 @@ namespace TOne.LCR.Data
         void WriteRouteToStream(RouteDetail routeDetail, object stream);
 
         object FinishDBApplyStream(object stream);
+
+        List<RouteDetail> GetRoutesDetail(string customerId, string code, int? ourZoneId);
+
+        IEnumerable<RouteDetail> GetRoutesDetail(string customerIds, string code, string zoneIds, int fromRow, int toRow, bool isDescending, string orderBy);
     }
 }

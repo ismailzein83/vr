@@ -94,6 +94,7 @@ namespace TOne.LCR.Data.SQL
 
 
 
+
 CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ZoneID] [int] NOT NULL,
 	                                                    [Name] [nvarchar](255) NOT NULL,
@@ -167,8 +168,21 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                         (
 	                                                        [Code] ASC
                                                         )WITH (IGNORE_DUP_KEY = OFF)
-                                                        )";
-
+                                                        )
+                                                    
+                                                    ";
+        const string query_GetRoutes = @"
+	                                    SELECT 
+	                                       r.[CustomerID]
+                                          ,r.[Code]
+                                          ,r.[OurZoneID]
+                                          ,r.[OurActiveRate]
+                                          ,r.[OurServicesFlag]
+                                          ,r.[Options]
+                                      FROM [dbo].[Route] r
+	                                    WHERE (r.CustomerID = @CustomerID OR @CustomerID IS NULL)
+	                                           AND (r.Code LIKE @Code + '%' OR @Code IS NULL)
+                                        ";
         #endregion
 
     }

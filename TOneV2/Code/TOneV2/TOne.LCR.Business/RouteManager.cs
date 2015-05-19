@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.LCR.Data;
 using TOne.LCR.Entities;
 
 namespace TOne.LCR.Business
@@ -14,15 +15,15 @@ namespace TOne.LCR.Business
             suppliersOption = null;
             suppliersOrderOption = null;
             percentagesOption = null;
-            if(options != null && options.Count > 0)
+            if (options != null && options.Count > 0)
             {
                 var orderedOptions = options.OrderBy(itm => itm.SupplierId).ToList();
                 StringBuilder suppliersOptionBuilder = new StringBuilder();
-                
+
                 bool isDefaultOrder = true;
                 bool isDefaultPercentage = true;
                 int index = 0;
-                foreach(var option in orderedOptions)
+                foreach (var option in orderedOptions)
                 {
                     if (suppliersOptionBuilder == null)
                         suppliersOptionBuilder = new StringBuilder();
@@ -42,9 +43,9 @@ namespace TOne.LCR.Business
                 {
                     StringBuilder suppliersOrderOptionBuilder = null;
                     StringBuilder percentagesOptionBuilder = null;
-                    foreach(var option in options)
+                    foreach (var option in options)
                     {
-                        if(!isDefaultOrder)
+                        if (!isDefaultOrder)
                         {
                             if (suppliersOrderOptionBuilder == null)
                                 suppliersOrderOptionBuilder = new StringBuilder();
@@ -119,15 +120,22 @@ namespace TOne.LCR.Business
             }
         }
 
+        public IEnumerable<RouteDetail> GetRoutes(string customerId, string code, int? ourZoneId)
+        {
+            IRouteDetailDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteDetailDataManager>();
+            dataManager.RoutingDatabaseType = RoutingDatabaseType.Current;
+            return dataManager.GetRoutesDetail(customerId, code, ourZoneId);
+        }
+
         private void SetRuleInvalid(RouteRule rule)
         {
             throw new NotImplementedException();
-        }         
+        }
 
         private void AddRuleMatches(RouteRuleMatches ruleMatches, RouteRule rule)
         {
             CodeSetMatch codeSetMatch = rule.CodeSet.GetMatch();
-            if(codeSetMatch.MatchCodes != null)
+            if (codeSetMatch.MatchCodes != null)
             {
                 foreach (var matchCodeEntry in codeSetMatch.MatchCodes)
                 {
@@ -139,9 +147,9 @@ namespace TOne.LCR.Business
             if (codeSetMatch.IsMatchingAllZones)
                 ruleMatches.RulesMatchingAllZones.Add(rule);
             else
-                if(codeSetMatch.MatchZoneIds!= null)
+                if (codeSetMatch.MatchZoneIds != null)
                 {
-                    foreach(int matchZoneId in codeSetMatch.MatchZoneIds)
+                    foreach (int matchZoneId in codeSetMatch.MatchZoneIds)
                     {
                         AddRuleToGroupDictionary(ruleMatches.RulesByMatchZones, matchZoneId, rule);
                     }
@@ -161,7 +169,7 @@ namespace TOne.LCR.Business
     }
 
     public class RouteRulesByActionDataType : Dictionary<Type, RouteRuleMatches>
-    {        
+    {
     }
 
     public class RouteOptionRulesBySupplier : Dictionary<string, RouteRulesByActionDataType>

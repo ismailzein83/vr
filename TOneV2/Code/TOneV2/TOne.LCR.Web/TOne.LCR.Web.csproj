@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Controllers\RoutingController.cs" />
     <Compile Include="ModelMappers\Mappers.cs" />
+    <Compile Include="Models\RouteDetailModel.cs" />
     <Compile Include="Models\RouteRuleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -139,9 +140,15 @@
     <Content Include="Client\Views\Management\EditorTemplates\RouteOverrideTemplate.html" />
     <Content Include="Client\Views\Management\EditorTemplates\ZoneController.js" />
     <Content Include="Client\Views\Management\EditorTemplates\ZoneTemplate.html" />
+    <Content Include="Client\Views\Management\RatePlanning.html" />
+    <Content Include="Client\Views\Management\RatePlanningController.js" />
+    <Content Include="Client\Views\Management\RouteDetailGrid.html" />
+    <Content Include="Client\Views\Management\RouteDetailGridController.js" />
     <Content Include="Client\Views\Management\RouteRuleEditor.html" />
     <Content Include="Client\Views\Management\RouteRuleEditorController.js" />
+    <Content Include="Client\Views\Management\RouteManager.html" />
     <Content Include="Client\Views\Management\RouteRuleManager.html" />
+    <Content Include="Client\Views\Management\RouteManagerController.js" />
     <Content Include="Client\Views\Management\RouteRuleManagerController.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    [Serializable]
+
     public class RouteDetail
     {
         public string CustomerID { get; set; }

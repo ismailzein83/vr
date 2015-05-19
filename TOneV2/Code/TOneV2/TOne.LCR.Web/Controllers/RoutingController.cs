@@ -28,7 +28,7 @@ namespace TOne.LCR.Web.Controllers
             System.Threading.Thread.Sleep(1000);
             RouteRuleManager manager = new RouteRuleManager();
             return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
-          
+
 
         }
 
@@ -41,19 +41,34 @@ namespace TOne.LCR.Web.Controllers
             if (rules != null)
                 return Mappers.MapRouteRules(rules);
             else
-                return null;            
+                return null;
         }
 
         [HttpGet]
         [TOne.Entities.SecureAction("View")]
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
-           
+
             RouteRuleManager manager = new RouteRuleManager();
             return manager.GetRouteRuleDetails(RouteRuleId);
 
         }
-        
+
+        [HttpGet]
+        [TOne.Entities.SecureAction("View")]
+        public IEnumerable<RouteDetail> GetRoutes(int pageNumber, int pageSize, string customerId, string code, int ourZoneId)
+        {
+            RouteManager manager = new RouteManager();
+            return manager.GetRoutes(customerId, code, ourZoneId == 0 ? (int?)null : ourZoneId).Skip(pageNumber * pageSize).Take(pageSize);
+        }
+        [HttpGet]
+        [TOne.Entities.SecureAction("View")]
+        public IEnumerable<RouteDetailModel> GetRoutes()
+        {
+            RouteManager manager = new RouteManager();
+
+            return Mappers.MapRouteDetails(manager.GetRoutes("C120", "961", (int?)null).Skip(20).Take(20));
+        }
     }
 
     #region Argument Classes
@@ -66,11 +81,20 @@ namespace TOne.LCR.Web.Controllers
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
     }
+
+    public class GetFiltertedRoutesInput
+    {
+        public int ZoneId { get; set; }
+        public string Code { get; set; }
+        public string CustomerId { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+    }
     #endregion
 
     public class CustomJSONTypeHandlingAttribure : Attribute, IControllerConfiguration
     {
-      public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
+        public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
         {
             controllerSettings.Formatters.Clear();
             var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
