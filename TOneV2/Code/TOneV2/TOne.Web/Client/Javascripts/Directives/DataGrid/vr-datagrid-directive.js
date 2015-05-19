@@ -32,6 +32,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             if (ctrl.maxheight != undefined) {
                 ctrl.gridStyle['max-height'] = ctrl.maxheight;
                 ctrl.gridStyle['overflow-y'] = "auto";
+                ctrl.gridStyle['overflow-x'] = "hidden";
             }
 
             ctrl.headerStyle = {};

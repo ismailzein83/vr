@@ -1,34 +1,66 @@
-﻿appControllers.controller('UserEditorController', function UserEditorController($scope, UsersAPIService, $modal) {
+﻿appControllers.controller('UserEditorController', function UserEditorController($scope, UsersAPIService, VRNavigationService) {
 
-    if ($scope.user != undefined) {
-        $scope.txtName=   $scope.user.Name;
-        $scope.txtPassword=   $scope.user.Password;
-        $scope.txtEmail=   $scope.user.Email;
-        $scope.txtDescription=   $scope.user.Description;
+    var parameters = VRNavigationService.getParameters($scope);
+
+
+    if (parameters != undefined) {
+        $scope.txtName = parameters.Name;
+        $scope.txtPassword = parameters.Password;
+        $scope.txtEmail = parameters.Email;
+        $scope.txtDescription = parameters.Description;
     }
 
     $scope.SaveUser = function () {
-        var user = {
+        var user = {};
+        
+        if (parameters != undefined)
+        {
+            user = {
 
-            UserId: null,
-            Name: $scope.txtName,
-            Password: $scope.txtPassword,
-            Email: $scope.txtEmail,
-            Description: $scope.txtDescription
+                UserId: parameters.UserId,
+                Name: $scope.txtName,
+                Password: $scope.txtPassword,
+                Email: $scope.txtEmail,
+                Description: $scope.txtDescription
+            }
         }
-        UsersAPIService.SaveUser(user).then(function (response) {
+        else
+        {
+            user = {
 
-        }).finally(function () {
-            $scope.$hide();
-            $scope.callBack();
-            $scope.grid.itemAdded(user);
+                Name: $scope.txtName,
+                Password: $scope.txtPassword,
+                Email: $scope.txtEmail,
+                Description: $scope.txtDescription
+            }
+        }
+        
+        if (user.UserId == null) {
+            UsersAPIService.AddUser(user).then(function (response) {
+                if ($scope.onUserAdded != undefined)
+                    $scope.onUserAdded(user);
 
-        });
+            }).finally(function () {
+                $scope.$hide();
+                $scope.grid.itemAdded(user);
+
+            });
+        }
+        else {
+            UsersAPIService.EditUser(user).then(function (response) {
+                if ($scope.onUserUpdated != undefined)
+                    $scope.onUserUpdated(user);
+
+            }).finally(function () {
+                $scope.$hide();
+                $scope.grid.itemAdded(user);
+
+            });
+        }
     };
 
     $scope.hide = function () {
         $scope.$hide();
     };
-
 
 });
