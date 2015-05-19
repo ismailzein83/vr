@@ -6,45 +6,36 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class AverageAggregate : IAggregate
     {
 
-        Func<CDR, bool> condition;
-        MethodInfo propertyGetMethod;
-        Func<CDR, Decimal> cdrExpressionToSum;
-        decimal sum;
-        int count;
+        Func<CDR, bool> _condition;
+        MethodInfo _propertyGetMethod;
+        Func<CDR, Decimal> _cdrExpressionToSum;
+        decimal _sum;
+        int _count;
 
 
-        public AverageAggregate(string propertyName, Func<CDR, bool> condition)
-        {
-            this.propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
-            this.condition = condition;
-        }
+     
 
-        public AverageAggregate(Func<CDR, Decimal> cdrExpressionToSum, Func<CDR, bool> condition)
-        {
-            this.cdrExpressionToSum = cdrExpressionToSum;
-            this.condition = condition;
-        }
 
         public void Reset()
         {
-            this.sum = 0;
-            this.count = 0;
+            this._sum = 0;
+            this._count = 0;
         }
 
         public void EvaluateCDR(CDR cdr)
         {
-            if (this.condition == null || this.condition(cdr))
+            if (this._condition == null || this._condition(cdr))
             {
-                if (this.cdrExpressionToSum != null)
+                if (this._cdrExpressionToSum != null)
                 {
-                    this.sum += this.cdrExpressionToSum(cdr);
-                    this.count++;
+                    this._sum += this._cdrExpressionToSum(cdr);
+                    this._count++;
                 }
                     
                 else
                 {
-                    this.sum += (Decimal)this.propertyGetMethod.Invoke(cdr, null);
-                    this.count++;
+                    this._sum += (Decimal)this._propertyGetMethod.Invoke(cdr, null);
+                    this._count++;
                 }
                     
             }
@@ -52,10 +43,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public decimal GetResult()
         {
-            if (this.sum == 0 || this.count == 0)
+            if (this._sum == 0 || this._count == 0)
                 return 0;
             else
-                return decimal.Parse((this.sum / this.count).ToString());
+                return decimal.Parse((this._sum / this._count).ToString());
         }
 
 

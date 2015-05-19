@@ -8,47 +8,43 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class DistinctCountAggregate : IAggregate
     {
 
-        Func<CDR, bool> condition;
-        MethodInfo propertyGetMethod;
-        Func<CDR, Object> cdrExpressionToCountDistinct;
-        HashSet<Object> distinctItems = new HashSet<Object>();
+        Func<CDR, bool> _condition;
+        MethodInfo _propertyGetMethod;
+        Func<CDR, Object> _cdrExpressionToCountDistinct;
+        HashSet<Object> _distinctItems = new HashSet<Object>();
 
-        public DistinctCountAggregate(string propertyName, Func<CDR, bool> condition)
-        {
-            this.propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
-            this.condition = condition;
-        }
+       
 
         public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
         {
-            this.cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
-            this.condition = condition;
+            this._cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
+            this._condition = condition;
         }
 
         public void Reset()
         {
-            distinctItems.Clear();
+            _distinctItems.Clear();
         }
 
         public void EvaluateCDR(CDR cdr)
         {
-            if (this.condition == null || this.condition(cdr))
+            if (this._condition == null || this._condition(cdr))
             {
-                if (this.cdrExpressionToCountDistinct != null)
+                if (this._cdrExpressionToCountDistinct != null)
                 {
-                    distinctItems.Add(this.cdrExpressionToCountDistinct(cdr));
+                    _distinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
                 }
 
                 else
                 {
-                    distinctItems.Add((String)this.propertyGetMethod.Invoke(cdr, null));
+                    _distinctItems.Add((String)this._propertyGetMethod.Invoke(cdr, null));
                 }
             }
         }
 
         public decimal GetResult()
         {
-            return decimal.Parse(distinctItems.Count().ToString());
+            return decimal.Parse(_distinctItems.Count().ToString());
         }
 
 

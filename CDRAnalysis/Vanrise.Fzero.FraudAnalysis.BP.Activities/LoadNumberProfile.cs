@@ -130,11 +130,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 if (inputArgument.PeriodId == (int)Enums.Period.Day)
                 {
-                    numberProfile.ToDate = normalCDR.ConnectDateTime.AddDays(1);
+                    numberProfile.ToDate = normalCDR.ConnectDateTime.Value.AddDays(1);
                 }
                 else if (inputArgument.PeriodId == (int)Enums.Period.Hour)
                 {
-                    numberProfile.ToDate = normalCDR.ConnectDateTime.AddHours(1);
+                    numberProfile.ToDate = normalCDR.ConnectDateTime.Value.AddHours(1);
                 }
 
                 numberProfile.PeriodId = inputArgument.PeriodId;

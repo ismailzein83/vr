@@ -35,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "TotalDataVolume",
                 Aggregation = new SumAggregate((cdr) =>
                 {
-                    return cdr.UpVolume + cdr.DownVolume;
+                    return decimal.Parse((!cdr.UpVolume.HasValue && !cdr.DownVolume.HasValue ? 0:((!cdr.UpVolume.HasValue && cdr.DownVolume.HasValue)? cdr.DownVolume.Value: ((cdr.UpVolume.HasValue && !cdr.DownVolume.HasValue)? cdr.DownVolume.Value:0))).ToString());
                 }, null)
             });
 
@@ -140,12 +140,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                (cdr) =>
                {
-                   return cdr.DurationInSeconds / 60;
+                   return cdr.DurationInSeconds.Value / 60;
                },
 
                (cdr) =>
                {
-                   return ( cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
+                   return (cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
                }
             )
             });
@@ -157,12 +157,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                 (cdr) =>
                 {
-                    return cdr.DurationInSeconds;
+                    return cdr.DurationInSeconds.Value;
                 },
 
                 (cdr) =>
                 {
-                    return (cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
+                    return (cdr.DurationInSeconds.HasValue && cdr.CallType == (int)Enums.CallType.OutgoingVoiceCall);
                 }
             )
             });
@@ -175,12 +175,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                (cdr) =>
                {
-                   return cdr.DurationInSeconds / 60;
+                   return decimal.Parse(( cdr.DurationInSeconds.Value / 60).ToString());
                },
 
                (cdr) =>
                {
-                   return (cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.IncomingVoiceCall);
+                   return (cdr.DurationInSeconds.HasValue && cdr.DurationInSeconds != 0 && cdr.CallType == (int)Enums.CallType.IncomingVoiceCall);
                }
             )
             });
@@ -193,12 +193,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Aggregation = new SumAggregate(
                 (cdr) =>
                 {
-                    return cdr.DurationInSeconds;
+                    return cdr.DurationInSeconds.Value;
                 },
 
                 (cdr) =>
                 {
-                    return (cdr.CallType == (int)Enums.CallType.IncomingVoiceCall);
+                    return (cdr.DurationInSeconds.HasValue && cdr.CallType == (int)Enums.CallType.IncomingVoiceCall);
                 }
             )
             });

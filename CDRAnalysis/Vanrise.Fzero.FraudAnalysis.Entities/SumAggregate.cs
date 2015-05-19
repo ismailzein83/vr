@@ -9,13 +9,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         Func<CDR, bool> _condition;
         MethodInfo _propertyGetMethod;
         Func<CDR, Decimal> _cdrExpressionToSum;
-        decimal Sum;
+        decimal _sum;
 
-        public SumAggregate(string propertyName, Func<CDR, bool> condition)
-        {
-            _propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
-            _condition = condition;
-        }
+       
 
         public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum, Func<CDR, bool> condition)
         {
@@ -25,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public void Reset()
         {
-            Sum = 0;
+            _sum = 0;
         }
 
         public void EvaluateCDR(CDR cdr)
@@ -33,15 +29,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             if (_condition == null || _condition(cdr))
             {
                 if(_cdrExpressionToSum != null)
-                    Sum += _cdrExpressionToSum(cdr);
+                    _sum += _cdrExpressionToSum(cdr);
                 else
-                    Sum += (Decimal)_propertyGetMethod.Invoke(cdr, null);
+                    _sum += (Decimal)_propertyGetMethod.Invoke(cdr, null);
             }
         }
 
         public decimal GetResult()
         {
-            return decimal.Parse(Sum.ToString());
+            return decimal.Parse(_sum.ToString());
         }
 
 
