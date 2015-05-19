@@ -64,7 +64,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="NumberCriteriaBatch.cs" />
-    <Compile Include="NormalCDR.cs" />
+    <Compile Include="CDR.cs" />
     <Compile Include="NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
