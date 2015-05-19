@@ -17,10 +17,10 @@ appControllers.controller('UserManagementController', function UserController($s
     //load();
 
     $scope.gridMenuActions = [{
-        name: "Edit",
+        name: "Update",
         clicked: function (dataItem) {
             var modalScope = VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', false, dataItem);
-            modalScope.title = "Edit User";
+            modalScope.title = "Update User";
             modalScope.onUserUpdated = function (user) {
                 gridApi.itemUpdated(user);
             };
@@ -90,6 +90,14 @@ appControllers.controller('UserManagementController', function UserController($s
     $scope.ValidateUser = function (text) {
         if(text.length < 3)
             return "Invalid";
+
+
+
+
+
+
+
+
     }
 
     $scope.AddNewUser = function () {

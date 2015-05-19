@@ -1,4 +1,4 @@
-﻿appControllers.controller('UserEditorController', function UserEditorController($scope, UsersAPIService, VRNavigationService) {
+﻿appControllers.controller('UserUpdateorController', function UserUpdateorController($scope, UsersAPIService, VRNavigationService) {
 
     var parameters = VRNavigationService.getParameters($scope);
 
@@ -47,7 +47,7 @@
             });
         }
         else {
-            UsersAPIService.EditUser(user).then(function (response) {
+            UsersAPIService.UpdateUser(user).then(function (response) {
                 if ($scope.onUserUpdated != undefined)
                     $scope.onUserUpdated(user);
 

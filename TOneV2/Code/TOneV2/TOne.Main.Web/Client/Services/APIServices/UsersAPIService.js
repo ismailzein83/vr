@@ -5,7 +5,7 @@
         GetUserList: GetUserList,
         DeleteUser: DeleteUser,
         AddUser: AddUser,
-        EditUser: EditUser,
+        UpdateUser: UpdateUser,
         SearchUser: SearchUser
     });
 
@@ -38,8 +38,8 @@
            );
     }
 
-    function EditUser(user) {
-        return BaseAPIService.post("/api/User/EditUser",
+    function UpdateUser(user) {
+        return BaseAPIService.post("/api/User/UpdateUser",
             {
                 UserId: user.UserId,
                 Name: user.Name,

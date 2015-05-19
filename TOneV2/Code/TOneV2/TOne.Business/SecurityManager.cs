@@ -63,34 +63,6 @@ namespace TOne.Business
                 return null;
         }
 
-        public List<TOne.Entities.User> GetUsers(int DisplayStart, int DisplayLength)
-        {
-            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            return datamanager.GetUsers(DisplayStart, DisplayLength);
-        }
-
-        public void DeleteUser(int Id)
-        {
-            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            datamanager.DeleteUser(Id);
-        }
-
-        public void AddUser(User user)
-        {
-            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            datamanager.AddUser(user);
-        }
-
-        public void EditUser(User user)
-        {
-            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            datamanager.EditUser(user);
-        }
-
-        public List<TOne.Entities.User> SearchUser(string name, string email)
-        {
-            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            return datamanager.SearchUser(name, email);
-        }
+ 
     }
 }

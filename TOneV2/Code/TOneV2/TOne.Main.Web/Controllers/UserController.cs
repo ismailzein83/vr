@@ -12,38 +12,38 @@ namespace TOne.Main.Web.Controllers
     public class UserController : ApiController
     {
         [HttpGet]
-        public IEnumerable<User> GetUsers(int pageNumber, int pageSize)
+        public IEnumerable<User> GetUsers(int fromRow, int toRow)
         {
-            SecurityManager manager = new SecurityManager();
+            UserManager manager = new UserManager();
             //return ((IEnumerable<User>)(manager.GetUsers())).Skip(pageNumber * pageSize).Take(pageSize);
-            return ((IEnumerable<User>)(manager.GetUsers(pageNumber, pageSize)));
+            return ((IEnumerable<User>)(manager.GetUsers(fromRow, toRow)));
         }
 
         [HttpGet]
         public void DeleteUser(int Id)
         {
-            SecurityManager manager = new SecurityManager();
+            UserManager manager = new UserManager();
             manager.DeleteUser(Id);
         }
 
         [HttpPost]
-        public void EditUser(User user)
+        public bool UpdateUser(User user)
         {
-            SecurityManager manager = new SecurityManager();
-            manager.EditUser(user);
+            UserManager manager = new UserManager();
+            return manager.UpdateUser(user);
         }
 
-        public void AddUser(User user)
+        public User AddUser(User user)
         {
-            SecurityManager manager = new SecurityManager();
-            manager.AddUser(user);
+            UserManager manager = new UserManager();
+            return manager.AddUser(user);
         }
 
 
         [HttpGet]
         public List<User> SearchUser(string Name, string Email)
         {
-            SecurityManager manager = new SecurityManager();
+            UserManager manager = new UserManager();
             return manager.SearchUser(Name, Email);
         }
     }
