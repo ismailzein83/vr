@@ -38,4 +38,22 @@ namespace TOne.Web.Reports
 
         public decimal Attemps { get; set; }
     }
+
+    public class ReportSubModelMatirx
+    {
+        public void TestMethod(ReportModelMatirx model)
+        {
+
+        }
+
+        public List<ReportSubModelMatirx> GetSubReportMatrix()
+        {
+            return null;
+        }
+        public string Day { get; set; }
+
+        public decimal Attemps { get; set; }
+
+        public string Month { get; set; }
+    }
 }

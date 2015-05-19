@@ -1,6 +1,7 @@
 ﻿using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -22,6 +23,9 @@ namespace TOne.Web.Reports
             {
                 ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/TestReport.rdlc");
+
+              
+
                 List<ReportModel> dataSource = new List<ReportModel>();
                 dataSource.Add(new ReportModel { Title = "Item 1", Value = 4 });
                 dataSource.Add(new ReportModel { Title = "Item 2", Value = 6 });
@@ -118,7 +122,14 @@ namespace TOne.Web.Reports
                 datamatrix.Add(new ReportModelMatirx { ZoneName = "Syria-Mobile-MTN", Month = "December", Attemps = 757 });
                 datamatrix.Add(new ReportModelMatirx { ZoneName = "Syria-Mobile-Syriatel", Month = "December", Attemps = 125 });
 
+
+
+               
+
+
                 ReportDataSource ds = new ReportDataSource("DataSet2", ds2);
+               
+
 
                 ReportDataSource datasource = new ReportDataSource("ReportModel", dataSource);
                 ReportDataSource matrixdata = new ReportDataSource("MatrixModel", datamatrix);
@@ -126,8 +137,31 @@ namespace TOne.Web.Reports
                 ReportViewer1.LocalReport.DataSources.Add(datasource);
                 ReportViewer1.LocalReport.DataSources.Add(ds);
                 ReportViewer1.LocalReport.DataSources.Add(matrixdata);
+              
                 
             }
+            ReportViewer1.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(DemoDrillthroughEventHandler);
+        }
+        private List<ReportSubModelMatirx> LoadData(string s)
+        {
+            List<ReportSubModelMatirx> dataSubmatrix = new List<ReportSubModelMatirx>();
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Monday", Attemps = 10, Month = "January" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Tuesday", Attemps = 11, Month = "February" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Wednesday", Attemps = 12, Month = "March" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Thursday", Attemps = 13, Month = "April" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Friday", Attemps = 14, Month = "June" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Saturday", Attemps = 15, Month = "July" });
+            dataSubmatrix.Add(new ReportSubModelMatirx { Day = "Sunday", Attemps = 16, Month = "October" });
+
+            return dataSubmatrix.Where( x => x.Month == s ).ToList();
+        }
+
+        void DemoDrillthroughEventHandler(object sender, SubreportProcessingEventArgs e)
+        {   
+            string s = e.Parameters["MonthName"].Values.First().ToString();
+            e.DataSources.Clear();
+            e.DataSources.Add(new ReportDataSource("DataSet1",
+                LoadData(s)));
         }
 
         protected override void Render(HtmlTextWriter writer)
