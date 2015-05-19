@@ -7,7 +7,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class FraudManager
     {
-        private List<StrategyLevelWithCriterias> levelsByPriority;
+        private List<StrategyLevelWithCriterias> _levelsByPriority;
+        CriteriaManager _criteriaManager = new CriteriaManager();
 
         public FraudManager(Strategy strategy) 
         {
@@ -24,11 +25,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 throw new ArgumentNullException("strategy.StrategyCriterias");
 
             var criteriaManager = new CriteriaManager();
-            Dictionary<int, CriteriaDefinition> dictionary_int_criteriaDefinition = criteriaManager.GetCriteriaDefinitions();
-            if (dictionary_int_criteriaDefinition == null)
-                throw new ArgumentNullException("dictionary_int_criteriaDefinitions");
+            Dictionary<int, CriteriaDefinition> criteriaDefinitions = criteriaManager.GetCriteriaDefinitions();
+            if (criteriaDefinitions == null)
+                throw new ArgumentNullException("criteriaDefinitions");
 
-            levelsByPriority = new List<StrategyLevelWithCriterias>();
+            _levelsByPriority = new List<StrategyLevelWithCriterias>();
 
 
             foreach (StrategyLevel i in strategy.StrategyLevels)
@@ -38,12 +39,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 strategyLevelWithCriterias.SuspectionLevelId = i.SuspectionLevelId;
 
 
-                strategyLevelWithCriterias.LevelCriteriasThresholdPercentage = new List<LevelCriteria_Threshold_Percentage>();
+                strategyLevelWithCriterias.LevelCriteriasThresholdPercentage = new List<LevelCriteriaInfo>();
 
                 foreach (var j in i.StrategyLevelCriterias)
                 {
-                    LevelCriteria_Threshold_Percentage levelCriteriasThresholdPercentage = new LevelCriteria_Threshold_Percentage();
-                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = dictionary_int_criteriaDefinition.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.CompareOperator, CriteriaId = j.CriteriaId, Description = dictionary_int_criteriaDefinition.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.Description };
+                    LevelCriteriaInfo levelCriteriasThresholdPercentage = new LevelCriteriaInfo();
+                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.CompareOperator, CriteriaId = j.CriteriaId, Description = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage=j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold=strategy.StrategyCriterias.Where(x=>x.CriteriaId==j.CriteriaId).FirstOrDefault().Threshold;
                     
@@ -51,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 }
 
 
-                levelsByPriority.Add(strategyLevelWithCriterias);
+                _levelsByPriority.Add(strategyLevelWithCriterias);
 
             }
 
@@ -65,20 +66,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             Dictionary<int, Decimal> criteriaValues ;
             bool IsSuspicious = false;
 
-            foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in levelsByPriority)
+            foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in _levelsByPriority)
             {
                 IsSuspicious = false;
 
                 criteriaValues = new Dictionary<int, decimal>();
 
-                foreach (LevelCriteria_Threshold_Percentage LevelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
+                foreach (LevelCriteriaInfo LevelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                 {
-
-                    CriteriaManager criteriaManager = new CriteriaManager();
-
-                    Decimal ValueoverPercentage = criteriaManager.GetCriteriaValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions, profile) / LevelCriteriaThresholdPercentage.Percentage;
-
-                    criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, ValueoverPercentage);
+                    
+                    Decimal criteriaValue;
+                    if (!criteriaValues.TryGetValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, out criteriaValue))
+                    {
+                        criteriaValue = _criteriaManager.GetCriteriaValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions, profile) ;
+                        criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, criteriaValue);
+                    }
+                    Decimal ValueoverPercentage = criteriaValue / LevelCriteriaThresholdPercentage.Percentage;
 
                     if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
                     {
@@ -127,10 +130,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             public int SuspectionLevelId { get; set; }
 
-            public List<LevelCriteria_Threshold_Percentage> LevelCriteriasThresholdPercentage { get; set; }
+            public List<LevelCriteriaInfo> LevelCriteriasThresholdPercentage { get; set; }
         }
 
-        private class LevelCriteria_Threshold_Percentage
+        private class LevelCriteriaInfo
         {
             public CriteriaDefinition CriteriaDefinitions { get; set; }
 
