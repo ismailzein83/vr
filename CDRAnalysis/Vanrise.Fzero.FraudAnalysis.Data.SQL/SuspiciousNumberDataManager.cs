@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                
 
                 stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}",
-                             new[] { suspiciousNumber.DateDay.Value.ToString(), suspiciousNumber.Number.ToString(), sValues[0], sValues[1], sValues[2], sValues[3], sValues[4], sValues[5], sValues[6], sValues[7], sValues[8], sValues[9], sValues[10], sValues[11], sValues[12], sValues[13], sValues[14], suspiciousNumber.SuspectionLevel.ToString(), strategy.Id.ToString(), suspiciousNumber.PeriodId.ToString() }
+                             new[] { suspiciousNumber.DateDay.Value.ToString(), suspiciousNumber.Number.ToString(), sValues[0], sValues[1], sValues[2], sValues[3], sValues[4], sValues[5], sValues[6], sValues[7], sValues[8], sValues[9], sValues[10], sValues[11], sValues[12], sValues[13], sValues[14], suspiciousNumber.SuspectionLevel.ToString(), strategy.Id.ToString(), ((int)suspiciousNumber.Period).ToString() }
                );
 
             }
