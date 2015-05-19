@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
-        public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<NormalCDR> onBatchReady)
+        public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
         {
             MySQLManager manager = new MySQLManager();
             string query_GetCDRRange = @"SELECT  `Id` ,`MSISDN` ,`IMSI` ,`ConnectDateTime` ,`Destination` ,`DurationInSeconds` ,`DisconnectDateTime` ,`Call_Class`  ,`IsOnNet` ,`Call_Type` ,`Sub_Type` ,`IMEI`
@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 }, (reader) =>
             {
 
-                NormalCDR normalCDR = new NormalCDR();
+                CDR normalCDR = new CDR();
                 int count = 0;
                 int currentIndex = 0;
 

@@ -3,7 +3,7 @@
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class NormalCDR
+    public class CDR
     {
 
 

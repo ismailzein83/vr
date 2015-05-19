@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class CountAggregate:IAggregate
     {
         string conditionExpression;
-        Func<NormalCDR, bool> condition;
+        Func<CDR, bool> condition;
         int count;
 
 
@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         }
 
 
-        public CountAggregate(Func<NormalCDR,bool> condition)
+        public CountAggregate(Func<CDR,bool> condition)
         {
             this.condition = condition;
         }
@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             this.count = 0;
         }
 
-        public void EvaluateCDR(NormalCDR cdr)
+        public void EvaluateCDR(CDR cdr)
         {
             if (this.condition == null || this.condition(cdr))
                 this.count++;

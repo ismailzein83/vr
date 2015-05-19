@@ -8,18 +8,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class DistinctCountAggregate : IAggregate
     {
 
-        Func<NormalCDR, bool> condition;
+        Func<CDR, bool> condition;
         MethodInfo propertyGetMethod;
-        Func<NormalCDR, Object> cdrExpressionToCountDistinct;
+        Func<CDR, Object> cdrExpressionToCountDistinct;
         HashSet<Object> distinctItems = new HashSet<Object>();
 
-        public DistinctCountAggregate(string propertyName, Func<NormalCDR, bool> condition)
+        public DistinctCountAggregate(string propertyName, Func<CDR, bool> condition)
         {
-            this.propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
+            this.propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
             this.condition = condition;
         }
 
-        public DistinctCountAggregate(Func<NormalCDR, Object> cdrExpressionToCountDistinct, Func<NormalCDR, bool> condition)
+        public DistinctCountAggregate(Func<CDR, Object> cdrExpressionToCountDistinct, Func<CDR, bool> condition)
         {
             this.cdrExpressionToCountDistinct = cdrExpressionToCountDistinct;
             this.condition = condition;
@@ -30,7 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             distinctItems.Clear();
         }
 
-        public void EvaluateCDR(NormalCDR cdr)
+        public void EvaluateCDR(CDR cdr)
         {
             if (this.condition == null || this.condition(cdr))
             {

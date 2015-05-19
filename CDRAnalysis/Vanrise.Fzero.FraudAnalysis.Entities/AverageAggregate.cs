@@ -6,20 +6,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class AverageAggregate : IAggregate
     {
 
-        Func<NormalCDR, bool> condition;
+        Func<CDR, bool> condition;
         MethodInfo propertyGetMethod;
-        Func<NormalCDR, Decimal> cdrExpressionToSum;
+        Func<CDR, Decimal> cdrExpressionToSum;
         decimal sum;
         int count;
 
 
-        public AverageAggregate(string propertyName, Func<NormalCDR, bool> condition)
+        public AverageAggregate(string propertyName, Func<CDR, bool> condition)
         {
-            this.propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
+            this.propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
             this.condition = condition;
         }
 
-        public AverageAggregate(Func<NormalCDR, Decimal> cdrExpressionToSum, Func<NormalCDR, bool> condition)
+        public AverageAggregate(Func<CDR, Decimal> cdrExpressionToSum, Func<CDR, bool> condition)
         {
             this.cdrExpressionToSum = cdrExpressionToSum;
             this.condition = condition;
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             this.count = 0;
         }
 
-        public void EvaluateCDR(NormalCDR cdr)
+        public void EvaluateCDR(CDR cdr)
         {
             if (this.condition == null || this.condition(cdr))
             {

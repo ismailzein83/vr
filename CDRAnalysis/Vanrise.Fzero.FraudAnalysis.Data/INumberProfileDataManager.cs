@@ -5,6 +5,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface INumberProfileDataManager : IDataManager 
     {
-        void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<NormalCDR> onBatchReady);
+        void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady);
     }
 }

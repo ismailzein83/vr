@@ -6,18 +6,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class SumAggregate:IAggregate
     {
 
-        Func<NormalCDR, bool> _condition;
+        Func<CDR, bool> _condition;
         MethodInfo _propertyGetMethod;
-        Func<NormalCDR, Decimal> _cdrExpressionToSum;
+        Func<CDR, Decimal> _cdrExpressionToSum;
         decimal Sum;
 
-        public SumAggregate(string propertyName, Func<NormalCDR, bool> condition)
+        public SumAggregate(string propertyName, Func<CDR, bool> condition)
         {
-            _propertyGetMethod = typeof(NormalCDR).GetProperty(propertyName).GetGetMethod();
+            _propertyGetMethod = typeof(CDR).GetProperty(propertyName).GetGetMethod();
             _condition = condition;
         }
 
-        public SumAggregate(Func<NormalCDR, Decimal> cdrExpressionToSum, Func<NormalCDR, bool> condition)
+        public SumAggregate(Func<CDR, Decimal> cdrExpressionToSum, Func<CDR, bool> condition)
         {
             _cdrExpressionToSum = cdrExpressionToSum;
             _condition = condition;
@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             Sum = 0;
         }
 
-        public void EvaluateCDR(NormalCDR cdr)
+        public void EvaluateCDR(CDR cdr)
         {
             if (_condition == null || _condition(cdr))
             {
