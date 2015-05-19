@@ -47,10 +47,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
 
-            FraudManager manager;
-            foreach(var strategy in inputArgument.Strategies)
-            {
-                manager = new FraudManager(strategy);
+            List<FraudManager> managers= new List<FraudManager>();
+
+                foreach (var strategy in inputArgument.Strategies)
+                {
+                   managers.Add( new FraudManager(strategy));
+                }
+
                 DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
                     bool hasItem = false;
@@ -66,10 +69,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 foreach (NumberProfile number in item.numberProfiles)
                                 {
                                     SuspiciousNumber sNumber = new SuspiciousNumber();
-                                    if (manager.IsNumberSuspicious(number, out sNumber, strategy.Id))
-                                    {
-                                        sNumbers.Add(sNumber);   
-                                    }
+                                    foreach (FraudManager manager in managers)
+                                        if (manager.IsNumberSuspicious(number, out sNumber, manager.StrategyId))
+                                        {
+                                            sNumbers.Add(sNumber);   
+                                        }
                                 }
                                 if (sNumbers.Count > 0)
                                 {
@@ -84,7 +88,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     }
                     while (!ShouldStop(handle) && hasItem);
                 });
-            }
             
             
 

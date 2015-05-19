@@ -9,9 +9,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     {
         private List<StrategyLevelWithCriterias> _levelsByPriority;
         CriteriaManager _criteriaManager = new CriteriaManager();
+        public int StrategyId { get; set; }
 
         public FraudManager(Strategy strategy) 
         {
+            StrategyId = strategy.Id;
             LoadLevelsByPriority(strategy);
         }
 
