@@ -461,7 +461,7 @@ public partial class Users : BasePage
                 break;
 
             case "Reset":
-                wucChangePassword.Load(Id);
+                wucChangePassword.LoadUser(Id);
                 ShowResetSection();
                 break;
 

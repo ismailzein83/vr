@@ -46,11 +46,11 @@ public partial class Controls_wucChangePassword : System.Web.UI.UserControl
             SetCaptions();
             if (UserID > 0)
             {
-                Load(UserID);
+                LoadUser(UserID);
             }
         }
     }
-    public void Load(int Id)
+    public void LoadUser(int Id)
     {
         this.UserID = Id;
         hfId.Value = Id.ToString();

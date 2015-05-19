@@ -169,22 +169,18 @@ public partial class StrategyProperties : BasePage
 
             bool flag = true;
 
-            if (maxValue != null)
+            CurrentThreshold.MaxValue = maxValue;
+            if (!StrategyThreshold.Save(CurrentThreshold))
             {
-                CurrentThreshold.MaxValue = maxValue;
-                if (!StrategyThreshold.Save(CurrentThreshold))
-                {
-                    flag = false;
+                flag = false;
 
-                }
             }
-            if (periodValue != 0 || periodId != null)
+            if (periodValue != 0 )
             {
                 if (periodValue != 0)
                     CurrentPeriod.Value = periodValue;
 
-                if (periodId != null)
-                    CurrentPeriod.PeriodId = periodId;
+                CurrentPeriod.PeriodId = periodId;
                 CurrentPeriod.Period = null;// Period.Load(periodId);
 
                 if (!StrategyPeriod.Save(CurrentPeriod))
