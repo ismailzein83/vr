@@ -735,6 +735,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\TestReport.rdlc" />
+    <EmbeddedResource Include="Reports\TestSubReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
