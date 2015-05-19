@@ -8,7 +8,7 @@ namespace TOne.Data
 {
     public interface ISecurityDataManager : IDataManager
     {
-        List<User> GetUsers();
+        List<User> GetUsers(int DisplayStart, int DisplayLength);
 
         void DeleteUser(int Id);
 

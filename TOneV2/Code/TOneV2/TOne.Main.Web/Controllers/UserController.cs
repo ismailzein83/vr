@@ -15,7 +15,8 @@ namespace TOne.Main.Web.Controllers
         public IEnumerable<User> GetUsers(int pageNumber, int pageSize)
         {
             SecurityManager manager = new SecurityManager();
-            return ((IEnumerable<User>)(manager.GetUsers())).Skip(pageNumber * pageSize).Take(pageSize);
+            //return ((IEnumerable<User>)(manager.GetUsers())).Skip(pageNumber * pageSize).Take(pageSize);
+            return ((IEnumerable<User>)(manager.GetUsers(pageNumber, pageSize)));
         }
 
         [HttpGet]

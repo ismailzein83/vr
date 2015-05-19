@@ -63,10 +63,10 @@ namespace TOne.Business
                 return null;
         }
 
-        public List<TOne.Entities.User> GetUsers()
+        public List<TOne.Entities.User> GetUsers(int DisplayStart, int DisplayLength)
         {
             ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            return datamanager.GetUsers();
+            return datamanager.GetUsers(DisplayStart, DisplayLength);
         }
 
         public void DeleteUser(int Id)

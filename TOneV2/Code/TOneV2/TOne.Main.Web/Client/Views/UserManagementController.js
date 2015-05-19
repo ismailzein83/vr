@@ -69,7 +69,7 @@ appControllers.controller('UserManagementController', function UserController($s
             angular.forEach(response, function (itm) {
                 $scope.users.push(itm);
             });
-            current = current + 1;
+            current = current + params.pageSize;
             last = (response.length < params.pageSize) ? true : false;
 
         }).finally(function () {

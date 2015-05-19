@@ -8,9 +8,9 @@ namespace TOne.Data.SQL
 {
     public class SecurityDataManager : BaseTOneDataManager, ISecurityDataManager
     {
-        public List<Entities.User> GetUsers()
+        public List<Entities.User> GetUsers(int DisplayStart, int DisplayLength)
         {
-            return GetItemsSP("mainmodule.sp_User_GetAll", (reader) =>
+            return GetItemsSP("mainmodule.sp_User_GetAll2", (reader) =>
             {
                 return new Entities.User
                 {
@@ -22,7 +22,7 @@ namespace TOne.Data.SQL
                     Status = reader["IsActive"].ToString().ToUpper().Equals("Y") ? Entities.UserStatus.Active : Entities.UserStatus.Inactive,
                     Description = reader["Description"] as string
                 };
-            });
+            },DisplayStart,DisplayLength);
         }
 
         public void DeleteUser(int Id)
