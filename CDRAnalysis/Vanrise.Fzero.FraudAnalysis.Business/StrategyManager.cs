@@ -5,12 +5,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyManager
     {
-        public Strategy GetDefaultStrategy()
+        public Strategy GetStrategy(int StrategyId)
         {
 
             IStrategyDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return dataManager.GetDefaultStrategy();
+            return dataManager.GetStrategy(StrategyId);
 
         }
     }

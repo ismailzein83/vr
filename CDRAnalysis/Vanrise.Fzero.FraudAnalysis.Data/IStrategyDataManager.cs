@@ -4,6 +4,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyDataManager : IDataManager 
     {
-        Strategy GetDefaultStrategy();
+        Strategy GetStrategy(int strategyId);
     }
 }

@@ -5,6 +5,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface ISuspiciousNumberDataManager : IDataManager 
     {
-        void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers, Strategy strategy);
+        void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers);
     }
 }

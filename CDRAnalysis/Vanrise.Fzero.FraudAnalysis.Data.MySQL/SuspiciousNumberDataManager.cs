@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
         }
 
-        public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers, Strategy strategy)
+        public void SaveSuspiciousNumbers(List<SuspiciousNumber> suspiciousNumbers)
         {
             string filename = GetFilePathForBulkInsert();
             string sFields = "";
@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                         }
                     }
 
-                    streamWriter.WriteLine("'0', '" + suspiciousNumber.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + suspiciousNumber.Number + "' " + sValues + ", '" + suspiciousNumber.SuspectionLevel.ToString() + "', '" + strategy.Id.ToString() + "', '" + ((int)suspiciousNumber.Period).ToString() + "'");
+                    streamWriter.WriteLine("'0', '" + suspiciousNumber.DateDay.Value.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + suspiciousNumber.Number + "' " + sValues + ", '" + suspiciousNumber.SuspectionLevel.ToString() + "', '" + suspiciousNumber.StrategyId.ToString() + "', '" + ((int)suspiciousNumber.Period).ToString() + "'");
 
                 }
                 streamWriter.Close();

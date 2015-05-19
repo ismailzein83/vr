@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -12,11 +14,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public Strategy GetDefaultStrategy()
+        public Strategy GetStrategy(int strategyId)
         {
-            string query0 = "SELECT Id FROM Strategy s WHERE s.IsDefault = 1";
-            string query = "SELECT MaxValue, CriteriaID FROM StrategyThreshold sl inner join Strategy s on sl.StrategyId=s.Id  WHERE s.IsDefault = 1";
-            string query2 = "SELECT LevelId, CriteriaId1, Cr1Per ,  CriteriaId2 ,  Cr2Per ,  CriteriaId3 ,  Cr3Per ,  CriteriaId4 ,  Cr4Per ,  CriteriaId5 ,  Cr5Per ,  CriteriaId6 ,  Cr6Per ,  CriteriaId7 ,  Cr7Per ,  CriteriaId8 ,  Cr8Per ,  CriteriaId9 ,  Cr9Per ,  CriteriaId10 ,  Cr10Per ,  CriteriaId11 ,  Cr11Per ,  CriteriaId12 ,  Cr12Per ,  CriteriaId13 ,  Cr13Per ,  CriteriaId14 ,  Cr14Per ,  CriteriaId15 ,  Cr15Per   FROM  Strategy_Suspicion_Level sl inner join  Strategy s on sl.StrategyId=s.Id  WHERE s.IsDefault = 1 and sl.LevelId<>1  ";
+            string query0 = "SELECT Id FROM Strategy WHERE Id = @StrategyId";
+            string query = "SELECT MaxValue, CriteriaID FROM StrategyThreshold Where StrategyId = @StrategyId";
+            string query2 = "SELECT LevelId, CriteriaId1, Cr1Per ,  CriteriaId2 ,  Cr2Per ,  CriteriaId3 ,  Cr3Per ,  CriteriaId4 ,  Cr4Per ,  CriteriaId5 ,  Cr5Per ,  CriteriaId6 ,  Cr6Per ,  CriteriaId7 ,  Cr7Per ,  CriteriaId8 ,  Cr8Per ,  CriteriaId9 ,  Cr9Per ,  CriteriaId10 ,  Cr10Per ,  CriteriaId11 ,  Cr11Per ,  CriteriaId12 ,  Cr12Per ,  CriteriaId13 ,  Cr13Per ,  CriteriaId14 ,  Cr14Per ,  CriteriaId15 ,  Cr15Per   FROM  Strategy_Suspicion_Level Where StrategyId = @StrategyId and LevelId<>1  ";
             
             Strategy strategy = new Strategy();
 
@@ -25,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return GetReaderValue<int>(reader, "Id") ;
             } ,(cmd) =>
             {
-                //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
+                cmd.Parameters.Add(new SqlParameter(){ParameterName="@StrategyId", Value=strategyId});
             });
 
 
@@ -39,7 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
            }, (cmd) =>
            {
 
-               //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
+               cmd.Parameters.Add(new SqlParameter(){ParameterName="@StrategyId", Value=strategyId});
 
            });
 
@@ -68,9 +70,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 return strategyLevel;
             }, (cmd) =>
             {
-
-                //cmd.Parameters.AddWithValue("@StrategyId", strategyId);
-
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
             });
 
             return strategy;

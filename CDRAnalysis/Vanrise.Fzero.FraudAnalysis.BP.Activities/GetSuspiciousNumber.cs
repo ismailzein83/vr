@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<SuspiciousNumberBatch> OutputQueue { get; set; }
 
-        public Strategy Strategy { get; set; }
+        public List<Strategy> Strategies { get; set; }
     }
 
     #endregion
@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueue { get; set; }
 
         [RequiredArgument]
-        public InArgument<Strategy> Strategy { get; set; }
+        public InArgument<List<Strategy>> Strategies { get; set; }
 
         #endregion
 
@@ -46,40 +46,47 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
-            FraudManager manager = new FraudManager(inputArgument.Strategy);
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+
+            FraudManager manager;
+            foreach(var strategy in inputArgument.Strategies)
             {
-                bool hasItem = false;
-                do
+                manager = new FraudManager(strategy);
+                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
+                    bool hasItem = false;
+                    do
+                    {
 
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (item) =>
-                        {
-
-                            List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
-
-                            foreach (NumberProfile number in item.numberProfiles)
+                        hasItem = inputArgument.InputQueue.TryDequeue(
+                            (item) =>
                             {
-                                SuspiciousNumber sNumber = new SuspiciousNumber();
-                                if (manager.IsNumberSuspicious(number, out sNumber))
+
+                                List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
+
+                                foreach (NumberProfile number in item.numberProfiles)
                                 {
-                                    sNumbers.Add(sNumber);   
+                                    SuspiciousNumber sNumber = new SuspiciousNumber();
+                                    if (manager.IsNumberSuspicious(number, out sNumber, strategy.Id))
+                                    {
+                                        sNumbers.Add(sNumber);   
+                                    }
                                 }
-                            }
-                            if (sNumbers.Count > 0)
-                            {
-                                inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
-                                    suspiciousNumbers = sNumbers
-                                });
-                                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Count Items: {0} ", sNumbers.Count);
-                            }
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Dequeued Count Items: {0} ", item.numberProfiles.Count);
+                                if (sNumbers.Count > 0)
+                                {
+                                    inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
+                                        suspiciousNumbers = sNumbers
+                                    });
+                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Count Items: {0} ", sNumbers.Count);
+                                }
+                                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Dequeued Count Items: {0} ", item.numberProfiles.Count);
 
-                        });
-                }
-                while (!ShouldStop(handle) && hasItem);
-            });
+                            });
+                    }
+                    while (!ShouldStop(handle) && hasItem);
+                });
+            }
+            
+            
 
 
 
@@ -92,7 +99,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
-                Strategy = this.Strategy.Get(context)
+                Strategies = this.Strategies.Get(context)
             };
         }
     }

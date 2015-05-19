@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             
         }
 
-        public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber)
+        public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber, int StrategyId)
         {
             suspiciousNumber = null;
          
@@ -118,6 +118,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     suspiciousNumber.CriteriaValues = criteriaValues;
                     suspiciousNumber.DateDay = profile.FromDate;
                     suspiciousNumber.Period = profile.Period;
+                    suspiciousNumber.StrategyId = StrategyId;
                     return IsSuspicious;
                 }
             }
