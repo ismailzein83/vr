@@ -235,6 +235,7 @@
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
     <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
+    <Content Include="Client\Javascripts\Services\ModalService\vr-confirmation-modal.html" />
     <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.html" />
     <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.js" />
     <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
