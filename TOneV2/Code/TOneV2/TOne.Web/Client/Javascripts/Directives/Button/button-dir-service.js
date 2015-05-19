@@ -32,9 +32,19 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Save",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
+            case "Yes":
+                return {
+                    text: "Yes",
+                    class: "glyphicon  glyphicon-floppy-disk"
+                };
             case "Close":
                 return {
                     text: "Close",
+                    class: "glyphicon  glyphicon-remove-circle"
+                };
+            case "No":
+                return {
+                    text: "No",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
         }

@@ -2,7 +2,7 @@
 /// <reference path="ZoneMonitor.html" />
 appControllers.controller('ZoneMonitorController',
     function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
-        CarrierTypeEnum, VRModalService) {
+        CarrierTypeEnum, VRModalService, VRNotificationService) {
 
         var chartSelectedMeasureAPI;
         var chartSelectedEntityAPI;
@@ -88,12 +88,43 @@ appControllers.controller('ZoneMonitorController',
             $scope.gridMenuActions = [{
                 name: "CDRs",
                 clicked: function (dataItem) {
-                    var modalSettings = {
-                        useModalTemplate: true,
-                        width: "80%",
-                        maxHeight: "800px"
-                    };
-                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
+                    VRNotificationService.showConfirmation('Are you sure you want to delete?')
+                    .then(function (result) {
+                        if (result)
+                            console.log('Confirmed');
+                        else
+                            console.log('not confirmed');
+                    });
+                    //var modalSettings = {
+                    //    useModalTemplate: true,
+                    //    width: "80%",
+                    //    maxHeight: "800px"
+                    //};
+                    //VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
+                }
+            },
+            {
+                name: "Show Error",
+                clicked: function (dataItem) {
+                    VRNotificationService.showError('Error Message');
+                }
+            },
+            {
+                name: "Show Warning",
+                clicked: function (dataItem) {
+                    VRNotificationService.showWarning('Warning Message');
+                }
+            },
+            {
+                name: "Show Success",
+                clicked: function (dataItem) {
+                    VRNotificationService.showSuccess('Success Message');
+                }
+            },
+            {
+                name: "Show Information",
+                clicked: function (dataItem) {
+                    VRNotificationService.showInformation('Information Message');
                 }
             }];
         }

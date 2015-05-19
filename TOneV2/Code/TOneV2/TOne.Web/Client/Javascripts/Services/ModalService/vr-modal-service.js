@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRModalService', function ($modal, $rootScope, VRNavigationService) {
+app.service('VRModalService', function ($modal, $rootScope, VRNavigationService, $q, notify) {
 
     return ({
         showModal: showModal
@@ -33,3 +33,4 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService)
         var modalInstance = $modal({ scope: modalScope, template: modalUrl, show: true, animation: "am-fade-and-scale" });
     }
 });
+

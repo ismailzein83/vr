@@ -1,0 +1,13 @@
+﻿<div vr-modalcontent>
+    <vr-modalbody maxheight="'100px'">
+        <span>{{message}}</span>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Yes" data-onclick="yesClicked"></vr-button>
+                <vr-button type="No" data-onclick="noClicked"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

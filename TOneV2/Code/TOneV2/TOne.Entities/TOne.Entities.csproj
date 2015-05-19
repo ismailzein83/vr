@@ -107,6 +107,8 @@
     <Compile Include="CacheObjectType.cs" />
     <Compile Include="GenericEntity.cs" />
     <Compile Include="GenericEntityStatus.cs" />
+    <Compile Include="OperationResults\InsertOperationOutput.cs" />
+    <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="Security\SecureActionAttribute.cs" />
     <Compile Include="Security\AuthenticationOutput.cs" />
     <Compile Include="CodeList.cs" />
