@@ -34,7 +34,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            string SFTP_Dir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
+            string SFTPDir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Start {0}", DateTime.Now);
             var sftp = new Rebex.Net.Sftp();
             sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             if (sftp.GetConnectionState().Connected)
             {
                 // set current directory
-                sftp.ChangeDirectory(SFTP_Dir);
+                sftp.ChangeDirectory(SFTPDir);
                 // get items within the current directory
                 SftpItemCollection currentItems = sftp.GetList();
                 handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.GetList {0}", DateTime.Now);
@@ -54,8 +54,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     {
                         if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
                         {
-                            String filePath = SFTP_Dir + "/" + fileObj.Name;
-                            String newFilePath = SFTP_Dir + "/" + fileObj.Name.Replace(".DAT", ".old");
+                            String filePath = SFTPDir + "/" + fileObj.Name;
+                            String newFilePath = SFTPDir + "/" + fileObj.Name.Replace(".DAT", ".old");
 
                             var stream = new MemoryStream();
                             sftp.GetFile(filePath, stream);
@@ -76,12 +76,12 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     cdr.MSISDN = i.Substring(145, 20).Trim();
                                     cdr.IMSI = i.Substring(125, 20).Trim();
                                     cdr.Destination = i.Substring(198, 20).Trim();
-                                    cdr.Call_Class = i.Substring(434, 10).Trim();
-                                    cdr.Sub_Type = i.Substring(165, 10).Trim();
+                                    cdr.CallClass = i.Substring(434, 10).Trim();
+                                    cdr.SubType = i.Substring(165, 10).Trim();
                                     cdr.IMEI = i.Substring(105, 20).Trim();
-                                    cdr.Cell_Id = i.Substring(252, 22).Trim();
-                                    cdr.In_Trunk = i.Substring(414, 20).Trim();
-                                    cdr.Out_Trunk = i.Substring(394, 20).Trim();
+                                    cdr.CellId = i.Substring(252, 22).Trim();
+                                    cdr.InTrunk = i.Substring(414, 20).Trim();
+                                    cdr.OutTrunk = i.Substring(394, 20).Trim();
 
 
                                     DateTime ConnectDateTime;
@@ -91,33 +91,33 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
 
 
-                                    int Call_Type = 0;
-                                    if (int.TryParse(i.Substring(102, 3).Trim(), out Call_Type))
-                                        cdr.Call_Type = Call_Type;
+                                    int callType = 0;
+                                    if (int.TryParse(i.Substring(102, 3).Trim(), out callType))
+                                        cdr.CallType = callType;
 
-                                    decimal Cell_Latitude;
-                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out Cell_Latitude))
-                                        cdr.Cell_Latitude = Cell_Latitude;
-
-
-                                    decimal DurationInSeconds;
-                                    if (decimal.TryParse(i.Substring(588, 10).Trim(), out DurationInSeconds))
-                                        cdr.DurationInSeconds = DurationInSeconds;
+                                    decimal cellLatitude;
+                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out cellLatitude))
+                                        cdr.CellLatitude = cellLatitude;
 
 
-                                    decimal Up_Volume;
-                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out Up_Volume))
-                                        cdr.UpVolume = Up_Volume;
+                                    decimal durationInSeconds;
+                                    if (decimal.TryParse(i.Substring(588, 10).Trim(), out durationInSeconds))
+                                        cdr.DurationInSeconds = durationInSeconds;
 
 
-                                    decimal Cell_Longitude;
-                                    if (decimal.TryParse(i.Substring(618, 9).Trim(), out Cell_Longitude))
-                                        cdr.Cell_Longitude = Cell_Longitude;
+                                    decimal upVolume;
+                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out upVolume))
+                                        cdr.UpVolume = upVolume;
 
 
-                                    decimal Down_Volume;
-                                    if (decimal.TryParse(i.Substring(598, 10).Trim(), out Down_Volume))
-                                        cdr.DownVolume = Down_Volume;
+                                    decimal cellLongitude;
+                                    if (decimal.TryParse(i.Substring(618, 9).Trim(), out cellLongitude))
+                                        cdr.CellLongitude = cellLongitude;
+
+
+                                    decimal downVolume;
+                                    if (decimal.TryParse(i.Substring(598, 10).Trim(), out downVolume))
+                                        cdr.DownVolume = downVolume;
 
 
                                     CDRs.Add(cdr);

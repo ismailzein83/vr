@@ -34,20 +34,20 @@ namespace Vanrise.Fzero.CDRImport.Data.MYSQL
                                   , cdr.Destination.ToString()
                                   , cdr.DurationInSeconds.ToString()
                                   , ""
-                                  , cdr.Call_Class.ToString()
+                                  , cdr.CallClass.ToString()
                                   , cdr.IsOnNet.ToString()
-                                  , cdr.Call_Type.ToString()
-                                  , cdr.Sub_Type.ToString()
+                                  , cdr.CallType.ToString()
+                                  , cdr.SubType.ToString()
                                   , cdr.IMEI.ToString()
                                   , ""
-                                  , cdr.Cell_Id.ToString()
+                                  , cdr.CellId.ToString()
                                   , ""
                                   , ""
                                   , ""
-                                  , cdr.Cell_Latitude.ToString()
-                                  , cdr.Cell_Longitude.ToString()
-                                  , cdr.In_Trunk.ToString()
-                                  , cdr.Out_Trunk.ToString()
+                                  , cdr.CellLatitude.ToString()
+                                  , cdr.CellLongitude.ToString()
+                                  , cdr.InTrunk.ToString()
+                                  , cdr.OutTrunk.ToString()
                                   , ""
                                   , ""}
                     );
