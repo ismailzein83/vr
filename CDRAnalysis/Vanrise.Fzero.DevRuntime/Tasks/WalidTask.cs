@@ -72,8 +72,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyId = 1,
-                    FromDate = new DateTime(2015, 3, 14, 4, 39, 24),//2015-03-14 04:39:24.000
-                    ToDate = new DateTime(2015, 3, 14, 5, 39, 25),//2015-03-14 05:39:25.000
+                    FromDate = new DateTime(2015, 3, 14, 5, 0, 0),//2015-03-14 05:00:00
+                    ToDate = new DateTime(2015, 3, 14, 6, 0, 1),//2015-03-14 06:00:01
                     PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
                 }
             });
