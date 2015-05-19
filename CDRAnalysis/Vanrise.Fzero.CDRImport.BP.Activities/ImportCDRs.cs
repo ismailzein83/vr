@@ -34,7 +34,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            string SFTPDir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
+            string sFTPDir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Start {0}", DateTime.Now);
             var sftp = new Rebex.Net.Sftp();
             sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             if (sftp.GetConnectionState().Connected)
             {
                 // set current directory
-                sftp.ChangeDirectory(SFTPDir);
+                sftp.ChangeDirectory(sFTPDir);
                 // get items within the current directory
                 SftpItemCollection currentItems = sftp.GetList();
                 handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.GetList {0}", DateTime.Now);
@@ -54,8 +54,8 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                     {
                         if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(".DAT"))
                         {
-                            String filePath = SFTPDir + "/" + fileObj.Name;
-                            String newFilePath = SFTPDir + "/" + fileObj.Name.Replace(".DAT", ".old");
+                            String filePath = sFTPDir + "/" + fileObj.Name;
+                            String newFilePath = sFTPDir + "/" + fileObj.Name.Replace(".DAT", ".old");
 
                             var stream = new MemoryStream();
                             sftp.GetFile(filePath, stream);
