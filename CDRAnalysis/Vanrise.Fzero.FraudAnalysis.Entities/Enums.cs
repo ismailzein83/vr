@@ -28,7 +28,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             INV = 29, //1
             INTL = 30, //2
             KOREKTEL = 31, //0
-            ASIACELL = 26 //0
+            ASIACELL = 26, //0
+            UNKNOWN = 0
         };
 
 

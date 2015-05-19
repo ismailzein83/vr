@@ -14,9 +14,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public  string Destination { get; set; }
         public  decimal? DurationInSeconds { get; set; }
         public  DateTime? DisconnectDateTime { get; set; }
-        public  string CallClass { get; set; }
+        public  Enums.CallClass CallClass { get; set; }
         public  Int16? IsOnNet { get; set; }
-        public  int? CallType { get; set; }
+        public Enums.CallType? CallType { get; set; }
         public  string SubType { get; set; }
         public  string IMEI { get; set; }
         public  int? BTSId { get; set; }

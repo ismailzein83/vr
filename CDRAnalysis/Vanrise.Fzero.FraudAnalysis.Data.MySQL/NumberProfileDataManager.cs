@@ -33,33 +33,34 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 CDR normalCDR = new CDR();
                 int count = 0;
                 int currentIndex = 0;
-
+                Enums.CallClass callClass;
 
                 while (reader.Read())
                 {
-                    normalCDR.MSISDN = reader["MSISDN"] as string;
-                    normalCDR.Destination = reader["Destination"] as string;
-                    normalCDR.CallType = GetReaderValue<int>(reader, "Call_Type") ;
-                    normalCDR.BTSId = GetReaderValue<int>(reader, "BTS_Id")    ;
-                    normalCDR.ConnectDateTime = GetReaderValue<DateTime>(reader, "ConnectDateTime") ;
-                    normalCDR.Id =GetReaderValue<int>(reader, "Id")     ;
+                    normalCDR.CallType = (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
+                    normalCDR.BTSId = GetReaderValue<int?>(reader, "BTS_Id");
+                    normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+                    normalCDR.Id = (int)reader["Id"];
                     normalCDR.IMSI = reader["IMSI"] as string;
-                    normalCDR.DurationInSeconds = GetReaderValue<Decimal>(reader, "DurationInSeconds") ;
-                    normalCDR.DisconnectDateTime = GetReaderValue<DateTime>(reader, "DisconnectDateTime")   ;
-                    normalCDR.CallClass = reader["Call_Class"] as string;
-                    normalCDR.IsOnNet = GetReaderValue<short>(reader, "IsOnNet")    ;
+                    normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+                    normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                    if (Enum.TryParse<Enums.CallClass>(reader["Call_Class"] as string, out callClass))
+                        normalCDR.CallClass = callClass;
+                    normalCDR.IsOnNet = GetReaderValue<Byte?>(reader, "IsOnNet");
                     normalCDR.SubType = reader["Sub_Type"] as string;
                     normalCDR.IMEI = reader["IMEI"] as string;
                     normalCDR.CellId = reader["Cell_Id"] as string;
-                    normalCDR.SwitchRecordId = GetReaderValue<int>(reader, "SwitchRecordId")   ;
-                    normalCDR.UpVolume = GetReaderValue<Decimal>(reader, "Up_Volume") ;
-                    normalCDR.DownVolume = GetReaderValue<Decimal>(reader, "Down_Volume") ;
-                    normalCDR.CellLatitude = GetReaderValue<Decimal>(reader, "Cell_Latitude") ;
-                    normalCDR.CellLongitude = GetReaderValue<Decimal>(reader, "Cell_Longitude")  ;
+                    normalCDR.SwitchRecordId = GetReaderValue<int?>(reader, "SwitchRecordId");
+                    normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
+                    normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
+                    normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "Cell_Latitude");
+                    normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "Cell_Longitude");
                     normalCDR.InTrunk = reader["In_Trunk"] as string;
                     normalCDR.OutTrunk = reader["Out_Trunk"] as string;
-                    normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type")  ;
-                    normalCDR.ServiceVASName = reader["Service_VAS_Name"].ToString();
+                    normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
+                    normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
+                    normalCDR.Destination = reader["Destination"] as string;
+                    normalCDR.MSISDN = reader["MSISDN"] as string;
 
                     currentIndex++;
                     if (currentIndex == 10000)
