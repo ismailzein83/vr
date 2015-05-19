@@ -125,8 +125,8 @@
   <ItemGroup>
     <Content Include="Client\Services\APIServices\UsersAPIService.js" />
     <Content Include="Client\Views\UserEditor.html" />
-    <Content Include="Client\Views\User.html" />
-    <Content Include="Client\Views\UserController.js" />
+    <Content Include="Client\Views\UserManagement.html" />
+    <Content Include="Client\Views\UserManagementController.js" />
     <Content Include="Client\Views\UserEditorController.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

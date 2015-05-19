@@ -30,9 +30,14 @@ namespace TOne.Data.SQL
             ExecuteScalarSP("mainmodule.sp_User_Delete", Id);
         }
 
-        public void SaveUser(User user)
+        public void AddUser(User user)
         {
             ExecuteScalarSP("mainmodule.sp_User_Insert", user.Name, user.Password, user.Email, user.Description);
+        }
+
+        public void EditUser(User user)
+        {
+            ExecuteScalarSP("mainmodule.sp_User_Update", user.UserId, user.Name, user.Password, user.Email, user.Description);
         }
 
         public List<Entities.User> SearchUser(string name, string email)

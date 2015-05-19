@@ -75,11 +75,18 @@ namespace TOne.Business
             datamanager.DeleteUser(Id);
         }
 
-        public void SaveUser(User user)
+        public void AddUser(User user)
         {
             ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
-            datamanager.SaveUser(user);
+            datamanager.AddUser(user);
         }
+
+        public void EditUser(User user)
+        {
+            ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();
+            datamanager.EditUser(user);
+        }
+
         public List<TOne.Entities.User> SearchUser(string name, string email)
         {
             ISecurityDataManager datamanager = DataManagerFactory.GetDataManager<ISecurityDataManager>();

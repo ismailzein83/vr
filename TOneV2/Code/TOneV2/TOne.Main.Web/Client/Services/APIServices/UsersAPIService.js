@@ -4,13 +4,16 @@
     return ({
         GetUserList: GetUserList,
         DeleteUser: DeleteUser,
-        SaveUser: SaveUser,
+        AddUser: AddUser,
+        EditUser: EditUser,
         SearchUser: SearchUser
     });
 
-    function GetUserList() {
+    function GetUserList(params) {
         return BaseAPIService.get("/api/User/GetUsers",
             {
+                pageSize: params.pageSize,
+                pageNumber: params.pageNumber
             }
            );
     }
@@ -23,8 +26,20 @@
            );
     }
 
-    function SaveUser(user) {
-        return BaseAPIService.post("/api/User/SaveUser",
+    function AddUser(user) {
+        return BaseAPIService.post("/api/User/AddUser",
+            {
+                UserId: user.UserId,
+                Name: user.Name,
+                Password: user.Password,
+                Email: user.Email,
+                Description: user.Description
+            }
+           );
+    }
+
+    function EditUser(user) {
+        return BaseAPIService.post("/api/User/EditUser",
             {
                 UserId: user.UserId,
                 Name: user.Name,

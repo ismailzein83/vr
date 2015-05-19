@@ -12,7 +12,9 @@ namespace TOne.Data
 
         void DeleteUser(int Id);
 
-        void SaveUser(User user);
+        void AddUser(User user);
+
+        void EditUser(User user);
 
         List<Entities.User> SearchUser(string name, string email);
     }
