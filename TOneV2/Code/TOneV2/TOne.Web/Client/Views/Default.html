@@ -16,3 +16,17 @@
         <input type="text" ng-model="dataItem.col3" />
     </vr-datagridcolumn>
 </vr-datagrid>
+
+<vr-choices selectedindex="testObj.choiceSelectedIndex" onselectionchanged="choiceSelectionChanged" on-ready="choicesReady">
+    <vr-choice isselected="testObj.isTab1Selected" onselectionchanged="choiceSelectionChanged">test1</vr-choice>
+    <vr-choice isselected="testObj.isTab2Selected" onselectionchanged="choiceSelectionChanged">test2</vr-choice>
+    <vr-choice >test3</vr-choice>
+    <vr-choice >test4</vr-choice>
+    <vr-choice >test5</vr-choice>
+</vr-choices>
+<div>
+
+</div>
+{{testObj}}
+
+<input type="text" ng-model="choiceIndex" ng-change="selectChoice()">

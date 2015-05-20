@@ -265,13 +265,11 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             addActionTypeColumn();
 
             ctrl.isMainItemsShown = true;
-            ctrl.switchDataSource = function () {
-                if (ctrl.isMainItemsShown) {
-                    ctrl.isMainItemsShown = false;
+            ctrl.viewVisibilityChanged = function () {
+                if (!ctrl.isMainItemsShown) {
                     ctrl.showColumn(actionTypeColumn);
                 }
                 else {
-                    ctrl.isMainItemsShown = true;
                     ctrl.hideColumn(actionTypeColumn);
                 }
             };

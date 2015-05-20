@@ -85,5 +85,17 @@
         $scope.gridReady = function (api) {
             gridApi = api;
         };
+        $scope.testObj = {};
+        $scope.choiceSelectionChanged = function () {
+            //console.log($scope.testObj);
+        };
+
+        var choicesApi;
+        $scope.choicesReady = function (api) {
+            choicesApi = api;
+        };
        
+        $scope.selectChoice = function () {
+            choicesApi.selectChoice($scope.choiceIndex);
+        };
     });

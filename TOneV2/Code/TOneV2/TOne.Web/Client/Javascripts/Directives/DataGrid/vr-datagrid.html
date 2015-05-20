@@ -1,9 +1,8 @@
-﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData">
-    <div class="btn-group btn-group-custom" role="group" ng-show="ctrl.updateItems.length > 0">
-        <label class="hand-cursor" ng-class="ctrl.isMainItemsShown?'clicked-btn':''" ng-click="ctrl.switchDataSource()">Main View</label>
-        <label>|</label>
-        <label class="hand-cursor" ng-class="!ctrl.isMainItemsShown?'clicked-btn':''" ng-click="ctrl.switchDataSource()">Updated Items ({{ctrl.updateItems.length}})</label>
-    </div>
+﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData"> 
+    <vr-choices onselectionchanged="ctrl.viewVisibilityChanged" ng-show="ctrl.updateItems.length > 0">
+        <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
+        <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
+    </vr-choices>
     <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle">
         <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
 
