@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public OperationType()
         {
             this.ControlTables = new HashSet<ControlTable>();
-            this.ControlTables1 = new HashSet<ControlTable>();
         }
     
         public int ID { get; set; }
@@ -28,6 +27,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Description { get; set; }
     
         public virtual ICollection<ControlTable> ControlTables { get; set; }
-        public virtual ICollection<ControlTable> ControlTables1 { get; set; }
     }
 }

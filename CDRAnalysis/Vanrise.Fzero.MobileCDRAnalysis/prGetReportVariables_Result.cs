@@ -10,18 +10,10 @@
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class EmailReceiverType
+    public partial class prGetReportVariables_Result
     {
-        public EmailReceiverType()
-        {
-            this.EmailReceivers = new HashSet<EmailReceiver>();
-        }
-    
-        public int Id { get; set; }
-        public string Name { get; set; }
-    
-        public virtual ICollection<EmailReceiver> EmailReceivers { get; set; }
+        public System.DateTime ReportDate { get; set; }
+        public string ReportNumber { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Report()
         {
             this.ReportDetails = new HashSet<ReportDetail>();
-            this.ReportDetails1 = new HashSet<ReportDetail>();
         }
     
         public int Id { get; set; }
@@ -33,8 +32,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual ReportingStatu ReportingStatu { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<ReportDetail> ReportDetails { get; set; }
-        public virtual ReportingStatu ReportingStatu1 { get; set; }
-        public virtual User User1 { get; set; }
-        public virtual ICollection<ReportDetail> ReportDetails1 { get; set; }
     }
 }

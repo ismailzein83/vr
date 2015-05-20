@@ -18,8 +18,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<System.DateTime> Date_Day { get; set; }
         public Nullable<decimal> OriginatedVolume { get; set; }
         public decimal TerminatedVolume { get; set; }
-        public Nullable<long> NumberofAttempts { get; set; }
-        public Nullable<long> CountDistinctCalledParties { get; set; }
+        public Nullable<int> NumberofAttempts { get; set; }
+        public Nullable<int> CountDistinctCalledParties { get; set; }
         public int ReportID { get; set; }
         public string MonthYear { get; set; }
     }

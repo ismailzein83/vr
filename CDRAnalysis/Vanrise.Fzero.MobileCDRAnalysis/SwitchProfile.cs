@@ -16,27 +16,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public SwitchProfile()
         {
-            this.CDR_Old = new HashSet<CDR_Old>();
-            this.CDR_Old1 = new HashSet<CDR_Old>();
-            this.CDR_Old2 = new HashSet<CDR_Old>();
             this.NormalizationRules = new HashSet<NormalizationRule>();
-            this.NormalizationRules1 = new HashSet<NormalizationRule>();
             this.SourceMappings = new HashSet<SourceMapping>();
-            this.SourceMappings1 = new HashSet<SourceMapping>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public bool AllowAutoImport { get; set; }
     
-        public virtual ICollection<CDR_Old> CDR_Old { get; set; }
-        public virtual ICollection<CDR_Old> CDR_Old1 { get; set; }
-        public virtual ICollection<CDR_Old> CDR_Old2 { get; set; }
         public virtual ICollection<NormalizationRule> NormalizationRules { get; set; }
-        public virtual ICollection<NormalizationRule> NormalizationRules1 { get; set; }
         public virtual ICollection<SourceMapping> SourceMappings { get; set; }
-        public virtual ICollection<SourceMapping> SourceMappings1 { get; set; }
         public virtual Switch_DatabaseConnections Switch_DatabaseConnections { get; set; }
-        public virtual Switch_DatabaseConnections Switch_DatabaseConnections1 { get; set; }
     }
 }

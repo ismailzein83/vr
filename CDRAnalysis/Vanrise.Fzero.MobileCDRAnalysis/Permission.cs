@@ -18,8 +18,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             this.Permissions1 = new HashSet<Permission>();
             this.UserPermissions = new HashSet<UserPermission>();
-            this.Permissions11 = new HashSet<Permission>();
-            this.UserPermissions1 = new HashSet<UserPermission>();
         }
     
         public int ID { get; set; }
@@ -31,8 +29,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual ICollection<Permission> Permissions1 { get; set; }
         public virtual Permission Permission1 { get; set; }
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
-        public virtual ICollection<Permission> Permissions11 { get; set; }
-        public virtual Permission Permission2 { get; set; }
-        public virtual ICollection<UserPermission> UserPermissions1 { get; set; }
     }
 }

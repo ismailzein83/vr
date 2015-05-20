@@ -32,7 +32,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual OperationType OperationType { get; set; }
         public virtual Period Period { get; set; }
-        public virtual OperationType OperationType1 { get; set; }
-        public virtual Period Period1 { get; set; }
     }
 }

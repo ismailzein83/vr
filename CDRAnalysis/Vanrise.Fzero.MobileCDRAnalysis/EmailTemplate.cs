@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public EmailTemplate()
         {
             this.EmailReceivers = new HashSet<EmailReceiver>();
-            this.EmailReceivers1 = new HashSet<EmailReceiver>();
         }
     
         public int ID { get; set; }
@@ -29,8 +28,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public int LastUpdatedBy { get; set; }
     
         public virtual ICollection<EmailReceiver> EmailReceivers { get; set; }
-        public virtual ICollection<EmailReceiver> EmailReceivers1 { get; set; }
         public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
     }
 }

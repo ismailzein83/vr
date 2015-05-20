@@ -14,22 +14,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
     public partial class Import
     {
-        public Import()
-        {
-            this.CDR_Old = new HashSet<CDR_Old>();
-            this.CDR_Old1 = new HashSet<CDR_Old>();
-        }
-    
         public int ID { get; set; }
         public System.DateTime ImportDate { get; set; }
         public Nullable<int> ImportedBy { get; set; }
         public int ImportTypeId { get; set; }
     
-        public virtual ICollection<CDR_Old> CDR_Old { get; set; }
-        public virtual ICollection<CDR_Old> CDR_Old1 { get; set; }
         public virtual ImportType ImportType { get; set; }
         public virtual User User { get; set; }
-        public virtual ImportType ImportType1 { get; set; }
-        public virtual User User1 { get; set; }
     }
 }

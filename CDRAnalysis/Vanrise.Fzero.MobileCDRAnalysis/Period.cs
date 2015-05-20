@@ -17,29 +17,17 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Period()
         {
             this.ControlTables = new HashSet<ControlTable>();
-            this.ControlTables1 = new HashSet<ControlTable>();
             this.StrategyPeriods = new HashSet<StrategyPeriod>();
             this.Subscriber_Values = new HashSet<Subscriber_Values>();
             this.SubscriberThresholds = new HashSet<SubscriberThreshold>();
-            this.SubscriberThresholdstests = new HashSet<SubscriberThresholdstest>();
-            this.StrategyPeriods1 = new HashSet<StrategyPeriod>();
-            this.Subscriber_Values1 = new HashSet<Subscriber_Values>();
-            this.SubscriberThresholds1 = new HashSet<SubscriberThreshold>();
-            this.SubscriberThresholdstests1 = new HashSet<SubscriberThresholdstest>();
         }
     
         public int Id { get; set; }
         public string Description { get; set; }
     
         public virtual ICollection<ControlTable> ControlTables { get; set; }
-        public virtual ICollection<ControlTable> ControlTables1 { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
         public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
         public virtual ICollection<SubscriberThreshold> SubscriberThresholds { get; set; }
-        public virtual ICollection<SubscriberThresholdstest> SubscriberThresholdstests { get; set; }
-        public virtual ICollection<StrategyPeriod> StrategyPeriods1 { get; set; }
-        public virtual ICollection<Subscriber_Values> Subscriber_Values1 { get; set; }
-        public virtual ICollection<SubscriberThreshold> SubscriberThresholds1 { get; set; }
-        public virtual ICollection<SubscriberThresholdstest> SubscriberThresholdstests1 { get; set; }
     }
 }

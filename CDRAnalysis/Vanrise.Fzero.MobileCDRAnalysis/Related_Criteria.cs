@@ -21,9 +21,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual Criteria_Profile Criteria_Profile { get; set; }
         public virtual Criteria_Profile Criteria_Profile1 { get; set; }
-        public virtual Criteria_Profile Criteria_Profile2 { get; set; }
-        public virtual Criteria_Profile Criteria_Profile3 { get; set; }
         public virtual Strategy Strategy { get; set; }
-        public virtual Strategy Strategy1 { get; set; }
     }
 }

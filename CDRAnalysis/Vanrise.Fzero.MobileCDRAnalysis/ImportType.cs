@@ -17,13 +17,11 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public ImportType()
         {
             this.Imports = new HashSet<Import>();
-            this.Imports1 = new HashSet<Import>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
     
         public virtual ICollection<Import> Imports { get; set; }
-        public virtual ICollection<Import> Imports1 { get; set; }
     }
 }
