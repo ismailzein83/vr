@@ -185,6 +185,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelMappers\Mappers.cs" />
     <Compile Include="Models\MobileAppConfig.cs" />
     <Compile Include="Models\SecurityToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

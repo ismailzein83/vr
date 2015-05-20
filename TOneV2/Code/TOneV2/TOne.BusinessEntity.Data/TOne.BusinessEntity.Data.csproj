@@ -52,7 +52,7 @@
     <Compile Include="ICommissionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
-    <Compile Include="IServiceDataManager.cs" />
+    <Compile Include="IFlaggedServiceDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
     <Compile Include="ITariffDataManager.cs" />
     <Compile Include="IToDConsiderationDataManager.cs" />

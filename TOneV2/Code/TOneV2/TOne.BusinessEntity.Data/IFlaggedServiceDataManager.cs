@@ -7,11 +7,10 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.BusinessEntity.Data
 {
-    public interface IServiceDataManager : IDataManager
+    public interface IFlaggedServiceDataManager : IDataManager
     {
         Dictionary<short, FlaggedService> GetServiceFlags();
 
         FlaggedService GetServiceFlag(short id);
-        string GetServicesDisplayList(short serviceFlag);
     }
 }

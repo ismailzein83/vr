@@ -10,5 +10,6 @@ namespace TOne.BusinessEntity.Entities
     {
         public short FlaggedServiceID { get; set; }
         public string Symbol { get; set; }
+        public string ServiceColor { get; set; }
     }
 }

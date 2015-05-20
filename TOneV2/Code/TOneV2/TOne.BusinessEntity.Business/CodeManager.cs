@@ -33,5 +33,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCodeGroups();
         }
+
+        public List<Code> GetCodes(int zoneID, DateTime effectiveOn)
+        {
+            return _dataManager.GetCodes(zoneID, effectiveOn);
+        }
     }
 }

@@ -54,7 +54,23 @@ namespace TOne.BusinessEntity.Data.SQL
             return allSuppliersCodes;
         }
 
-
+        public List<Code> GetCodes(int zoneID, DateTime effectiveOn)
+        {
+            return GetItemsSP("BEntity.sp_Codes_GetByZone", (reader) =>
+            {
+                return new Entities.Code
+                {
+                    ID = (long)reader["ID"],
+                    Value = reader["Code"] as string,
+                    ZoneId = (int)reader["ZoneID"],
+                    BeginEffectiveDate = reader["BeginEffectiveDate"] as Nullable<DateTime>,
+                    EndEffectiveDate = GetReaderValue<Nullable<DateTime>>(reader, "EndEffectiveDate"),
+                    CodeGroup = reader["CodeGroup"] as string,
+                    SupplierId = reader["SupplierID"] as string,
+                    Timestamp = (byte[])reader["timestamp"]
+                };
+            }, zoneID, effectiveOn);
+        }
         public SuppliersCodes GetCodesByCodePrefixGroup(string codePrefix, DateTime effectiveOn, bool isFuture, List<Entities.CarrierAccountInfo> activeSuppliers, out List<string> distinctCodes, out HashSet<Int32> supplierZoneIds, out HashSet<Int32> saleZoneIds)
         {
             DataTable dtSuppliersCodeInfo = CarrierDataManager.BuildCarrierAccountInfoTable(activeSuppliers);

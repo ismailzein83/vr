@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.Analytics.Entities
 {
-    public class CarrierRateView
+    public class CarrierRateView : IFlaggedServiceEntity
     {
         public int ZoneID { get; set; }
         public string CodeGroup { get; set; }
         public string ZoneName { get; set; }
         public string Code { get; set; }
         public int RateID { get; set; }
-        public int ServiceFlag { get; set; }
         public decimal? Rate { get; set; }
         public string CurrencyID { get; set; }
         public decimal? OffPeakRate { get; set; }
@@ -28,5 +28,9 @@ namespace TOne.Analytics.Entities
         public DateTime? PricelistBeginEffectiveDate { get; set; }
         public string UserName { get; set; }
 
+
+        public short FlaggedServiceID { get; set; }
+        public string FlaggedServiceSymbol { get; set; }
+        public string FlaggedServiceColor { get; set; }
     }
 }

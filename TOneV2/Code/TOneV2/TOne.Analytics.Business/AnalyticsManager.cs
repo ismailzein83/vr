@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Data;
+using TOne.BusinessEntity.Business;
 
 namespace TOne.Analytics.Business
 {
@@ -28,7 +29,11 @@ namespace TOne.Analytics.Business
 
         public List<Entities.CarrierRateView> GetRates(string carrierType, DateTime effectiveOn, string carrierID, string codeGroup, int from, int to)
         {
-            return _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
+            List<Entities.CarrierRateView> lst = _datamanager.GetRates(carrierType, effectiveOn, carrierID, codeGroup, from, to);
+            FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
+            if (lst != null)
+                flaggedServiceManager.AssignFlaggedServiceInfo(lst);
+            return lst;
         }
 
         public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, int? topCount, char groupByProfile, int from, int to)
@@ -59,7 +64,7 @@ namespace TOne.Analytics.Business
 
         public Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate)
         {
-            return _datamanager.GetSummary(fromDate, toDate).FirstOrDefault();
+            return _datamanager.GetSummary(fromDate, toDate);
         }
 
         #region Private Methods
@@ -81,7 +86,7 @@ namespace TOne.Analytics.Business
             foreach (var dailyRecord in dailyProfit)
             {
                 Entities.ProfitByWeekDayView weekDayItem = result.Where(c => c.DayNumber == dailyRecord.DayNumber).FirstOrDefault();
-                if(weekDayItem == null)
+                if (weekDayItem == null)
                 {
                     weekDayItem = new Entities.ProfitByWeekDayView();
                     weekDayItem.DayNumber = dailyRecord.DayNumber;
@@ -93,7 +98,7 @@ namespace TOne.Analytics.Business
                 {
                     if (weekDayItem.ProfitWeek2 == null)
                         weekDayItem.ProfitWeek2 = dailyRecord.Profit;
-                }              
+                }
             }
             return result;
         }

@@ -43,20 +43,5 @@ namespace TOne.BusinessEntity.Business
             }
             return zoneName;
         }
-
-        public string GetFlaggedServiceSymbol(short flaggedServiceId)
-        {
-            TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
-            ConcurrentDictionary<short, string> flaggedServices = cacheManager.GetOrCreateObject("FlaggedServices",
-                TOne.Entities.CacheObjectType.FlaggedService, () => new ConcurrentDictionary<short, string>());
-            string serviceSymbol;
-            if (!flaggedServices.TryGetValue(flaggedServiceId, out serviceSymbol))
-            {
-                IServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
-                serviceSymbol = dataManager.GetServiceFlag(flaggedServiceId).Symbol;
-            }
-            return serviceSymbol;
-
-        }
     }
 }

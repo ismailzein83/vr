@@ -23,12 +23,13 @@ namespace TOne.Analytics.Data.SQL
                     DurationInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
                     ASR = Convert.ToDecimal(reader["ASR"]),
                     SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempt"]),
+                    ACD = Convert.ToDecimal(reader["ACD"]),
                     DeliveredASR = Convert.ToDecimal(reader["DeliveredASR"]),
                     AveragePDD = Convert.ToDecimal(reader["AveragePDD"]),
                     CodeGroup = reader["CodeGroupName"] as string
                 };
             },
-                topCount,fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, "TopNDestinationTemp");
+                topCount, fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, "TopNDestinationTemp");
         }
 
         public List<Entities.Alert> GetAlerts(int from, int to, int? topCount, char showHiddenAlerts, int? alertLevel, string tag, string source, int? userID)
@@ -59,7 +60,7 @@ namespace TOne.Analytics.Data.SQL
                         ZoneName = reader["ZoneName"] as string,
                         Code = reader["Code"] as string,
                         RateID = Convert.ToInt32(reader["RateID"]),
-                        ServiceFlag = Convert.ToInt32(reader["ServicesFlag"]),
+                        FlaggedServiceID = Convert.ToInt16(reader["ServicesFlag"]),
                         Rate = reader["Rate"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["Rate"]) : null,
                         CurrencyID = reader["CurrencyID"] as string,
                         OffPeakRate = reader["OffPeakRate"] != DBNull.Value ? (decimal?)Convert.ToDecimal(reader["OffPeakRate"]) : null,
@@ -76,15 +77,15 @@ namespace TOne.Analytics.Data.SQL
                 }, carrierType, effectiveOn, codeGroup, carrierID, from, to);
         }
 
-        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile,int? topCount, int from, int to)
+        public List<Entities.CarrierSummaryView> GetCarrierSummary(string carrierType, DateTime fromDate, DateTime toDate, string customerID, string supplierID, char groupByProfile, int? topCount, int from, int to)
         {
             return GetItemsSP("Analytics.SP_Traffic_CarrierSummary", (reader) =>
                 {
                     return new Entities.CarrierSummaryView
                     {
                         ProfileID = groupByProfile == 'Y' && reader["ProfileID"] != DBNull.Value ? (int?)Convert.ToInt32(reader["ProfileID"]) : null,
-                        CarrierID =  groupByProfile == 'N' ? (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string) : null,
-                        CarrierName =groupByProfile == 'N' ? string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty) : string.Empty,
+                        CarrierID = groupByProfile == 'N' ? (carrierType.ToLower() == "customer" ? reader["CustomerID"] as string : reader["SupplierID"] as string) : null,
+                        CarrierName = groupByProfile == 'N' ? string.Format("{0}{1}", reader["ProfileName"] as string, reader["NameSuffix"] != DBNull.Value && !string.IsNullOrEmpty(reader["NameSuffix"].ToString()) ? " (" + reader["NameSuffix"] as string + ")" : string.Empty) : string.Empty,
                         ProfileName = groupByProfile == 'Y' ? (reader["ProfileName"] != DBNull.Value ? reader["ProfileName"] as string : "") : string.Empty,
                         SuccessfulAttempts = Convert.ToInt32(reader["SuccessfulAttempts"]),
                         DurationsInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
@@ -145,9 +146,9 @@ namespace TOne.Analytics.Data.SQL
                 }, from, to);
         }
 
-        public List<Entities.TrafficSummaryView> GetSummary(DateTime fromDate, DateTime toDate)
+        public Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate)
         {
-            return GetItemsSP("Analytics.SP_Traffic_Summary", (reader) =>
+            return GetItemSP("Analytics.SP_Traffic_Summary", (reader) =>
                 {
                     return new Entities.TrafficSummaryView
                     {
