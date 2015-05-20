@@ -64,116 +64,71 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
         {
-
-            int? BatchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"].ToString());
+            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+            int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
-
             List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions();
+            Enums.Period period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), inputArgument.PeriodId);
 
-            List<AggregateDefinition> AggregateDefinitions = new AggregateManager().GetAggregateDefinitions();
-           
+            NumberProfile currentNumberProfile = null;
 
-
-           
-            NumberProfile numberProfile = new NumberProfile();
-            string MSISDN = string.Empty;
-
-
-            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
-            dataManager.LoadCDR(inputArgument.FromDate,inputArgument.ToDate, BatchSize, (normalCDR) =>
+            dataManager.LoadCDR(inputArgument.FromDate,inputArgument.ToDate, batchSize, (cdr) =>
             {
-
-                // Agregates
-
-                if (MSISDN == string.Empty)
+                if (currentNumberProfile == null || currentNumberProfile.SubscriberNumber != cdr.MSISDN)
                 {
-                    numberProfile = new NumberProfile();
-                    foreach (var i in AggregateDefinitions)
+                    if(currentNumberProfile != null)
                     {
-                        i.Aggregation.Reset();
+                        FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, batchSize, aggregateDefinitions);
                     }
-
-                    MSISDN = normalCDR.MSISDN;
-                }
-
-                else if (MSISDN != normalCDR.MSISDN)
-                {
-
-                    foreach (var i in AggregateDefinitions)
+                    currentNumberProfile = new NumberProfile()
                     {
-                        numberProfile.AggregateValues.Add(i.Name, i.Aggregation.GetResult());
-                    }
-
-                    numberProfileBatch.Add(numberProfile);
-                    if (BatchSize.HasValue && numberProfileBatch.Count == BatchSize)
+                        SubscriberNumber = cdr.MSISDN,
+                        FromDate = inputArgument.FromDate,
+                        ToDate = inputArgument.ToDate,
+                        Period = period,
+                        IsOnNet = 1
+                    };
+                    foreach (var aggregateDef in aggregateDefinitions)
                     {
-                        inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
-                        {
-                            numberProfiles = numberProfileBatch
-                        });
-                        handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfileBatch.Count);
-                        numberProfileBatch = new List<NumberProfile>();
+                        aggregateDef.Aggregation.Reset();
+                        aggregateDef.Aggregation.EvaluateCDR(cdr);
                     }
-
-                    numberProfile = new NumberProfile();
-                    foreach (var i in AggregateDefinitions)
+                }
+                else
+                {
+                    foreach (var aggregateDef in aggregateDefinitions)
                     {
-                        i.Aggregation.Reset();
+                        aggregateDef.Aggregation.EvaluateCDR(cdr);
                     }
-                    MSISDN = normalCDR.MSISDN;
                 }
-
-
-                numberProfile.SubscriberNumber = MSISDN;
-
-
-                if (inputArgument.PeriodId == (int)Enums.Period.Day)
-                {
-                    numberProfile.ToDate = normalCDR.ConnectDateTime.Value.AddDays(1);
-                }
-                else if (inputArgument.PeriodId == (int)Enums.Period.Hour)
-                {
-                    numberProfile.ToDate = normalCDR.ConnectDateTime.Value.AddHours(1);
-                }
-
-                numberProfile.Period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), inputArgument.PeriodId); ;
-                numberProfile.FromDate = inputArgument.FromDate;
-                numberProfile.IsOnNet = 1;
-
-
-                foreach (var i in AggregateDefinitions)
-                {
-                    i.Aggregation.EvaluateCDR(normalCDR);
-                }
-
-
-                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "123");
-                
 
             });
 
-            foreach (var i in AggregateDefinitions)
+            if (currentNumberProfile != null)
+                FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, 0, aggregateDefinitions);
+
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
+
+        }
+
+        private void FinishNumberProfileProcessing(NumberProfile currentNumberProfile, ref List<NumberProfile> numberProfileBatch, LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle, int batchSize, List<AggregateDefinition> AggregateDefinitions)
+        {
+            foreach (var aggregateDef in AggregateDefinitions)
             {
-                numberProfile.AggregateValues.Add(i.Name, i.Aggregation.GetResult());
+                currentNumberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult());
             }
-
-            numberProfileBatch.Add(numberProfile);
-
-
-            if (numberProfileBatch.Count > 0)
+            numberProfileBatch.Add(currentNumberProfile);
+            if (numberProfileBatch.Count == batchSize)
             {
                 inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                 {
                     numberProfiles = numberProfileBatch
-
-
                 });
                 handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Enqueued Count Items: {0} ", numberProfileBatch.Count);
+                numberProfileBatch = new List<NumberProfile>();
             }
-
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
-
         }
 
         protected override LoadNumberProfilesInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
