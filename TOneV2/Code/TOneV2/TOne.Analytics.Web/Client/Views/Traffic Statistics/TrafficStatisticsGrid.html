@@ -1,11 +1,7 @@
 ﻿<div ng-controller="TrafficStatisticsGridController" vr-loader="isGettingData">
-    
-    <div class="btn-group btn-group-custom" role="group">
-        <div ng-repeat="groupKey in groupKeys" style="display:inline-block">
-            <label class="hand-cursor" ng-class="selectedGroupKey == groupKey? 'clicked-btn' : ''" ng-click="selectGroupKey(groupKey)">{{groupKey.title}}</label>
-            <label ng-hide="$index == groupKeys.length - 1">|</label>
-        </div>
-    </div>
+    <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged">
+        <vr-choice ng-repeat="groupKey in groupKeys">{{groupKey.title}}</vr-choice>
+    </vr-choices>
     <div ng-repeat="groupKey in groupKeys">
         <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" menuactions="menuActions" issubgrid>
             <vr-datagridcolumn headertext="groupKey.gridHeader" field="'GroupKeyValues[0].Name'" widthfactor="20" isclickable="'true'" onclicked="onEntityClicked"></vr-datagridcolumn>

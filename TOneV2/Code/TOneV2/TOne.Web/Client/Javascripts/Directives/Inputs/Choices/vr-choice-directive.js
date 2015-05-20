@@ -41,7 +41,7 @@ app.directive('vrChoice', [function () {
                 }
             }
         },
-        template: '<label class="hand-cursor" ng-class="ctrl.isSelected?\'clicked-btn\':\'\'" ng-click="ctrl.choiceClicked()" ng-transclude></label>'
+        template: '<label class="hand-cursor" ng-class="ctrl.isSelected?\'clicked-btn\':\'\'" style="margin:2px;" ng-click="ctrl.choiceClicked()" ng-transclude></label>'
     };
 
     return directiveDefinitionObject;

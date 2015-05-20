@@ -17,12 +17,6 @@ appControllers.controller('TrafficStatisticsGridController',
 
         function defineScopeMethods() {
 
-            $scope.selectGroupKey = function (groupKey) {
-                $scope.selectedGroupKey = groupKey;
-                if (!groupKey.isDataLoaded)
-                    getData();
-            };
-
             $scope.onEntityClicked = function (dataItem) {
                 var parentGroupKeys = $scope.viewScope.groupKeys;
 
@@ -30,6 +24,14 @@ appControllers.controller('TrafficStatisticsGridController',
                     return parentGrpKey.groupKeyEnumValue == $scope.selectedGroupKey.groupKeyEnumValue;
                 })[0];
                 $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
+            };
+
+            $scope.groupKeySelectionChanged = function () {
+                if ($scope.selectedGroupKeyIndex != undefined) {
+                    $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
+                    if (!$scope.selectedGroupKey.isDataLoaded)
+                        getData();
+                }
             };
         }
 
