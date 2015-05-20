@@ -35,16 +35,16 @@
             method: "GET"
         });
     }
-    var data = $scope.getObjectsFromService = function () {
-        var objects = [];
+    $scope.getObjectsFromService = function () {
         $scope.getObjectsFromApi()
         .success(function (data, status, headers, config) {
-            objects= data;
+            $scope.totalServerItems = data.length;
+            $scope.SwitchItems = data;
+            $scope.gridOptions.data = data;
         })
         .error(function (data, status, headers, config) {
             alert(JSON.stringify(data));
         });
-        return objects;
     };
 
     /***************************************************/
@@ -60,7 +60,7 @@
         $scope.gridOptions.data = data;
     };
 
-    $scope.BindSwitchs();
+    $scope.getObjectsFromService();
 
     $scope.addSwitch = function () {
         $scope.SwitchItems.push({ 'SwitchId': $scope.switchIDInput, 'Name': $scope.switchNameInput });

@@ -10,7 +10,7 @@ namespace TOne.BusinessEntity.Entities
     {
         public int SwitchId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } 
       
     }
 }

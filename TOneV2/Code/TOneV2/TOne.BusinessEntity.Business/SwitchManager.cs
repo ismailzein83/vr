@@ -15,5 +15,12 @@ namespace TOne.BusinessEntity.Business
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             return dataManager.GetSwitches();
         }
+
+
+        public List<SwitchInfo> GetFilteredSwitches(string switchName,int rowFrom,int rowTo)
+        {
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.GetSwitches();
+        }
     }
 }
