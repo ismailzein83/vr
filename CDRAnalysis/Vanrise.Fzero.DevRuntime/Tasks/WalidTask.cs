@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
                     StrategyIds = StrategyIds,
                     FromDate = new DateTime(2015, 3, 13, 23, 01, 12),//2015-03-13 23:01:12.000
                     ToDate = new DateTime(2015, 3, 14, 6, 11, 42),//2015-03-14 06:11:42.000
-                    PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+                    PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
                 }
             });
 
