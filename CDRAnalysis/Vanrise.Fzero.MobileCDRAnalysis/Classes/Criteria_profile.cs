@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Criteria_Profile criteria_profile = new Criteria_Profile();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     criteria_profile = context.Criteria_Profile
@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Criteria_Profile> criteria_profiles = new List<Criteria_Profile>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     criteria_profiles = context.Criteria_Profile
                         //.Include(s => s.Switch_DatabaseConnection)
@@ -71,7 +71,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Criteria_Profile> criteria_profiles = new List<Criteria_Profile>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     criteria_profiles = context.Criteria_Profile
                        .ToList();

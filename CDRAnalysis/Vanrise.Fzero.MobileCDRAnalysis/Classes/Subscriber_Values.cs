@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
              List<Subscriber_Values> subscriber_Values = new List<Subscriber_Values>();
              try
              {
-                 using (MobileEntities context = new MobileEntities())
+                 using (Entities context = new Entities())
                  {
                      subscriber_Values = context.Subscriber_Values
                          .Include(s => s.Criteria_Profile)

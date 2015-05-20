@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Suspicion_Level Suspicion_Level = new Suspicion_Level();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Suspicion_Level = context.Suspicion_Level
                         .Where(s => s.Id == id)
@@ -42,7 +42,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Suspicion_Level> suspection_levels = new List<Suspicion_Level>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     suspection_levels = context.Suspicion_Level
                        .ToList();
@@ -61,7 +61,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (Suspicion_Level.Id == 0)
                     {

@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     //return context.prGetEmails( DestinationEmail, FromDate, ToDate).ToList();
                 }
@@ -29,7 +29,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             try
             {
 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     //context.prSendMail(profile_name, To, Subject, CC, Body, BCC);
                 }
@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             try
             {
 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     //context.prSendMailWithAttachment(profile_name, To, Subject, CC, Body, AttachmentPath, BCC);
                 }
@@ -65,7 +65,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             try
             {
 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     //context.prDeleteEmail(Ids);
                 }

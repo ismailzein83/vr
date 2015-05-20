@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
             StrategyProperty strategyProperty = new StrategyProperty();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (strategyId != 0 && criteriaId == 0)
@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
             StrategyProperty strategyProperty = new StrategyProperty();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     var data = from st in context.Strategies
                                join th in context.StrategyThresholds on st.Id equals th.StrategyId

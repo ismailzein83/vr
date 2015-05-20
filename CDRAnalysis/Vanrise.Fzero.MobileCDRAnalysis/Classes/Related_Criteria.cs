@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Related_Criteria related_Criteria = new Related_Criteria();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     related_Criteria = context.Related_Criteria
                         .Include(s => s.Strategy)
@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Related_Criteria> related_Criteria = new List<Related_Criteria>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (strategyId != 0 && criteriaId == 0)
@@ -110,7 +110,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Related_Criteria> related_Criteria = new List<Related_Criteria>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     related_Criteria = context.Related_Criteria
                         .Include(s => s.Strategy)
@@ -139,7 +139,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     Related_Criteria st = Related_Criteria.Load(related_Criteria.Id);
@@ -167,7 +167,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (related_Criteria.Id == 0)

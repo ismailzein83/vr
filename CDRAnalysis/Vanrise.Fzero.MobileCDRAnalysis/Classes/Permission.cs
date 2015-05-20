@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Permission> permissions = new List<Permission>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     permissions = context.Permissions
                         .Include(p => p.Permissions1)//Children

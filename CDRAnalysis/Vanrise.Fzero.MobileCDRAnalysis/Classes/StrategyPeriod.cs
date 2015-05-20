@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             StrategyPeriod strategyPeriod = new StrategyPeriod();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     strategyPeriod = context.StrategyPeriods
                         .Include(s => s.Strategy)
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<StrategyPeriod> strategyThresholds = new List<StrategyPeriod>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     strategyThresholds = context.StrategyPeriods
                            .Include(s => s.Strategy)
@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (strategyPeriod.Id == 0)
                     {

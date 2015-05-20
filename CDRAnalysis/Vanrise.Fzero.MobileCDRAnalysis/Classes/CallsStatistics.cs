@@ -34,7 +34,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 var _SwitchID = new SqlParameter("@SwitchID", switchId);
 
 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (party == Constants.MSISDN)
                     {

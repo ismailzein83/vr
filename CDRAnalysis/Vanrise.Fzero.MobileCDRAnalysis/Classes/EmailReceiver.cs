@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             EmailReceiver EmailReceiver = new EmailReceiver();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     EmailReceiver = context.EmailReceivers
                      .Where(u => u.Id == ID)
@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             EmailReceiver CurrentEmailReceiver = new EmailReceiver();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (EmailReceiver.Id == 0)
                     {
@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(emailReceiver).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
@@ -84,7 +84,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     EmailCCsList = context.EmailReceivers.Include(u => u.EmailReceiverType).Include(u => u.EmailTemplate)
                                        .Where(u => u.Id > 0

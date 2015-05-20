@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             rowsCount = 0;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     var query = context.NormalizationRules
                         .Include(r=>r.SwitchProfile)
@@ -98,7 +98,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using(MobileEntities context = new MobileEntities())
+                using(Entities context = new Entities())
                 {
                     if (rule.Id == 0)
                     {
@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(rule).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
@@ -148,7 +148,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             NormalizationRule rule = new NormalizationRule();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     rule = context.NormalizationRules
                         .Where(r => r.Id == id)
@@ -168,7 +168,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             try
             {
                 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Count = context.NormalizationRules
                         .Where(r => r.Party == rule.Party).Where(r => r.SwitchId == rule.SwitchId).Where(r => r.CallLength == rule.CallLength).Where(r => r.Prefix == rule.Prefix).Where(r => r.Id != rule.Id)

@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     foreach (UserPermission userPermission in context.UserPermissions.Where(x => x.UserID == userID).ToList())
                     {
@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
               bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     foreach (UserPermission rolePermission in permissions)
                     {

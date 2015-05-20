@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Import CurrentImport = new Import();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Imports.Add(Import);
                     context.SaveChanges();

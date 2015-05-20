@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             StrategyThreshold strategyThreshold = new StrategyThreshold();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     strategyThreshold = context.StrategyThresholds
                         .Include(s => s.Strategy)
@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<StrategyThreshold> strategyThresholds = new List<StrategyThreshold>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     if (strategyId != 0 && criteriaID == 0)
@@ -102,7 +102,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<StrategyThreshold> strategyThresholds = new List<StrategyThreshold>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     strategyThresholds = context.StrategyThresholds
                         .Include(s => s.Strategy.StrategyPeriods)
@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     StrategyThreshold st = StrategyThreshold.Load(strategyThreshold.Id);
@@ -162,7 +162,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (strategyThreshold.Id == 0)
                     {

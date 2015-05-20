@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<ReportingStatu> ListReportingStatus = new List<ReportingStatu>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     ListReportingStatus = context.ReportingStatus
                        .ToList();

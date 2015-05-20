@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Period period = new Period();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     period = context.Periods
                         .Where(s => s.Id == id)
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Period> periods = new List<Period>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     periods = context.Periods
                        .ToList();
@@ -57,7 +57,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (period.Id == 0)
                     {

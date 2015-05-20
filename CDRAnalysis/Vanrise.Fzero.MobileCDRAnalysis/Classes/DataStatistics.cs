@@ -34,7 +34,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             DataStatistics dataStatistics = new DataStatistics();
             try 
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     dataStatistics.ReportDetails = context.ReportDetails.Count();
                     dataStatistics.ReportsCount = context.Reports.Count();
@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 var _Database = new SqlParameter("@Database", database);
 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
                     dashboard = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwDashboard>("prDashboard @Database", _Database).ToList().FirstOrDefault();

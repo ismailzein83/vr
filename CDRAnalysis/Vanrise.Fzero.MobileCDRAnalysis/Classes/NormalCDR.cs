@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<NormalCDR> normalCDRs = new List<NormalCDR>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     normalCDRs = context.NormalCDRs
                        .Where(s =>
@@ -62,7 +62,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     relatedList = (from  c in context.NormalCDRs

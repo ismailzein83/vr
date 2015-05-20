@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Strategy_Suspicion_Level Strategy_Suspicion_Level = new Strategy_Suspicion_Level();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Include(s => s.Strategy)
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Strategy_Suspicion_Level> Strategy_Suspicion_Level = new List<Strategy_Suspicion_Level>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Where(s =>
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Strategy_Suspicion_Level> Strategy_Suspicion_Level = new List<Strategy_Suspicion_Level>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Strategy_Suspicion_Level = context.Strategy_Suspicion_Level
                         .Include(s => s.Strategy)
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (Strategy_Suspicion_Level.Id == 0)
                     {
@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(Strategy_Suspicion_Level).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

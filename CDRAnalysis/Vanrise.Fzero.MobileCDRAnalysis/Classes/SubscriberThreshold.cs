@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<SubscriberThreshold> subscriberThresholds = new List<SubscriberThreshold>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     subscriberThresholds = context.SubscriberThresholds
                         .Include(s => s.Suspicion_Level)

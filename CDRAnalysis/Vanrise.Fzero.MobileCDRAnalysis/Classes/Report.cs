@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             int Count = 0;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     Count = context.Reports
                         .Count();
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Report report = new Report();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     report = context.Reports
@@ -58,7 +58,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Report report = new Report();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     report = context.Reports
@@ -83,7 +83,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<ReportDetail> reportDetails = new List<ReportDetail>();
             try
             {
-               using (MobileEntities context = new MobileEntities())
+               using (Entities context = new Entities())
                 {
 
                     reports = context.Reports
@@ -114,7 +114,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Report> reports = new List<Report>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     reports = context.Reports
                        .Include(s => s.ReportDetails)
@@ -133,7 +133,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<Report> reports = new List<Report>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     reports = context.Reports
                        .Include(s => s.ReportDetails)
@@ -160,7 +160,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (report.Id == 0)
                     {
@@ -188,7 +188,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     var result = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwReportVariable>("call prGetReportVariables ()").ToList().FirstOrDefault();
 
@@ -212,7 +212,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         //    List<Report> reports = new List<Report>();
         //    try
         //    {
-        //        using (MobileEntities context = new MobileEntities())
+        //        using (Entities context = new Entities())
         //        {
                     
         //            reports = from rt in context.Reports
@@ -257,7 +257,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(report).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();

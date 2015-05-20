@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             EmailTemplate EmailTemplate = new EmailTemplate();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     EmailTemplate = context.EmailTemplates
                     .Where(u => u.ID == ID)
@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             EmailTemplate EmailTemplate = new EmailTemplate();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     EmailTemplate = context.EmailTemplates.Include(u => u.EmailReceivers)
                     .Where(u => u.ID == ID)
@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     EmailTemplatesList = context.EmailTemplates
@@ -76,7 +76,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     EmailTemplatesList = context.EmailTemplates
@@ -98,7 +98,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     EmailTemplate.LastUpdateDate = DateTime.Now;
                     context.EmailTemplates.Attach(EmailTemplate);

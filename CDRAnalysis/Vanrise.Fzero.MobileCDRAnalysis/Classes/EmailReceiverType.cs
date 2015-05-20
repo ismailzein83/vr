@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
 
                     EmailReceiverTypesList = context.EmailReceiverTypes

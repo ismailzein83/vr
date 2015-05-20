@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             List<vwReportedNumber> list_ReportedNumbers = new List<vwReportedNumber>();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     list_ReportedNumbers = context.vwReportedNumbers.Where(x=>x.ReportID==ReportID).ToList();
                 }

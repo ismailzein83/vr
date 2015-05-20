@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             User user = new User();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     user = Load(id);
                     user.IsActive = !user.IsActive;
@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     UsersList = context.Users
                         .OrderBy(x => x.FullName).ToList();
@@ -62,7 +62,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     return context.Users
                         .Include(u=>u.UserPermissions)
@@ -84,7 +84,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             User user = new User();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     user = context.Users
                         .Include(u => u.UserPermissions)
@@ -104,7 +104,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             int id = 0;
             try
             { 
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     if (user.ID == 0)
                     {
@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Entry(user).State = System.Data.EntityState.Deleted;
                     context.SaveChanges();
@@ -156,7 +156,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool success = false;
             try 
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     context.Users.Attach(user);
                     context.Entry(user).Property(u => u.LastLoginTime).IsModified = true;
@@ -176,7 +176,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             bool exists = false;
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     exists = context.Users.Where(u => u.UserName == userName).Count() > 0;
                 }
@@ -228,7 +228,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     UserName = context.Users
                         .Where(u => u.ID == ID)
@@ -248,7 +248,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             User user = new User();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     user = User.Load(userId);
                     user.Password = password;
@@ -272,7 +272,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             User user = new User();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     user = User.Load(userId);
 
@@ -294,7 +294,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     UsersList = context.Users
                                        .Where(u => u.ID > 0

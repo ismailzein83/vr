@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             Switch_DatabaseConnections SwitchConnection = new Switch_DatabaseConnections();
             try
             {
-                using (MobileEntities context = new MobileEntities())
+                using (Entities context = new Entities())
                 {
                     SwitchConnection = context.Switch_DatabaseConnections.Where(u=>u.Id==id).ToList().FirstOrDefault();
                 }
