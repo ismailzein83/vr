@@ -67,17 +67,121 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             List<int> StrategyIds = new List<int>();
             StrategyIds.Add(1);
-            //StrategyIds.Add(35);
 
-            BPClient bpClient2 = new BPClient();
-            bpClient2.CreateNewProcess(new CreateProcessInput
+            BPClient bpClient3 = new BPClient();
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 0, 0, 0),
+            //        ToDate = new DateTime(2015, 3, 14, 0, 59, 59),
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 1, 0, 0),
+            //        ToDate = new DateTime(2015, 3, 14, 1, 59, 59),
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 2, 0, 0),
+            //        ToDate = new DateTime(2015, 3, 14, 2, 59, 59),
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 3, 0, 0),//2015-03-13 23:01:12.000
+            //        ToDate = new DateTime(2015, 3, 14, 3, 59, 59),//2015-03-14 06:11:42.000
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 4, 0, 0),//2015-03-13 23:01:12.000
+            //        ToDate = new DateTime(2015, 3, 14, 4, 59, 59),//2015-03-14 06:11:42.000
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIds,
+            //        FromDate = new DateTime(2015, 3, 14, 5, 0, 0),//2015-03-13 23:01:12.000
+            //        ToDate = new DateTime(2015, 3, 14, 5, 59,59),//2015-03-14 06:11:42.000
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            //    }
+            //});
+
+
+           
+
+
+
+
+
+
+
+
+
+            List<int> StrategyIdsDaily = new List<int>();
+            StrategyIdsDaily.Add(35);
+
+            
+            //bpClient3.CreateNewProcess(new CreateProcessInput
+            //{
+            //    ProcessName = "ExecuteStrategyProcess",
+            //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            //    {
+            //        StrategyIds = StrategyIdsDaily,
+            //        FromDate = new DateTime(2015, 3, 13, 23, 0, 0),//2015-03-13 23:01:12.000
+            //        ToDate = new DateTime(2015, 3, 13, 23, 59, 59),//2015-03-14 06:11:42.000
+            //        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
+            //    }
+            //});
+
+
+            bpClient3.CreateNewProcess(new CreateProcessInput
             {
                 ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
-                    StrategyIds = StrategyIds,
-                    FromDate = new DateTime(2015, 3, 13, 23, 01, 12),//2015-03-13 23:01:12.000
-                    ToDate = new DateTime(2015, 3, 14, 6, 11, 42),//2015-03-14 06:11:42.000
+                    StrategyIds = StrategyIdsDaily,
+                    FromDate = new DateTime(2015, 3, 14, 0, 0, 0),//2015-03-13 23:01:12.000
+                    ToDate = new DateTime(2015, 3, 14, 5, 59, 59),//2015-03-14 06:11:42.000
                     PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
                 }
             });
