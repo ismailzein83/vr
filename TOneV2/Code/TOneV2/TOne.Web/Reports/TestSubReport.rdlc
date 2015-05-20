@@ -6,18 +6,18 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.89583in</Width>
+              <Width>1.28375in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.05209in</Width>
+              <Width>1.21084in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>1.64833in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.30208in</Height>
+              <Height>0.30521in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -29,7 +29,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Day</Value>
-                              <Style />
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>White</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -38,9 +41,13 @@
                       <rd:DefaultName>Textbox2</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BottomBorder>
+                          <Color>Green</Color>
+                          <Width>2pt</Width>
+                        </BottomBorder>
+                        <BackgroundColor>#93c572</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -59,7 +66,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Attemps</Value>
-                              <Style />
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>White</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -68,9 +78,13 @@
                       <rd:DefaultName>Textbox6</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BottomBorder>
+                          <Color>Green</Color>
+                          <Width>2pt</Width>
+                        </BottomBorder>
+                        <BackgroundColor>#93c572</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -88,8 +102,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>month</Value>
-                              <Style />
+                              <Value>Month</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>White</Color>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -98,9 +115,13 @@
                       <rd:DefaultName>Textbox1</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BottomBorder>
+                          <Color>Green</Color>
+                          <Width>2pt</Width>
+                        </BottomBorder>
+                        <BackgroundColor>#93c572</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -112,7 +133,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.30208in</Height>
+              <Height>0.27396in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -133,7 +154,6 @@
                       <rd:DefaultName>Day</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -157,13 +177,14 @@
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Attemps</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -193,7 +214,6 @@
                       <rd:DefaultName>Textbox3</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -225,21 +245,42 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <NoRowsMessage>No data to diplay</NoRowsMessage>
         <DataSetName>DataSet1</DataSetName>
-        <Height>0.60416in</Height>
-        <Width>2.94792in</Width>
+        <Left>0.26958in</Left>
+        <Height>0.57917in</Height>
+        <Width>4.14292in</Width>
         <Style>
           <Border>
-            <Style>None</Style>
+            <Style>Solid</Style>
+            <Width>2pt</Width>
           </Border>
+          <TopBorder>
+            <Color>Green</Color>
+          </TopBorder>
+          <BottomBorder>
+            <Color>Green</Color>
+          </BottomBorder>
+          <LeftBorder>
+            <Color>Green</Color>
+          </LeftBorder>
+          <RightBorder>
+            <Color>Green</Color>
+          </RightBorder>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>0.63542in</Height>
-    <Style />
+    <Height>0.58958in</Height>
+    <Style>
+      <Border>
+        <Style>None</Style>
+      </Border>
+    </Style>
   </Body>
-  <Width>2.94792in</Width>
+  <Width>4.42292in</Width>
   <Page>
+    <PageHeight>5in</PageHeight>
+    <PageWidth>3in</PageWidth>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
     <TopMargin>1in</TopMargin>

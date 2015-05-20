@@ -176,6 +176,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ReportChart.aspx.cs">
+      <DependentUpon>ReportChart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportChart.aspx.designer.cs">
+      <DependentUpon>ReportChart.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ReportModel.cs" />
     <Compile Include="Reports\ReportPage.aspx.cs">
       <DependentUpon>ReportPage.aspx</DependentUpon>
@@ -587,6 +594,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Reports\ReportChart.aspx" />
     <Content Include="Reports\ReportPage.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -737,6 +745,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\ReportChart.rdlc" />
     <EmbeddedResource Include="Reports\TestReport.rdlc" />
     <EmbeddedResource Include="Reports\TestSubReport.rdlc" />
   </ItemGroup>

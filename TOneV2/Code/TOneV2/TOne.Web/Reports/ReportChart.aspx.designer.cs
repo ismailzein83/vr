@@ -10,7 +10,7 @@
 namespace TOne.Web.Reports {
     
     
-    public partial class ReportPage {
+    public partial class ReportChart {
         
         /// <summary>
         /// form1 control.
