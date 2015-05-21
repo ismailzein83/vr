@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics\ZoneProfit.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />

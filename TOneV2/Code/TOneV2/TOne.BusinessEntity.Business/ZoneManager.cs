@@ -32,5 +32,7 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetZones(supplierId, nameFilter);
         }
+
+
     }
 }

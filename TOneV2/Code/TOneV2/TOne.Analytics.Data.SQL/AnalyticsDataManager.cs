@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Analytics.Entities;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
@@ -163,6 +165,32 @@ namespace TOne.Analytics.Data.SQL
                 }, fromDate, toDate);
         }
 
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer)
+        {
+            return GetItemsSP("Analytics.sp_billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer), fromDate, toDate, null, null, groupByCustomer, null, null);
+        }
+
+        private ZoneProfit ZoneProfitMapper(IDataReader reader, string groupByCustomer)
+        {
+            ZoneProfit instance = new ZoneProfit
+            {
+                CostZone = reader["CostZone"] as string,
+                SaleZone = reader["SaleZone"] as string,
+                SupplierID = reader["SupplierID"] as string,
+                Calls = GetReaderValue<int>(reader, "Calls"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+                DurationNet = GetReaderValue<decimal>(reader, "DurationNet")
+            };
+            if (groupByCustomer=="Y")
+            {
+                instance.CustomerID = reader["CustomerID"] as string;
+
+            }
+            return instance;
+        }
 
 
     }

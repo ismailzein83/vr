@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Data;
+using TOne.Analytics.Entities;
 using TOne.BusinessEntity.Business;
 
 namespace TOne.Analytics.Business
@@ -66,6 +67,13 @@ namespace TOne.Analytics.Business
         {
             return _datamanager.GetSummary(fromDate, toDate);
         }
+
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer)
+        {
+
+            return _datamanager.GetZoneProfit(fromDate, toDate, groupByCustomer);
+        }
+
 
         #region Private Methods
         private List<Entities.AlertView> CreateAlertViews(List<Entities.Alert> alerts)

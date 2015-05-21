@@ -176,6 +176,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Analytics\ZoneProfit.aspx.cs">
+      <DependentUpon>ZoneProfit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Analytics\ZoneProfit.aspx.designer.cs">
+      <DependentUpon>ZoneProfit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ReportChart.aspx.cs">
       <DependentUpon>ReportChart.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -594,6 +601,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Reports\Analytics\ZoneProfit.aspx" />
     <Content Include="Reports\ReportChart.aspx" />
     <Content Include="Reports\ReportPage.aspx" />
     <Content Include="Web.config">
@@ -745,6 +753,12 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Analytics\rdlZoneProfits.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Analytics\ZoneProfit.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\ReportChart.rdlc" />
     <EmbeddedResource Include="Reports\TestReport.rdlc" />
     <EmbeddedResource Include="Reports\TestSubReport.rdlc" />
