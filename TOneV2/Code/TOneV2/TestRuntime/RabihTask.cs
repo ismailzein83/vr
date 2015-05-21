@@ -19,11 +19,11 @@ namespace TestRuntime
         public void Execute()
         {
 
-            IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
+            //IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
 
 
-            string result = datamanager.GetServicesDisplayList(15);
-            return;
+            //string result = datamanager.GetServicesDisplayList(15);
+            //return;
 
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
             Console.WriteLine("Hello from Rabih!");
