@@ -1,7 +1,8 @@
-﻿/// <reference path="ZoneMonitorSettings.html" />
-/// <reference path="ZoneMonitor.html" />
-appControllers.controller('ZoneMonitorController',
-    function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
+﻿ZoneMonitorController.$inject = ['$scope', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
+        'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
+appControllers.controller('ZoneMonitorController', ZoneMonitorController);
+
+ function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
         CarrierTypeEnum, VRModalService, VRNotificationService) {
 
         var chartSelectedMeasureAPI;
@@ -433,4 +434,4 @@ appControllers.controller('ZoneMonitorController',
             });
         }
         
-    });
+    };

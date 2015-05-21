@@ -1,9 +1,10 @@
 ﻿'use strict';
 
-app.service('UtilsService', [function () {
+app.service('UtilsService', ['$q', function ($q) {
 
     return ({
-        replaceAll: replaceAll
+        replaceAll: replaceAll,
+        waitMultipleAsyncOperations: waitMultipleAsyncOperations
     });
 
     function replaceAll(string, find, replace) {
@@ -12,5 +13,20 @@ app.service('UtilsService', [function () {
 
     function escapeRegExp(string) {
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    function waitMultipleAsyncOperations(operations) {
+        var deferred = $q.defer();
+        var pendingOperations = operations.lenght;
+        angular.forEach(operations, function (operation) {
+            operation.then(function () {
+                pendingOperations--;
+                if (pendingOperations == 0)
+                    deferred.resolve();
+            }).catch(function (error) {
+                deferred.reject(error);
+            });
+        });
+        return deferred.promise;
     }
 }]);
