@@ -56,5 +56,68 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
         }
 
+        public void SaveNumberProfiles(List<NumberProfile> numberProfiles)
+        {
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            foreach (NumberProfile numberProfile in numberProfiles)
+            {
+                           
+                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
+                             new[] 
+                             
+                                 { 
+                                    numberProfile.SubscriberNumber.ToString(),	
+                                    numberProfile.FromDate.ToString(),	
+                                    numberProfile.ToDate.ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["CountOutCalls"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["DiffOutputNumb"],0).ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["CountOutInters"],0).ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["CountInInters"],0).ToString()	,
+                                    "0",	
+                                    "0",		
+                                    "0",		
+                                    numberProfile.AggregateValues["CallOutDurs"].ToString(),	
+                                    "0",	
+                                    "0",		
+                                    Math.Round(numberProfile.AggregateValues["CountOutFails"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["CountInFails"],0).ToString()	,
+                                    numberProfile.AggregateValues["TotalOutVolume"].ToString()	,
+                                    numberProfile.AggregateValues["TotalInVolume"].ToString(),	
+                                    Math.Round(numberProfile.AggregateValues["DiffInputNumbers"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["CountOutSMSs"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["TotalIMEI"],0).ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["TotalBTS"],0).ToString()	,	
+                                    numberProfile.IsOnNet.ToString()	,	
+                                    numberProfile.AggregateValues["TotalDataVolume"].ToString()	,
+                                    ((int)numberProfile.Period).ToString()		,
+                                    Math.Round(numberProfile.AggregateValues["CountInCalls"],0).ToString()	,
+                                    numberProfile.AggregateValues["CallInDurs"].ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["CountOutOnNets"],0).ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["CountInOnNets"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["CountOutOffNets"],0).ToString()	,
+                                    Math.Round(numberProfile.AggregateValues["CountInOffNets"],0).ToString()	
+                                 }
+               );
+
+                      
+               
+
+            }
+
+            stream.Close();
+
+            InsertBulkToTable(
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[dbo].[ts_NumberProfile]",
+                    Stream = stream,
+                    TabLock = false,
+                    KeepIdentity = false,
+                    FieldSeparator = ','
+                });
+        }
+
     }
 }

@@ -83,6 +83,7 @@
         <Variable x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)" Name="suspiciousNumberQueue" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadNumberProfilesStatus" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetSuspiciousNumberStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="outnumberProfileQueue" />
       </Parallel.Variables>
       <vffba1:LoadNumberProfiles sap2010:WorkflowViewState.IdRef="LoadNumberProfiles_1">
         <vffba1:LoadNumberProfiles.FromDate>
@@ -122,6 +123,11 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">suspiciousNumberQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:GetSuspiciousNumber.OutputQueue>
+        <vffba1:GetSuspiciousNumber.OutputQueue2>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">outnumberProfileQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:GetSuspiciousNumber.OutputQueue2>
         <vffba1:GetSuspiciousNumber.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpValue>
@@ -144,6 +150,11 @@
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:SuspiciousNumberBatch)">suspiciousNumberQueue</mca:CSharpValue>
           </InArgument>
         </vffba1:StoreSuspiciousNumbers.InputQueue>
+        <vffba1:StoreSuspiciousNumbers.InputQueue2>
+          <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">outnumberProfileQueue</mca:CSharpValue>
+          </InArgument>
+        </vffba1:StoreSuspiciousNumbers.InputQueue2>
         <vffba1:StoreSuspiciousNumbers.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GetSuspiciousNumberStatus</mca:CSharpValue>
@@ -161,7 +172,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBk7A6UBDgIBAT8FQxECAWxEBU8aAgFlUAWeARACAQafAQWjARECAQJBCUGVAQIBbUwLTGMCAWlHC0dqAgFmVwdxIwIBQXIHjAEkAgEdjQEHnQEnAgEHoQEJoQGUAQIBA1oNWlsCAV5pDWl5AgFXXw1fggECAVBkDWRYAgFJbg1uWQIBQokBDYkBZAIBOn8Nf3ECATN1DXV6AgEshAENhAF6AgEleg16iAECAR6aAQ2aAWQCARaVAQ2VAXICAQ+QAQ2QAYABAgEI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBs7A7ABDgIBAT8FQxEDAYkBRAVPGgMBggFQBakBEAIBBqoBBa4BEQIBAkEJQZUBAwGKAUwLTGMDAYYBRwtHagMBgwFYB3IjAgFZcweSASQCASiTAQeoAScCAQesAQmsAZQBAgEDWw1bWwIBemoNankCAXJgDWCCAQIBamUNZVgCAWJvDW9ZAgFajwENjwFkAgFRhQENhQFxAgFJdg12egIBQYABDYABhQECATmKAQ2KAXoCATF7DXuIAQIBKaUBDaUBZAIBIKABDaABcgIBGJYBDZYBgAECARCbAQ2bAX0CAQg=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

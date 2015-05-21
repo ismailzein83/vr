@@ -15,6 +15,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public BaseQueue<SuspiciousNumberBatch> InputQueue { get; set; }
 
+        public BaseQueue<NumberProfileBatch> InputQueue2 { get; set; }
+
         public List<Strategy> Strategies { get; set; }
 
     }
@@ -27,6 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<SuspiciousNumberBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<NumberProfileBatch>> InputQueue2 { get; set; }
 
 
         [RequiredArgument]
@@ -42,18 +45,27 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
-                bool hasItem = false;
+                bool hasItemSuspiciousNumbers = false;
+                bool hasNumberProfiles = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue(
-                        (item) =>
+                    hasItemSuspiciousNumbers = inputArgument.InputQueue.TryDequeue(
+                        (x) =>
                         {
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.Dequeued {0}", DateTime.Now);
-                            dataManager.SaveSuspiciousNumbers(item.suspiciousNumbers);
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDB {0}", DateTime.Now);
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.DequeuedSaveSuspiciousNumbers {0}", DateTime.Now);
+                            dataManager.SaveSuspiciousNumbers(x.suspiciousNumbers);
+                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDBSaveSuspiciousNumbers {0}", DateTime.Now);
                         });
+
+                    hasNumberProfiles = inputArgument.InputQueue2.TryDequeue(
+                       (y) =>
+                       {
+                           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.DequeuedSaveNumberProfiles {0}", DateTime.Now);
+                           dataManager.SaveNumberProfiles(y.numberProfiles);
+                           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDBSaveNumberProfiles {0}", DateTime.Now);
+                       });
                 }
-                while (!ShouldStop(handle) && hasItem);
+                while (!ShouldStop(handle) && hasItemSuspiciousNumbers && hasNumberProfiles);
             });
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.End {0}", DateTime.Now);
         }
@@ -63,6 +75,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return new GetStoreSuspiciousNumbersInput
             {
                 InputQueue = this.InputQueue.Get(context),
+                InputQueue2 = this.InputQueue2.Get(context),
                 Strategies = this.Strategies.Get(context)
             };
         }

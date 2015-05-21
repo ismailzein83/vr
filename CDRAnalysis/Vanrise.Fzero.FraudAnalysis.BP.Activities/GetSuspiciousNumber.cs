@@ -16,6 +16,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public BaseQueue<SuspiciousNumberBatch> OutputQueue { get; set; }
 
+        public BaseQueue<NumberProfileBatch> OutputQueue2 { get; set; }
+
         public List<Strategy> Strategies { get; set; }
     }
 
@@ -31,6 +33,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public InOutArgument<BaseQueue<SuspiciousNumberBatch>> OutputQueue { get; set; }
 
+        public InOutArgument<BaseQueue<NumberProfileBatch>> OutputQueue2 { get; set; }
+
         [RequiredArgument]
         public InArgument<List<Strategy>> Strategies { get; set; }
 
@@ -40,6 +44,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             if (this.OutputQueue.Get(context) == null)
                 this.OutputQueue.Set(context, new MemoryQueue<SuspiciousNumberBatch>());
+
+            if (this.OutputQueue2.Get(context) == null)
+                this.OutputQueue2.Set(context, new MemoryQueue<NumberProfileBatch>());
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -63,7 +71,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         hasItem = inputArgument.InputQueue.TryDequeue(
                             (item) =>
                             {
-
+                                List<NumberProfile> numbers = new List<NumberProfile>();
                                 List<SuspiciousNumber> sNumbers = new List<SuspiciousNumber>();
 
                                 foreach (NumberProfile number in item.numberProfiles)
@@ -72,13 +80,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     foreach (FraudManager manager in managers)
                                         if (manager.IsNumberSuspicious(number, out sNumber, manager.StrategyId))
                                         {
-                                            sNumbers.Add(sNumber);   
+                                            sNumbers.Add(sNumber);
+                                            numbers.Add(number);
                                         }
                                 }
                                 if (sNumbers.Count > 0)
                                 {
                                     inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
                                         suspiciousNumbers = sNumbers
+                                    });
+
+                                    inputArgument.OutputQueue2.Enqueue(new NumberProfileBatch()
+                                    {
+                                        numberProfiles = numbers
                                     });
                                     handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Count Items: {0} ", sNumbers.Count);
                                 }
@@ -102,6 +116,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
+                OutputQueue2 = this.OutputQueue2.Get(context),
                 Strategies = this.Strategies.Get(context)
             };
         }
