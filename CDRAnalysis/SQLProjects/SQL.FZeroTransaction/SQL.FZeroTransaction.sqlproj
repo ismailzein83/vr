@@ -114,12 +114,9 @@
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateStatuses.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UnLock.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_TryLockAndUpdateWorkflowInstanceID.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriteria.sql" />
-    <Build Include="bp\User Defined Types\IDIntType.sql" />
-    <Build Include="bp\User Defined Types\IDBigIntType.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateWorkflowInstanceID.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateLoadedFlag.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_ClearLoadedFlag.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
