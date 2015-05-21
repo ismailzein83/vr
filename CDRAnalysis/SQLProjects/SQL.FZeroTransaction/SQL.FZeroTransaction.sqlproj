@@ -73,6 +73,7 @@
     <Folder Include="bp\Stored Procedures\" />
     <Folder Include="queue\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="bp\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -101,13 +102,10 @@
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_Update.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionState_GetByKey.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_ClearLoadedFlag.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_GetPendings.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateWorkflowInstanceID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateStatus.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_Insert.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateLoadedFlag.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetPendings.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_GetAll.sql" />
@@ -116,6 +114,12 @@
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateStatuses.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UnLock.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_TryLockAndUpdateWorkflowInstanceID.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriteria.sql" />
+    <Build Include="bp\User Defined Types\IDIntType.sql" />
+    <Build Include="bp\User Defined Types\IDBigIntType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

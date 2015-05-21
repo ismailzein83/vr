@@ -6,7 +6,7 @@
     [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
     [InputArgument]      NVARCHAR (MAX)   NULL,
     [ExecutionStatus]    INT              NOT NULL,
-    [LoadedByRuntime]    BIT              NULL,
+    [LockedByProcessID]  INT              NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
     [RetryCount]         INT              NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
@@ -16,14 +16,15 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_ExecutionStatus]
     ON [bp].[BPInstance]([ExecutionStatus] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_BPInstance_LoadedByRuntime]
-    ON [bp].[BPInstance]([LoadedByRuntime] ASC);
+
 
 
 GO
@@ -34,4 +35,9 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_CreatedTime]
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_DefinitionID]
     ON [bp].[BPInstance]([DefinitionID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BPInstance_LockedByProcessID]
+    ON [bp].[BPInstance]([LockedByProcessID] ASC);
 
