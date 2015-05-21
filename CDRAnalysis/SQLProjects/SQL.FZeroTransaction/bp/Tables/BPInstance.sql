@@ -6,7 +6,7 @@ CREATE TABLE [bp].[BPInstance] (
     [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
     [InputArgument]      NVARCHAR (MAX)   NULL,
     [ExecutionStatus]    INT              NOT NULL,
-    [LoadedByRuntime]    BIT              NULL,
+    [LockedByProcessID]  INT              NULL,
     [LastMessage]        NVARCHAR (MAX)   NULL,
     [RetryCount]         INT              NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
@@ -14,6 +14,8 @@ CREATE TABLE [bp].[BPInstance] (
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID])
 );
+
+
 
 
 
@@ -40,6 +42,6 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_DefinitionID]
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_BPInstance_LoadedByRuntime]
-    ON [bp].[BPInstance]([LoadedByRuntime] ASC);
+CREATE NONCLUSTERED INDEX [IX_BPInstance_LockedByProcessID]
+    ON [bp].[BPInstance]([LockedByProcessID] ASC);
 

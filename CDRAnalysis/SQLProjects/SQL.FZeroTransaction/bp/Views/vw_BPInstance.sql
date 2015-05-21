@@ -1,7 +1,7 @@
 ﻿CREATE VIEW bp.vw_BPInstance
 AS
 SELECT     bp.BPInstance.ID, bp.BPInstance.Title, bp.LKUP_ExecutionStatus.Description AS ExecutionStatus, bp.BPDefinition.Title AS Definition, bp.BPInstance.ParentID, 
-                      bp.BPInstance.WorkflowInstanceID, bp.BPInstance.InputArgument, bp.BPInstance.LoadedByRuntime, bp.BPInstance.LastMessage, bp.BPInstance.RetryCount, 
+                      bp.BPInstance.WorkflowInstanceID, bp.BPInstance.InputArgument, bp.BPInstance.LockedByProcessID, bp.BPInstance.LastMessage, bp.BPInstance.RetryCount, 
                       bp.BPInstance.CreatedTime, bp.BPInstance.StatusUpdatedTime, bp.BPInstance.DefinitionID
 FROM         bp.BPInstance INNER JOIN
                       bp.BPDefinition ON bp.BPInstance.DefinitionID = bp.BPDefinition.ID LEFT OUTER JOIN
