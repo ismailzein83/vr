@@ -79,6 +79,36 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             return strategy;
         }
 
+
+        public List<Strategy> GetAllStrategies()
+        {
+            MySQLManager manager = new MySQLManager();
+            string query_GetStrategies = @"SELECT Id, Name FROM Strategy; ";
+            List<Strategy> strategies = new List<Strategy>();
+
+
+            manager.ExecuteReader(query_GetStrategies,
+                null, (reader) =>
+                {
+
+                    while (reader.Read())
+                    {
+                        Strategy strategy = new Strategy();
+                        strategy.Id = (int)reader["Id"];
+                        strategy.Name = reader["Name"] as string;
+                        strategies.Add(strategy);
+                    }
+
+
+
+                });
+
+
+            return strategies;
+        }
+
+
+
        
     }
 }

@@ -7,6 +7,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public int Id { get; set; }
 
+        public string Name { get; set; }
+
         public List<StrategyCriteria> StrategyCriterias { get; set; }
 
         public List<StrategyLevel> StrategyLevels { get; set; }
