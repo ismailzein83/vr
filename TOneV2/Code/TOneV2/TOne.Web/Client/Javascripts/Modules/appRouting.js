@@ -2,6 +2,9 @@
 appRouting.config(['$routeProvider',
   function ($routeProvider) {
       $routeProvider.
+          when('/Error/:params', {
+              templateUrl: '/Client/Modules/Common/Views/Error.html'
+          }).
         when('/default', {
             templateUrl: '/Client/Views/Default.html',
             controller: 'DefaultController'
@@ -80,8 +83,7 @@ appRouting.config(['$routeProvider',
                 controller: 'SwitchManagmentController'
             }).
         when('/NOC/ZoneMonitor', {
-            templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html',
-            controller: 'ZoneMonitorController'
+            templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html'
         }).
           when('/Tree', {
               templateUrl: '/Client/Views/TreeView.html',
