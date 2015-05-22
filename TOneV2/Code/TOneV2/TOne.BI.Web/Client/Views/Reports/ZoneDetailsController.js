@@ -1,5 +1,5 @@
 ﻿appControllers.controller('ZoneDetailsController',
-    function ZoneDetailsController($scope, VRNavigationService, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
+    function ZoneDetailsController($scope, VRNavigationService, VRNotificationService, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
 
         var zoneId;
         var maxTimeDimension = 0;
@@ -225,6 +225,8 @@
                 //    angular.element(document.getElementsByClassName('gridrouteMain')[0]).css('height', gridOption.getHeight() + 'px');
                 //    gridMainAPI.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
                 //}
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error);
             });
         }
 

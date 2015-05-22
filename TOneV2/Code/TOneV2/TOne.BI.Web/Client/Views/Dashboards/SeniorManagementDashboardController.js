@@ -1,5 +1,5 @@
 ﻿appControllers.controller('SeniorManagementDashboardController',
-    function SeniorManagementDashboardController($scope, VRNavigationService, VRModalService, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum, $animate) {
+    function SeniorManagementDashboardController($scope, UtilsService, VRNotificationService, VRNavigationService, VRModalService, BIAPIService, BIEntityTypeEnum, BIMeasureTypeEnum, $animate) {
 
         defineScopeObjects();
         defineScopeMethods();
@@ -89,8 +89,8 @@
                 updateCharts();
             };
 
-            $scope.updateCharts = function (asyncHandle) {
-                updateCharts(asyncHandle);
+            $scope.updateCharts = function () {
+                return updateCharts();
             };
         }
 
@@ -101,48 +101,39 @@
             $scope.optionTopCounts.lastselectedvalue = $scope.optionTopCounts.datasource[1];
         }
 
-        function updateCharts(asyncHandle) {
+        function updateCharts() {
             if (chartTopDestinationsAPI == undefined || chartTopCustomersAPI == undefined || chartTopSuppliersAPI == undefined)
                 return;
-            var finishedTasks = 0;
-            var taskHandle = {
-                operationDone: function () {
-                    finishedTasks++;
-                    if (finishedTasks == 3) {
-                        if (asyncHandle)
-                            asyncHandle.operationDone();
-                        $scope.isGettingData = false;
-                    }
-                }
-            };
             $scope.isGettingData = true;
-            updateTopDestinationsChart(taskHandle);
-            updateTopCustomersChart(taskHandle);
-            updateTopSuppliersChart(taskHandle);
+            return UtilsService.waitMultipleAsyncOperations([updateTopDestinationsChart, updateTopCustomersChart, updateTopSuppliersChart]).finally(function () {
+                $scope.isGettingData = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error);
+            });
         }
 
-        function updateTopDestinationsChart(asyncHandle) {
-            updateTopChart(chartTopDestinationsAPI, BIEntityTypeEnum.SaleZone.value, {
+        function updateTopDestinationsChart() {
+            return updateTopChart(chartTopDestinationsAPI, BIEntityTypeEnum.SaleZone.value, {
                 chartTitle: "TOP DESTINATIONS",
                 seriesTitle: "Top Destinations"
-            }, asyncHandle);
+            });
         }
 
-        function updateTopCustomersChart(asyncHandle) {
-            updateTopChart(chartTopCustomersAPI, BIEntityTypeEnum.Customer.value, {
+        function updateTopCustomersChart() {
+            return updateTopChart(chartTopCustomersAPI, BIEntityTypeEnum.Customer.value, {
                 chartTitle: "TOP CUSTOMERS",
                 seriesTitle: "Top Customers"
-            }, asyncHandle);
+            });
         }
 
-        function updateTopSuppliersChart(asyncHandle) {
-            updateTopChart(chartTopSuppliersAPI, BIEntityTypeEnum.Supplier.value, {
+        function updateTopSuppliersChart() {
+            return updateTopChart(chartTopSuppliersAPI, BIEntityTypeEnum.Supplier.value, {
                 chartTitle: "TOP SUPPLIERS",
                 seriesTitle: "Top Suppliers"
-            }, asyncHandle);
+            });
         }
 
-        function updateTopChart(chartAPI, entityType, chartSettings, asyncHandle) {
+        function updateTopChart(chartAPI, entityType, chartSettings) {
             if (!chartAPI)
                 return;
             var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
@@ -150,16 +141,16 @@
                 return;
 
             var selectedDateTimeFilter = $scope.dateTimeFilterOption.lastselectedvalue;
-            BIAPIService.GetTopEntities(entityType, measureType.value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.value])
+            return BIAPIService.GetTopEntities(entityType, measureType.value, selectedDateTimeFilter.fromDate, selectedDateTimeFilter.toDate, $scope.optionTopCounts.lastselectedvalue.value, [measureType.value])
                 .then(function (response) {
                     var chartData = [];
                     angular.forEach(response, function (item) {
                         chartData.push(item);
                     });
-                    
+
                     var chartDefinition = {
                         type: "pie",
-                     //   title: chartSettings.chartTitle,
+                        //   title: chartSettings.chartTitle,
                         yAxisTitle: "Value"
                     };
 
@@ -170,10 +161,6 @@
                     }];
 
                     chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
-                })
-                .finally(function () {
-                    if (asyncHandle)
-                        asyncHandle.operationDone();
                 });
         }
     });

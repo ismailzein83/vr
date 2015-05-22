@@ -44,15 +44,15 @@
                 updateProfitChart();
             };
 
-            $scope.updateChart = function (asyncHandle) {
-                updateProfitChart(asyncHandle);
+            $scope.updateChart = function () {
+                return updateProfitChart();
             };
         }
 
         function load() {
         }
 
-        function updateProfitChart(asyncHandle) {
+        function updateProfitChart() {
 
             if ($scope.chartSaleCostProfitAPI == undefined)
                 return;
@@ -67,7 +67,7 @@
             $scope.profit.length = 0;
             $scope.isGettingData = true;
             var selectedTimeDimension = $scope.timeDimensionTypesOption.lastselectedvalue;
-            BIAPIService.GetMeasureValues(selectedTimeDimension.value, fromDate, toDate, [1, 2, 3])
+            return BIAPIService.GetMeasureValues(selectedTimeDimension.value, fromDate, toDate, [1, 2, 3])
                 .then(function (response) {
                     BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension.value, fromDate, toDate);
                     angular.forEach(response, function (item) {
@@ -111,8 +111,6 @@
                 })
                 .finally(function () {
                     $scope.isGettingData = false;
-                    if (asyncHandle)
-                        asyncHandle.operationDone();
                 });
         }
 

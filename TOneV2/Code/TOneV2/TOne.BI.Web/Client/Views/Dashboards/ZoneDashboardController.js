@@ -92,8 +92,8 @@
                 chartZoneReadyAPI = api;
             };
             
-            $scope.updateData = function (asyncHandle) {
-                getAndShowTopDestination(asyncHandle);
+            $scope.updateData = function () {
+                return getAndShowTopDestination();
             };
 
             $scope.updateZone = function () {
@@ -114,7 +114,7 @@
             $scope.optionsTopCount.lastselectedvalue = $scope.optionsTopCount.datasource[1];
         }
 
-        function getAndShowTopDestination(asyncHandle) {
+        function getAndShowTopDestination() {
             if (!chartTopDestinationsAPI)
                 return;
             var measureType = $scope.optionsMeasureTypes.lastselectedvalue;
@@ -129,7 +129,7 @@
                 measures.push(itm.value);
             });
             $scope.isGettingData = true;
-            BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
+            return BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 $scope.data.length = 0;
                 angular.forEach(response, function (itm) {
@@ -152,8 +152,6 @@
             })
                 .finally(function () {
                     $scope.isGettingData = false;
-                    if (asyncHandle)
-                        asyncHandle.operationDone();
                 });
         }
 
@@ -172,7 +170,7 @@
                 measureValues.push(m.value);
             });
             $scope.isGettingZoneData = true;
-            BIAPIService.GetEntityMeasuresValues(BIEntityTypeEnum.SaleZone.value, $scope.selectedZoneId, BITimeDimensionTypeEnum.Daily.value, $scope.fromDate, $scope.toDate, measureValues)
+            return BIAPIService.GetEntityMeasuresValues(BIEntityTypeEnum.SaleZone.value, $scope.selectedZoneId, BITimeDimensionTypeEnum.Daily.value, $scope.fromDate, $scope.toDate, measureValues)
             .then(function (response) {
                 var chartData = response;                
 

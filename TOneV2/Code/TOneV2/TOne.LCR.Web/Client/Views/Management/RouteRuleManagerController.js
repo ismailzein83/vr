@@ -208,7 +208,7 @@
 
         $scope.getDatalist = function (page, pageSize) {
             $scope.isloadingdata = true;
-            RoutingAPIService.GetFilteredRouteRules(buildFilter(page, pageSize))
+            return RoutingAPIService.GetFilteredRouteRules(buildFilter(page, pageSize))
              .then(function (data) {
                  $scope.isloadingdata = false;
                  $scope.gridOptionsRouteRule.data = getData(data, page);
@@ -221,7 +221,7 @@
             page = 0;
             last = false;            
             $scope.gridApi.infiniteScroll.resetScroll(false, true);
-            $scope.getDatalist(page, pageSize);
+            return $scope.getDatalist(page, pageSize);
            
 
         }

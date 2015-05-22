@@ -192,7 +192,7 @@
             }
         }      
 
-        $scope.saveRule = function (asyncHandle) {
+        $scope.saveRule = function () {
             $scope.issaving = true;
             var routeRule = {
                     CodeSet: $scope.subViewConnector.getCodeSet(),
@@ -204,7 +204,7 @@
                     Reason: $scope.Reason,
                     RouteRuleId: ($scope.RouteRuleId !=null)? $scope.RouteRuleId : 0 
             };
-            RoutingAPIService.saveRouteRule(routeRule)
+            return RoutingAPIService.saveRouteRule(routeRule)
             .then(function (response) {
                 $scope.issaving = false;
                 if ($scope.RouteRuleId != 'undefined') {
@@ -216,9 +216,6 @@
                 $scope.callBackHistory(newdata);
                 notify({ message: 'Route Rule has been saved successfully.', classes: "alert  alert-success" });
                 $scope.$hide();
-            }).finally(function () {
-                if (asyncHandle)
-                    asyncHandle.operationDone();
             });
 
         }

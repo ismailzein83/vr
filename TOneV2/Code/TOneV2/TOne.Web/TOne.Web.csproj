@@ -149,7 +149,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Client\Libraries\AngularExtensions\" />
-    <Folder Include="Client\Modules\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -460,6 +459,8 @@
     <Content Include="Client\Libraries\Helpers\DateFormat.js" />
     <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
     <Content Include="Client\Libraries\waves\waves.js" />
+    <Content Include="Client\Modules\Common\Views\Error.html" />
+    <Content Include="Client\Modules\Common\Views\ErrorController.js" />
     <Content Include="Client\Styles\angular-motion.css" />
     <Content Include="Client\Styles\custom.css" />
     <Content Include="Client\Styles\ivh-treeview.css" />
@@ -760,7 +761,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ReportChart.rdlc" />
-    <EmbeddedResource Include="Reports\TestReport.rdlc" />
+    <EmbeddedResource Include="Reports\TestReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\TestSubReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>

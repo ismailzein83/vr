@@ -17,14 +17,20 @@ app.service('UtilsService', ['$q', function ($q) {
 
     function waitMultipleAsyncOperations(operations) {
         var deferred = $q.defer();
-        var pendingOperations = operations.lenght;
+        var pendingOperations = operations.length;
+        var isRejected = false;
+
         angular.forEach(operations, function (operation) {
-            operation.then(function () {
+            operation().then(function () {
+                if (isRejected)
+                    return;
                 pendingOperations--;
+
                 if (pendingOperations == 0)
                     deferred.resolve();
             }).catch(function (error) {
                 deferred.reject(error);
+                isRejected = true;
             });
         });
         return deferred.promise;

@@ -16,18 +16,13 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
 
             this.onInternalClick = function () {
                 if (this.onclick != undefined && typeof (this.onclick) == 'function') {
-                    if (this.isasynchronous) {
-                        var asyncHandle = {
-                            operationDone: function(){
-                                isSubmitting = false;
-                                asyncHandle = null;
-                            }
-                        };
+                    var promise = this.onclick();//this function should return a promise in case it is performing asynchronous task
+                    if (promise != undefined && promise != null) {
                         isSubmitting = true;
-                        this.onclick(asyncHandle);
+                        promise.finally(function () {
+                            isSubmitting = false;
+                        });
                     }
-                    else
-                        this.onclick();
                 }
             };
 

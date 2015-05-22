@@ -84,7 +84,7 @@ appControllers.controller('TrafficStatisticsGridController',
                 $scope.groupKeys.push(groupKey);
         }
 
-        function getData(asyncHandle) {
+        function getData() {
             var withSummary = false;
             var fromRow = 1;
             var toRow = 100;
@@ -103,7 +103,7 @@ appControllers.controller('TrafficStatisticsGridController',
             };
             var isSucceeded;
             $scope.isGettingData = true;
-            AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
+            return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
                 angular.forEach(response.Data, function (itm) {
                     $scope.selectedGroupKey.data.push(itm);
@@ -111,8 +111,6 @@ appControllers.controller('TrafficStatisticsGridController',
                 $scope.selectedGroupKey.isDataLoaded = true;
             })
                 .finally(function () {
-                    if (asyncHandle)
-                        asyncHandle.operationDone(isSucceeded);
                     $scope.isGettingData = false;
                 });
         }

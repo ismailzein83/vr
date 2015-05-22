@@ -1,7 +1,7 @@
 ﻿
 <vr-panel ng-controller="ZoneMonitorController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-select label="Group By:" datasource="groupKeys"
@@ -39,7 +39,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="getData" isasynchronous=" true"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
                     <vr-button type="Reset" ng-show="false"></vr-button>
                 </div>
             </vr-actionbar>

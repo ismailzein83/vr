@@ -43,8 +43,8 @@
         };
         var current = 0;
         $scope.gridData = [];
-        $scope.loadMoreData = function (asyncHandle) {
-            BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+        $scope.loadMoreData = function () {
+            return BusinessEntityAPIService.GetCodeGroups().then(function (response) {
                 var count = current + 20;
                 for (current; current < count; current++) {
                     $scope.gridData.push({
@@ -56,10 +56,6 @@
 
                 
             })
-                .finally(function () {
-                    if (asyncHandle)
-                        asyncHandle.operationDone();
-                });
             //setTimeout(function () {
             //    $scope.$apply(function () {
                     

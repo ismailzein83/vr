@@ -1,8 +1,7 @@
-﻿ZoneMonitorController.$inject = ['$scope', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
+﻿ZoneMonitorController.$inject = ['$scope','UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
         'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
-appControllers.controller('ZoneMonitorController', ZoneMonitorController);
 
- function ZoneMonitorController($scope, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
+function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
         CarrierTypeEnum, VRModalService, VRNotificationService) {
 
         var chartSelectedMeasureAPI;
@@ -82,12 +81,23 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
                 currentPage: 1,
                 totalDataCount: 0,
                 pageChanged: function () {
-                    getData();
+                    return getData();
                 }
             };
 
             $scope.gridMenuActions = [{
                 name: "CDRs",
+                clicked: function (dataItem) {
+                    var modalSettings = {
+                        useModalTemplate: true,
+                        width: "80%",
+                        maxHeight: "800px"
+                    };
+                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
+                }
+            },
+            {
+                name: "Show Confirmation",
                 clicked: function (dataItem) {
                     VRNotificationService.showConfirmation('Are you sure you want to delete?')
                     .then(function (result) {
@@ -96,12 +106,6 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
                         else
                             console.log('not confirmed');
                     });
-                    //var modalSettings = {
-                    //    useModalTemplate: true,
-                    //    width: "80%",
-                    //    maxHeight: "800px"
-                    //};
-                    //VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
                 }
             },
             {
@@ -149,16 +153,12 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
 
             };
 
-            $scope.getData = function (asyncHandle) {
+            $scope.getData = function () {
                 $scope.mainGridPagerSettings.currentPage = 1;
                 resultKey = null;
                 mainGridAPI.reset();
                 resetSorting();
-                getData(asyncHandle, true);
-            };
-
-            $scope.pageChanged = function () {
-                getData();
+                return getData(true);
             };
 
             $scope.onMainGridReady = function (api) {
@@ -178,10 +178,10 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
                 getAndShowEntityStatistics(groupKey);
             };
 
-            $scope.onMainGridSortChanged = function (colDef, sortDirection, handle) {
+            $scope.onMainGridSortChanged = function (colDef, sortDirection) {
                 sortColumn = colDef.tag;
                 sortDescending = (sortDirection == "DESC");
-                getData(handle);
+                return getData();
             }
 
             $scope.isOverallItemClickable = function (dataItem) {
@@ -215,10 +215,12 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
             overallSelectedMeasure = TrafficStatisticsMeasureEnum.Attempts;
             $scope.fromDate = '2012-04-27';
             $scope.toDate = '2014-04-29';
-            loadCodeGroups();
-            loadSwitches();
-            loadCustomers();
-            loadSuppliers();
+            $scope.isInitializing = true;
+            UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCodeGroups, loadCustomers, loadSuppliers]).finally(function () {
+                $scope.isInitializing = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error);
+            });
         }
 
         function resetSorting() {
@@ -232,7 +234,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
             }
         }
         
-        function getData(asyncHandle, withSummary) {
+        function getData(withSummary) {
             if (!chartSelectedMeasureAPI)
                 return;
             if (sortColumn == undefined)
@@ -275,7 +277,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
                 $scope.currentSearchCriteria.groupKeys.push(group);
             });
 
-            AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
+            return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
 
                                 
 
@@ -295,9 +297,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
                 renderOverallChart();
                 isSucceeded = true;
             })
-                .finally(function () {
-                    if (asyncHandle)
-                        asyncHandle.operationDone(isSucceeded);
+                .finally(function () {                   
                     $scope.isGettingData = false;
                 });
         }
@@ -401,7 +401,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
         }
 
         function loadSwitches() {
-            BusinessEntityAPIService.GetSwitches().then(function (response) {
+            return BusinessEntityAPIService.GetSwitches().then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.switches.push(itm);
                 });
@@ -410,7 +410,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
 
         function loadCodeGroups()
         {            
-            BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+            return BusinessEntityAPIService.GetCodeGroups().then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.codeGroups.push(itm);
                 });
@@ -419,7 +419,7 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
         }
 
         function loadCustomers() {
-            BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+            return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.customers.push(itm);
                 });
@@ -427,11 +427,13 @@ appControllers.controller('ZoneMonitorController', ZoneMonitorController);
         }
 
         function loadSuppliers() {
-            BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+            return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.suppliers.push(itm);
                 });
             });
         }
         
-    };
+};
+
+appControllers.controller('ZoneMonitorController', ZoneMonitorController);

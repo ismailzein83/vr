@@ -7,6 +7,7 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
     });
 
     function showModal(viewUrl, parameters, settings) {
+        var deferred = $q.defer();
         var modalScope = $rootScope.$new();
         
         var modalUrl = viewUrl;
@@ -14,6 +15,7 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
         modalScope.modalContext = {};
         modalScope.modalContext.closeModal = function () {
             modalInstance.hide();
+            deferred.resolve();
         };
         VRNavigationService.setParameters(modalScope, parameters);
 
@@ -31,6 +33,7 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
         }
 
         var modalInstance = $modal({ scope: modalScope, template: modalUrl, show: true, animation: "am-fade-and-scale" });
+        return deferred.promise;
     }
 });
 

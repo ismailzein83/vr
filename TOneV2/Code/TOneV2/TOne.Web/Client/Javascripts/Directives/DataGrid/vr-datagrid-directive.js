@@ -85,18 +85,15 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
                 onSort: function () {
                     if (col.onSortChanged != undefined) {
-                        var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
-                        var sortChangedHandle = {
-                            operationDone: function (isSucceeded) {
-                                if (isSucceeded == true) {
-                                    if (lastSortColumnDef != undefined)
-                                        lastSortColumnDef.sortDirection = undefined;
-                                    colDef.sortDirection = sortDirection;
-                                    lastSortColumnDef = colDef;
-                                }
-                            }
-                        };
-                        col.onSortChanged(colDef, sortDirection, sortChangedHandle);
+                        var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";                        
+                        var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
+                        if (promise != undefined && promise != null)
+                            promise.then(function () {
+                                if (lastSortColumnDef != undefined)
+                                    lastSortColumnDef.sortDirection = undefined;
+                                colDef.sortDirection = sortDirection;
+                                lastSortColumnDef = colDef;
+                            });
                     }
                 },
                 tag: col.tag
@@ -260,21 +257,17 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     return;
                 if (ctrl.isLoadingMoreData)
                     return;
-                $scope.$apply(function () {
-                    ctrl.isLoadingMoreData = true;
-                    var asyncHandle = {
-                        operationDone: clearLoadingMoreDataFlag
-                    };
-                    loadMoreDataFunction(asyncHandle);
+                $scope.$apply(function () {                             
+                    var promise = loadMoreDataFunction();//this function should return a promise in case it is getting data
+                    if (promise != undefined && promise != null) {
+                        ctrl.isLoadingMoreData = true;
+                        promise.finally(function () {
+                            ctrl.isLoadingMoreData = false;
+                        });
+                    }
                 });
 
             };
-
-            function clearLoadingMoreDataFlag() {
-                //$scope.$apply(function () {
-                ctrl.isLoadingMoreData = false;
-                //});                    
-            }
         }
 
         function defineExpandableRow () {
