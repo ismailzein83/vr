@@ -9,6 +9,11 @@ using TOne.Entities;
 
 namespace TOne.Main.Web.Controllers
 {
+    public class ResetPasswordInput
+    {
+        public int UserId { get; set; }
+        public string Password { get; set; }
+    }
     public class UserController : ApiController
     {
         [HttpGet]
@@ -33,6 +38,7 @@ namespace TOne.Main.Web.Controllers
             return manager.UpdateUser(user);
         }
 
+        [HttpPost]
         public User AddUser(User user)
         {
             UserManager manager = new UserManager();
@@ -45,6 +51,20 @@ namespace TOne.Main.Web.Controllers
         {
             UserManager manager = new UserManager();
             return manager.SearchUser(Name, Email);
+        }
+
+        [HttpGet]
+        public bool CheckUserName(string Name)
+        {
+            UserManager manager = new UserManager();
+            return manager.CheckUserName(Name);
+        }
+
+        [HttpPost]
+        public bool ResetPassword(ResetPasswordInput user)
+        {
+            UserManager manager = new UserManager();
+            return manager.ResetPassword(user.UserId, user.Password);
         }
     }
 }

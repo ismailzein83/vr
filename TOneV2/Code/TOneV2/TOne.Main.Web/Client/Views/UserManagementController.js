@@ -2,36 +2,49 @@
 /// <reference path="User.html" />
 appControllers.controller('UserManagementController', function UserController($scope, UsersAPIService, VRModalService) {
     $scope.users = [];
-    var current = 0;
-    //$scope.loadUsers = function () {
-    //    var params = {};
-    //    params.pageSize = 20;
-    //    params.pageNumber = current;
-    //    UsersAPIService.GetUserList(params).then(function (response) {
-    //        $scope.users = response;
-    //    }).finally(function () {
-
-    //        $scope.isGettingData = false;
-    //    });
-    //}
-    //load();
-
+    
     $scope.gridMenuActions = [{
-        name: "Update",
+        name: "Edit",
         clicked: function (dataItem) {
-            var modalScope = VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', false, dataItem);
-            modalScope.title = "Update User";
-            modalScope.onUserUpdated = function (user) {
-                gridApi.itemUpdated(user);
+
+            var settings = {
+                width: "40%"
             };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Edit User";
+                modalScope.onUserAdded = function (user) {
+                    gridApi.itemUpdated(user);
+                };
+            };
+
+            VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html',  dataItem, settings);
         }
     },
     {
-        name: "Delete",
-        clicked: function (dataItem) {
-            $scope.DeleteUser(dataItem);
-        }
+            name: "Reset Password",
+            clicked: function (dataItem) {
+
+                var settings = {
+                    width: "40%"
+                };
+
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.title = "Reset Pasword";
+                    modalScope.onUserAdded = function (user) {
+                        gridApi.itemUpdated(user);
+                    };
+                };
+
+                VRModalService.showModal('/Client/Modules/Main/Views/ResetPasswordEditor.html', dataItem, settings);
+            }
     }
+    //{
+    //    name: "Delete",
+    //    clicked: function (dataItem) {
+    //        $scope.DeleteUser(dataItem);
+    //    }
+    //}
     ];
 
     //Action
@@ -43,17 +56,17 @@ appControllers.controller('UserManagementController', function UserController($s
             loadUsersSearch($scope.txtname, $scope.txtemail);
         });
     }
-
   
-    
     var gridApi;
     $scope.gridReady = function (api) {
         gridApi = api;
     };
 
-
-    var current = 0;
+    var pageSize = 20;
+    var from = 0;
+    var to = pageSize;
     var last = false;
+
     $scope.loadMoreData = function (asyncHandle) {
        
         if (last) {
@@ -62,15 +75,19 @@ appControllers.controller('UserManagementController', function UserController($s
             return;
         }
         var params = {};
-        params.pageSize = 20;
-        params.pageNumber = current;      
+        if (from == 0) params.fromRow = 0;
+        else params.fromRow =  from + 1;
+        params.toRow = to;
         
+        from = from + pageSize ;
+        to = to + pageSize;
+
         UsersAPIService.GetUserList(params).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.users.push(itm);
             });
-            current = current + params.pageSize;
-            last = (response.length < params.pageSize) ? true : false;
+            
+            last = (response.length < pageSize ) ? true : false;
 
         }).finally(function () {
             if (asyncHandle) {
@@ -87,27 +104,25 @@ appControllers.controller('UserManagementController', function UserController($s
         loadUsersSearch($scope.txtname, $scope.txtemail);
     }
 
-    $scope.ValidateUser = function (text) {
+    $scope.ValidateUs1 = function (text) {
+        if (text == undefined)
+            return null;
         if(text.length < 3)
             return "Invalid";
-
-
-
-
-
-
-
-
     }
 
     $scope.AddNewUser = function () {
 
-        var modalScope = VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', false);
+        var settings = {};
 
-        modalScope.title = "New User";
-        modalScope.onUserAdded = function (user) {
-            gridApi.itemAdded(user);
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New User";
+            modalScope.onUserAdded = function (user) {
+                gridApi.itemAdded(user);
+            };
         };
+        VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', null, settings);
+        
     }
 
     function loadUsersSearch(name, email) {
@@ -119,6 +134,7 @@ appControllers.controller('UserManagementController', function UserController($s
 
         });
     }
+
     function load() {
         $scope.isGettingData = true;
         $scope.txtname = '';
@@ -126,6 +142,4 @@ appControllers.controller('UserManagementController', function UserController($s
         $scope.loadUsers();
     }
 
-
-    
 });

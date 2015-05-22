@@ -10,10 +10,10 @@ namespace TOne.Business
 {
     public class UserManager
     {
-        public List<TOne.Entities.User> GetUsers(int FromRow, int ToRow)
+        public List<TOne.Entities.User> GetUsers(int fromRow, int toRow)
         {
             IUserDataManager datamanager = DataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.GetUsers(FromRow, ToRow);
+            return datamanager.GetUsers(fromRow, toRow);
         }
 
         public void DeleteUser(int Id)
@@ -34,6 +34,12 @@ namespace TOne.Business
             return datamanager.UpdateUser(user);
         }
 
+        public bool ResetPassword(int userId, string password)
+        {
+            IUserDataManager datamanager = DataManagerFactory.GetDataManager<IUserDataManager>();
+            return datamanager.ResetPassword(userId, password);
+        }
+
         public List<TOne.Entities.User> SearchUser(string name, string email)
         {
             IUserDataManager datamanager = DataManagerFactory.GetDataManager<IUserDataManager>();
@@ -43,6 +49,12 @@ namespace TOne.Business
         public string EncodePassword(string password)
         {
             return SecurityEssentials.PasswordEncryption.Encode(password);
+        }
+
+        public bool CheckUserName(string name)
+        {
+            IUserDataManager datamanager = DataManagerFactory.GetDataManager<IUserDataManager>();
+            return datamanager.CheckUserName(name); 
         }
     }
 }

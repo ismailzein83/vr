@@ -1,9 +1,10 @@
 ﻿<vr-panel>
+
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-textbox value="txtname" label="Name" onvaluechanged="SearchUser()"></vr-textbox> <!--<input type="text" ng-model="txtname" ng-change="SearchUser()" />-->
+                    <vr-textbox value="txtname" label="Name" onvaluechanged="SearchUser()" customvalidate="ValidateUs1"></vr-textbox> <!--<input type="text" ng-model="txtname" ng-change="SearchUser()" />-->
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-textbox value="txtemail" label="Email" onvaluechanged="SearchUser()"></vr-textbox>
@@ -28,7 +29,7 @@
                 <vr-datagrid datasource="users" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Email'" field="'Email'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'">{{dataItem.Status == "0"? 'Not Active': 'Active' }}</vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'LastLogin'">{{dataItem.LastLogin | date:'yyyy-MM-dd' }}</vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
                 </vr-datagrid>

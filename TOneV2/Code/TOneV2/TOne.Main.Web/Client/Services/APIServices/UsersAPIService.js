@@ -1,19 +1,20 @@
 ﻿app.service('UsersAPIService', function (BaseAPIService) {
 
-
     return ({
         GetUserList: GetUserList,
         DeleteUser: DeleteUser,
         AddUser: AddUser,
         UpdateUser: UpdateUser,
-        SearchUser: SearchUser
+        SearchUser: SearchUser,
+        CheckUserName: CheckUserName,
+        ResetPassword: ResetPassword
     });
 
     function GetUserList(params) {
         return BaseAPIService.get("/api/User/GetUsers",
             {
-                pageSize: params.pageSize,
-                pageNumber: params.pageNumber
+                fromRow: params.fromRow,
+                toRow: params.toRow
             }
            );
     }
@@ -33,6 +34,7 @@
                 Name: user.Name,
                 Password: user.Password,
                 Email: user.Email,
+                IsActive: user.IsActive,
                 Description: user.Description
             }
            );
@@ -45,6 +47,7 @@
                 Name: user.Name,
                 Password: user.Password,
                 Email: user.Email,
+                IsActive: user.IsActive,
                 Description: user.Description
             }
            );
@@ -55,6 +58,24 @@
             {
                 Name: name,
                 Email: email
+            }
+           );
+    }
+
+    function CheckUserName(name)
+    {
+        return BaseAPIService.get("/api/User/CheckUserName",
+            {
+                Name: name
+            }
+            );
+    }
+
+    function ResetPassword(ResetPasswordInput) {
+        return BaseAPIService.post("/api/User/ResetPassword",
+            {
+                UserId: ResetPasswordInput.UserId,
+                Password: ResetPasswordInput.Password
             }
            );
     }

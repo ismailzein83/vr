@@ -1,14 +1,15 @@
-﻿appControllers.controller('UserUpdateorController', function UserUpdateorController($scope, UsersAPIService, VRNavigationService) {
+﻿appControllers.controller('UserEditorController', function UserEditorController($scope, UsersAPIService, VRNavigationService) {
 
     var parameters = VRNavigationService.getParameters($scope);
-
 
     if (parameters != undefined) {
         $scope.txtName = parameters.Name;
         $scope.txtPassword = parameters.Password;
         $scope.txtEmail = parameters.Email;
         $scope.txtDescription = parameters.Description;
+        $scope.IsActive = parameters.Status;
     }
+
 
     $scope.SaveUser = function () {
         var user = {};
@@ -21,16 +22,18 @@
                 Name: $scope.txtName,
                 Password: $scope.txtPassword,
                 Email: $scope.txtEmail,
+                Status: $scope.IsActive,
                 Description: $scope.txtDescription
             }
         }
         else
         {
             user = {
-
+                
                 Name: $scope.txtName,
                 Password: $scope.txtPassword,
                 Email: $scope.txtEmail,
+                Status: $scope.IsActive,
                 Description: $scope.txtDescription
             }
         }
@@ -62,5 +65,39 @@
     $scope.hide = function () {
         $scope.$hide();
     };
+
+    $scope.CheckUserName = function (name) {
+        var bool = false;
+        if (name == undefined)
+            return null;
+
+        UsersAPIService.CheckUserName(name == undefined ? " " : name).then(function (response) {
+            bool = response;
+            //if (response == false)
+                //return "Invalid";
+            //else
+            //  return null;
+
+        }).finally(function () {
+
+        });
+
+        if (! bool)
+            return "Invalid";
+    }
+
+    //function CheckUserName(name) {
+    //    UsersAPIService.CheckUserName(name == undefined ? " " : name).then(function (response) {
+
+    //        if (response == false)
+    //            return "Invalid";
+    //        else
+    //            return null;
+
+    //    }).finally(function () {
+
+    //    });
+    //};
+
 
 });
