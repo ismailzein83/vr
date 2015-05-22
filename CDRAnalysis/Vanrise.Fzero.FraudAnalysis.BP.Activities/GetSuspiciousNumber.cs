@@ -81,21 +81,31 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                         if (manager.IsNumberSuspicious(number, out sNumber, manager.StrategyId))
                                         {
                                             sNumbers.Add(sNumber);
-                                            numbers.Add(number);
+                                            //numbers.Add(number);
                                         }
+
+
+                                    numbers.Add(number);
                                 }
                                 if (sNumbers.Count > 0)
                                 {
                                     inputArgument.OutputQueue.Enqueue(new SuspiciousNumberBatch() { 
                                         suspiciousNumbers = sNumbers
                                     });
+                                   
+                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Suspicious Count Items: {0} ", sNumbers.Count);
+                                }
+
+                                if (numbers.Count > 0)
+                                {
 
                                     inputArgument.OutputQueue2.Enqueue(new NumberProfileBatch()
                                     {
                                         numberProfiles = numbers
                                     });
-                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Count Items: {0} ", sNumbers.Count);
+                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Profiles Count Items: {0} ", sNumbers.Count);
                                 }
+
                                 handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Dequeued Count Items: {0} ", item.numberProfiles.Count);
 
                             });

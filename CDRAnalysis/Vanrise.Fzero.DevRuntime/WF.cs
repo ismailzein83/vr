@@ -41,15 +41,25 @@ namespace Vanrise.Fzero.DevRuntime
             ddlStrategy.DataSource = dataManager.GetAllStrategies();
             ddlStrategy.ValueMember = "Id";
             ddlStrategy.DisplayMember = "Name";
-
-
-            ddlPeriods.Items.Add("Daily");
-            ddlPeriods.Items.Add("Hourly");
-            ddlPeriods.SelectedIndex = 1;
         }
+
+
+        public static class DateHelper
+        {
+            public static DateTime Min(DateTime date1, DateTime date2)
+            {
+                return (date1 < date2 ? date1 : date2);
+            }
+        }
+
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+
+
+           
+
+
 
             Console.WriteLine("Walid Task started");
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
@@ -66,36 +76,68 @@ namespace Vanrise.Fzero.DevRuntime
             List<int> StrategyIds = new List<int>();
             StrategyIds.Add( int.Parse( ddlStrategy.SelectedValue.ToString()));
 
-            var inputArgs = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput> inputArgs = new List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput>();
+
+
+
+
+
+            //var Start = DateTime.Parse(dateTimePicker1.Text);
+            //var End = DateTime.Parse(dateTimePicker2.Text);
+
+            var Start = DateTime.Parse("2015-03-13 23:01:12.000");
+            var End = DateTime.Parse("2015-03-14 06:11:42.000");
+
+
+            if (ddlPeriods.SelectedIndex == 0)
             {
-                StrategyIds = StrategyIds,
-                FromDate = DateTime.Parse(dateTimePicker1.Text),
-                ToDate = DateTime.Parse(dateTimePicker2.Text),
-                PeriodId = (ddlPeriods.SelectedText == "Day" ? (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day : (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour)
-            };
+                var runningDate = Start;
+                while (runningDate < End)
+                {
+                    inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+                    {
+                        StrategyIds = StrategyIds,
+                        FromDate = runningDate.Date,
+                        ToDate = runningDate.Date.AddDays(1).AddSeconds(-1),
+                        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
+                    });
+                    runningDate = runningDate.Date.AddDays(1);
+                }
+            }
+            else if (ddlPeriods.SelectedIndex == 1)
+            {
+                var runningDate = Start;
+                while (runningDate < End)
+                {
+                    inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+                    {
+                        StrategyIds = StrategyIds,
+                        FromDate =  new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0)  ,
+                        ToDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 59, 59),
+                        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+                    });
+                    runningDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0).AddHours(1);
+                }
+            }
+
+           
+
+
+
 
             Task t = new Task(() =>
             {
                 BPClient bpClient3 = new BPClient();
 
-                //bpClient3.CreateNewProcess(new CreateProcessInput
-                //{
-                //    ProcessName = "ExecuteStrategy",
-                //    InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
-                //    {
+              
 
-                //    }
-                //});
+                foreach (var inputArg in inputArgs)
+                {
+                    bpClient3.CreateNewProcess(new CreateProcessInput { ProcessName = "ExecuteStrategyProcess", InputArguments = inputArg });
+                }
+
 
                
-
-
-
-                bpClient3.CreateNewProcess(new CreateProcessInput
-                {
-                    ProcessName = "ExecuteStrategyProcess",
-                    InputArguments = inputArgs
-                });
 
 
                 Console.WriteLine("END");
