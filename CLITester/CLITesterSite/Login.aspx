@@ -43,9 +43,10 @@
 	</div>
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->
+    <form id="form1" runat="server">
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-		<form id="login_form" runat="server" clientidmode="Static" class="form-vertical login-form">
+		<div id="login_form" class="form-vertical login-form">
         <input type="hidden" id="backto" runat="server" name="backto" />
 			<h3 class="form-title">Login to your account</h3>
 			<div class="alert alert-error hide">
@@ -91,10 +92,34 @@
 					<a href="javascript:;" id="register-btn" >Create an account</a>
 				</p>
 			</div>--%>
-		</form>
-		<!-- END LOGIN FORM -->        
+		</div>
+		<!-- END LOGIN FORM -->  
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+		<div class="form-vertical forget-form" id="forget_form">
+			<h3>Forget Password ?</h3>
+			<p>Enter your username below to reset your password.</p>
+			<div class="control-group">
+				<div class="controls">
+					<div class="input-icon left">
+						<i class="icon-user"></i>
+                        <asp:TextBox class="m-wrap placeholder-no-fix " ID="txtReset" autocomplete="off" name="username" placeholder="Username" runat="server"></asp:TextBox>
+					</div>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="button" id="back-btn" class="btn">
+				<i class="m-icon-swapleft"></i> Back
+				</button>
+                <asp:Button ID="btnNewPassword" OnClick="btnNewPassword_Click" runat="server" class="btn green pull-right" Text="Submit"></asp:Button>
+<%--				<button type="submit" class="btn green pull-right">
+				Submit <i class="m-icon-swapright m-icon-white"></i>
+				</button>   --%>         
+			</div>
+		</div>
+		<!-- END FORGOT PASSWORD FORM -->      
 	</div>
-	<!-- END LOGIN -->
+	</form>
+    <!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
 		2015 &copy; CLI Tester - Vanrise Solutions. Admin Dashboard.
@@ -141,6 +166,16 @@
 	    jQuery(document).ready(function () {
 	        App.init();
 	        //Login.init();
+
+	        jQuery('#forget-password').click(function () {
+	            jQuery('.login-form').hide();
+	            jQuery('.forget-form').show();
+	        });
+
+	        jQuery('#back-btn').click(function () {
+	            jQuery('.login-form').show();
+	            jQuery('.forget-form').hide();
+	        });
 
 	        enterKeyLogin('#<%=txtPassword.ClientID %>');
 	        enterKeyLogin('#<%=txtUsername.ClientID %>');

@@ -12,6 +12,7 @@ public partial class Controls_Menu : System.Web.UI.UserControl
         if (Current.User.IsSuperAdministrator == true)
         {
             liSettings.Visible = true;
+            liBalances.Visible = true;
             licalls.Visible = true;
             liLstTstOp.Visible = true;
             liUsers.Visible = false;
@@ -21,6 +22,7 @@ public partial class Controls_Menu : System.Web.UI.UserControl
             licalls.Visible = false;
             liLstTstOp.Visible = false;
             liSettings.Visible = false;
+            liBalances.Visible = false;
 
             if (Current.User.User.ParentId == null)
             {

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallGeneratorLibrary", "CallGeneratorLibrary\CallGeneratorLibrary.csproj", "{ED9E2ECE-DB3A-41EE-8EBC-EFAE2175A8C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFServiceMonty", "WCFServiceMonty\WCFServiceMonty.csproj", "{1C47CAF9-1898-4E9B-9CBA-15A6637B2BC6}"
@@ -48,9 +50,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroitTest", "AndroitTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineOperatorsTest", "OnlineOperatorsTest\OnlineOperatorsTest.csproj", "{241FE6B3-4A3B-40DE-B2F8-CBE2A183DBDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoIPSwitchService", "VoIPSwitchService1\VoIPSwitchService.csproj", "{6DC7EC08-8915-4B20-9821-D769DC64D6D6}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -89,6 +93,9 @@ Global
 		SccProjectUniqueName11 = OnlineOperatorsTest\\OnlineOperatorsTest.csproj
 		SccProjectName11 = OnlineOperatorsTest
 		SccLocalPath11 = OnlineOperatorsTest
+		SccProjectUniqueName12 = VoIPSwitchService1\\VoIPSwitchService.csproj
+		SccProjectName12 = VoIPSwitchService1
+		SccLocalPath12 = VoIPSwitchService1
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +146,10 @@ Global
 		{241FE6B3-4A3B-40DE-B2F8-CBE2A183DBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{241FE6B3-4A3B-40DE-B2F8-CBE2A183DBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{241FE6B3-4A3B-40DE-B2F8-CBE2A183DBDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DC7EC08-8915-4B20-9821-D769DC64D6D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DC7EC08-8915-4B20-9821-D769DC64D6D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DC7EC08-8915-4B20-9821-D769DC64D6D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DC7EC08-8915-4B20-9821-D769DC64D6D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

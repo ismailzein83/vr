@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FraudTest" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=LENOVO\SQL2008R2;Initial Catalog=FraudTest;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=FraudTest;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.SipStatus" Member="SipStatus">
     <Type Name="SipStatus">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -395,6 +395,7 @@
       <Association Name="User_ActionLog" Member="ActionLogs" ThisKey="Id" OtherKey="UserId" Type="ActionLog" />
       <Association Name="User_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="UserId" Type="TestOperator" />
       <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
+      <Association Name="User_UserBalance" Member="UserBalances" ThisKey="Id" OtherKey="UserId" Type="UserBalance" />
     </Type>
   </Table>
   <Table Name="" Member="TestOperatorHistories">
@@ -422,6 +423,7 @@
       <Column Name="ServiceMonty" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="Operator_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="OperatorId" Type="TestOperator" />
       <Association Name="Operator_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="OperatorId" Type="ScheduleOperator" />
+      <Association Name="Operator_PhoneNumber" Member="PhoneNumbers" ThisKey="Id" OtherKey="OperatorId" Type="PhoneNumber" />
     </Type>
   </Table>
   <Table Name="dbo.MontyCalls" Member="MontyCalls">
@@ -540,6 +542,27 @@
       <Association Name="Schedule_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleOperator" />
       <Association Name="SipAccount_Schedule" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="User_Schedule" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserBalances" Member="UserBalances">
+    <Type Name="UserBalance">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OldBalance" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CountCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="User_UserBalance" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PhoneNumbers" Member="PhoneNumbers">
+    <Type Name="PhoneNumber">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LastCallDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Operator_PhoneNumber" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.GetRolePages" Method="GetRolePages">

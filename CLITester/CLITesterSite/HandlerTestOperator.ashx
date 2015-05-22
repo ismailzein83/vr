@@ -23,6 +23,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
         
         public string Id { get; set; }
         public string OperatorId { get; set; }
+        public string CountryPic { get; set; }
         public string Prefix { get; set; }
         public string CreationDate { get; set; }
         public string EndDate { get; set; }
@@ -101,6 +102,8 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
                 int TestOperatorId = testOp.Id;
 
                 responseTestOp.Id = testOp.Id.ToString();
+
+                responseTestOp.CountryPic = OperatorRepository.Load(testOp.OperatorId.Value).CountryPicture;
                 responseTestOp.CreationDate = testOp.CreationDate.ToString();
                 responseTestOp.EndDate = "";
                 responseTestOp.OperatorId = OperatorRepository.Load(testOp.OperatorId.Value).FullName;

@@ -374,7 +374,7 @@ namespace CallGeneratorLibrary.Repositories
 
         private static void WriteToEventLogEx(string message)
         {
-            string cs = "Call Generator Service";
+            string cs = "LogCallGen";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

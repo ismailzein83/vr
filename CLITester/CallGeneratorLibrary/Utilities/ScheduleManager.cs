@@ -462,7 +462,7 @@ namespace CallGeneratorLibrary.Utilities
             }
         }
 
-        private static bool SendEmail2(User member, ScheduleLog s)
+        public static bool SendEmail2(User member, ScheduleLog s)
         {
             try
             {
@@ -508,42 +508,11 @@ namespace CallGeneratorLibrary.Utilities
                 }
 
 
-                //Microsoft.Reporting.WebForms.ReportViewer rview = new Microsoft.Reporting.WebForms.ReportViewer();
-                //rview.ServerReport.ReportServerUrl = new Uri("http://localhost:8080/ReportServer");
-                //rview.ServerReport.ReportPath = "Reports\\TestOperatorReport.rdlc";
-                //string mimeType, encoding, extension;
-                //string[] streamids; Microsoft.Reporting.WebForms.Warning[] warnings;
-                //string format = "PDF";
-                //byte[] bytes = rview.ServerReport.Render(format, "", out mimeType, out encoding, out extension, out streamids, out warnings);
-                ////save the pdf byte to the folder
-                //FileStream fs = new FileStream(@"c:\report.pdf", FileMode.Open);
-                //fs.Write(bytes, 0, bytes.Length);
-                //fs.Close();
-
-
-
-
-
-                //Microsoft.Reporting.WebForms.ReportViewer rptApplication = new ReportViewer();
-                //WriteToEventLogEx("2");
-                //rptApplication.LocalReport.ReportPath = "Reports\\TestOperatorReport.rdlc";
-                //rptApplication.LocalReport.DataSources.Clear();
-                //rptApplication.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource("DataSet2", dt));
-                //rptApplication.LocalReport.Refresh();
-                //WriteToEventLogEx("3");
-                //Warning[] warnings;
-                //string[] streamids;
-                //string mimeType;
-                //string encoding;
-                //string filenameExtension;
-
-                //byte[] bytes = rptApplication.LocalReport.Render("PDF", null, out mimeType, out encoding, 
-                //    out filenameExtension, out streamids, out warnings);
-                //WriteToEventLogEx("4");
-                //using (FileStream fs = new FileStream("output.pdf", FileMode.Create))
-                //{
-                //    fs.Write(bytes, 0, bytes.Length);
-                //}
+                ///Attach a file
+                //string[][] output = new string[][]{
+                //    new string[]{"Name","Schedule","Creation Date","End Date","Test Cli","Received Cli","Status"}
+                //    };
+                //int ii = 0;
 
                 StringBuilder EmailBody = new StringBuilder();
                 EmailBody.Append("<table cellspacing='0' cellpadding='0'>");
@@ -600,7 +569,17 @@ namespace CallGeneratorLibrary.Utilities
 
                     // WriteToEventLogEx("member.Email " + member.Email.ToString());
                     EmailBody.Append("<tr><td>" + opname + "</td><td>" + scname + "</td><td>" + creadate + "</td><td>" + enddate + "</td><td>" + tstCli + "</td><td>" + recCli + "</td><td>" + ss + "</td></tr>");
+
+                    
+                    ///Attach a file
+                    //string[] sadd = { opname, scname, creadate, enddate, tstCli, recCli, ss };
+                    //output[ii] = sadd;
+                    //ii = ii + 1;
                 }
+
+
+
+
 
                 EmailBody.Append("</table></td></tr>");
 
@@ -615,6 +594,24 @@ namespace CallGeneratorLibrary.Utilities
 
                 if (trouv == false)
                 {
+
+                    ///Attach a file
+                    //string filePath = "C:\\Android\\Resources\\" + DateTime.Now.ToString("yyyymmddhhmmss") + ".csv";
+
+                    ////filePath = "" + "filename" + ".csv";
+                    //if (!File.Exists(filePath))
+                    //{
+                    //    File.Create(filePath).Close();
+                    //}
+                    //string delimiter = ",";
+
+                    //int length = output.GetLength(0);
+                    //StringBuilder sb = new StringBuilder();
+                    //for (int index = 0; index < length; index++)
+                    //    sb.AppendLine(string.Join(delimiter, output[index]));
+                    //File.AppendAllText(filePath, sb.ToString());
+
+
                     MailMessage objMail = new MailMessage();
 
                     objMail.To.Add(member.Email);

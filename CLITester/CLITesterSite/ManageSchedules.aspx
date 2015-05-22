@@ -423,7 +423,7 @@
                 for (var i = 0 ; i < rows.length; i++) {
                     if (rows[i] != '') {
                         var row = rows[i].split('$');
-                        console.log(row);
+
                         if (row[0] != '' || row[1] != '' || row[2] != '' || row[1] != null || row[2] != null || row[0] != null) {
                             sOut += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>';
                         }

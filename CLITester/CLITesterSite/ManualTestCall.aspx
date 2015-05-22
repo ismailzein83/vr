@@ -73,7 +73,7 @@
             <a class="btn blue big" id="LnkAdd">Add <i class=" icon-plus "></i></a>
         </div>
         <div class="span2">
-            <a class="btn green big"  id="LinkTestCall">Start <i class="m-icon-big-swapright m-icon-white"></i></a>            
+            <a class="btn green big" data-toggle="modal" href="#responsive" onclick='editRow()' id="LinkTestCall1" >Start <i class="m-icon-big-swapright m-icon-white"></i></a>            
         </div>
         <div class="span2">
             <a class="btn black big" id="LnkClear">Clear <i class=" icon-remove"></i></a>
@@ -139,24 +139,11 @@
                     <div class="portlet box red">
                         <div class="portlet-title">
                             <div class="caption">Confirm Test Call</div>
-                            <div class="tools">
-
-                                <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
-                            </div>
                         </div>
                         <div class="portlet-body">
-                            <table id="Table1" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="span6">Operator</th>
-                                        <th class="span6">Route</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <p><span class="icon icon-warning-sign"></span>
+							    These test calls will be started and cannot be recovered. Are you sure?
+							</p>
                         </div>
                     </div>
                 </div>
@@ -165,7 +152,7 @@
         </div>
         <div class="modal-footer form-actions">
             <button type="button" data-dismiss="modal" class="btn">Close</button>
-            
+             <asp:Button id="LinkTestCall"  data-dismiss="modal" class="btn blue" runat="server" Text="Start" />
         </div>
     </div>
     <asp:HiddenField runat="server" ID="imgSRC" />
@@ -236,14 +223,14 @@
 
             var dl1 = $('select[name=selectOperator]').val();
             var res = dl1.split("~");
-
+            console.log("CountryPic: " + msg.CountryPic);
             var imgSrc = $('#<%=imgSRC.ClientID %>').val() + '';
-            imgSrc = imgSrc + res[0] + '.png';
+            imgSrc = imgSrc + msg.CountryPic + '.png';
 
             $('#myTable > tbody').append('<tr>' +
                                  '<td class="hideTd">' + msg.idOp + '</td>' +
                                 '<td class="hideTd">' + msg.Operator + '</td>' +
-                                '<td class="hideTd">' + msg.CountryId  + '</td>' +
+                                '<td class="hideTd">' + msg.CountryPic + '</td>' +
                               '<td><img src=' + imgSrc + ' alt="" /> ' + msg.OperatorId + '</td>' +
                               '<td>' + msg.Prefix + '</td>' +
                               '<td>' + msg.CreationDate + '</td>' +
@@ -260,20 +247,32 @@
 
         var Clicked = false;
         var timer = null;
+        var boolfinish = true;
 
         $('#LinkTestCall').bind('click', function (e) {
             e.preventDefault();
-            a_onClick();
+            if (boolfinish) {
+                boolfinish = false;
+                a_onClick();
+
+            }
         });
 
         $('#LnkAdd').bind('click', function (e) {
             e.preventDefault();
-            aAdd_onClick();
+            if (boolfinish)
+                aAdd_onClick();
         });
 
         $('#LnkClear').bind('click', function (e) {
             e.preventDefault();
             aClear_onClick();
+            boolfinish = true;
+
+            $('#LinkTestCall').removeClass('disabled');
+            $('#LinkTestCall1').removeClass('disabled');
+            $('#LnkAdd').removeClass('disabled');
+
         });
 
         function aAdd_onClick() {
@@ -398,6 +397,12 @@
                                 if (IsFinished == "true") {
                                     resetTimer();
                                     Clicked = false;
+                                    boolfinish = true;
+
+                                    $('#LinkTestCall').removeClass('disabled');
+                                    $('#LinkTestCall1').removeClass('disabled');
+                                    $('#LnkAdd').removeClass('disabled');
+                                    arrayRow = [];
                                 }
                             });
                         }, 3000);
@@ -419,23 +424,28 @@
                 //isClick = true;
 
             });
-
-
         }
 
         function a_onClick() {
             arrayRow = [];
+            $('#LinkTestCall').addClass('disabled');
+            $('#LinkTestCall1').addClass('disabled');
+            $('#LnkAdd').addClass('disabled');
 
             $('#myTable > tbody  > tr').each(function () {
+
                 var op = $('td:nth-child(2)', $(this)).html();
                 var prefix = $('td:nth-child(5)', $(this)).html();
                 console.log("OP: " + op + " PRE: " + prefix);
+
                 if (typeof op === "undefined") {
                     console.log("undefined");
                 }
                 else {
-                    testCall(op, prefix);
+                    if(op != null && op != "null")
+                        testCall(op, prefix);
                 }
+
             });
         }
 

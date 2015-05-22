@@ -101,5 +101,10 @@ namespace CallGeneratorLibrary.Utilities
             Phase = 6
         }
 
+        public enum PhoneNumberStatus
+        {
+            Free = 0,
+            Busy = 1
+        }
     }
 }

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CallGeneratorLibrary;
+using CallGeneratorLibrary.Utilities;
+using CallGeneratorLibrary.Repositories;
 
 namespace AndroitTest
 {
@@ -27,6 +30,10 @@ namespace AndroitTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            User u = UserRepository.Load(3);
+            ScheduleLog ss = ScheduleLogRepository.Load(269);
+            CallGeneratorLibrary.Utilities.ScheduleManager.SendEmail2(u,ss);
+
             List<MontyOperator> testoperators = new List<MontyOperator>();
             {
                 MontyOperator m = new MontyOperator();
