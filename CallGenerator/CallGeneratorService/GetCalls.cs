@@ -75,8 +75,8 @@ namespace CallGeneratorService
                             Service1.LstChanels[ClientId].idle = false;
                             Service1.LstChanels[ClientId].Idle = false;
 
-                            WriteToEventLog("ClientId " + Service1.LstChanels[ClientId].GeneratedCallid + " " + 
-                                Service1.LstChanels[ClientId].DestinationNumber + " " + Service1.LstChanels[ClientId].Idle + " " + Service1.LstChanels[ClientId].StartDate);
+                            //WriteToEventLog("ClientId " + Service1.LstChanels[ClientId].GeneratedCallid + " " + 
+                            //    Service1.LstChanels[ClientId].DestinationNumber + " " + Service1.LstChanels[ClientId].Idle + " " + Service1.LstChanels[ClientId].StartDate);
 
                             String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                         }

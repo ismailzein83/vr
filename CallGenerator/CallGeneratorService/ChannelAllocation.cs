@@ -196,7 +196,7 @@ namespace CallGeneratorService
                     if ((c.Idle == false) && (c.StartDate == DateTime.MinValue))
                     {
                         ///////GeneratedCall GenCall = GeneratedCallRepository.Load(Service1.LstChanels[i].GeneratedCallid);
-                        WriteToEventLog("iiii " + Service1.LstChanels[i].GeneratedCallid + " " + Service1.LstChanels[i].DestinationNumber);
+                        //WriteToEventLog("iiii " + Service1.LstChanels[i].GeneratedCallid + " " + Service1.LstChanels[i].DestinationNumber);
                         
                         //////GenCall.Status = "2";
                         ////////GenCall.StartCall = DateTime.Now;

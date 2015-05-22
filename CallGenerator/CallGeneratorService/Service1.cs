@@ -239,7 +239,7 @@ namespace CallGeneratorService
             {
                 ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
 
-                WriteToEventLog(" phone_OnClearedCall " + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
+               // WriteToEventLog(" phone_OnClearedCall " + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
 
 
                 GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
