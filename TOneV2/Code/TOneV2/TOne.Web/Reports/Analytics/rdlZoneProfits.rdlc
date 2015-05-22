@@ -1849,36 +1849,6 @@
             <PaddingBottom>2pt</PaddingBottom>
           </Style>
         </Textbox>
-        <Textbox Name="Textbox34">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>ffff</Value>
-                  <Style />
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox34</rd:DefaultName>
-          <Top>0.16542in</Top>
-          <Left>3.11333in</Left>
-          <Height>0.25in</Height>
-          <Width>1in</Width>
-          <ZIndex>10</ZIndex>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
       </ReportItems>
       <Style>
         <Border>
@@ -1967,47 +1937,97 @@
   <ReportParameters>
     <ReportParameter Name="FromDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=Now()</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>FromDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=Now()</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="Title">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>test</Value>
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Title</Prompt>
     </ReportParameter>
     <ReportParameter Name="Currency">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>dollar</Value>
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Currency</Prompt>
     </ReportParameter>
     <ReportParameter Name="LogoPath">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>"ffff"</Value>
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>LogoPath</Prompt>
     </ReportParameter>
     <ReportParameter Name="Customer">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>"test"</Value>
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Customer</Prompt>
     </ReportParameter>
     <ReportParameter Name="Supplier">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>"test s"</Value>
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Supplier</Prompt>
     </ReportParameter>
     <ReportParameter Name="GroupByCustomer">
       <DataType>Boolean</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>true</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>GroupByCustomer</Prompt>
     </ReportParameter>
     <ReportParameter Name="DigitRate">
       <DataType>Integer</DataType>
-      <AllowBlank>true</AllowBlank>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>1</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
   </ReportParameters>

@@ -25,9 +25,9 @@ namespace TOne.Web.Reports.Analytics
               //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
 
                 List<TOne.Analytics.Entities.ZoneProfit> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
-                ReportDataSource datasource = new ReportDataSource("ReportsDataSet_rpt_ZoneProfit", zoneProfit);
-                ReportViewer1.LocalReport.DataSources.Add(datasource);
+                ReportDataSource ds = new ReportDataSource("ZoneProfit", zoneProfit);               
                 ReportViewer1.LocalReport.DataSources.Clear();
+                ReportViewer1.LocalReport.DataSources.Add(ds);
 
                 //ReportParameter[] parameters = new ReportParameter[1];
                 //parameters[0] = new ReportParameter("GroupByCustomer", "true", false);
@@ -36,5 +36,11 @@ namespace TOne.Web.Reports.Analytics
 
             }
         }
+        protected override void Render(HtmlTextWriter writer)
+        {
+            base.Render(writer);
+            GC.Collect();
+        }
+
     }
 }
