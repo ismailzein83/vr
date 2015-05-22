@@ -35,8 +35,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "TotalDataVolume",
                 Aggregation = new SumAggregate((cdr) =>
                 {
-                    return decimal.Parse((!cdr.UpVolume.HasValue && !cdr.DownVolume.HasValue ? 0:((!cdr.UpVolume.HasValue && cdr.DownVolume.HasValue)? cdr.DownVolume.Value: ((cdr.UpVolume.HasValue && !cdr.DownVolume.HasValue)? cdr.DownVolume.Value:0))).ToString());
-                }, null)
+                    return (cdr.UpVolume.HasValue ? cdr.UpVolume.Value : 0) + (cdr.DownVolume.HasValue ? cdr.DownVolume.Value : 0);
+                }, (cdr) =>
+                {
+                    return (cdr.UpVolume.HasValue || cdr.DownVolume.HasValue );
+                })
             });
 
 
