@@ -122,7 +122,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         },
         {
             name: "BusinessEntity", location: '', icon: 'glyphicon-cog', childs: [
-               { name: "DumySwitchs", location: '#/BusinessEntity/DumySwitchs' }
+               { name: "DumySwitchs", location: '#/BusinessEntity/DumySwitchs' },
+            { name: "Switch Managments", location: '#/BusinessEntity/Switch Managments' }
             ]
         },
         {
