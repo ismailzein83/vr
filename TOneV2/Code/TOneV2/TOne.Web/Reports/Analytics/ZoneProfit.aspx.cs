@@ -1,6 +1,7 @@
 ﻿using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -21,10 +22,13 @@ namespace TOne.Web.Reports.Analytics
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/Analytics/rdlZoneProfits.rdlc");
 
                 AnalyticsManager manager = new AnalyticsManager();
-              //  string showCustomer = Request.QueryString["showCustomer"];
-              //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
+                //  string showCustomer = Request.QueryString["showCustomer"];
+                //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
 
                 List<TOne.Analytics.Entities.ZoneProfit> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
+
+              
+
                 ReportDataSource ds = new ReportDataSource("ZoneProfit", zoneProfit);               
                 ReportViewer1.LocalReport.DataSources.Clear();
                 ReportViewer1.LocalReport.DataSources.Add(ds);
