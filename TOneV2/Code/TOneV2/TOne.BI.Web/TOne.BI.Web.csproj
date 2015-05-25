@@ -125,7 +125,12 @@
     <Content Include="Client\Constants\BIEntityTypeEnum.js" />
     <Content Include="Client\Constants\BIMeasureTypeEnum.js" />
     <Content Include="Client\Constants\BITimeDimensionTypeEnum.js" />
+    <Content Include="Client\Directives\vr-bi-visualelement-directive.js" />
     <Content Include="Client\Services\APIServices\BIAPIService.js" />
+    <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditorController.js" />
+    <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditor.html" />
+    <Content Include="Client\Views\Dashboards\DynamicDashboard.html" />
+    <Content Include="Client\Views\Dashboards\DynamicDashboardController.js" />
     <Content Include="Client\Views\Dashboards\SeniorManagementDashboardController.js" />
     <Content Include="Client\Views\Dashboards\TopManagementDashboardController.js" />
     <Content Include="Client\Views\Dashboards\ZoneDashboardController.js" />

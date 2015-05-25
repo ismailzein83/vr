@@ -19,7 +19,8 @@ app.service('UtilsService', ['$q', function ($q) {
         var deferred = $q.defer();
         var pendingOperations = operations.length;
         var isRejected = false;
-
+        if (pendingOperations == 0)
+            deferred.resolve();
         angular.forEach(operations, function (operation) {
             operation().then(function () {
                 if (isRejected)

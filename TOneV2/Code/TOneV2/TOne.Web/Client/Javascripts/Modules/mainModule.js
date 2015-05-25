@@ -117,7 +117,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             name: "BI", location: '', icon: 'glyphicon-cog', childs: [
                { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' },
                 { name: "Senior Management Dashboard", location: '#/BI/SeniorManagementDashboard' },
-                { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' }
+                { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' },
+                { name: "Dynamic Dashboard", location: '#/BI/DynamicDashboard' }
             ]
         },
         {
