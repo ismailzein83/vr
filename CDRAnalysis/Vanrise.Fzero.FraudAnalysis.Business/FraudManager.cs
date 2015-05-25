@@ -26,6 +26,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             if (strategy.StrategyCriterias == null)
                 throw new ArgumentNullException("strategy.StrategyCriterias");
 
+            if (strategy.StrategyPeriods == null)
+                throw new ArgumentNullException("strategy.StrategyPeriods");
+
             var criteriaManager = new CriteriaManager();
             Dictionary<int, CriteriaDefinition> criteriaDefinitions = criteriaManager.GetCriteriaDefinitions();
             if (criteriaDefinitions == null)
@@ -36,7 +39,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             foreach (StrategyLevel i in strategy.StrategyLevels)
             {
-
                 StrategyLevelWithCriterias strategyLevelWithCriterias = new StrategyLevelWithCriterias();
                 strategyLevelWithCriterias.SuspectionLevelId = i.SuspectionLevelId;
 
@@ -49,16 +51,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.CompareOperator, CriteriaId = j.CriteriaId, Description = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage=j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold=strategy.StrategyCriterias.Where(x=>x.CriteriaId==j.CriteriaId).FirstOrDefault().Threshold;
+                    levelCriteriasThresholdPercentage.Period = strategy.StrategyPeriods.Where(x => x.CriteriaId == j.CriteriaId).FirstOrDefault().Period;
+                    levelCriteriasThresholdPercentage.PeriodValue = strategy.StrategyPeriods.Where(x => x.CriteriaId == j.CriteriaId).FirstOrDefault().Value;
+
                     
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
                 }
 
-
                 _levelsByPriority.Add(strategyLevelWithCriterias);
 
             }
-
-            
         }
 
         public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber, int StrategyId)
@@ -132,7 +134,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspectionLevelId;
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
-                    suspiciousNumber.Period = profile.Period;
                     suspiciousNumber.StrategyId = StrategyId;
                     return IsSuspicious;
                 }
@@ -146,6 +147,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             public int SuspectionLevelId { get; set; }
 
+           
+
             public List<LevelCriteriaInfo> LevelCriteriasThresholdPercentage { get; set; }
         }
 
@@ -156,6 +159,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             public Decimal Threshold { get; set; }
 
             public Decimal Percentage { get; set; }
+            public int PeriodValue { get; set; }
+            public Enums.Period? Period { get; set; }
+
         }
 
         #endregion

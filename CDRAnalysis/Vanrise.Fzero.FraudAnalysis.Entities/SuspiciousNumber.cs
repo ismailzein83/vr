@@ -16,8 +16,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? DateDay { get; set; }
 
-        public Enums.Period? Period { get; set; }
-
         public int StrategyId { get; set; }
     }
 }

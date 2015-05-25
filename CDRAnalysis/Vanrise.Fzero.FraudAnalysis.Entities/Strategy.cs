@@ -11,6 +11,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public List<StrategyCriteria> StrategyCriterias { get; set; }
 
+        public List<StrategyPeriod> StrategyPeriods { get; set; }
+
         public List<StrategyLevel> StrategyLevels { get; set; }
     }
 
@@ -19,6 +21,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public int CriteriaId { get; set; }
 
         public Decimal Threshold { get; set; }
+    }
+
+    public class StrategyPeriod
+    {
+        public int CriteriaId { get; set; }
+        public int Value { get; set; }
+
+        public Enums.Period? Period { get; set; }
     }
 
     public class StrategyLevel

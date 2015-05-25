@@ -3,6 +3,7 @@ using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Data.SqlClient;
 using System.Data;
+using System;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
@@ -18,6 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             string query0 = "SELECT Id FROM Strategy WHERE Id = @StrategyId";
             string query = "SELECT MaxValue, CriteriaID FROM StrategyThreshold Where StrategyId = @StrategyId";
+            string query1 = "SELECT PeriodId, Value, CriteriaID FROM StrategyPeriods Where StrategyId = @StrategyId";
             string query2 = "SELECT LevelId, CriteriaId1, Cr1Per ,  CriteriaId2 ,  Cr2Per ,  CriteriaId3 ,  Cr3Per ,  CriteriaId4 ,  Cr4Per ,  CriteriaId5 ,  Cr5Per ,  CriteriaId6 ,  Cr6Per ,  CriteriaId7 ,  Cr7Per ,  CriteriaId8 ,  Cr8Per ,  CriteriaId9 ,  Cr9Per ,  CriteriaId10 ,  Cr10Per ,  CriteriaId11 ,  Cr11Per ,  CriteriaId12 ,  Cr12Per ,  CriteriaId13 ,  Cr13Per ,  CriteriaId14 ,  Cr14Per ,  CriteriaId15 ,  Cr15Per   FROM  Strategy_Suspicion_Level Where StrategyId = @StrategyId and LevelId<>1  ";
             
             Strategy strategy = new Strategy();
@@ -44,6 +46,24 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                cmd.Parameters.Add(new SqlParameter(){ParameterName="@StrategyId", Value=strategyId});
 
            });
+
+
+
+            strategy.StrategyPeriods = GetItemsText<StrategyPeriod>(query1, (reader) =>
+            {
+                StrategyPeriod strategyPeriod = new StrategyPeriod();
+                strategyPeriod.Period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), GetReaderValue<int>(reader, "PeriodId"));
+                strategyPeriod.Value = GetReaderValue<int>(reader, "Value");
+                strategyPeriod.CriteriaId = GetReaderValue<int>(reader, "CriteriaID");
+                return strategyPeriod;
+            }, (cmd) =>
+            {
+
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
+
+            });
+
+
 
 
             strategy.StrategyLevels = GetItemsText<StrategyLevel>(query2, (reader) =>
