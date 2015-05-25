@@ -200,6 +200,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Client\Javascripts\Constants\UpdateOperationResultEnum.js" />
+    <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\AMChartController.js" />
     <Content Include="Client\Javascripts\Controllers\ChartPrototypes\CanvasJSChartController.js" />

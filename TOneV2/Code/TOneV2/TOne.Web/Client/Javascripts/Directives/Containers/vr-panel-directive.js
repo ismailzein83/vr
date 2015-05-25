@@ -6,7 +6,6 @@ app.directive('vrPanel', [function () {
         restrict: 'E',
         scope: false,
         compile: function (tElement, tAttrs) {
-            var removeline = tAttrs.removeline;
             var newElement = '<div class="panel panel-primary panel-over-color"><div class="panel-body">' + tElement.context.innerHTML + '</div></div>';
             tElement.html(newElement);
         }

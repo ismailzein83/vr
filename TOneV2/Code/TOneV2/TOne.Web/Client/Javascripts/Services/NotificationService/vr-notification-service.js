@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRNotificationService', function (VRModalService, VRNavigationService, $q, notify, $location) {
+app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, $q, notify, $location) {
 
     return ({
         showConfirmation: showConfirmation,
@@ -10,9 +10,8 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         showWarning: showWarning,
         notifyException: notifyException,
         notifyExceptionWithClose: notifyExceptionWithClose,
-        notifyItemAddedSuccessfully: notifyItemAddedSuccessfully,
-        notifyItemUpdatedSuccessfully: notifyItemUpdatedSuccessfully,
-        notifyItemDeletedSuccessfully: notifyItemDeletedSuccessfully
+        notifyOnItemAdded: notifyOnItemAdded,
+        notifyOnItemUpdated: notifyOnItemUpdated
     });
 
     function showConfirmation(message) {
@@ -51,7 +50,6 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         showNotificationMessage(message, "alert  alert-warning");
     }
 
-
     function showNotificationMessage(message, cssClasses) {
         notify.closeAll();
         notify({ message: message, classes: cssClasses });
@@ -72,15 +70,24 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         VRNavigationService.goto("/Error", parameters);
     }
 
-    function notifyItemAddedSuccessfully(itemType) {
-        showSuccess(itemType + " added successfully");
+    function notifyOnItemAdded(itemType, insertOperationOutput) {//insertOperationOutput is of type InsertOperationOutput
+        switch (insertOperationOutput.Result) {
+            case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully"); break;
+            case InsertOperationResultEnum.Failed.value: showError("Failed to add " + itemType); break;
+            case InsertOperationResultEnum.SameExists.value:
+                switch(itemType)
+                {
+                    case "User": showWarning("Same Email already exists"); break;
+                    default: showWarning(itemType + " with the same key already exists"); break;
+                }
+                break;
+        }
     }
 
-    function notifyItemUpdatedSuccessfully(itemType) {
-        showSuccess(itemType + " updated successfully");
-    }
-
-    function notifyItemDeletedSuccessfully(itemType) {
-        showSuccess(itemType + " deleted successfully");
+    function notifyOnItemUpdated(itemType, updateOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
+        switch (updateOperationOutput.Result) {
+            case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully"); break;
+            case UpdateOperationResultEnum.Failed.value: showError("Failed to update " + itemType); break;
+        }
     }
 });
