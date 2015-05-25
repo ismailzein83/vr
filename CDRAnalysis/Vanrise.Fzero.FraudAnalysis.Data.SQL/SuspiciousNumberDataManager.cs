@@ -63,8 +63,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             foreach (NumberProfile numberProfile in numberProfiles)
             {
-                           
-                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24}",
+
+                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
                              new[] 
                              
                                  { 
@@ -75,7 +75,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     Math.Round(numberProfile.AggregateValues["DiffOutputNumb"],0).ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["CountOutInters"],0).ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["CountInInters"],0).ToString()	,
+                                    "0",	
+                                    "0",		
+                                    "0",		
                                     numberProfile.AggregateValues["CallOutDurs"].ToString(),	
+                                    "0",	
+                                    "0",		
                                     Math.Round(numberProfile.AggregateValues["CountOutFails"],0).ToString()	,
                                     Math.Round(numberProfile.AggregateValues["CountInFails"],0).ToString()	,
                                     numberProfile.AggregateValues["TotalOutVolume"].ToString()	,
@@ -96,8 +101,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                  }
                );
 
-                      
-               
+
+
 
             }
 

@@ -1,30 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Vanrise.Fzero.FraudAnalysis.Data;
-using Vanrise.Fzero.FraudAnalysis.Entities;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Fzero.CDRImport.Entities;
+using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
-using Vanrise.Fzero.FraudAnalysis.Data.MySQL;
 
 namespace Vanrise.Fzero.DevRuntime
 {
@@ -85,7 +68,7 @@ namespace Vanrise.Fzero.DevRuntime
             //var Start = DateTime.Parse(dateTimePicker1.Text);
             //var End = DateTime.Parse(dateTimePicker2.Text);
 
-            var Start = DateTime.Parse("2015-03-13 23:01:12.000");
+           var Start = DateTime.Parse("2015-03-13 23:01:12.000");
             var End = DateTime.Parse("2015-03-14 06:11:42.000");
 
 
