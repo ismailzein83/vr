@@ -100,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-                    if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual)
+                    if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual   && LevelCriteriaThresholdPercentage.Period==profile.Period )
                     {
                         if (criteriaValuesThreshold >= LevelCriteriaThresholdPercentage.Percentage)
                         {
@@ -112,7 +112,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                             break;
                         }
                     }
-                    else if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual)
+                    else if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && LevelCriteriaThresholdPercentage.Period == profile.Period)
                     {
                         if (criteriaValuesThreshold <= LevelCriteriaThresholdPercentage.Percentage)
                         {
