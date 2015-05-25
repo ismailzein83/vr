@@ -223,7 +223,7 @@
       <Name>Vanrise.Fzero.FraudAnalysis.Data.MySQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.SQL\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj">
-      <Project>{c62bbf70-e5da-421d-85e1-75f847183ff0}</Project>
+      <Project>{ce9ee251-4bb3-457a-925a-7b53a990cf34}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Data.SQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data\Vanrise.Fzero.FraudAnalysis.Data.csproj">
