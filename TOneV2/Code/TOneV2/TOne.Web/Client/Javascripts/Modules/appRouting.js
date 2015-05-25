@@ -81,7 +81,11 @@ appRouting.config(['$routeProvider',
         when('/BusinessEntity/Switch Managments', {
                 templateUrl: '/Client/Modules/BusinessEntity/Views/SwitchManagment.html',
                 controller: 'SwitchManagmentController'
-            }).
+        }).
+          when('/SwitchEditor/:SwitchId', {
+              templateUrl: '/Client/Modules/BusinessEntity/Views/SwitchEditor.html',
+              controller: 'SwitchEditorController'
+          }).
         when('/NOC/ZoneMonitor', {
             templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html'
         }).
