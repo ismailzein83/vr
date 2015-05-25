@@ -99,14 +99,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             if (numberProfile.Period == Enums.Period.Day)
             {
-                // not developed yet
-            }
-            else if (numberProfile.Period == Enums.Period.Hour)
-            {
-                // not developed yet
+                return numberProfile.AggregateValues["DiffOutputNumbNightCalls"]; 
             }
             return 0;
-
         }
 
         static decimal CalculateVoiceOnlyServiceUsage(NumberProfile numberProfile)
@@ -134,7 +129,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             if (numberProfile.Period == Enums.Period.Day)
             {
-                // not developed yet
+                return numberProfile.AggregateValues["CountOutCallsPeakHours"]; 
             }
             return 0;
         }

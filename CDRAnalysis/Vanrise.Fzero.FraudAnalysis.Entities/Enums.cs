@@ -32,6 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             UNKNOWN = 0
         };
 
+              
 
 
     }
