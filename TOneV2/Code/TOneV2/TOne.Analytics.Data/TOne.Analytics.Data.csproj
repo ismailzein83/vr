@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticsDataManagerFactory.cs" />
+    <Compile Include="IBillingStatisticDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAnalyticsDataManager.cs" />
     <Compile Include="ITrafficStatisticDataManager.cs" />

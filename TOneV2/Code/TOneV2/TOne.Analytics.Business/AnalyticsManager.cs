@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.Analytics.Business.Models;
-using TOne.Analytics.Business.ModelsMappers;
 using TOne.Analytics.Data;
 using TOne.Analytics.Entities;
 using TOne.BusinessEntity.Business;
@@ -69,13 +67,6 @@ namespace TOne.Analytics.Business
         {
             return _datamanager.GetSummary(fromDate, toDate);
         }
-
-        public List<ZoneProfitFormated> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer)
-        {
-
-            return Mappers.MapZoneProfits( _datamanager.GetZoneProfit(fromDate, toDate, groupByCustomer));
-        }
-
 
         #region Private Methods
         private List<Entities.AlertView> CreateAlertViews(List<Entities.Alert> alerts)

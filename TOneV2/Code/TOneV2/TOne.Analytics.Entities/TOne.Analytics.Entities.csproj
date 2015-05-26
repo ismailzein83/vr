@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analytics\ZoneProfit.cs" />
+    <Compile Include="Billing\ZoneProfit.cs" />
     <Compile Include="BigResult.cs" />
+    <Compile Include="Billing\ZoneProfitFormatted.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />
     <Compile Include="Mobile\CarrierRateView.cs" />

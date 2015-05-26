@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using TOne.Analytics.Business;
-using TOne.Analytics.Business.Models;
+using TOne.Analytics.Entities;
 
 namespace TOne.Web.Reports.Analytics
 {
@@ -21,11 +21,11 @@ namespace TOne.Web.Reports.Analytics
                 ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/Analytics/rdlZoneProfits.rdlc");
 
-                AnalyticsManager manager = new AnalyticsManager();
+                BillingStatisticManager manager = new BillingStatisticManager();
                 //  string showCustomer = Request.QueryString["showCustomer"];
                 //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
 
-                List<ZoneProfitFormated> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
+                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
 
               
 

@@ -1667,10 +1667,10 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
-        <rd:TableName>AnalyticsManager</rd:TableName>
+        <rd:TableName>BillingManager</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetZoneProfit</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Business.Models.ZoneProfitFormated] GetZoneProfit(System.DateTime, System.DateTime, System.String)</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Business.AnalyticsManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.ZoneProfitFormatted] GetZoneProfit(System.DateTime, System.DateTime, System.String)</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

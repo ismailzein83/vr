@@ -37,6 +37,5 @@ namespace TOne.Analytics.Data
         List<Entities.ProfitByDay> GetLastWeeksProfit(DateTime from, DateTime to);
 
         Entities.TrafficSummaryView GetSummary(DateTime fromDate, DateTime toDate);
-        List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer);
     }
 }

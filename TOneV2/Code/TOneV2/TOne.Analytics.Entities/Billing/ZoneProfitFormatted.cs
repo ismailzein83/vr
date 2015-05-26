@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.Analytics.Business.Models
+namespace TOne.Analytics.Entities
 {
-    public class ZoneProfitFormated
+    public class ZoneProfitFormatted
     {
 
 
