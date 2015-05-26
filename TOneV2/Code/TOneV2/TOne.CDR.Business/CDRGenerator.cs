@@ -131,5 +131,29 @@ namespace TOne.CDR.Business
 
         private System.Text.RegularExpressions.Regex _invalidCGPNDigits = new System.Text.RegularExpressions.Regex("[^0-9]", System.Text.RegularExpressions.RegexOptions.Compiled);
 
+
+        public void HandlePassThrough(BillingCDRMain cdr)
+        {
+            TABS.CarrierAccount Customer = TABS.CarrierAccount.All.ContainsKey(cdr.CustomerID) ? TABS.CarrierAccount.All[cdr.CustomerID] : null;
+            TABS.CarrierAccount Supplier = TABS.CarrierAccount.All.ContainsKey(cdr.SupplierID) ? TABS.CarrierAccount.All[cdr.SupplierID] : null;
+
+            if (Customer == null || Supplier == null) return;
+
+            if (Customer.IsPassThroughCustomer && cdr.cost != null)
+            {
+                var sale = new BillingCDRSale();
+                cdr.sale = sale;
+                sale.Copy(cdr.cost);
+                sale.ZoneID = cdr.OurZoneID;
+            }
+            if (Supplier.IsPassThroughSupplier && cdr.sale != null)
+            {
+                var cost = new BillingCDRCost();
+                cdr.cost = cost;
+                cost.Copy(cdr.sale);
+                cost.ZoneID = cdr.SupplierZoneID;
+            }
+        }
+
     }
 }

@@ -45,33 +45,6 @@ namespace TOne.CDRProcess.Activities
 
         #endregion
 
-        #region ProcessBillingCDR Controls
-
-        private void HandlePassThrough(BillingCDRMain cdr)
-        {
-            TABS.CarrierAccount Customer = TABS.CarrierAccount.All.ContainsKey(cdr.CustomerID) ? TABS.CarrierAccount.All[cdr.CustomerID] : null;
-            TABS.CarrierAccount Supplier = TABS.CarrierAccount.All.ContainsKey(cdr.SupplierID) ? TABS.CarrierAccount.All[cdr.SupplierID] : null;
-
-            if (Customer == null || Supplier == null) return;
-
-            if (Customer.IsPassThroughCustomer && cdr.cost != null)
-            {
-                var sale = new BillingCDRSale();
-                cdr.sale = sale;
-                sale.Copy(cdr.cost);
-                sale.ZoneID = cdr.OurZoneID;
-            }
-            if (Supplier.IsPassThroughSupplier && cdr.sale != null)
-            {
-                var cost = new BillingCDRCost();
-                cdr.cost = cost;
-                cost.Copy(cdr.sale);
-                cost.ZoneID = cdr.SupplierZoneID;
-            }
-        }
-
-        #endregion
-
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
         {
             if (this.OutputMainCDRQueue.Get(context) == null)
@@ -92,7 +65,7 @@ namespace TOne.CDRProcess.Activities
             PricingGenerator generator;
             
             generator = new PricingGenerator(cacheManager);
-
+            CDRGenerator cdrGenerator = new CDRGenerator();
 
             ProtCodeMap codeMap = new ProtCodeMap(cacheManager);
 
@@ -119,7 +92,7 @@ namespace TOne.CDRProcess.Activities
                                 main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
 
-                                HandlePassThrough(main);
+                                cdrGenerator.HandlePassThrough(main);
 
                                 if (main != null && main.cost != null && main.SupplierCode != null)
                                     main.cost.Code = main.SupplierCode;
