@@ -9,10 +9,6 @@ using TOne.Entities;
 
 namespace TOne.Main.Web.Controllers
 {
-    public class ResetPasswordInput
-    {
-        public int RoleId { get; set; }
-    }
     public class RoleController : ApiController
     {
         [HttpGet]
@@ -46,24 +42,12 @@ namespace TOne.Main.Web.Controllers
 
 
         [HttpGet]
-        public List<Role> SearchRole(string Name, string Email)
+        public List<Role> SearchRole(string Name)
         {
             RoleManager manager = new RoleManager();
-            return manager.SearchRole(Name, Email);
+            return manager.SearchRole(Name);
         }
 
-        [HttpGet]
-        public bool CheckRoleName(string Name)
-        {
-            RoleManager manager = new RoleManager();
-            return manager.CheckRoleName(Name);
-        }
-
-        [HttpPost]
-        public bool ResetPassword(ResetPasswordInput Role)
-        {
-            RoleManager manager = new RoleManager();
-            return manager.ResetPassword(Role.RoleId, Role.Password);
-        }
+      
     }
 }
