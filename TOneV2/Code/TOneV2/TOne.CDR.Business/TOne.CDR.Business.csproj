@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRGenerator.cs" />
     <Compile Include="CDRQueueFactory.cs" />
     <Compile Include="PricingGenerator.cs" />
     <Compile Include="PricingGeneratorEntities.cs" />
@@ -82,6 +83,10 @@
     <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
       <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
       <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Caching\TOne.Caching.csproj">
       <Project>{1950b29a-5c7b-47a3-8113-fc9211d27cfd}</Project>
