@@ -10,28 +10,13 @@ function DynamicDashboardController($scope, UtilsService, BITimeDimensionTypeEnu
             $scope.fromDate = "2015-04-01";
             $scope.toDate = "2015-04-30";
 
-            $scope.visualElementSettings = {
-                operationType: "GetTopEntities",
-                entityType: BIEntityTypeEnum.SaleZone,
-                measureType: BIMeasureTypeEnum.SuccessfulAttempts
-            };
-
-            $scope.timeDimensionTypes = [];
-            for (var td in BITimeDimensionTypeEnum)
-                $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
-            $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
-                return t == BITimeDimensionTypeEnum.Daily;
-            })[0];
-
-            var chartAPIs = [];
-            $scope.biVisualElementReady = function (api) {
-                chartAPIs.push(api);
-            };
+            defineTimeDimensionTypes();
+                    
 
             $scope.updateDashboard = function () {
                 var refreshDataOperations = [];
-                angular.forEach(chartAPIs, function (api) {
-                    refreshDataOperations.push(api.retrieveData);
+                angular.forEach($scope.visualElements, function (visualElement) {
+                    refreshDataOperations.push(visualElement.API.retrieveData);
                 });
                 $scope.isGettingData = true;
                 return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
@@ -49,7 +34,7 @@ function DynamicDashboardController($scope, UtilsService, BITimeDimensionTypeEnu
                 var modalSettings = {};
                 modalSettings.onScopeReady = function (modalScope) {
                     modalScope.onAddElement = function (element) {
-                        addVisualElement(element.type, element.settings, element.numberOfColumns);
+                        addVisualElement(element.directive, element.settings, element.numberOfColumns);
                     }
                 };
 
@@ -71,13 +56,26 @@ function DynamicDashboardController($scope, UtilsService, BITimeDimensionTypeEnu
            
         }
 
-        function addVisualElement(type, settings, numberOfColumns) {
-            $scope.visualElements.push(
-                {
-                    type: type,
-                    settings: settings,
-                    numberOfColumns: numberOfColumns
-                });
+        function defineTimeDimensionTypes() {
+            $scope.timeDimensionTypes = [];
+            for (var td in BITimeDimensionTypeEnum)
+                $scope.timeDimensionTypes.push(BITimeDimensionTypeEnum[td]);
+
+            $scope.selectedTimeDimensionType = $.grep($scope.timeDimensionTypes, function (t) {
+                return t == BITimeDimensionTypeEnum.Daily;
+            })[0];
+        }
+
+        function addVisualElement(directive, settings, numberOfColumns) {
+            var visualElement = {
+                directive: directive,
+                settings: settings,
+                numberOfColumns: numberOfColumns
+            };
+            visualElement.onElementReady = function (api) {                
+                visualElement.API = api;
+            };
+            $scope.visualElements.push(visualElement);
         }
 
 }

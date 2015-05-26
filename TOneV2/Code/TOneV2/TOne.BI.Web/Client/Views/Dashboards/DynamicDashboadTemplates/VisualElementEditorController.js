@@ -7,7 +7,7 @@ function VisualElementEditorController($scope, BIEntityTypeEnum, BIMeasureTypeEn
     load();
 
     function defineScope() {
-        defineElementTypes();
+        defineDirectives();
         defineOperationTypes();
         defineEntityTypes();
         defineMeasureTypes();
@@ -22,7 +22,7 @@ function VisualElementEditorController($scope, BIEntityTypeEnum, BIMeasureTypeEn
 
             if ($scope.onAddElement != undefined)
                 $scope.onAddElement({
-                    type: $scope.selectedElementType.value,
+                    directive: $scope.selectedDirective.value,
                     settings: elementSettings,
                     numberOfColumns: $scope.selectedNumberOfColumns.value
                 });
@@ -34,18 +34,18 @@ function VisualElementEditorController($scope, BIEntityTypeEnum, BIMeasureTypeEn
 
     }
 
-    function defineElementTypes() {
-        $scope.elementTypes = [
+    function defineDirectives() {
+        $scope.directives = [
             {
-                value: "chart",
+                value: "vr-bi-chart",
                 description: "Chart"
             },
             {
-                value: "datagrid",
+                value: "vr-bi-datagrid",
                 description: "Report"
             }
         ]; 
-        $scope.selectedElementType = $scope.elementTypes[0];
+        $scope.selectedDirective = $scope.directives[0];
     }
 
     function defineOperationTypes() {

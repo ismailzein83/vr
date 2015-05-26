@@ -27,14 +27,15 @@
             </div>
         </vr-actionbar>
     </vr-row>
+    
     <div vr-loader="isGettingData">
         <vr-row>
             <div class="list-group dragbelzone" ng-sortable="itemsSortable">
                 <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
                     <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                    <i class="glyphicon glyphicon-remove" ng-click="removeVisualElement(visualElement)"></i>
-                    <vr-bi-visualelement type="visualElement.type" on-ready="biVisualElementReady" settings="visualElement.settings"
-                                         retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-bi-visualelement>
+                    <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
+                    <vr-directivewrapper directive="visualElement.directive" on-ready="visualElement.onElementReady" settings="visualElement.settings"
+                                      retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-directivewrapper>
                 </vr-columns>
             </div>
            

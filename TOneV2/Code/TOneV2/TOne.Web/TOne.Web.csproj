@@ -223,6 +223,7 @@
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridexpandablerow-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcolumn-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridrows-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DirectiveWrapper\vr-directivewrapper-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Switch\vr-switch-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\DatePicker\vr-datetimepicker-directive.js" />
