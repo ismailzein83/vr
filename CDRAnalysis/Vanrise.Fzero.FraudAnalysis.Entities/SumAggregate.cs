@@ -37,7 +37,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public decimal GetResult()
         {
-            return decimal.Parse(_sum.ToString());
+            return _sum;
         }
 
 

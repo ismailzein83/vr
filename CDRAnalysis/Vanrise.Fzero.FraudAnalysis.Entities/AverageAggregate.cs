@@ -46,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             if (this._sum == 0 || this._count == 0)
                 return 0;
             else
-                return decimal.Parse((this._sum / this._count).ToString());
+                return _sum / _count;
         }
 
 

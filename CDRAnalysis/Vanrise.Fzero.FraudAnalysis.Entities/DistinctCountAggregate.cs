@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public decimal GetResult()
         {
-            return decimal.Parse(_distinctItems.Count().ToString());
+            return _distinctItems.Count();
         }
 
 
