@@ -167,7 +167,7 @@ namespace TOne.CDR.Data.SQL
         }
         public void ApplyCDRsToDB(Object preparedCDRs)
         {
-            InsertBulkToTable(preparedCDRs as BulkInsertInfo);
+            InsertBulkToTable(preparedCDRs as StreamBulkInsertInfo);
         }
 
         private void PrepareCDRBillingMainBaseForDBApply(TOne.CDR.Entities.BillingCDRBase cdr, System.IO.StreamWriter wr)
@@ -316,49 +316,49 @@ namespace TOne.CDR.Data.SQL
             };
         }
 
-        public Object PrepareCDRsForDBApply(System.Collections.Generic.List<TABS.CDR> cdrs, int SwitchId)
+        public Object PrepareCDRsForDBApply(System.Collections.Generic.List<TABS.CDR> cdrs, int switchId)
         {
-            string filePath = GetFilePathForBulkInsert();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            foreach (var cdr in cdrs)
             {
-                foreach (var cdr in cdrs)
-                {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",
-                        cdr.CDRID,
-                        cdr.Switch == null ? SwitchId.ToString() : cdr.Switch.SwitchID.ToString(),
-                        cdr.IDonSwitch,
-                        cdr.Tag,
-                        cdr.AttemptDateTime,
-                        cdr.AlertDateTime.HasValue ? cdr.AlertDateTime.Value.ToString() : "",
-                        cdr.ConnectDateTime.HasValue ? cdr.ConnectDateTime.Value.ToString() : "",
-                        cdr.DisconnectDateTime.HasValue ? cdr.DisconnectDateTime.Value.ToString() : "",
-                        cdr.DurationInSeconds,
-                        cdr.IN_TRUNK,
-                        cdr.IN_CIRCUIT,
-                        cdr.IN_CARRIER,
-                        cdr.IN_IP,
-                        cdr.OUT_TRUNK,
-                        cdr.OUT_CIRCUIT,
-                        cdr.OUT_CARRIER,
-                        cdr.OUT_IP,
-                        cdr.CGPN,
-                        cdr.CDPN,
-                        cdr.CAUSE_FROM_RELEASE_CODE,
-                        cdr.CAUSE_FROM,
-                        cdr.CAUSE_TO_RELEASE_CODE,
-                        cdr.CAUSE_TO,
-                        cdr.Extra_Fields,
-                        cdr.IsRerouted ? 'Y' : 'N',
-                        cdr.CDPNOut,
-                        cdr.SIP));
-                }
-                wr.Close();
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",
+                    cdr.CDRID,
+                    cdr.Switch == null ? switchId.ToString() : cdr.Switch.SwitchID.ToString(),
+                    cdr.IDonSwitch,
+                    cdr.Tag,
+                    cdr.AttemptDateTime,
+                    cdr.AlertDateTime.HasValue ? cdr.AlertDateTime.Value.ToString() : "",
+                    cdr.ConnectDateTime.HasValue ? cdr.ConnectDateTime.Value.ToString() : "",
+                    cdr.DisconnectDateTime.HasValue ? cdr.DisconnectDateTime.Value.ToString() : "",
+                    cdr.DurationInSeconds,
+                    cdr.IN_TRUNK,
+                    cdr.IN_CIRCUIT,
+                    cdr.IN_CARRIER,
+                    cdr.IN_IP,
+                    cdr.OUT_TRUNK,
+                    cdr.OUT_CIRCUIT,
+                    cdr.OUT_CARRIER,
+                    cdr.OUT_IP,
+                    cdr.CGPN,
+                    cdr.CDPN,
+                    cdr.CAUSE_FROM_RELEASE_CODE,
+                    cdr.CAUSE_FROM,
+                    cdr.CAUSE_TO_RELEASE_CODE,
+                    cdr.CAUSE_TO,
+                    cdr.Extra_Fields,
+                    cdr.IsRerouted ? 'Y' : 'N',
+                    cdr.CDPNOut,
+                    cdr.SIP);
             }
 
-            return new BulkInsertInfo
+            stream.Close();
+
+            return new StreamBulkInsertInfo
             {
                 TableName = "CDR",
-                DataFilePath = filePath,
+                Stream = stream,
                 TabLock = false,
                 FieldSeparator = '^'
             };
