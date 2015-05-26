@@ -33,33 +33,33 @@ namespace TOne.CDRProcess.Activities
 
         #endregion
 
-
         #region Private Methods
 
-        private TOne.CDR.Entities.CDRBatch GetCDRsBySwitchId(int SwitchID)
+        private TOne.CDR.Entities.CDRBatch GetCDRsBySwitchId(int switchID)
         {
-            List<TABS.CDR> ToneCdrs = new List<TABS.CDR>();
-            TOne.CDR.Entities.CDRBatch BatchCdrs = new TOne.CDR.Entities.CDRBatch();
+            List<TABS.CDR> toneCdrs = new List<TABS.CDR>();
+            TOne.CDR.Entities.CDRBatch batchCdrs = new TOne.CDR.Entities.CDRBatch();
             DateTime start = DateTime.Now;
-            TABS.Switch CurrentSwitch = null;
-            if (TABS.Switch.All.ContainsKey(SwitchID))
-                CurrentSwitch = TABS.Switch.All[SwitchID];
-            if (CurrentSwitch != null && CurrentSwitch.Enable_CDR_Import && CurrentSwitch.SwitchManager != null)
+            TABS.Switch currentSwitch = null;
+            if (TABS.Switch.All.ContainsKey(switchID))
+                currentSwitch = TABS.Switch.All[switchID];
+            if (currentSwitch != null && currentSwitch.Enable_CDR_Import && currentSwitch.SwitchManager != null)
             {
-                var rawCDRs = CurrentSwitch.SwitchManager.GetCDR(CurrentSwitch);
+                var rawCDRs = currentSwitch.SwitchManager.GetCDR(currentSwitch);
 
                 // create CDRs from Standard CDRs
                 foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
-                    ToneCdrs.Add(new TABS.CDR(CurrentSwitch, rawCDR));
+                    toneCdrs.Add(new TABS.CDR(currentSwitch, rawCDR));
             }
-            BatchCdrs.SwitchId = CurrentSwitch.SwitchID;
-            BatchCdrs.CDRs = ToneCdrs;
+            batchCdrs.SwitchId = currentSwitch.SwitchID;
+            batchCdrs.CDRs = toneCdrs;
             Console.WriteLine("{0}: GetCDRs is done in {1}", DateTime.Now, (DateTime.Now - start));
-            return BatchCdrs;
+            return batchCdrs;
         }
 
         #endregion
 
+        
 
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
