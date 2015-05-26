@@ -178,9 +178,9 @@ namespace TOne.Analytics.Data.SQL
                 SaleZone = reader["SaleZone"] as string,
                 SupplierID = reader["SupplierID"] as string,
                 Calls = GetReaderValue<int>(reader, "Calls"),
-                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
-                CostNet = GetReaderValue<double>(reader, "CostNet"),
                 SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostNet = GetReaderValue<double>(reader, "CostNet"),                
                 CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
                 DurationNet = GetReaderValue<decimal>(reader, "DurationNet")
             };

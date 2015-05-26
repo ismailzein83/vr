@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using TOne.Analytics.Business;
-using TOne.Analytics.Entities;
+using TOne.Analytics.Business.Models;
 
 namespace TOne.Web.Reports.Analytics
 {
@@ -25,7 +25,7 @@ namespace TOne.Web.Reports.Analytics
                 //  string showCustomer = Request.QueryString["showCustomer"];
                 //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
 
-                List<TOne.Analytics.Entities.ZoneProfit> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
+                List<ZoneProfitFormated> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
 
               
 

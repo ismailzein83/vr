@@ -448,7 +448,6 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>11</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -482,7 +481,6 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -512,7 +510,6 @@
                       <rd:DefaultName>SaleZone</rd:DefaultName>
                       <ZIndex>9</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -542,7 +539,6 @@
                       <rd:DefaultName>CostZone</rd:DefaultName>
                       <ZIndex>8</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -572,7 +568,6 @@
                       <rd:DefaultName>SupplierID</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -604,7 +599,6 @@
                       <rd:DefaultName>Calls</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -615,14 +609,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="DurationNet">
+                    <Textbox Name="DurationNetFormated">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!DurationNet.Value,2)</Value>
+                              <Value>=Fields!DurationNetFormated.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -633,10 +627,8 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>DurationNet</rd:DefaultName>
-                      <ZIndex>5</ZIndex>
+                      <rd:DefaultName>DurationNetFormated</rd:DefaultName>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -647,14 +639,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleDuration">
+                    <Textbox Name="SaleDurationFormated1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!SaleDuration.Value),"0.00",FormatNumber(Fields!SaleDuration.Value,2))</Value>
+                              <Value>=Fields!SaleDurationFormated.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -665,10 +657,8 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleDuration</rd:DefaultName>
-                      <ZIndex>4</ZIndex>
+                      <rd:DefaultName>SaleDurationFormated1</rd:DefaultName>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -679,14 +669,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CostNet">
+                    <Textbox Name="CostDurationFormated">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!CostNet.Value),"0.00",FormatNumber(Fields!CostNet.Value,Parameters!DigitRate.Value))</Value>
+                              <Value>=Fields!CostDurationFormated.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -697,10 +687,9 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CostNet</rd:DefaultName>
+                      <rd:DefaultName>CostDurationFormated</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -711,14 +700,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleNet">
+                    <Textbox Name="SaleNetFormated">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!SaleNet.Value),"0.00",FormatNumber(Fields!SaleNet.Value,Parameters!DigitRate.Value))</Value>
+                              <Value>=Fields!SaleNetFormated.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -729,10 +718,9 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleNet</rd:DefaultName>
+                      <rd:DefaultName>SaleNetFormated</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -743,14 +731,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox12">
+                    <Textbox Name="Profit">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleNet.Value - Fields!CostNet.Value,2)</Value>
+                              <Value>=Fields!Profit.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -761,10 +749,9 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox12</rd:DefaultName>
+                      <rd:DefaultName>Profit</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -775,14 +762,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox20">
+                    <Textbox Name="ProfitPercentage">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!SaleNet.Value) ,"-100%",FormatPercent(1- Fields!CostNet.Value/Fields!SaleNet.Value,2))</Value>
+                              <Value>=Fields!ProfitPercentage.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -793,9 +780,8 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox20</rd:DefaultName>
+                      <rd:DefaultName>ProfitPercentage</rd:DefaultName>
                       <Style>
-                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1565,7 +1551,7 @@
     <Height>1in</Height>
     <Style />
   </Body>
-  <Width>13.12492in</Width>
+  <Width>14.12492in</Width>
   <Page>
     <PageHeader>
       <Height>2in</Height>
@@ -1876,11 +1862,25 @@
       </ConnectionProperties>
       <rd:DataSourceID>71107b04-9ee3-47e2-ba6a-72bcd2ec4349</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="TOneAnalyticsDataSQL1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>d6ed4d5e-5535-4827-9be7-6129a620ff1c</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="TOneAnalyticsDataSQL2">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>ccc26b9a-631a-4138-ba99-d439b94f3e7e</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="ZoneProfit">
       <Query>
-        <DataSourceName>TOneAnalyticsDataSQL</DataSourceName>
+        <DataSourceName>TOneAnalyticsDataSQL2</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -1908,29 +1908,57 @@
           <DataField>DurationNet</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="CostDuration">
-          <DataField>CostDuration</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        <Field Name="DurationNetFormated">
+          <DataField>DurationNetFormated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleDuration">
           <DataField>SaleDuration</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="SaleDurationFormated">
+          <DataField>SaleDurationFormated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CostDuration">
+          <DataField>CostDuration</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="CostDurationFormated">
+          <DataField>CostDurationFormated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="CostNet">
           <DataField>CostNet</DataField>
           <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="CostNetFormated">
+          <DataField>CostNetFormated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaleNet">
           <DataField>SaleNet</DataField>
           <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="SaleNetFormated">
+          <DataField>SaleNetFormated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Profit">
+          <DataField>Profit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProfitPercentage">
+          <DataField>ProfitPercentage</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TOne.Analytics.Data.SQL</rd:DataSetName>
-        <rd:TableName>AnalyticsDataManager</rd:TableName>
+        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
+        <rd:TableName>AnalyticsManager</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetZoneProfit</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.ZoneProfit] GetZoneProfit(System.DateTime, System.DateTime, System.String)</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>TOne.Analytics.Data.SQL.AnalyticsDataManager, TOne.Analytics.Data.SQL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Business.Models.ZoneProfitFormated] GetZoneProfit(System.DateTime, System.DateTime, System.String)</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>TOne.Analytics.Business.AnalyticsManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
