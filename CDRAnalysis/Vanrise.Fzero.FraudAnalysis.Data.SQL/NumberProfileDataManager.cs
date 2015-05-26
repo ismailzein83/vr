@@ -28,7 +28,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     CDR normalCDR = new CDR();
                     int count = 0;
                     int currentIndex = 0;
-                    Enums.CallClass callClass;
 
                     while (reader.Read())
                     {
@@ -39,8 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                         normalCDR.IMSI = reader["IMSI"] as string;
                         normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
                         normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                        if (Enum.TryParse<Enums.CallClass>(reader["Call_Class"] as string,out callClass))
-                           normalCDR.CallClass = callClass;
+                        normalCDR.CallClass = reader["Call_Class"] as string;
                         normalCDR.IsOnNet = GetReaderValue<Byte?>(reader, "IsOnNet");
                         normalCDR.SubType = reader["Sub_Type"] as string;
                         normalCDR.IMEI = reader["IMEI"] as string;

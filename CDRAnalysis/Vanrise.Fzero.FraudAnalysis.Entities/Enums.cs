@@ -21,15 +21,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
             RoamingCallForward = 26
         };
 
-        public enum CallClass
+        //public enum CallClass
+        //{
+        //    ZAINIQ = 1, //1
+        //    VAS = 2, //1
+        //    INV = 29, //1
+        //    INTL = 30, //2
+        //    KOREKTEL = 31, //0
+        //    ASIACELL = 26, //0
+        //    UNKNOWN = 0
+        //};
+
+        public enum NetType
         {
-            ZAINIQ = 1, //1
-            VAS = 2, //1
-            INV = 29, //1
-            INTL = 30, //2
-            KOREKTEL = 31, //0
-            ASIACELL = 26, //0
-            UNKNOWN = 0
+            Others = 0, 
+            Local = 1, 
+            International = 2
         };
 
               

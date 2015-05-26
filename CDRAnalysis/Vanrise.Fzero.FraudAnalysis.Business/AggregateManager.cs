@@ -10,10 +10,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         IList<int> NightCallHours = new List<int>() { 23,0,1,2,3,4,5};
         IList<int> PeakHours = new List<int>() { 11,12,13,14 };
-        
 
 
-        public List<AggregateDefinition> GetAggregateDefinitions()
+        public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> CallClasses)
         {
             List<AggregateDefinition> AggregateDefinitions = new List<AggregateDefinition>();
 
@@ -84,13 +83,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 })
             });
 
+            
 
             AggregateDefinitions.Add(new AggregateDefinition()
             {
                 Name = "CountOutOffNets",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && (cdr.CallClass == Enums.CallClass.ASIACELL) || cdr.CallClass == Enums.CallClass.KOREKTEL);
+                    return ((cdr.CallType == Enums.CallType.OutgoingVoiceCall) && (CallClasses.FindAll(x=>x.NetType==Enums.NetType.Others &&  x.Description==cdr.CallClass).Count>0));
                 })
             });
 
@@ -99,7 +99,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountOutOnNets",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && (cdr.CallClass == Enums.CallClass.ZAINIQ|| cdr.CallClass == Enums.CallClass.VAS || cdr.CallClass == Enums.CallClass.INV));
+                    return ((cdr.CallType == Enums.CallType.OutgoingVoiceCall) && (CallClasses.FindAll(x => x.NetType == Enums.NetType.Local && x.Description == cdr.CallClass).Count > 0));
                 })
             });
 
@@ -109,7 +109,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountOutInters",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.CallClass == Enums.CallClass.INTL);
+                    return ((cdr.CallType == Enums.CallType.OutgoingVoiceCall) && (CallClasses.FindAll(x => x.NetType == Enums.NetType.International && x.Description == cdr.CallClass).Count > 0));
                 })
             });
 
@@ -120,7 +120,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountInOffNets",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall && (cdr.CallClass == Enums.CallClass.ASIACELL || cdr.CallClass == Enums.CallClass.KOREKTEL));
+                    return ((cdr.CallType == Enums.CallType.IncomingVoiceCall) && (CallClasses.FindAll(x => x.NetType == Enums.NetType.Others && x.Description == cdr.CallClass).Count > 0));
                 })
             });
 
@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountInOnNets",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall && ((cdr.CallClass == Enums.CallClass.ZAINIQ ) || cdr.CallClass == Enums.CallClass.VAS) || cdr.CallClass == Enums.CallClass.INV);
+                    return ((cdr.CallType == Enums.CallType.IncomingVoiceCall) && (CallClasses.FindAll(x => x.NetType == Enums.NetType.Local && x.Description == cdr.CallClass).Count > 0));
                 })
             });
 
@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountInInters",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall && (cdr.CallClass == Enums.CallClass.INTL));
+                    return ((cdr.CallType == Enums.CallType.IncomingVoiceCall) && (CallClasses.FindAll(x => x.NetType == Enums.NetType.International && x.Description == cdr.CallClass).Count > 0));
                 })
             });
 

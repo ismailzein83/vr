@@ -64,12 +64,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
         {
+            IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
             List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions();
+            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions(predefinedDataManager.GetAllCallClasses());
             Enums.Period period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), inputArgument.PeriodId);
 
             NumberProfile currentNumberProfile = null;
