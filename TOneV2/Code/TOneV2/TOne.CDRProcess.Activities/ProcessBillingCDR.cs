@@ -76,18 +76,18 @@ namespace TOne.CDRProcess.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((billingCDR) =>
                     {
-                        TOne.CDR.Entities.CDRMainBatch CDRMains = new TOne.CDR.Entities.CDRMainBatch();
-                        TOne.CDR.Entities.CDRInvalidBatch CDRInvalids = new TOne.CDR.Entities.CDRInvalidBatch();
+                        TOne.CDR.Entities.CDRMainBatch  cdrMains = new TOne.CDR.Entities.CDRMainBatch();
+                        TOne.CDR.Entities.CDRInvalidBatch cdrInvalids = new TOne.CDR.Entities.CDRInvalidBatch();
 
-                        CDRMains.MainCDRs = new List<BillingCDRMain>();
-                        CDRInvalids.InvalidCDRs = new List<BillingCDRInvalid>();
+                        cdrMains.MainCDRs = new List<BillingCDRMain>();
+                        cdrInvalids.InvalidCDRs = new List<BillingCDRInvalid>();
 
-                        foreach (BillingCDRBase CDR in billingCDR.CDRs)
+                        foreach (BillingCDRBase cdr in billingCDR.CDRs)
                         {
 
-                            if (CDR.IsValid)
+                            if (cdr.IsValid)
                             {
-                                BillingCDRMain main = new BillingCDRMain(CDR);
+                                BillingCDRMain main = new BillingCDRMain(cdr);
 
                                 main.cost = generator.GetRepricing<BillingCDRCost>(main);
                                 main.sale = generator.GetRepricing<BillingCDRSale>(main);
@@ -100,15 +100,15 @@ namespace TOne.CDRProcess.Activities
                                 if (main != null && main.sale != null && main.OurCode != null)
                                     main.sale.Code = main.OurCode;
 
-                                CDRMains.MainCDRs.Add(main);
+                                cdrMains.MainCDRs.Add(main);
 
                             }
                             else
-                                CDRInvalids.InvalidCDRs.Add(new BillingCDRInvalid(CDR));
+                                cdrInvalids.InvalidCDRs.Add(new BillingCDRInvalid(cdr));
                         }
 
-                        if(CDRMains.MainCDRs.Count > 0) inputArgument.OutputMainCDRQueue.Enqueue(CDRMains);
-                        if (CDRInvalids.InvalidCDRs.Count > 0) inputArgument.OutputInvalidCDRQueue.Enqueue(CDRInvalids);
+                        if (cdrMains.MainCDRs.Count > 0) inputArgument.OutputMainCDRQueue.Enqueue(cdrMains);
+                        if (cdrInvalids.InvalidCDRs.Count > 0) inputArgument.OutputInvalidCDRQueue.Enqueue(cdrInvalids);
 
                     });
                 }
