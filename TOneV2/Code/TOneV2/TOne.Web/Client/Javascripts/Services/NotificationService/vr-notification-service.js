@@ -72,22 +72,27 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
 
     function notifyOnItemAdded(itemType, insertOperationOutput) {//insertOperationOutput is of type InsertOperationOutput
         switch (insertOperationOutput.Result) {
-            case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully"); break;
+            case InsertOperationResultEnum.Succeeded.value: showSuccess(itemType + " added successfully");
+                return true;
+                break;
             case InsertOperationResultEnum.Failed.value: showError("Failed to add " + itemType); break;
             case InsertOperationResultEnum.SameExists.value:
-                switch(itemType)
-                {
+                switch (itemType) {
                     case "User": showWarning("Same Email already exists"); break;
                     default: showWarning(itemType + " with the same key already exists"); break;
                 }
                 break;
         }
+        return false;
     }
 
     function notifyOnItemUpdated(itemType, updateOperationOutput) {//updateOperationOutput is of type UpdateOperationOutput
         switch (updateOperationOutput.Result) {
-            case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully"); break;
+            case UpdateOperationResultEnum.Succeeded.value: showSuccess(itemType + " updated successfully");
+                return true;
+                break;
             case UpdateOperationResultEnum.Failed.value: showError("Failed to update " + itemType); break;
         }
+        return false;
     }
 });
