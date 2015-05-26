@@ -17,10 +17,29 @@ namespace TOne.BusinessEntity.Business
         }
 
 
-        public List<SwitchInfo> GetFilteredSwitches(string switchName,int rowFrom,int rowTo)
+        public List<Switch> GetFilteredSwitches(string switchName, int rowFrom, int rowTo)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.GetSwitches();
+            return dataManager.GetFilteredSwitches(switchName, rowFrom, rowTo);
+        }
+
+        public Switch GetSwitchDetails(int switchID)
+        {
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.GetSwitchDetails(switchID);
+        }
+
+        public int UpdateSwitch(Switch switchObject)
+        {
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.UpdateSwitch(switchObject);
+        }
+
+
+        public int InsertSwitch(Switch switchObject)
+        {
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            return dataManager.InsertSwitch(switchObject);
         }
     }
 }

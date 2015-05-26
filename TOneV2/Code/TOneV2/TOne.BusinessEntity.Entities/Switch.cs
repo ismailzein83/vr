@@ -14,8 +14,8 @@ namespace TOne.BusinessEntity.Entities
         public string Symbol { get; set; }
         public string SwitchManagerName { get; set; }
         public virtual string Description { get; set; }
-        public bool Enable_CDR_Import { get; set; }
-        public bool Enable_Routing { get; set; }
+        public bool EnableCDRImport { get; set; }
+        public bool EnableRouting { get; set; }
         public DateTime? LastImport { get; set; }
         public DateTime? LastAttempt { get; set; }
         public DateTime? LastRouteUpdate { get; set; }
