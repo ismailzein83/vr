@@ -5,9 +5,7 @@ using System.Text;
 using TOne.Entities;
 using System.Web;
 using TOne.Business;
-
 using System.Threading.Tasks;
-using TOne.Entities;
 using TOne.Data;
 
 namespace TOne.Data.SQL

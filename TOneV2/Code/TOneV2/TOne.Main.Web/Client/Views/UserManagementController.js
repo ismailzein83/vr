@@ -1,6 +1,6 @@
 ﻿/// <reference path="UserSettings.html" />
 /// <reference path="User.html" />
-appControllers.controller('UserManagementController', function UserController($scope, UsersAPIService, VRModalService) {
+appControllers.controller('UserManagementController', function UserController($scope, $q, UsersAPIService, VRModalService) {
     $scope.users = [];
     
     $scope.gridMenuActions = [{
@@ -38,6 +38,24 @@ appControllers.controller('UserManagementController', function UserController($s
 
                 VRModalService.showModal('/Client/Modules/Main/Views/ResetPasswordEditor.html', dataItem, settings);
             }
+    },
+    {
+        name: "Roles",
+        clicked: function (dataItem) {
+
+            var settings = {
+                width: "40%"
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "Roles";
+                modalScope.onUserAdded = function (user) {
+                    gridApi.itemUpdated(user);
+                };
+            };
+
+            VRModalService.showModal('/Client/Modules/Main/Views/RolesEditor.html', dataItem, settings);
+        }
     }
     //{
     //    name: "Delete",
@@ -67,13 +85,8 @@ appControllers.controller('UserManagementController', function UserController($s
     var to = pageSize;
     var last = false;
 
-    $scope.loadMoreData = function (asyncHandle) {
+    $scope.loadMoreData = function () {
        
-        if (last) {
-            if (asyncHandle)
-                asyncHandle.operationDone();
-            return;
-        }
         var params = {};
         if (from == 0) params.fromRow = 0;
         else params.fromRow =  from + 1;
@@ -82,18 +95,13 @@ appControllers.controller('UserManagementController', function UserController($s
         from = from + pageSize ;
         to = to + pageSize;
 
-        UsersAPIService.GetUserList(params).then(function (response) {
+        return UsersAPIService.GetUserList(params).then(function (response) {
+
             angular.forEach(response, function (itm) {
                 $scope.users.push(itm);
             });
             
             last = (response.length < pageSize ) ? true : false;
-
-        }).finally(function () {
-            if (asyncHandle) {
-
-                asyncHandle.operationDone();
-            }
 
         });
     };

@@ -127,6 +127,7 @@
     <Compile Include="ProtCodeMap.cs" />
     <Compile Include="ProtPricingGenerator.cs" />
     <Compile Include="RandomPasswordHelper.cs" />
+    <Compile Include="RoleManager.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="SharedQueueManager.cs" />
     <Compile Include="ConfigParameterManager.cs" />

@@ -4,10 +4,7 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-textbox value="txtname" label="Name" onvaluechanged="SearchUser()" customvalidate="ValidateUs1"></vr-textbox>
-                </vr-columns>
-                <vr-columns colnum="2">
-                    <vr-textbox value="txtemail" label="Email" onvaluechanged="SearchUser()"></vr-textbox>
+                    <vr-textbox value="txtname" label="Name" onvaluechanged="SearchRole()" customvalidate="ValidateUs1"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-row></vr-row>
@@ -17,7 +14,7 @@
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="getData" isasynchronous=" true"></vr-button>
                     <vr-button type="Reset" ng-show="false"></vr-button>
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewUser()">Add
+                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="AddNewRole()">Add
                     <span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
                 </div>
             </vr-actionbar>
@@ -29,9 +26,7 @@
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="users" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Email'" field="'Email'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Status'">{{dataItem.Status == "0"? 'Not Active': 'Active' }}</vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'LastLogin'">{{dataItem.LastLogin | date:'yyyy-MM-dd' }}</vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

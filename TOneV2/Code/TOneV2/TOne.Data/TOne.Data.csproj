@@ -110,6 +110,7 @@
     <Compile Include="DataManagerFactory.cs" />
     <Compile Include="IBusinessEntityDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IRoleDataManager.cs" />
     <Compile Include="ISecurityDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

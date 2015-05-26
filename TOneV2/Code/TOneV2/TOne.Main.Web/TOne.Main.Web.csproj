@@ -119,13 +119,17 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Services\APIServices\RolesAPIService.js" />
     <Content Include="Client\Services\APIServices\UsersAPIService.js" />
     <Content Include="Client\Views\ResetPasswordEditorController.js" />
     <Content Include="Client\Views\ResetPasswordEditor.html" />
+    <Content Include="Client\Views\RoleManagement.html" />
+    <Content Include="Client\Views\RoleManagementController.js" />
     <Content Include="Client\Views\UserEditor.html" />
     <Content Include="Client\Views\UserManagement.html" />
     <Content Include="Client\Views\UserManagementController.js" />
