@@ -2,15 +2,15 @@
 var serviceObj = function (BaseAPIService) {
 
     return ({
-        GetFilteredSwitches: GetFilteredSwitches,
+        getFilteredSwitches: getFilteredSwitches,
         getSwitchDetails: getSwitchDetails,
         updateSwitch: updateSwitch,
         insertSwitch: insertSwitch
     });
 
 
-    function GetFilteredSwitches(switchName, rowFrom, rowTo) {
-        return BaseAPIService.get("/api/Switch/GetFilteredSwitches",
+    function getFilteredSwitches(switchName, rowFrom, rowTo) {
+        return BaseAPIService.get("/api/Switch/getFilteredSwitches",
            {
                switchName: switchName,
                rowFrom: rowFrom,
@@ -20,16 +20,18 @@ var serviceObj = function (BaseAPIService) {
     }
 
     function getSwitchDetails(SwitchId) {
-        return BaseAPIService.get("/api/Switch/GetSwitchDetails",
+        return BaseAPIService.get("/api/Switch/getSwitchDetails",
            {
                SwitchId: SwitchId
            });
     }
 
     function updateSwitch(switchObject) {
+        alert('updateSwitch' + switchObject);
         return BaseAPIService.get("/api/Switch/updateSwitch", switchObject);
     }
     function insertSwitch(switchObject) {
+      
         return BaseAPIService.post("/api/Switch/insertSwitch", switchObject);
     }
 

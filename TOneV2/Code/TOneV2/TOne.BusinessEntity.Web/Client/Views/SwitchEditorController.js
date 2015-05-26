@@ -1,14 +1,15 @@
-﻿var SwitchEditorController = function ($scope, SwitchManagmentAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+﻿SwitchEditorController.$inject = ['$scope', 'SwitchManagmentAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
 
+    var editMode = false;
     loadParameters();
-    defineScopeObjects();
+    defineScope();
     load();
 
-    function defineScopeObjects() {
-        // $scope.subViewConnector = {};
-        $scope.EnableCDRImport = false;
-        $scope.EnableRouting = false;
+    function defineScope() {
+        $scope.enableCDRImport = false;
+        $scope.enableRouting = false;
 
         $scope.switchManagers = {
             datasource: [],
@@ -16,17 +17,28 @@
         };
     }
 
-
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        $scope.switchId = parameters.switchId;
-        $scope.Symbol = parameters.Symbol;
-        $scope.Name = parameters.Name;
+        editMode = false;
+        $scope.switchId = 'undefined';
+        if (parameters != 'undefined' && parameters != null) {
+            editMode = true;
+            $scope.switchId = parameters.switchId;
+            $scope.Symbol = parameters.Symbol;
+            $scope.Name = parameters.Name;
+        }
     }
 
+    function load() {
+        if (editMode) {
+            SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
+           .then(function (response) {
+               getScopeDataFromSwitch(response);
+           })
+        }
+    }
 
-    $scope.insertSwitch = function (asyncHandle) {
-        $scope.issaving = true;
+    function getSwitchFromScope() {
         var switchObject = {
             SwitchId: ($scope.switchId != null) ? $scope.switchId : 0,
             Name: $scope.Name,
@@ -37,7 +49,22 @@
             EnableCDRImport: $scope.enableCDRImport,
             EnableRouting: $scope.enableRouting
         };
-        alert('Enter insertSwitch' + switchObject.Description);
+        return switchObject;
+    }
+
+    function getScopeDataFromSwitch(switchObject) {
+        $scope.lastImport = new Date(switchObject.LastImport);
+        $scope.Description = switchObject.Description;
+        $scope.Name = switchObject.Name;
+        $scope.lastCDRImportTag = switchObject.lastCDRImportTag;
+        $scope.Symbol = switchObject.Symbol;
+        $scope.enableCDRImport = switchObject.EnableCDRImport;
+        $scope.enableRouting = switchObject.EnableRouting;
+    }
+
+    function insertSwitch(asyncHandle) {
+        $scope.issaving = true;
+        var switchObject = getSwitchFromScope();
         SwitchManagmentAPIService.insertSwitch(switchObject)
         .then(function (response) {
             $scope.issaving = false;
@@ -60,23 +87,13 @@
 
     }
 
-
-    $scope.UpdateSwitch = function (asyncHandle) {
+    function updateSwitch(asyncHandle) {
         $scope.issaving = true;
-        var switchObject = {
-            SwitchId: ($scope.switchId != null) ? $scope.switchId : 0,
-            Name: $scope.Name,
-            Symbol: $scope.Symbol,
-            Description: $scope.Description,
-            LastImport: $scope.lastImport,
-            LastCDRImportTag: $scope.lastCDRImportTag,
-            EnableCDRImport: $scope.enableCDRImport,
-            EnableRouting: $scope.enableRouting
-        };
+        var switchObject = getSwitchFromScope();
         SwitchManagmentAPIService.updateSwitch(switchObject)
         .then(function (response) {
             $scope.issaving = false;
-            if ($scope.switchId != 'undefined') {
+            if (angular.isNumber(response) && response > 0) {//if ($scope.switchId != 'undefined') {
                 $scope.refreshRowData(response, $scope.index);
             }
             var newdata = response;
@@ -92,45 +109,20 @@
 
     }
 
-    $scope.SaveSwitch = function (asyncHandle) {
-
+    $scope.saveSwitch = function (asyncHandle) {
         if ($scope.switchId != 'undefined') {
-            $scope.UpdateSwitch(asyncHandle);
+            updateSwitch(asyncHandle);
         }
         else {
-            $scope.insertSwitch(asyncHandle);
+            insertSwitch(asyncHandle);
         }
     }
 
-    $scope.hide = function () {
-        $scope.$hide();
+    $scope.close = function () {
+        $scope.modalContext.closeModal()
     };
-    function load() {
-        alert($scope.switchId);
-        if ($scope.switchId != 'undefined') {
-
-            SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
-           .then(function (response) {
-               $scope.switchObject = response;
-               $scope.lastImport = new Date($scope.switchObject.LastImport);
-               $scope.Description = $scope.switchObject.Description;
-               $scope.Name = $scope.switchObject.Name;
-               $scope.lastCDRImportTag = $scope.switchObject.lastCDRImportTag;
-               $scope.Symbol = $scope.switchObject.Symbol;
-               $scope.enableCDRImport = $scope.switchObject.EnableCDRImport;
-               $scope.enableRouting = $scope.switchObject.EnableRouting;
-           })
-        }
-        else {
-            //$scope.optionsRouteType.selectedvalue = null;
-            //$scope.optionsEditorType.selectedvalue = $scope.optionsEditorType.datasource[0];
-            //$scope.optionsRuleType.selectedvalue = $scope.optionsRuleType.datasource[0];
-        }
-    }
 
 }
-SwitchEditorController.$inject = ['$scope', 'SwitchManagmentAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
-
-appControllers.controller('SwitchEditorController', SwitchEditorController)
+appControllers.controller('SwitchEditorController', SwitchEditorController);
 
 
