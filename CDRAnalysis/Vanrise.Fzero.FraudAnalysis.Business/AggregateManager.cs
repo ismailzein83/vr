@@ -18,14 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             List<AggregateDefinition> AggregateDefinitions = new List<AggregateDefinition>();
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
-            {
-                Name = "CountOutCallsPeakHours",
-                Aggregation = new CountAggregate((cdr) =>
-                {
-                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && PeakHours.Contains(cdr.ConnectDateTime.Value.Hour));
-                })
-            });
+           
 
 
             AggregateDefinitions.Add(new AggregateDefinition()
@@ -281,21 +274,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-            AggregateDefinitions.Add(new AggregateDefinition()
-            {
-                Name = "DiffOutputNumbNightCalls",
-                Aggregation = new DistinctCountAggregate(
-                     (cdr) =>
-                     {
-                         return cdr.Destination;
-                     },
-
-                     (cdr) =>
-                     {
-                         return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && NightCallHours.Contains(cdr.ConnectDateTime.Value.Hour));
-                     }
-                 )
-            });
+          
 
 
 
@@ -316,7 +295,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "DiffOutputNumbNightCalls",
+                Aggregation = new DistinctCountAggregate(
+                     (cdr) =>
+                     {
+                         return cdr.Destination;
+                     },
 
+                     (cdr) =>
+                     {
+                         return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && NightCallHours.Contains(cdr.ConnectDateTime.Value.Hour));
+                     }
+                 )
+            });
+
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutCallsPeakHours",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && PeakHours.Contains(cdr.ConnectDateTime.Value.Hour));
+                })
+            });
 
 
             AggregateDefinitions.Add(new AggregateDefinition()
