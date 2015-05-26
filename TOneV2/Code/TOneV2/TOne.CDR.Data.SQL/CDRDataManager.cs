@@ -204,7 +204,7 @@ namespace TOne.CDR.Data.SQL
 
         private void PrepareCDRBillingInvalidBaseForDBApply(TOne.CDR.Entities.BillingCDRBase cdr, System.IO.StreamWriter wr)
         {
-            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}",//^{27}
+            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}^{24}^{25}^{26}^{27}",
                         cdr.ID,
                        cdr.Attempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                         cdr.Alert.HasValue ? cdr.Alert.Value.ToString("yyyy-MM-dd HH:mm:ss.fff") : "",
@@ -230,18 +230,20 @@ namespace TOne.CDR.Data.SQL
                          cdr.OurCode,
                           cdr.SupplierCode,
                           cdr.CDPNOut,
-                           cdr.SIP,
-                        cdr.SubscriberID));//
-            //cdr.SubscriberID,
+                     cdr.SubscriberID,
+                cdr.SIP,
+                0));
+
+
             //cdr.SIP,
-            //0));//
+            //            cdr.SubscriberID));//
 
         }
 
         public Object PrepareInvalidCDRsForDBApply(List<TOne.CDR.Entities.BillingCDRInvalid> cdrs)
         {
             string filePath = GetFilePathForBulkInsert();
-            long lastPricedInvalidID ;
+            long lastPricedInvalidID;
             ReserverIdRange(false, true, cdrs.Count, out lastPricedInvalidID);
 
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
