@@ -8,8 +8,10 @@ namespace TOne.Entities
 {
     public enum UpdateOperationResult { Succeeded = 0, Failed = 1}
     
-    public class UpdateOperationOutput
+    public class UpdateOperationOutput<T>
     {
         public UpdateOperationResult Result { get; set; }
+
+        public T UpdatedObject { get; set; }
     }
 }
