@@ -1,3 +1,25 @@
 ﻿<vr-panel ng-controller="BI_EntityReportController">
- test
+    <div class="am-collapse" ng-hide="filterSectionCollapsed">
+        <vr-form name="filterForm">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-select datasource="entityTypes" datatextfield="description" datavaluefield="value" label="Entity Type" selectedvalues="selectedEntityType" onselectionchanged="onchangeEntityType" isrequired hidefilterbox></vr-select>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select datasource="entitiesData" datatextfield="label" datavaluefield="value" label="Entity" selectedvalues="selectedEntity" isrequired hidefilterbox></vr-select>
+                </vr-columns>
+
+
+               
+            </vr-row>
+            <vr-row></vr-row>
+        </vr-form>
+    </div>
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                
+            </div>
+        </vr-actionbar>
+    </vr-row>
 </vr-panel>
