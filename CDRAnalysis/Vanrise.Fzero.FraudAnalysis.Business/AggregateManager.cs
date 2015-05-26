@@ -338,6 +338,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountActiveHours",
+                Aggregation = new GroupCountAggregate(
+                      (cdr) =>
+                      {
+                          return (cdr.CallType == Enums.CallType.OutgoingVoiceCall);
+                      }
+                  )
+            });
+
+
+
+
 
 
 

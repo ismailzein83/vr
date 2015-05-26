@@ -92,7 +92,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateCountofDailyActiveHours(NumberProfile numberProfile)
         {
-            // not developed yet
+            if (numberProfile.Period == Enums.Period.Day)
+            {
+                return numberProfile.AggregateValues["CountActiveHours"];
+            }
             return 0;
         }
 
