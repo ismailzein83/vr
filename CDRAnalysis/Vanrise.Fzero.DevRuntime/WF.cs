@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.DevRuntime
 
 
 
-            Console.WriteLine("Walid Task started");
+            Console.WriteLine("Strategy started");
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
@@ -147,6 +147,82 @@ namespace Vanrise.Fzero.DevRuntime
         }
 
         delegate void VoidDelegate();
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Saving Imported started");
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+
+            var runtimeServices = new List<RuntimeService>();
+            runtimeServices.Add(queueActivationService);
+
+            runtimeServices.Add(bpService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+
+
+            Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput inputArg = new Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput();
+
+            Task t = new Task(() =>
+            {
+                BPClient bpClient2 = new BPClient();
+                bpClient2.CreateNewProcess(new CreateProcessInput
+                {
+                    ProcessName = "SaveCDRToDBProcess",
+                    InputArguments = inputArg
+                });
+
+                Console.WriteLine("END");
+            });
+            t.ContinueWith((tt) =>
+            {
+                this.CloseFormAsync();
+            });
+            t.Start();
+            this.WindowState = FormWindowState.Minimized;
+            
+           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Import started");
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+
+            var runtimeServices = new List<RuntimeService>();
+            runtimeServices.Add(queueActivationService);
+
+            runtimeServices.Add(bpService);
+
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
+
+
+            Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput inputArg = new Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput();
+
+            Task t = new Task(() =>
+            {
+                BPClient bpClient2 = new BPClient();
+                bpClient2.CreateNewProcess(new CreateProcessInput
+                {
+                    ProcessName = "CDRImportProcess",
+                    InputArguments = inputArg
+                });
+
+                Console.WriteLine("END");
+            });
+            t.ContinueWith((tt) =>
+            {
+                this.CloseFormAsync();
+            });
+            t.Start();
+            this.WindowState = FormWindowState.Minimized;
+
+         
+        }
 
       
 
