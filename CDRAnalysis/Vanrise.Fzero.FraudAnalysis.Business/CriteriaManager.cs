@@ -34,6 +34,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             dictionary.Add(13, new CriteriaDefinition() { CriteriaId = 13, Description = "Ratio_International_Originated_Vs_Outgoing_Calls", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateRatioInternationalOriginatedvsOutgoingCalls });
             dictionary.Add(14, new CriteriaDefinition() { CriteriaId = 14, Description = "Count_of_outgoing_during_peak_hours", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateCountofOutgoingDuringPeakHours });
             dictionary.Add(15, new CriteriaDefinition() { CriteriaId = 15, Description = "Data_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateDataUsage });
+            dictionary.Add(16, new CriteriaDefinition() { CriteriaId = 16, Description = "Consecutive_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateConsecutiveCalls });
 
             return dictionary; 
         }
@@ -137,6 +138,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         static decimal CalculateDataUsage(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues["TotalDataVolume"];
+        }
+
+        static decimal CalculateConsecutiveCalls(NumberProfile numberProfile)
+        {
+            return numberProfile.AggregateValues["CountConsecutiveCalls"];
         }
 
         

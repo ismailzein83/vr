@@ -30,15 +30,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         {
             if (this._condition == null || this._condition(cdr))
             {
-                if (this._cdrExpressionToCountDistinct != null)
-                {
                     _distinctItems.Add(this._cdrExpressionToCountDistinct(cdr));
-                }
-
-                else
-                {
-                    _distinctItems.Add((String)this._propertyGetMethod.Invoke(cdr, null));
-                }
             }
         }
 

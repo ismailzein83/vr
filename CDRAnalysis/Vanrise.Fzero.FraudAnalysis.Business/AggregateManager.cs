@@ -10,6 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         IList<int> NightCallHours = new List<int>() { 23,0,1,2,3,4,5};
         IList<int> PeakHours = new List<int>() { 11,12,13,14 };
+        
 
 
         public List<AggregateDefinition> GetAggregateDefinitions()
@@ -313,6 +314,26 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                      }
                  )
             });
+
+
+
+
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountConsecutiveCalls",
+                Aggregation = new ConsecutiveAggregate(
+                      (cdr) =>
+                      {
+                          return (cdr.CallType == Enums.CallType.OutgoingVoiceCall);
+                      }
+                  )
+            });
+
+
+
+
+
 
 
 
