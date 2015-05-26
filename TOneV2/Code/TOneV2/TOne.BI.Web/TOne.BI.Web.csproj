@@ -136,6 +136,8 @@
     <Content Include="Client\Views\Dashboards\SeniorManagementDashboardController.js" />
     <Content Include="Client\Views\Dashboards\TopManagementDashboardController.js" />
     <Content Include="Client\Views\Dashboards\ZoneDashboardController.js" />
+    <Content Include="Client\Views\Reports\EntityReport.html" />
+    <Content Include="Client\Views\Reports\EntityReportController.js" />
     <Content Include="Client\Views\Reports\ZoneDetailsController.js" />
     <Content Include="Client\Views\Reports\ZoneSummaryController.js" />
     <Content Include="Client\Services\bi-utilities-service.js" />

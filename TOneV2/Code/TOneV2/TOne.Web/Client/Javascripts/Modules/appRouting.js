@@ -73,6 +73,9 @@ appRouting.config(['$routeProvider',
         when('/BI/DynamicDashboard', {
             templateUrl: '/Client/Modules/BI/Views/Dashboards/DynamicDashboard.html'
         }).
+       when('/BI/EntityReport', {
+           templateUrl: '/Client/Modules/BI/Views/Reports/EntityReport.html'
+       }).
         when('/BI/ZoneDetails/:params', {
             templateUrl: '/Client/Modules/BI/Views/Reports/ZoneDetails.html',
             controller: 'ZoneDetailsController'

@@ -118,7 +118,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' },
                 { name: "Senior Management Dashboard", location: '#/BI/SeniorManagementDashboard' },
                 { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' },
-                { name: "Dynamic Dashboard", location: '#/BI/DynamicDashboard' }
+                { name: "Dynamic Dashboard", location: '#/BI/DynamicDashboard' },
+                 { name: "Entity Report", location: '#/BI/EntityReport' }
             ]
         },
         {
