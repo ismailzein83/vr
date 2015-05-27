@@ -12,21 +12,21 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="getSwitchsDataSource" isasynchronous="true"></vr-button>
-                    <vr-button type="Reset" data-onclick="resetSearchForm"></vr-button>
-                    <vr-button type="Add" data-onclick="openNewSwitch"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addSwitch"></vr-button>
                     <!--<button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="openNewSwitch()">Add<span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>-->
                 </div>
             </vr-actionbar>
         </vr-row>
     </vr-form>
-    <div vr-loader="isGettingData">
+    <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="switchsDataSource" maxheight="300px" loadmoredata="loadDataonScrolling" on-ready="gridReady" menuactions="gridMenuActions">
+                <vr-datagrid datasource="switchsDataSource" maxheight="300px" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
                     <vr-datagridcolumn headertext="'Switch Id'" field="'SwitchId'">
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Switch Name'" field="'Name'" ><!--onsortchanged="onGridSortChanged"-->
+                    <vr-datagridcolumn headertext="'Switch Name'" field="'Name'">
+                        <!--onsortchanged="onGridSortChanged"-->
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Symbol'" field="'Symbol'">
                     </vr-datagridcolumn>

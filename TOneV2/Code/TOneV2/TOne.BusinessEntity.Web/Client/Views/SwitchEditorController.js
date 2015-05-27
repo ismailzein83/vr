@@ -1,46 +1,58 @@
 ﻿SwitchEditorController.$inject = ['$scope', 'SwitchManagmentAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
-
-
-    var editMode = false;
+    var editMode;
     loadParameters();
     defineScope();
     load();
 
-    function defineScope() {
-        $scope.enableCDRImport = false;
-        $scope.enableRouting = false;
-        $scope.isGettingData = false;
-        $scope.switchManagers = {
-            datasource: [],
-            selectedvalue: ''
-        };
-    }
-
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        editMode = false;
-        $scope.switchId = 'undefined';
-        if (parameters != 'undefined' && parameters != null) {
-            editMode = true;
+        
+        $scope.switchId = undefined;
+        if (parameters != undefined && parameters != null)            
             $scope.switchId = parameters.switchId;
-            $scope.Symbol = parameters.Symbol;
-            $scope.Name = parameters.Name;
-        }
+
+        if ($scope.switchId != undefined)
+            editMode = true;
+        else
+            editMode = false;
+    }
+
+    function defineScope() {
+        $scope.saveSwitch = function () {
+            if (editMode) {
+                return updateSwitch();
+            }
+            else {
+                return insertSwitch();
+            }
+        };
+
+        $scope.close = function () {
+            $scope.modalContext.closeModal()
+        };
     }
 
     function load() {
         if (editMode) {
             $scope.isGettingData = true;
-            SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
-           .then(function (response) {
-               getScopeDataFromSwitch(response);
-               $scope.isGettingData = false;
-           })
+            getSwitch().finally(function () {
+                $scope.isGettingData = false;
+            })
         }
     }
 
-    function getSwitchFromScope() {
+    function getSwitch() {
+        return SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
+           .then(function (response) {
+               fillScopeFromSwitchObj(response);
+           })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error);
+            });
+    }
+
+    function buildSwitchObjFromScope() {
         var switchObject = {
             SwitchId: ($scope.switchId != null) ? $scope.switchId : 0,
             Name: $scope.Name,
@@ -55,7 +67,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
         return switchObject;
     }
 
-    function getScopeDataFromSwitch(switchObject) {
+    function fillScopeFromSwitchObj(switchObject) {
         $scope.lastImport = new Date(switchObject.LastImport);
         $scope.Description = switchObject.Description;
         $scope.Name = switchObject.Name;
@@ -65,59 +77,36 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
         $scope.enableRouting = switchObject.EnableRouting;
     }
 
-    function insertSwitch(asyncHandle) {
+    function insertSwitch() {
         $scope.issaving = true;
-        var switchObject = getSwitchFromScope();
-        SwitchManagmentAPIService.insertSwitch(switchObject)
-        .then(function (response) {
-            $scope.issaving = false;
-
-            var insertionActionSucc = VRNotificationService.notifyOnItemAdded("Insert Switch", response);
-
-            if (insertionActionSucc) {
-                VRNotificationService.showSuccess('Switch will Inserted into parent Grid');
-                $scope.modalContext.onSwitchAdded();
+        var switchObject = buildSwitchObjFromScope();
+        return SwitchManagmentAPIService.insertSwitch(switchObject)
+        .then(function (response) {  
+            if (VRNotificationService.notifyOnItemAdded("Switch", response))
+            {
+                if ($scope.onSwitchAdded != undefined)
+                    $scope.onSwitchAdded(response.InsertedObject);
+                $scope.modalContext.closeModal();
             }
-            //notify({ message: 'Switch has been saved successfully.', classes: "alert  alert-success" });
-            $scope.close();
-        }).finally(function () {
-            if (asyncHandle)
-                asyncHandle.operationDone();
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error);
         });
 
     }
 
-    function updateSwitch(asyncHandle) {
-        $scope.issaving = true;
-        var switchObject = getSwitchFromScope();
+    function updateSwitch() {
+        var switchObject = buildSwitchObjFromScope();
         SwitchManagmentAPIService.updateSwitch(switchObject)
         .then(function (response) {
-            $scope.issaving = false;
-            var updateActionSucc = VRNotificationService.notifyOnItemUpdated("Update Switch", response);
-
-            if (updateActionSucc) {
-                VRNotificationService.showSuccess('Switch will Updated into parent Grid');
-                $scope.modalContext.onSwitchUpdated();
+            if (VRNotificationService.notifyOnItemUpdated("Switch", response)) {
+                if ($scope.onSwitchUpdated != undefined)
+                    $scope.onSwitchUpdated(response.UpdatedObject);
+                $scope.modalContext.closeModal();
             }
-        }).finally(function () {
-            if (asyncHandle)
-                asyncHandle.operationDone();
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error);
         });
-
     }
-
-    $scope.saveSwitch = function (asyncHandle) {
-        if ($scope.switchId != 'undefined') {
-            updateSwitch(asyncHandle);
-        }
-        else {
-            insertSwitch(asyncHandle);
-        }
-    }
-
-    $scope.close = function () {
-        $scope.modalContext.closeModal()
-    };
 
 }
 appControllers.controller('SwitchEditorController', SwitchEditorController);
