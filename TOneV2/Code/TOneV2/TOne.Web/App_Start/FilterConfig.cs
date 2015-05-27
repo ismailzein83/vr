@@ -7,7 +7,7 @@ namespace TOne.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            Vanrise.Web.FilterConfig.RegisterGlobalFilters(filters);
         }
     }
 }

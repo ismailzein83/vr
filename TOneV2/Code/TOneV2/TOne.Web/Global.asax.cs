@@ -9,14 +9,25 @@ using System.Web.Routing;
 
 namespace TOne.Web
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    public class WebApiApplication : Vanrise.Web.WebApiApplication
     {
-        protected void Application_Start()
+        protected override void RegisterWebAPI()
         {
-            AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
+        }
+
+        public override void RegisterGlobalFilters()
+        {
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+        }
+
+        public override void RegisterRoutes()
+        {
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+
+        public override void RegisterBundles()
+        {
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }

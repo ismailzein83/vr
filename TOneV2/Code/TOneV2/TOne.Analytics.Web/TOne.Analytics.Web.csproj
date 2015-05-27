@@ -63,9 +63,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -123,22 +120,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Constants\TrafficStatisticGroupKeysEnum.js" />
-    <Content Include="Client\Constants\TrafficStatisticsMeasureEnum.js" />
-    <Content Include="Client\Services\APIServices\AnalyticsAPIService.js" />
-    <Content Include="Client\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
-    <Content Include="Client\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
-    <Content Include="Client\Views\Traffic Statistics\ZoneMonitor.html" />
-    <Content Include="Client\Views\Traffic Statistics\ZoneMonitorController.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
+    <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
+    <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
+    <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
+    <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitorController.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Analytics.Business\TOne.Analytics.Business.csproj">
       <Project>{1d2c62ce-4f44-474e-84ef-44579a454dea}</Project>
       <Name>TOne.Analytics.Business</Name>
@@ -147,9 +141,6 @@
       <Project>{d23495a3-bf94-4a57-973d-8b3b384fc0a8}</Project>
       <Name>TOne.Analytics.Entities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,6 +1,0 @@
-﻿'use strict';
-
-app.constant('ValidationMessagesEnum', {
-    required: "Required Field",
-    invalidFormat: "Invalid Format"
-});

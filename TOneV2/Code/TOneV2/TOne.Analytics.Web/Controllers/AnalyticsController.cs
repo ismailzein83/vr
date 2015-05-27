@@ -9,7 +9,7 @@ using TOne.Analytics.Entities;
 
 namespace TOne.Analytics.Web.Controllers
 {
-    public class AnalyticsController : ApiController
+    public class AnalyticsController : Vanrise.Web.Base.BaseAPIController
     {
         private readonly AnalyticsManager _analyticsManager;
         public AnalyticsController()

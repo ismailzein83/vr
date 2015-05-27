@@ -10,7 +10,7 @@ using TOne.BI.Web.Models;
 
 namespace TOne.BI.Web.Controllers
 {
-    public class BIController : ApiController
+    public class BIController : Vanrise.Web.Base.BaseAPIController
     {
         public IEnumerable<BIMeasureTypeModel> GetMeasureTypeList()
         {

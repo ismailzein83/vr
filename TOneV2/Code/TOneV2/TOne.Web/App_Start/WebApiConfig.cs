@@ -12,31 +12,7 @@ namespace TOne.Web
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.Add(new MyAuthorizationFilter());
-            // Web API configuration and services
-            
-            // Web API routes
-            config.MapHttpAttributeRoutes();
-            
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional },
-                constraints: null//,
-               // handler: authenticationHandler
-            );
-
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+            Vanrise.Web.WebApiConfig.Register(config);
         }
     }
-
-    public class MyAuthorizationFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
-    {
-        public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
-        {
-            
-            base.OnAuthorization(actionContext);
-        }
-    }
-
 }

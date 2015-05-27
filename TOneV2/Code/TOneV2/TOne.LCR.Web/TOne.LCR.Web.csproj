@@ -125,40 +125,37 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Services\RoutingAPIService.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\CodeController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\CodeTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\CustomerController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\CustomerTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\PoolTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\PriorityController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\PriorityTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\ProductTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\RouteBlockController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\RouteBlockTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\RouteOverrideController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\RouteOverrideTemplate.html" />
-    <Content Include="Client\Views\Management\EditorTemplates\ZoneController.js" />
-    <Content Include="Client\Views\Management\EditorTemplates\ZoneTemplate.html" />
-    <Content Include="Client\Views\Management\RatePlanning.html" />
-    <Content Include="Client\Views\Management\RatePlanningController.js" />
-    <Content Include="Client\Views\Management\RouteDetailGrid.html" />
-    <Content Include="Client\Views\Management\RouteDetailGridController.js" />
-    <Content Include="Client\Views\Management\RouteRuleEditor.html" />
-    <Content Include="Client\Views\Management\RouteRuleEditorController.js" />
-    <Content Include="Client\Views\Management\RouteManager.html" />
-    <Content Include="Client\Views\Management\RouteRuleManager.html" />
-    <Content Include="Client\Views\Management\RouteManagerController.js" />
-    <Content Include="Client\Views\Management\RouteRuleManagerController.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    <Content Include="Routing\Services\RoutingAPIService.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\CodeController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\CodeTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\CustomerController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\CustomerTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\PoolTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\PriorityController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\PriorityTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\ProductTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\RouteBlockController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\RouteBlockTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\RouteOverrideController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\RouteOverrideTemplate.html" />
+    <Content Include="Routing\Views\Management\EditorTemplates\ZoneController.js" />
+    <Content Include="Routing\Views\Management\EditorTemplates\ZoneTemplate.html" />
+    <Content Include="Routing\Views\Management\RatePlanning.html" />
+    <Content Include="Routing\Views\Management\RatePlanningController.js" />
+    <Content Include="Routing\Views\Management\RouteDetailGrid.html" />
+    <Content Include="Routing\Views\Management\RouteDetailGridController.js" />
+    <Content Include="Routing\Views\Management\RouteRuleEditor.html" />
+    <Content Include="Routing\Views\Management\RouteRuleEditorController.js" />
+    <Content Include="Routing\Views\Management\RouteManager.html" />
+    <Content Include="Routing\Views\Management\RouteRuleManager.html" />
+    <Content Include="Routing\Views\Management\RouteManagerController.js" />
+    <Content Include="Routing\Views\Management\RouteRuleManagerController.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
       <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
       <Name>TOne.BusinessEntity.Business</Name>
@@ -179,9 +176,6 @@
       <Project>{aee31608-d6e1-4005-9773-b1b970afd323}</Project>
       <Name>TOne.LCR.Entities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

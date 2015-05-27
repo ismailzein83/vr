@@ -14,7 +14,7 @@ namespace TOne.LCR.Web.Controllers
 {
     [TOne.Entities.SecureController("/Routing/RouteRuleManagement")]
     [CustomJSONTypeHandlingAttribure]
-    public class RoutingController : ApiController
+    public class RoutingController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
         public string GetTest(string prm)
