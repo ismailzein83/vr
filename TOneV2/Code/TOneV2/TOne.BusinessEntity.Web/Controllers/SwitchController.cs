@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Web.Http;
 using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Entities;
-
 namespace TOne.BusinessEntity.Web.Controllers
 {
     public class SwitchController : ApiController
@@ -23,6 +22,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         [HttpGet]
         public Switch getSwitchDetails(int switchID)
         {
+            System.Threading.Thread.Sleep(2000);
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchDetails(switchID);
         }
@@ -30,27 +30,18 @@ namespace TOne.BusinessEntity.Web.Controllers
         [HttpPost]
         public int updateSwitch(Switch switchObject)
         {
-            System.Threading.Thread.Sleep(1000);
             SwitchManager manager = new SwitchManager();
             return manager.UpdateSwitch(switchObject);
-            // return Mappers.MapSwitch(manager.UpdateSwitch(switchObject));
         }
 
 
         [HttpPost]
-        public int insertSwitch(Switch switchObject)
+        public int insertSwitch(Switch switchObject)//UpdateOperationOutput
         {
-            System.Threading.Thread.Sleep(1000);
             SwitchManager manager = new SwitchManager();
             return manager.InsertSwitch(switchObject);
-            // return Mappers.MapSwitch(manager.UpdateSwitch(switchObject));
         }
 
-        //[HttpPost]
-        //public List<Switch> AddSwitch(Switch newswitch)
-        //{
-        //    SwitchManager manager = new SwitchManager();
-        //    return manager.GetFilteredSwitches(switchName, rowFrom, rowTo);
-        //}
+
     }
 }

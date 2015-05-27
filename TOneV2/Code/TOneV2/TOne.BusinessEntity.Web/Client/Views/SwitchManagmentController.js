@@ -1,26 +1,14 @@
 ﻿SwitchManagmentController.$inject = ['$scope', '$q', 'SwitchManagmentAPIService', '$location', '$timeout', '$modal', 'VRModalService', 'VRNotificationService'];
-
-
 function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $location, $timeout, $modal, VRModalService, VRNotificationService) {
 
-
-    var sortColumn;
-    var sortDescending = true;
     var current = 0;
     var allDatawasRetreived = false;
     var gridApi;
 
 
-    defineScopeObjects();
+    defineScope();
 
-    function defineScopeObjects() {
-
-        $scope.sortType = 'Name';
-        $scope.sortReverse = false;
-        $scope.sortData = function (name) {
-            $scope.sortType = name;
-            $scope.sortReverse = !$scope.sortReverse;
-        }
+    function defineScope() {
         $scope.gridPagerSettings = {
             currentPage: 1,
             pageSize: 10,
@@ -31,20 +19,19 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
             }
         };
 
-
         $scope.switchName = '';
         $scope.rowFrom = 0;
         $scope.rowTo = 20;
         $scope.switchsDataSource = [];
-
-
 
         $scope.gridMenuActions = [{
             name: "Edit/Delete Switch",
             clicked: function (dataItem) {
                 alert(dataItem.SwitchId);
                 var modalSettings = {
-
+                    //useModalTemplate: true,
+                    //width: "80%",
+                    //maxHeight: "800px"
                 };
                 var parameters = {
                     switchId: dataItem.SwitchId,
@@ -70,64 +57,7 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
         }];
     }
 
-
-
-    $scope.AddNewSwitch = function () {
-
-        //var scopeDetails = $scope.$root.$new();
-        //scopeDetails.title = "New Switch Info";
-        //scopeDetails.switchId = 'undefined';
-        //var addModal = $modal({ scope: scopeDetails, template: '/Client/Modules/BusinessEntity/Views/SwitchEditor.html', show: true, animation: "am-fade-and-scale" });
-
-
-        var modalSettings = {
-            //useModalTemplate: true,
-            //width: "80%",
-            //maxHeight: "800px"
-        };
-        var parameters = {
-            switchId: 'undefined',
-            Symbol: '',
-            Name: ''
-        };
-        modalSettings.onScopeReady = function (modalScope) {
-            alert('Ready');
-            modalScope.title = "New Switch Info";
-        };
-        VRModalService.showModal('/Client/Modules/BusinessEntity/Views/SwitchEditor.html', null, modalSettings);
-    }
-
-
-    function resetSorting() {
-        sortColumn = 'Name';
-        sortDescending = true;
-    }
-
-    function resetLoadingData() {
-        current = 0;
-        allDatawasRetreived = false;
-        $scope.gridPagerSettings.currentPage = 1;
-    }
-
-    function incrementScrollrowFrom() {
-        current = current + $scope.gridPagerSettings.pageSize;
-        $scope.gridPagerSettings.currentPage++;
-    }
-
-    function resetSwitchsDataSource() {
-        $scope.switchsDataSource.length = 0;
-    }
-
-    function setSearchBoundaries() {
-        $scope.rowFrom = current + 1;
-        $scope.rowTo = $scope.rowFrom + $scope.gridPagerSettings.pageSize;
-    }
-    function setActionGettingData(isGetting) {
-        $scope.isGettingData = isGetting;
-    }
-
-
-    $scope.getObjectsFromService = function (asyncHandle) {//
+    function getObjectsFromService() {//asyncHandle
         SwitchManagmentAPIService.getFilteredSwitches($scope.switchName, $scope.rowFrom, $scope.rowTo).then(function (response) {
             response.length
             angular.forEach(response, function (itm) {
@@ -136,72 +66,107 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
             if (response.length < $scope.gridPagerSettings.pageSize)
                 allDatawasRetreived = true;
         }).finally(function () {
-            if (asyncHandle)
-                asyncHandle.operationDone();
-            setActionGettingData(false);
+            //if (asyncHandle)
+            //    asyncHandle.operationDone();
+            $scope.isGettingData = false;
         });
     };
 
+    $scope.openNewSwitch = function () {
 
-    $scope.getSwitchsDataSource = function (asyncHandle) {//
-
-        resetLoadingData();
-        setSearchBoundaries();
-        incrementScrollrowFrom();
-        resetSwitchsDataSource();
-
-        setActionGettingData(true);
-
-        $scope.getObjectsFromService(asyncHandle);//
+        //var scopeDetails = $scope.$root.$new();
+        //scopeDetails.title = "New Switch Info";
+        //scopeDetails.switchId = 'undefined';
+        //var addModal = $modal({ scope: scopeDetails, template: '/Client/Modules/BusinessEntity/Views/SwitchEditor.html', show: true, animation: "am-fade-and-scale" });
+        var modalSettings = {
+            //useModalTemplate: true,
+            //width: "80%",
+            //maxHeight: "800px"
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            alert('Ready');
+            modalScope.title = "New Switch Info";
+        };
+        VRModalService.showModal('/Client/Modules/BusinessEntity/Views/SwitchEditor.html', null, modalSettings);
     }
 
-    $scope.loadDataonScrolling = function (asyncHandle) {//
+    $scope.getSwitchsDataSource = function () {//asyncHandle
+
+        current = 0;
+        allDatawasRetreived = false;
+        $scope.gridPagerSettings.currentPage = 1;
+
+        $scope.rowFrom = current + 1;
+        $scope.rowTo = $scope.rowFrom + $scope.gridPagerSettings.pageSize;
+        current = current + $scope.gridPagerSettings.pageSize;
+        $scope.gridPagerSettings.currentPage++;
+
+        $scope.switchsDataSource.length = 0;
+        $scope.isGettingData = true;
+
+        return getObjectsFromService();//asyncHandle
+    }
+
+    $scope.loadDataonScrolling = function () {//asyncHandle
         if (allDatawasRetreived) {
-            if (asyncHandle)
-                asyncHandle.operationDone();
+            //if (asyncHandle)
+            //    asyncHandle.operationDone();
             return;
         }
 
-        setSearchBoundaries();
-        incrementScrollrowFrom();
-        setActionGettingData(true);
-        return $scope.getObjectsFromService();//
+        $scope.rowFrom = current + 1;
+        $scope.rowTo = $scope.rowFrom + $scope.gridPagerSettings.pageSize;
+        current = current + $scope.gridPagerSettings.pageSize;
+        $scope.gridPagerSettings.currentPage++;
+
+        $scope.isGettingData = true;
+        return getObjectsFromService();//asyncHandle
     }
 
-
     $scope.resetSearchForm = function () {
-        resetLoadingData();
-        resetSorting();
-        resetSwitchsDataSource();
+        current = 0;
+        allDatawasRetreived = false;
+        $scope.gridPagerSettings.currentPage = 1;
+        $scope.switchsDataSource.length = 0;
         $scope.switchName = '';
         $scope.gridApi.infiniteScroll.resetScroll(false, true);
     }
 
-
-
-
-
-
-    /************************************************************* Sorting Function ********************************************/
-    $scope.getData = function (asyncHandle) {
-        $scope.gridPagerSettings.currentPage = 1;
-        resetSorting();
-        $scope.getSwitchsDataSource(asyncHandle);
-    };
-
-
-    $scope.onGridSortChanged = function (colDef, sortDirection, handle) {
-        sortColumn = colDef.tag;
-        sortDescending = (sortDirection == "DESC");
-        $scope.getData(handle);
-    }
-
-
     $scope.gridReady = function (api) {
         gridApi = api;
     };
-    /*********************************************************END Sorting Function************************************************/
+
+
+    ///************************************************************* Sorting Function ********************************************/
+
+    //$scope.sortType = 'Name';
+    //$scope.sortReverse = false;
+    //$scope.sortData = function (name) {
+    // $scope.sortType = name;
+    // $scope.sortReverse = !$scope.sortReverse;
+    // }
+    //var sortColumn;
+    //var sortDescending = true;
+    //function resetSorting() {
+    //    sortColumn = 'Name';
+    //    sortDescending = true;
+    //}
+    //$scope.getData = function (asyncHandle) {
+    //    $scope.gridPagerSettings.currentPage = 1;
+    //    resetSorting();
+    //    $scope.getSwitchsDataSource(asyncHandle);
+    //};
+
+
+    //$scope.onGridSortChanged = function (colDef, sortDirection, handle) {
+    //    sortColumn = colDef.tag;
+    //    sortDescending = (sortDirection == "DESC");
+    //    $scope.getData(handle);
+    //}
+
+
+
+    ///*********************************************************END Sorting Function************************************************/
 
 }
-
 appControllers.controller('SwitchManagmentController', SwitchManagmentController);

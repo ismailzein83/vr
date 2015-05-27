@@ -1,64 +1,31 @@
 ﻿<div vr-modalcontent ng-controller="SwitchEditorController">
-    <vr-modalbody maxheight="'500px'">
-        <!--<div class="modal-body" style="max-height:650px;overflow:auto">-->
-        <vr-panel>
-            <vr-form name="formSwitchEditor">
-                <vr-row ng-show="false">
-                    <vr-columns colnum="2">
-                        <vr-label>{{switchId}}</vr-label>
-                    </vr-columns>
-                    <vr-columns colnum="10">
-                        <vr-label>{{lastCDRImportTag}}</vr-label>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns colnum="2">
-                        <vr-label standalone>Name:</vr-label>
-                    </vr-columns>
-                    <vr-columns colnum="10">
-                        <vr-textbox label="" value="Name"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns colnum="2">
-                        <vr-label standalone>Symbol:</vr-label>
-                    </vr-columns>
-                    <vr-columns colnum="10">
-                        <vr-textbox label="" value="Symbol"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns colnum="6">
-                        <vr-row removeline>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-label standalone>Include In Routing:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-switch label="" value="enableRouting"></vr-switch>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-columns>
-                    <vr-columns colnum="6">
-                        <vr-row removeline>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-label standalone>Include In Billing:</vr-label>
-                            </vr-columns>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-switch label="" value="enableCDRImport"></vr-switch>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-columns>
-                </vr-row>
+    <vr-modalbody maxheight="'800px'" vr-loader="isGettingData">
 
-                <vr-row removeline>
-                    <vr-columns colnum="12">
-                        <vr-label>Description:</vr-label>
-                        <textarea class="form-control" ng-model="Description" />
-                    </vr-columns>
-                </vr-row>
-            </vr-form>
-        </vr-panel>
-        <!--</div>-->
+        <vr-form name="formSwitchEditor">
+
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-textbox label="Name" value="Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-textbox label="Symbol" value="Symbol"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <textarea class="form-control" ng-model="Description" text="Description" />
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-switch label="Include In Routing" value="enableRouting"></vr-switch>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-switch label="Include In Billing" value="enableCDRImport"></vr-switch>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">

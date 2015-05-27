@@ -10,7 +10,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
     function defineScope() {
         $scope.enableCDRImport = false;
         $scope.enableRouting = false;
-
+        $scope.isGettingData = false;
         $scope.switchManagers = {
             datasource: [],
             selectedvalue: ''
@@ -31,6 +31,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
 
     function load() {
         if (editMode) {
+            $scope.isGettingData = true;
             SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
            .then(function (response) {
                getScopeDataFromSwitch(response);
@@ -49,6 +50,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
             EnableCDRImport: $scope.enableCDRImport,
             EnableRouting: $scope.enableRouting
         };
+        $scope.isGettingData = false;
         return switchObject;
     }
 
