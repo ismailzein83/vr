@@ -1,10 +1,7 @@
 ﻿<vr-panel ng-controller="BI_EntityReportController">
     <div class="am-collapse" ng-hide="filterSectionCollapsed">
         <vr-form name="entityfilterForm">
-            <vr-row removeline>
-                <vr-columns colnum="2">
-                    <vr-select datasource="measureTypes" datatextfield="description" datavaluefield="value" label="Measures" selectedvalues="selectedMeasureTypes" isrequired ismultipleselection hidefilterbox></vr-select>
-                </vr-columns>
+            <vr-row removeline>               
                 <vr-columns colnum="2">
                     <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
                 </vr-columns>

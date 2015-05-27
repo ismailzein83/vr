@@ -3,19 +3,19 @@
 function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService) {
 
         defineScope();
-        var params = {}
+        var entityType;
+        var entityId; 
         load();
-       
+        loadParametresValue();       
         function defineScope() {
-            $scope.fromDate = "2015-04-01";
             $scope.data = [];
+            $scope.fromDate = "2015-04-01";           
             $scope.toDate = "2015-04-30";
-            defineMeasureTypes();
             
             
 
             defineTimeDimensionTypes();
-
+            defineMeasureTypes()
 
             $scope.onchangeEntityType = function () {                
                 loadEntityData()
@@ -26,7 +26,7 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
                 for (var prop in BIMeasureTypeEnum) {
                     measureTypes.push(BIMeasureTypeEnum.value);
                 }
-                return BIAPIService.GetEntityMeasuresValues(params.EntityType, params.EntityValue, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, measureTypes)
+                return BIAPIService.GetEntityMeasuresValues(entityType, entityId, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, measureTypes)
                  .then(function (response) {
 
                      $scope.data.length = 0;
@@ -43,16 +43,11 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
         }
 
         function load() {
-            params.EntityType = 0;
-            params.EntityValue = 27708;
+            
         }
-        function defineMeasureTypes() {
-            $scope.measureTypes = [];
-            for (var m in BIMeasureTypeEnum) {
-                $scope.measureTypes.push(BIMeasureTypeEnum[m]);
-            }
-
-            $scope.selectedMeasureTypes = [];
+        function loadParametresValue() {
+            entityType = 0;
+            entityId = 27708;
         }
 
         function defineTimeDimensionTypes() {
@@ -64,7 +59,13 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
                 return t == BITimeDimensionTypeEnum.Daily;
             })[0];
         }
-        
+        function defineMeasureTypes() {
+            $scope.measureTypes = [];
+            for (var m in BIMeasureTypeEnum) {
+                $scope.measureTypes.push(BIMeasureTypeEnum[m]);
+            }
+
+        }
 
 }
 
