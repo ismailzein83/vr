@@ -35,6 +35,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
             SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
            .then(function (response) {
                getScopeDataFromSwitch(response);
+               $scope.isGettingData = false;
            })
         }
     }
@@ -50,7 +51,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
             EnableCDRImport: $scope.enableCDRImport,
             EnableRouting: $scope.enableRouting
         };
-        $scope.isGettingData = false;
+        
         return switchObject;
     }
 

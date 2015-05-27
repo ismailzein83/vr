@@ -1,5 +1,5 @@
-﻿SwitchManagmentController.$inject = ['$scope', '$q', 'SwitchManagmentAPIService', '$location', '$timeout', '$modal', 'VRModalService', 'VRNotificationService'];
-function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $location, $timeout, $modal, VRModalService, VRNotificationService) {
+﻿SwitchManagmentController.$inject = ['$scope', '$q', 'SwitchManagmentAPIService', '$location', '$timeout', '$modal', 'VRModalService', 'VRNotificationService', 'UtilsService'];
+function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $location, $timeout, $modal, VRModalService, VRNotificationService, UtilsService) {
 
     var current = 0;
     var allDatawasRetreived = false;
@@ -7,6 +7,20 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
 
 
     defineScope();
+    //load();
+
+    function load() {
+        UtilsService.waitMultipleAsyncOperations([getSwitchsDataSource, loadSwitchs]).finally(function () {
+            $scope.isGettingData = false;
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error);
+        });
+
+    }
+
+    function loadSwitchs() {
+
+    }
 
     function defineScope() {
         $scope.gridPagerSettings = {
@@ -163,9 +177,6 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
     //    sortDescending = (sortDirection == "DESC");
     //    $scope.getData(handle);
     //}
-
-
-
     ///*********************************************************END Sorting Function************************************************/
 
 }
