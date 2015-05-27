@@ -43,7 +43,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
     }
 
     function getSwitch() {
-        return SwitchManagmentAPIService.getSwitchDetails($scope.switchId)
+        return SwitchManagmentAPIService.GetSwitchDetails($scope.switchId)
            .then(function (response) {
                fillScopeFromSwitchObj(response);
            })
@@ -55,9 +55,9 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
     function buildSwitchObjFromScope() {
         var switchObject = {
             SwitchId: ($scope.switchId != null) ? $scope.switchId : 0,
-            Name: $scope.Name,
-            Symbol: $scope.Symbol,
-            Description: $scope.Description,
+            Name: $scope.name,
+            Symbol: $scope.symbol,
+            Description: $scope.description,
             LastImport: $scope.lastImport,
             LastCDRImportTag: $scope.lastCDRImportTag,
             EnableCDRImport: $scope.enableCDRImport,
@@ -69,10 +69,10 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
 
     function fillScopeFromSwitchObj(switchObject) {
         $scope.lastImport = new Date(switchObject.LastImport);
-        $scope.Description = switchObject.Description;
-        $scope.Name = switchObject.Name;
+        $scope.description = switchObject.Description;
+        $scope.name = switchObject.Name;
         $scope.lastCDRImportTag = switchObject.lastCDRImportTag;
-        $scope.Symbol = switchObject.Symbol;
+        $scope.symbol = switchObject.Symbol;
         $scope.enableCDRImport = switchObject.EnableCDRImport;
         $scope.enableRouting = switchObject.EnableRouting;
     }
@@ -80,7 +80,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
     function insertSwitch() {
         $scope.issaving = true;
         var switchObject = buildSwitchObjFromScope();
-        return SwitchManagmentAPIService.insertSwitch(switchObject)
+        return SwitchManagmentAPIService.InsertSwitch(switchObject)
         .then(function (response) {  
             if (VRNotificationService.notifyOnItemAdded("Switch", response))
             {
@@ -96,7 +96,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
 
     function updateSwitch() {
         var switchObject = buildSwitchObjFromScope();
-        SwitchManagmentAPIService.updateSwitch(switchObject)
+        SwitchManagmentAPIService.UpdateSwitch(switchObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Switch", response)) {
                 if ($scope.onSwitchUpdated != undefined)

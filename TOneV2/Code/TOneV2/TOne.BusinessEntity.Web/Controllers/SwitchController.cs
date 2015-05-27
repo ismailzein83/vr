@@ -13,22 +13,22 @@ namespace TOne.BusinessEntity.Web.Controllers
 
 
         [HttpGet]
-        public List<Switch> getFilteredSwitches(string switchName, int rowFrom, int rowTo)
+        public List<Switch> GetFilteredSwitches(string switchName, int rowFrom, int rowTo)
         {
             SwitchManager manager = new SwitchManager();
             return manager.GetFilteredSwitches(switchName, rowFrom, rowTo);
         }
 
         [HttpGet]
-        public Switch getSwitchDetails(int switchID)
+        public Switch GetSwitchDetails(int switchID)
         {
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1000);
             SwitchManager manager = new SwitchManager();
             return manager.GetSwitchDetails(switchID);
         }
 
         [HttpPost]
-        public TOne.Entities.UpdateOperationOutput<Switch> updateSwitch(Switch switchObject)
+        public TOne.Entities.UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
         {
             SwitchManager manager = new SwitchManager();
             return manager.UpdateSwitch(switchObject);
@@ -36,7 +36,7 @@ namespace TOne.BusinessEntity.Web.Controllers
 
 
         [HttpPost]
-        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> insertSwitch(Switch switchObject)//UpdateOperationOutput
+        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)//UpdateOperationOutput
         {
             SwitchManager manager = new SwitchManager();
             return manager.InsertSwitch(switchObject);

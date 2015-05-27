@@ -43,7 +43,7 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
         }
         var fromRow = $scope.switchsDataSource.length + 1;
         var toRow = fromRow + 20 - 1;
-        return SwitchManagmentAPIService.getFilteredSwitches($scope.switchName, fromRow, toRow).then(function (response) {
+        return SwitchManagmentAPIService.GetFilteredSwitches($scope.switchName, fromRow, toRow).then(function (response) {
 
             angular.forEach(response, function (itm) {
                 $scope.switchsDataSource.push(itm);
@@ -55,7 +55,7 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
 
     function defineMenuActions() {
         $scope.gridMenuActions = [{
-            name: "Edit/Delete Switch",
+            name: "Edit",
             clicked: editSwitch
         }];
     }
