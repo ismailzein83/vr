@@ -28,7 +28,7 @@ namespace TOne.BusinessEntity.Web.Controllers
         }
 
         [HttpPost]
-        public int updateSwitch(Switch switchObject)
+        public TOne.Entities.UpdateOperationOutput<Switch> updateSwitch(Switch switchObject)
         {
             SwitchManager manager = new SwitchManager();
             return manager.UpdateSwitch(switchObject);
@@ -36,7 +36,7 @@ namespace TOne.BusinessEntity.Web.Controllers
 
 
         [HttpPost]
-        public int insertSwitch(Switch switchObject)//UpdateOperationOutput
+        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> insertSwitch(Switch switchObject)//UpdateOperationOutput
         {
             SwitchManager manager = new SwitchManager();
             return manager.InsertSwitch(switchObject);

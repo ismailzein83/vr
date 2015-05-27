@@ -51,7 +51,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
             EnableCDRImport: $scope.enableCDRImport,
             EnableRouting: $scope.enableRouting
         };
-        
+
         return switchObject;
     }
 
@@ -72,17 +72,14 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
         .then(function (response) {
             $scope.issaving = false;
 
-            if (angular.isNumber(response) && response > 0) {
-                alert(response);
-                //$scope.switchId != 'undefined'
-                $scope.refreshRowData(response, $scope.index);
+            var insertionActionSucc = VRNotificationService.notifyOnItemAdded("Insert Switch", response);
+
+            if (insertionActionSucc) {
+                VRNotificationService.showSuccess('Switch will Inserted into parent Grid');
+                $scope.modalContext.onSwitchAdded();
             }
-            //var newdata = response;
-            //newdata.Time = new Date();
-            //newdata.Action = ($scope.switchId != 'undefined') ? "Updated" : "Added";
-            //$scope.callBackHistory(newdata);
-            notify({ message: 'Switch has been saved successfully.', classes: "alert  alert-success" });
-            $scope.$hide();
+            //notify({ message: 'Switch has been saved successfully.', classes: "alert  alert-success" });
+            $scope.close();
         }).finally(function () {
             if (asyncHandle)
                 asyncHandle.operationDone();
@@ -96,15 +93,12 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
         SwitchManagmentAPIService.updateSwitch(switchObject)
         .then(function (response) {
             $scope.issaving = false;
-            if (angular.isNumber(response) && response > 0) {//if ($scope.switchId != 'undefined') {
-                $scope.refreshRowData(response, $scope.index);
+            var updateActionSucc = VRNotificationService.notifyOnItemUpdated("Update Switch", response);
+
+            if (updateActionSucc) {
+                VRNotificationService.showSuccess('Switch will Updated into parent Grid');
+                $scope.modalContext.onSwitchUpdated();
             }
-            var newdata = response;
-            newdata.Time = new Date();
-            newdata.Action = ($scope.switchId != 'undefined') ? "Updated" : "Added";
-            $scope.callBackHistory(newdata);
-            notify({ message: 'Switch has been saved successfully.', classes: "alert  alert-success" });
-            $scope.$hide();
         }).finally(function () {
             if (asyncHandle)
                 asyncHandle.operationDone();

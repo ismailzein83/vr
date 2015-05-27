@@ -53,8 +53,13 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
                     Name: dataItem.Name
                 };
                 modalSettings.onScopeReady = function (modalScope) {
-                    alert('Ready');
+                    alert('ScopeReady');
                     modalScope.title = "Switch Info(" + dataItem.Symbol + ")";
+                };
+                modalSettings.onSwitchUpdated = function (switchUpdated) {
+                    alert('SwitchUpdated');
+                    gridApi.itemUpdated(switchUpdated);
+
                 };
                 VRModalService.showModal('/Client/Modules/BusinessEntity/Views/SwitchEditor.html', parameters, modalSettings);
             }
@@ -100,6 +105,11 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
         modalSettings.onScopeReady = function (modalScope) {
             alert('Ready');
             modalScope.title = "New Switch Info";
+        };
+        modalSettings.onSwitchAdded = function (switchAdded) {
+            alert('SwitchAdded');
+            gridApi.itemAdded(switchAdded);
+
         };
         VRModalService.showModal('/Client/Modules/BusinessEntity/Views/SwitchEditor.html', null, modalSettings);
     }
