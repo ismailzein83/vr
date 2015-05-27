@@ -22,18 +22,7 @@ var RoutingAPIService = function (BaseAPIService) {
     }
 
     function GetFilteredRoutes(filter) {
-        return BaseAPIService.post("/api/routing/GetFilteredRoutes", filter);
-    }
-
-    function GetRoutes(pageNumber, pageSize, customerId, code, ourZoneId) {
-
-        return BaseAPIService.get("/api/routing/GetRoutes", {
-            pageNumber: pageNumber,
-            pageSize: pageSize,
-            customerId: customerId,
-            code: code,
-            ourZoneId: ourZoneId
-        });
+        return BaseAPIService.post("/api/routing/GetRoutes", filter);
     }
 
 }

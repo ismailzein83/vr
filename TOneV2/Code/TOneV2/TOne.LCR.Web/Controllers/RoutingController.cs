@@ -54,20 +54,19 @@ namespace TOne.LCR.Web.Controllers
 
         }
 
+        //[HttpGet]
+        //[TOne.Entities.SecureAction("View")]
+        //public IEnumerable<RouteDetail> GetRoutes(int pageNumber, int pageSize, string customerId, string code, int ourZoneId)
+        //{
+        //    RouteManager manager = new RouteManager();
+        //    return manager.GetRoutes(customerId, code, ourZoneId == 0 ? (int?)null : ourZoneId).Skip(pageNumber * pageSize).Take(pageSize);
+        //}
         [HttpGet]
         [TOne.Entities.SecureAction("View")]
-        public IEnumerable<RouteDetail> GetRoutes(int pageNumber, int pageSize, string customerId, string code, int ourZoneId)
+        public IEnumerable<RouteDetailModel> GetRoutes(GetFiltertedRoutesInput filter)
         {
             RouteManager manager = new RouteManager();
-            return manager.GetRoutes(customerId, code, ourZoneId == 0 ? (int?)null : ourZoneId).Skip(pageNumber * pageSize).Take(pageSize);
-        }
-        [HttpGet]
-        [TOne.Entities.SecureAction("View")]
-        public IEnumerable<RouteDetailModel> GetRoutes()
-        {
-            RouteManager manager = new RouteManager();
-
-            return Mappers.MapRouteDetails(manager.GetRoutes("C120", "961", (int?)null).Skip(20).Take(20));
+            return Mappers.MapRouteDetails(manager.GetRoutes(filter.CustomerIds, filter.Code, filter.ZoneIds, filter.FromRow, filter.ToRow, filter.IsDescending, Enum.GetName(typeof(RouteDetailFilterOrder), filter.OrderBy)));
         }
     }
 
@@ -80,15 +79,20 @@ namespace TOne.LCR.Web.Controllers
         public List<string> CustomerIds { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+
     }
 
     public class GetFiltertedRoutesInput
     {
-        public int ZoneId { get; set; }
+        public List<int> ZoneIds { get; set; }
         public string Code { get; set; }
-        public string CustomerId { get; set; }
+        public List<string> CustomerIds { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int FromRow { get; set; }
+        public int ToRow { get; set; }
+        public RouteDetailFilterOrder OrderBy { get; set; }
+        public bool IsDescending { get; set; }
     }
     #endregion
 

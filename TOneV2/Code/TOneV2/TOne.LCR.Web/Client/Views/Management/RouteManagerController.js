@@ -25,6 +25,7 @@
             datasource: []
         };
 
+        $scope.routes = [];
 
     }
     function defineScopeMethods() {
