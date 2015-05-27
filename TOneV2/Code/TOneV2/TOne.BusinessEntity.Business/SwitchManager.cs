@@ -29,17 +29,42 @@ namespace TOne.BusinessEntity.Business
             return dataManager.GetSwitchDetails(switchID);
         }
 
-        public int UpdateSwitch(Switch switchObject)
+        public TOne.Entities.UpdateOperationOutput<Switch> UpdateSwitch(Switch switchObject)
         {
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.UpdateSwitch(switchObject);
+            bool updateActionSucc = dataManager.UpdateSwitch(switchObject);
+            TOne.Entities.UpdateOperationOutput<Switch> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<Switch>();
+
+            updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = switchObject;
+            }
+            return updateOperationOutput;
         }
 
 
-        public int InsertSwitch(Switch switchObject)
+        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)
         {
+            TOne.Entities.OperationResults.InsertOperationOutput<Switch> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<Switch>();
+
+            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int switchId = -1;
+
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            return dataManager.InsertSwitch(switchObject);
+            bool insertActionSucc = dataManager.InsertSwitch(switchObject, out switchId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                switchObject.SwitchId = switchId;
+                insertOperationOutput.InsertedObject = switchObject;
+            }
+            return insertOperationOutput;
         }
     }
 }
