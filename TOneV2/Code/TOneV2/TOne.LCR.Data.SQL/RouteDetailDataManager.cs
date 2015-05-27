@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.LCR.Entities;
+using TOne.LCR.Entities.Routing;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 
@@ -20,33 +21,37 @@ namespace TOne.LCR.Data.SQL
             routesDetails = GetItemsSP("sp_Route_GetRoutes", RouteDetailMapper, customerId, code, ourZoneId);
             return routesDetails;
         }
-        public IEnumerable<RouteDetail> GetRoutesDetail(string customerIds, string code, string zoneIds, int fromRow, int toRow, bool isDescending, string orderBy)
+        public IEnumerable<RouteDetail> GetRoutesDetail(IEnumerable<string> customerIds, string code, IEnumerable<int> zoneIds, int fromRow, int toRow, bool isDescending, string orderBy)
         {
-            return GetPagedItemsText<RouteDetail>(string.Format(query_GetRoutes, GetConditions(customerIds, code, zoneIds)), RouteDetailMapper, null, fromRow, toRow, isDescending, orderBy);
+            StringBuilder filterQuery = new StringBuilder();
+            RouteDetailFilter filter = new RouteDetailFilter()
+            {
+                Code = new List<string>(),
+                CustomerIds = customerIds.ToList(),
+                ZoneIds = zoneIds.ToList()
+            };
+            filter.Code.Add(code);
+            AddFilterToQuery(filter, filterQuery);
+            return GetPagedItemsText<RouteDetail>(string.Format(query_GetRoutes, filterQuery.ToString()), RouteDetailMapper, null, fromRow, toRow, isDescending, orderBy);
         }
 
-        private string GetConditions(string customerIds, string code, string zoneIds)
+        void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
-            StringBuilder condition = new StringBuilder();
-            if (!string.IsNullOrEmpty(customerIds))
+            if (values != null && values.Count() > 0)
             {
-                condition.Append(" and ");
-                condition.Append("CustomerID in (" + customerIds.Split(',').Select(s => "'" + s + "'").Aggregate((i, j) => i + "," + j) + ")");
+                if (typeof(T) == typeof(string))
+                    whereBuilder.AppendFormat("AND {0} IN ('{1}')", column, String.Join("', '", values));
+                else
+                    whereBuilder.AppendFormat("AND {0} IN ({1})", column, String.Join(", ", values));
             }
+        }
 
-            if (!string.IsNullOrEmpty(zoneIds))
-            {
-                condition.Append(" and ");
-                condition.Append("SaleZoneId in (" + zoneIds.Split(',').Select(s => s).Aggregate((i, j) => i + "," + j) + ")");
-            }
+        private void AddFilterToQuery(RouteDetailFilter filter, StringBuilder whereBuilder)
+        {
 
-            if (!string.IsNullOrEmpty(code))
-            {
-                condition.Append(" and ");
-                condition.Append("Code like '" + code + "%'");
-            }
-
-            return condition.ToString();
+            AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, filter.Code, "Code");
+            AddFilter(whereBuilder, filter.ZoneIds, "OurZoneID");
         }
 
         public static string Serialize(RouteOptions routeOptions)

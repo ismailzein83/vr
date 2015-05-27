@@ -120,13 +120,19 @@ namespace TOne.LCR.Business
             }
         }
 
-        public IEnumerable<RouteDetail> GetRoutes(string customerId, string code, int? ourZoneId)
+        public IEnumerable<RouteDetail> GetRoutes(IEnumerable<string> customerIds, string code, IEnumerable<int> zoneIds, int fromRow, int toRow, bool isDescending, string orderBy)
         {
             IRouteDetailDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteDetailDataManager>();
             dataManager.RoutingDatabaseType = RoutingDatabaseType.Current;
-            return dataManager.GetRoutesDetail(customerId, code, ourZoneId);
+            return dataManager.GetRoutesDetail(customerIds, code, zoneIds, fromRow, toRow, isDescending, orderBy);
         }
 
+        public IEnumerable<RouteDetail> GetRoutes(List<string> customerIds, string code, List<int> ourZoneIds, int fromRow, int toRow, bool isDescending, string orderBy)
+        {
+            IRouteDetailDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteDetailDataManager>();
+            dataManager.RoutingDatabaseType = RoutingDatabaseType.Current;
+            return dataManager.GetRoutesDetail(customerIds, code, ourZoneIds, fromRow, toRow, isDescending, orderBy);
+        }
         private void SetRuleInvalid(RouteRule rule)
         {
             throw new NotImplementedException();

@@ -21,6 +21,6 @@ namespace TOne.LCR.Data
 
         List<RouteDetail> GetRoutesDetail(string customerId, string code, int? ourZoneId);
 
-        IEnumerable<RouteDetail> GetRoutesDetail(string customerIds, string code, string zoneIds, int fromRow, int toRow, bool isDescending, string orderBy);
+        IEnumerable<RouteDetail> GetRoutesDetail(IEnumerable<string> customerIds, string code, IEnumerable<int> zoneIds, int fromRow, int toRow, bool isDescending, string orderBy);
     }
 }
