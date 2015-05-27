@@ -9,8 +9,8 @@ namespace TOne.BusinessEntity.Data
         List<Switch> GetFilteredSwitches(string switchName, int rowFrom, int rowTo);
         Switch GetSwitchDetails(int switchID);
 
-        int UpdateSwitch(Switch switchObject);
+        bool UpdateSwitch(Switch switchObject);
 
-        int InsertSwitch(Switch switchObject);
+        bool InsertSwitch(Switch switchObject, out int insertedId);
     }
 }
