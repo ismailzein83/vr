@@ -36,38 +36,39 @@ namespace TOne.BusinessEntity.Data.SQL
 
 
 
-        public int InsertSwitch(Switch switchObject)
+        public bool InsertSwitch(Switch switchObject, out int insertedId)
         {
-            int id;
             object switchID;
-            ExecuteNonQuerySP("[BEntity].[sp_SwitchDefinition_Insert]", out switchID,
-           !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
-              !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
-              !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
-              switchObject.EnableCDRImport ? 1 : 0,
-              switchObject.EnableRouting ? 1 : 0,
-               switchObject.LastAttempt = DateTime.Now,
-               switchObject.LastImport = DateTime.Now
-           );
-            id = (int)switchID;
-            return id;
+            int recordesEffected = ExecuteNonQuerySP("[BEntity].[sp_SwitchDefinition_Insert]", out switchID,
+            !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
+               !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
+               !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
+               switchObject.EnableCDRImport ? 1 : 0,
+               switchObject.EnableRouting ? 1 : 0,
+                switchObject.LastAttempt = DateTime.Now,
+                switchObject.LastImport = DateTime.Now
+            );
+            insertedId = (int)switchID;
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
 
-        public int UpdateSwitch(Switch switchObject)
+        public bool UpdateSwitch(Switch switchObject)
         {
-            int id;
-            ExecuteNonQuerySP("[BEntity].[sp_SwitchDefinition_Update]",
-                !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
-              !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
-              !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
-               switchObject.EnableCDRImport,
-               switchObject.EnableRouting,
-               switchObject.LastAttempt = DateTime.Now,
-               switchObject.LastImport = DateTime.Now,
-               switchObject.SwitchId
-           );
-            id = switchObject.SwitchId;
-            return id;
+            int recordesEffected = ExecuteNonQuerySP("[BEntity].[sp_SwitchDefinition_Update]",
+                 !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
+               !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
+               !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
+                switchObject.EnableCDRImport,
+                switchObject.EnableRouting,
+                switchObject.LastAttempt = DateTime.Now,
+                switchObject.LastImport = DateTime.Now,
+                switchObject.SwitchId
+            );
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
 
         private Switch SwitchMapper(IDataReader reader)
