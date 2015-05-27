@@ -44,9 +44,9 @@
         var current = 0;
         $scope.gridData = [];
         $scope.loadMoreData = function () {
+            var pageInfo = gridApi.getPageInfo();
             return BusinessEntityAPIService.GetCodeGroups().then(function (response) {
-                var count = current + 20;
-                for (current; current < count; current++) {
+                for (current = pageInfo.fromRow; current <= pageInfo.toRow; current++) {
                     $scope.gridData.push({
                         col1: "test " + current + "1",
                         col2: "test " + current + "2",
@@ -54,8 +54,8 @@
                     });
                 }
 
-                
-            })
+
+            });
             //setTimeout(function () {
             //    $scope.$apply(function () {
                     
@@ -65,7 +65,6 @@
             //}, 2000);
 
         };
-        $scope.loadMoreData();
 
         $scope.addItem = function () {
             var item = {
@@ -80,6 +79,7 @@
         var gridApi;
         $scope.gridReady = function (api) {
             gridApi = api;
+            $scope.loadMoreData();
         };
         $scope.testObj = {};
         $scope.choiceSelectionChanged = function () {

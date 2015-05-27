@@ -46,9 +46,9 @@ namespace TOne.BusinessEntity.Business
         }
 
 
-        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)
+        public TOne.Entities.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)
         {
-            TOne.Entities.OperationResults.InsertOperationOutput<Switch> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<Switch>();
+            TOne.Entities.InsertOperationOutput<Switch> insertOperationOutput = new TOne.Entities.InsertOperationOutput<Switch>();
 
             int switchId = -1;
 
@@ -57,12 +57,12 @@ namespace TOne.BusinessEntity.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Succeeded;
                 switchObject.SwitchId = switchId;
                 insertOperationOutput.InsertedObject = switchObject;
             }
             else
-                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+                insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Failed;
             return insertOperationOutput;
         }
     }

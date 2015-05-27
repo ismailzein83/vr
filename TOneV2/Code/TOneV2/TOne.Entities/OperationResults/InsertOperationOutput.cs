@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.Entities.OperationResults
+namespace TOne.Entities
 {
     public enum InsertOperationResult {  Succeeded = 0, Failed = 1, SameExists = 2}
     public class InsertOperationOutput<T>

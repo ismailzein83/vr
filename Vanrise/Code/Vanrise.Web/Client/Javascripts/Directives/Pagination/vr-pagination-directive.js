@@ -13,8 +13,14 @@ app.directive('vrPagination', [function () {
             ctrl.topCounts = [5, 10, 15];
             if (ctrl.pagersettings != undefined) {
                 ctrl.pagersettings.itemsPerPage = ctrl.topCounts[1];
+                ctrl.pagersettings.getPageInfo = function () {
+                    var fromRow = (ctrl.pagersettings.currentPage - 1) * ctrl.pagersettings.itemsPerPage + 1;
+                    return {
+                        fromRow: fromRow,
+                        toRow: fromRow + ctrl.pagersettings.itemsPerPage - 1
+                    };
+                };
             }
-
         },
         controllerAs: 'ctrl',
         bindToController: true,

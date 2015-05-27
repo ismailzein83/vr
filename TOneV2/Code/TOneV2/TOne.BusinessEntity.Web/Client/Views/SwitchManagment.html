@@ -22,7 +22,7 @@
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="switchsDataSource" maxheight="300px" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
+                <vr-datagrid datasource="switchsDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
                     <vr-datagridcolumn headertext="'Switch Id'" field="'SwitchId'">
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Switch Name'" field="'Name'">
@@ -34,9 +34,9 @@
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Last CDR Import Tag'" field="'LastCDRImportTag'">
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Last Import'" field="'LastImport'">
+                    <vr-datagridcolumn headertext="'Last Import'" field="'LastImport'" type="'Datetime'">
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Last Attempt'" field="'LastAttempt'">
+                    <vr-datagridcolumn headertext="'Last Attempt'" field="'LastAttempt'" type="'Datetime'">
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Enable CDR Import'" field="'Enable_CDR_Import'">
                     </vr-datagridcolumn>

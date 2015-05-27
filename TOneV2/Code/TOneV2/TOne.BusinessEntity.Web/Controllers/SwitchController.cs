@@ -36,7 +36,7 @@ namespace TOne.BusinessEntity.Web.Controllers
 
 
         [HttpPost]
-        public TOne.Entities.OperationResults.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)//UpdateOperationOutput
+        public TOne.Entities.InsertOperationOutput<Switch> InsertSwitch(Switch switchObject)//UpdateOperationOutput
         {
             SwitchManager manager = new SwitchManager();
             return manager.InsertSwitch(switchObject);

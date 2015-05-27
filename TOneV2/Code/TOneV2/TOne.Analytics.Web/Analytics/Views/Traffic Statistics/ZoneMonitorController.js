@@ -156,7 +156,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             $scope.getData = function () {
                 $scope.mainGridPagerSettings.currentPage = 1;
                 resultKey = null;
-                mainGridAPI.reset();
+                mainGridAPI.resetSorting();
                 resetSorting();
                 return getData(true);
             };
@@ -252,9 +252,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             angular.forEach($scope.selectedGroupKeys, function (group) {
                 groupKeys.push(group.groupKeyEnumValue);
             });
-           
-            var fromRow = ($scope.mainGridPagerSettings.currentPage - 1) * count + 1;
-            var toRow = fromRow + count - 1;
+            var pageInfo = $scope.mainGridPagerSettings.getPageInfo();            
             var filter = buildFilter();
             var getTrafficStatisticSummaryInput = {
                 TempTableKey: resultKey,
@@ -263,8 +261,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 GroupKeys: groupKeys,
                 From: $scope.fromDate,
                 To: $scope.toDate,
-                FromRow: fromRow,
-                ToRow: toRow,
+                FromRow: pageInfo.fromRow,
+                ToRow: pageInfo.toRow,
                 OrderBy: sortColumn.value,
                 IsDescending: sortDescending
             };

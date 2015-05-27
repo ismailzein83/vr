@@ -76,6 +76,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         var expandableColumnWidth = 0;
         var expandableRowTemplate;
         var actionTypeColumn;
+        var stopPagingOnScroll;
 
         function addColumn(col, columnIndex) {
             var colDef = {
@@ -115,7 +116,12 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 }
                 else {
                     columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "left");
-                    columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "");
+                    if (col.type == "Datetime")
+                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
+                    if (col.type == "Date")
+                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
+                    else
+                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "");
                 }
             }
             colDef.cellTemplate = columnCellTemplate;
@@ -197,9 +203,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
-                ctrl.gridStyle['max-height'] = ctrl.maxheight;
-                ctrl.gridStyle['overflow-y'] = "auto";
-                ctrl.gridStyle['overflow-x'] = "hidden";
+                setMaxHeight(ctrl.maxheight);
             }
 
             ctrl.headerStyle = {};
@@ -225,7 +229,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         }
 
         function defineAPI() {
-            gridApi.reset = function () {
+            gridApi.resetSorting = function () {
                 if (lastSortColumnDef != undefined) {
                     lastSortColumnDef.sortDirection = undefined;
                     lastSortColumnDef = undefined;
@@ -244,12 +248,28 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 itemChanged(item, "Deleted");
             };
 
+            gridApi.getPageInfo = getPageInfo;
+
+            gridApi.clearDataAndContinuePaging = function () {
+                ctrl.datasource.length = 0;
+                stopPagingOnScroll = false;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(gridApi);
         }
 
+        function setMaxHeight(maxHeight) {
+            ctrl.gridStyle['max-height'] = maxHeight;
+            ctrl.gridStyle['overflow-y'] = "auto";
+            ctrl.gridStyle['overflow-x'] = "hidden";
+        }
+
         function definePagingOnScroll($scope, loadMoreDataFunction) {
             ctrl.isLoadingMoreData = false;
+
+            if (loadMoreDataFunction != undefined)
+                setMaxHeight("400px");
 
             //this event is called by the vrDatagridrows directive
             ctrl.onScrolling = function () {
@@ -257,16 +277,34 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                     return;
                 if (ctrl.isLoadingMoreData)
                     return;
-                $scope.$apply(function () {                             
+                if (stopPagingOnScroll)
+                    return;
+                $scope.$apply(function () {
+                    var initialLength = ctrl.datasource.length;
                     var promise = loadMoreDataFunction();//this function should return a promise in case it is getting data
                     if (promise != undefined && promise != null) {
                         ctrl.isLoadingMoreData = true;
                         promise.finally(function () {
+                            if (ctrl.datasource.length - initialLength < getPageSize())
+                                stopPagingOnScroll = true;
                             ctrl.isLoadingMoreData = false;
                         });
                     }
                 });
 
+            };
+        }
+
+        function getPageSize() {
+            return 20;
+        }
+
+        function getPageInfo()
+        {
+            var fromRow = ctrl.datasource.length + 1;
+            return {
+                fromRow: fromRow,
+                toRow: fromRow + getPageSize() - 1
             };
         }
 
