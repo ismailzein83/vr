@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html ng-app="mainModule">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/bootstrap")
+    @*@Styles.Render("~/Content/Semantic")*@
+    @Styles.Render("~/Content/Styles")
+
+
+
+</head>
+<body ng-controller="mainCtrl">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+        <div class="container">
+            <div class="navbar-header">
+
+
+            </div>
+            <div id="navbar">
+
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div id="wrapper" ng-style="toogled==true?{'padding-left':'225px'}:{'padding-left':'5px'}">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'250px'}:{'width':'2px'}">
+
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true">
+                <div class="panel panel-default toggle-panel ">
+                    <div class="panel-heading dll-menu" style="height: 40px;">
+
+                        <span style="font-size: 20px; margin: 0px 4px; position: absolute; right: 5px; top: 5px;" ng-click="toggledpanel()" class=" hand-cursor glyphicon glyphicon-chevron-left "></span>
+
+
+                    </div>
+                </div>
+                <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
+                    <div class="panel-heading hand-cursor dll-menu boxes float-box waves-effect waves-float waves-block" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
+                        <span ng-if="item.childs.length > 0">
+                            <span class="glyphicon " ng-class="item.icon" style="font-size: 20px; top: 4px;"></span>
+                            <span>{{item.name}} </span>
+                            <span class=" hand-cursor  toggel">
+
+                                <span ng-if="item.childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
+
+                            </span>
+                        </span>
+
+                        <ul class="nav" ng-if="item.childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                            <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.childs">
+                                <a class="menulink  " ng-href="{{item.location}}">{{item.name}}</a>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+
+                    <div id="collapse-{{$index}}" ng-if="item.childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
+                        <div class="panel-body ">
+                            <ul class="nav">
+                                <li ng-if="c.childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.childs">
+                                    <a class=" menulink" ng-click="setIndexSub($index,$event)" ng-href=" {{c.location}}">{{c.name}}</a>
+                                </li>
+                                <li ng-if="c.childs != undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth "  ng-repeat="c in item.childs">
+                                    <a class=" menulink " ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{c.name}}</a>
+                                    <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
+                                        <li ng-repeat="a in c.childs">
+                                            <a class=" menulink" style="color:#333;" ng-href="{{a.location}}">{{a.name}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:30px;position:fixed;z-index:10" ng-show="toogled==false">
+                <div class="dropdown dropdown-custom-serf leftdiv">
+                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right" ng-click="toggledpanel()" style="font-size: 20px; margin: 0px 4px;">
+
+                    </div>
+                </div>
+
+                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                    <div class="dropdown-toggle hand-cursor glyphicon " ng-class="item.icon" style="font-size:20px;margin:0px 4px" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
+
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
+                        <li role="presentation">
+
+                            <label class="titel-groupe"> {{item.name}}</label>
+                        </li>
+                        <li ng-if="c.childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.childs">
+
+                            <a ng-href="{{c.location}}" ng-click="setActiveClass(null,item , c);setIndexSub($index,$event)">{{c.name}}</a>
+
+                        </li>
+                        <li ng-if="c.childs != undefined" class="innerlist" ng-repeat="c in item.childs">
+                            <a ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub($index,$event) ; setActiveClass(null,item , c);" href="">{{c.name}}</a>
+                            <ul class="nav"  ng-show="menusubItemsCurrent == $index">
+                                <li ng-repeat="a in c.childs" class="innerlist">
+                                    <a class="menulink" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{a.location}}">{{a.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                @*</li>
+
+                    </ul>*@
+
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid vr-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb breadcrumb-vr">
+                            <li><a href="#/default">Home</a></li>
+                            <li ng-show="parent!=null"><a href="">{{parent.name}}</a></li>
+                            <li class="active" ng-show="child!=null">{{child.name}}</li>
+                        </ol>
+
+                    </div>
+
+                    <div class="panel-primary panel-vr his-nav" ng-if="hisnav.length > 0 ">
+                        <div class="panel-heading">
+                            <span ng-show="showHip"> Nav History </span>
+                            <span class="hand-cursor" ng-click="showHip=!showHip ">
+                                <span ng-show="showHip" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                <span ng-hide="showHip" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </span>
+
+                        </div>
+                        <div class="panel-body am-slide-top" ng-show="showHip">
+                            <vr-row removeline>                                
+                                <div ng-if="hisnav.length > 0 ">
+                                    <div ng-repeat="h in hisnav">
+                                        <button class="btn-link" ng-click="hidesubview(h.name,$index)">{{h.name}}</button>
+                                    </div>
+                                    <span class="glyphicon glyphicon-circle-arrow-left pull-right hand-cursor" ng-click="hidesubview(hisnav[hisnav.length-1].name,hisnav.length-1)"></span>
+                                </div>
+
+
+                            </vr-row>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-12" ng-view>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- /#page-content-wrapper -->
+        </div>
+
+
+    </div>
+   
+
+
+
+</body>
+@Scripts.Render("~/bundles/helpers")
+@Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/AngularExtensions")
+
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/highchart")
+@*@Scripts.Render("~/bundles/Semantic")*@
+@Scripts.Render("~/bundles/Javascripts")
+@Scripts.Render("~/bundles/ModulesJavascripts")
+@Scripts.Render("~/bundles/waves")
+
+
+</html>

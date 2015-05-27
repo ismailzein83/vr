@@ -1,0 +1,32 @@
+﻿<h1> default</h1>
+<input type="text" ng-model="testModel" />
+    {{testModel}}
+
+
+<input type="button" ng-click="postMsg()" value="Post" />
+
+<vr-datagridcell htmltemplate='html'>
+    
+</vr-datagridcell>
+<input type="button" ng-click="addItem()" value="Add Item" />
+<vr-datagrid datasource="gridData" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
+    <vr-datagridcolumn headertext="'Column 3'" field="'col3'">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Column 4'">
+        <input type="text" ng-model="dataItem.col3" />
+    </vr-datagridcolumn>
+</vr-datagrid>
+
+<vr-choices selectedindex="testObj.choiceSelectedIndex" onselectionchanged="choiceSelectionChanged" on-ready="choicesReady">
+    <vr-choice isselected="testObj.isTab1Selected" onselectionchanged="choiceSelectionChanged">test1</vr-choice>
+    <vr-choice isselected="testObj.isTab2Selected" onselectionchanged="choiceSelectionChanged">test2</vr-choice>
+    <vr-choice >test3</vr-choice>
+    <vr-choice >test4</vr-choice>
+    <vr-choice >test5</vr-choice>
+</vr-choices>
+<div>
+
+</div>
+{{testObj}}
+
+<input type="text" ng-model="choiceIndex" ng-change="selectChoice()">

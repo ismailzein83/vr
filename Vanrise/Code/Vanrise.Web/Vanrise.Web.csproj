@@ -1,0 +1,598 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vanrise.Web</RootNamespace>
+    <AssemblyName>Vanrise.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Client\Libraries\AngularExtensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
+    <Content Include="Client\Javascripts\Constants\UpdateOperationResultEnum.js" />
+    <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\AMChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\CanvasJSChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\FusionChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\HighChartSparklineController.js" />
+    <Content Include="Client\Javascripts\Controllers\ChartPrototypes\ZingChartController.js" />
+    <Content Include="Client\Javascripts\Controllers\DefaultController.js" />
+    <Content Include="Client\Javascripts\Controllers\TestViewController.js" />
+    <Content Include="Client\Javascripts\Controllers\TreeController .js" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\actionbar-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar-directive.js" />
+    <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar.html" />
+    <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Button\vr-button-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart-settings.html" />
+    <Content Include="Client\Javascripts\Directives\Chart\vr-chart.html" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-columns-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-panel-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-row-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-section-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid.html" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcell-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcolumn-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridexpandablerow-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridrows-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\vr-htmlcompiler-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DirectiveWrapper\vr-directivewrapper-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choice-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choices-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\DatePicker\vr-datetimepicker-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Form\vr-form-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Label\vr-label-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\dropdown-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-select.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Switch\vr-switch-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\textbox-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-button.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-icon.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Textbox\vr-textbox-standard.html" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\validation-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vr-validation.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationArray.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationCustom.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\Validation\vrValidationValue.js" />
+    <Content Include="Client\Javascripts\Directives\Loader\vr-loader-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Modal\vr-modalbody-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Modal\vr-modalcontent-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-menu.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-multiple.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-ondemand.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-dropdown-standard.html" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-gridview-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Old\vr-gridview-standard.html" />
+    <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Pagination\vr-pagination.html" />
+    <Content Include="Client\Javascripts\Modules\appControllers.js" />
+    <Content Include="Client\Javascripts\Modules\appRouting.js" />
+    <Content Include="Client\Javascripts\Modules\mainModule.js" />
+    <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
+    <Content Include="Client\Javascripts\Services\base-dir-service.js" />
+    <Content Include="Client\Javascripts\Services\carrier-service.js" />
+    <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
+    <Content Include="Client\Javascripts\Services\main-service.js" />
+    <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.html" />
+    <Content Include="Client\Javascripts\Services\ModalService\vr-modal-service.js" />
+    <Content Include="Client\Javascripts\Services\multitransclude-service.js" />
+    <Content Include="Client\Javascripts\Services\NavigationService\vr-navigation-service.js" />
+    <Content Include="Client\Javascripts\Services\NotificationService\vr-confirmation-modal.html" />
+    <Content Include="Client\Javascripts\Services\NotificationService\vr-notification-service.js" />
+    <Content Include="Client\Javascripts\Services\utils-service.js" />
+    <Content Include="Client\Javascripts\Services\zone-service.js" />
+    <Content Include="Client\Libraries\Angular\angular-animate.js" />
+    <Content Include="Client\Libraries\Angular\angular-messages.js" />
+    <Content Include="Client\Libraries\Angular\angular-notify.js" />
+    <Content Include="Client\Libraries\Angular\angular-route.js" />
+    <Content Include="Client\Libraries\Angular\angular-sanitize.js" />
+    <Content Include="Client\Libraries\Angular\angular-strap.js" />
+    <Content Include="Client\Libraries\Angular\angular-strap.tpl.js" />
+    <Content Include="Client\Libraries\Angular\angular-ui-switch.js" />
+    <Content Include="Client\Libraries\Angular\angular.js" />
+    <Content Include="Client\Libraries\Angular\ivh-treeview.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.html" />
+    <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\model.js" />
+    <Content Include="Client\Libraries\Angular\meteor\example\server\fixtures.js" />
+    <Content Include="Client\Libraries\Angular\meteor\methods.js" />
+    <Content Include="Client\Libraries\Angular\meteor\package.js" />
+    <Content Include="Client\Libraries\Angular\meteor\reactivize.js" />
+    <Content Include="Client\Libraries\Angular\meteor\template.html" />
+    <Content Include="Client\Libraries\Angular\meteor\test.js" />
+    <Content Include="Client\Libraries\Angular\ng-sortable.js" />
+    <Content Include="Client\Libraries\Angular\sortable-old.js" />
+    <Content Include="Client\Libraries\Angular\Sortable.js" />
+    <Content Include="Client\Libraries\Angular\ui-grid.js" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.css" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap-switch.js" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap.css" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap.js" />
+    <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-0.12.1.min.js" />
+    <Content Include="Client\Libraries\Bootstrap\ui-bootstrap-tpls-0.12.1.min.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\amcharts.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\amexport.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\canvg.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\filesaver.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\jspdf.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\jspdf.plugin.addimage.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\exporting\rgbcolor.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\funnel.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\gauge.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\dragIcon.gif" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\dragIconBlack.gif" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\dragIconH.gif" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\dragIconHBlack.gif" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\export.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\exportWhite.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\lens.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\images\lensWhite.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\az.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\bg.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\de.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\es.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\fi.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\fo.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\fr.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\hr.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\hu.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\id.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\is.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\it.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\lt.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\lv.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\mk.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\mn.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\mt.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\nl.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\no.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\pl.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\pt.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\ro.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\ru.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\rw.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\sk.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\so.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\th.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\lang\tr.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern1.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern10.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern11.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern12.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern13.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern14.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern15.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern16.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern17.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern18.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern19.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern2.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern20.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern21.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern3.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern4.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern5.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern6.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern7.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern8.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\black\pattern9.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern1.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern1r.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern2.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern3.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern4.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern5.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\chalk\pattern6.jpg" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern1.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern10.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern11.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern12.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern13.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern14.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern15.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern16.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern17.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern18.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern19.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern2.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern20.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern21.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern3.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern4.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern5.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern6.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern7.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern8.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\patterns\white\pattern9.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\pie.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\funnel.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\gauge.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\images\bicycle.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\images\car.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\images\motorcycle.png" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\index.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\map.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\pie1.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\pie2.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\radar.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\serial1.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\serial2.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\serial3.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\stock.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\examples\xy.html" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\license.txt" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\responsive.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\responsive.min.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\radar.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\serial.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\themes\black.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\themes\chalk.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\themes\dark.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\themes\light.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\themes\patterns.js" />
+    <Content Include="Client\Libraries\Charts\AMChart\xy.js" />
+    <Content Include="Client\Libraries\Charts\CanvasChart\canvasjs.js" />
+    <Content Include="Client\Libraries\Charts\CanvasChart\excanvas.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.charts.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.gantt.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.maps.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.powercharts.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\fusioncharts.widgets.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\maps\fusioncharts.usa.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\maps\fusioncharts.world.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\maps\readme.txt" />
+    <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.carbon.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.fint.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.ocean.js" />
+    <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.zune.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\adapters\standalone-framework.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\highcharts-3d.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\highcharts-more.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\broken-axis.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\canvas-tools.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\data.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\drilldown.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\exporting.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\funnel.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\heatmap.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\no-data-to-display.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\solid-gauge.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\modules\treemap.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\Plugins\grouped-categories.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-blue.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-green.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-unica.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\gray.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\grid-light.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\grid.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\sand-signika.js" />
+    <Content Include="Client\Libraries\Charts\HichChart\themes\skies.js" />
+    <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Client\Libraries\Helpers\DateFormat.js" />
+    <Content Include="Client\Libraries\JQuery\jquery-2.1.3.min.js" />
+    <Content Include="Client\Libraries\JQuery\jquery-ui.js" />
+    <Content Include="Client\Libraries\Semantic -old2\semantic.min.css" />
+    <Content Include="Client\Libraries\Semantic -old2\semantic.min.js" />
+    <Content Include="Client\Libraries\Semantic\components\accordion.css" />
+    <Content Include="Client\Libraries\Semantic\components\accordion.js" />
+    <Content Include="Client\Libraries\Semantic\components\ad.css" />
+    <Content Include="Client\Libraries\Semantic\components\api.js" />
+    <Content Include="Client\Libraries\Semantic\components\breadcrumb.css" />
+    <Content Include="Client\Libraries\Semantic\components\button.css" />
+    <Content Include="Client\Libraries\Semantic\components\card.css" />
+    <Content Include="Client\Libraries\Semantic\components\checkbox.css" />
+    <Content Include="Client\Libraries\Semantic\components\checkbox.js" />
+    <Content Include="Client\Libraries\Semantic\components\comment.css" />
+    <Content Include="Client\Libraries\Semantic\components\dimmer.css" />
+    <Content Include="Client\Libraries\Semantic\components\dimmer.js" />
+    <Content Include="Client\Libraries\Semantic\components\divider.css" />
+    <Content Include="Client\Libraries\Semantic\components\dropdown.css" />
+    <Content Include="Client\Libraries\Semantic\components\dropdown.js" />
+    <Content Include="Client\Libraries\Semantic\components\feed.css" />
+    <Content Include="Client\Libraries\Semantic\components\flag.css" />
+    <Content Include="Client\Libraries\Semantic\components\form.css" />
+    <Content Include="Client\Libraries\Semantic\components\form.js" />
+    <Content Include="Client\Libraries\Semantic\components\grid.css" />
+    <Content Include="Client\Libraries\Semantic\components\header.css" />
+    <Content Include="Client\Libraries\Semantic\components\icon.css" />
+    <Content Include="Client\Libraries\Semantic\components\image.css" />
+    <Content Include="Client\Libraries\Semantic\components\input.css" />
+    <Content Include="Client\Libraries\Semantic\components\item.css" />
+    <Content Include="Client\Libraries\Semantic\components\label.css" />
+    <Content Include="Client\Libraries\Semantic\components\list.css" />
+    <Content Include="Client\Libraries\Semantic\components\loader.css" />
+    <Content Include="Client\Libraries\Semantic\components\menu.css" />
+    <Content Include="Client\Libraries\Semantic\components\message.css" />
+    <Content Include="Client\Libraries\Semantic\components\modal.css" />
+    <Content Include="Client\Libraries\Semantic\components\modal.js" />
+    <Content Include="Client\Libraries\Semantic\components\nag.css" />
+    <Content Include="Client\Libraries\Semantic\components\nag.js" />
+    <Content Include="Client\Libraries\Semantic\components\popup.css" />
+    <Content Include="Client\Libraries\Semantic\components\popup.js" />
+    <Content Include="Client\Libraries\Semantic\components\progress.css" />
+    <Content Include="Client\Libraries\Semantic\components\progress.js" />
+    <Content Include="Client\Libraries\Semantic\components\rail.css" />
+    <Content Include="Client\Libraries\Semantic\components\rating.css" />
+    <Content Include="Client\Libraries\Semantic\components\rating.js" />
+    <Content Include="Client\Libraries\Semantic\components\reset.css" />
+    <Content Include="Client\Libraries\Semantic\components\reveal.css" />
+    <Content Include="Client\Libraries\Semantic\components\search.css" />
+    <Content Include="Client\Libraries\Semantic\components\search.js" />
+    <Content Include="Client\Libraries\Semantic\components\segment.css" />
+    <Content Include="Client\Libraries\Semantic\components\shape.css" />
+    <Content Include="Client\Libraries\Semantic\components\shape.js" />
+    <Content Include="Client\Libraries\Semantic\components\sidebar.css" />
+    <Content Include="Client\Libraries\Semantic\components\sidebar.js" />
+    <Content Include="Client\Libraries\Semantic\components\site.css" />
+    <Content Include="Client\Libraries\Semantic\components\site.js" />
+    <Content Include="Client\Libraries\Semantic\components\state.js" />
+    <Content Include="Client\Libraries\Semantic\components\statistic.css" />
+    <Content Include="Client\Libraries\Semantic\components\step.css" />
+    <Content Include="Client\Libraries\Semantic\components\sticky.css" />
+    <Content Include="Client\Libraries\Semantic\components\sticky.js" />
+    <Content Include="Client\Libraries\Semantic\components\tab.css" />
+    <Content Include="Client\Libraries\Semantic\components\tab.js" />
+    <Content Include="Client\Libraries\Semantic\components\table.css" />
+    <Content Include="Client\Libraries\Semantic\components\transition.css" />
+    <Content Include="Client\Libraries\Semantic\components\transition.js" />
+    <Content Include="Client\Libraries\Semantic\components\video.css" />
+    <Content Include="Client\Libraries\Semantic\components\video.js" />
+    <Content Include="Client\Libraries\Semantic\components\visibility.js" />
+    <Content Include="Client\Libraries\Semantic\semantic.css" />
+    <Content Include="Client\Libraries\Semantic\semantic.js" />
+    <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.svg" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.svg" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\images\flags.png" />
+    <Content Include="Client\Libraries\waves\waves.js" />
+    <Content Include="Client\Modules\Common\Views\Error.html" />
+    <Content Include="Client\Modules\Common\Views\ErrorController.js" />
+    <Content Include="Client\Styles\angular-motion.css" />
+    <Content Include="Client\Styles\angular-notify.css" />
+    <Content Include="Client\Styles\angular-ui-switch.css" />
+    <Content Include="Client\Styles\custom.css" />
+    <Content Include="Client\Styles\ivh-treeview.css" />
+    <Content Include="Client\Styles\jquery-ui.css" />
+    <Content Include="Client\Styles\loader.css" />
+    <Content Include="Client\Styles\loader.gif" />
+    <Content Include="Client\Styles\ng-sortable.style.css" />
+    <Content Include="Client\Styles\simple-sidebar.css" />
+    <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Styles\ui-grid-custom.css" />
+    <Content Include="Client\Styles\ui-grid.css" />
+    <Content Include="Client\Styles\ui-grid.svg" />
+    <Content Include="Client\Styles\waves.css" />
+    <Content Include="Client\Templates\Grid\CellAction.html" />
+    <Content Include="Client\Templates\Grid\CellTemplate.html" />
+    <Content Include="Client\Templates\Grid\ClickableCellTemplate.html" />
+    <Content Include="Client\Templates\Grid\ExpandableRowGridTemplate.html" />
+    <Content Include="Client\Templates\Grid\HeaderTemplate.html" />
+    <Content Include="Client\Templates\Grid\ProgressCellTemplate.html" />
+    <Content Include="Client\Templates\Grid\RowTemplate.html" />
+    <Content Include="Client\Views\ChartPrototypes\AMChart.html" />
+    <Content Include="Client\Views\ChartPrototypes\CanvasJSChart.html" />
+    <Content Include="Client\Views\ChartPrototypes\FusionChart.html" />
+    <Content Include="Client\Views\ChartPrototypes\HighChart.html" />
+    <Content Include="Client\Views\ChartPrototypes\HighChartSparkline.html" />
+    <Content Include="Client\Views\ChartPrototypes\ZingChart.html" />
+    <Content Include="Client\Views\Default.html" />
+    <Content Include="Client\Views\TestView.html" />
+    <Content Include="Client\Views\TreeView.html" />
+    <Content Include="Global.asax" />
+    <Content Include="Client\CSViews\Home\Index.cshtml" />
+    <Content Include="Client\CSViews\_ViewStart.cshtml" />
+    <Content Include="Client\CSViews\Web.config" />
+    <Content Include="Client\Libraries\Angular\angular-animate.min.js.map" />
+    <Content Include="Client\Libraries\Angular\angular-route.min.js.map" />
+    <Content Include="Client\Libraries\Angular\angular.min.js.map" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\.gitignore" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\packages" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\release" />
+    <Content Include="Client\Libraries\Angular\meteor\example\.meteor\versions" />
+    <Content Include="Client\Libraries\Angular\meteor\example\package.json" />
+    <Content Include="Client\Libraries\Angular\meteor\example\packages\Sortable" />
+    <Content Include="Client\Libraries\Angular\meteor\example\README.md" />
+    <Content Include="Client\Libraries\Angular\meteor\example\run.bat" />
+    <Content Include="Client\Libraries\Angular\meteor\example\run.sh" />
+    <Content Include="Client\Libraries\Angular\meteor\publish.sh" />
+    <Content Include="Client\Libraries\Angular\meteor\README.md" />
+    <Content Include="Client\Libraries\Angular\meteor\runtests.sh" />
+    <Content Include="Client\Libraries\Bootstrap\bootstrap.css.map" />
+    <Content Include="Client\Libraries\Charts\AMChart\plugins\responsive\readme.md" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.eot" />
+    <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.ttf" />
+    <Content Include="Client\Libraries\Semantic\themes\basic\assets\fonts\icons.woff" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.eot" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.otf" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.ttf" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.woff" />
+    <Content Include="Client\Libraries\Semantic\themes\default\assets\fonts\icons.woff2" />
+    <Content Include="Client\Libraries\waves\waves.min.js.map" />
+    <Content Include="Client\Styles\ui-grid.eot" />
+    <Content Include="Client\Styles\ui-grid.ttf" />
+    <Content Include="Client\Styles\ui-grid.woff" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55089</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55089/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,80 @@
+﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData"> 
+    <vr-choices onselectionchanged="ctrl.viewVisibilityChanged" ng-show="ctrl.updateItems.length > 0">
+        <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
+        <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
+    </vr-choices>
+    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle">
+        <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
+
+        </div>
+        <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}" ng-sortable="itemsSortable">
+            <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block'}">
+                <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
+        <div id="gridBody">
+            <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
+               
+            </div>
+        </div>
+    </div>
+    <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
+        <div id="gridBody_2">
+            <div id="rowSection2" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.updateItems">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-show="ctrl.showPager">
+    <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
+</div>
+
+<div id="rowTemplate">
+    <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
+        <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
+            <label style="height: 9px;" class=" hand-cursor" ng-click="ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
+                <span class="glyphicon glyphicon-plus" style="top: -4px; left: 2px"></span>
+            </label>
+            <label style="height: 9px;" class=" hand-cursor" ng-click="ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
+                <span class="glyphicon glyphicon-minus" style="top: -4px; left: 2px"></span>
+            </label>
+        </div>
+        <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
+            <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block', 'border-left': $index != 0 ? colDef.borderRight : ''}">
+                <div class="vr-datagrid-cell">
+                    <div class="vr-datagrid-celltext">
+                        <vr-datagridcell htmltemplate='colDef.cellTemplate'></vr-datagridcell>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div ng-style="{'width': ctrl.actionsColumnWidth, 'display':'inline-block'}" ng-show="ctrl.isActionMenuVisible(dataItem)">
+            <div class="vr-datagrid-cell">
+                <div class="vr-datagrid-celltext">
+                    <div ng-mouseleave="show = false">
+                        <label style="height:9px" class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;ctrl.adjustPosition($event)">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                        </label>
+                        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
+                            <li role="presentation">
+                                <div ng-repeat="action in ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
+                                    <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divExpandableRowContent_{{$index}}" ng-show="isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
+        <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
+        <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}"></div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿<script src="/Client/Libraries/Charts/ZingChart/zingchart.min.js"></script>
+
+<h1>{{model}}</h1>
+<div>
+    <div ng-repeat="item in data" style="width:175px;display:inline-block">
+        <input type="checkbox" ng-click="loadChart()" ng-model="item.selected" />{{item.ZoneName}}
+    </div>
+</div>
+<div id="chartDiv" style="height:500px;width:700px;display:inline-block"></div>
+
+<div id="chartDiv2" style="height: 500px; width: 700px; display: inline-block; "></div>
+<!--<div ng-repeat="item in data2">
+    <input type="checkbox" ng-click="updateChart2()" ng-model="item.selected" />{{item.ZoneName}}
+</div>-->
+<div id="chartDiv3" style="height: 500px; width: 700px;"></div>
+
