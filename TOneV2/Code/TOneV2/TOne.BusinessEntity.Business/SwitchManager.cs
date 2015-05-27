@@ -35,14 +35,13 @@ namespace TOne.BusinessEntity.Business
             bool updateActionSucc = dataManager.UpdateSwitch(switchObject);
             TOne.Entities.UpdateOperationOutput<Switch> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<Switch>();
 
-            updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = switchObject;
             }
+            else
+                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
             return updateOperationOutput;
         }
 
@@ -51,8 +50,6 @@ namespace TOne.BusinessEntity.Business
         {
             TOne.Entities.OperationResults.InsertOperationOutput<Switch> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<Switch>();
 
-            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
             int switchId = -1;
 
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
@@ -64,6 +61,8 @@ namespace TOne.BusinessEntity.Business
                 switchObject.SwitchId = switchId;
                 insertOperationOutput.InsertedObject = switchObject;
             }
+            else
+                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
             return insertOperationOutput;
         }
     }
