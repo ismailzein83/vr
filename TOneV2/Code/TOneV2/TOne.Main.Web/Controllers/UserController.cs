@@ -39,7 +39,7 @@ namespace TOne.Main.Web.Controllers
         }
 
         [HttpPost]
-        public TOne.Entities.OperationResults.InsertOperationOutput<User> AddUser(User userObject)
+        public TOne.Entities.InsertOperationOutput<User> AddUser(User userObject)
         {
             UserManager manager = new UserManager();
             return manager.AddUser(userObject);

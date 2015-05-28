@@ -22,15 +22,15 @@ namespace TOne.Business
             return datamanager.GetUser(userId);
         }
 
-        public TOne.Entities.OperationResults.InsertOperationOutput<User> AddUser(User userObject)
+        public TOne.Entities.InsertOperationOutput<User> AddUser(User userObject)
         {
             //IUserDataManager datamanager = DataManagerFactory.GetDataManager<IUserDataManager>();
             //return datamanager.AddUser(user);
 
 
-            TOne.Entities.OperationResults.InsertOperationOutput<User> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<User>();
+            TOne.Entities.InsertOperationOutput<User> insertOperationOutput = new TOne.Entities.InsertOperationOutput<User>();
 
-            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+            insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
 
@@ -39,7 +39,7 @@ namespace TOne.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Succeeded;
                 userObject.UserId = userId;
                 insertOperationOutput.InsertedObject = userObject;
             }

@@ -18,17 +18,16 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            getData();
         };
 
         $scope.loadMoreData = function () {
-            if (stopPaging)
-                return;
             return getData();
         }
 
         $scope.searchClicked = function () {
-            stopPaging = false;
-            return getData(true);
+            mainGridAPI.clearDataAndContinuePaging();
+            return getData();
         };
 
         $scope.AddNewUser = function () {
@@ -79,23 +78,14 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
             });
 
         });
-
-        getData(true);
     }
 
-    function getData(startFromFirstRow) {
-        var fromRow;
-        if (startFromFirstRow) {
-            fromRow = 1;
-            $scope.users.length = 0;
-        }
-        else
-            fromRow = $scope.users.length + 1;
-        var toRow = fromRow + 20 - 1;
+    function getData() {
+        var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
         var email = $scope.email != undefined ? $scope.email : '';
-        return UsersAPIService.GetFilteredUsers(fromRow, toRow, name, email).then(function (response) {
+        return UsersAPIService.GetFilteredUsers(pageInfo.fromRow, pageInfo.toRow, name, email).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.users.push(itm);
             });

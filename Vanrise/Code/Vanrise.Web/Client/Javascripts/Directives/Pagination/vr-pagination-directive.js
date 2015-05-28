@@ -20,7 +20,19 @@ app.directive('vrPagination', [function () {
                         toRow: fromRow + ctrl.pagersettings.itemsPerPage - 1
                     };
                 };
+
+                ctrl.pageChanged = function () {
+                    if (ctrl.pagersettings.pageChanged != undefined)
+                        ctrl.pagersettings.pageChanged();
+                };
+
+                ctrl.pageSizeChanged = function () {
+                    if (ctrl.pagersettings.pageChanged != undefined)
+                        ctrl.pagersettings.pageChanged();
+                };
             }
+
+
         },
         controllerAs: 'ctrl',
         bindToController: true,
