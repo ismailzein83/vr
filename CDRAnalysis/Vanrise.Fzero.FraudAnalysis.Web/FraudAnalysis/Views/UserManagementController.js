@@ -1,11 +1,11 @@
-﻿UserManagementController.$inject = ['$scope', '$q', 'UsersAPIService', 'VRModalService', 'VRNotificationService'];
+﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService'];
 
 
-function UserManagementController($scope, $q, UsersAPIService, VRModalService, VRNotificationService) {
+function StrategyManagementController($scope, StrategyAPIService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
-    var stopPaging;
+   
 
     defineScope();
     load();
@@ -14,34 +14,29 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
 
         $scope.gridMenuActions = [];
 
-        $scope.users = [];
+        $scope.strategies = [];
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
 
-        $scope.loadMoreData = function () {
-            if (stopPaging)
-                return;
-            return getData();
-        }
+       
 
         $scope.searchClicked = function () {
-            stopPaging = false;
             return getData(true);
         };
 
-        $scope.AddNewUser = function () {
+        $scope.AddNewStrategy = function () {
 
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "New User";
-                modalScope.onUserAdded = function (user) {
-                    mainGridAPI.itemAdded(user);
+                modalScope.title = "New Strategy";
+                modalScope.onStrategyAdded = function (strategy) {
+                    mainGridAPI.itemAdded(strategy);
                 };
             };
-            VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Main/Views/StrategyEditor.html', null, settings);
 
         }
     }
@@ -51,7 +46,7 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
             this.name = name;
             this.clicked = function (dataItem) {
                 var params = {
-                    userId: dataItem.UserId
+                    strategyId: dataItem.StrategyId
                 };
 
                 var settings = {
@@ -60,17 +55,16 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
 
                 settings.onScopeReady = function (modalScope) {
                     modalScope.title = title;
-                    modalScope.onUserUpdated = function (user) {
-                        mainGridAPI.itemUpdated(user);
+                    modalScope.onStrategyUpdated = function (strategy) {
+                        mainGridAPI.itemUpdated(strategy);
                     };
                 };
                 VRModalService.showModal(url, params, settings);
             };
         }
 
-        arrMenuAction.push(new MenuAction("Edit", "40%", "Edit User", "/Client/Modules/Main/Views/UserEditor.html"));
-        arrMenuAction.push(new MenuAction("Reset Password", "40%", "Reset Password", "/Client/Modules/Main/Views/ResetPasswordEditor.html"));
-        arrMenuAction.push(new MenuAction("Roles", "40%", "Roles", "/Client/Modules/Main/Views/RolesEditor.html"));
+        arrMenuAction.push(new MenuAction("Edit", "40%", "Edit Strategy", "/Client/Modules/Main/Views/StrategyEditor.html"));
+       
 
         arrMenuAction.forEach(function (item) {
             $scope.gridMenuActions.push({
@@ -84,24 +78,11 @@ function UserManagementController($scope, $q, UsersAPIService, VRModalService, V
     }
 
     function getData(startFromFirstRow) {
-        var fromRow;
-        if (startFromFirstRow) {
-            fromRow = 1;
-            $scope.users.length = 0;
-        }
-        else
-            fromRow = $scope.users.length + 1;
-        var toRow = fromRow + 20 - 1;
-
-        var name = $scope.name != undefined ? $scope.name : '';
-        var email = $scope.email != undefined ? $scope.email : '';
-        return UsersAPIService.GetFilteredUsers(fromRow, toRow, name, email).then(function (response) {
+        return StrategyAPIService.GetAllStrategies().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.users.push(itm);
+                $scope.strategies.push(itm);
             });
-            if (response.length < 20)
-                stopPaging = true;
         });
     }
 }
-appControllers.controller('UserManagementController', UserManagementController);
+appControllers.controller('StrategyManagementController', StrategyManagementController);

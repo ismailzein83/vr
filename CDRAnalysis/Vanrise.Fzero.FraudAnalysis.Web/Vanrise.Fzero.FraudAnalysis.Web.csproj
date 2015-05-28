@@ -146,8 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
-    <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
-    <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\UserManagement.html" />
     <Content Include="FraudAnalysis\Views\UserManagementController.js" />
   </ItemGroup>
