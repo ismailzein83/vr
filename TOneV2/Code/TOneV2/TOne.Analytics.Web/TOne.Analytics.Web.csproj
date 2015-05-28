@@ -123,6 +123,7 @@
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
+    <Content Include="Analytics\Views\CDR\CDRReport.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
     <Content Include="Analytics\Views\Traffic Statistics\ZoneMonitor.html" />
