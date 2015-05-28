@@ -15,10 +15,15 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         var measures = [];
         var currentData;
 
-        defineScopeObjects();
-        defineScopeMethods();
+        loadParameters();
+        defineScope();
         load();
-        function defineScopeObjects() {
+
+        function loadParameters() {
+
+        }
+
+        function defineScope() {
             $scope.currentSearchCriteria = {
                 groupKeys: []
             };
@@ -40,22 +45,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             }
             $scope.testModel = 'ZoneMonitorController';
             
-            $scope.groupKeys = [
-                {
-                    title: "Zone",
-                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
-                    gridHeader: "Zone"
-                },
-                {
-                    title: "Customer",
-                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
-                    gridHeader: "Customer"
-                },
-                {
-                    title: "Supplier",
-                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
-                    gridHeader: "Supplier"
-                }];
+            defineGroupKeys();
             $scope.selectedGroupKeys = [];
             $scope.selectedGroupKeys.push($scope.groupKeys[0]);
 
@@ -85,57 +75,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 }
             };
 
-            $scope.gridMenuActions = [{
-                name: "CDRs",
-                clicked: function (dataItem) {
-                    var modalSettings = {
-                        useModalTemplate: true,
-                        width: "80%",
-                        maxHeight: "800px"
-                    };
-                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
-                }
-            },
-            {
-                name: "Show Confirmation",
-                clicked: function (dataItem) {
-                    VRNotificationService.showConfirmation('Are you sure you want to delete?')
-                    .then(function (result) {
-                        if (result)
-                            console.log('Confirmed');
-                        else
-                            console.log('not confirmed');
-                    });
-                }
-            },
-            {
-                name: "Show Error",
-                clicked: function (dataItem) {
-                    VRNotificationService.showError('Error Message');
-                }
-            },
-            {
-                name: "Show Warning",
-                clicked: function (dataItem) {
-                    VRNotificationService.showWarning('Warning Message');
-                }
-            },
-            {
-                name: "Show Success",
-                clicked: function (dataItem) {
-                    VRNotificationService.showSuccess('Success Message');
-                }
-            },
-            {
-                name: "Show Information",
-                clicked: function (dataItem) {
-                    VRNotificationService.showInformation('Information Message');
-                }
-            }];
-        }
-        
-        function defineScopeMethods() {
-
+            defineMenuActions();
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
                 //chartSelectedMeasureAPI.onDataItemClicked = function (selectedEntity) {
@@ -221,6 +161,75 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error);
             });
+        }
+
+        function defineGroupKeys() {
+            $scope.groupKeys = [
+               {
+                   title: "Zone",
+                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
+                   gridHeader: "Zone"
+               },
+               {
+                   title: "Customer",
+                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
+                   gridHeader: "Customer"
+               },
+               {
+                   title: "Supplier",
+                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
+                   gridHeader: "Supplier"
+               }];
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "CDRs",
+                clicked: function (dataItem) {
+                    var modalSettings = {
+                        useModalTemplate: true,
+                        width: "80%",
+                        maxHeight: "800px"
+                    };
+                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
+                }
+            },
+            {
+                name: "Show Confirmation",
+                clicked: function (dataItem) {
+                    VRNotificationService.showConfirmation('Are you sure you want to delete?')
+                    .then(function (result) {
+                        if (result)
+                            console.log('Confirmed');
+                        else
+                            console.log('not confirmed');
+                    });
+                }
+            },
+            {
+                name: "Show Error",
+                clicked: function (dataItem) {
+                    VRNotificationService.showError('Error Message');
+                }
+            },
+            {
+                name: "Show Warning",
+                clicked: function (dataItem) {
+                    VRNotificationService.showWarning('Warning Message');
+                }
+            },
+            {
+                name: "Show Success",
+                clicked: function (dataItem) {
+                    VRNotificationService.showSuccess('Success Message');
+                }
+            },
+            {
+                name: "Show Information",
+                clicked: function (dataItem) {
+                    VRNotificationService.showInformation('Information Message');
+                }
+            }];
         }
 
         function resetSorting() {
@@ -434,4 +443,4 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         
 };
 
-appControllers.controller('ZoneMonitorController', ZoneMonitorController);
+appControllers.controller('Analytics_ZoneMonitorController', ZoneMonitorController);
