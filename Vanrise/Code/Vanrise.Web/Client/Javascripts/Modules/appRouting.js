@@ -109,7 +109,11 @@ appRouting.config(['$routeProvider',
         when('/User', {
             templateUrl: '/Client/Modules/Main/Views/UserManagement.html',
             controller: 'UserManagementController'
-                    }).
+        }).
+         when('/Role', {
+            templateUrl: '/Client/Modules/Main/Views/RoleManagement.html',
+            controller: 'RoleManagementController'
+        }).
           when('/TestNew', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/TestNew.html',
               controller: 'TestNewController'
