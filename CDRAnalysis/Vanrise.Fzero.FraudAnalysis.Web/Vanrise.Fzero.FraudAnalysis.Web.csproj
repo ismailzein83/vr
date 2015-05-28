@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Controllers\StrategyController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,10 +123,33 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Business\Vanrise.Fzero.FraudAnalysis.Business.csproj">
+      <Project>{c195cfd3-948d-447c-83b4-3365d0515ec9}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.MySQL\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj">
+      <Project>{dd4f4480-110d-4bc4-8ea0-688fc59c9b34}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data.MySQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data.SQL\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj">
+      <Project>{ce9ee251-4bb3-457a-925a-7b53a990cf34}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Data\Vanrise.Fzero.FraudAnalysis.Data.csproj">
+      <Project>{521364bc-ae3d-4eca-8392-44a6c1961939}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Entities\Vanrise.Fzero.FraudAnalysis.Entities.csproj">
+      <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Services\APIServices\UsersAPIService.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
+    <Content Include="FraudAnalysis\Views\UserManagement.html" />
+    <Content Include="FraudAnalysis\Views\UserManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
