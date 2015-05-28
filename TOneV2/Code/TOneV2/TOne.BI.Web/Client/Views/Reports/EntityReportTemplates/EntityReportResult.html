@@ -1,10 +1,10 @@
 ﻿<vr-panel ng-controller="BI_EntityReportResultController" vr-loader="isGettingData">
     <vr-row>
         <vr-columns colnum="12">
-            <vr-datagrid datasource="data">
+            <vr-datagrid datasource="data" on-ready="gridReady">
                 <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
                 <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridexpandablerow ng-if="dataItem.timeDimensionType < 3">
+                <vr-datagridexpandablerow ng-if="timeDimensionValue < 4">
                     <div ng-include="'/Client/Modules/BI/Views/Reports/EntityReportTemplates/EntityReportResult.html'"></div>
                 </vr-datagridexpandablerow>
             </vr-datagrid>

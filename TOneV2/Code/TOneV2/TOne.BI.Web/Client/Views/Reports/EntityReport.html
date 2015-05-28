@@ -28,13 +28,7 @@
     </vr-row>
     <vr-row >
         <vr-columns colnum="12" vr-loader="isGettingData">
-            <vr-datagrid datasource="data">
-                <vr-datagridcolumn headertext="'Time'" field="'dateTimeValue'"></vr-datagridcolumn>
-                <vr-datagridcolumn ng-repeat="measureType in measureTypes" headertext="measureType.description" field="'Values[' + $index + ']'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridexpandablerow>
-                    <div ng-include="'/Client/Modules/BI/Views/Reports/EntityReportTemplates/EntityReportResult.html'"></div>
-                </vr-datagridexpandablerow>
-            </vr-datagrid>
+            <div ng-include="'/Client/Modules/BI/Views/Reports/EntityReportTemplates/EntityReportResult.html'"></div>
         </vr-columns>
     </vr-row>
     

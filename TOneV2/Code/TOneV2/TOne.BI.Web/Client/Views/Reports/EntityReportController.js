@@ -1,7 +1,7 @@
 ﻿EntityReportController.$inject = ['$scope', 'UtilsService', 'BITimeDimensionTypeEnum', 'BIEntityTypeEnum', 'BIMeasureTypeEnum', 'BIAPIService', 'BIUtilitiesService', 'VRNavigationService'];
 
 function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, BIAPIService, BIUtilitiesService, VRNavigationService) {
-
+        var resultAPI;
         defineScope();
         load();
         loadParametresValue();       
@@ -20,26 +20,14 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
 
             }
             $scope.search = function () {
-                $scope.isGettingData = true;
-                var measureTypes = [];
-                angular.forEach($scope.measureTypes, function (measureType) {
-                    measureTypes.push(measureType.value);
-                });
-                return BIAPIService.GetEntityMeasuresValues($scope.entityType, $scope.entityId, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, measureTypes)
-                 .then(function (response) {
 
-                     $scope.data.length = 0;
-                     BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
-                     angular.forEach(response, function (itm) {
-                         itm.timeDimensionType = $scope.selectedTimeDimensionType.value;
-                         $scope.data.push(itm);
-                     });
-                     $scope.isGettingData = false;
+                return resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);;
 
-                 }).catch(function (error) {
-                     $scope.isGettingData = false;
-                 });
+            }
 
+            $scope.onEntityReportResultReady = function (api) {
+                resultAPI = api
+                resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);
             }
         }
 
