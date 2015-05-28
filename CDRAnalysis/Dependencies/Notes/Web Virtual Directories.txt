@@ -1,0 +1,6 @@
+﻿Expand the IIS web site of TOne.Web project:
+ - Add the following virtual directory under the root site:
+Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+
+ - Add the following virtual directories under Client > Modules folder:
+FraudAnalysis			C:\TFS\CDRAnalysis\Vanrise.Fzero.FraudAnalysis.Web\FraudAnalysis

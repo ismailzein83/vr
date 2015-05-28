@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql", "Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql\Vanrise.Fzero.MobileCDRAnalysis.Services.Mysql.csproj", "{0A69317A-3793-454B-BE3B-C864AA76EF6D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnalysis.Website(1)", "Vanrise.Fzero.MobileCDRAnalysis.Website", "{92E99B9E-D751-410B-BCD8-1A7FAB030D39}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -49,7 +49,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		SlnRelativePath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dependencies", "Dependencies\Dependencies.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Dependencies\Resources.csproj", "{FEB021A1-D6A3-4AC9-BCCD-A56DAEA69983}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.CDRImport.Data.MYSQL", "Vanrise.Fzero.CDRImport.Data.MYSQL\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj", "{656B4BE0-3309-4F19-9F73-58EEDB56B20F}"
 EndProject
@@ -77,9 +77,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1FFAF5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Data.SQL", "Vanrise.Fzero.FraudAnalysis.Data.SQL\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj", "{CE9EE251-4BB3-457A-925A-7B53A990CF34}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj", "{C527C7B2-A481-4D1D-B25A-4A540E812153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRAnalysis.Web", "CDRAnalysis.Web\CDRAnalysis.Web.csproj", "{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.FraudAnalysis.Web", "Vanrise.Fzero.FraudAnalysis.Web\Vanrise.Fzero.FraudAnalysis.Web.csproj", "{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 26
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -126,46 +136,62 @@ Global
 		SccProjectName11 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccLocalPath11 = Vanrise.Fzero.MobileCDRAnalysis.Website
 		SccProjectEnlistmentChoice11 = 2
-		SccProjectUniqueName12 = Dependencies\\Dependencies.csproj
+		SccProjectUniqueName12 = Vanrise.Fzero.CDRImport.Data.MYSQL\\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj
 		SccProjectTopLevelParentUniqueName12 = CDRAnalysis.sln
-		SccProjectName12 = Dependencies
-		SccLocalPath12 = Dependencies
-		SccProjectUniqueName13 = Vanrise.Fzero.CDRImport.Data.MYSQL\\Vanrise.Fzero.CDRImport.Data.MYSQL.csproj
+		SccProjectName12 = Vanrise.Fzero.CDRImport.Data.MYSQL
+		SccLocalPath12 = Vanrise.Fzero.CDRImport.Data.MYSQL
+		SccProjectUniqueName13 = Vanrise.Fzero.FraudAnalysis.Data\\Vanrise.Fzero.FraudAnalysis.Data.csproj
 		SccProjectTopLevelParentUniqueName13 = CDRAnalysis.sln
-		SccProjectName13 = Vanrise.Fzero.CDRImport.Data.MYSQL
-		SccLocalPath13 = Vanrise.Fzero.CDRImport.Data.MYSQL
-		SccProjectUniqueName14 = Vanrise.Fzero.FraudAnalysis.Data\\Vanrise.Fzero.FraudAnalysis.Data.csproj
+		SccProjectName13 = Vanrise.Fzero.FraudAnalysis.Data
+		SccLocalPath13 = Vanrise.Fzero.FraudAnalysis.Data
+		SccProjectUniqueName14 = Vanrise.Fzero.FraudAnalysis.Data.MySQL\\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj
 		SccProjectTopLevelParentUniqueName14 = CDRAnalysis.sln
-		SccProjectName14 = Vanrise.Fzero.FraudAnalysis.Data
-		SccLocalPath14 = Vanrise.Fzero.FraudAnalysis.Data
-		SccProjectUniqueName15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL\\Vanrise.Fzero.FraudAnalysis.Data.MySQL.csproj
+		SccProjectName14 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
+		SccLocalPath14 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
+		SccProjectUniqueName15 = Vanrise.Fzero.FraudAnalysis.Entities\\Vanrise.Fzero.FraudAnalysis.Entities.csproj
 		SccProjectTopLevelParentUniqueName15 = CDRAnalysis.sln
-		SccProjectName15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
-		SccLocalPath15 = Vanrise.Fzero.FraudAnalysis.Data.MySQL
-		SccProjectUniqueName16 = Vanrise.Fzero.FraudAnalysis.Entities\\Vanrise.Fzero.FraudAnalysis.Entities.csproj
+		SccProjectName15 = Vanrise.Fzero.FraudAnalysis.Entities
+		SccLocalPath15 = Vanrise.Fzero.FraudAnalysis.Entities
+		SccProjectUniqueName16 = Vanrise.Fzero.FraudAnalysis.Business\\Vanrise.Fzero.FraudAnalysis.Business.csproj
 		SccProjectTopLevelParentUniqueName16 = CDRAnalysis.sln
-		SccProjectName16 = Vanrise.Fzero.FraudAnalysis.Entities
-		SccLocalPath16 = Vanrise.Fzero.FraudAnalysis.Entities
-		SccProjectUniqueName17 = Vanrise.Fzero.FraudAnalysis.Business\\Vanrise.Fzero.FraudAnalysis.Business.csproj
+		SccProjectName16 = Vanrise.Fzero.FraudAnalysis.Business
+		SccLocalPath16 = Vanrise.Fzero.FraudAnalysis.Business
+		SccProjectUniqueName17 = Vanrise.Fzero.FraudAnalysis.BP\\Vanrise.Fzero.FraudAnalysis.BP.csproj
 		SccProjectTopLevelParentUniqueName17 = CDRAnalysis.sln
-		SccProjectName17 = Vanrise.Fzero.FraudAnalysis.Business
-		SccLocalPath17 = Vanrise.Fzero.FraudAnalysis.Business
-		SccProjectUniqueName18 = Vanrise.Fzero.FraudAnalysis.BP\\Vanrise.Fzero.FraudAnalysis.BP.csproj
+		SccProjectName17 = Vanrise.Fzero.FraudAnalysis.BP
+		SccLocalPath17 = Vanrise.Fzero.FraudAnalysis.BP
+		SccProjectUniqueName18 = Vanrise.Fzero.FraudAnalysis.Arguments\\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj
 		SccProjectTopLevelParentUniqueName18 = CDRAnalysis.sln
-		SccProjectName18 = Vanrise.Fzero.FraudAnalysis.BP
-		SccLocalPath18 = Vanrise.Fzero.FraudAnalysis.BP
-		SccProjectUniqueName19 = Vanrise.Fzero.FraudAnalysis.Arguments\\Vanrise.Fzero.FraudAnalysis.BP.Arguments.csproj
+		SccProjectName18 = Vanrise.Fzero.FraudAnalysis.Arguments
+		SccLocalPath18 = Vanrise.Fzero.FraudAnalysis.Arguments
+		SccProjectUniqueName19 = Vanrise.Fzero.FraudAnalysis.BP.Activities\\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj
 		SccProjectTopLevelParentUniqueName19 = CDRAnalysis.sln
-		SccProjectName19 = Vanrise.Fzero.FraudAnalysis.Arguments
-		SccLocalPath19 = Vanrise.Fzero.FraudAnalysis.Arguments
-		SccProjectUniqueName20 = Vanrise.Fzero.FraudAnalysis.BP.Activities\\Vanrise.Fzero.FraudAnalysis.BP.Activities.csproj
+		SccProjectName19 = Vanrise.Fzero.FraudAnalysis.BP.Activities
+		SccLocalPath19 = Vanrise.Fzero.FraudAnalysis.BP.Activities
+		SccProjectUniqueName20 = Vanrise.Fzero.FraudAnalysis.Data.SQL\\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName20 = CDRAnalysis.sln
-		SccProjectName20 = Vanrise.Fzero.FraudAnalysis.BP.Activities
-		SccLocalPath20 = Vanrise.Fzero.FraudAnalysis.BP.Activities
-		SccProjectUniqueName21 = Vanrise.Fzero.FraudAnalysis.Data.SQL\\Vanrise.Fzero.FraudAnalysis.Data.SQL.csproj
+		SccProjectName20 = Vanrise.Fzero.FraudAnalysis.Data.SQL
+		SccLocalPath20 = Vanrise.Fzero.FraudAnalysis.Data.SQL
+		SccProjectUniqueName21 = ..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName21 = CDRAnalysis.sln
-		SccProjectName21 = Vanrise.Fzero.FraudAnalysis.Data.SQL
-		SccLocalPath21 = Vanrise.Fzero.FraudAnalysis.Data.SQL
+		SccProjectName21 = ../Vanrise/Code/Vanrise.Web.Base
+		SccLocalPath21 = ..\\Vanrise\\Code\\Vanrise.Web.Base
+		SccProjectUniqueName22 = ..\\Vanrise\\Code\\Vanrise.Web\\Vanrise.Web.csproj
+		SccProjectTopLevelParentUniqueName22 = CDRAnalysis.sln
+		SccProjectName22 = ../Vanrise/Code/Vanrise.Web
+		SccLocalPath22 = ..\\Vanrise\\Code\\Vanrise.Web
+		SccProjectUniqueName23 = CDRAnalysis.Web\\CDRAnalysis.Web.csproj
+		SccProjectTopLevelParentUniqueName23 = CDRAnalysis.sln
+		SccProjectName23 = CDRAnalysis.Web
+		SccLocalPath23 = CDRAnalysis.Web
+		SccProjectUniqueName24 = Vanrise.Fzero.FraudAnalysis.Web\\Vanrise.Fzero.FraudAnalysis.Web.csproj
+		SccProjectTopLevelParentUniqueName24 = CDRAnalysis.sln
+		SccProjectName24 = Vanrise.Fzero.FraudAnalysis.Web
+		SccLocalPath24 = Vanrise.Fzero.FraudAnalysis.Web
+		SccProjectUniqueName25 = Dependencies\\Resources.csproj
+		SccProjectTopLevelParentUniqueName25 = CDRAnalysis.sln
+		SccProjectName25 = Dependencies
+		SccLocalPath25 = Dependencies
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -302,6 +328,30 @@ Global
 		{CE9EE251-4BB3-457A-925A-7B53A990CF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9EE251-4BB3-457A-925A-7B53A990CF34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE9EE251-4BB3-457A-925A-7B53A990CF34}.Release|x64.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|x64.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|x64.ActiveCfg = Release|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15}.Release|x64.ActiveCfg = Release|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,5 +375,9 @@ Global
 		{2E88EE6A-AB0D-4BB4-87BD-EF9DC4079FE8} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{DD806597-E531-469D-847D-6DE0354889DD} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
 		{CE9EE251-4BB3-457A-925A-7B53A990CF34} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{459A8A67-4CBC-4C83-A94F-53ADA1178FA4} = {2068D29A-9DB3-4E50-83A3-C360CD6C3AC4}
+		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
+		{9BC5681C-2FD8-4A88-858C-F4DA9CCA7C15} = {3CAFC6CA-8D5A-4FAE-9661-2B90354B0D07}
 	EndGlobalSection
 EndGlobal
