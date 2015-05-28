@@ -125,8 +125,8 @@
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />
     <Content Include="Analytics\Services\APIServices\BillingStatisticsAPIService.js" />
-    <Content Include="Analytics\Views\BillingStatistics\VariationReports.html" />
-    <Content Include="Analytics\Views\BillingStatistics\VariationReportsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReports.html" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReportsController.js" />
     <Content Include="Analytics\Views\CDR\CDRReport.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGrid.html" />
     <Content Include="Analytics\Views\Traffic Statistics\TrafficStatisticsGridController.js" />
