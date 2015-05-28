@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +145,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FraudAnalysis\Services\APIServices\UsersAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\UserManagement.html" />

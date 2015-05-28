@@ -23,7 +23,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
     public class StrategyController : BaseAPIController
     {
         [HttpGet]
-        public IEnumerable<Strategy> GetFilteredStrategys(int fromRow, int toRow, string name, string email)
+        public IEnumerable<Strategy> GetAllStrategies()
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             return ((IEnumerable<Strategy>)(manager.GetAllStrategies()));
