@@ -65,11 +65,11 @@ namespace Vanrise.Fzero.DevRuntime
 
 
 
-            //var Start = DateTime.Parse(dateTimePicker1.Text);
-            //var End = DateTime.Parse(dateTimePicker2.Text);
+            var Start = DateTime.Parse(dateTimePicker1.Text);
+            var End = DateTime.Parse(dateTimePicker2.Text);
 
-            var Start = DateTime.Parse("2015-03-13 23:01:12.000");
-            var End = DateTime.Parse("2015-03-14 06:11:42.000");
+            //var Start = DateTime.Parse("2015-03-13 23:01:12.000");
+            //var End = DateTime.Parse("2015-03-14 06:11:42.000");
 
 
             if (ddlPeriods.SelectedIndex == 0)
