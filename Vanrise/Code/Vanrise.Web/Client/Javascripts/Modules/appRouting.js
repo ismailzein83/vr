@@ -111,6 +111,9 @@ appRouting.config(['$routeProvider',
               templateUrl: '/Client/Modules/BusinessEntity/Views/TestNew.html',
               controller: 'TestNewController'
           }).
+          when('/Strategy', {
+              templateUrl: '/Client/Modules/FraudAnalysis/Views/StrategyManagement.html'
+          }).
         otherwise({
             redirectTo: '/default'
         });

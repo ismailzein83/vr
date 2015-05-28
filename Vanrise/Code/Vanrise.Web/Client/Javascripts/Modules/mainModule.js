@@ -137,6 +137,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             name: "Others", icon: 'glyphicon-pencil', location: '', childs: [
                { name: "Default", location: '#/Default' },
                 { name: "Test View", location: '#/TestView' },
+                { name: "Strategy Management", location: '#/Strategy' },
                 { name: "ZingChart", location: '#/ZingChart' },
                 { name: "HighChart", location: '#/HighChart' },
                 { name: "HighChartSparkline", location: '#/HighChartSparkline' },
