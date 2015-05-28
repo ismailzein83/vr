@@ -14,50 +14,43 @@ namespace TOne.Main.Web.Controllers
         public int UserId { get; set; }
         public string Password { get; set; }
     }
+
     public class UserController : ApiController
     {
         [HttpGet]
-        public IEnumerable<User> GetUsers(int fromRow, int toRow)
+        public IEnumerable<User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
         {
             UserManager manager = new UserManager();
-            //return ((IEnumerable<User>)(manager.GetUsers())).Skip(pageNumber * pageSize).Take(pageSize);
-            return ((IEnumerable<User>)(manager.GetUsers(fromRow, toRow)));
+            return ((IEnumerable<User>)(manager.GetFilteredUsers(fromRow, toRow, name, email)));
         }
 
         [HttpGet]
-        public void DeleteUser(int Id)
+        public User GetUser(int userId)
         {
             UserManager manager = new UserManager();
-            manager.DeleteUser(Id);
+            return ((User)(manager.GetUser(userId)));
         }
 
         [HttpPost]
-        public bool UpdateUser(User user)
+        public TOne.Entities.UpdateOperationOutput<User> UpdateUser(User userObject)
         {
             UserManager manager = new UserManager();
-            return manager.UpdateUser(user);
+            return manager.UpdateUser(userObject);
         }
 
         [HttpPost]
-        public User AddUser(User user)
+        public TOne.Entities.OperationResults.InsertOperationOutput<User> AddUser(User userObject)
         {
             UserManager manager = new UserManager();
-            return manager.AddUser(user);
+            return manager.AddUser(userObject);
         }
 
 
         [HttpGet]
-        public List<User> SearchUser(string Name, string Email)
+        public bool CheckUserName(string name)
         {
             UserManager manager = new UserManager();
-            return manager.SearchUser(Name, Email);
-        }
-
-        [HttpGet]
-        public bool CheckUserName(string Name)
-        {
-            UserManager manager = new UserManager();
-            return manager.CheckUserName(Name);
+            return manager.CheckUserName(name);
         }
 
         [HttpPost]

@@ -8,17 +8,15 @@ namespace TOne.Data
 {
     public interface IUserDataManager : IDataManager
     {
-        List<User> GetUsers(int fromRow, int toRow);
+        List<User> GetFilteredUsers(int fromRow, int toRow, string name, string email);
 
-        void DeleteUser(int Id);
+        User GetUser(int userId);
 
-        User AddUser(User user);
+        bool AddUser(User user, out int insertedId);
 
         bool UpdateUser(User user);
 
         bool ResetPassword(int userId, string password);
-
-        List<Entities.User> SearchUser(string name, string email);
 
         bool CheckUserName(string name);
     }

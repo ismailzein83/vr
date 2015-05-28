@@ -1,64 +1,42 @@
 ﻿app.service('UsersAPIService', function (BaseAPIService) {
 
     return ({
-        GetUserList: GetUserList,
-        DeleteUser: DeleteUser,
+        GetFilteredUsers: GetFilteredUsers,
+        GetUser: GetUser,
         AddUser: AddUser,
         UpdateUser: UpdateUser,
-        SearchUser: SearchUser,
         CheckUserName: CheckUserName,
         ResetPassword: ResetPassword
     });
 
-    function GetUserList(params) {
-        return BaseAPIService.get("/api/User/GetUsers",
+    function GetFilteredUsers(fromRow, toRow, name, email) {
+        return BaseAPIService.get("/api/User/GetFilteredUsers",
             {
-                fromRow: params.fromRow,
-                toRow: params.toRow
+                fromRow: fromRow,
+                toRow: toRow,
+                name: name,
+                email: email
             }
            );
     }
 
-    function DeleteUser(id) {
-        return BaseAPIService.get("/api/User/DeleteUser",
+    function GetUser(userId) {
+        return BaseAPIService.get("/api/User/GetUser",
             {
-                Id: id
+                UserId: userId
             }
            );
     }
 
     function AddUser(user) {
         return BaseAPIService.post("/api/User/AddUser",
-            {
-                UserId: user.UserId,
-                Name: user.Name,
-                Password: user.Password,
-                Email: user.Email,
-                IsActive: user.IsActive,
-                Description: user.Description
-            }
+            user
            );
     }
 
     function UpdateUser(user) {
         return BaseAPIService.post("/api/User/UpdateUser",
-            {
-                UserId: user.UserId,
-                Name: user.Name,
-                Password: user.Password,
-                Email: user.Email,
-                IsActive: user.IsActive,
-                Description: user.Description
-            }
-           );
-    }
-
-    function SearchUser(name, email) {
-        return BaseAPIService.get("/api/User/SearchUser",
-            {
-                Name: name,
-                Email: email
-            }
+           user
            );
     }
 
@@ -71,12 +49,9 @@
             );
     }
 
-    function ResetPassword(ResetPasswordInput) {
+    function ResetPassword(resetPasswordInput) {
         return BaseAPIService.post("/api/User/ResetPassword",
-            {
-                UserId: ResetPasswordInput.UserId,
-                Password: ResetPasswordInput.Password
-            }
+            resetPasswordInput
            );
     }
 
