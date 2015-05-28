@@ -95,6 +95,9 @@ appRouting.config(['$routeProvider',
         when('/NOC/ZoneMonitor', {
             templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html'
         }).
+        when('/NOC/VariationReports', {
+               templateUrl: '/Client/Modules/Analytics/Views/Billing Statistics/VariationReports.html'
+        }).
           when('/Tree', {
               templateUrl: '/Client/Views/TreeView.html',
               controller: 'TreeController'
