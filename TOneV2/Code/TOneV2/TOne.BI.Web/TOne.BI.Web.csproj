@@ -135,6 +135,8 @@
     <Content Include="Client\Views\Dashboards\ZoneDashboardController.js" />
     <Content Include="Client\Views\Reports\EntityReport.html" />
     <Content Include="Client\Views\Reports\EntityReportController.js" />
+    <Content Include="Client\Views\Reports\EntityReportTemplates\EntityReportResult.html" />
+    <Content Include="Client\Views\Reports\EntityReportTemplates\EntityReportResultController.js" />
     <Content Include="Client\Views\Reports\ZoneDetailsController.js" />
     <Content Include="Client\Views\Reports\ZoneSummaryController.js" />
     <Content Include="Client\Services\bi-utilities-service.js" />

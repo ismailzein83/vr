@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', function (BIAPIService, BIUtilitiesService, BIVisualElementService) {
+app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -20,6 +20,22 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
             biDataGrid.initializeController();
 
             biDataGrid.defineAPI();
+            $scope.openReportEntityModal = function (item) {
+
+                var parameters = {
+                    EntityType: item.EntityType,
+                    EntityName: item.EntityName,
+                    EntityId: item.EntityId
+                }
+                var modalSettings = {
+                    useModalTemplate: true,
+                    width: "80%",
+                    maxHeight: "800px",
+                    title: item.EntityName
+                };
+                VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
+               
+            }
 
         },
         controllerAs: 'ctrl',
@@ -32,7 +48,7 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
         },
         template: function () {
             return '<vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
-                                        + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'"></vr-datagridcolumn>'
+                                        + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.description" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
                                     + '</vr-datagrid>';
@@ -75,7 +91,6 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
         function refreshDataGrid(response) {
             ctrl.data = response;
         }
-
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }

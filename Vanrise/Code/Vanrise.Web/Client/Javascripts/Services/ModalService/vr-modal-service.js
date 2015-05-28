@@ -28,6 +28,8 @@ app.service('VRModalService', function ($modal, $rootScope, VRNavigationService,
             modalScope.modalWidth = settings.width;
             modalScope.modalMaxHeight = settings.maxHeight;
 
+            modalScope.title = settings.title;
+
             if (settings.onScopeReady != undefined)
                 settings.onScopeReady(modalScope);
         }

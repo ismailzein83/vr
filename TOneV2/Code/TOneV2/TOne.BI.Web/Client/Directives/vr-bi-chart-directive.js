@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', function (BIAPIService, BIUtilitiesService, BIVisualElementService) {
+app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualElementService', 'VRModalService', function (BIAPIService, BIUtilitiesService, BIVisualElementService, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -16,7 +16,7 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService);
+            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, VRModalService);
             biChart.initializeController();
 
             biChart.defineAPI();
@@ -37,13 +37,27 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
 
     };
 
-    function BIChart(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService) {
+    function BIChart(ctrl, settings, retrieveDataOnLoad, BIAPIService, BIVisualElementService, VRModalService) {
 
         var chartAPI;
 
         function initializeController() {
             ctrl.onChartReady = function (api) {
                 chartAPI = api;
+                chartAPI.onDataItemClicked = function (item) {
+                    var parameters = {
+                        EntityType: item.EntityType,
+                        EntityName: item.EntityName,
+                        EntityId: item.EntityId
+                    }
+                    var modalSettings = {
+                        useModalTemplate: true,
+                        width: "80%",
+                        maxHeight: "800px",
+                        title: item.EntityName
+                    };
+                    VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
+                };
                 if (retrieveDataOnLoad)
                     retrieveData();
             };
