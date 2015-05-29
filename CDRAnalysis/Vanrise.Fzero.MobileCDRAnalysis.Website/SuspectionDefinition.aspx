@@ -704,7 +704,7 @@
                                                 </td>
                                                 <td></td>
                                                 <td>
-                                                    <Telerik:RadSlider ID="RadSlider16" runat="server" ItemType="Item" Height="50px"  Width="1000px">
+                                                    <Telerik:RadSlider ID="RadSlider16" IsSelectionRangeEnabled ="false"   runat="server" ItemType="Item"  Height="50px"  Width="1000px">
                                                         <Items>
                                                             <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
                                                             <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />

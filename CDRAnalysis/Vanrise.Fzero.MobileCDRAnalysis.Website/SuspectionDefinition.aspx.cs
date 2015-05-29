@@ -193,22 +193,22 @@ public partial class SuspectionDefinition : BasePage
         RadSlider16.Visible = false;
 
 
-        RadSlider1.SelectedValue = RadSlider1.Items[3].Value;
-        RadSlider2.SelectedValue = RadSlider2.Items[3].Value;
-        RadSlider3.SelectedValue = RadSlider3.Items[3].Value;
-        RadSlider4.SelectedValue = RadSlider4.Items[3].Value;
-        RadSlider5.SelectedValue = RadSlider5.Items[3].Value;
-        RadSlider6.SelectedValue = RadSlider6.Items[3].Value;
-        RadSlider7.SelectedValue = RadSlider7.Items[3].Value;
-        RadSlider8.SelectedValue = RadSlider8.Items[3].Value;
-        RadSlider9.SelectedValue = RadSlider9.Items[3].Value;
-        RadSlider10.SelectedValue = RadSlider10.Items[3].Value;
-        RadSlider11.SelectedValue = RadSlider11.Items[3].Value;
-        RadSlider12.SelectedValue = RadSlider12.Items[3].Value;
-        RadSlider13.SelectedValue = RadSlider13.Items[3].Value;
-        RadSlider14.SelectedValue = RadSlider14.Items[3].Value;
-        RadSlider15.SelectedValue = RadSlider15.Items[3].Value;
-        RadSlider16.SelectedValue = RadSlider16.Items[3].Value;
+        RadSlider1.Value = RadSlider1.Items[3].Value.ToDecimal();
+        RadSlider2.Value = RadSlider2.Items[3].Value.ToDecimal();
+        RadSlider3.Value = RadSlider3.Items[3].Value.ToDecimal();
+        RadSlider4.Value = RadSlider4.Items[3].Value.ToDecimal();
+        RadSlider5.Value = RadSlider5.Items[3].Value.ToDecimal();
+        RadSlider6.Value = RadSlider6.Items[3].Value.ToDecimal();
+        RadSlider7.Value = RadSlider7.Items[3].Value.ToDecimal();
+        RadSlider8.Value = RadSlider8.Items[3].Value.ToDecimal();
+        RadSlider9.Value = RadSlider9.Items[3].Value.ToDecimal();
+        RadSlider10.Value = RadSlider10.Items[3].Value.ToDecimal();
+        RadSlider11.Value = RadSlider11.Items[3].Value.ToDecimal();
+        RadSlider12.Value = RadSlider12.Items[3].Value.ToDecimal();
+        RadSlider13.Value = RadSlider13.Items[3].Value.ToDecimal();
+        RadSlider14.Value = RadSlider14.Items[3].Value.ToDecimal();
+        RadSlider15.Value = RadSlider15.Items[3].Value.ToDecimal();
+        RadSlider16.Value = RadSlider16.Items[3].Value.ToDecimal();
         
 
     }
@@ -261,22 +261,22 @@ public partial class SuspectionDefinition : BasePage
        currentObject.CriteriaId15 = chkCriteria15.Checked == true ? 1 : 0;
        currentObject.CriteriaId16 = chkCriteria16.Checked == true ? 1 : 0;
 
-       currentObject.Cr1Per = RadSlider1.SelectedItem.Value.ToDecimal();
-       currentObject.Cr2Per = RadSlider2.SelectedItem.Value.ToDecimal();
-       currentObject.Cr3Per = RadSlider3.SelectedItem.Value.ToDecimal();
-       currentObject.Cr4Per = RadSlider4.SelectedItem.Value.ToDecimal();
-       currentObject.Cr5Per = RadSlider5.SelectedItem.Value.ToDecimal();
-       currentObject.Cr6Per = RadSlider6.SelectedItem.Value.ToDecimal();
-       currentObject.Cr7Per = RadSlider7.SelectedItem.Value.ToDecimal();
-       currentObject.Cr8Per = RadSlider8.SelectedItem.Value.ToDecimal();
-       currentObject.Cr9Per = RadSlider9.SelectedItem.Value.ToDecimal();
-       currentObject.Cr10Per = RadSlider10.SelectedItem.Value.ToDecimal();
-       currentObject.Cr11Per = RadSlider11.SelectedItem.Value.ToDecimal();
-       currentObject.Cr12Per = RadSlider12.SelectedItem.Value.ToDecimal();
-       currentObject.Cr13Per = RadSlider13.SelectedItem.Value.ToDecimal();
-       currentObject.Cr14Per = RadSlider14.SelectedItem.Value.ToDecimal();
-       currentObject.Cr15Per = RadSlider15.SelectedItem.Value.ToDecimal();
-       currentObject.Cr16Per = RadSlider16.SelectedItem.Value.ToDecimal();
+       currentObject.Cr1Per = RadSlider1.Value;
+       currentObject.Cr2Per = RadSlider2.Value;
+       currentObject.Cr3Per = RadSlider3.Value;
+       currentObject.Cr4Per = RadSlider4.Value;
+       currentObject.Cr5Per = RadSlider5.Value;
+       currentObject.Cr6Per = RadSlider6.Value;
+       currentObject.Cr7Per = RadSlider7.Value;
+       currentObject.Cr8Per = RadSlider8.Value;
+       currentObject.Cr9Per = RadSlider9.Value;
+       currentObject.Cr10Per = RadSlider10.Value;
+       currentObject.Cr11Per = RadSlider11.Value;
+       currentObject.Cr12Per = RadSlider12.Value;
+       currentObject.Cr13Per = RadSlider13.Value;
+       currentObject.Cr14Per = RadSlider14.Value;
+       currentObject.Cr15Per = RadSlider15.Value;
+       currentObject.Cr16Per = RadSlider16.Value;
 
        return currentObject;
     }
@@ -332,27 +332,30 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria15.Checked = currentObject.CriteriaId15 == 1 ? true : false;
         chkCriteria16.Checked = currentObject.CriteriaId16 == 1 ? true : false;
 
+
+
+
+
+        RadSlider1.Value = currentObject.Cr1Per.Value;
+        RadSlider2.Value = currentObject.Cr2Per.Value;
+        RadSlider3.Value = currentObject.Cr3Per.Value;
+        RadSlider4.Value = currentObject.Cr4Per.Value;
+        RadSlider5.Value = currentObject.Cr5Per.Value;
+        RadSlider6.Value = currentObject.Cr6Per.Value;
+        RadSlider7.Value = currentObject.Cr7Per.Value;
+        RadSlider8.Value = currentObject.Cr8Per.Value;
+        RadSlider9.Value = currentObject.Cr9Per.Value;
+        RadSlider10.Value = currentObject.Cr10Per.Value;
+        RadSlider11.Value = currentObject.Cr11Per.Value;
+        RadSlider12.Value = currentObject.Cr12Per.Value;
+        RadSlider13.Value = currentObject.Cr13Per.Value;
+        RadSlider14.Value = currentObject.Cr14Per.Value;
+        RadSlider15.Value = currentObject.Cr15Per.Value;
+        RadSlider16.Value = currentObject.Cr16Per.Value;
+
+
+
        
-
-
-
-        RadSlider1.SelectedValue = currentObject.Cr1Per.ToString();
-        RadSlider2.SelectedValue = currentObject.Cr2Per.ToString();
-        RadSlider3.SelectedValue = currentObject.Cr3Per.ToString();
-        RadSlider4.SelectedValue = currentObject.Cr4Per.ToString();
-        RadSlider5.SelectedValue = currentObject.Cr5Per.ToString();
-        RadSlider6.SelectedValue = currentObject.Cr6Per.ToString();
-        RadSlider7.SelectedValue = currentObject.Cr7Per.ToString();
-        RadSlider8.SelectedValue = currentObject.Cr8Per.ToString();
-        RadSlider9.SelectedValue = currentObject.Cr9Per.ToString();
-        RadSlider10.SelectedValue = currentObject.Cr10Per.ToString();
-        RadSlider11.SelectedValue = currentObject.Cr11Per.ToString();
-        RadSlider12.SelectedValue = currentObject.Cr12Per.ToString();
-        RadSlider13.SelectedValue = currentObject.Cr13Per.ToString();
-        RadSlider14.SelectedValue = currentObject.Cr14Per.ToString();
-        RadSlider15.SelectedValue = currentObject.Cr15Per.ToString();
-        RadSlider16.SelectedValue = currentObject.Cr16Per.ToString();
-
         RadSlider1.Visible = chkCriteria1.Checked;
         RadSlider2.Visible = chkCriteria2.Checked;
         RadSlider3.Visible = chkCriteria3.Checked;
