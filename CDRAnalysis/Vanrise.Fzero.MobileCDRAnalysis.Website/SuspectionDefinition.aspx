@@ -19,10 +19,18 @@
                             </td>
                             <td class="inputData">
 
-                                <Telerik:RadComboBox ID="ddlSearchStrategy" runat="server"></Telerik:RadComboBox>
+                                <Telerik:RadComboBox ID="ddlSearchStrategy" runat="server" Visible="false"    ></Telerik:RadComboBox> <Telerik:RadTextBox ID="lblStrategy"  ReadOnly="true" runat ="server" Text="Label"></Telerik:RadTextBox>
+                                
                             </td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                              <br />
+                            </td>
+                        </tr>
 
                         <tr>
                             <td>&nbsp;
@@ -194,6 +202,16 @@
                                     <i class= <%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
                                         </asp:Label>
                                         <asp:Label runat="server" ID="Cr15Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId15"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr15Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+
+
+                                  <Telerik:GridTemplateColumn HeaderText="Filter 16">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId16">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId16"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr16Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId16"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr16Per")))%>'></asp:Label>
                                     </ItemTemplate>
                                 </Telerik:GridTemplateColumn>
 
@@ -649,8 +667,7 @@
                                                 </td>
 
                                             </tr>
-
-                                            <tr>
+                                             <tr>
                                                 <td>
                                                     <asp:CheckBox runat="server" ID="chkCriteria15" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
                                                 </td>
@@ -675,6 +692,37 @@
                                                 </td>
 
                                             </tr>
+
+
+
+                                             <tr>
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria16" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria16"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider16" runat="server" ItemType="Item" Height="50px"  Width="1000px">
+                                                        <Items>
+                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
+                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
+                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
+                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
+                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
+
+                                                        </Items>
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+                                            
+
+
                                         </tbody>
                                     </table>
                                 </div>

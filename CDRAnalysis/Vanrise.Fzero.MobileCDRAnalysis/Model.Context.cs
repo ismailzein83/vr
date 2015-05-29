@@ -57,7 +57,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
         public DbSet<StrategyPeriod> StrategyPeriods { get; set; }
         public DbSet<StrategyThreshold> StrategyThresholds { get; set; }
-        public DbSet<Subscriber_Values> Subscriber_Values { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }

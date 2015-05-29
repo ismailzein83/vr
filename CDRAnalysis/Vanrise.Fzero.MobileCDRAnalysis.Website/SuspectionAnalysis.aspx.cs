@@ -504,7 +504,7 @@ public partial class SuspectionAnalysis : BasePage
 
     protected void gvSubscriberValues_NeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
     {
-        gvSubscriberValues.DataSource = Subscriber_Values.GetList(id, lstRelatedNumber.SelectedValue);
+        //gvSubscriberValues.DataSource = Subscriber_Values.GetList(id, lstRelatedNumber.SelectedValue);
 
     }
 

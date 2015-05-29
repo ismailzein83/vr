@@ -224,9 +224,6 @@
     <Compile Include="SubscriberThreshold.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Subscriber_Values.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Suspicion_Level.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

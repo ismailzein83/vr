@@ -56,6 +56,7 @@ public partial class SuspectionDefinition : BasePage
         if ((StartegyId) != 0)
         {
             ddlSearchStrategy.SelectedValue = StartegyId.ToString();
+            lblStrategy.Text = ddlSearchStrategy.SelectedItem.Text;
         }
 
 
@@ -95,6 +96,7 @@ public partial class SuspectionDefinition : BasePage
         lblCriteria13.Text = "Filter 13: (" + criteria_Profiles[12].Description + ")";
         lblCriteria14.Text = "Filter 14: (" + criteria_Profiles[13].Description + ")";
         lblCriteria15.Text = "Filter 15: (" + criteria_Profiles[14].Description + ")";
+        lblCriteria16.Text = "Filter 16: (" + criteria_Profiles[15].Description + ")";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
@@ -170,6 +172,7 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria13.Checked = false;
         chkCriteria14.Checked = false;
         chkCriteria15.Checked = false;
+            chkCriteria16.Checked = false;
 
 
         RadSlider1.Visible = false;
@@ -187,6 +190,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider13.Visible = false;
         RadSlider14.Visible = false;
         RadSlider15.Visible = false;
+        RadSlider16.Visible = false;
 
 
         RadSlider1.SelectedValue = RadSlider1.Items[3].Value;
@@ -204,15 +208,12 @@ public partial class SuspectionDefinition : BasePage
         RadSlider13.SelectedValue = RadSlider13.Items[3].Value;
         RadSlider14.SelectedValue = RadSlider14.Items[3].Value;
         RadSlider15.SelectedValue = RadSlider15.Items[3].Value;
-
+        RadSlider16.SelectedValue = RadSlider16.Items[3].Value;
         
 
     }
 
-    private void ClearFiltrationFields()
-    {
-        ddlSearchStrategy.SelectedValue = "0";
-    }
+   
 
     private void LoadData()
     {
@@ -258,6 +259,7 @@ public partial class SuspectionDefinition : BasePage
        currentObject.CriteriaId13 = chkCriteria13.Checked == true ? 1 : 0;
        currentObject.CriteriaId14 = chkCriteria14.Checked == true ? 1 : 0;
        currentObject.CriteriaId15 = chkCriteria15.Checked == true ? 1 : 0;
+       currentObject.CriteriaId16 = chkCriteria16.Checked == true ? 1 : 0;
 
        currentObject.Cr1Per = RadSlider1.SelectedItem.Value.ToDecimal();
        currentObject.Cr2Per = RadSlider2.SelectedItem.Value.ToDecimal();
@@ -274,6 +276,7 @@ public partial class SuspectionDefinition : BasePage
        currentObject.Cr13Per = RadSlider13.SelectedItem.Value.ToDecimal();
        currentObject.Cr14Per = RadSlider14.SelectedItem.Value.ToDecimal();
        currentObject.Cr15Per = RadSlider15.SelectedItem.Value.ToDecimal();
+       currentObject.Cr16Per = RadSlider16.SelectedItem.Value.ToDecimal();
 
        return currentObject;
     }
@@ -327,7 +330,7 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria13.Checked = currentObject.CriteriaId13 == 1 ? true : false;
         chkCriteria14.Checked = currentObject.CriteriaId14 == 1 ? true : false;
         chkCriteria15.Checked = currentObject.CriteriaId15 == 1 ? true : false;
-      
+        chkCriteria16.Checked = currentObject.CriteriaId16 == 1 ? true : false;
 
        
 
@@ -348,6 +351,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider13.SelectedValue = currentObject.Cr13Per.ToString();
         RadSlider14.SelectedValue = currentObject.Cr14Per.ToString();
         RadSlider15.SelectedValue = currentObject.Cr15Per.ToString();
+        RadSlider16.SelectedValue = currentObject.Cr16Per.ToString();
 
         RadSlider1.Visible = chkCriteria1.Checked;
         RadSlider2.Visible = chkCriteria2.Checked;
@@ -364,7 +368,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider13.Visible = chkCriteria13.Checked;
         RadSlider14.Visible = chkCriteria14.Checked;
         RadSlider15.Visible = chkCriteria15.Checked;
-       
+        RadSlider16.Visible = chkCriteria16.Checked;
 
 
 
@@ -394,6 +398,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider13.Visible = chkCriteria13.Checked;
         RadSlider14.Visible = chkCriteria14.Checked;
         RadSlider15.Visible = chkCriteria15.Checked;
+        RadSlider16.Visible = chkCriteria16.Checked;
        
     }
     protected void gvData_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)

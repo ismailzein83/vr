@@ -23,7 +23,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             this.Strategy_Suspicion_Level = new HashSet<Strategy_Suspicion_Level>();
             this.StrategyPeriods = new HashSet<StrategyPeriod>();
             this.StrategyThresholds = new HashSet<StrategyThreshold>();
-            this.Subscriber_Values = new HashSet<Subscriber_Values>();
         }
     
         public int Id { get; set; }
@@ -41,6 +40,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual User User { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
         public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
-        public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
     }
 }

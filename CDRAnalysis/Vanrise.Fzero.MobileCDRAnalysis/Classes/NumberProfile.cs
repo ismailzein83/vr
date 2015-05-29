@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                {
                    numberProfiles = context.NumberProfiles
                       .Where(s =>
-                           (s.SubscriberNumber == subscriberNumber && s.Day_Hour == 25 && s.Date_Day >= fromdate && s.Date_Day <= toDate)
+                           (s.SubscriberNumber == subscriberNumber && s.FromDate >= fromdate && s.ToDate <= toDate)
                        )
                        .ToList();
             }
@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     numberProfiles = context.NumberProfiles
                        .Where(s =>
-                            (s.SubscriberNumber == subscriberNumber && s.Day_Hour == 30 && s.Date_Day >= fromdate && s.Date_Day <= toDate)
+                            (s.SubscriberNumber == subscriberNumber && s.FromDate >= fromdate && s.ToDate <= toDate)
                         )
                         .ToList();
                 }
@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     numberProfiles = context.NumberProfiles
                        .Where(s =>
-                            (s.SubscriberNumber == subscriberNumber && s.Day_Hour != 25 && s.Day_Hour != 30 && s.Date_Day >= fromdate && s.Date_Day <= toDate)
+                            (s.SubscriberNumber == subscriberNumber && s.FromDate >= fromdate && s.ToDate <= toDate)
                         )
                         .ToList().Distinct();
                 }

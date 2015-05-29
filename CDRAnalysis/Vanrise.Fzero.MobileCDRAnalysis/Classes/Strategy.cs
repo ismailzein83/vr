@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 using (Entities context = new Entities())
                 {
 
-                    strategy = context.Strategies
+                    strategy = context.Strategies.Include(x => x.Strategy_Min_Values).Include(x => x.Strategy_Suspicion_Level).Include(x => x.StrategyPeriods).Include(x => x.StrategyThresholds)
                         .Where(s => s.Id == id)
                         .FirstOrDefault();
                 }
@@ -101,7 +101,24 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
 
                     Strategy st = Strategy.Load(strategy.Id);
-                    context.Entry(strategy).State = System.Data.EntityState.Deleted;
+
+                    foreach (var i in st.StrategyPeriods.ToList())
+                        context.Entry(i).State = System.Data.EntityState.Deleted;
+
+                    foreach (var i in st.Strategy_Min_Values.ToList())
+                        context.Entry(i).State = System.Data.EntityState.Deleted;
+
+                    foreach (var i in st.Strategy_Suspicion_Level.ToList())
+                        context.Entry(i).State = System.Data.EntityState.Deleted;
+
+                    foreach (var i in st.StrategyThresholds.ToList())
+                        context.Entry(i).State = System.Data.EntityState.Deleted;
+
+
+                    context.Entry(st).State = System.Data.EntityState.Deleted;
+
+
+                 
                     context.SaveChanges();
                     success = true;
                 }
