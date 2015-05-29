@@ -22,18 +22,7 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
             biDataGrid.defineAPI();
             $scope.openReportEntityModal = function (item) {
 
-                var parameters = {
-                    EntityType: item.EntityType,
-                    EntityName: item.EntityName,
-                    EntityId: item.EntityId
-                }
-                var modalSettings = {
-                    useModalTemplate: true,
-                    width: "80%",
-                    maxHeight: "800px",
-                    title: item.EntityName
-                };
-                VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
+                BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
                
             }
 

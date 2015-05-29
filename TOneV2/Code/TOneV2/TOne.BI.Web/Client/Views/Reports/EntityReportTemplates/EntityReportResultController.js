@@ -4,10 +4,22 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
         var gridAPI;
         var entityType;
         var entityId;
+        var entityName;
+        var measures= [];
         defineScope();       
         load();   
         function defineScope() {
             $scope.data = [];
+            for (prop in BIMeasureTypeEnum) {
+                var obj = {
+                    measure: BIMeasureTypeEnum[prop],
+                    name: BIMeasureTypeEnum[prop].description,
+                    value: BIMeasureTypeEnum[prop].value,
+                    selected: true
+                };
+                measures.push(obj);
+            }
+
             $scope.isGettingData = false;
             $scope.gridReady = function (api) {
                 gridAPI = api;
@@ -19,6 +31,20 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
                 if ($scope.onEntityReportResultReady != undefined)
                     $scope.onEntityReportResultReady(entityReportResultReadyAPI);
             };
+            $scope.chartEntityReady = function (api) {
+                chartEntityReadyAPI = api;
+            };
+            $scope.choiceSelectionChanged = function () {
+                console.log($scope.selectedChoiceIndex);                
+                if ($scope.selectedChoiceIndex == 1) {
+                    loadEntityChart($scope.data);
+                    console.log($scope.data);
+                }
+            };
+
+            defineChoicesGroup();
+
+            
         }
 
         function load() {
@@ -26,10 +52,12 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
             if ($scope.viewScope != undefined) {
                 entityType = $scope.viewScope.entityType;
                 entityId = $scope.viewScope.entityId;
+                entityName = $scope.viewScope.title;
             }
             else {
                 entityType = $scope.entityType;
                 entityId = $scope.entityId;
+                entityName = $scope.title;
             }
             if ($scope.dataItem != undefined) {
                 var fromDate = $scope.dataItem.Time;
@@ -47,7 +75,16 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
             }
 
         }
+        function defineChoicesGroup() {
+            $scope.choicesGroup = [
+                {title:"Report"},
+                { title: "Graph" }
+            ];
 
+            $scope.choicesReady = function (api) {
+                //api.selectChoice(1);
+            }
+        }
         function loadData(fromDate, toDate, timeDimensionValue) {
             $scope.timeDimensionValue = timeDimensionValue;
             $scope.isGettingData = true;
@@ -58,18 +95,40 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
             
             return BIAPIService.GetEntityMeasuresValues(entityType, entityId, timeDimensionValue, fromDate, toDate, measureTypes)
              .then(function (response) {
-
-                 $scope.data.length = 0;
-                 BIUtilitiesService.fillDateTimeProperties(response, timeDimensionValue, fromDate, toDate, true);
-                 angular.forEach(response, function (itm) {
+                $scope.data.length = 0;
+                angular.forEach(response, function (itm) {
                      itm.timeDimensionType = timeDimensionValue;
                      $scope.data.push(itm);
-                 });
+                });
+
+                BIUtilitiesService.fillDateTimeProperties(response, timeDimensionValue, fromDate, toDate, true);
+                if ($scope.selectedChoiceIndex == 1)
+                    loadEntityChart($scope.data);
                  $scope.isGettingData = false;
 
              }).catch(function (error) {
                  $scope.isGettingData = false;
              });
+
+        }
+        function loadEntityChart(chartData) {
+            var chartDefinition = {
+                type: "spline",
+                title: entityName
+            };
+            var xAxisDefinition = {
+                titlePath: "dateTimeValue"
+            };
+            var seriesDefinitions = [];
+            for (var i = 0; i < measures.length; i++) {
+                var measure = measures[i];
+                seriesDefinitions.push({
+                    title: measure.name,
+                    valuePath: "Values[" + i + "]",
+                    selected: measure.measure == BIMeasureTypeEnum.Sale || measure.measure == BIMeasureTypeEnum.Cost
+                });
+            }
+            chartEntityReadyAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
 
         }
 }

@@ -1,12 +1,28 @@
 ﻿
 
 
-app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum) {
+app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalService) {
 
     return ({
+        openEntityReport:openEntityReport,
         fillDateTimeProperties: fillDateTimeProperties,
         getNextDate: getNextDate
     });
+
+    function openEntityReport(entityType, entityId, entityName) {
+        var parameters = {
+            EntityType: entityType,
+            EntityName: entityName,
+            EntityId: entityId
+        }
+        var modalSettings = {
+            useModalTemplate: true,
+            width: "80%",
+            maxHeight: "800px",
+            title: entityName
+        };
+        VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
+    }
 
     function fillDateTimeProperties(data, timeDimensionType, fromDateString, toDateString, dontFillGroup) {
         var fromDate = new Date(fromDateString);

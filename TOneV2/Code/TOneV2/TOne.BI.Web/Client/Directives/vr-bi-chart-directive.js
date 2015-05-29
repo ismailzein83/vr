@@ -44,19 +44,8 @@ app.directive('vrBiChart', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEleme
         function initializeController() {
             ctrl.onChartReady = function (api) {
                 chartAPI = api;
-                chartAPI.onDataItemClicked = function (item) {
-                    var parameters = {
-                        EntityType: item.EntityType,
-                        EntityName: item.EntityName,
-                        EntityId: item.EntityId
-                    }
-                    var modalSettings = {
-                        useModalTemplate: true,
-                        width: "80%",
-                        maxHeight: "800px",
-                        title: item.EntityName
-                    };
-                    VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
+                chartAPI.onDataItemClicked = function (item) {                  
+                    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
                 };
                 if (retrieveDataOnLoad)
                     retrieveData();
