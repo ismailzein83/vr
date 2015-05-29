@@ -6,7 +6,7 @@
     });
 
     function GetAllStrategies() {
-        return BaseAPIService.get("/api/User/GetAllStrategies",
+        return BaseAPIService.get("/api/Strategy/GetAllStrategies",
             {
                
             }
@@ -14,7 +14,7 @@
     }
 
     function GetStrategy(strategyId) {
-        return BaseAPIService.get("/api/User/GetStrategy",
+        return BaseAPIService.get("/api/Strategy/GetStrategy",
             {
                 StrategyId: strategyId
             }

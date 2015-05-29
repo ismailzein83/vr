@@ -99,7 +99,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Strategy> GetAllStrategies()
         {
-            string query_GetStrategies = @"SELECT Id, Name FROM Strategy; ";
+            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy; ";
             List<Strategy> strategies = new List<Strategy>();
 
 
@@ -110,6 +110,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     Strategy strategy = new Strategy();
                     strategy.Id = (int)reader["Id"];
                     strategy.Name = reader["Name"] as string;
+                    strategy.Description = reader["Description"] as string;
                     strategies.Add(strategy);
                 }
              }, null);

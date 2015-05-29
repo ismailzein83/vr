@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Fzero.FraudAnalysis.Business;
-using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers

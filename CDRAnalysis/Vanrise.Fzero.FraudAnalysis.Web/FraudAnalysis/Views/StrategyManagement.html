@@ -1,0 +1,25 @@
+﻿<vr-panel ng-controller="FraudAnalysis_StrategyManagementController">
+
+    <vr-form name="formFilter">
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Reset" ng-show="false"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-datagrid datasource="strategies">
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'IsDefault'">{{dataItem.IsDefault == "0"? 'Not Default': 'Default' }}</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>
