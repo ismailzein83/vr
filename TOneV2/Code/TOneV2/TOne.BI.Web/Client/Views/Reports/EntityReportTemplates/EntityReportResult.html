@@ -4,7 +4,7 @@
             <vr-choice ng-repeat="choice in choicesGroup">{{choice.title}}</vr-choice>
         </vr-choices>
     </vr-row>
-    <vr-row ng-show="choicesGroupe[selectedChoiceIndex].title=='Report'">
+    <vr-row ng-show="choicesGroup[selectedChoiceIndex].title=='Report'">
        
 
             <vr-datagrid datasource="data" on-ready="gridReady">
@@ -16,7 +16,7 @@
             </vr-datagrid>
        
     </vr-row>
-    <vr-row ng-show="choicesGroupe[selectedChoiceIndex].title=='Graphe'">
+    <vr-row ng-show="choicesGroup[selectedChoiceIndex].title=='Graphe'">
         <vr-columns colnum="12">
             <vr-chart data-on-ready="chartEntityReady"></vr-chart>
         </vr-columns>
