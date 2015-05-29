@@ -35,10 +35,8 @@ function EntityReportResultController($scope, VRNavigationService, UtilsService,
                 chartEntityReadyAPI = api;
             };
             $scope.choiceSelectionChanged = function () {
-                console.log($scope.selectedChoiceIndex);                
                 if ($scope.selectedChoiceIndex == 1) {
                     loadEntityChart($scope.data);
-                    console.log($scope.data);
                 }
             };
 
