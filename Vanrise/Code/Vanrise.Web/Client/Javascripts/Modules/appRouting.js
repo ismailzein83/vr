@@ -121,6 +121,9 @@ appRouting.config(['$routeProvider',
           when('/Strategy', {
               templateUrl: '/Client/Modules/FraudAnalysis/Views/StrategyManagement.html'
           }).
+          when('/Security/RoleManagement', {
+              templateUrl: '/Client/Modules/Security/Views/RoleManagement.html'
+          }).
         otherwise({
             redirectTo: '/default'
         });

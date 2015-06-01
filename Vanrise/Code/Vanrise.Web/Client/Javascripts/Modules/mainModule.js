@@ -135,6 +135,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             ]
         },
         {
+            name: "Security", location: '', icon: 'glyphicon-flash', childs: [
+               { name: "Roles", location: '#/Security/RoleManagement' }
+            ]
+        },
+        {
             name: "Others", icon: 'glyphicon-pencil', location: '', childs: [
                { name: "Default", location: '#/Default' },
                 { name: "Test View", location: '#/TestView' },

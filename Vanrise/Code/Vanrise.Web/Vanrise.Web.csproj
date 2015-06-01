@@ -125,6 +125,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -147,6 +148,7 @@
     <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar-directive.js" />
     <Content Include="Client\Javascripts\Directives\ActionBar\vr-actionbar.html" />
     <Content Include="Client\Javascripts\Directives\Button\button-dir-service.js" />
+    <Content Include="Client\Javascripts\Directives\Button\images\loader-mask.gif" />
     <Content Include="Client\Javascripts\Directives\Button\vr-button-directive.js" />
     <Content Include="Client\Javascripts\Directives\Chart\chart-dir-service.js" />
     <Content Include="Client\Javascripts\Directives\Chart\vr-chart-directive.js" />
@@ -199,6 +201,7 @@
     <Content Include="Client\Javascripts\Modules\appRouting.js" />
     <Content Include="Client\Javascripts\Modules\mainModule.js" />
     <Content Include="Client\Javascripts\Services\APIServices\BaseAPIService.js" />
+    <Content Include="Client\Javascripts\Services\APIServices\ValuesAPIService.js" />
     <Content Include="Client\Javascripts\Services\base-dir-service.js" />
     <Content Include="Client\Javascripts\Services\carrier-service.js" />
     <Content Include="Client\Javascripts\Services\CarrierTypeEnum.js" />
@@ -547,7 +550,9 @@
     <Content Include="Client\Styles\ui-grid.eot" />
     <Content Include="Client\Styles\ui-grid.ttf" />
     <Content Include="Client\Styles\ui-grid.woff" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

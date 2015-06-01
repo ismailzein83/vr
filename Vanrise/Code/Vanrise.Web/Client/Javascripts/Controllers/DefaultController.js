@@ -1,5 +1,5 @@
 ﻿appControllers.controller('DefaultController',
-    function DefaultController($scope, $http) {
+    function DefaultController($scope, $http, ValuesAPIService) {
        
         $scope.testModel = 'initial from default';
         $scope.html = '<input ng-click="click(1)" value="Click me" type="button">';
@@ -45,7 +45,7 @@
         $scope.gridData = [];
         $scope.loadMoreData = function () {
             var pageInfo = gridApi.getPageInfo();
-            //return BusinessEntityAPIService.GetCodeGroups().then(function (response) {
+            return ValuesAPIService.Get().then(function (response) {
                 for (current = pageInfo.fromRow; current <= pageInfo.toRow; current++) {
                     $scope.gridData.push({
                         col1: "test " + current + "1",
@@ -55,7 +55,7 @@
                 }
 
 
-            //});
+            });
             //setTimeout(function () {
             //    $scope.$apply(function () {
                     
