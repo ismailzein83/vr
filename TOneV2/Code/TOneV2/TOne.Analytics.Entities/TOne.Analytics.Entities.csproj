@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\BillingStatistic.cs" />
     <Compile Include="Billing\ZoneProfit.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="Billing\ZoneProfitFormatted.cs" />
