@@ -38,7 +38,7 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
-        private  ZoneProfitFormatted MapZoneProfit(ZoneProfit zoneProfit)
+        private ZoneProfitFormatted MapZoneProfit(ZoneProfit zoneProfit)
         {
             return new ZoneProfitFormatted
             {
@@ -71,7 +71,7 @@ namespace TOne.Analytics.Data.SQL
             };
         }
 
-        private  List<ZoneProfitFormatted> MapZoneProfits(List<ZoneProfit> zoneProfits)
+        private List<ZoneProfitFormatted> MapZoneProfits(List<ZoneProfit> zoneProfits)
         {
             List<ZoneProfitFormatted> models = new List<ZoneProfitFormatted>();
             if (zoneProfits != null)
@@ -80,6 +80,48 @@ namespace TOne.Analytics.Data.SQL
                     models.Add(MapZoneProfit(z));
                 }
             return models;
+        }
+
+        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        {
+            return new List<BillingStatistic>();
+        }
+
+        public BillingStatistic BillingStatisticsMapper(IDataReader reader)
+        {
+
+            BillingStatistic instance = new BillingStatistic
+            {
+                CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
+                CustomerID = reader["CustomerID"] as string,
+                SupplierID = reader["SupplierID"] as string,
+                CostZoneID = GetReaderValue<int>(reader, "CostZoneID"),
+                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
+                Cost_Currency = reader["Cost_Currency"] as string,
+                Sale_Currency = reader["Sale_Currency"] as string,
+                NumberOfCalls = GetReaderValue<int>(reader, "CostZonNumberOfCallseID"),
+                FirstCallTime = GetReaderValue<TimeSpan>(reader, "FirstCallTime"),
+                LastCallTime = GetReaderValue<TimeSpan>(reader, "LastCallTime"),
+                MinDuration = GetReaderValue<decimal>(reader, "MinDuration"),
+                MaxDuration = GetReaderValue<decimal>(reader, "MaxDuration"),
+                AvgDuration = GetReaderValue<int>(reader, "AvgDuration"),
+                Cost_Nets = GetReaderValue<decimal>(reader, "Cost_Nets"),
+                Cost_Discounts = GetReaderValue<decimal>(reader, "Cost_Discounts"),
+                Cost_Commissions = GetReaderValue<decimal>(reader, "Cost_Commissions"),
+                Cost_ExtraCharges = GetReaderValue<decimal>(reader, "Cost_ExtraCharges"),
+                Sale_Nets = GetReaderValue<decimal>(reader, "Sale_Nets"),
+                Sale_Discounts = GetReaderValue<decimal>(reader, "Sale_Discounts"),
+                Sale_Commissions = GetReaderValue<decimal>(reader, "Sale_Commissions"),
+                Sale_ExtraCharges = GetReaderValue<decimal>(reader, "Sale_ExtraCharges"),
+                Sale_Rate = GetReaderValue<decimal>(reader, "Sale_Rate"),
+                Cost_Rate = GetReaderValue<decimal>(reader, "Cost_Rate"),
+                Sale_RateType = GetReaderValue<byte>(reader, "Sale_RateType"),
+                Cost_RateType = GetReaderValue<byte>(reader, "Cost_RateType"),
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+            };
+
+            return instance;
         }
 
     }
