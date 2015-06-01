@@ -13,28 +13,28 @@ namespace TOne.Analytics.Entities
         public string SupplierID { get; set; }
         public int  CostZoneID { get; set; }
         public int SaleZoneID { get; set; }
-        public string Cost_Currency { get; set; }
-        public string Sale_Currency { get; set; }
+        public string CostCurrency { get; set; }
+        public string SaleCurrency { get; set; }
         public int NumberOfCalls { get; set; }
-        public  TimeSpan FirstCallTime { get; set; }
-        public  TimeSpan LastCallTime { get; set; }
-        public  decimal MinDuration { get; set; }
-        public  decimal MaxDuration { get; set; }
-        public  decimal AvgDuration { get; set; }
-        public  decimal Cost_Nets { get; set; }
-        public  decimal Cost_Discounts { get; set; }
-        public  decimal Cost_Commissions { get; set; }
-        public  decimal Cost_ExtraCharges { get; set; }
-        public  decimal Sale_Nets { get; set; }
-        public  decimal Sale_Discounts { get; set; }
-        public  decimal Sale_Commissions { get; set; }
-        public  decimal Sale_ExtraCharges { get; set; }
-        public  decimal Sale_Rate { get; set; }
-        public  decimal Cost_Rate { get; set; }
-        public  byte Sale_RateType { get; set; }
-        public  byte Cost_RateType { get; set; }
-        public  decimal SaleDuration { get; set; }
-        public  decimal CostDuration { get; set; }
+        public  string FirstCallTime { get; set; }
+        public  string LastCallTime { get; set; }
+        public decimal MinDuration { get; set; }
+        public decimal MaxDuration { get; set; }
+        public decimal AvgDuration { get; set; }
+        public double CostNets { get; set; }
+        public double CostDiscounts { get; set; }
+        public double CostCommissions { get; set; }
+        public double CostExtraCharges { get; set; }
+        public  double SaleNets { get; set; }
+        public double SaleDiscounts { get; set; }
+        public double SaleCommissions { get; set; }
+        public double SaleExtraCharges { get; set; }
+        public double SaleRate { get; set; }
+        public double CostRate { get; set; }
+        public  byte SaleRateType { get; set; }
+        public  byte CostRateType { get; set; }
+        public decimal SaleDuration { get; set; }
+        public decimal CostDuration { get; set; }
      
     }
 }
