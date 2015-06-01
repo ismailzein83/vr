@@ -10,5 +10,6 @@ namespace TOne.Analytics.Data
     public interface IBillingStatisticDataManager : IDataManager
     {
         List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer);
+        List<BillingStatistic> GetBillingStatistics(DateTime fromDate,DateTime toDate);
     }
 }
