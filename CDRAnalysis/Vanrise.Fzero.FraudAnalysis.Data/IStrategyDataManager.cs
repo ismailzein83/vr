@@ -11,8 +11,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description);
 
-        void AddStrategy(Strategy strategy);
+        bool AddStrategy(Strategy strategy);
 
-        void UpdateStrategy(Strategy strategy);
+        bool UpdateStrategy(Strategy strategy);
     }
 }

@@ -1,6 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategysAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function StrategyManagementController($scope, StrategysAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function StrategyManagementController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -74,7 +74,7 @@ function StrategyManagementController($scope, StrategysAPIService, $routeParams,
                 mainGridAPI.itemAdded(strategy);
             };
         };
-        VRModalService.showModal('/Client/Modules/Main/Views/StrategyEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/StrategyEditor.html', null, settings);
     }
 
     function editStrategy(strategy) {
@@ -92,7 +92,7 @@ function StrategyManagementController($scope, StrategysAPIService, $routeParams,
                 mainGridAPI.itemUpdated(strategy);
             };
         };
-        VRModalService.showModal("/Client/Modules/Main/Views/StrategyEditor.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
     }
 }
 appControllers.controller('FraudAnalysis_StrategyManagementController', StrategyManagementController);

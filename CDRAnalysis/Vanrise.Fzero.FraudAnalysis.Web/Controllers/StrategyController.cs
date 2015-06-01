@@ -27,27 +27,26 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-        public void AddStrategy(Strategy strategy)
+        [HttpPost]
+        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            StrategyManager manager = new StrategyManager();
 
-            manager.AddStrategy(strategy);
+            return manager.UpdateStrategy(strategyObject);
+        }
+
+        [HttpPost]
+        public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
+        {
+            StrategyManager manager = new StrategyManager();
+
+            return manager.AddStrategy(strategyObject);
         }
 
 
 
-        public void UpdateStrategy(Strategy strategy)
-        {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            manager.UpdateStrategy(strategy);
-        }
-
-
-
-
-
-
+       
 
 
 

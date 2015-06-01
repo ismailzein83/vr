@@ -22,10 +22,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function defineScope() {
         $scope.SaveStrategy = function () {
             if (editMode) {
-                return updateStrategy();
+                return UpdateStrategy();
             }
             else {
-                return insertStrategy();
+                return AddStrategy();
             }
         };
 
@@ -44,7 +44,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function getStrategy() {
-        return StrategysAPIService.GetStrategy($scope.StrategyId)
+        return StrategyAPIService.GetStrategy($scope.StrategyId)
            .then(function (response) {
                fillScopeFromStrategyObj(response);
            })
@@ -73,10 +73,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.isActive = StrategyObject.Status;
     }
 
-    function insertStrategy() {
+    function AddStrategy() {
         $scope.issaving = true;
         var StrategyObject = buildStrategyObjFromScope();
-        return StrategysAPIService.AddStrategy(StrategyObject)
+        return StrategyAPIService.AddStrategy(StrategyObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
                 if ($scope.onStrategyAdded != undefined)
@@ -89,7 +89,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     }
 
-    function updateStrategy() {
+    function UpdateStrategy() {
         var StrategyObject = buildStrategyObjFromScope();
         StrategyAPIService.UpdateStrategy(StrategyObject)
         .then(function (response) {

@@ -61,6 +61,8 @@
     <Compile Include="ConsecutiveAggregate.cs" />
     <Compile Include="CallClass.cs" />
     <Compile Include="GroupCountAggregate.cs" />
+    <Compile Include="OperationResults\InsertOperationOutput.cs" />
+    <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="SumAggregate.cs" />
     <Compile Include="DistinctCountAggregate.cs" />
     <Compile Include="CriteriaDefinition.cs" />

@@ -2,6 +2,8 @@
 
     return ({
         GetFilteredStrategies: GetFilteredStrategies,
+        AddStrategy: AddStrategy,
+        UpdateStrategy: UpdateStrategy,
         GetStrategy: GetStrategy
     });
 
@@ -24,6 +26,28 @@
             }
            );
     }
+
+
+    function AddStrategy(strategy) {
+        return BaseAPIService.get("/api/Strategy/AddStrategy",
+            {
+                Strategy: strategy
+            }
+           );
+    }
+
+
+    function UpdateStrategy(strategy) {
+        return BaseAPIService.get("/api/Strategy/UpdateStrategy",
+            {
+                Strategy: strategy
+            }
+           );
+    }
+
+
+
+
 
 
 });

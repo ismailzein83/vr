@@ -26,27 +26,44 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public void AddStrategy(Strategy strategy)
+        public Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> UpdateStrategy(Strategy strategyObject)
         {
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            bool updateActionSucc = manager.UpdateStrategy(strategyObject);
+            Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy> updateOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationOutput<Strategy>();
 
-            manager.AddStrategy(strategy);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = strategyObject;
+            }
+            else
+                updateOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.UpdateOperationResult.Failed;
+            return updateOperationOutput;
         }
 
 
-
-        public void UpdateStrategy(Strategy strategy)
+        public Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> AddStrategy(Strategy strategyObject)
         {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> insertOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy>();
 
-            manager.UpdateStrategy(strategy);
+            int switchId = -1;
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+            bool insertActionSucc = manager.AddStrategy(strategyObject);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = strategyObject;
+            }
+            else
+                insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.Failed;
+            return insertOperationOutput;
         }
 
 
-
-
-
-
+        
 
 
     }
