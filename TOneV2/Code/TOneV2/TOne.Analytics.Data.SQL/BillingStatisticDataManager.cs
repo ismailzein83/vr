@@ -35,23 +35,23 @@ namespace TOne.Analytics.Data.SQL
                             ORDER BY   Convert(varchar(7), BS.CallDate,121) DESC ",
 
                             isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : " BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ",
-                           
+
                             isSale ? "Customer" : "Supplier",
 
                             toDate.Date.ToString("yyyy-MM-") + daysInTillDays.ToString(),
-                            
+
                             isSale ? "BS.CustomerID" : "BS.SupplierID",
 
                             carrierAccountID,
 
                             isSale ? "BS.SaleZoneID " : "BS.CostZoneID");
 
-                            return GetItemsText(query, MonthMapper,
-                            (cmd) =>
-                            {
-                                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-                            });
-           
+            return GetItemsText(query, MonthMapper,
+            (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+            });
+
         }
 
 
@@ -85,7 +85,7 @@ namespace TOne.Analytics.Data.SQL
                 Durations = GetReaderValue<double>(reader, "Durations"),
                 Amount = GetReaderValue<double>(reader, "Amount")
             };
-            
+
             return instance;
         }
 
@@ -157,22 +157,22 @@ namespace TOne.Analytics.Data.SQL
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
                 CostCurrency = reader["Cost_Currency"] as string,
                 SaleCurrency = reader["Sale_Currency"] as string,
-                NumberOfCalls = GetReaderValue<int>(reader, "CostZonNumberOfCallseID"),
-                FirstCallTime = GetReaderValue<TimeSpan>(reader, "FirstCallTime"),
-                LastCallTime = GetReaderValue<TimeSpan>(reader, "LastCallTime"),
+                NumberOfCalls = GetReaderValue<int>(reader, "NumberOfCalls"),
+                FirstCallTime = reader["FirstCallTime"] as string,
+                LastCallTime = reader["LastCallTime"] as string,
                 MinDuration = GetReaderValue<decimal>(reader, "MinDuration"),
                 MaxDuration = GetReaderValue<decimal>(reader, "MaxDuration"),
-                AvgDuration = GetReaderValue<int>(reader, "AvgDuration"),
-                CostNets = GetReaderValue<decimal>(reader, "Cost_Nets"),
-                CostDiscounts = GetReaderValue<decimal>(reader, "Cost_Discounts"),
-                CostCommissions = GetReaderValue<decimal>(reader, "Cost_Commissions"),
-                CostExtraCharges = GetReaderValue<decimal>(reader, "Cost_ExtraCharges"),
-                SaleNets = GetReaderValue<decimal>(reader, "Sale_Nets"),
-                SaleDiscounts = GetReaderValue<decimal>(reader, "Sale_Discounts"),
-                SaleCommissions = GetReaderValue<decimal>(reader, "Sale_Commissions"),
-                SaleExtraCharges = GetReaderValue<decimal>(reader, "Sale_ExtraCharges"),
-                SaleRate = GetReaderValue<decimal>(reader, "Sale_Rate"),
-                CostRate = GetReaderValue<decimal>(reader, "Cost_Rate"),
+                AvgDuration = GetReaderValue<decimal>(reader, "AvgDuration"),
+                CostNets = GetReaderValue<double>(reader, "Cost_Nets"),
+                CostDiscounts = GetReaderValue<double>(reader, "Cost_Discounts"),
+                CostCommissions = GetReaderValue<double>(reader, "Cost_Commissions"),
+                CostExtraCharges = GetReaderValue<double>(reader, "Cost_ExtraCharges"),
+                SaleNets = GetReaderValue<double>(reader, "Sale_Nets"),
+                SaleDiscounts = GetReaderValue<double>(reader, "Sale_Discounts"),
+                SaleCommissions = GetReaderValue<double>(reader, "Sale_Commissions"),
+                SaleExtraCharges = GetReaderValue<double>(reader, "Sale_ExtraCharges"),
+                SaleRate = GetReaderValue<double>(reader, "Sale_Rate"),
+                CostRate = GetReaderValue<double>(reader, "Cost_Rate"),
                 SaleRateType = GetReaderValue<byte>(reader, "Sale_RateType"),
                 CostRateType = GetReaderValue<byte>(reader, "Cost_RateType"),
                 SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
