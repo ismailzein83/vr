@@ -30,6 +30,13 @@ function StrategyManagementController($scope, StrategyAPIService) {
             return getData(true);
         };
 
+        $scope.resetClicked = function () {
+            stopPaging = true;
+            $scope.name = '';
+            $scope.description = '';
+            return getData(true);
+        };
+
         $scope.AddNewStrategy = function () {
 
             var settings = {};

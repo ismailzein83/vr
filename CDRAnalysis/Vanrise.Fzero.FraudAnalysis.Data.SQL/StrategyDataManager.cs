@@ -119,7 +119,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
-            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy where Name like '%' + @name + '%' and Description like '%' + @description + '%'; ";
+            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy where Name like @name and Description like @description ; ";
             List<Strategy> strategies = new List<Strategy>();
 
 
@@ -143,8 +143,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     description = string.Empty;
 
 
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "name", Value = name });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "description", Value = description });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "name", Value = "%" + name + "%" });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "description", Value = "%" + description + "%" });
             }
             );
             return strategies;
