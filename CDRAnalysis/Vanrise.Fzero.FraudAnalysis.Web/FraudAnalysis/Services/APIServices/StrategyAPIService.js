@@ -1,17 +1,21 @@
 ﻿app.service('StrategyAPIService', function (BaseAPIService) {
 
     return ({
-        GetAllStrategies: GetAllStrategies,
+        GetFilteredStrategies: GetFilteredStrategies,
         GetStrategy: GetStrategy
     });
 
-    function GetAllStrategies() {
-        return BaseAPIService.get("/api/Strategy/GetAllStrategies",
+    function GetFilteredStrategies(fromRow, toRow, name, description) {
+        return BaseAPIService.get("/api/Strategy/GetFilteredStrategies",
             {
-               
+                fromRow: fromRow,
+                toRow: toRow,
+                name: name,
+                description: description
             }
            );
     }
+
 
     function GetStrategy(strategyId) {
         return BaseAPIService.get("/api/Strategy/GetStrategy",

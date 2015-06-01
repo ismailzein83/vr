@@ -116,6 +116,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
              }, null);
             return strategies;
           }
+
+        public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
+        {
+            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy where Name like '%' + @name + '%' and Description like '%' + @description + '%'; ";
+            List<Strategy> strategies = new List<Strategy>();
+
+
+            ExecuteReaderText(query_GetStrategies, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    Strategy strategy = new Strategy();
+                    strategy.Id = (int)reader["Id"];
+                    strategy.Name = reader["Name"] as string;
+                    strategy.Description = reader["Description"] as string;
+                    strategies.Add(strategy);
+                }
+            }
+            , (cmd) =>
+            {
+                if (name == null)
+                    name = string.Empty;
+
+                if (description == null)
+                    description = string.Empty;
+
+
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "name", Value = name });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "description", Value = description });
+            }
+            );
+            return strategies;
+        }
+
       
     }
 }
