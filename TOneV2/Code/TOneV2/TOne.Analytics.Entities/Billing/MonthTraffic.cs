@@ -10,7 +10,7 @@ namespace TOne.Analytics.Entities
     {
         public string Month { get; set; }
 
-        public double? Durations { get; set; }
+        public decimal? Durations { get; set; }
 
         public double? Amount { get; set; }
 

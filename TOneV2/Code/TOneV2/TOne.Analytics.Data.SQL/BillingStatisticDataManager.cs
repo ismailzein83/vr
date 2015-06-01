@@ -82,7 +82,7 @@ namespace TOne.Analytics.Data.SQL
             MonthTraffic instance = new MonthTraffic
             {
                 Month = reader["Month"] as string,
-                Durations = GetReaderValue<double>(reader, "Durations"),
+                Durations = GetReaderValue<decimal>(reader, "Durations"),
                 Amount = GetReaderValue<double>(reader, "Amount")
             };
 

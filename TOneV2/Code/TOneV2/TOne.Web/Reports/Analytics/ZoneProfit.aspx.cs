@@ -27,6 +27,7 @@ namespace TOne.Web.Reports.Analytics
 
                 List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
 
+                List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
               
 
                 ReportDataSource ds = new ReportDataSource("ZoneProfit", zoneProfit);               
