@@ -17,15 +17,42 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         [HttpGet]
         public IEnumerable<Strategy> GetFilteredStrategies(int fromRow, int toRow,string name, string description)
         {
-            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            return ((IEnumerable<Strategy>)(manager.GetFilteredStrategies(fromRow, toRow, name, description)));
+            return new StrategyManager().GetFilteredStrategies(fromRow, toRow, name, description);
         }
 
         [HttpGet]
         public Strategy GetStrategy(int StrategyId)
         {
-            StrategyManager manager = new StrategyManager();
-            return ((Strategy)(manager.GetStrategy(StrategyId)));
+            return new StrategyManager().GetStrategy(StrategyId);
         }
+
+
+        public void AddStrategy(Strategy strategy)
+        {
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            manager.AddStrategy(strategy);
+        }
+
+
+
+        public void UpdateStrategy(Strategy strategy)
+        {
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            manager.UpdateStrategy(strategy);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

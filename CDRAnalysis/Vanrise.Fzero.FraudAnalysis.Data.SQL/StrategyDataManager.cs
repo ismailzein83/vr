@@ -96,7 +96,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategy;
         }
 
-
         public List<Strategy> GetAllStrategies()
         {
             string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy; ";
@@ -150,6 +149,36 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategies;
         }
 
-      
+        public void AddStrategy(Strategy strategy)
+        {
+            string query = "INSERT INTO Strategy(Name, Description, IsDefault) values(@Name, @Description, @IsDefault)";
+
+            ExecuteNonQueryText(query,  (cmd) =>            {
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategy.Name });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategy.Description });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IsDefault", Value = strategy.IsDefault });
+            });
+            
+        }
+
+
+
+        public void UpdateStrategy(Strategy strategy)
+        {
+            string query = "Update Strategy set Name=@Name, Description=@Description, IsDefault=@IsDefault where Id=@Id ";
+
+            ExecuteNonQueryText(query, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", Value = strategy.Id });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategy.Name });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategy.Description });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IsDefault", Value = strategy.IsDefault });
+            });
+
+        }
+
+
+
+
     }
 }

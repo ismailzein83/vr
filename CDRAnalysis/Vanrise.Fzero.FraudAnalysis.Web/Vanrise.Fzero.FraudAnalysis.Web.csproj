@@ -148,6 +148,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
+    <Content Include="FraudAnalysis\Views\StrategyEditor.html" />
+    <Content Include="FraudAnalysis\Views\StrategyEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

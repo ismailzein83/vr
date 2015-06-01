@@ -1,7 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', 'VRModalService'];
+﻿StrategyManagementController.$inject = ['$scope', 'StrategysAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-
-function StrategyManagementController($scope, StrategyAPIService, VRModalService) {
+function StrategyManagementController($scope, StrategysAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
