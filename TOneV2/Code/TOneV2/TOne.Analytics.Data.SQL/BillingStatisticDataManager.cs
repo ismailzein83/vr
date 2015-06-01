@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,44 @@ namespace TOne.Analytics.Data.SQL
         {
             return GetItemsSP("Analytics.sp_billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer), fromDate, toDate, null, null, groupByCustomer, null, null);
         }
+        public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
+        {
+            int daysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
+
+            int numberOfMonths = toDate.Month - fromDate.Month + 1;
+
+            string query = String.Format(@"SELECT
+                            Convert(varchar(7), BS.CallDate,121) AS [Month] , 
+                            IsNull(SUM(BS.SaleDuration) / 60.0,0) AS Durations ,
+                            IsNull(SUM({0}),0) AS Amount 
+                            From Billing_Stats BS WITH(NOLOCK,INDEX(IX_Billing_Stats_Date,IX_Billing_Stats_{1})) ,
+                            Zone z (NOLOCK)
+                            WHERE BS.CallDate BETWEEN @FromDate AND '{2}' 
+                            AND {3} = '{4}' 
+                            AND z.ZoneID = {5}
+                            GROUP BY   Convert(varchar(7), BS.CallDate,121)
+                            ORDER BY   Convert(varchar(7), BS.CallDate,121) DESC ",
+
+                            isSale ? "BS.Sale_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) " : " BS.Cost_Nets / dbo.GetExchangeRate(BS.Sale_Currency, BS.CallDate) ",
+                           
+                            isSale ? "Customer" : "Supplier",
+
+                            toDate.Date.ToString("yyyy-MM-") + daysInTillDays.ToString(),
+                            
+                            isSale ? "BS.CustomerID" : "BS.SupplierID",
+
+                            carrierAccountID,
+
+                            isSale ? "BS.SaleZoneID " : "BS.CostZoneID");
+
+                            return GetItemsText(query, MonthMapper,
+                            (cmd) =>
+                            {
+                                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                            });
+           
+        }
+
 
         private ZoneProfit ZoneProfitMapper(IDataReader reader, string groupByCustomer)
         {
@@ -35,6 +74,18 @@ namespace TOne.Analytics.Data.SQL
                 instance.CustomerID = reader["CustomerID"] as string;
 
             }
+            return instance;
+        }
+
+        private MonthTraffic MonthMapper(IDataReader reader)
+        {
+            MonthTraffic instance = new MonthTraffic
+            {
+                Month = reader["Month"] as string,
+                Durations = GetReaderValue<double>(reader, "Durations"),
+                Amount = GetReaderValue<double>(reader, "Amount")
+            };
+            
             return instance;
         }
 

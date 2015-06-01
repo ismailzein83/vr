@@ -23,6 +23,12 @@ namespace TOne.Analytics.Business
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, groupByCustomer));
         }
 
+        public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
+        {
+
+            return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
+        }
+
 
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
