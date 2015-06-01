@@ -3,30 +3,87 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="From:" value="fromDate"  isrequired></vr-datetimepicker>
                 </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <!--<vr-columns colnum="2">
+                    <vr-select datasource="PeriodType" isrequired ></vr-select>
+                </vr-columns>-->
             </vr-row>
         </div>
-
-
     </vr-form>
 
     <vr-row>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
-                <vr-button type="Reset" ></vr-button>
+                <vr-button type="Search" formname="formFilter" data-onclick="getBillingStats"></vr-button>
+                <vr-button type="Reset"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
     <input type="text" ng-model="name" />
+
+
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="data" data-on-ready="onMainGridReady" pagersettings="mainGridPagerSettings" >
-                    <vr-datagridcolumn headertext="'Name'" field="'name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Country'" field="'country'"></vr-datagridcolumn>
+                <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'CallDate'" field="'CallDate'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CustomerID'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SupplierID'" field="'SupplierID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostZoneID'" field="'CostZoneID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleZoneID'" field="'SaleZoneID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost_Currency'" field="'Cost_Currency'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_Currency'" field="'Sale_Currency'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'NumberOfCalls'" field="'NumberOfCalls'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'FirstCallTime'" field="'FirstCallTime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'LastCallTime'" field="'LastCallTime'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'MinDuration'" field="'MinDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'MaxDuration'" field="'MaxDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'AvgDuration'" field="'AvgDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost_Nets'" field="'Cost_Nets'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost_Discounts'" field="'Cost_Discounts'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost_Commissions'" field="'Cost_Commissions'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Cost_ExtraCharges'" field="'Cost_ExtraCharges'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_Nets'" field="'Sale_Nets'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_Discounts'" field="'Sale_Discounts'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_Commissions'" field="'Sale_Commissions'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_ExtraCharges'" field="'Sale_ExtraCharges'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_RateType'" field="'Sale_RateType'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Sale_RateType'" field="'Sale_RateType'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleDuration'" field="'SaleDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostDuration'" field="'CostDuration'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'SaleZone'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Calls'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostDuration'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostDurationFormated'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostNet'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostNetFormated'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CostZone'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CustomerID'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'DurationNet'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'DurationNetFormated'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Profit'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'ProfitPercentage'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleDuration'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleDurationFormated'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleNet'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleNetFormated'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SaleZoneID'" field="'CustomerID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SupplierID'" field="'DurationNet'"></vr-datagridcolumn>
+
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
