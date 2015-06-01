@@ -33,7 +33,7 @@ public partial class SuspectionDefinition : BasePage
 
     //-----------------
     int id { get { return (int)ViewState["Id"]; } set { ViewState["Id"] = value; } }
-
+    List<Telerik.Web.UI.RadSlider> Sliders = new List<Telerik.Web.UI.RadSlider>();
 
     private void FillControls()
     {
@@ -69,6 +69,49 @@ public partial class SuspectionDefinition : BasePage
     {
         if (!IsPostBack)
         {
+
+
+            
+            Sliders.Add(RadSlider1);
+            Sliders.Add(RadSlider2);
+            Sliders.Add(RadSlider3);
+            Sliders.Add(RadSlider4);
+            Sliders.Add(RadSlider5);
+            Sliders.Add(RadSlider6);
+            Sliders.Add(RadSlider7);
+            Sliders.Add(RadSlider8);
+            Sliders.Add(RadSlider9);
+            Sliders.Add(RadSlider10);
+            Sliders.Add(RadSlider11);
+            Sliders.Add(RadSlider12);
+            Sliders.Add(RadSlider13);
+            Sliders.Add(RadSlider14);
+            Sliders.Add(RadSlider15);
+            Sliders.Add(RadSlider16);
+
+
+            foreach (var i in Sliders)
+            {
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-75%", Value = "0.25" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-50%", Value = "0.50" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-25%", Value = "0.75" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "0%", Value = "1" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "25%", Value = "1.25" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "50%", Value = "1.50" });
+                i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "75%", Value = "0.75" });
+            }
+
+            foreach (var i in Sliders)
+            {
+                i.SelectedValue = "1";
+            }
+
+
+
+          
+
+
+
             SetCaptions();
             SetDetailsVisible(false);
             FillControls();
@@ -193,22 +236,22 @@ public partial class SuspectionDefinition : BasePage
         RadSlider16.Visible = false;
 
 
-        RadSlider1.Value = RadSlider1.Items[3].Value.ToDecimal();
-        RadSlider2.Value = RadSlider2.Items[3].Value.ToDecimal();
-        RadSlider3.Value = RadSlider3.Items[3].Value.ToDecimal();
-        RadSlider4.Value = RadSlider4.Items[3].Value.ToDecimal();
-        RadSlider5.Value = RadSlider5.Items[3].Value.ToDecimal();
-        RadSlider6.Value = RadSlider6.Items[3].Value.ToDecimal();
-        RadSlider7.Value = RadSlider7.Items[3].Value.ToDecimal();
-        RadSlider8.Value = RadSlider8.Items[3].Value.ToDecimal();
-        RadSlider9.Value = RadSlider9.Items[3].Value.ToDecimal();
-        RadSlider10.Value = RadSlider10.Items[3].Value.ToDecimal();
-        RadSlider11.Value = RadSlider11.Items[3].Value.ToDecimal();
-        RadSlider12.Value = RadSlider12.Items[3].Value.ToDecimal();
-        RadSlider13.Value = RadSlider13.Items[3].Value.ToDecimal();
-        RadSlider14.Value = RadSlider14.Items[3].Value.ToDecimal();
-        RadSlider15.Value = RadSlider15.Items[3].Value.ToDecimal();
-        RadSlider16.Value = RadSlider16.Items[3].Value.ToDecimal();
+        RadSlider1.SelectedValue = "1";
+        RadSlider2.SelectedValue = "1";
+        RadSlider3.SelectedValue = "1";
+        RadSlider4.SelectedValue = "1";
+        RadSlider5.SelectedValue = "1";
+        RadSlider6.SelectedValue = "1";
+        RadSlider7.SelectedValue = "1";
+        RadSlider8.SelectedValue = "1";
+        RadSlider9.SelectedValue = "1";
+        RadSlider10.SelectedValue = "1";
+        RadSlider11.SelectedValue = "1";
+        RadSlider12.SelectedValue = "1";
+        RadSlider13.SelectedValue = "1";
+        RadSlider14.SelectedValue = "1";
+        RadSlider15.SelectedValue = "1";
+        RadSlider16.SelectedValue = "1";
         
 
     }
@@ -261,22 +304,22 @@ public partial class SuspectionDefinition : BasePage
        currentObject.CriteriaId15 = chkCriteria15.Checked == true ? 1 : 0;
        currentObject.CriteriaId16 = chkCriteria16.Checked == true ? 1 : 0;
 
-       currentObject.Cr1Per = RadSlider1.SelectedValue.ToDecimal();
-       currentObject.Cr2Per = RadSlider2.SelectedValue.ToDecimal();
-       currentObject.Cr3Per = RadSlider3.SelectedValue.ToDecimal();
-       currentObject.Cr4Per = RadSlider4.SelectedValue.ToDecimal();
-       currentObject.Cr5Per = RadSlider5.SelectedValue.ToDecimal();
-       currentObject.Cr6Per = RadSlider6.SelectedValue.ToDecimal();
-       currentObject.Cr7Per = RadSlider7.SelectedValue.ToDecimal();
-       currentObject.Cr8Per = RadSlider8.SelectedValue.ToDecimal();
-       currentObject.Cr9Per = RadSlider9.SelectedValue.ToDecimal();
-       currentObject.Cr10Per = RadSlider10.SelectedValue.ToDecimal();
-       currentObject.Cr11Per = RadSlider11.SelectedValue.ToDecimal();
-       currentObject.Cr12Per = RadSlider12.SelectedValue.ToDecimal();
-       currentObject.Cr13Per = RadSlider13.SelectedValue.ToDecimal();
-       currentObject.Cr14Per = RadSlider14.SelectedValue.ToDecimal();
-       currentObject.Cr15Per = RadSlider15.SelectedValue.ToDecimal();
-       currentObject.Cr16Per = RadSlider16.SelectedValue.ToDecimal();
+       currentObject.Cr1Per = RadSlider1.SelectedItem.Value.ToDecimal();
+       currentObject.Cr2Per = RadSlider2.SelectedItem.Value.ToDecimal();
+       currentObject.Cr3Per = RadSlider3.SelectedItem.Value.ToDecimal();
+       currentObject.Cr4Per = RadSlider4.SelectedItem.Value.ToDecimal();
+       currentObject.Cr5Per = RadSlider5.SelectedItem.Value.ToDecimal();
+       currentObject.Cr6Per = RadSlider6.SelectedItem.Value.ToDecimal();
+       currentObject.Cr7Per = RadSlider7.SelectedItem.Value.ToDecimal();
+       currentObject.Cr8Per = RadSlider8.SelectedItem.Value.ToDecimal();
+       currentObject.Cr9Per = RadSlider9.SelectedItem.Value.ToDecimal();
+       currentObject.Cr10Per = RadSlider10.SelectedItem.Value.ToDecimal();
+       currentObject.Cr11Per = RadSlider11.SelectedItem.Value.ToDecimal();
+       currentObject.Cr12Per = RadSlider12.SelectedItem.Value.ToDecimal();
+       currentObject.Cr13Per = RadSlider13.SelectedItem.Value.ToDecimal();
+       currentObject.Cr14Per = RadSlider14.SelectedItem.Value.ToDecimal();
+       currentObject.Cr15Per = RadSlider15.SelectedItem.Value.ToDecimal();
+       currentObject.Cr16Per = RadSlider16.SelectedItem.Value.ToDecimal();
 
        return currentObject;
     }
@@ -313,6 +356,8 @@ public partial class SuspectionDefinition : BasePage
         }
    
 
+        
+
 
 
         chkCriteria1.Checked = currentObject.CriteriaId1 == 1 ? true : false;
@@ -333,7 +378,19 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria16.Checked = currentObject.CriteriaId16 == 1 ? true : false;
 
 
+        foreach (var i in Sliders)
+        {
+            i.Items.Clear();
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-75%", Value = "0.25" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-50%", Value = "0.50" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "-25%", Value = "0.75" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "0%", Value = "1" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "25%", Value = "1.25" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "50%", Value = "1.50" });
+            i.Items.Add(new Telerik.Web.UI.RadSliderItem() { Text = "75%", Value = "0.75" });
+        }
 
+       
 
 
         RadSlider1.SelectedValue = currentObject.Cr1Per.Value.ToString();

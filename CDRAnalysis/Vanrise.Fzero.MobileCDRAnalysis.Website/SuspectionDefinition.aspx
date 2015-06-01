@@ -296,16 +296,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider1" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                     
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -324,16 +315,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider2" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -350,16 +332,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider3" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -378,16 +351,7 @@
 
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider4" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -406,16 +370,7 @@
 
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider5" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -434,16 +389,7 @@
 
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider6" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -461,16 +407,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider7" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -488,16 +425,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider8" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -514,16 +442,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider9" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -544,16 +463,7 @@
 
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider10" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                        
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -569,17 +479,8 @@
                                                 </td>
                                                 <td></td>
                                                 <td>
-                                                    <Telerik:RadSlider ID="RadSlider11" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                    <Telerik:RadSlider ID="RadSlider11" runat="server" ItemType="Item" Height="50px"   Width="1000px"     >
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -598,16 +499,7 @@
 
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider12" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -625,16 +517,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider13" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -652,16 +535,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider14" runat="server" ItemType="Item" Height="50px"   Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -677,16 +551,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider15" runat="server" ItemType="Item" Height="50px"  Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                       
                                                     </Telerik:RadSlider>
 
                                                 </td>
@@ -705,16 +570,7 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider16" IsSelectionRangeEnabled ="false"   runat="server" ItemType="Item"  Height="50px"  Width="1000px">
-                                                        <Items>
-                                                            <Telerik:RadSliderItem runat="server" Text="-75%" Value="0.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-50%" Value="0.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="-25%" Value="0.75" />
-                                                            <Telerik:RadSliderItem runat="server" Text="0%" Value="1" />
-                                                            <Telerik:RadSliderItem runat="server" Text="25%" Value="1.25" />
-                                                            <Telerik:RadSliderItem runat="server" Text="50%" Value="1.50" />
-                                                            <Telerik:RadSliderItem runat="server" Text="75%" Value="0.75" />
-
-                                                        </Items>
+                                                      
                                                     </Telerik:RadSlider>
 
                                                 </td>
