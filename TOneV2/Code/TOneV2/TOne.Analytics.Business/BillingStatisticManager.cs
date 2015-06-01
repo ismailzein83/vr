@@ -68,5 +68,11 @@ namespace TOne.Analytics.Business
             return models;
         }
 
+        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        {
+
+            return _datamanager.GetBillingStatistics(fromDate,toDate);
+        }
+
     }
 }
