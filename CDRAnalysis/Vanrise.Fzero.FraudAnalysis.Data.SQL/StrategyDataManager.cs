@@ -159,12 +159,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool AddStrategy(Strategy strategyObject)
         {
-            string query = "INSERT INTO Strategy(Name, Description, IsDefault) values(@Name, @Description, @IsDefault)";
+            string query = "INSERT INTO Strategy(Name, Description, IsDefault, StrategyContent) values(@Name, @Description, @IsDefault, @StrategyContent)";
 
             ExecuteNonQueryText(query,  (cmd) =>            {
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IsDefault", Value = strategyObject.IsDefault });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value =  "Serialized" });
             });
 
             return true;
@@ -174,7 +175,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool UpdateStrategy(Strategy strategyObject)
         {
-            string query = "Update Strategy set Name=@Name, Description=@Description, IsDefault=@IsDefault where Id=@Id ";
+            string query = "Update Strategy set Name=@Name, Description=@Description, IsDefault=@IsDefault, StrategyContent=@StrategyContent where Id=@Id ";
 
             ExecuteNonQueryText(query, (cmd) =>
             {
@@ -182,6 +183,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IsDefault", Value = strategyObject.IsDefault });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value = "Serialized" });
             });
             return true;
         }

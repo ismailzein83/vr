@@ -13,6 +13,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public bool IsDefault { get; set; }
 
+        public string StrategyContent { get; set;}
+
         public List<StrategyCriteria> StrategyCriterias { get; set; }
 
         public List<StrategyPeriod> StrategyPeriods { get; set; }
