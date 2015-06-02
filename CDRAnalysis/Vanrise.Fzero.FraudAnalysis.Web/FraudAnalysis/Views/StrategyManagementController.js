@@ -8,6 +8,18 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
     defineScope();
     load();
 
+       
+   
+
+   // function IsDefaultLabel(IsDefault) {
+   //     foreach (DataGridViewRow row in datagridviews.Rows)
+   //     {
+   //currQty += row.Cells["qty"].Value;
+   //     //More code here
+   // }
+   // }
+
+
     function defineScope() {
 
         $scope.gridMenuActions = [];
@@ -58,6 +70,8 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
         return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
             angular.forEach(response, function (itm) {
+               
+                itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
                 $scope.strategies.push(itm);
             });
         });

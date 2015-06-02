@@ -31,7 +31,7 @@
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="strategies" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'IsDefault'">{{dataItem.IsDefault == "0"? 'Not Default': 'Default' }}</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'IsDefault'" field="'IsDefaultText'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
