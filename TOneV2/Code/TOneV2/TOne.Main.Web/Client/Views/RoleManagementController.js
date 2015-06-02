@@ -1,153 +1,97 @@
-﻿/// <reference path="RoleSettings.html" />
-/// <reference path="Role.html" />
-appControllers.controller('RoleManagementController', function RoleController($scope, $q, RolesAPIService, VRModalService) {
-    $scope.Roles = [];
+﻿RoleManagementController.$inject = ['$scope', '$q', 'RolesAPIService', 'VRModalService', 'VRNotificationService'];
 
-    $scope.gridMenuActions = [{
-        name: "Edit",
-        clicked: function (dataItem) {
 
-            var settings = {
-                width: "40%"
-            };
+function RoleManagementController($scope, $q, RolesAPIService, VRModalService, VRNotificationService) {
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Edit Role";
-                modalScope.onRoleAdded = function (Role) {
-                    gridApi.itemUpdated(Role);
-                };
-            };
+    var mainGridAPI;
+    var arrMenuAction = [];
+    var stopPaging;
 
-            VRModalService.showModal('/Client/Modules/Main/Views/RoleEditor.html', dataItem, settings);
-        }
-    },
-    {
-        name: "Reset Password",
-        clicked: function (dataItem) {
+    defineScope();
+    load();
 
-            var settings = {
-                width: "40%"
-            };
+    function defineScope() {
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Reset Pasword";
-                modalScope.onRoleAdded = function (Role) {
-                    gridApi.itemUpdated(Role);
-                };
-            };
+        $scope.gridMenuActions = [];
 
-            VRModalService.showModal('/Client/Modules/Main/Views/ResetPasswordEditor.html', dataItem, settings);
-        }
-    },
-    {
-        name: "Roles",
-        clicked: function (dataItem) {
+        $scope.Roles = [];
 
-            var settings = {
-                width: "40%"
-            };
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Roles";
-                modalScope.onRoleAdded = function (Role) {
-                    gridApi.itemUpdated(Role);
-                };
-            };
-
-            VRModalService.showModal('/Client/Modules/Main/Views/RolesEditor.html', dataItem, settings);
-        }
-    }
-    //{
-    //    name: "Delete",
-    //    clicked: function (dataItem) {
-    //        $scope.DeleteRole(dataItem);
-    //    }
-    //}
-    ];
-
-    //Action
-    $scope.DeleteRole = function (Role) {
-
-        RolesAPIService.DeleteRole(Role.RoleId).then(function (response) {
-
-        }).finally(function () {
-            loadRolesSearch($scope.txtname, $scope.txtemail);
-        });
-    }
-
-    var gridApi;
-    $scope.gridReady = function (api) {
-        gridApi = api;
-    };
-
-    var pageSize = 20;
-    var from = 0;
-    var to = pageSize;
-    var last = false;
-
-    $scope.loadMoreData = function () {
-
-        var params = {};
-        if (from == 0) params.fromRow = 0;
-        else params.fromRow = from + 1;
-        params.toRow = to;
-
-        from = from + pageSize;
-        to = to + pageSize;
-
-        return RolesAPIService.GetRoleList(params).then(function (response) {
-
-            angular.forEach(response, function (itm) {
-                $scope.Roles.push(itm);
-            });
-
-            last = (response.length < pageSize) ? true : false;
-
-        });
-    };
-    $scope.loadMoreData();
-
-    //Action
-    $scope.SearchRole = function () {
-        loadRolesSearch($scope.txtname, $scope.txtemail);
-    }
-
-    $scope.ValidateUs1 = function (text) {
-        if (text == undefined)
-            return null;
-        if (text.length < 3)
-            return "Invalid";
-    }
-
-    $scope.AddNewRole = function () {
-
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Role";
-            modalScope.onRoleAdded = function (Role) {
-                gridApi.itemAdded(Role);
-            };
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+            getData();
         };
-        VRModalService.showModal('/Client/Modules/Main/Views/RoleEditor.html', null, settings);
 
-    }
+        $scope.loadMoreData = function () {
+            return getData();
+        }
 
-    function loadRolesSearch(name, email) {
-        RolesAPIService.SearchRole(name == undefined ? " " : name, email == undefined ? " " : email).then(function (response) {
+        $scope.searchClicked = function () {
+            mainGridAPI.clearDataAndContinuePaging();
+            return getData();
+        };
 
-            $scope.Roles = response;
+        $scope.AddNewRole = function () {
 
-        }).finally(function () {
+            var settings = {};
 
-        });
+            settings.onScopeReady = function (modalScope) {
+                modalScope.title = "New Role";
+                modalScope.onRoleAdded = function (Role) {
+                    mainGridAPI.itemAdded(Role);
+                };
+            };
+            VRModalService.showModal('/Client/Modules/Main/Views/RoleEditor.html', null, settings);
+
+        }
     }
 
     function load() {
-        $scope.isGettingData = true;
-        $scope.txtname = '';
-        $scope.txtemail = '';
-        $scope.loadRoles();
+        function MenuAction(name, width, title, url) {
+            this.name = name;
+            this.clicked = function (dataItem) {
+                var params = {
+                    RoleId: dataItem.RoleId
+                };
+
+                var settings = {
+                    width: width
+                };
+
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.title = title;
+                    modalScope.onRoleUpdated = function (Role) {
+                        mainGridAPI.itemUpdated(Role);
+                    };
+                };
+                VRModalService.showModal(url, params, settings);
+            };
+        }
+
+        arrMenuAction.push(new MenuAction("Edit", "40%", "Edit Role", "/Client/Modules/Main/Views/RoleEditor.html"));
+        arrMenuAction.push(new MenuAction("Reset Password", "40%", "Reset Password", "/Client/Modules/Main/Views/ResetPasswordEditor.html"));
+        arrMenuAction.push(new MenuAction("Roles", "40%", "Roles", "/Client/Modules/Main/Views/RolesEditor.html"));
+
+        arrMenuAction.forEach(function (item) {
+            $scope.gridMenuActions.push({
+                name: item.name,
+                clicked: item.clicked
+            });
+
+        });
     }
 
-});
+    function getData() {
+        var pageInfo = mainGridAPI.getPageInfo();
+
+        var name = $scope.name != undefined ? $scope.name : '';
+        var email = $scope.email != undefined ? $scope.email : '';
+        return RolesAPIService.GetFilteredRoles(pageInfo.fromRow, pageInfo.toRow, name, email).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.Roles.push(itm);
+            });
+            if (response.length < 20)
+                stopPaging = true;
+        });
+    }
+}
+appControllers.controller('RoleManagementController', RoleManagementController);

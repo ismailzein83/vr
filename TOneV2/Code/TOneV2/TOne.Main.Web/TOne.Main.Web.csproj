@@ -125,6 +125,8 @@
     <Content Include="Client\Services\APIServices\UsersAPIService.js" />
     <Content Include="Client\Views\ResetPasswordEditorController.js" />
     <Content Include="Client\Views\ResetPasswordEditor.html" />
+    <Content Include="Client\Views\RoleEditor.html" />
+    <Content Include="Client\Views\RoleEditorController.js" />
     <Content Include="Client\Views\RoleManagement.html" />
     <Content Include="Client\Views\RoleManagementController.js" />
     <Content Include="Client\Views\UserEditor.html" />

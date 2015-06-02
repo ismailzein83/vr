@@ -8,14 +8,14 @@ namespace TOne.Data
 {
     public interface IRoleDataManager : IDataManager
     {
-        List<Role> GetRoles(int fromRow, int toRow);
+        List<Role> GetFilteredRoles(int fromRow, int toRow, string name);
 
-        void DeleteRole(int Id);
+        void DeleteRole(int id);
 
-        Role AddRole(Role Role);
+        Role GetRole(int roleId);
 
-        bool UpdateRole(Role Role);
+        bool AddRole(Role role, out int insertedId);
 
-        List<Entities.Role> SearchRole(string name);
+        bool UpdateRole(Role role);
     }
 }

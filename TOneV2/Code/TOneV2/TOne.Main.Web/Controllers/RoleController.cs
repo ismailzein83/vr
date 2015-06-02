@@ -12,42 +12,38 @@ namespace TOne.Main.Web.Controllers
     public class RoleController : ApiController
     {
         [HttpGet]
-        public IEnumerable<Role> GetRoles(int fromRow, int toRow)
+        public IEnumerable<Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
             RoleManager manager = new RoleManager();
-            //return ((IEnumerable<Role>)(manager.GetRoles())).Skip(pageNumber * pageSize).Take(pageSize);
-            return ((IEnumerable<Role>)(manager.GetRoles(fromRow, toRow)));
+            return ((IEnumerable<Role>)(manager.GetFilteredRoles(fromRow, toRow, name)));
         }
 
         [HttpGet]
-        public void DeleteRole(int Id)
+        public Role GetRole(int roleId)
         {
             RoleManager manager = new RoleManager();
-            manager.DeleteRole(Id);
+            return ((Role)(manager.GetRole(roleId)));
         }
 
         [HttpPost]
-        public bool UpdateRole(Role Role)
+        public TOne.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
         {
             RoleManager manager = new RoleManager();
-            return manager.UpdateRole(Role);
+            return manager.UpdateRole(roleObject);
         }
 
         [HttpPost]
-        public Role AddRole(Role Role)
+        public TOne.Entities.OperationResults.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
             RoleManager manager = new RoleManager();
-            return manager.AddRole(Role);
+            return manager.AddRole(roleObject);
         }
-
 
         [HttpGet]
-        public List<Role> SearchRole(string Name)
+        public void DeleteRole(int id)
         {
             RoleManager manager = new RoleManager();
-            return manager.SearchRole(Name);
+            manager.DeleteRole(id);
         }
-
-      
     }
 }

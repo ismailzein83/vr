@@ -10,35 +10,60 @@ namespace TOne.Business
 {
     public class RoleManager
     {
-        public List<TOne.Entities.Role> GetRoles(int fromRow, int toRow)
+
+        public List<TOne.Entities.Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
             IRoleDataManager datamanager = DataManagerFactory.GetDataManager<IRoleDataManager>();
-            return datamanager.GetRoles(fromRow, toRow);
+            return datamanager.GetFilteredRoles(fromRow, toRow, name);
         }
 
-        public void DeleteRole(int Id)
+        public Role GetRole(int roleId)
         {
             IRoleDataManager datamanager = DataManagerFactory.GetDataManager<IRoleDataManager>();
-            datamanager.DeleteRole(Id);
+            return datamanager.GetRole(roleId);
         }
 
-        public Role AddRole(Role Role)
+        public TOne.Entities.OperationResults.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
-            IRoleDataManager datamanager = DataManagerFactory.GetDataManager<IRoleDataManager>();
-            return datamanager.AddRole(Role);
+            TOne.Entities.OperationResults.InsertOperationOutput<Role> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<Role>();
+
+            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int RoleId = -1;
+
+            IRoleDataManager dataManager = DataManagerFactory.GetDataManager<IRoleDataManager>();
+            bool insertActionSucc = dataManager.AddRole(roleObject, out RoleId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                roleObject.RoleId = RoleId;
+                insertOperationOutput.InsertedObject = roleObject;
+            }
+            return insertOperationOutput;
         }
 
-        public bool UpdateRole(Role Role)
+        public TOne.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
         {
-            IRoleDataManager datamanager = DataManagerFactory.GetDataManager<IRoleDataManager>();
-            return datamanager.UpdateRole(Role);
+            IRoleDataManager dataManager = DataManagerFactory.GetDataManager<IRoleDataManager>();
+            bool updateActionSucc = dataManager.UpdateRole(roleObject);
+            TOne.Entities.UpdateOperationOutput<Role> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<Role>();
+
+            updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = roleObject;
+            }
+            return updateOperationOutput;
         }
 
-
-        public List<TOne.Entities.Role> SearchRole(string name)
+        public void DeleteRole(int id)
         {
             IRoleDataManager datamanager = DataManagerFactory.GetDataManager<IRoleDataManager>();
-            return datamanager.SearchRole(name);
+            datamanager.DeleteRole(id);
         }
     }
 }
