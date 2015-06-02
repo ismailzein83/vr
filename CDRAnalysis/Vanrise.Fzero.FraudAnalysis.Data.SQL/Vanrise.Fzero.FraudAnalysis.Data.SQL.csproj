@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C62BBF70-E5DA-421D-85E1-75F847183FF0}</ProjectGuid>
+    <ProjectGuid>{CE9EE251-4BB3-457A-925A-7B53A990CF34}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Vanrise.Fzero.FraudAnalysis.Data.SQL</RootNamespace>
