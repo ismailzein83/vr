@@ -1,7 +1,7 @@
 ﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
-
+    
     var editMode;
     loadParameters();
     defineScope();
@@ -10,9 +10,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         $scope.StrategyId = undefined;
-        if (parameters != undefined && parameters != null)
-            $scope.StrategyId = parameters.StrategyId;
 
+        if (parameters != undefined && parameters != null)
+            $scope.StrategyId = parameters.strategyId;
+        
         if ($scope.StrategyId != undefined)
             editMode = true;
         else
@@ -22,6 +23,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function defineScope() {
         $scope.SaveStrategy = function () {
             if (editMode) {
+                
                 return UpdateStrategy();
             }
             else {
@@ -44,8 +46,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function getStrategy() {
+        
         return StrategyAPIService.GetStrategy($scope.StrategyId)
            .then(function (response) {
+               console.log(response);
                fillScopeFromStrategyObj(response);
            })
             .catch(function (error) {
@@ -57,20 +61,21 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function buildStrategyObjFromScope() {
         var StrategyObject = {
-            StrategyId: ($scope.StrategyId != null) ? $scope.StrategyId : 0,
-            name: $scope.name,
-            email: $scope.email,
-            description: $scope.description,
-            Status: $scope.isActive == false ? "0" : "1"
+            Id: ($scope.StrategyId != null) ? $scope.StrategyId : 0,
+            Name: $scope.name,
+            Description: $scope.description,
+            IsDefault: $scope.isDefault == false ? "0" : "1"
         };
         return StrategyObject;
     }
 
-    function fillScopeFromStrategyObj(StrategyObject) {
-        $scope.name = StrategyObject.Name;
-        $scope.email = StrategyObject.Email;
-        $scope.description = StrategyObject.Description;
-        $scope.isActive = StrategyObject.Status;
+    function fillScopeFromStrategyObj(strategyObject) {
+        
+        //alert(response);
+
+        $scope.name = strategyObject.Name;
+        $scope.description = strategyObject.Description;
+        $scope.isDefault = strategyObject.IsDefault;
     }
 
     function AddStrategy() {

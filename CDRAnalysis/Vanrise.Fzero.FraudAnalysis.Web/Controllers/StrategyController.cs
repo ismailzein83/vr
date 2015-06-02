@@ -7,10 +7,6 @@ using Vanrise.Web.Base;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
-    public class ResetPasswordInput
-    {
-        public int StrategyId { get; set; }
-    }
 
     public class StrategyController : BaseAPIController
     {

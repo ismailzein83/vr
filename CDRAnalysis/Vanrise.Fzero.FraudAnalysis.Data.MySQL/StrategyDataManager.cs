@@ -25,12 +25,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
             MySQLManager manager = new MySQLManager();
 
-            strategy.Id = manager.GetItem(query0, (cmd) =>
+            strategy = manager.GetItem<Strategy>(query0, (cmd) =>
             {
                 cmd.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
             }, (reader) =>
             {
-                return GetReaderValue<int>(reader, "Id") ;
+                return new Strategy()
+                {
+                    Id = GetReaderValue<int>(reader, "Id"),
+                    Name = GetReaderValue<string>(reader, "Name"),
+                    Description = GetReaderValue<string>(reader, "Description"),
+                    IsDefault = GetReaderValue<bool>(reader, "IsDefault")
+                };
             });
 
 

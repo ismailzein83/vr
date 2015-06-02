@@ -79,7 +79,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
     function editStrategy(strategy) {
         var params = {
-            strategyId: strategy.StrategyId
+            strategyId: strategy.Id
         };
 
         var settings = {

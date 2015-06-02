@@ -19,29 +19,25 @@
     }
 
 
-    function GetStrategy(strategyId) {
+    function GetStrategy(StrategyId) {
         return BaseAPIService.get("/api/Strategy/GetStrategy",
             {
-                StrategyId: strategyId
+                StrategyId: StrategyId
             }
            );
     }
 
 
     function AddStrategy(strategy) {
-        return BaseAPIService.get("/api/Strategy/AddStrategy",
-            {
-                Strategy: strategy
-            }
+        return BaseAPIService.post("/api/Strategy/AddStrategy",
+            strategy
            );
     }
 
 
     function UpdateStrategy(strategy) {
-        return BaseAPIService.get("/api/Strategy/UpdateStrategy",
-            {
-                Strategy: strategy
-            }
+        return BaseAPIService.post("/api/Strategy/UpdateStrategy",
+            strategy
            );
     }
 
