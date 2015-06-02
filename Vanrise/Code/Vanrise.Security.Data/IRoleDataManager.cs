@@ -9,6 +9,12 @@ namespace Vanrise.Security.Data
 {
     public interface IRoleDataManager : IDataManager
     {
-        List<Role> GetRoles();
+        List<Role> GetFilteredRoles(int fromRow, int toRow, string name);
+
+        Role GetRole(int roleId);
+        
+        bool AddRole(Role role, out int insertedId);
+        
+        bool UpdateRole(Role role);
     }
 }
