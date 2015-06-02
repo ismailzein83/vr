@@ -49,7 +49,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         
         return StrategyAPIService.GetStrategy($scope.StrategyId)
            .then(function (response) {
-               console.log(response);
                fillScopeFromStrategyObj(response);
            })
             .catch(function (error) {
@@ -64,8 +63,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Id: ($scope.StrategyId != null) ? $scope.StrategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
-            IsDefault: $scope.isDefault == false ? "0" : "1"
+            IsDefault: $scope.isDefault 
         };
+        console.log(StrategyObject);
         return StrategyObject;
     }
 

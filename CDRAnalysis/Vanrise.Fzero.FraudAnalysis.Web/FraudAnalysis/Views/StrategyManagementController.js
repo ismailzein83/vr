@@ -31,6 +31,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         $scope.resetClicked = function () {            
             $scope.name = '';
             $scope.description = '';
+            mainGridAPI.clearDataAndContinuePaging();
             return getData();
         };
 
@@ -51,12 +52,9 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
     }
 
     function getData() {
-       
-
         var name = $scope.name != undefined ? $scope.name : '';
         var description = $scope.description != undefined ? $scope.description : '';
         var pageInfo = mainGridAPI.getPageInfo();
-
 
         return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
             angular.forEach(response, function (itm) {

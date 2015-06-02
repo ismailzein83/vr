@@ -125,7 +125,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
-            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy where Name like @name and Description like @description ; ";
+            string query_GetStrategies = @"SELECT Id, Name, Description, IsDefault FROM Strategy where Name like @name and Description like @description ; ";
             List<Strategy> strategies = new List<Strategy>();
 
 
@@ -137,6 +137,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     strategy.Id = (int)reader["Id"];
                     strategy.Name = reader["Name"] as string;
                     strategy.Description = reader["Description"] as string;
+                    strategy.IsDefault = GetReaderValue<bool>(reader, "IsDefault"); 
                     strategies.Add(strategy);
                 }
             }
