@@ -37,11 +37,11 @@ namespace TOne.BusinessEntity.Business
 
             if (updateActionSucc)
             {
-                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = switchObject;
             }
             else
-                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             return updateOperationOutput;
         }
 
@@ -57,12 +57,12 @@ namespace TOne.BusinessEntity.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 switchObject.SwitchId = switchId;
                 insertOperationOutput.InsertedObject = switchObject;
             }
             else
-                insertOperationOutput.Result = TOne.Entities.InsertOperationResult.Failed;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             return insertOperationOutput;
         }
     }

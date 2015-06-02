@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Entities
 {
-    public enum InsertOperationResult {  Succeeded = 0, Failed = 1, SameExists = 2}
-    public class InsertOperationOutput<T>
+    public class InsertOperationOutput<T> : Vanrise.Entities.InsertOperationOutput<T>
     {
-        public InsertOperationResult Result { get; set; }
-
-        public T InsertedObject { get; set; }
     }
 }

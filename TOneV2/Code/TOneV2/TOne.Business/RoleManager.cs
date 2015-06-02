@@ -23,11 +23,11 @@ namespace TOne.Business
             return datamanager.GetRole(roleId);
         }
 
-        public TOne.Entities.OperationResults.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public TOne.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
-            TOne.Entities.OperationResults.InsertOperationOutput<Role> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<Role>();
+            TOne.Entities.InsertOperationOutput<Role> insertOperationOutput = new TOne.Entities.InsertOperationOutput<Role>();
 
-            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int RoleId = -1;
 
@@ -36,7 +36,7 @@ namespace TOne.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 roleObject.RoleId = RoleId;
                 insertOperationOutput.InsertedObject = roleObject;
             }
@@ -49,12 +49,12 @@ namespace TOne.Business
             bool updateActionSucc = dataManager.UpdateRole(roleObject);
             TOne.Entities.UpdateOperationOutput<Role> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<Role>();
 
-            updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)
             {
-                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = roleObject;
             }
             return updateOperationOutput;

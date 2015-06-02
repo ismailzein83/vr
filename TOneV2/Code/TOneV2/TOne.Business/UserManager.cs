@@ -22,11 +22,11 @@ namespace TOne.Business
             return datamanager.GetUser(userId);
         }
 
-        public TOne.Entities.OperationResults.InsertOperationOutput<User> AddUser(User userObject)
+        public TOne.Entities.InsertOperationOutput<User> AddUser(User userObject)
         {
-            TOne.Entities.OperationResults.InsertOperationOutput<User> insertOperationOutput = new TOne.Entities.OperationResults.InsertOperationOutput<User>();
+            TOne.Entities.InsertOperationOutput<User> insertOperationOutput = new TOne.Entities.InsertOperationOutput<User>();
 
-            insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Failed;
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
 
@@ -35,7 +35,7 @@ namespace TOne.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = TOne.Entities.OperationResults.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 userObject.UserId = userId;
                 insertOperationOutput.InsertedObject = userObject;
             }
@@ -50,12 +50,12 @@ namespace TOne.Business
             bool updateActionSucc = dataManager.UpdateUser(userObject);
             TOne.Entities.UpdateOperationOutput<User> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<User>();
 
-            updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             if (updateActionSucc)
             {
-                updateOperationOutput.Result = TOne.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = userObject;
             }
             return updateOperationOutput;

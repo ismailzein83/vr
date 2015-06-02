@@ -33,7 +33,7 @@ namespace TOne.Main.Web.Controllers
         }
 
         [HttpPost]
-        public TOne.Entities.OperationResults.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public TOne.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
             RoleManager manager = new RoleManager();
             return manager.AddRole(roleObject);
