@@ -13,12 +13,12 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
-            return GetItemsSP("secu.sp_Roles_GetFilteredRoles", RoleMapper, fromRow, toRow, name);
+            return GetItemsSP("sec.sp_Roles_GetFilteredRoles", RoleMapper, fromRow, toRow, name);
         }
 
         public Entities.Role GetRole(int roleId)
         {
-            return GetItemSP("secu.sp_Roles_GetRole", RoleMapper, roleId);
+            return GetItemSP("sec.sp_Roles_GetRole", RoleMapper, roleId);
         }
 
 
@@ -26,7 +26,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object roleID;
 
-            int recordesEffected = ExecuteNonQuerySP("secu.sp_Roles_Insert", out roleID, roleObject.Name,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Insert", out roleID, roleObject.Name,
                 !string.IsNullOrEmpty(roleObject.Description) ? roleObject.Description : null);
             insertedId = (int)roleID;
             return (recordesEffected > 0);
@@ -34,7 +34,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateRole(Entities.Role roleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("secu.sp_Roles_Update", roleObject.RoleId, roleObject.Name,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Update", roleObject.RoleId, roleObject.Name,
                 !string.IsNullOrEmpty(roleObject.Description) ? roleObject.Description : null);
             return (recordesEffected > 0);
         }
