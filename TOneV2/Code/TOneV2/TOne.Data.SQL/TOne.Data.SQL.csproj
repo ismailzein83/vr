@@ -72,6 +72,7 @@
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="GenericEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportDefinitionDataManager.cs" />
     <Compile Include="RoleDataManager.cs" />
     <Compile Include="SecurityDataManager.cs" />
     <Compile Include="UserDataManager.cs" />

@@ -2,12 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using TOne.Entities;
 using System.Web.UI.WebControls;
 using TOne.Analytics.Business;
 using TOne.Analytics.Entities;
+using TOne.Business;
 
 namespace TOne.Web.Reports.Analytics
 {
@@ -19,15 +22,21 @@ namespace TOne.Web.Reports.Analytics
             if (!IsPostBack)
             {
                 ReportViewer1.ProcessingMode = ProcessingMode.Local;
+
+                ReportDefinitionManager mangerReport = new ReportDefinitionManager();
+
+
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/Analytics/rdlZoneProfits.rdlc");
 
                 BillingStatisticManager manager = new BillingStatisticManager();
+
                 //  string showCustomer = Request.QueryString["showCustomer"];
-                //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
+                DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), true);
+                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(from, to, true);
 
-                List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
+                //List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
               
 
                 ReportDataSource ds = new ReportDataSource("ZoneProfit", zoneProfit);               

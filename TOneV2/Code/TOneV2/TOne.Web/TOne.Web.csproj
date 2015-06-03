@@ -304,9 +304,17 @@
       <Project>{1df254fb-aa7a-44aa-a192-4e56d1d000f7}</Project>
       <Name>TOne.BusinessEntity.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
+      <Project>{cab55227-6fda-4012-8a59-168ad30f96d2}</Project>
+      <Name>TOne.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
       <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
       <Name>TOne.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data\TOne.Data.csproj">
+      <Project>{ac26c25e-a2bf-4f95-9070-8a910fda5989}</Project>
+      <Name>TOne.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
