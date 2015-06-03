@@ -22,6 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public List<StrategyLevel> StrategyLevels { get; set; }
     }
 
+
     public class StrategyCriteria
     {
         public int CriteriaId { get; set; }

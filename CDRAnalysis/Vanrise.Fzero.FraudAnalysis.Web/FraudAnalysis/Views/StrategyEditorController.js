@@ -57,22 +57,42 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
 
-
     function buildStrategyObjFromScope() {
         var StrategyObject = {
             Id: ($scope.StrategyId != null) ? $scope.StrategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
-            IsDefault: $scope.isDefault 
+            IsDefault: $scope.isDefault,
+            StrategyCriterias: [
+                                { CriteriaId: 1, Threshold: 1 },
+                                { CriteriaId: 2, Threshold: 2 },
+                                { CriteriaId: 3, Threshold: 1 },
+                                { CriteriaId: 4, Threshold: 2 },
+                                { CriteriaId: 5, Threshold: 3 },
+                                { CriteriaId: 6, Threshold: 1 }
+                               ],
+
+            StrategyPeriods:  [
+                                { CriteriaId: 1, Value: 1, Period: 1 },
+                                { CriteriaId: 2, Value: 1, Period: 6 },
+                                { CriteriaId: 3, Value: 1, Period: 1 },
+                                { CriteriaId: 4, Value: 1, Period: 6 },
+                                { CriteriaId: 5, Value: 1, Period: 6 },
+                                { CriteriaId: 6, Value: 1, Period: 1 }
+                              ],
+
+            StrategyLevels: [
+                                { SuspectionLevelId: 2, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.0 }, { CriteriaId: 2, Percentage: 1.0 }, { CriteriaId: 3, Percentage: 1.0 }] },
+                                { SuspectionLevelId: 3, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.25 }, { CriteriaId: 2, Percentage: 0.75 }, { CriteriaId: 3, Percentage: 1.0 }] }
+                             ]
+
+
         };
         console.log(StrategyObject);
         return StrategyObject;
     }
 
     function fillScopeFromStrategyObj(strategyObject) {
-        
-        //alert(response);
-
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
