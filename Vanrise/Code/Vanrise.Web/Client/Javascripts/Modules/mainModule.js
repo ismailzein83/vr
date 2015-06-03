@@ -9,16 +9,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $animate.enabled($('#sidebar-wrapper'));
     $animate.enabled(false, $('#sidebar-wrapper'));
     $animate.enabled(false, $('#collapsedmenu'));
-    
+
     $scope.toogled = true;
-    $scope.toggledpanel = function () {       
+    $scope.toggledpanel = function () {
         $scope.toogled = !$scope.toogled;
-        
-        
-    } 
+
+
+    }
 
     $scope.showMenu = function (e) {
-       
+
         var $this = angular.element(e.currentTarget);
         clearTimeout(dropdownHidingTimeoutHandlerc);
         if (!$this.hasClass('open')) {
@@ -34,14 +34,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
             }
         }, 200);
-        
+
     }
-    $(window).resize(function () {       
-            var w = window.innerWidth;
-            if (w >= 1200)
-                $scope.toogled = true;
-            else 
-                $scope.toogled = false;
+    $(window).resize(function () {
+        var w = window.innerWidth;
+        if (w >= 1200)
+            $scope.toogled = true;
+        else
+            $scope.toogled = false;
     });
     $scope.menuItemsCurrent = -1;
     $scope.setIndex = function (i, e) {
@@ -50,11 +50,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             $scope.menuItemsCurrent = -1;
         }
         else {
-            $scope.menuItemsCurrent = i;            
+            $scope.menuItemsCurrent = i;
             var $this = angular.element(e.currentTarget);
             $this.addClass('active-menu-parent');
         }
-       
+
     }
     $scope.menusubItemsCurrent = -1;
     $scope.setIndexSub = function (i, e) {
@@ -74,15 +74,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             $('.menu-item-list-ligth').removeClass('active-menu');
             var $this = angular.element(e.currentTarget);
             $this.addClass('active-menu');
-        }      
+        }
         $scope.parent = p;
-        $scope.child = c;       
+        $scope.child = c;
 
     }
     $rootScope.hisnav = [];
     $rootScope.showsubview = function (page) {
-         $rootScope.$broadcast(page + "-show");
-       
+        $rootScope.$broadcast(page + "-show");
+
     }
     $rootScope.hidesubview = function (page, $index) {
         if ($index == 0) {
@@ -94,10 +94,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         setTimeout(function () {
             $rootScope.$broadcast(page);
         }, 10)
-      
+
     }
     $rootScope.ishideView = function (val) {
-        var obj = $scope.findExsiteObj($rootScope.hisnav, val, 'name')        
+        var obj = $scope.findExsiteObj($rootScope.hisnav, val, 'name')
         if (obj != null) {
             return obj.show;
         }
@@ -125,13 +125,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         {
             name: "BusinessEntity", location: '', icon: 'glyphicon-cog', childs: [
                { name: "DumySwitchs", location: '#/BusinessEntity/DumySwitchs' },
-            { name: "Switch Managments", location: '#/BusinessEntity/Switch Managments' }
+            { name: "Switch Managments", location: '#/BusinessEntity/Switch Managments' },
+            { name: "CarrierAccount Managments", location: '#/BusinessEntity/CarrierAccount Managments' }
             ]
         },
         {
             name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
                { name: "Zone Monitor", location: '#/NOC/ZoneMonitor' },
-               { name: "Variation Reports" , location:'#/NOC/VariationReports' }
+               { name: "Variation Reports", location: '#/NOC/VariationReports' }
             ]
         },
         {
@@ -172,7 +173,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     var host = pathArray[2];
     $scope.baseurl = protocol + '//' + host;
     $scope.carrierAccountSelectionOption = 1;
-    
+
     $scope.findExsite = function (arr, value, attname) {
         var index = -1;
         for (var i = 0; i < arr.length; i++) {
@@ -198,24 +199,24 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $scope.dateToString = function (date) {
         var dateString = '';
         if (date) {
-         
-                var day = "" + (parseInt(date.getDate()));
-                if (day.length == 1)
-                    dateString += "0" + day;
-                else
-                    dateString += day;
-                var month = "" + (parseInt(date.getMonth()) + 1);
-                if (month.length == 1)
-                    dateString += "/0" + month;
-                else
-                    dateString += "/" + month;
-                dateString += "/" + date.getFullYear();
+
+            var day = "" + (parseInt(date.getDate()));
+            if (day.length == 1)
+                dateString += "0" + day;
+            else
+                dateString += day;
+            var month = "" + (parseInt(date.getMonth()) + 1);
+            if (month.length == 1)
+                dateString += "/0" + month;
+            else
+                dateString += "/" + month;
+            dateString += "/" + date.getFullYear();
         }
         return dateString;
     }
     var dateReg = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/((199\d)|([2-9]\d{3}))$/;
     $scope.isDate = function (s) {
-        var d = "";       
+        var d = "";
         if (s && (s instanceof Date)) {
             var d = $scope.dateToString(s);
         }
@@ -226,11 +227,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
     $scope.testDate = function (s) {
         var res;
         var d = "";
-        if (s == '' ||  s == null  ) {
+        if (s == '' || s == null) {
             return 0
         }
-        else if (s != '' || s==undefined) {
-           // alert(s)
+        else if (s != '' || s == undefined) {
+            // alert(s)
             if (s && (s instanceof Date)) {
                 var d = $scope.dateToString(s);
             }
@@ -242,11 +243,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
                 return 2
         }
 
-            
-       
+
+
     }
 
-   
+
 
 });
 angular.module('mainModule')
@@ -255,21 +256,21 @@ angular.module('mainModule')
         timeFormat: 'HH:mm:ss',
         length: 7,
         minuteStep: 1,
-        animation:""
+        animation: ""
     });
 })
 .config(function ($datepickerProvider) {
     angular.extend($datepickerProvider.defaults, {
         dateFormat: 'dd/MM/yyyy',
         startWeek: 1,
-        animation:""
+        animation: ""
     });
 })
 .config(function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {
         animation: 'am-flip-x',
         trigger: 'hover',
-        autoClose:true,
-        delay: { show:1 , hide: 100000 }
+        autoClose: true,
+        delay: { show: 1, hide: 100000 }
     });
 })
