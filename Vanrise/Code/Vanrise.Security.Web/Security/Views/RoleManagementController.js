@@ -4,7 +4,6 @@
 function RoleManagementController($scope, RoleAPIService, VRModalService) {
     var mainGridAPI;
     var arrMenuAction = [];
-    var stopPaging;
 
     defineScope();
     load();
@@ -12,6 +11,8 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
     function defineScope() {
         $scope.gridMenuActions = [];
         $scope.roles = [];
+
+        defineMenuActions();
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -27,53 +28,10 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
             return getData();
         };
 
-        $scope.AddNewRole = function () {
-            var settings = {};
-
-            settings.width = "40%";
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Add Role";
-                modalScope.onRoleAdded = function (role) {
-                    mainGridAPI.itemAdded(role);
-                };
-            };
-            VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', null, settings);
-        }
+        $scope.AddNewRole = addRole;
     }
 
     function load() {
-        function MenuAction(name, width, title, url) {
-            this.name = name;
-            this.clicked = function (dataItem) {
-                var params = {
-                    roleId: dataItem.RoleId
-                };
-
-                var settings = {
-                    width: width
-                };
-
-                settings.onScopeReady = function (modalScope) {
-                    modalScope.title = title;
-                    modalScope.onRoleUpdated = function (role) {
-                        mainGridAPI.itemUpdated(role);
-                    };
-                };
-                VRModalService.showModal(url, params, settings);
-            };
-        }
-
-        arrMenuAction.push(new MenuAction("Edit", "40%", "Edit Role", "/Client/Modules/Security/Views/RoleEditor.html"));
-
-        arrMenuAction.forEach(function (item) {
-            $scope.gridMenuActions.push({
-                name: item.name,
-                clicked: item.clicked
-            });
-
-        });
-
-
     }
 
     function getData()
@@ -85,10 +43,47 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
             angular.forEach(response, function (itm) {
                 $scope.roles.push(itm);
             });
-            if (response.length < 20)
-                stopPaging = true;
         });
     }
+
+    function defineMenuActions()
+    {
+        $scope.gridMenuActions = [{
+            name: "Edit",
+            clicked: editRole
+        }];
+    }
+
+    function addRole() {
+        var settings = {};
+
+        settings.width = "40%";
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Add Role";
+            modalScope.onRoleAdded = function (role) {
+                mainGridAPI.itemAdded(role);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', null, settings);
+    }
+
+    function editRole(roleObj)
+    {
+        var modalSettings = {
+        };
+        var parameters = {
+            roleId: roleObj.RoleId
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Editing: " + roleObj.Name;
+            modalScope.onRoleUpdated = function (role) {
+                mainGridAPI.itemUpdated(role);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', parameters, modalSettings);
+    }
+
   
 }
 appControllers.controller('Security_RoleManagementController', RoleManagementController);

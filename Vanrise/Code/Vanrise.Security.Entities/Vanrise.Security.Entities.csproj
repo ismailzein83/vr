@@ -43,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationResults\InsertOperationOutput.cs" />
-    <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
   </ItemGroup>

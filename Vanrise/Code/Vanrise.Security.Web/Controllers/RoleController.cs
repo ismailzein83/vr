@@ -25,14 +25,14 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Security.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
             RoleManager manager = new RoleManager();
             return manager.AddRole(roleObject);
         }
 
         [HttpPost]
-        public Vanrise.Security.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
+        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
         {
             RoleManager manager = new RoleManager();
             return manager.UpdateRole(roleObject);

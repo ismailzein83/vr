@@ -13,15 +13,7 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
-            return GetItemsSP("secu.sp_Roles_GetFilteredRoles", (reader) =>
-            {
-                return new Entities.Role
-                {
-                    RoleId = Convert.ToInt32(reader["ID"]),
-                    Name = reader["Name"] as string,
-                    Description = reader["Description"] as string
-                };
-            }, fromRow, toRow, name);
+            return GetItemsSP("secu.sp_Roles_GetFilteredRoles", RoleMapper, fromRow, toRow, name);
         }
 
         public Entities.Role GetRole(int roleId)

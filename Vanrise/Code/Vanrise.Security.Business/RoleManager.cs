@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -22,7 +23,7 @@ namespace Vanrise.Security.Business
             return dataManager.GetRole(roleId);
         }
 
-        public Vanrise.Security.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
         {
             InsertOperationOutput<Role> insertOperationOutput = new InsertOperationOutput<Role>();
 
@@ -42,7 +43,7 @@ namespace Vanrise.Security.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Security.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
+        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
         {
             IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();
             bool updateActionSucc = dataManager.UpdateRole(roleObject);
