@@ -17,18 +17,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public Strategy GetStrategy(int strategyId)
         {
-            string query0 = "SELECT StrategyContent FROM Strategy WHERE Id = @StrategyId";
+            string query0 = "SELECT Id, StrategyContent FROM Strategy WHERE Id = @StrategyId";
             string query = "SELECT MaxValue, CriteriaID FROM StrategyThreshold Where StrategyId = @StrategyId";
             string query1 = "SELECT PeriodId, Value, CriteriaID FROM StrategyPeriods Where StrategyId = @StrategyId";
             string query2 = "SELECT LevelId, CriteriaId1, Cr1Per ,  CriteriaId2 ,  Cr2Per ,  CriteriaId3 ,  Cr3Per ,  CriteriaId4 ,  Cr4Per ,  CriteriaId5 ,  Cr5Per ,  CriteriaId6 ,  Cr6Per ,  CriteriaId7 ,  Cr7Per ,  CriteriaId8 ,  Cr8Per ,  CriteriaId9 ,  Cr9Per ,  CriteriaId10 ,  Cr10Per ,  CriteriaId11 ,  Cr11Per ,  CriteriaId12 ,  Cr12Per ,  CriteriaId13 ,  Cr13Per ,  CriteriaId14 ,  Cr14Per ,  CriteriaId15 ,  Cr15Per,  CriteriaId16 ,  Cr16Per   FROM  Strategy_Suspicion_Level Where StrategyId = @StrategyId and LevelId<>1  ";
             
-            Strategy strategy = new Strategy();
-            
-
-            strategy = GetItemText<Strategy>(query0, (reader) =>
-            {
-                return Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
-            } 
+            Strategy strategy = GetItemText<Strategy>(query0, StrategyMapper
             ,(cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter(){ParameterName="@StrategyId", Value=strategyId});
@@ -100,7 +94,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Strategy> GetAllStrategies()
         {
-            string query_GetStrategies = @"SELECT StrategyContent  FROM Strategy; ";
+            string query_GetStrategies = @"SELECT Id, StrategyContent  FROM Strategy; ";
             List<Strategy> strategies = new List<Strategy>();
 
 
@@ -116,17 +110,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
-            string query_GetStrategies = @"SELECT  StrategyContent  FROM Strategy where Name like @name and Description like @description ; ";
-            List<Strategy> strategies = new List<Strategy>();
-
-
-            ExecuteReaderText(query_GetStrategies, (reader) =>
-            {
-                while (reader.Read())
-                {
-                    strategies.Add(Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent")));
-                }
-            }
+            string query_GetStrategies = @"SELECT Id, StrategyContent  FROM Strategy where Name like @name and Description like @description ; ";
+            List<Strategy> strategies = GetItemsText(query_GetStrategies, StrategyMapper
             , (cmd) =>
             {
                 if (name == null)
@@ -145,36 +130,46 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public bool AddStrategy(Strategy strategyObject)
         {
-            string query = "INSERT INTO Strategy(StrategyContent) values(@StrategyContent)";
+            string query = "INSERT INTO Strategy(StrategyContent, Name, Description) values(@StrategyContent, @Name, @Description);   SELECT CAST(SCOPE_IDENTITY() AS int) as Id;  ";
 
-            ExecuteNonQueryText(query,  (cmd) =>            {
+            strategyObject.Id = GetItemText<int>(query, (reader) =>
+            {
+                return GetReaderValue<int>(reader, "Id");
+            }
+            , (cmd) =>
+            {
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value = Vanrise.Common.Serializer.Serialize(strategyObject) });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
             });
-
             return true;
-
-
-            
-
-
         }
-
-
 
         public bool UpdateStrategy(Strategy strategyObject)
         {
-            string query = "Update Strategy set StrategyContent=@StrategyContent where Id=@Id ";
+            string query = "Update Strategy set StrategyContent=@StrategyContent,Name=@Name,Description=@Description  where Id=@Id ";
 
             ExecuteNonQueryText(query, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", Value = strategyObject.Id });
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value = Vanrise.Common.Serializer.Serialize(strategyObject) });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
+                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
             });
             return true;
         }
 
 
+        #region Private Methods
 
+        private Strategy StrategyMapper(IDataReader reader)
+        {
+            var strategy = Vanrise.Common.Serializer.Deserialize<Strategy>(GetReaderValue<string>(reader, "StrategyContent"));
+            strategy.Id = (int)reader["Id"];
+            return strategy;
+        }
+
+        #endregion
 
     }
 }
