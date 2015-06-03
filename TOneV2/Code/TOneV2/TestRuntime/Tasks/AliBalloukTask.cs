@@ -10,7 +10,7 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            TOne.Entities.ReportDefinition reportDefinition = new TOne.Entities.ReportDefinition
+            TOne.Entities.RDLCReportDefinition reportDefinition = new TOne.Entities.RDLCReportDefinition
             {
                 Name = "Zone Profit",
                 ReportGeneratorFQTN = "TOne.Analytics.Business.BillingReports.ZoneProfitReportGenerator, TOne.Analytics.Business",
