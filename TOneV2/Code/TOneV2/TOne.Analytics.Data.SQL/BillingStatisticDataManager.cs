@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
+using TOne.Analytics.Entities.Billing;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
@@ -242,6 +243,55 @@ namespace TOne.Analytics.Data.SQL
                 CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
             };
 
+            return instance;
+        }
+
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, int periodTypeValue)
+        {
+
+            string query = String.Format(@"DECLARE @ExchangeRates TABLE(
+		                                             Currency VARCHAR(3),
+		                                             Date SMALLDATETIME,
+		                                             Rate FLOAT
+		                                             PRIMARY KEY(Currency, Date) )
+	                                                                                 
+	                                  	
+                                           INSERT INTO @ExchangeRates 
+                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -@PeriodCount, @FromDate), @FromDate)
+                                            SELECT  cpc.Name , 0.0 as [@PeriodTypeValue AVG], 0.0 as [@PeriodTypeValue %], CallDate,
+                                            SUM(BS.SaleDuration/60) AS [TotalDuration], 0.0 as [Prev @PeriodTypeValue %],cac.CarrierAccountID   
+                                            From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
+                                                LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+                                                LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
+                                                JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
+                                            WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount, @FromDate) AND @FromDate 
+                                            GROUP BY cpc.Name,cac.CarrierAccountID , Calldate
+                                            ORDER BY SUM(BS.SaleDuration/60) desc");
+            return GetItemsText(query, VariationReportsMapper,
+           (cmd) =>
+           {
+               cmd.Parameters.Add(new SqlParameter("@FromDate", selectedDate));
+               cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
+               cmd.Parameters.Add(new SqlParameter("@PeriodTypeValue", periodTypeValue));
+           });
+        
+        }
+
+        private VariationReports VariationReportsMapper(IDataReader reader)
+        {
+
+            VariationReports instance = new VariationReports
+            {
+                Name = reader["Name"] as string,
+                PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "PeriodTypeValueAverage"),
+                PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "PeriodTypeValuePercentage"),
+                CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
+                TotalDuration = GetReaderValue<decimal>(reader, "TotalDuration"),
+                PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "PreviousPeriodTypeValuePercentage"),
+                CarrierAccountID = reader["CarrierAccountID"] as string,
+            };
+            
             return instance;
         }
 

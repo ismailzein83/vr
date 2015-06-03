@@ -7,8 +7,10 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
     var mainGridAPI;
     $scope.data = [];
     $scope.PeriodType = ['Days','Weeks','Months']
-   // $scope.fromDate = '2014/12/01';
-  //  $scope.toDate = '2015/05/01'
+    $scope.fromDate = '2014/12/01';
+    $scope.toDate = '2015/05/01';
+    $scope.selectedPeriodType = 'Days';
+    $scope.periodCount = 7;
     defineScope();
    
     function defineScope() {
@@ -17,7 +19,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
             currentPage: 1,
             totalDataCount: 0,
             pageChanged: function () {
-                return getData();
+          //      return getData();
             }
         };
         $scope.onMainGridReady = function (api) {
