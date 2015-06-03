@@ -84,7 +84,7 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit User: " + userObj.Name;
-            modalScope.onRoleUpdated = function (user) {
+            modalScope.onUserUpdated = function (user) {
                 mainGridAPI.itemUpdated(user);
             };
         };

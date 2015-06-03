@@ -13,7 +13,7 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
         {
-            return GetItemsSP("mainmodule.sp_User_GetFilteredUsers", UserMapper, fromRow, toRow, name, email);
+            return GetItemsSP("sec.sp_User_GetFilteredUsers", UserMapper, fromRow, toRow, name, email);
         }
 
         public User GetUser(int userId)
