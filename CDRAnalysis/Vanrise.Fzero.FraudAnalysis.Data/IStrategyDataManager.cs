@@ -14,5 +14,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         bool AddStrategy(Strategy strategy, out int insertedId);
 
         bool UpdateStrategy(Strategy strategy);
+
+        
     }
 }

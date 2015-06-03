@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public Strategy GetStrategy(int strategyId)
         {
-            return GetItemsSP("mainmodule.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetStrategy", StrategyMapper, strategyId).FirstOrDefault();
         }
 
         public List<Strategy> GetAllStrategies()
@@ -47,9 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             );
             insertedId = (int)id;
-            if (recordesEffected > 0)
-                return true;
-            return false;
+            return (recordesEffected > 0);
         }
 
         public bool UpdateStrategy(Strategy strategyObject)
@@ -76,6 +74,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             strategy.Id = (int)reader["Id"];
             return strategy;
         }
+
+        
+
 
         #endregion
 

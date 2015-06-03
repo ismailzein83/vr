@@ -102,16 +102,15 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.issaving = true;
         var StrategyObject = buildStrategyObjFromScope();
         return StrategyAPIService.AddStrategy(StrategyObject)
-        .then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
-                if ($scope.onStrategyAdded != undefined)
-                    $scope.onStrategyAdded(response.InsertedObject);
-                $scope.modalContext.closeModal();
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error);
-        });
-
+          .then(function (response) {
+              if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
+                  if ($scope.onStrategyAdded != undefined)
+                      $scope.onStrategyAdded(response.InsertedObject);
+                  $scope.modalContext.closeModal();
+              }
+          }).catch(function (error) {
+              VRNotificationService.notifyException(error);
+          });
     }
 
     function UpdateStrategy() {
@@ -128,24 +127,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
     }
 
-    //$scope.CheckStrategyName = function (name) {
-    //    var bool = false;
-    //    if (name == undefined)
-    //        return null;
-
-    //    StrategyAPIService.CheckStrategyName(name == undefined ? " " : name).then(function (response) {
-    //        bool = response;
-    //        //if (response == false)
-    //        //return "Invalid";
-    //        //else
-    //        //  return null;
-
-    //    }).finally(function () {
-
-    //    });
-
-    //    if (!bool)
-    //        return "Invalid";
-    //}
+    
 }
 appControllers.controller('StrategyEditorController', StrategyEditorController);

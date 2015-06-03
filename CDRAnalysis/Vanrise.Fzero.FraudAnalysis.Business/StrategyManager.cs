@@ -59,12 +59,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 insertOperationOutput.InsertedObject = strategyObject;
             }
             else
-                insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.Failed;
+                insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
 
-
-        
 
 
     }
