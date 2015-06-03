@@ -284,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tasks\ABaghdadiTask.cs" />
+    <Compile Include="Tasks\AliBalloukTask.cs" />
     <Compile Include="Tasks\HaSSanTask.cs" />
     <Compile Include="Tasks\HusseinTask.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
