@@ -30,7 +30,7 @@ namespace TOne.Analytics.Web.Controllers
         }
        
         public List<ZoneProfitFormatted> GetZoneProfit(DateTime date1,DateTime date2) {
-            return __billingStatisticsManager.GetZoneProfit(date1,date2, "Y");
+            return __billingStatisticsManager.GetZoneProfit(date1,date2, true);
         }
 
         [HttpGet]

@@ -17,7 +17,7 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
         }
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, string groupByCustomer)
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
         {
 
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, groupByCustomer));
@@ -27,6 +27,11 @@ namespace TOne.Analytics.Business
         {
 
             return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
+        }
+
+        public List<CarrierProfile> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
+        {
+            return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, TopDestinations, isSale, IsAmount);
         }
 
 

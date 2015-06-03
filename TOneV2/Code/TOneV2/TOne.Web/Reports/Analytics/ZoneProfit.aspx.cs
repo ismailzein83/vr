@@ -25,7 +25,7 @@ namespace TOne.Web.Reports.Analytics
                 //  string showCustomer = Request.QueryString["showCustomer"];
                 //  DateTime fromDate = DateTime.Parse(Request.QueryString["from"]);
 
-                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "Y");
+                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), true);
 
                 List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
               
