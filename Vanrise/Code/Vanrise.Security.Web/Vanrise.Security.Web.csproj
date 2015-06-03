@@ -114,13 +114,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Security\Services\APIServices\RoleAPIService.js" />
+    <Content Include="Security\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Security\Views\ResetPasswordEditor.html" />
+    <Content Include="Security\Views\ResetPasswordEditorController.js" />
     <Content Include="Security\Views\RoleEditor.html" />
     <Content Include="Security\Views\RoleEditorController.js" />
     <Content Include="Security\Views\RoleManagement.html" />
     <Content Include="Security\Views\RoleManagementController.js" />
+    <Content Include="Security\Views\UserEditor.html" />
+    <Content Include="Security\Views\UserEditorController.js" />
+    <Content Include="Security\Views\UserManagement.html" />
+    <Content Include="Security\Views\UserManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

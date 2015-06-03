@@ -124,6 +124,9 @@ appRouting.config(['$routeProvider',
           when('/Security/RoleManagement', {
               templateUrl: '/Client/Modules/Security/Views/RoleManagement.html'
           }).
+          when('/Security/UserManagement', {
+              templateUrl: '/Client/Modules/Security/Views/UserManagement.html'
+          }).
           when('/BusinessEntity/CarrierAccount Managments', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/CarrierAccountManagement.html'
           }).

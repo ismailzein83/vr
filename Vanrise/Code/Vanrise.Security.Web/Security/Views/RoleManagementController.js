@@ -57,7 +57,6 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
     function addRole() {
         var settings = {};
 
-        settings.width = "40%";
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Add Role";
             modalScope.onRoleAdded = function (role) {
@@ -76,14 +75,12 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
         };
 
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Editing: " + roleObj.Name;
+            modalScope.title = "Edit Role: " + roleObj.Name;
             modalScope.onRoleUpdated = function (role) {
                 mainGridAPI.itemUpdated(role);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', parameters, modalSettings);
     }
-
-  
 }
 appControllers.controller('Security_RoleManagementController', RoleManagementController);
