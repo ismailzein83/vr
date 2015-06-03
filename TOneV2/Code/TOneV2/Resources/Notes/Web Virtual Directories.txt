@@ -1,11 +1,14 @@
-﻿Expand the IIS web site of TOne.Web project:
+﻿- Open IIS > Create a new web site called TOne.Web > Make the physical direcotry point to TOne.WebProject > Change
+ the port to 8082 for example
+- Make sure the Application Pool of the newely created site is set to .Net FWK 4.0
+- Expand the IIS web site of TOne.Web project:
  - Add the following virtual directory under the root site:
-Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under "Client > Modules" folder:
-Main			C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Client
-Analytics		C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
-BI				C:\TFS\TOneV2\Code\TOneV2\TOne.BI.Web\Client
-Routing			C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
-BusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\Client
-Security		C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+	Main			C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Client
+	Analytics		C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
+	BI				C:\TFS\TOneV2\Code\TOneV2\TOne.BI.Web\Client
+	Routing			C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
+	BusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\Client
+	Security		C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
