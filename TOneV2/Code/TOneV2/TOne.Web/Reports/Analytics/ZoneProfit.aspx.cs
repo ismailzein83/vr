@@ -21,32 +21,32 @@ namespace TOne.Web.Reports.Analytics
 
             if (!IsPostBack)
             {
-                ReportViewer1.ProcessingMode = ProcessingMode.Local;
+               
 
-                ReportDefinitionManager mangerReport = new ReportDefinitionManager();
-
-
-                ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/Analytics/rdlZoneProfits.rdlc");
-
-                BillingStatisticManager manager = new BillingStatisticManager();
-
-                //  string showCustomer = Request.QueryString["showCustomer"];
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(from, to, true);
+                ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
-                //List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
-              
+                RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(1);
 
-                ReportDataSource ds = new ReportDataSource("ZoneProfit", zoneProfit);               
+                ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlc.ReportURL);
+
+                ReportParameters parameters = new ReportParameters();
+
+                parameters.FromTime = from;
+                parameters.ToTime = to;
+
+                IReportGenerator r =  rdlc.GetReportGenerator();
+
                 ReportViewer1.LocalReport.DataSources.Clear();
-                ReportViewer1.LocalReport.DataSources.Add(ds);
-
-                //ReportParameter[] parameters = new ReportParameter[1];
-                //parameters[0] = new ReportParameter("GroupByCustomer", "true", false);
-                //ReportViewer1.LocalReport.SetParameters(parameters);
-
+                foreach (var a in r.GenerateDataSources(parameters))
+                {
+                    ReportDataSource ds = new ReportDataSource(a.Key, a.Value);               
+                    ReportViewer1.LocalReport.DataSources.Add(ds);
+                }
+               
 
             }
         }
