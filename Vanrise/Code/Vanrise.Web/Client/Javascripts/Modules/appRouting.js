@@ -12,7 +12,7 @@ appRouting.config(['$routeProvider',
         when('/TestView', {
             templateUrl: '/Client/Views/TestView.html',
             controller: 'TestViewController',
-            controllerAs : 'testviewCtrl'
+            controllerAs: 'testviewCtrl'
         }).
         when('/RouteRuleEditorOld', {
             templateUrl: '/Client/Views/Routing/RouteRuleEditorOld.html',
@@ -82,11 +82,11 @@ appRouting.config(['$routeProvider',
         }).
         when('/BusinessEntity/DumySwitchs', {
             templateUrl: '/Client/Modules/BusinessEntity/Views/Switchs.html',
-              controller: 'SwitchsController'
+            controller: 'SwitchsController'
         }).
         when('/BusinessEntity/Switch Managments', {
-                templateUrl: '/Client/Modules/BusinessEntity/Views/SwitchManagment.html',
-                controller: 'SwitchManagmentController'
+            templateUrl: '/Client/Modules/BusinessEntity/Views/SwitchManagment.html',
+            controller: 'SwitchManagmentController'
         }).
           when('/SwitchEditor/:SwitchId', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/SwitchEditor.html',
@@ -96,7 +96,7 @@ appRouting.config(['$routeProvider',
             templateUrl: '/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html'
         }).
         when('/NOC/VariationReports', {
-               templateUrl: '/Client/Modules/Analytics/Views/Billing Statistics/VariationReports.html'
+            templateUrl: '/Client/Modules/Analytics/Views/Billing Statistics/VariationReports.html'
         }).
           when('/Tree', {
               templateUrl: '/Client/Views/TreeView.html',
@@ -111,9 +111,9 @@ appRouting.config(['$routeProvider',
             controller: 'UserManagementController'
         }).
          when('/Role', {
-            templateUrl: '/Client/Modules/Main/Views/RoleManagement.html',
-            controller: 'RoleManagementController'
-        }).
+             templateUrl: '/Client/Modules/Main/Views/RoleManagement.html',
+             controller: 'RoleManagementController'
+         }).
           when('/TestNew', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/TestNew.html',
               controller: 'TestNewController'
@@ -123,6 +123,9 @@ appRouting.config(['$routeProvider',
           }).
           when('/Security/RoleManagement', {
               templateUrl: '/Client/Modules/Security/Views/RoleManagement.html'
+          }).
+          when('/BusinessEntity/CarrierAccount Managments', {
+              templateUrl: '/Client/Modules/BusinessEntity/Views/CarrierAccountManagement.html'
           }).
         otherwise({
             redirectTo: '/default'
