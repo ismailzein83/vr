@@ -46,7 +46,7 @@ namespace TOne.Analytics.Business
                 Calls = zoneProfit.Calls,
 
                 DurationNet = zoneProfit.DurationNet,
-                DurationNetFormated = String.Format("{0:#0.00}", zoneProfit.DurationNet),
+                DurationNetFormated = FormatNumber(zoneProfit.DurationNet),
 
                 SaleDuration = zoneProfit.SaleDuration,
                 SaleDurationFormated = (zoneProfit.SaleDuration.HasValue) ? String.Format("{0:#0.00}", zoneProfit.SaleDuration) : "0.00",
@@ -66,6 +66,16 @@ namespace TOne.Analytics.Business
 
 
             };
+        }
+
+        private string FormatNumber(Decimal? number, int precision)
+        {
+            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+        }
+
+        private string FormatNumber(Decimal? number)
+        {
+            return String.Format("{0:#0.00}", number);
         }
 
         private List<ZoneProfitFormatted> FormatZoneProfits(List<ZoneProfit> zoneProfits)
