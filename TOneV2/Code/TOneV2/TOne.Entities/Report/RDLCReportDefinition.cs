@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Entities
 {
-    public class ReportDefinition
+    public class RDLCReportDefinition
     {
         public int ReportDefinitionId { get; set; }
 

@@ -115,7 +115,7 @@
     <Compile Include="Report\IReportGenerator.cs" />
     <Compile Include="Report\ReportParameters.cs" />
     <Compile Include="Report\ReportParameterSettings.cs" />
-    <Compile Include="Report\ReportDefinition.cs" />
+    <Compile Include="Report\RDLCReportDefinition.cs" />
     <Compile Include="Security\SecureActionAttribute.cs" />
     <Compile Include="Security\AuthenticationOutput.cs" />
     <Compile Include="CodeList.cs" />
