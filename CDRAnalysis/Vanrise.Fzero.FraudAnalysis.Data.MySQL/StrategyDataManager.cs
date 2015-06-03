@@ -171,7 +171,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             return strategies;
         }
 
-        public bool AddStrategy(Strategy strategy)
+        public bool AddStrategy(Strategy strategy, out int insertedId)
         {
             throw new NotImplementedException();
         }

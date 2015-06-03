@@ -47,14 +47,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy> insertOperationOutput = new Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationOutput<Strategy>();
 
-            int switchId = -1;
+            int strategyId = -1;
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            bool insertActionSucc = manager.AddStrategy(strategyObject);
+            bool insertActionSucc = manager.AddStrategy(strategyObject, out strategyId);
 
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.Succeeded;
+                strategyObject.Id = strategyId;
                 insertOperationOutput.InsertedObject = strategyObject;
             }
             else

@@ -4,16 +4,30 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Data.SqlClient;
 using System.Data;
 using System;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class StrategyDataManager : BaseSQLDataManager, IStrategyDataManager 
     {
+
+        int DefaultUserId = 1;
+
         public StrategyDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
+
+
+
+        //public Strategy GetStrategy(int strategyId)
+        //{
+        //    return GetItemsSP("mainmodule.sp_User_GetUser", StrategyMapper, strategyId).FirstOrDefault();
+        //}
+
+
+
 
         public Strategy GetStrategy(int strategyId)
         {
@@ -108,57 +122,48 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategies;
           }
 
+
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
-            string query_GetStrategies = @"SELECT Id, StrategyContent  FROM Strategy where Name like @name and Description like @description ; ";
-            List<Strategy> strategies = GetItemsText(query_GetStrategies, StrategyMapper
-            , (cmd) =>
-            {
-                if (name == null)
-                    name = string.Empty;
-
-                if (description == null)
-                    description = string.Empty;
-
-
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "name", Value = "%" + name + "%" });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "description", Value = "%" + description + "%" });
-            }
-            );
-            return strategies;
+            return GetItemsSP("FraudAnalysis.sp_Strategy_GetFilteredStrategies", StrategyMapper, fromRow, toRow, name, description);
         }
 
-        public bool AddStrategy(Strategy strategyObject)
-        {
-            string query = "INSERT INTO Strategy(StrategyContent, Name, Description) values(@StrategyContent, @Name, @Description);   SELECT CAST(SCOPE_IDENTITY() AS int) as Id;  ";
 
-            strategyObject.Id = GetItemText<int>(query, (reader) =>
-            {
-                return GetReaderValue<int>(reader, "Id");
-            }
-            , (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value = Vanrise.Common.Serializer.Serialize(strategyObject) });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
-            });
-            return true;
+
+        public bool AddStrategy(Strategy strategyObject, out int insertedId)
+        {
+            object id;
+            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Insert", out id, 
+                DefaultUserId, 
+                !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
+                !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
+                DateTime.Now,
+                strategyObject.IsDefault,
+                Vanrise.Common.Serializer.Serialize(strategyObject)
+
+            );
+            insertedId = (int)id;
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
 
         public bool UpdateStrategy(Strategy strategyObject)
         {
-            string query = "Update Strategy set StrategyContent=@StrategyContent,Name=@Name,Description=@Description  where Id=@Id ";
 
-            ExecuteNonQueryText(query, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", Value = strategyObject.Id });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyContent", Value = Vanrise.Common.Serializer.Serialize(strategyObject) });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Name", Value = strategyObject.Name });
-                cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Description", Value = strategyObject.Description });
-            });
-            return true;
+            int recordesEffected = ExecuteNonQuerySP("FraudAnalysis.sp_Strategy_Update",
+                strategyObject.Id,
+                 DefaultUserId, 
+                !string.IsNullOrEmpty(strategyObject.Name) ? strategyObject.Name : null,
+                !string.IsNullOrEmpty(strategyObject.Description) ? strategyObject.Description : null,
+                DateTime.Now,
+                strategyObject.IsDefault,
+                Vanrise.Common.Serializer.Serialize(strategyObject));
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
-
+        
 
         #region Private Methods
 
