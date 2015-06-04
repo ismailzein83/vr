@@ -12,7 +12,7 @@
                     Last : <number-filed ng-show="true" input-value="periodCount" place-holder="'Type period'" isrequired />
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="PeriodType" selectedvalues="selectedPeriodType" label="" isrequired></vr-select>
+                    <vr-select datasource="PeriodType" selectedvalues="periodTypeValue" label="" isrequired></vr-select>
                 </vr-columns>     
             </vr-row>
         </div>
@@ -22,7 +22,7 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getBillingStats"></vr-button>
+                <vr-button type="Search" formname="formFilter" data-onclick="getVariationReportsData"></vr-button>
                 <vr-button type="Reset"></vr-button>
             </div>
         </vr-actionbar>
@@ -30,7 +30,7 @@
     <!--<input type="text" ng-model="name" />-->
 
 
-    <div>
+    <!--<div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
@@ -59,6 +59,33 @@
                     <vr-datagridcolumn headertext="'Sale_RateType'" field="'Sale_RateType'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'SaleDuration'" field="'SaleDuration'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'CostDuration'" field="'CostDuration'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>-->
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Period TypeValue Average'" field="'PeriodTypeValueAverage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Period TypeValue Percentage'" field="'PeriodTypeValuePercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CallDate'" field="'CallDate'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'TotalDuration'" field="'TotalDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Previous Period Type Value Percentage'" field="'PreviousPeriodTypeValuePercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CarrierAccountID'" field="'CarrierAccountID'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+   
+     <div>
+       <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-datagrid data-on-ready="onMainGridReady" datasource="data" pagersettings="mainGridPagerSettings" >
+                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
