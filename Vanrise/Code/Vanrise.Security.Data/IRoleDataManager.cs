@@ -16,5 +16,7 @@ namespace Vanrise.Security.Data
         bool AddRole(Role role, out int insertedId);
         
         bool UpdateRole(Role role);
+
+        void AssignMembers(int roleId, int[] members);
     }
 }

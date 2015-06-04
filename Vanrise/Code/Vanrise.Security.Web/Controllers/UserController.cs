@@ -24,6 +24,20 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        public IEnumerable<User> GetUsers()
+        {
+            UserManager manager = new UserManager();
+            return manager.GetUsers();
+        }
+
+        [HttpGet]
+        public List<User> GetMembers(int roleId)
+        {
+            UserManager manager = new UserManager();
+            return manager.GetMembers(roleId);
+        }
+
+        [HttpGet]
         public User GetUser(int userId)
         {
             UserManager manager = new UserManager();

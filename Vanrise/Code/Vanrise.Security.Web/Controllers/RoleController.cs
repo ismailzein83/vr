@@ -25,18 +25,36 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(RoleEditorInput roleObject)
         {
             RoleManager manager = new RoleManager();
-            return manager.AddRole(roleObject);
+            Role role = new Role() 
+            { 
+                Name = roleObject.Name,
+                Description = roleObject.Description
+            };
+
+            return manager.AddRole(role, roleObject.Members);
         }
 
         [HttpPost]
-        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
+        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(RoleEditorInput roleObject)
         {
             RoleManager manager = new RoleManager();
-            return manager.UpdateRole(roleObject);
+            Role role = new Role()
+            {
+                RoleId = roleObject.RoleId,
+                Name = roleObject.Name,
+                Description = roleObject.Description
+            };
+            return manager.UpdateRole(roleObject, roleObject.Members);
         }
 
     }
+
+    public class RoleEditorInput : Role
+    {
+        public int[] Members { get; set; }
+    }
+
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,18 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public void AssignMembers(int roleId, int [] members)
+        {
+            DataTable dtRoleMembers = this.BuildRoleMembersTable(roleId, members);
+            int recordesEffected = ExecuteNonQuerySPCmd("sec.sp_Roles_AssignMembers", (cmd) =>
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@RoleId", roleId));
+                        var dtPrm = new SqlParameter("@RoleMembers", SqlDbType.Structured);
+                        dtPrm.Value = dtRoleMembers;
+                        cmd.Parameters.Add(dtPrm);
+                    });
+        }
+
         #region Private Methods
 
         Role RoleMapper(IDataReader reader)
@@ -50,6 +63,21 @@ namespace Vanrise.Security.Data.SQL
                 Description = reader["Description"] as string
             };
             return role;
+        }
+
+        DataTable BuildRoleMembersTable(int roleId, int [] members)
+        {
+            DataTable dtRoleMembers = new DataTable();
+            dtRoleMembers.Columns.Add("UserId", typeof(int));
+            dtRoleMembers.BeginLoadData();
+            foreach (var userId in members)
+            {
+                DataRow dr = dtRoleMembers.NewRow();
+                dr["UserId"] = userId;
+                dtRoleMembers.Rows.Add(dr);
+            }
+            dtRoleMembers.EndLoadData();
+            return dtRoleMembers;
         }
 
         #endregion

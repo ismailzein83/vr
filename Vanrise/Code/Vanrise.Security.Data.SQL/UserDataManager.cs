@@ -16,6 +16,16 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_User_GetFilteredUsers", UserMapper, fromRow, toRow, name, email);
         }
 
+        public List<User> GetUsers()
+        {
+            return GetItemsSP("sec.sp_User_GetUsers", UserMapper);
+        }
+
+        public List<User> GetMembers(int roleId)
+        {
+            return GetItemsSP("sec.sp_User_GetMembers", UserMapper, roleId);
+        }
+
         public User GetUser(int userId)
         {
             return GetItemSP("sec.sp_User_GetUser", UserMapper, userId);

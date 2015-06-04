@@ -17,6 +17,18 @@ namespace Vanrise.Security.Business
             return datamanager.GetFilteredUsers(fromRow, toRow, name, email);
         }
 
+        public List<User> GetUsers()
+        {
+            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return datamanager.GetUsers();
+        }
+
+        public List<User> GetMembers(int roleId)
+        {
+            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return datamanager.GetMembers(roleId);
+        }
+
         public User GetUser(int userId)
         {
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();

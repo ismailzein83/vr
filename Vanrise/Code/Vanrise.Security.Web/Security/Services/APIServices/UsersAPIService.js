@@ -6,7 +6,9 @@
         AddUser: AddUser,
         UpdateUser: UpdateUser,
         CheckUserName: CheckUserName,
-        ResetPassword: ResetPassword
+        ResetPassword: ResetPassword,
+        GetUsers: GetUsers,
+        GetMembers: GetMembers
     });
 
     function GetFilteredUsers(fromRow, toRow, name, email) {
@@ -20,12 +22,23 @@
            );
     }
 
+    function GetUsers() {
+        return BaseAPIService.get("/api/Users/GetUsers");
+    }
+
     function GetUser(userId) {
         return BaseAPIService.get("/api/Users/GetUser",
             {
                 UserId: userId
             }
            );
+    }
+
+    function GetMembers(roleId) {
+        return BaseAPIService.get("/api/Users/GetMembers", 
+             {
+                 roleId: roleId
+             });
     }
 
     function AddUser(user) {

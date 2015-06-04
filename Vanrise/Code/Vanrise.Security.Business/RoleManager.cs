@@ -23,7 +23,7 @@ namespace Vanrise.Security.Business
             return dataManager.GetRole(roleId);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject)
+        public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject, int[] members)
         {
             InsertOperationOutput<Role> insertOperationOutput = new InsertOperationOutput<Role>();
 
@@ -34,16 +34,20 @@ namespace Vanrise.Security.Business
             IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();
             bool insertActionSucc = dataManager.AddRole(roleObject, out roleId);
 
-            if (insertActionSucc)
+            if(insertActionSucc)
             {
+                dataManager.AssignMembers(roleId, members);
+                
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 roleObject.RoleId = roleId;
                 insertOperationOutput.InsertedObject = roleObject;
             }
+            
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject)
+
+        public Vanrise.Entities.UpdateOperationOutput<Role> UpdateRole(Role roleObject, int[] members)
         {
             IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();
             bool updateActionSucc = dataManager.UpdateRole(roleObject);
@@ -54,6 +58,8 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
+                dataManager.AssignMembers(roleObject.RoleId, members);
+
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = roleObject;
             }

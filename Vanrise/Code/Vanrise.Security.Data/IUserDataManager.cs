@@ -11,6 +11,10 @@ namespace Vanrise.Security.Data
     {
         List<User> GetFilteredUsers(int fromRow, int toRow, string name, string email);
 
+        List<User> GetUsers();
+
+        List<User> GetMembers(int roleId);
+
         User GetUser(int userId);
 
         bool AddUser(User user, out int insertedId);

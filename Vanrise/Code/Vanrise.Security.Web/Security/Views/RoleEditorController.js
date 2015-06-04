@@ -1,5 +1,5 @@
-﻿RoleEditorController.$inject = ['$scope', 'RoleAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
-function RoleEditorController($scope, RoleAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+﻿RoleEditorController.$inject = ['$scope', 'RoleAPIService', 'UsersAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+function RoleEditorController($scope, RoleAPIService, UsersAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     loadParameters();
@@ -31,9 +31,19 @@ function RoleEditorController($scope, RoleAPIService, VRModalService, VRNotifica
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+
+        $scope.optionsUsers = {
+            selectedvalues: [],
+            datasource: []
+        };
     }
 
     function load() {
+        UsersAPIService.GetUsers().then(function (response) {
+            $scope.optionsUsers.datasource = response;
+
+        });
+
         if (editMode) {
             $scope.isGettingData = true;
             getRole().finally(function () {
@@ -55,10 +65,15 @@ function RoleEditorController($scope, RoleAPIService, VRModalService, VRNotifica
 
 
     function buildRoleObjFromScope() {
+        var selectedUserIds = [];
+        angular.forEach($scope.optionsUsers.selectedvalues, function (user) {
+            selectedUserIds.push(user.UserId);
+        });
         var roleObject = {
             roleId: ($scope.roleId != null) ? $scope.roleId : 0,
             name: $scope.name,
-            description: $scope.description
+            description: $scope.description,
+            members: selectedUserIds
         };
         return roleObject;
     }
@@ -66,6 +81,11 @@ function RoleEditorController($scope, RoleAPIService, VRModalService, VRNotifica
     function fillScopeFromRoleObj(roleObject) {
         $scope.name = roleObject.Name;
         $scope.description = roleObject.Description;
+        
+        UsersAPIService.GetMembers($scope.roleId).then(function (response) {
+            console.log(response);
+            $scope.optionsUsers.selectedvalues = response;
+        });
     }
 
     function insertRole() {
