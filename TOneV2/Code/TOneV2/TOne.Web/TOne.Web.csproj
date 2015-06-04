@@ -182,6 +182,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Analytics\BillingReports.aspx.cs">
+      <DependentUpon>BillingReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Analytics\BillingReports.aspx.designer.cs">
+      <DependentUpon>BillingReports.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Analytics\CarrierProfile.aspx.cs">
       <DependentUpon>CarrierProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -225,6 +232,7 @@
     <Content Include="popoverTemp.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Reports\Analytics\BillingReports.aspx" />
     <Content Include="Reports\Analytics\CarrierProfile.aspx" />
     <Content Include="Reports\Analytics\ZoneProfit.aspx" />
     <Content Include="Reports\ReportChart.aspx" />

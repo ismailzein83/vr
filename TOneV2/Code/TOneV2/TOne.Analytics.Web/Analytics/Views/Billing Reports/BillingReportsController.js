@@ -7,7 +7,7 @@ function BillingReportsController($scope) {
     function defineScope() {
        
         $scope.openReport = function () {
-            window.open("/Reports/Analytics/ZoneProfit.aspx?fromDate=" +$scope.dateToString( $scope.fromDate) + "&toDate=" +$scope.dateToString( $scope.toDate ), "_blank", "width=400, height=200");
+            window.open("/Reports/Analytics/BilllingReport.aspx?fromDate=" +$scope.dateToString( $scope.fromDate) + "&toDate=" +$scope.dateToString( $scope.toDate ), "_blank", "width=400, height=200");
         }
         
     }
