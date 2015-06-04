@@ -46,7 +46,7 @@ namespace Vanrise.Security.Data.SQL
             int recordesEffected = ExecuteNonQuerySPCmd("sec.sp_Roles_AssignMembers", (cmd) =>
                     {
                         cmd.Parameters.Add(new SqlParameter("@RoleId", roleId));
-                        var dtPrm = new SqlParameter("@RoleMembers", SqlDbType.Structured);
+                        var dtPrm = new SqlParameter("@UserIds", SqlDbType.Structured);
                         dtPrm.Value = dtRoleMembers;
                         cmd.Parameters.Add(dtPrm);
                     });
