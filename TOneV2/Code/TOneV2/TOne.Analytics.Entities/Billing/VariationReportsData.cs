@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class VariationReports
+    public class VariationReportsData
     {
         public string Name { get; set; }
 
@@ -14,15 +14,18 @@ namespace TOne.Analytics.Entities
 
         public decimal PeriodTypeValuePercentage { get; set; }
 
-        public DateTime CallDate { get; set; }
-
-        public decimal TotalDuration { get; set; }
-
         public decimal PreviousPeriodTypeValuePercentage { get; set; }
 
+        //public List<decimal> TotalDurationPerDate { get; set; }
+
+        public decimal[][] TotalDurationPerDate ;
+       
         public string CarrierAccountID { get; set; }
 
-
+        public VariationReportsData(int periodCount) { 
+       
+            TotalDurationPerDate = new decimal[periodCount][];
+        }
 
 
     }
