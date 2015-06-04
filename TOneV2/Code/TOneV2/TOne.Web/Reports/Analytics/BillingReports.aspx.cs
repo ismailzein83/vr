@@ -43,7 +43,14 @@ namespace TOne.Web.Reports.Analytics
                     ReportDataSource ds = new ReportDataSource(a.Key, a.Value);
                     ReportViewer1.LocalReport.DataSources.Add(ds);
                 }
-
+                List<ReportParameter> BillingRDLCReportParameters = new List<ReportParameter>();
+                foreach (var p in r.GetRdlcReportParameters(parameters))
+                {                   
+                  
+                    BillingRDLCReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
+                 
+                }
+                ReportViewer1.LocalReport.SetParameters(BillingRDLCReportParameters.ToArray());
 
             }
         }

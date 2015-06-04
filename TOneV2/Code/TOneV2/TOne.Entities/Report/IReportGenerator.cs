@@ -10,5 +10,7 @@ namespace TOne.Entities
     public interface IReportGenerator
     {
         Dictionary<string, IEnumerable> GenerateDataSources(ReportParameters parameters);
+
+        Dictionary<string, RdlcParameter> GetRdlcReportParameters(ReportParameters parameters);
     }
 }

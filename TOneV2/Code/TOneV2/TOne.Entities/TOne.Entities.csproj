@@ -113,6 +113,7 @@
     <Compile Include="OperationResults\InsertOperationOutput.cs" />
     <Compile Include="OperationResults\UpdateOperationOutput.cs" />
     <Compile Include="Report\IReportGenerator.cs" />
+    <Compile Include="Report\RdlcParameter.cs" />
     <Compile Include="Report\ReportParameters.cs" />
     <Compile Include="Report\ReportParameterSettings.cs" />
     <Compile Include="Report\RDLCReportDefinition.cs" />

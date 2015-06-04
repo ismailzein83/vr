@@ -448,6 +448,7 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>11</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -481,6 +482,7 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -510,6 +512,7 @@
                       <rd:DefaultName>SaleZone</rd:DefaultName>
                       <ZIndex>9</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -539,6 +542,7 @@
                       <rd:DefaultName>CostZone</rd:DefaultName>
                       <ZIndex>8</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -568,6 +572,7 @@
                       <rd:DefaultName>SupplierID</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -599,6 +604,7 @@
                       <rd:DefaultName>Calls</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -629,6 +635,7 @@
                       </Paragraphs>
                       <rd:DefaultName>DurationNetFormated</rd:DefaultName>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -659,6 +666,7 @@
                       </Paragraphs>
                       <rd:DefaultName>SaleDurationFormated1</rd:DefaultName>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -690,6 +698,7 @@
                       <rd:DefaultName>CostDurationFormated</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -721,6 +730,7 @@
                       <rd:DefaultName>SaleNetFormated</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -752,6 +762,7 @@
                       <rd:DefaultName>Profit</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -782,6 +793,7 @@
                       </Paragraphs>
                       <rd:DefaultName>ProfitPercentage</rd:DefaultName>
                       <Style>
+                        <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1966,53 +1978,28 @@
     <ReportParameter Name="FromDate">
       <DataType>DateTime</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>=Now()</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>FromDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="ToDate">
       <DataType>DateTime</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>=Now()</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>ToDate</Prompt>
     </ReportParameter>
     <ReportParameter Name="Title">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>test</Value>
-        </Values>
-      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Title</Prompt>
     </ReportParameter>
     <ReportParameter Name="Currency">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>dollar</Value>
-        </Values>
-      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>Currency</Prompt>
     </ReportParameter>
     <ReportParameter Name="LogoPath">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>"ffff"</Value>
-        </Values>
-      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>LogoPath</Prompt>
     </ReportParameter>
@@ -2041,21 +2028,11 @@
     <ReportParameter Name="GroupByCustomer">
       <DataType>Boolean</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>true</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>GroupByCustomer</Prompt>
     </ReportParameter>
     <ReportParameter Name="DigitRate">
       <DataType>Integer</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>1</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>DigitRate</Prompt>
     </ReportParameter>
   </ReportParameters>

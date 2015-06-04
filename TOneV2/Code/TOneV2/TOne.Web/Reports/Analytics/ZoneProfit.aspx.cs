@@ -24,10 +24,10 @@ namespace TOne.Web.Reports.Analytics
 
                 BillingStatisticManager manager = new BillingStatisticManager();
                 //  string showCustomer = Request.QueryString["showCustomer"];
-                DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(from, to, true);
+                List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), true) ;
 
                 //List<MonthTraffic> m = manager.GetMonthTraffic(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), "C060", true);
               
@@ -36,9 +36,9 @@ namespace TOne.Web.Reports.Analytics
                 ReportViewer1.LocalReport.DataSources.Clear();
                 ReportViewer1.LocalReport.DataSources.Add(ds);
 
-                //ReportParameter[] parameters = new ReportParameter[1];
-                //parameters[0] = new ReportParameter("GroupByCustomer", "true", false);
-                //ReportViewer1.LocalReport.SetParameters(parameters);
+                ReportParameter[] parameters = new ReportParameter[1];
+                parameters[0] = new ReportParameter("GroupByCustomer", "true", false);
+                ReportViewer1.LocalReport.SetParameters(parameters);
 
 
             }

@@ -1,9 +1,10 @@
-﻿BillingReportsController.$inject = ['$scope'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService'];
 
-function BillingReportsController($scope) {
+function BillingReportsController($scope, ReportAPIService) {
    
     defineScope();
     load();
+    $scope.reportsTypes = [];
     function defineScope() {
        
         $scope.openReport = function () {
@@ -12,10 +13,14 @@ function BillingReportsController($scope) {
         
     }
     function load() {
-
+        loadReportTypes();
     }
 
-   
+    function loadReportTypes() {
+        ReportAPIService.GetAllReportDefinition().then(function (response) {
+            $scope.reportsTypes = response;
+        })
+    }
 
 };
 
