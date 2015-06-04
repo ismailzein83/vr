@@ -4,7 +4,8 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
     return ({
         GetTest: GetTest,
         GetZoneProfit: GetZoneProfit,
-        GetBillingStatistics: GetBillingStatistics
+        GetBillingStatistics: GetBillingStatistics,
+        GetVariationReportsData: GetVariationReportsData
     });
 
     function GetTest(name){
@@ -30,6 +31,16 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
                 toDate: toDate
             }
             );
+        }
+
+        function GetVariationReportsData(selectedDate, periodCount, periodTypeValue) {
+            return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
+                {
+                    selectedDate: selectedDate,
+                    periodCount: periodCount,
+                    periodTypeValue: periodTypeValue
+                }
+                );
         }
 
 
