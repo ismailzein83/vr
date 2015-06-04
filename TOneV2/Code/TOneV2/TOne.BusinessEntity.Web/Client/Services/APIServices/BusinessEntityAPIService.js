@@ -5,7 +5,10 @@ var serviceObj = function (BaseAPIService) {
         GetCarriers: GetCarriers,
         GetCodeGroups: GetCodeGroups,
         GetSwitches: GetSwitches,
-        insertCarrierTest: insertCarrierTest
+        insertCarrierTest: insertCarrierTest,
+        GetCarrierAccounts: GetCarrierAccounts,
+        GetCarrierAccount: GetCarrierAccount,
+        UpdateCarrierAccount: UpdateCarrierAccount
     });
 
     function GetCarriers(carrierType) {
@@ -31,6 +34,27 @@ var serviceObj = function (BaseAPIService) {
         return BaseAPIService.get("/api/BusinessEntity/GetSwitches",
             {
             });
+    }
+    function GetCarrierAccounts(ProfileName, ProfileCompanyName, from, to) {
+        return BaseAPIService.get("/api/BusinessEntity/GetCarrierAccounts",
+            {
+                ProfileName: ProfileName,
+                ProfileCompanyName: ProfileCompanyName,
+                from: from,
+                to: to
+            });
+    }
+    function GetCarrierAccount(carrierAccountId) {
+        return BaseAPIService.get("/api/BusinessEntity/GetCarrierAccount",
+            {
+                carrierAccountId: carrierAccountId
+            });
+    }
+    function UpdateCarrierAccount(CarrierAccount) {
+        return BaseAPIService.post("/api/BusinessEntity/UpdateCarrierAccount",
+
+                CarrierAccount
+            );
     }
 }
 

@@ -23,7 +23,19 @@ namespace TOne.BusinessEntity.Business
 
         public int InsertCarrierTest(string CarrierAccountID, string Name)
         {
-           return _dataManager.InsertCarrierTest(CarrierAccountID, Name);
+            return _dataManager.InsertCarrierTest(CarrierAccountID, Name);
+        }
+        public List<CarrierAccount> GetCarrierAccounts(string name, string companyName, int from, int to)
+        {
+            return _dataManager.GetCarrierAccounts(name, companyName, from, to);
+        }
+        public CarrierAccount GetCarrierAccount(string carrierAccountId)
+        {
+            return _dataManager.GetCarrierAccount(carrierAccountId);
+        }
+        public int UpdateCarrierAccount(CarrierAccount carrierAccount)
+        {
+            return _dataManager.UpdateCarrierAccount(carrierAccount);
         }
     }
 }

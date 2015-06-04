@@ -40,10 +40,57 @@ namespace TOne.BusinessEntity.Data.SQL
             return carrierAccountName;
         }
 
+        public List<CarrierAccount> GetCarrierAccounts(string name, string companyName, int from, int to)
+        {
+            return GetItemsSP("BEntity.sp_CarrierAccount_GetByName", (reader) =>
+                {
+                    return new CarrierAccount
+                    {
+                        CarrierAccountId = reader["CarrierAccountId"] as string,
+                        ProfileId = (Int16)reader["ProfileId"],
+                        ProfileName = reader["ProfileName"] as string,
+                        ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                        ActivationStatus = (byte)reader["ActivationStatus"],
+                        RoutingStatus = (byte)reader["RoutingStatus"],
+                        AccountType = (byte)reader["AccountType"],
+                        CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                        SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                        NameSuffix = reader["NameSuffix"] as string
+                    };
+                }, name, companyName, from, to);
+        }
+        public CarrierAccount GetCarrierAccount(string carrierAccountId)
+        {
+            return GetItemSP("BEntity.sp_CarrierAccount_GetByCarrierAccountId", (reader) =>
+                {
+                    return new CarrierAccount
+                    {
+                        CarrierAccountId = reader["CarrierAccountId"] as string,
+                        ProfileId = (Int16)reader["ProfileId"],
+                        ProfileName = reader["ProfileName"] as string,
+                        ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                        ActivationStatus = (byte)reader["ActivationStatus"],
+                        RoutingStatus = (byte)reader["RoutingStatus"],
+                        AccountType = (byte)reader["AccountType"],
+                        CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                        SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                        NameSuffix = reader["NameSuffix"] as string
+                    };
+                }, carrierAccountId);
+        }
         public int InsertCarrierTest(string carrierAccountID, string Name)
         {
 
             int rowEffected = ExecuteNonQuerySP("BEntity.sp_InsertCarrierInfoTest", carrierAccountID, Name);
+            return rowEffected;
+        }
+        public int UpdateCarrierAccount(CarrierAccount carrierAccount)
+        {
+
+            int rowEffected = ExecuteNonQuerySP("BEntity.sp_CarrierAccount_Update ",
+                carrierAccount.AccountType,carrierAccount.ActivationStatus,carrierAccount.CarrierAccountId,
+                carrierAccount.CustomerPaymentType,carrierAccount.NameSuffix,carrierAccount.ProfileCompanyName,
+                carrierAccount.ProfileId,carrierAccount.ProfileName,carrierAccount.RoutingStatus,carrierAccount.SupplierPaymentType);
             return rowEffected;
         }
 

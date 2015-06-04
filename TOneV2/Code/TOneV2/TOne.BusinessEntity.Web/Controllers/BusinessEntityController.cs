@@ -52,5 +52,25 @@ namespace TOne.BusinessEntity.Web.Controllers
             CarrierManager manager = new CarrierManager();
             return manager.InsertCarrierTest(carrierInfo.CarrierAccountID, carrierInfo.Name);
         }
+
+        [HttpGet]
+        public List<CarrierAccount> GetCarrierAccounts(string ProfileName, string ProfileCompanyName, int from, int to)
+        {
+            CarrierManager manager = new CarrierManager();
+            return manager.GetCarrierAccounts(ProfileName, ProfileCompanyName, from, to);
+        }
+
+        [HttpGet]
+        public CarrierAccount GetCarrierAccount(string carrierAccountId)
+        {
+            CarrierManager manager = new CarrierManager();
+            return manager.GetCarrierAccount(carrierAccountId);
+        }
+        [HttpPost]
+        public int UpdateCarrierAccount(CarrierAccount carrierAccount)
+        {
+            CarrierManager manager = new CarrierManager();
+            return manager.UpdateCarrierAccount(carrierAccount);
+        }
     }
 }

@@ -127,6 +127,10 @@
   <ItemGroup>
     <Content Include="Client\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Client\Services\APIServices\SwitchManagmentAPIService.js" />
+    <Content Include="Client\Views\CarrierAccountEditor.html" />
+    <Content Include="Client\Views\CarrierAccountEditorController.js" />
+    <Content Include="Client\Views\CarrierAccountManagement.html" />
+    <Content Include="Client\Views\CarrierAccountManagementController.js" />
     <Content Include="Client\Views\SwitchEditor.html" />
     <Content Include="Client\Views\SwitchEditorController.js" />
     <Content Include="Client\Views\SwitchManagment.html" />
