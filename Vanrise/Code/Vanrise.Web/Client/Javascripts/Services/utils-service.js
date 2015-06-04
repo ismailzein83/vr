@@ -4,7 +4,9 @@ app.service('UtilsService', ['$q', function ($q) {
 
     return ({
         replaceAll: replaceAll,
-        waitMultipleAsyncOperations: waitMultipleAsyncOperations
+        waitMultipleAsyncOperations: waitMultipleAsyncOperations,
+        getItemIndexByVal: getItemIndexByVal,
+        getItemByVal: getItemByVal
     });
 
     function replaceAll(string, find, replace) {
@@ -35,5 +37,23 @@ app.service('UtilsService', ['$q', function ($q) {
             });
         });
         return deferred.promise;
+    }
+
+    function getItemIndexByVal(array, value, attname) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i][attname] == value) {
+                return i
+            }
+        }
+        return -1;
+    }
+
+    function getItemByVal(array, value, attname) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i][attname] == value) {
+                return array[i];
+            }
+        }
+        return null;
     }
 }]);
