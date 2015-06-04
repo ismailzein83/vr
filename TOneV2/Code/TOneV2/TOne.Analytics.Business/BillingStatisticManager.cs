@@ -95,5 +95,10 @@ namespace TOne.Analytics.Business
             return _datamanager.GetBillingStatistics(fromDate,toDate);
         }
 
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        {
+            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+        }
+
     }
 }
