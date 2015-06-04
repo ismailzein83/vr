@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 {
                     if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
-                        sValues.Add(Math.Round(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value).ToString());
+                       sValues.Add(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value.ToString());
                     }
                     else
                     {
@@ -71,33 +71,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     numberProfile.SubscriberNumber.ToString(),	
                                     numberProfile.FromDate.ToString(),	
                                     numberProfile.ToDate.ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CountOutCalls"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["DiffOutputNumb"],0).ToString()	,	
-                                    Math.Round(numberProfile.AggregateValues["CountOutInters"],0).ToString()	,	
-                                    Math.Round(numberProfile.AggregateValues["CountInInters"],0).ToString()	,
+                                    numberProfile.AggregateValues["CountOutCalls"].ToString()	,
+                                    numberProfile.AggregateValues["DiffOutputNumb"].ToString()	,	
+                                    numberProfile.AggregateValues["CountOutInters"].ToString()	,	
+                                    numberProfile.AggregateValues["CountInInters"].ToString()	,
                                     "0",	
                                     "0",		
                                     "0",		
                                     numberProfile.AggregateValues["CallOutDurs"].ToString(),	
                                     "0",	
                                     "0",		
-                                    Math.Round(numberProfile.AggregateValues["CountOutFails"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CountInFails"],0).ToString()	,
+                                    numberProfile.AggregateValues["CountOutFails"].ToString()	,
+                                    numberProfile.AggregateValues["CountInFails"].ToString()	,
                                     numberProfile.AggregateValues["TotalOutVolume"].ToString()	,
                                     numberProfile.AggregateValues["TotalInVolume"].ToString(),	
-                                    Math.Round(numberProfile.AggregateValues["DiffInputNumbers"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CountOutSMSs"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["TotalIMEI"],0).ToString()	,	
-                                    Math.Round(numberProfile.AggregateValues["TotalBTS"],0).ToString()	,	
+                                    numberProfile.AggregateValues["DiffInputNumbers"].ToString()	,
+                                    numberProfile.AggregateValues["CountOutSMSs"].ToString()	,
+                                    numberProfile.AggregateValues["TotalIMEI"].ToString()	,	
+                                    numberProfile.AggregateValues["TotalBTS"].ToString()	,	
                                     numberProfile.IsOnNet.ToString()	,	
                                     numberProfile.AggregateValues["TotalDataVolume"].ToString()	,
                                     ((int)numberProfile.Period).ToString()		,
-                                    Math.Round(numberProfile.AggregateValues["CountInCalls"],0).ToString()	,
+                                    numberProfile.AggregateValues["CountInCalls"].ToString()	,
                                     numberProfile.AggregateValues["CallInDurs"].ToString()	,	
-                                    Math.Round(numberProfile.AggregateValues["CountOutOnNets"],0).ToString()	,	
-                                    Math.Round(numberProfile.AggregateValues["CountInOnNets"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CountOutOffNets"],0).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CountInOffNets"],0).ToString()	
+                                    numberProfile.AggregateValues["CountOutOnNets"].ToString()	,	
+                                    numberProfile.AggregateValues["CountInOnNets"].ToString()	,
+                                    numberProfile.AggregateValues["CountOutOffNets"].ToString()	,
+                                    numberProfile.AggregateValues["CountInOffNets"].ToString()	
                                  }
                );
 

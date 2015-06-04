@@ -25,13 +25,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
         public Strategy GetStrategy(int strategyId)
         {
-            string query0 = "SELECT Id, StrategyContent FROM Strategy WHERE Id = @StrategyId";
+            string query0 = "SELECT Id FROM Strategy WHERE Id = @StrategyId";
             string query = "SELECT MaxValue, CriteriaID FROM StrategyThreshold Where StrategyId = @StrategyId";
             string query1 = "SELECT PeriodId, Value, CriteriaID FROM StrategyPeriods Where StrategyId = @StrategyId";
             string query2 = "SELECT LevelId, CriteriaId1, Cr1Per ,  CriteriaId2 ,  Cr2Per ,  CriteriaId3 ,  Cr3Per ,  CriteriaId4 ,  Cr4Per ,  CriteriaId5 ,  Cr5Per ,  CriteriaId6 ,  Cr6Per ,  CriteriaId7 ,  Cr7Per ,  CriteriaId8 ,  Cr8Per ,  CriteriaId9 ,  Cr9Per ,  CriteriaId10 ,  Cr10Per ,  CriteriaId11 ,  Cr11Per ,  CriteriaId12 ,  Cr12Per ,  CriteriaId13 ,  Cr13Per ,  CriteriaId14 ,  Cr14Per ,  CriteriaId15 ,  Cr15Per,  CriteriaId16 ,  Cr16Per   FROM  Strategy_Suspicion_Level Where StrategyId = @StrategyId and LevelId<>1  ";
 
-            Strategy strategy = GetItemText<Strategy>(query0, StrategyMapper
-            , (cmd) =>
+            Strategy strategy = new Strategy();
+
+            strategy.Id = GetItemText<int>(query0, (reader) =>
+            {
+                return GetReaderValue<int>(reader, "Id");
+            }, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
             });
@@ -99,10 +103,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return strategy;
         }
-        public List<Strategy> GetAllStrategies()
+        public List<Strategy> GetAllStrategies2()
         {
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
+
+
+        public List<Strategy> GetAllStrategies()
+        {
+            string query_GetStrategies = @"SELECT Id, Name, Description FROM Strategy; ";
+            List<Strategy> strategies = new List<Strategy>();
+
+
+            ExecuteReaderText(query_GetStrategies, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    Strategy strategy = new Strategy();
+                    strategy.Id = (int)reader["Id"];
+                    strategy.Name = reader["Name"] as string;
+                    strategy.Description = reader["Description"] as string;
+                    strategies.Add(strategy);
+                }
+            }, null);
+            return strategies;
+        }
+
 
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
