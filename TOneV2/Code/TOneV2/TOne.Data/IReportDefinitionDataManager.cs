@@ -10,5 +10,7 @@ namespace TOne.Data
     public interface IReportDefinitionDataManager : IDataManager
     {
         RDLCReportDefinition GetRDLCReportDefinition(int ReportDefinitionId);
+
+        List<RDLCReportDefinition> GetAllRDLCReportDefinition();
     }
 }

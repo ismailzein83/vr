@@ -22,6 +22,10 @@ namespace TOne.Business
         {
             return _datamanager.GetRDLCReportDefinition(ReportDefinitionId);
         }
+        public List<RDLCReportDefinition> GetAllRDLCReportDefinition()
+        {
+            return _datamanager.GetAllRDLCReportDefinition();
+        }
 
     }
 }

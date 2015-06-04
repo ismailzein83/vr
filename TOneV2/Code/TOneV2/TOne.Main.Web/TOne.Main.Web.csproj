@@ -120,11 +120,13 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ReportDefintionController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Services\APIServices\ReportAPIService.js" />
     <Content Include="Client\Services\APIServices\RolesAPIService.js" />
     <Content Include="Client\Services\APIServices\UsersAPIService.js" />
     <Content Include="Client\Views\ResetPasswordEditorController.js" />

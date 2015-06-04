@@ -13,8 +13,14 @@ namespace TOne.Data.SQL
 
         public RDLCReportDefinition GetRDLCReportDefinition(int ReportDefinitionId)
         {
-            return GetItemSP("[main].[sp_ReportDefinition_GetByReportDefinitionId]", ReportDefinitionMapper, ReportDefinitionId);
+            return GetItemSP("[mainmodule].[sp_ReportDefinition_GetById]", ReportDefinitionMapper, ReportDefinitionId);
         }
+
+        public List<RDLCReportDefinition> GetAllRDLCReportDefinition()
+        {
+            return GetItemsSP("[mainmodule].[sp_ReportDefinition_GetAll]", ReportDefinitionMapper);
+        }
+
 
         #region Private Methods
 
