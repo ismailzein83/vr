@@ -39,10 +39,10 @@ namespace Vanrise.Security.Data.SQL
             //TODO: implement an encryption module
             //string encPassword = manager.EncodePassword(password);
 
-            string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
+            //string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
 
             int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name,
-                password, !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, isActive,
+                password, !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, userObject.Status,
                 !string.IsNullOrEmpty(userObject.Description) ? userObject.Description : null);
 
             insertedId = (int)userID;
@@ -51,10 +51,10 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
+            //string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
 
             int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name,
-               !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, isActive,
+               !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, userObject.Status,
                !string.IsNullOrEmpty(userObject.Description) ? userObject.Description : null);
             
             return (recordesEffected > 0);
@@ -81,7 +81,7 @@ namespace Vanrise.Security.Data.SQL
                 Name = reader["Name"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
-                Status = reader["IsActive"].ToString().ToUpper().Equals("Y") ? Entities.UserStatus.Active : Entities.UserStatus.Inactive,
+                Status = (int.Parse(reader["Status"].ToString()) == 0) ? Entities.UserStatus.Active : Entities.UserStatus.Inactive,
                 Description = reader["Description"] as string
             };
         }
