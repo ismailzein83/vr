@@ -17,7 +17,7 @@ namespace TestRuntime
     public class RabihTask : ITask
     {
         public void Execute()
-        {
+        { 
 
             //IServiceDataManager datamanager = BEDataManagerFactory.GetDataManager<IServiceDataManager>();
 
@@ -73,7 +73,7 @@ namespace TestRuntime
 
 
 
-            //RunCompleteRouteBuild();
+            RunCompleteRouteBuild();
         }
 
         private static void RunCompleteRouteBuild()
@@ -86,7 +86,7 @@ namespace TestRuntime
                 {
                     EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    IsLcrOnly = false
+                    IsLcrOnly = true
                 }
             });
         }
