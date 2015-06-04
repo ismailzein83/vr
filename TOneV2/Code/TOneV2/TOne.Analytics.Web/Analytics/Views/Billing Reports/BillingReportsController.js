@@ -5,10 +5,15 @@ function BillingReportsController($scope, ReportAPIService) {
     defineScope();
     load();
     $scope.reportsTypes = [];
+        $scope.params = {
+            fromDate: "",
+            toDate:""
+        }
     function defineScope() {
        
         $scope.openReport = function () {
-            window.open("/Reports/Analytics/BillingReports.aspx?fromDate=" +$scope.dateToString( $scope.fromDate) + "&toDate=" +$scope.dateToString( $scope.toDate ), "_blank", "width=400, height=200");
+            alert($scope.params.fromDate)
+            window.open("/Reports/Analytics/BillingReports.aspx?fromDate=" + $scope.dateToString($scope.params.fromDate) + "&toDate=" + $scope.dateToString($scope.params.toDate), "_blank", "width=400, height=200");
         }
         
     }
