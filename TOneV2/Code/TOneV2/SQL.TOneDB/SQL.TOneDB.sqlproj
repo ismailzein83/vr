@@ -142,5 +142,6 @@
     <Build Include="BEntity\Stored Procedures\sp_FlaggedService_GetAll.sql" />
     <Build Include="CDR\Stored Procedures\sp_CDRIDManager_ReserveIDRange.sql" />
     <Build Include="Security\CDR.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_CodeGroup_GetByCodePrefix.sql" />
   </ItemGroup>
 </Project>

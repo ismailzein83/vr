@@ -21,7 +21,7 @@ namespace TOne.LCR.Data.SQL
                 }
                 wr.Close();
             }
-            
+
             return new BulkInsertInfo
             {
                 TableName = "ZoneInfo",

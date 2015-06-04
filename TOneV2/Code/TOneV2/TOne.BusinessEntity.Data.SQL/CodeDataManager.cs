@@ -168,5 +168,24 @@ namespace TOne.BusinessEntity.Data.SQL
         #endregion
 
 
+
+
+        public Dictionary<string, CodeGroupInfo> GetCodeGroupsByCodePrefix(string codePrefix)
+        {
+            Dictionary<string, CodeGroupInfo> codeGroups = new Dictionary<string, CodeGroupInfo>();
+            ExecuteReaderSP("BEntity.SP_CodeGroup_GetByCodePrefix", (reader) =>
+           {
+               while (reader.Read())
+               {
+                   CodeGroupInfo codeGroup = new CodeGroupInfo()
+                   {
+                       Code = reader["Code"] as string,
+                       Name = reader["Name"] as string
+                   };
+                   codeGroups.Add(codeGroup.Code, codeGroup);
+               };
+           }, codePrefix);
+            return codeGroups;
+        }
     }
 }

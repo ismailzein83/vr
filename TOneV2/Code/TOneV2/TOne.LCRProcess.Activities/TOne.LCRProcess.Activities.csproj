@@ -75,12 +75,14 @@
     <Compile Include="BuildCodeMatchByCodeGroup.cs" />
     <Compile Include="BuildCodeMatchByFirstCodeDigit.cs" />
     <Compile Include="BuildRoutes.cs" />
+    <Compile Include="BuildZoneMatch.cs" />
     <Compile Include="CreateIndexesOnRouteTable.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="CreateIndexesOnZoneMatchTable.cs" />
     <Compile Include="CreateIndexesOnCodeMatchTable.cs" />
     <Compile Include="DropOldRoutingDatabases.cs" />
     <Compile Include="GetCodeCustomers.cs" />
+    <Compile Include="GetCodeGroupsByCodePrefix.cs" />
     <Compile Include="GetCodes.cs" />
     <Compile Include="GetCurrentDatabaseId.cs" />
     <Compile Include="GetDifferentialRouteRules.cs" />

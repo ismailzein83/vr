@@ -122,7 +122,8 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                     CREATE TABLE [dbo].[ZoneMatch](
 	                                                    [OurZoneID] [int] NOT NULL,
 	                                                    [SupplierZoneID] [int] NOT NULL,
-	                                                    [SupplierID] [varchar](5) NOT NULL
+	                                                    [SupplierID] [varchar](5) NOT NULL,
+                                                        [IsCodeGroup] BIT NOT NULL
                                                     ) 
                                                     CREATE TABLE [dbo].[CodeMatch](
 	                                                    [Code] [varchar](30) NOT NULL,
@@ -169,7 +170,12 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                        [Code] ASC
                                                         )WITH (IGNORE_DUP_KEY = OFF)
                                                         )
-                                                    
+                                                     CREATE TABLE [dbo].[TempZoneMatch](
+	                                                    [OurZoneId] [int] NOT NULL,
+                                                        [SupplierZoneId] [int] NOT NULL,
+                                                        [SupplierId] [varchar](5) NOT NULL,
+                                                        [IsCodeGroup] BIT NOT NULL
+                                                    ) 
                                                     ";
         const string query_GetRoutes = @"
 	                                    SELECT 

@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TOne.LCR.Entities
+{
+  public  class SingleSaleCodeMatch
+
+    {
+        public int SaleZoneId { get; set; }
+        public bool IsMatchingCodeGroup { get; set; }
+        public List<CodeMatch> SupplierCodeMatches { get; set; }
+    }
+}

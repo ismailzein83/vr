@@ -50,6 +50,7 @@
     <Compile Include="ActionExecutionStep.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="CodeCustomers.cs" />
+    <Compile Include="SaleZoneMatches.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="RoutingRuleActionType.cs" />
     <Compile Include="RoutingRules\Actions\BaseRouteRuleActionData.cs" />
@@ -65,6 +66,8 @@
     <Compile Include="Routing\DifferentialRouteState.cs" />
     <Compile Include="Routing\RouteDetailFilter.cs" />
     <Compile Include="Routing\RouteInfo.cs" />
+    <Compile Include="SingleSaleCodeMatch.cs" />
+    <Compile Include="SupplierZones.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />
     <Compile Include="ZoneRates\ZoneCustomerRates.cs" />

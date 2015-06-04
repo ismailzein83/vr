@@ -38,5 +38,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCodes(zoneID, effectiveOn);
         }
+
+        public Dictionary<string, CodeGroupInfo> GetCodeGroupsByCodePrefix(string codePrefix)
+        {
+            return _dataManager.GetCodeGroupsByCodePrefix(codePrefix);
+        }
     }
 }

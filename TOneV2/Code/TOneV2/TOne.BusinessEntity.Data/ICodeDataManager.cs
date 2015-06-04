@@ -17,6 +17,8 @@ namespace TOne.BusinessEntity.Data
 
         List<CodeGroupInfo> GetCodeGroups();
 
+        Dictionary<string, CodeGroupInfo> GetCodeGroupsByCodePrefix(string codePrefix);
+
         List<string> GetDistinctCodePrefixes(int codePrefixLength, DateTime effectiveOn, bool isFuture);
         List<Code> GetCodes(int zoneID, DateTime effectiveOn);
     }
