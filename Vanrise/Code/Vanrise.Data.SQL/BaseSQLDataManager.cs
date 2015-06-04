@@ -28,11 +28,11 @@ namespace Vanrise.Data.SQL
             if (!Directory.Exists(s_bcpDirectory))
                 Directory.CreateDirectory(s_bcpDirectory);
             string bcpFullPath = Path.Combine(s_bcpDirectory, "v_bcp.exe");
-            if(!File.Exists(bcpFullPath))
+            if (!File.Exists(bcpFullPath))
                 File.WriteAllBytes(bcpFullPath, Resource.v_bcp);
-            
+
             string bcprllFullPath = Path.Combine(s_bcpDirectory, "bcp.rll");
-            if(!File.Exists(bcprllFullPath))
+            if (!File.Exists(bcprllFullPath))
                 File.WriteAllBytes(bcprllFullPath, Resource.bcp);
         }
 
@@ -43,8 +43,9 @@ namespace Vanrise.Data.SQL
         {
         }
 
-        public BaseSQLDataManager(string connectionStringKey) : base(connectionStringKey)
-        {            
+        public BaseSQLDataManager(string connectionStringKey)
+            : base(connectionStringKey)
+        {
         }
 
         #endregion
@@ -164,7 +165,7 @@ namespace Vanrise.Data.SQL
                     reader.Close();
                 }
             }
-            
+
         }
 
         protected void ExecuteReaderSPCmd(string spName, Action<IDataReader> onReaderReady, Action<DbCommand> prepareCommand)
@@ -317,7 +318,7 @@ namespace Vanrise.Data.SQL
             if (!String.IsNullOrEmpty(configuredDirectory))
             {
                 string filePath = Path.Combine(configuredDirectory, Guid.NewGuid().ToString());
-                using(var stream = File.Create(filePath))
+                using (var stream = File.Create(filePath))
                 {
                     stream.Close();
                 }
@@ -327,17 +328,29 @@ namespace Vanrise.Data.SQL
                 return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
         }
 
+        protected bool GetDeleteBCPFiles()
+        {
+            string donotDeleteFiles = ConfigurationManager.AppSettings["BCPDonotDeleteFiles"];
+            if (!String.IsNullOrEmpty(donotDeleteFiles))
+            {
+
+                return !bool.Parse(donotDeleteFiles);
+            }
+            else
+                return true;
+        }
+
         protected void InsertBulkToTable(BaseBulkInsertInfo bulkInsertInfo)
         {
             if (bulkInsertInfo == null)
                 throw new ArgumentNullException("bulkInsertInfo");
-            
+
             string dataFilePath = bulkInsertInfo.GetDataFilePath();
             if (String.IsNullOrEmpty(dataFilePath))
                 throw new ArgumentNullException("bulkInsertInfo.GetDataFilePath()");
             if (String.IsNullOrEmpty(bulkInsertInfo.TableName))
                 throw new ArgumentNullException("bulkInsertInfo.TableName");
-            if(bulkInsertInfo.FieldSeparator == default(char))
+            if (bulkInsertInfo.FieldSeparator == default(char))
                 throw new ArgumentNullException("bulkInsertInfo.FieldSeparator");
 
 
@@ -345,19 +358,19 @@ namespace Vanrise.Data.SQL
             string errorFilePath = System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\Error\{0}.txt", Guid.NewGuid());
             SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
             StringBuilder args = new StringBuilder(String.Format("{0} in {1} -e {2} -c -d {3} -S {4} -t {5} -b 100000", bulkInsertInfo.TableName, dataFilePath, errorFilePath, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, bulkInsertInfo.FieldSeparator));
-            
+
             if (connStringBuilder.IntegratedSecurity)
                 args.Append(" -T");
             else
                 args.Append(String.Format(" -U {0} -P {1}", connStringBuilder.UserID, connStringBuilder.Password));
-            
+
             if (bulkInsertInfo.TabLock)
                 args.Append(" -h TABLOCK");
             if (bulkInsertInfo.KeepIdentity)
                 args.Append(" -E");
-            
+
             System.Diagnostics.Process processBulkCopy = new System.Diagnostics.Process();
-            
+
             string bcpPath;
             if (string.IsNullOrEmpty(_bcpCommandName))
                 bcpPath = Path.Combine(s_bcpDirectory, "v_bcp");
@@ -365,7 +378,7 @@ namespace Vanrise.Data.SQL
                 bcpPath = _bcpCommandName;
 
             var procStartInfo = new System.Diagnostics.ProcessStartInfo(bcpPath, args.ToString());
-            
+           
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
             procStartInfo.CreateNoWindow = true;
@@ -373,7 +386,8 @@ namespace Vanrise.Data.SQL
             processBulkCopy.Start();
             processBulkCopy.WaitForExit();
             string errorMessage = File.ReadAllText(errorFilePath);
-            File.Delete(dataFilePath);
+            if (GetDeleteBCPFiles())
+                File.Delete(dataFilePath);
             File.Delete(errorFilePath);
             if (!String.IsNullOrWhiteSpace(errorMessage))
                 throw new Exception(errorMessage);
