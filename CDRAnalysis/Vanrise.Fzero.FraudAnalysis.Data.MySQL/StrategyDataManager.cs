@@ -182,5 +182,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
+
+        public Strategy GetStrategy2(int strategyId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
