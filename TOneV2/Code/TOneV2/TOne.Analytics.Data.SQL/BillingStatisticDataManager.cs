@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
-using TOne.Analytics.Entities.Billing;
 using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
@@ -246,7 +245,7 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, int periodTypeValue)
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
         {
 
             string query = String.Format(@"DECLARE @ExchangeRates TABLE(
@@ -258,8 +257,8 @@ namespace TOne.Analytics.Data.SQL
 	                                  	
                                            INSERT INTO @ExchangeRates 
                                             SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -@PeriodCount, @FromDate), @FromDate)
-                                            SELECT  cpc.Name , 0.0 as [@PeriodTypeValue AVG], 0.0 as [@PeriodTypeValue %], CallDate,
-                                            SUM(BS.SaleDuration/60) AS [TotalDuration], 0.0 as [Prev @PeriodTypeValue %],cac.CarrierAccountID   
+                                            SELECT  cpc.Name , 0.0 as [AVG], 0.0 as [%], CallDate,
+                                            SUM(BS.SaleDuration/60) AS [TotalDuration], 0.0 as [Prev %],cac.CarrierAccountID   
                                             From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
                                                 LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
                                                 LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
@@ -284,11 +283,11 @@ namespace TOne.Analytics.Data.SQL
             VariationReports instance = new VariationReports
             {
                 Name = reader["Name"] as string,
-                PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "PeriodTypeValueAverage"),
-                PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "PeriodTypeValuePercentage"),
+                PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
+                PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
                 CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
                 TotalDuration = GetReaderValue<decimal>(reader, "TotalDuration"),
-                PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "PreviousPeriodTypeValuePercentage"),
+                PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
                 CarrierAccountID = reader["CarrierAccountID"] as string,
             };
             
