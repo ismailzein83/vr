@@ -130,6 +130,9 @@ appRouting.config(['$routeProvider',
           when('/Security/UserManagement', {
               templateUrl: '/Client/Modules/Security/Views/UserManagement.html'
           }).
+          when('/Analytics/CDRLog', {
+              templateUrl: '/Client/Modules/Analytics/Views/CDR/CDRLog.html'
+          }).
           when('/BusinessEntity/CarrierAccount Managments', {
               templateUrl: '/Client/Modules/BusinessEntity/Views/CarrierAccountManagement.html'
           }).

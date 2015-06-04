@@ -133,7 +133,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
             name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
                { name: "Zone Monitor", location: '#/NOC/ZoneMonitor' },
                { name: "Variation Reports", location: '#/NOC/VariationReports' },
-               { name: "Billing Reports", location: '#/NOC/BillingReports' }
+               { name: "Billing Reports", location: '#/NOC/BillingReports' },
+            { name: "CDR Log", location: '#/Analytics/CDRLog' }
 
             ]
         },
