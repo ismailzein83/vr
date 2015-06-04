@@ -39,5 +39,29 @@ namespace TOne.Analytics.Web.Controllers
 
             return __billingStatisticsManager.GetBillingStatistics(fromDate,toDate);
         }
+
+        [HttpGet]
+
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        {
+            return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+        }
+
+        //public List<VariationReportsData> GetVariationReportsData(List<VariationReports> variationReports,int periodCount)
+        //{
+        //    List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
+        //    foreach (var item in variationReports) {
+        //        VariationReportsData newItem = new VariationReportsData();
+        //        newItem.Name = item.Name;
+        //        newItem.CarrierAccountID = item.CarrierAccountID;
+        //        int i = 0;
+        //        while (i<periodCount)
+        //        {
+        //          newItem.TotalDurationPerDate[i]= item.TotalDuration;
+        //        }
+            
+        //    }
+
+         
     }
 }
