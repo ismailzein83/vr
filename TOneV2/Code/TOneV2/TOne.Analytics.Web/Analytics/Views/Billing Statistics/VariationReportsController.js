@@ -7,7 +7,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
     var mainGridAPI;
     $scope.data = [];
     $scope.PeriodType = ['Days','Weeks','Months']
-    $scope.fromDate = '2013/07/30';
+    $scope.fromDate = '2013/07/31';
     $scope.toDate = '2015/05/01';
     $scope.periodTypeValue = 'Days';
     $scope.periodCount = 7;
@@ -38,6 +38,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
         $scope.getZoneProfit = getZoneProfit;
         $scope.getBillingStats = getBillingStats;
         $scope.getVariationReportsData = getVariationReportsData;
+        $scope.getVariationReportsFinalData = getVariationReportsFinalData;
         
     }
    
@@ -77,6 +78,16 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
         BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
             $scope.isInitializing = false;
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
+        });
+    }
+    function getVariationReportsFinalData() {
+        $scope.isInitializing = true;
+        BillingStatisticsAPIService.GetVariationReportsFinalData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
+        //    alert('here');
+        //  console.log(response);
+         $scope.isInitializing = false;
+         angular.forEach(response, function (itm) { $scope.data.push(itm); });
+            
         });
     }
 

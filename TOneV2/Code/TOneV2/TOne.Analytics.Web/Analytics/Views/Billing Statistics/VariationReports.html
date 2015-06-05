@@ -22,7 +22,7 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getVariationReportsData"></vr-button>
+                <vr-button type="Search" formname="formFilter" data-onclick="getVariationReportsFinalData"></vr-button>
                 <vr-button type="Reset"></vr-button>
             </div>
         </vr-actionbar>
@@ -64,7 +64,7 @@
         </vr-row>
     </div>-->
 
-    <div>
+    <!--<div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
@@ -78,14 +78,14 @@
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
-    </div>
+    </div>-->
    
      <div>
        <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid data-on-ready="onMainGridReady" datasource="data" pagersettings="mainGridPagerSettings" >
-                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="item in data" headertext="data.gridHeader" field="'data[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="item" ></vr-datagridcolumn>
+                    <!--<vr-datagridcolumn ng-repeat="item in data" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="item" ></vr-datagridcolumn>-->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

@@ -16,16 +16,19 @@ namespace TOne.Analytics.Entities
 
         public decimal PreviousPeriodTypeValuePercentage { get; set; }
 
-        //public List<decimal> TotalDurationPerDate { get; set; }
+       // public Dictionary<DateTime,decimal> TotalDurationPerDate { get; set; }
 
-        public decimal[][] TotalDurationPerDate ;
-       
+        //public decimal[][] TotalDurationPerDate ;
+
+       // public List<decimal> TotalDurationPerDate {get;set;}
+
+        public List<TotalDurationPerDate> TotalDurationsPerDate { get; set; }
         public string CarrierAccountID { get; set; }
 
-        public VariationReportsData(int periodCount) { 
+        //public VariationReportsData(int periodCount) { 
        
-            TotalDurationPerDate = new decimal[periodCount][];
-        }
+        //    TotalDurationPerDate = new decimal[periodCount][];
+        //}
 
 
     }

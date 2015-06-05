@@ -47,21 +47,54 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
         }
 
-        //public List<VariationReportsData> GetVariationReportsData(List<VariationReports> variationReports,int periodCount)
-        //{
-        //    List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
-        //    foreach (var item in variationReports) {
-        //        VariationReportsData newItem = new VariationReportsData();
-        //        newItem.Name = item.Name;
-        //        newItem.CarrierAccountID = item.CarrierAccountID;
-        //        int i = 0;
-        //        while (i<periodCount)
-        //        {
-        //          newItem.TotalDurationPerDate[i]= item.TotalDuration;
-        //        }
+        [HttpGet]
+        public List<VariationReportsData> GetVariationReportsFinalData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        {
+           // List<VariationReports> variationReports = __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+            List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             
-        //    }
+           
+            //VariationReportsData current = null;
 
-         
+            //foreach (var item in  variationReports.OrderBy(v => v.CarrierAccountID))
+            //{ 
+            //    if(current == null || current.CarrierAccountID != item.CarrierAccountID)
+            //    {
+            //        current = new VariationReportsData
+            //        {
+            //            CarrierAccountID = item.CarrierAccountID,
+            //            Name = item.Name,
+            //            TotalDurationsPerDate = new List<TotalDurationPerDate>()
+            //        };
+            //        variationReportsData.Add(current);
+            //    }
+            //    current.TotalDurationsPerDate.Add(new TotalDurationPerDate(item.CallDate, item.TotalDuration));
+            //}
+            //foreach (VariationReportsData item in variationReportsData)
+            //{
+            //    double average = 0;
+            //    double CurrentDayValue = item.TotalDurationsPerDate[0].CallDate == null ? 0 : double.Parse(item.TotalDurationsPerDate[0].CallDate.ToString());
+            //    double PrevDayValue = item.TotalDurationsPerDate[1] == null ? 0 : double.Parse(item.TotalDurationsPerDate[1].ToString());
+
+            //    for (int i = 3; i <= 3 + periodCount; i++)
+            //    {
+            //        if (i != 4)
+            //        {
+            //            average += item[i] == DBNull.Value ? 0 : double.Parse(item[i].ToString());
+            //            if (Totals[i] == double.MinValue) Totals[i] = (double)0m;
+            //            Totals[i] += row[i] == DBNull.Value ? 0 : double.Parse(row[i].ToString());
+            //        }
+            //    }
+            //    average = average / Days;
+            //    row[periodtypeText + " AVG"] = average;
+            //    row["Prev " + periodtypeValue + " %"] = ((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)); // * 100
+            //    row[periodtypeText + " %"] = ((CurrentDayValue - average) / (average == 0 ? double.MaxValue : average));// * 100
+            //}
+            //usedforsorting = periodtypeText + " AVG Desc";
+
+            //VariationResults.DefaultView.Sort = usedforsorting;  //"Days AVG Desc" ;
+            return variationReportsData;
+
+        }
     }
 }
