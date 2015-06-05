@@ -55,8 +55,7 @@ namespace Vanrise.Web
               "~/Client/Libraries/AngularExtensions", "*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/AngularExtensions").IncludeDirectory(
-                "~/Client/Libraries/AngularExtensions", "*.css", true).IncludeDirectory(
-                "~/Client/Libraries/AngularExtensions", "*.png", true));
+                "~/Client/Libraries/AngularExtensions", "*.css", true));
 
             //Helpers
             bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
