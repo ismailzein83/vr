@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     {
 
 
-        IList<int> NightCallHours = new List<int>() { 23,0,1,2,3,4,5};
+        IList<int> NightCallHours = new List<int>() { 0,1,2,3,4,5};
         IList<int> PeakHours = new List<int>() { 11,12,13,14 };
 
 
