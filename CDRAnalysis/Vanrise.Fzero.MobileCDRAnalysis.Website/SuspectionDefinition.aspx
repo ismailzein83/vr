@@ -215,6 +215,16 @@
                                     </ItemTemplate>
                                 </Telerik:GridTemplateColumn>
 
+
+                                  <Telerik:GridTemplateColumn HeaderText="Filter 17">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" ID="lblCriteriaId17">
+                                    <i class= <%# System.Convert.ToString(Eval("CriteriaId17"))== "1" ? "icon-check-sign" :"icon-check-empty"%> ></i>
+                                        </asp:Label>
+                                        <asp:Label runat="server" ID="Cr17Per" Visible='<%# System.Convert.ToString(Eval("CriteriaId17"))== "1" ? true :false%>' Text='<%# this.Convert_Decimal_Percentage(System.Convert.ToString(Eval("Cr17Per")))%>'></asp:Label>
+                                    </ItemTemplate>
+                                </Telerik:GridTemplateColumn>
+
                             
                                 <Telerik:GridTemplateColumn>
                                     <ItemTemplate>
@@ -570,6 +580,25 @@
                                                 <td></td>
                                                 <td>
                                                     <Telerik:RadSlider ID="RadSlider16" IsSelectionRangeEnabled ="false"   runat="server" ItemType="Item"  Height="50px"  Width="1000px">
+                                                      
+                                                    </Telerik:RadSlider>
+
+                                                </td>
+
+                                            </tr>
+
+
+
+                                            <tr>
+                                                <td>
+                                                    <asp:CheckBox runat="server" ID="chkCriteria17" OnCheckedChanged="chkCriteria_CheckedChanged" AutoPostBack="true" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblCriteria17"></asp:Label>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <Telerik:RadSlider ID="RadSlider17" IsSelectionRangeEnabled ="false"   runat="server" ItemType="Item"  Height="50px"  Width="1000px">
                                                       
                                                     </Telerik:RadSlider>
 

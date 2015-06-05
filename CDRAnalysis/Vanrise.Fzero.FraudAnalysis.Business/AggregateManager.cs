@@ -336,6 +336,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             });
 
 
+          
+
+
 
 
             AggregateDefinitions.Add(new AggregateDefinition()
@@ -351,7 +354,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountFailConsecutiveCalls",
+                Aggregation = new ConsecutiveAggregate(
+                      (cdr) =>
+                      {
+                          return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.DurationInSeconds==0);
+                      }
+                  )
+            });
 
 
 

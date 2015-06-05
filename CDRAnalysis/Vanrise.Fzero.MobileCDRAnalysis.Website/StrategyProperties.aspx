@@ -41,9 +41,7 @@
                                     <i class="icon-search icon-white"></i> Search </asp:LinkButton>
                                 <asp:LinkButton  ID="btnReturn" runat="server" CssClass="btn btn-danger" OnClick="btnReturn_Click" >
                                     <i class="icon-undo icon-white"></i> Return </asp:LinkButton>
-
-                                <%--<asp:LinkButton ID="btnAdd" runat="server" CssClass="btn btn-success" OnClick="btnAdd_Click">
-                                    <i class="icon-plus icon-white"></i> Add New </asp:LinkButton>--%>
+                               
                             </td>
                         </tr>
                     </table>
@@ -63,14 +61,6 @@
                     <asp:GridView ID="gvData" runat="server" SkinID="GridDefault"
                         OnRowCommand="gvData_RowCommand">
                         <Columns>
-                            <%--<asp:BoundField HeaderText="Strategy" DataField="Strategy.Name" />
-                            <asp:BoundField HeaderText="Criteria Id" DataField="Criteria_profile.Id" />
-                            <asp:BoundField HeaderText="Criteria" DataField="Criteria_profile.Description_" />
-                            <asp:BoundField HeaderText="Threshold" DataField="MaxValue" />--%>
-
-                            <%-- <asp:BoundField HeaderText="StrategyThresholdId" DataField="StrategyThresholdId" />
-                            <asp:BoundField HeaderText="StrategyPeriodId" DataField="StrategyPeriodId" />--%>
-
                             <asp:BoundField HeaderText="Strategy Name" DataField="StrategyName" />
                             <asp:BoundField HeaderText="CriteriaId" DataField="CriteriaId" />
                             <asp:BoundField HeaderText="Criteria" DataField="Criteria" />
@@ -82,11 +72,6 @@
                                     <asp:LinkButton ID="btnEdit" runat="server" CssClass="command btn-success" CommandArgument='<%#Eval("StrategyThresholdId").ToString() +"-"+ Eval("StrategyPeriodId").ToString()%>' CommandName="Modify">
                                         <i class="icon-pencil"></i>
                                     </asp:LinkButton>
-                                    <%--<asp:LinkButton ID="btnDelete" runat="server" CssClass="command btn-danger"
-                                        CommandArgument='<%#Eval("Id")%>' CommandName="Remove"
-                                        OnClientClick="return confirm('Are you sure you want to delete this threshold?');">
-                                        <i class="icon-trash"></i>
-                                    </asp:LinkButton>--%>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -157,9 +142,6 @@
                                                 <td class="inputData">
                                                     <br />
                                                     <telerik:RadNumericTextBox ID="txtMaxValue" runat="server"     ></telerik:RadNumericTextBox>
-                                                    <%--                                                    <asp:RequiredFieldValidator CssClass="error" ID="rfvType" runat="server" Display="Dynamic"
-                                                        ControlToValidate="txtMaxValue" ErrorMessage="MaxValue should not be empty" ValidationGroup="Save"></asp:RequiredFieldValidator>--%>
-                                                
                                                 </td>
                                             </tr>
 

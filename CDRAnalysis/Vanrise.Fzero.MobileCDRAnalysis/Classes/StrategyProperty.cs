@@ -62,7 +62,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
                             strategyProperty = new StrategyProperty();
                             strategyProperty.StrategyId = a.Id;
                             strategyProperty.StrategyName = a.Name;
-                            //strategyProperty.MaxValue = a.MAxValue;
                             strategyProperty.CriteriaId = a.CriteriaID;
                             strategyProperty.PeriodValue = a.Value;
                             strategyProperty.Period = a.period;
@@ -92,7 +91,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
                             strategyProperty = new StrategyProperty();
                             strategyProperty.StrategyId = a.Id;
                             strategyProperty.StrategyName = a.Name;
-                            //strategyProperty.MaxValue = a.MAxValue;
                             strategyProperty.CriteriaId = a.CriteriaID;
                             strategyProperty.PeriodValue = a.Value;
                             strategyProperty.Period = a.period;
@@ -120,7 +118,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
                             strategyProperty = new StrategyProperty();
                             strategyProperty.StrategyId = a.Id;
                             strategyProperty.StrategyName = a.Name;
-                            //strategyProperty.MaxValue = a.MAxValue;
                             strategyProperty.CriteriaId = a.CriteriaID;
                             strategyProperty.PeriodValue = a.Value;
                             strategyProperty.Period = a.period;
@@ -166,7 +163,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis.Providers
                         strategyProperty = new StrategyProperty();
                         strategyProperty.StrategyId = a.Id;
                         strategyProperty.StrategyName = a.Name;
-                        //strategyProperty.MaxValue = a.MAxValue;
                         strategyProperty.CriteriaId = a.CriteriaID;
                         strategyProperty.PeriodValue = a.Value;
                         strategyProperty.Period = a.period;

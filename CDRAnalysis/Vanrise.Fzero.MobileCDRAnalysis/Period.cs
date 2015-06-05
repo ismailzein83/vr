@@ -18,6 +18,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             this.ControlTables = new HashSet<ControlTable>();
             this.StrategyPeriods = new HashSet<StrategyPeriod>();
+            this.Subscriber_Values = new HashSet<Subscriber_Values>();
             this.SubscriberThresholds = new HashSet<SubscriberThreshold>();
         }
     
@@ -26,6 +27,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual ICollection<ControlTable> ControlTables { get; set; }
         public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
+        public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
         public virtual ICollection<SubscriberThreshold> SubscriberThresholds { get; set; }
     }
 }

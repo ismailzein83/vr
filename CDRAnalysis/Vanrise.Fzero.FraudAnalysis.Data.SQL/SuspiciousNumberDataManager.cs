@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 List<string> sValues = new List<string>();
 
-                for (int i = 1; i <= 16; i++)
+                for (int i = 1; i <= 17; i++)
                 {
                     if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
@@ -37,8 +37,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                             new[] { suspiciousNumber.DateDay.Value.ToString(), suspiciousNumber.Number.ToString(), sValues[0], sValues[1], sValues[2], sValues[3], sValues[4], sValues[5], sValues[6], sValues[7], sValues[8], sValues[9], sValues[10], sValues[11], sValues[12], sValues[13], sValues[14], sValues[15], suspiciousNumber.SuspectionLevel.ToString(), suspiciousNumber.StrategyId.ToString(), null }
+                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",
+                             new[] { suspiciousNumber.DateDay.Value.ToString(), suspiciousNumber.Number.ToString(), sValues[0], sValues[1], sValues[2], sValues[3], sValues[4], sValues[5], sValues[6], sValues[7], sValues[8], sValues[9], sValues[10], sValues[11], sValues[12], sValues[13], sValues[14], sValues[15], sValues[16], suspiciousNumber.SuspectionLevel.ToString(), suspiciousNumber.StrategyId.ToString(), null }
                );
 
             }
@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             foreach (NumberProfile numberProfile in numberProfiles)
             {
 
-                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
+                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30}",
                              new[] 
                              
                                  { 
@@ -97,7 +97,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     numberProfile.AggregateValues["CountOutOnNets"].ToString()	,	
                                     numberProfile.AggregateValues["CountInOnNets"].ToString()	,
                                     numberProfile.AggregateValues["CountOutOffNets"].ToString()	,
-                                    numberProfile.AggregateValues["CountInOffNets"].ToString()	
+                                    numberProfile.AggregateValues["CountInOffNets"].ToString() ,
+	                                numberProfile.AggregateValues["CountFailConsecutiveCalls"].ToString()
                                  }
                );
 

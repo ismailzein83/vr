@@ -157,6 +157,9 @@
     <Compile Include="NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Ol_NumberProfile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="OperationType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -206,6 +209,15 @@
     <Compile Include="sp_helpdiagrams_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_Strategy_GetAll_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_Strategy_GetFilteredStrategies_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_Strategy_GetStrategy_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Strategy.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -222,6 +234,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SubscriberThreshold.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Subscriber_Values.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Suspicion_Level.cs">

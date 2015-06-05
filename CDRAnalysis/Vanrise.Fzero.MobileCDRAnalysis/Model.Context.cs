@@ -39,6 +39,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<ImportType> ImportTypes { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
+        public DbSet<Ol_NumberProfile> Ol_NumberProfile { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
@@ -57,6 +58,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
         public DbSet<StrategyPeriod> StrategyPeriods { get; set; }
         public DbSet<StrategyThreshold> StrategyThresholds { get; set; }
+        public DbSet<Subscriber_Values> Subscriber_Values { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }
@@ -461,6 +463,198 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int Ol_prFillDailyProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Ol_prFillDailyProfile");
+        }
+    
+        public virtual int Ol_prFillDailySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Ol_prFillDailySubscriberThresholds", strategyIdParameter);
+        }
+    
+        public virtual int Ol_prFillHourlyProfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Ol_prFillHourlyProfile");
+        }
+    
+        public virtual int Ol_prFillHourlySubscriberThresholds(Nullable<int> strategyId)
+        {
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Ol_prFillHourlySubscriberThresholds", strategyIdParameter);
+        }
+    
+        public virtual int prCollectNormalizedCDR1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prCollectNormalizedCDR1");
+        }
+    
+        public virtual int prFillDailySubscriberValues1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillDailySubscriberValues1");
+        }
+    
+        public virtual int prFillHourlySubscriberValues1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillHourlySubscriberValues1");
+        }
+    
+        public virtual int prFillSubscriberThresholds1(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillSubscriberThresholds1", fromDateParameter, toDateParameter, strategyIdParameter);
+        }
+    
+        public virtual int prFillSubscriberValues1(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, Nullable<int> strategyId)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            var strategyIdParameter = strategyId.HasValue ?
+                new ObjectParameter("StrategyId", strategyId) :
+                new ObjectParameter("StrategyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prFillSubscriberValues1", fromDateParameter, toDateParameter, strategyIdParameter);
+        }
+    
+        public virtual int prNumberProfiling1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("prNumberProfiling1");
+        }
+    
+        public virtual int Ranking(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Ranking", fromDateParameter, toDateParameter);
+        }
+    
+        public virtual ObjectResult<sp_Strategy_GetAll_Result> sp_Strategy_GetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Strategy_GetAll_Result>("sp_Strategy_GetAll");
+        }
+    
+        public virtual ObjectResult<sp_Strategy_GetFilteredStrategies_Result> sp_Strategy_GetFilteredStrategies(Nullable<int> fromRow, Nullable<int> toRow, string name, string description)
+        {
+            var fromRowParameter = fromRow.HasValue ?
+                new ObjectParameter("FromRow", fromRow) :
+                new ObjectParameter("FromRow", typeof(int));
+    
+            var toRowParameter = toRow.HasValue ?
+                new ObjectParameter("ToRow", toRow) :
+                new ObjectParameter("ToRow", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Strategy_GetFilteredStrategies_Result>("sp_Strategy_GetFilteredStrategies", fromRowParameter, toRowParameter, nameParameter, descriptionParameter);
+        }
+    
+        public virtual ObjectResult<sp_Strategy_GetStrategy_Result> sp_Strategy_GetStrategy(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Strategy_GetStrategy_Result>("sp_Strategy_GetStrategy", idParameter);
+        }
+    
+        public virtual int sp_Strategy_Insert(Nullable<int> userId, string name, string description, Nullable<System.DateTime> creationDate, Nullable<bool> isDefault, string strategyContent, ObjectParameter id)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var creationDateParameter = creationDate.HasValue ?
+                new ObjectParameter("CreationDate", creationDate) :
+                new ObjectParameter("CreationDate", typeof(System.DateTime));
+    
+            var isDefaultParameter = isDefault.HasValue ?
+                new ObjectParameter("IsDefault", isDefault) :
+                new ObjectParameter("IsDefault", typeof(bool));
+    
+            var strategyContentParameter = strategyContent != null ?
+                new ObjectParameter("StrategyContent", strategyContent) :
+                new ObjectParameter("StrategyContent", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Strategy_Insert", userIdParameter, nameParameter, descriptionParameter, creationDateParameter, isDefaultParameter, strategyContentParameter, id);
+        }
+    
+        public virtual int sp_Strategy_Update(Nullable<int> id, Nullable<int> userId, string name, string description, Nullable<System.DateTime> creationDate, Nullable<bool> isDefault, string strategyContent)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var creationDateParameter = creationDate.HasValue ?
+                new ObjectParameter("CreationDate", creationDate) :
+                new ObjectParameter("CreationDate", typeof(System.DateTime));
+    
+            var isDefaultParameter = isDefault.HasValue ?
+                new ObjectParameter("IsDefault", isDefault) :
+                new ObjectParameter("IsDefault", typeof(bool));
+    
+            var strategyContentParameter = strategyContent != null ?
+                new ObjectParameter("StrategyContent", strategyContent) :
+                new ObjectParameter("StrategyContent", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Strategy_Update", idParameter, userIdParameter, nameParameter, descriptionParameter, creationDateParameter, isDefaultParameter, strategyContentParameter);
         }
     }
 }

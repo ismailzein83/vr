@@ -12,20 +12,7 @@ using Vanrise.CommonLibrary;
 public partial class StrategyProperties : BasePage
 {
     #region Properties
-    //List<StrategyThreshold> CurrentList
-    //{
-    //    get
-    //    {
-    //        if (Session["StrategyThreshold.CurrentList"] == null
-    //            || !(Session["StrategyThreshold.CurrentList"] is List<StrategyThreshold>))
-    //            GetList();
-    //        return (List<StrategyThreshold>)Session["StrategyThreshold.CurrentList"];
-    //    }
-    //    set
-    //    {
-    //        Session["StrategyThreshold.CurrentList"] = value;
-    //    }
-    //}
+   
     List<StrategyProperty> CurrentPropertyList
     {
         get
@@ -70,26 +57,7 @@ public partial class StrategyProperties : BasePage
             Session["StrategyProperties.CurrentPeriod"] = value;
         }
     }
-    //-----------------
-    //Strategy GblStrategy
-    //{
-    //    get
-    //    {
-    //        if (Session["StrategyProperties.GblStrategy"] == null
-    //            || !(Session["StrategyProperties.GblStrategy"] is Strategy))
-    //            GetList();
-    //        return (Strategy)Session["StrategyProperties.GblStrategy"];
-    //    }
-    //    set
-    //    {
-    //        Session["StrategyProperties.GblStrategy"] = value;
-    //    }
-    //}
-
-
-
-    //-----------------
-    //int id { get { return (int)ViewState["Id"]; } set { ViewState["Id"] = value; } }
+    
 
 
     private void FillControls()
@@ -114,10 +82,6 @@ public partial class StrategyProperties : BasePage
         if ((StartegyId) != 0)
         {
             ddlSearchStrategy.SelectedValue = StartegyId.ToString();
-
-            //GblStrategy = Strategy.Load(StartegyId);
-            //txtGblStrategy.Text = GblStrategy.Name;
-
         }
     }
 
@@ -227,9 +191,7 @@ public partial class StrategyProperties : BasePage
 
     private void ClearFiltrationFields()
     {
-        //txtSearchId.Text = string.Empty;
-
-        //txtSearchDescription.Text = string.Empty;
+        
     }
 
     private void LoadData()
@@ -253,28 +215,6 @@ public partial class StrategyProperties : BasePage
 
         CurrentPropertyList = StrategyProperty.GetstrategyProperty(strategyId, criteriaId);
 
-        // CurrentList = Vanrise.Fzero.MobileCDRAnalysis.StrategyThreshold.GetList(strategyId, criteriaId);
-
-        /*
-         
-        CurrentList = Vanrise.Fzero.MobileCDRAnalysis.StrategyThreshold.GetList(strategyId, criteriaId);
-        CurrentListPeriods = Vanrise.Fzero.MobileCDRAnalysis.StrategyPeriod.GetList(strategyId, criteriaId);
-
-        List<StrategyProperties> properties = new List<StrategyProperties>();
-        var data = from item1 in CurrentList
-                   join item2 in CurrentListPeriods on item1.StrategyId equals item2.StrategyId
-                   select new { item1.StrategyId, item2.Value };
-
-
-        foreach (var item in data )
-        {
-            StrategyProperties property = new StrategyProperties();
-            property.StrategyId = item.StrategyId;
-            property.Value = item.Value;
-            properties.Add(property);
-        }
-
-        */
 
 
     }
@@ -284,15 +224,7 @@ public partial class StrategyProperties : BasePage
         gvData.DataBind();
     }
 
-    //private StrategyThreshold SetData()
-    //{
-    //    return new StrategyThreshold();
-
-    //    //StrategyThreshold currentObject = StrategyThreshold.Load(id);
-    //    //currentObject.MaxValue = decimal.Parse(txtMaxValue.Text.Trim());
-
-    //    //return currentObject;
-    //}
+   
 
     private void FillDetails(int strategyThresholId, int strategyPeriodId)
     {
@@ -328,9 +260,7 @@ public partial class StrategyProperties : BasePage
     {
         if (e.CommandArgument == null)
             return;
-
-        // id = Manager.GetInteger(e.CommandArgument.ToString());
-        //.IndexOf("-")
+      
         string thId = e.CommandArgument.ToString().Substring(0, e.CommandArgument.ToString().IndexOf("-"));
         string prid = e.CommandArgument.ToString().Substring(e.CommandArgument.ToString().IndexOf("-") + 1, e.CommandArgument.ToString().Length - e.CommandArgument.ToString().IndexOf("-") - 1);
         if (e.CommandArgument != null)
@@ -342,15 +272,7 @@ public partial class StrategyProperties : BasePage
                     FillDetails(int.Parse(thId), int.Parse(prid));
                     break;
                 case "Remove":
-                    //if (StrategyThreshold.Delete(id))
-                    //{
-                    //    LoadData();
-                    //   // id = 0;
-                    //}
-                    //else
-                    //{
-                    //    ShowModel("Error!!!", "An error occured when trying to delete Threshold.", true);
-                    //}
+                  
 
                     break;
             }
