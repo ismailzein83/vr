@@ -81,11 +81,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                         if (manager.IsNumberSuspicious(number, out sNumber, manager.StrategyId))
                                         {
                                             sNumbers.Add(sNumber);
-                                            numbers.Add(number);
+                                            //numbers.Add(number);
                                         }
 
 
-                                    //numbers.Add(number);
+                                    numbers.Add(number);
                                 }
                                 if (sNumbers.Count > 0)
                                 {

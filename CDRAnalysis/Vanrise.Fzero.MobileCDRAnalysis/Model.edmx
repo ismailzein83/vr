@@ -162,25 +162,25 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="AvrDurIn_Vs_AvrDurOut" Type="decimal" Precision="9" Scale="2" />
           <Property Name="OutOffNet_Vs_OutOnNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_Fail" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Count_In_Fail" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Total_Out_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="decimal" Precision="9" Scale="2" Nullable="false" />
-          <Property Name="Diff_Input_Numbers" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Total_In_Volume" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Input_Numbers" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_SMS" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Total_IMEI" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Total_BTS" Type="decimal" Precision="9" Scale="2" />
           <Property Name="IsOnNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Total_Data_Volume" Type="decimal" Precision="9" Scale="2" />
           <Property Name="PeriodId" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="decimal" Precision="9" Scale="2" Nullable="false" />
-          <Property Name="Call_In_Dur_Avg" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Count_In_Calls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_OnNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OnNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_OffNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OffNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="CountFailConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
           <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountOutLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
         </EntityType>
         <EntityType Name="Ol_NumberProfile">
           <Key>
@@ -457,6 +457,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria18" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SuspectionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="PeriodId" Type="int" />
@@ -2004,25 +2005,25 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="AvrDurIn_Vs_AvrDurOut" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="OutOffNet_Vs_OutOnNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_Fail" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="Count_In_Fail" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Total_Out_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
-          <Property Name="Diff_Input_Numbers" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="Total_In_Volume" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Input_Numbers" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_SMS" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Total_IMEI" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Total_BTS" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="IsOnNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Total_Data_Volume" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="PeriodId" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="Count_In_Calls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_OnNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OnNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_Out_OffNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OffNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="CountFailConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="CountConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountOutLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountInLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
         </EntityType>
         <EntityType Name="Ol_NumberProfile">
           <Key>
@@ -2341,6 +2342,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Criteria15" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria18" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="SuspectionLevelId" Type="Int32" />
           <Property Name="StrategyId" Type="Int32" />
           <Property Name="PeriodId" Type="Int32" />
@@ -3189,7 +3191,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="Model.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
-                <ScalarProperty Name="CountOutLowDurationCalls" ColumnName="CountOutLowDurationCalls" />
+                <ScalarProperty Name="CountInLowDurationCalls" ColumnName="CountInLowDurationCalls" />
                 <ScalarProperty Name="CountConsecutiveCalls" ColumnName="CountConsecutiveCalls" />
                 <ScalarProperty Name="CountFailConsecutiveCalls" ColumnName="CountFailConsecutiveCalls" />
                 <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
@@ -3503,6 +3505,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="Criteria18" ColumnName="Criteria18" />
                 <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
                 <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
                 <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />

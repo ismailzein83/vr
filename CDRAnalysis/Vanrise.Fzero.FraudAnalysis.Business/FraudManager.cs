@@ -65,6 +65,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public bool IsNumberSuspicious(NumberProfile profile, out SuspiciousNumber suspiciousNumber, int StrategyId)
         {
+
             suspiciousNumber = null;
 
             Dictionary<int, Decimal> criteriaValuesThresholds;

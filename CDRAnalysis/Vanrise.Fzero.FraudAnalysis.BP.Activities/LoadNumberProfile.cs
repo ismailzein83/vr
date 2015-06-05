@@ -121,7 +121,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 currentNumberProfile.AggregateValues.Add(aggregateDef.Name, aggregateDef.Aggregation.GetResult());
             }
             numberProfileBatch.Add(currentNumberProfile);
-            if (numberProfileBatch.Count == batchSize)
+            //Console.WriteLine(numberProfileBatch.Count);
+            if (numberProfileBatch.Count >= batchSize)
             {
                 inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
                 {

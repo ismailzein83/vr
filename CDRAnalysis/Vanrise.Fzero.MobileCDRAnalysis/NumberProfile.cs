@@ -29,24 +29,24 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<decimal> AvrDurIn_Vs_AvrDurOut { get; set; }
         public Nullable<decimal> OutOffNet_Vs_OutOnNet { get; set; }
         public Nullable<decimal> Count_Out_Fail { get; set; }
-        public decimal Count_In_Fail { get; set; }
+        public Nullable<decimal> Count_In_Fail { get; set; }
         public Nullable<decimal> Total_Out_Volume { get; set; }
-        public decimal Total_In_Volume { get; set; }
-        public decimal Diff_Input_Numbers { get; set; }
+        public Nullable<decimal> Total_In_Volume { get; set; }
+        public Nullable<decimal> Diff_Input_Numbers { get; set; }
         public Nullable<decimal> Count_Out_SMS { get; set; }
         public Nullable<decimal> Total_IMEI { get; set; }
         public Nullable<decimal> Total_BTS { get; set; }
         public Nullable<decimal> IsOnNet { get; set; }
         public Nullable<decimal> Total_Data_Volume { get; set; }
         public Nullable<decimal> PeriodId { get; set; }
-        public decimal Count_In_Calls { get; set; }
-        public decimal Call_In_Dur_Avg { get; set; }
+        public Nullable<decimal> Count_In_Calls { get; set; }
+        public Nullable<decimal> Call_In_Dur_Avg { get; set; }
         public Nullable<decimal> Count_Out_OnNet { get; set; }
         public Nullable<decimal> Count_In_OnNet { get; set; }
         public Nullable<decimal> Count_Out_OffNet { get; set; }
         public Nullable<decimal> Count_In_OffNet { get; set; }
         public Nullable<decimal> CountFailConsecutiveCalls { get; set; }
         public Nullable<decimal> CountConsecutiveCalls { get; set; }
-        public Nullable<decimal> CountOutLowDurationCalls { get; set; }
+        public Nullable<decimal> CountInLowDurationCalls { get; set; }
     }
 }
