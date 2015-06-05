@@ -19,12 +19,12 @@ namespace TOne.Analytics.Data.SQL
         {
             CDR instance = new CDR
             {
-                ID = GetReaderValue<int>(reader, "ID"),
-                Attempt = GetReaderValue<DateTime>(reader, "Attempt"),
+                ID = GetReaderValue<Int64>(reader, "ID"),
+                Attempt = GetReaderValue<DateTime>(reader,"Attempt"),
                 Alert = GetReaderValue<DateTime>(reader, "Alert"),
                 Connect = GetReaderValue<DateTime>(reader, "Connect"),
                 Disconnect = GetReaderValue<DateTime>(reader, "Disconnect"),
-                DurationInSeconds = GetReaderValue<int>(reader, "DurationInSeconds"),
+                DurationInSeconds = GetReaderOfNumeric(reader, "DurationInSeconds"),
                 CustomerID = reader["CustomerID"] as string,
                 OurZoneID = GetReaderValue<int>(reader, "OurZoneID"),
                 OriginatingZoneID = GetReaderValue<int>(reader, "OriginatingZoneID"),
@@ -34,8 +34,9 @@ namespace TOne.Analytics.Data.SQL
                 CGPN = reader["CGPN"] as string,
                 ReleaseCode = reader["ReleaseCode"] as string,
                 ReleaseSource = reader["ReleaseSource"] as string,
-                SwitchID = GetReaderValue<int>(reader, "SwitchID"),
-                SwitchCdrID = GetReaderValue<int>(reader, "SwitchCdrID"),
+                SwitchID = GetReaderValueOfTinyInt(reader,"SwitchID"),
+
+                SwitchCdrID = GetReaderValue<Int64>(reader, "SwitchCdrID"),
                 Tag = reader["Tag"] as string,
                 Extra_Fields = reader["Extra_Fields"] as string,
                 Port_IN = reader["Port_IN"] as string,
@@ -43,11 +44,19 @@ namespace TOne.Analytics.Data.SQL
                 OurCode = reader["OurCode"] as string,
                 SupplierCode = reader["SupplierCode"] as string,
                 CDPNOut = reader["CDPNOut"] as string,
-                SubscriberID = GetReaderValue<int>(reader, "SubscriberID"),
-                SIP = reader["SIP"] as string,
+                SubscriberID = GetReaderValue<Int64>(reader, "SubscriberID"),
+                SIP = reader["SIP"] as string
                
             }; 
             return instance;
+        }
+        public int GetReaderOfNumeric(IDataReader reader, String value)
+        {
+            return reader[value] != DBNull.Value ? Convert.ToInt32(reader[value]) : 0;
+        }
+        public int GetReaderValueOfTinyInt(IDataReader reader, String value)
+        {
+            return reader[value] != DBNull.Value ? Convert.ToInt32(reader[value]) : 0;
         }
     }
 }

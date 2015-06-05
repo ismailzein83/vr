@@ -1,3 +1,54 @@
-﻿<div ng-controller="Analytics_CDRLogController">
-    {{testModel}}
-</div>
+﻿
+    <vr-panel ng-controller="Analytics_CDRLogController">
+        <vr-form name="formFilter">
+            <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
+                <vr-row removeline>
+                    <vr-columns colnum="2">
+                        <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select datasource="Size" selectedvalues="selectedsize" label="" isrequired></vr-select>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-form>
+
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="GetCDRData"></vr-button>
+                    <vr-button type="Reset"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <!--<input type="text" ng-model="name" />-->
+
+
+        <div>
+            <vr-row>
+                <vr-columns colnum="12" simplecol>
+                    <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
+                        <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Attempt'" field="'Attempt'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Alert'" field="'Alert'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Connect'" field="'Connect'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Disconnect'" field="'Disconnect'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'DurationInSeconds'" field="'DurationInSeconds'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'CustomerID'" field="'CustomerID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'OurZoneID'" field="'OurZoneID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'OriginatingZoneID'" field="'OriginatingZoneID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'SupplierID'" field="'SupplierID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'SupplierZoneID'" field="'SupplierZoneID'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'ReleaseCode'" field="'ReleaseCode'"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+      

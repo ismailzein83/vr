@@ -8,7 +8,7 @@ namespace TOne.Analytics.Entities
 {
     public class CDR
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public DateTime Attempt { get; set; }
         public DateTime Alert { get; set; }
         public DateTime Connect { get; set; }
@@ -24,7 +24,7 @@ namespace TOne.Analytics.Entities
         public String ReleaseCode { get; set; }
         public String ReleaseSource { get; set; }
         public int SwitchID { get; set; }
-        public int SwitchCdrID { get; set; }
+        public long SwitchCdrID { get; set; }
         public String Tag { get; set; }
         public String Extra_Fields { get; set; }
         public String Port_IN { get; set; }
@@ -32,7 +32,7 @@ namespace TOne.Analytics.Entities
         public String OurCode { get; set; }
         public String SupplierCode { get; set; }
         public String CDPNOut { get; set; }
-        public int SubscriberID { get; set; }
+        public long SubscriberID { get; set; }
         public String SIP { get; set; }
 
     }
