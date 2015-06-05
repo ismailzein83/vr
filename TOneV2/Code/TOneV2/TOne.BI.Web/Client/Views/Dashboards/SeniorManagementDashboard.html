@@ -1,4 +1,4 @@
-﻿<vr-panel>
+﻿<vr-panel ng-controller="SeniorManagementDashboardController">
     <div class="am-collapse" ng-hide="filterSectionCollapsed" ng-init="filterSectionCollapsed=true">
         <vr-form name="filterForm">
             <vr-row removeline>
@@ -33,13 +33,13 @@
     <div vr-loader="isGettingData">
         <vr-row>
             <vr-columns colnum="6" simplecol>
-                <vr-section  title="Top Customers">
+                <vr-section title="Top Customers">
                     <vr-chart data-on-ready="chartTopCustomersReady"></vr-chart>
                 </vr-section>
             </vr-columns>
             <vr-columns colnum="6" simplecol>
                 <vr-section title="Top Suppliers">
-                        <vr-chart data-on-ready="chartTopSuppliersReady"></vr-chart>
+                    <vr-chart data-on-ready="chartTopSuppliersReady"></vr-chart>
                 </vr-section>
             </vr-columns>
             <vr-columns colnum="6" simplecol>

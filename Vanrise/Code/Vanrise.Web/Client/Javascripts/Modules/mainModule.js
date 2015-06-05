@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, notify, $animate) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, notify, $animate) {
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
@@ -104,73 +104,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
         else return false;
 
     }
-    $scope.menuItems = [
-        {
-            name: "Routing", location: '', icon: 'glyphicon-certificate', childs: [
-               { name: "Rule Management", location: '#/RouteRuleManager' },
-               { name: "Rate Plan", location: '#/RatePlanning' },
-               { name: "Route Manager", location: '#/RouteManager' }
 
-            ]
-        },
-        {
-            name: "BI", location: '', icon: 'glyphicon-cog', childs: [
-               { name: "Top Management Dashboard", location: '#/BI/TopManagementDashboard' },
-                { name: "Senior Management Dashboard", location: '#/BI/SeniorManagementDashboard' },
-                { name: "Top Destination Dashboard", location: '#/BI/ZoneDashboard' },
-                { name: "Dynamic Dashboard", location: '#/BI/DynamicDashboard' },
-                 { name: "Entity Report", location: '#/BI/EntityReport' }
-            ]
-        },
-        {
-            name: "BusinessEntity", location: '', icon: 'glyphicon-cog', childs: [
-               { name: "DumySwitchs", location: '#/BusinessEntity/DumySwitchs' },
-            { name: "Switch Managments", location: '#/BusinessEntity/Switch Managments' },
-            { name: "CarrierAccount Managments", location: '#/BusinessEntity/CarrierAccount Managments' }
-            ]
-        },
-        {
-            name: "NOC", location: '', icon: 'glyphicon-flash', childs: [
-               { name: "Zone Monitor", location: '#/NOC/ZoneMonitor' },
-               { name: "Variation Reports", location: '#/NOC/VariationReports' },
-               { name: "Billing Reports", location: '#/NOC/BillingReports' },
-            { name: "CDR Log", location: '#/Analytics/CDRLog' }
-
-            ]
-        },
-        {
-            name: "Security", location: '', icon: 'glyphicon-flash', childs: [
-               { name: "Users", location: '#/Security/UserManagement' },
-               { name: "Roles", location: '#/Security/RoleManagement' }
-            ]
-        },
-        {
-            name: "Others", icon: 'glyphicon-pencil', location: '', childs: [
-               { name: "Default", location: '#/Default' },
-                { name: "Test View", location: '#/TestView' },
-                { name: "Strategy Management", location: '#/Strategy' },
-                { name: "ZingChart", location: '#/ZingChart' },
-                { name: "HighChart", location: '#/HighChart' },
-                { name: "HighChartSparkline", location: '#/HighChartSparkline' },
-                { name: "FusionChart", location: '#/FusionChart' },
-                { name: "CanvasJSChart", location: '#/CanvasJSChart' },
-                { name: "AMChart", location: '#/AMChart' },
-                { name: "Tree", location: '#/Tree' },
-                {
-                    name: "For test", location: '', childs: [
-                         { name: "test1", location: '#/CanvasJSChart' },
-                         { name: "test2", location: '#/AMChart' },
-                    ]
-                },
-                 {
-                     name: "For test 22", location: '', childs: [
-                          { name: "an other 1", location: '#/CanvasJSChart' },
-                          { name: "an other 2 ", location: '#/AMChart' },
-                     ]
-                 }
-            ]
-        }
-    ];
+    MenuAPIService.GetMenuItems().then(function (response) {
+        $scope.menuItems = response;
+    });
 
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
@@ -254,6 +191,9 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
 
 
 });
+
+app.controller.$inject = ['MenuAPIService'];
+
 angular.module('mainModule')
 .config(function ($timepickerProvider) {
     angular.extend($timepickerProvider.defaults, {
