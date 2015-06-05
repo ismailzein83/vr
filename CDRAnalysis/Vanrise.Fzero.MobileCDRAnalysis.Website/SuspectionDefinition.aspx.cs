@@ -143,7 +143,7 @@ public partial class SuspectionDefinition : BasePage
         lblCriteria15.Text = "Filter 15: (" + criteria_Profiles[14].Description + ")";
         lblCriteria16.Text = "Filter 16: (" + criteria_Profiles[15].Description + ")";
         lblCriteria17.Text = "Filter 17: (" + criteria_Profiles[16].Description + ")";
-        lblCriteria18.Text = "Filter 18: (" + criteria_Profiles[16].Description + ")";
+        lblCriteria18.Text = "Filter 18: (" + criteria_Profiles[17].Description + ")";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)

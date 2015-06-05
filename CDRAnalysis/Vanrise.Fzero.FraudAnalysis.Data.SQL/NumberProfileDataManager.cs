@@ -59,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                        
 
                         currentIndex++;
-                        if (currentIndex == 10000)
+                        if (currentIndex == 100000)
                         {
                             count += currentIndex;
                             currentIndex = 0;
