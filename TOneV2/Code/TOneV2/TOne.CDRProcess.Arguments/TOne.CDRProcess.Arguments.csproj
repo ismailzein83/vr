@@ -46,6 +46,7 @@
     <Compile Include="BillingCDRsProcessInput.cs" />
     <Compile Include="CDRGenerationProcessInput.cs" />
     <Compile Include="DailyRepricingProcessInput.cs" />
+    <Compile Include="GenerateStatisticsProcessInput.cs" />
     <Compile Include="ImportCDRProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawCDRsProcessInput.cs" />

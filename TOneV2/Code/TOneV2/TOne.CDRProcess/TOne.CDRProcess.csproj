@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="CDRImport\BillingCDRsProcess.cs" />
     <Compile Include="CDRGenerationProcess.cs" />
+    <Compile Include="CDRImport\GenerateStatisticsProcess.cs" />
     <Compile Include="Repricing\DailyRepricingProcess.cs" />
     <Compile Include="CDRImport\ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -177,7 +178,12 @@
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <XamlAppDef Include="CDRImport\GenerateStatisticsProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
