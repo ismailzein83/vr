@@ -43,8 +43,8 @@ namespace TOne.BusinessEntity.Data.SQL
             !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
                !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
                !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
-               switchObject.EnableCDRImport ? 1 : 0,
-               switchObject.EnableRouting ? 1 : 0,
+               switchObject.EnableCDRImport,//? "Y" :"N"
+               switchObject.EnableRouting,//? "Y" : "N"
                 switchObject.LastAttempt = DateTime.Now,
                 switchObject.LastImport = DateTime.Now
             );
@@ -57,14 +57,14 @@ namespace TOne.BusinessEntity.Data.SQL
         public bool UpdateSwitch(Switch switchObject)
         {
             int recordesEffected = ExecuteNonQuerySP("[BEntity].[sp_SwitchDefinition_Update]",
+                switchObject.SwitchId,
                  !string.IsNullOrEmpty(switchObject.Name) ? switchObject.Name : null,
                !string.IsNullOrEmpty(switchObject.Symbol) ? switchObject.Symbol : null,
                !string.IsNullOrEmpty(switchObject.Description) ? switchObject.Description : null,
-                switchObject.EnableCDRImport,
-                switchObject.EnableRouting,
+                switchObject.EnableCDRImport,//? "Y" : "N"
+                switchObject.EnableRouting,// ? "Y" : "N"
                 switchObject.LastAttempt = DateTime.Now,
-                switchObject.LastImport = DateTime.Now,
-                switchObject.SwitchId
+                switchObject.LastImport = DateTime.Now
             );
             if (recordesEffected > 0)
                 return true;
