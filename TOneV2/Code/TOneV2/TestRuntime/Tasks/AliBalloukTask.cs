@@ -18,7 +18,13 @@ namespace TestRuntime.Tasks
                 ParameterSettings = new TOne.Entities.ReportParameterSettings
                 {
                     RequiresFromTime = true,
-                    RequiresToTime = true
+                    RequiresToTime = true,
+                    RequiresCustomerAMUId = true ,
+                    RequiresCustomerId = true ,
+                    RequiresGroupByCustomer = true ,
+                    RequiresSupllierAMUId = true ,
+                    RequiresSupllierId = true
+
                 },
                 ReportDefinitionId = 1
             };

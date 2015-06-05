@@ -13,7 +13,7 @@ namespace TOne.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime, true);
+            List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime ,parameters.SupplierId, parameters.CustomerId ,parameters.GroupByCustomer ,parameters.SupplierAMUId ,parameters.CustomerAMUId );
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneProfit", zoneProfit);
             return dataSources;
@@ -23,7 +23,7 @@ namespace TOne.Analytics.Business.BillingReports
         {
 
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
-            list.Add("GroupByCustomer", new RdlcParameter() { Value = "true", IsVisible = false });
+            list.Add("GroupByCustomer", new RdlcParameter() { Value = parameters.GroupByCustomer.ToString(), IsVisible = false });
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Zone Profit", IsVisible = true });

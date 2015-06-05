@@ -12,9 +12,16 @@ namespace TOne.Analytics.Data.SQL
 {
     class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
-        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate ,string customerId ,string supplierId , bool groupByCustomer , int? supplierAMUId ,int? customerAMUId)
         {
-            return GetItemsSP("Analytics.sp_billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer), fromDate, toDate, null, null, groupByCustomer, null, null);
+            return GetItemsSP("Analytics.sp_billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
+                fromDate,
+                toDate,
+                (customerId == null || customerId == "") ? null : customerId,
+                (supplierId == null || supplierId == "") ? null : supplierId,
+                groupByCustomer,
+                (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
+                (customerAMUId== 0) ?  (object)DBNull.Value : customerAMUId );
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {            

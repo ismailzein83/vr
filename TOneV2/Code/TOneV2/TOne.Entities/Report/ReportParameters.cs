@@ -11,5 +11,16 @@ namespace TOne.Entities
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
+
+        public string CustomerId { get; set; }
+
+        public string SupplierId { get; set; }
+
+        public bool GroupByCustomer { get; set; }
+
+        public int CustomerAMUId { get; set; }
+
+        public int SupplierAMUId { get; set; }   
+
     }
 }

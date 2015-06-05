@@ -17,10 +17,15 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
         }
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate,  bool groupByCustomer)
         {
 
-            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, groupByCustomer));
+            return GetZoneProfit(fromDate, toDate, null, null, groupByCustomer, null, null);
+        }
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate,string customerId ,string supplierId , bool groupByCustomer , int? supplierAMUId ,int? customerAMUId)
+        {
+
+            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId , supplierId ,  groupByCustomer ,  supplierAMUId , customerAMUId));
         }
 
         public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)

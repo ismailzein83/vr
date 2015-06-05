@@ -1513,7 +1513,11 @@
         <TablixColumnHierarchy>
           <TablixMembers>
             <TablixMember />
-            <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=IIF(Parameters!GroupByCustomer.Value = "false" , True, False)</Hidden>
+              </Visibility>
+            </TablixMember>
             <TablixMember />
             <TablixMember />
             <TablixMember />

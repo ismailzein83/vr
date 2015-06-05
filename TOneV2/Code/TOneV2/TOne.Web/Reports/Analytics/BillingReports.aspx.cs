@@ -19,13 +19,16 @@ namespace TOne.Web.Reports.Analytics
             if (!IsPostBack)
             {
 
-
+                int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                bool groupByCustomer = (Request.QueryString["groupByCustomer"] == "true");
+                string customer = Request.QueryString["customer"];
+                string supplier = Request.QueryString["supplier"];
 
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
-                RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(1);
+                RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(reportId);
 
                 ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlc.ReportURL);
@@ -34,6 +37,9 @@ namespace TOne.Web.Reports.Analytics
 
                 parameters.FromTime = from;
                 parameters.ToTime = to;
+                parameters.GroupByCustomer = groupByCustomer;
+                parameters.CustomerId = customer;
+                parameters.SupplierId = supplier;
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 
