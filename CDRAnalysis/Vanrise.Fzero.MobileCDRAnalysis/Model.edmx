@@ -179,6 +179,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="Count_Out_OffNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OffNet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="CountFailConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountOutLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
         </EntityType>
         <EntityType Name="Ol_NumberProfile">
           <Key>
@@ -396,6 +398,8 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="Cr16Per" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CriteriaId17" Type="int" />
           <Property Name="Cr17Per" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CriteriaId18" Type="int" />
+          <Property Name="Cr18Per" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="StrategyPeriods">
           <Key>
@@ -452,6 +456,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="Criteria14" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SuspectionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="PeriodId" Type="int" />
@@ -1570,6 +1575,60 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="Ol_prFillDailyProfile" />
+          <FunctionImport Name="Ol_prFillDailySubscriberThresholds">
+          <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Ol_prFillHourlyProfile" />
+          <FunctionImport Name="Ol_prFillHourlySubscriberThresholds">
+          <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prCollectNormalizedCDR1" />
+          <FunctionImport Name="prFillDailySubscriberValues1" />
+          <FunctionImport Name="prFillHourlySubscriberValues1" />
+          <FunctionImport Name="prFillSubscriberThresholds1">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prFillSubscriberValues1">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="prNumberProfiling1" />
+          <FunctionImport Name="Ranking">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Strategy_GetAll" ReturnType="Collection(Model.sp_Strategy_GetAll_Result)" />
+          <FunctionImport Name="sp_Strategy_GetFilteredStrategies" ReturnType="Collection(Model.sp_Strategy_GetFilteredStrategies_Result)">
+            <Parameter Name="FromRow" Mode="In" Type="Int32" />
+            <Parameter Name="ToRow" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Strategy_GetStrategy" ReturnType="Collection(Model.sp_Strategy_GetStrategy_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Strategy_Insert">
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="CreationDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
+            <Parameter Name="StrategyContent" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Strategy_Update">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="CreationDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
+            <Parameter Name="StrategyContent" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
           <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="Model.Criteria_Profile" />
@@ -1762,60 +1821,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
-          <FunctionImport Name="Ol_prFillDailyProfile" />
-          <FunctionImport Name="Ol_prFillDailySubscriberThresholds">
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="Ol_prFillHourlyProfile" />
-          <FunctionImport Name="Ol_prFillHourlySubscriberThresholds">
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prCollectNormalizedCDR1" />
-          <FunctionImport Name="prFillDailySubscriberValues1" />
-          <FunctionImport Name="prFillHourlySubscriberValues1" />
-          <FunctionImport Name="prFillSubscriberThresholds1">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prFillSubscriberValues1">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-            <Parameter Name="StrategyId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="prNumberProfiling1" />
-          <FunctionImport Name="Ranking">
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Strategy_GetAll" ReturnType="Collection(Model.sp_Strategy_GetAll_Result)" />
-          <FunctionImport Name="sp_Strategy_GetFilteredStrategies" ReturnType="Collection(Model.sp_Strategy_GetFilteredStrategies_Result)">
-            <Parameter Name="FromRow" Mode="In" Type="Int32" />
-            <Parameter Name="ToRow" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Strategy_GetStrategy" ReturnType="Collection(Model.sp_Strategy_GetStrategy_Result)">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Strategy_Insert">
-            <Parameter Name="UserId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="CreationDate" Mode="In" Type="DateTime" />
-            <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
-            <Parameter Name="StrategyContent" Mode="In" Type="String" />
-            <Parameter Name="Id" Mode="InOut" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Strategy_Update">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
-            <Parameter Name="UserId" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="CreationDate" Mode="In" Type="DateTime" />
-            <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
-            <Parameter Name="StrategyContent" Mode="In" Type="String" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="prGetReportVariables_Result">
           <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="23" />
@@ -1831,6 +1836,29 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Strategy_GetAll_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="UserId" Nullable="true" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="IsDefault" Nullable="true" />
+          <Property Type="String" Name="StrategyContent" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Strategy_GetFilteredStrategies_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="StrategyContent" Nullable="true" />
+          <Property Type="Int64" Name="RowNumber" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Strategy_GetStrategy_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="UserId" Nullable="true" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="IsDefault" Nullable="true" />
+          <Property Type="String" Name="StrategyContent" Nullable="true" />
         </ComplexType>
         <EntityType Name="CellProfile">
           <Key>
@@ -1993,6 +2021,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Count_Out_OffNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="Count_In_OffNet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="CountFailConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountOutLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
         </EntityType>
         <EntityType Name="Ol_NumberProfile">
           <Key>
@@ -2242,6 +2272,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Cr16Per" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="CriteriaId17" Type="Int32" />
           <Property Name="Cr17Per" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CriteriaId18" Type="Int32" />
+          <Property Name="Cr18Per" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy_Suspicion_Level" ToRole="Strategy" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
         </EntityType>
@@ -2308,6 +2340,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Criteria14" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria15" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="SuspectionLevelId" Type="Int32" />
           <Property Name="StrategyId" Type="Int32" />
           <Property Name="PeriodId" Type="Int32" />
@@ -2931,29 +2964,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_Strategy_GetAll_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="UserId" Nullable="true" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
-          <Property Type="Boolean" Name="IsDefault" Nullable="true" />
-          <Property Type="String" Name="StrategyContent" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_Strategy_GetFilteredStrategies_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="StrategyContent" Nullable="true" />
-          <Property Type="Int64" Name="RowNumber" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_Strategy_GetStrategy_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="UserId" Nullable="true" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
-          <Property Type="Boolean" Name="IsDefault" Nullable="true" />
-          <Property Type="String" Name="StrategyContent" Nullable="true" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3010,6 +3020,54 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Model.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Model.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillDailyProfile" FunctionName="Model.Store.Ol_prFillDailyProfile" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillDailySubscriberThresholds" FunctionName="Model.Store.Ol_prFillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillHourlyProfile" FunctionName="Model.Store.Ol_prFillHourlyProfile" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillHourlySubscriberThresholds" FunctionName="Model.Store.Ol_prFillHourlySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR1" FunctionName="Model.Store.prCollectNormalizedCDR" />
+          <FunctionImportMapping FunctionImportName="prFillDailySubscriberValues1" FunctionName="Model.Store.prFillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberValues1" FunctionName="Model.Store.prFillHourlySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds1" FunctionName="Model.Store.prFillSubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberValues1" FunctionName="Model.Store.prFillSubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prNumberProfiling1" FunctionName="Model.Store.prNumberProfiling" />
+          <FunctionImportMapping FunctionImportName="Ranking" FunctionName="Model.Store.Ranking" />
+          <FunctionImportMapping FunctionImportName="sp_Strategy_GetAll" FunctionName="Model.Store.sp_Strategy_GetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetAll_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Strategy_GetFilteredStrategies" FunctionName="Model.Store.sp_Strategy_GetFilteredStrategies">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetFilteredStrategies_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
+                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Strategy_GetStrategy" FunctionName="Model.Store.sp_Strategy_GetStrategy">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetStrategy_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Strategy_Insert" FunctionName="Model.Store.sp_Strategy_Insert" />
+          <FunctionImportMapping FunctionImportName="sp_Strategy_Update" FunctionName="Model.Store.sp_Strategy_Update" />
           <EntitySetMapping Name="CellProfiles">
             <EntityTypeMapping TypeName="Model.CellProfile">
               <MappingFragment StoreEntitySet="CellProfile">
@@ -3131,6 +3189,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="Model.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
+                <ScalarProperty Name="CountOutLowDurationCalls" ColumnName="CountOutLowDurationCalls" />
+                <ScalarProperty Name="CountConsecutiveCalls" ColumnName="CountConsecutiveCalls" />
                 <ScalarProperty Name="CountFailConsecutiveCalls" ColumnName="CountFailConsecutiveCalls" />
                 <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
                 <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
@@ -3360,6 +3420,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySetMapping Name="Strategy_Suspicion_Level">
             <EntityTypeMapping TypeName="Model.Strategy_Suspicion_Level">
               <MappingFragment StoreEntitySet="Strategy_Suspicion_Level">
+                <ScalarProperty Name="Cr18Per" ColumnName="Cr18Per" />
+                <ScalarProperty Name="CriteriaId18" ColumnName="CriteriaId18" />
                 <ScalarProperty Name="Cr17Per" ColumnName="Cr17Per" />
                 <ScalarProperty Name="CriteriaId17" ColumnName="CriteriaId17" />
                 <ScalarProperty Name="Cr16Per" ColumnName="Cr16Per" />
@@ -3441,6 +3503,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
                 <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
                 <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
                 <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
                 <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
@@ -3616,54 +3679,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Ol_prFillDailyProfile" FunctionName="Model.Store.Ol_prFillDailyProfile" />
-          <FunctionImportMapping FunctionImportName="Ol_prFillDailySubscriberThresholds" FunctionName="Model.Store.Ol_prFillDailySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="Ol_prFillHourlyProfile" FunctionName="Model.Store.Ol_prFillHourlyProfile" />
-          <FunctionImportMapping FunctionImportName="Ol_prFillHourlySubscriberThresholds" FunctionName="Model.Store.Ol_prFillHourlySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR1" FunctionName="Model.Store.prCollectNormalizedCDR" />
-          <FunctionImportMapping FunctionImportName="prFillDailySubscriberValues1" FunctionName="Model.Store.prFillDailySubscriberValues" />
-          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberValues1" FunctionName="Model.Store.prFillHourlySubscriberValues" />
-          <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds1" FunctionName="Model.Store.prFillSubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="prFillSubscriberValues1" FunctionName="Model.Store.prFillSubscriberValues" />
-          <FunctionImportMapping FunctionImportName="prNumberProfiling1" FunctionName="Model.Store.prNumberProfiling" />
-          <FunctionImportMapping FunctionImportName="Ranking" FunctionName="Model.Store.Ranking" />
-          <FunctionImportMapping FunctionImportName="sp_Strategy_GetAll" FunctionName="Model.Store.sp_Strategy_GetAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetAll_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
-                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_Strategy_GetFilteredStrategies" FunctionName="Model.Store.sp_Strategy_GetFilteredStrategies">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetFilteredStrategies_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
-                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_Strategy_GetStrategy" FunctionName="Model.Store.sp_Strategy_GetStrategy">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_Strategy_GetStrategy_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
-                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_Strategy_Insert" FunctionName="Model.Store.sp_Strategy_Insert" />
-          <FunctionImportMapping FunctionImportName="sp_Strategy_Update" FunctionName="Model.Store.sp_Strategy_Update" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

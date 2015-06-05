@@ -89,6 +89,7 @@ public partial class SuspectionDefinition : BasePage
             Sliders.Add(RadSlider15);
             Sliders.Add(RadSlider16);
             Sliders.Add(RadSlider17);
+            Sliders.Add(RadSlider18);
 
 
             foreach (var i in Sliders)
@@ -142,6 +143,7 @@ public partial class SuspectionDefinition : BasePage
         lblCriteria15.Text = "Filter 15: (" + criteria_Profiles[14].Description + ")";
         lblCriteria16.Text = "Filter 16: (" + criteria_Profiles[15].Description + ")";
         lblCriteria17.Text = "Filter 17: (" + criteria_Profiles[16].Description + ")";
+        lblCriteria18.Text = "Filter 18: (" + criteria_Profiles[16].Description + ")";
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
@@ -219,6 +221,7 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria15.Checked = false;
             chkCriteria16.Checked = false;
             chkCriteria17.Checked = false;
+            chkCriteria18.Checked = false;
 
 
         RadSlider1.Visible = false;
@@ -238,6 +241,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider15.Visible = false;
         RadSlider16.Visible = false;
         RadSlider17.Visible = false;
+        RadSlider18.Visible = false;
 
 
         RadSlider1.SelectedValue = "1";
@@ -257,6 +261,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider15.SelectedValue = "1";
         RadSlider16.SelectedValue = "1";
         RadSlider17.SelectedValue = "1";
+        RadSlider18.SelectedValue = "1";
         
 
     }
@@ -309,6 +314,7 @@ public partial class SuspectionDefinition : BasePage
        currentObject.CriteriaId15 = chkCriteria15.Checked == true ? 1 : 0;
        currentObject.CriteriaId16 = chkCriteria16.Checked == true ? 1 : 0;
        currentObject.CriteriaId17 = chkCriteria17.Checked == true ? 1 : 0;
+       currentObject.CriteriaId18 = chkCriteria18.Checked == true ? 1 : 0;
 
        currentObject.Cr1Per = RadSlider1.SelectedItem.Value.ToDecimal();
        currentObject.Cr2Per = RadSlider2.SelectedItem.Value.ToDecimal();
@@ -327,6 +333,7 @@ public partial class SuspectionDefinition : BasePage
        currentObject.Cr15Per = RadSlider15.SelectedItem.Value.ToDecimal();
        currentObject.Cr16Per = RadSlider16.SelectedItem.Value.ToDecimal();
        currentObject.Cr17Per = RadSlider17.SelectedItem.Value.ToDecimal();
+       currentObject.Cr18Per = RadSlider18.SelectedItem.Value.ToDecimal();
 
        return currentObject;
     }
@@ -384,7 +391,7 @@ public partial class SuspectionDefinition : BasePage
         chkCriteria15.Checked = currentObject.CriteriaId15 == 1 ? true : false;
         chkCriteria16.Checked = currentObject.CriteriaId16 == 1 ? true : false;
         chkCriteria17.Checked = currentObject.CriteriaId17 == 1 ? true : false;
-
+        chkCriteria18.Checked = currentObject.CriteriaId18 == 1 ? true : false;
 
         foreach (var i in Sliders)
         {
@@ -418,7 +425,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider15.SelectedValue = currentObject.Cr15Per.Value.ToString();
         RadSlider16.SelectedValue = currentObject.Cr16Per.Value.ToString();
         RadSlider17.SelectedValue = currentObject.Cr17Per.Value.ToString();
-
+        RadSlider18.SelectedValue = currentObject.Cr18Per.Value.ToString();
 
        
         RadSlider1.Visible = chkCriteria1.Checked;
@@ -438,6 +445,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider15.Visible = chkCriteria15.Checked;
         RadSlider16.Visible = chkCriteria16.Checked;
         RadSlider17.Visible = chkCriteria17.Checked;
+        RadSlider18.Visible = chkCriteria18.Checked;
 
 
     }
@@ -468,6 +476,7 @@ public partial class SuspectionDefinition : BasePage
         RadSlider15.Visible = chkCriteria15.Checked;
         RadSlider16.Visible = chkCriteria16.Checked;
         RadSlider17.Visible = chkCriteria17.Checked;
+        RadSlider18.Visible = chkCriteria18.Checked;
     }
     protected void gvData_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
     {

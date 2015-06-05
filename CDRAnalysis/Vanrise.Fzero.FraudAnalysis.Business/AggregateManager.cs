@@ -10,6 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         IList<int> NightCallHours = new List<int>() { 0,1,2,3,4,5};
         IList<int> PeakHours = new List<int>() { 11,12,13,14 };
+        int LowDurationMaxValue = 20;
 
 
         public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> CallClasses)
@@ -17,7 +18,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             List<AggregateDefinition> AggregateDefinitions = new List<AggregateDefinition>();
 
 
-           
+
+            AggregateDefinitions.Add(new AggregateDefinition()
+            {
+                Name = "CountOutLowDurationCalls",
+                Aggregation = new CountAggregate((cdr) =>
+                {
+                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall  &&  cdr.DurationInSeconds <=LowDurationMaxValue);
+                })
+            });
 
 
             AggregateDefinitions.Add(new AggregateDefinition()

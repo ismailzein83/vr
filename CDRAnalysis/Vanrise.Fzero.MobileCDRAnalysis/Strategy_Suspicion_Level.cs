@@ -51,6 +51,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<decimal> Cr16Per { get; set; }
         public Nullable<int> CriteriaId17 { get; set; }
         public Nullable<decimal> Cr17Per { get; set; }
+        public Nullable<int> CriteriaId18 { get; set; }
+        public Nullable<decimal> Cr18Per { get; set; }
     
         public virtual Strategy Strategy { get; set; }
         public virtual Suspicion_Level Suspicion_Level { get; set; }
