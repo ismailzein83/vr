@@ -12,7 +12,7 @@ namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
-        public List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords, string CDROption)
+        public List<CDR> GetCDRData(CDRFilter filter,DateTime fromDate, DateTime toDate, int nRecords, string CDROption)
         {
             string queryData = "";
             if (CDROption == "Successful")

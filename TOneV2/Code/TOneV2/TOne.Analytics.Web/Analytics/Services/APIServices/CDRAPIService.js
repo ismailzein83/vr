@@ -8,15 +8,8 @@ app.service('CDRAPIService', function (BaseAPIService) {
     });
 
  
-    function GetCDRData(fromDate, toDate, nRecords, CDROption) {
-        return BaseAPIService.get("/api/CDR/GetCDRData",
-        {
-            fromDate: fromDate,
-            toDate: toDate,
-            nRecords: nRecords,
-            CDROption:CDROption
-        }
-        );
+    function GetCDRData(getCDRLogSummaryInput) {
+        return BaseAPIService.post("/api/CDR/GetCDRData", getCDRLogSummaryInput);
     }
 
 });

@@ -15,10 +15,10 @@ namespace TOne.Analytics.Business
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<ICDRDataManager>();
         }
-        public List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords, string CDROption)
+        public List<CDR> GetCDRData(CDRFilter filter,DateTime fromDate, DateTime toDate, int nRecords, string CDROption)
         {
 
-            return _datamanager.GetCDRData(fromDate, toDate, nRecords, CDROption);
+            return _datamanager.GetCDRData(filter,fromDate, toDate, nRecords, CDROption);
         }
     }
 

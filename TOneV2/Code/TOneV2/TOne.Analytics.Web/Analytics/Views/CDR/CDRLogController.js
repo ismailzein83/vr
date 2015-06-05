@@ -76,7 +76,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
-        
+        filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
+        filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
         return filter;
     }
 
@@ -109,8 +110,17 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     //    });
     //}
     function GetCDRData() {
-      
-        return CDRAPIService.GetCDRData($scope.fromDate, $scope.toDate, $scope.selectedsize, $scope.selectedCDROption).then(function (response) {
+        var filter = buildFilter();
+
+        var getCDRLogSummaryInput = {
+            Filter: filter,
+
+            From: $scope.fromDate,
+            To: $scope.toDate,
+            Size: $scope.selectedsize,
+            CDROption:$scope.selectedCDROption
+        }
+        return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             //  alert(response);
             $scope.data = [];
             console.log(response);
@@ -124,5 +134,17 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
    
 
 };
+
+function getFilterIds(values, idProp) {
+    var filterIds;
+    if (values.length > 0) {
+        filterIds = [];
+        angular.forEach(values, function (val) {
+            filterIds.push(val[idProp]);
+        });
+    }
+    return filterIds;
+}
+
 
 appControllers.controller('Analytics_CDRLogController', CDRLogController);
