@@ -81,6 +81,7 @@ namespace TOne.CDR.Business
                     pricing.RateType = ToDRateType.Normal;
 
                 var attemptDate = new DateTime(main.Attempt.Year, main.Attempt.Month, main.Attempt.Day);
+                pricing.Attempt = attemptDate;
 
                 // Commissions or extra charges
                 IList<Commission> commissionsAndExtraCharges = GetCommissions(cost ? TABS.CarrierAccount.SYSTEM.CarrierAccountID : main.CustomerID, pricing.ZoneID, main.Attempt);
