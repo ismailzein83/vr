@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.CDRImport.GenerateStatisticsProcess"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.CDRProcess.GenerateStatisticsProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
@@ -16,7 +16,7 @@
     <x:Property Name="Input" Type="InArgument(tca:GenerateStatisticsProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.CDRImport.GenerateStatisticsProcess_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>TOne.CDRProcess.GenerateStatisticsProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -64,8 +64,16 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)" Name="CDRBillingQueue" />
-      <Variable x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)" Name="CDRStatsQueue" />
+      <Variable x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)" Name="CDRBillingQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRBillingForStatisticsQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)" Name="CDRStatsQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticBatch)">TOne.CDR.Business.CDRQueueFactory.GetTrafficStatsQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
@@ -89,7 +97,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Generate Statistics Process finished for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRcR2VuZXJhdGVTdGF0aXN0aWNzUHJvY2Vzcy54YW1sCEEDXQ4CAQFGBUoRAgEQSwVWJgIBB1cFWxECAQJICUiuAQIBEU4LTnECAQxTC1N9AgEIWQlZsAECAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRcR2VuZXJhdGVTdGF0aXN0aWNzUHJvY2Vzcy54YW1sCkEDZQ4CAQFFC0WzAQIBBkoLSq4BAgECTgVSEQIBGFMFXiYCAQ9fBWMRAgEKUAlQrgECARlWC1ZxAgEUWwtbfQIBEGEJYbABAgEL</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -103,7 +111,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.CDRImport.GenerateStatisticsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.GenerateStatisticsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -38,27 +38,80 @@ namespace TOne.CDRProcess.Activities
         private TOne.CDR.Entities.CDRBatch GetCDRsBySwitchId(int switchID)
         {
             List<TABS.CDR> toneCdrs = new List<TABS.CDR>();
-            TOne.CDR.Entities.CDRBatch batchCdrs = new TOne.CDR.Entities.CDRBatch();
+            //TOne.CDR.Entities.CDRBatch batchCdrs = new TOne.CDR.Entities.CDRBatch();
             DateTime start = DateTime.Now;
             TABS.Switch currentSwitch = null;
             if (TABS.Switch.All.ContainsKey(switchID))
                 currentSwitch = TABS.Switch.All[switchID];
-            if (currentSwitch != null && currentSwitch.Enable_CDR_Import && currentSwitch.SwitchManager != null)
-            {
-                var rawCDRs = currentSwitch.SwitchManager.GetCDR(currentSwitch);
+            //if (currentSwitch != null && currentSwitch.Enable_CDR_Import && currentSwitch.SwitchManager != null)
+            //{
+            //    var rawCDRs = currentSwitch.SwitchManager.GetCDR(currentSwitch);
 
-                // create CDRs from Standard CDRs
-                foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
-                    toneCdrs.Add(new TABS.CDR(currentSwitch, rawCDR));
-            }
-            batchCdrs.SwitchId = currentSwitch.SwitchID;
-            batchCdrs.CDRs = toneCdrs;
+            //    // create CDRs from Standard CDRs
+            //    foreach (TABS.Addons.Utilities.Extensibility.CDR rawCDR in rawCDRs)
+            //        toneCdrs.Add(new TABS.CDR(currentSwitch, rawCDR));
+            //}
+            //batchCdrs.SwitchId = currentSwitch.SwitchID;
+            //batchCdrs.CDRs = toneCdrs;
             Console.WriteLine("{0}: GetCDRs is done in {1}", DateTime.Now, (DateTime.Now - start));
-            return batchCdrs;
+            return GetCDRs(currentSwitch.SwitchID);
         }
 
         #endregion
 
+
+        #region Test Methods
+
+        private TOne.CDR.Entities.CDRBatch GetCDRs(int switchID)
+        {
+            List<TABS.CDR> toneCdrs = new List<TABS.CDR>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                toneCdrs.Add(GetCdr(switchID));
+            }
+
+            TOne.CDR.Entities.CDRBatch batchCdrs = new TOne.CDR.Entities.CDRBatch()
+            {
+                SwitchId = switchID,
+                CDRs = toneCdrs
+            };
+            return batchCdrs;
+        }
+
+        private TABS.CDR GetCdr(int switchId)
+        {
+            return new TABS.CDR()
+            {
+                Switch = (TABS.Switch.All.ContainsKey(switchId)) ? TABS.Switch.All[switchId] : null,
+                IDonSwitch = switchId,
+                Tag = String.Empty,
+                AttemptDateTime = DateTime.Now,
+                AlertDateTime = DateTime.Now.AddSeconds(1),
+                ConnectDateTime = DateTime.Now.AddSeconds(1),
+                DisconnectDateTime = DateTime.Now.AddSeconds(2),
+                Duration = DateTime.Now.AddSeconds(2) - DateTime.Now.AddSeconds(1),
+                IN_TRUNK = "140",
+                IN_CIRCUIT = 23,
+                IN_CARRIER = "EAS",
+                IN_IP = String.Empty,
+                OUT_TRUNK = "21",
+                OUT_CIRCUIT = 31,
+                OUT_CARRIER = "C045",
+                OUT_IP = String.Empty,
+                CGPN = "97477658129",
+                CDPN = "21695679495",
+                CDPNOut = String.Empty,
+                CAUSE_FROM = "A",
+                CAUSE_FROM_RELEASE_CODE = "CAU_NCC",
+                CAUSE_TO = "B",
+                CAUSE_TO_RELEASE_CODE = "CAU_NCC",
+                Extra_Fields = String.Empty,
+                IsRerouted = false,
+            };
+        }
+
+        #endregion
         
 
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)

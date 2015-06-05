@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Queueing;
+using Vanrise.Runtime;
 
 namespace TestRuntime.Tasks
 {
@@ -13,158 +16,161 @@ namespace TestRuntime.Tasks
         public void Execute()
         {
             Console.WriteLine("Host Started");
-            BusinessProcessRuntime.Current.TerminatePendingProcesses();
 
-            Timer timer = new Timer(1000);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            timer.Start();
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
 
-            int switchID = 2;
+            var runtimeServices = new List<RuntimeService>();
+            runtimeServices.Add(queueActivationService);
 
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-            {
-                TriggerProcessImportCDRProcess(switchID);
-            });
-            t.Start();
+            runtimeServices.Add(bpService);
 
-            //while (true)
-            //{
-                
+            RuntimeHost host = new RuntimeHost(runtimeServices);
+            host.Start();
 
-            //    System.Threading.Thread.Sleep(5000);
+            int switchID = 8;
 
-            //    System.Threading.Tasks.Task t2 = new System.Threading.Tasks.Task(() =>
-            //    {
-            //        TriggerProcess2(switchID);
-            //    });
-            //    t2.Start();
+            //TriggerProcessImportCDRProcess(switchID);
+            //TriggerProcessStoreCDRsInDB(switchID);
 
-            //    System.Threading.Thread.Sleep(5000);
+            //TriggerProcessRawCDRsProcess(switchID);
+            // TriggerBillingCDRsProcess(switchID);
+            //TriggerStoreInvalidCDRsInDBProcess(switchID);
+            //TriggerStoreMainCDRsInDBProcess(switchID);
 
-            //    System.Threading.Tasks.Task t3 = new System.Threading.Tasks.Task(() =>
-            //    {
-            //        TriggerProcess3(switchID);
-            //    });
-            //    t3.Start();
-
-            //}
-
+            GenerateStatisticsProcess(switchID);
         }
 
-        private static void TriggerStoreMainCDRsInDBProcess(int SwitchID)
+        private static void TriggerProcessImportCDRProcess(int switchID)
         {
-            TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "StoreMainCDRsInDBProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
-
-        private static void TriggerStoreInvalidCDRsInDBProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "StoreInvalidCDRsInDBProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
-
-        //
-        private static void TriggerBillingCDRsProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.BillingCDRsProcessInput inputArguments = new TOne.CDRProcess.Arguments.BillingCDRsProcessInput { SwitchID = SwitchID, CacheManagerId = new Guid() };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "BillingCDRsProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
-
-        private static void TriggerProcessRawCDRsProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.RawCDRsProcessInput inputArguments = new TOne.CDRProcess.Arguments.RawCDRsProcessInput { SwitchID = SwitchID, CacheManagerId = new Guid() };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "RawCDRsProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
-
-
-        private static void TriggerProcessStoreCDRsInDB(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "StoreCDRsInDBProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-
-
-        }
-
-        private static void TriggerProcessImportCDRProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.ImportCDRProcessInput inputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
             {
                 ProcessName = "ImportCDRProcess",
-                InputArguments = inputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
+                InputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        private static void TriggerProcessStoreCDRsInDB(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "StoreCDRsInDBProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        private static void TriggerProcessRawCDRsProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "RawCDRsProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.RawCDRsProcessInput
+                {
+                    SwitchID = switchID,
+                    CacheManagerId = new Guid() 
+                }
+            });
 
         }
 
-        //private static void TriggerProcessCDRImportProcess(int SwitchID)
+        private static void TriggerBillingCDRsProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "BillingCDRsProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.BillingCDRsProcessInput
+                {
+                    SwitchID = switchID,
+                    CacheManagerId = new Guid()
+                }
+            });
+        }
+
+        private static void TriggerStoreInvalidCDRsInDBProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "StoreInvalidCDRsInDBProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        private static void TriggerStoreMainCDRsInDBProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "StoreMainCDRsInDBProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        private static void GenerateStatisticsProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "GenerateStatisticsProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.GenerateStatisticsProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        //private static void TriggerStoreMainCDRsInDBProcess(int SwitchID)
         //{
-        //    TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
+        //    TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput inputArguments = new TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput { SwitchID = SwitchID };
         //    CreateProcessInput input = new CreateProcessInput
         //    {
-        //        ProcessName = "CDRImportProcess",
+        //        ProcessName = "StoreMainCDRsInDBProcess",
         //        InputArguments = inputArguments
         //    };
         //    ProcessManager processManager = new ProcessManager();
         //    processManager.CreateNewProcess(input);
-
         //}
 
-        private static void TriggerProcessCDRGenerationProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "CDRGenerationProcess",
-                InputArguments = CDRProcessInputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
 
-        private static void TriggerProcessUpdateBillingPricingProcess(int SwitchID)
-        {
-            TOne.CDRProcess.Arguments.UpdateBillingPricingProcessInput UpdateBillingPricingProcessInputArguments = new TOne.CDRProcess.Arguments.UpdateBillingPricingProcessInput { SwitchID = SwitchID };
-            CreateProcessInput input = new CreateProcessInput
-            {
-                ProcessName = "UpdateBillingPricingProcess",
-                InputArguments = UpdateBillingPricingProcessInputArguments
-            };
-            ProcessManager processManager = new ProcessManager();
-            processManager.CreateNewProcess(input);
-        }
+        //private static void TriggerProcessCDRGenerationProcess(int SwitchID)
+        //{
+        //    TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
+        //    CreateProcessInput input = new CreateProcessInput
+        //    {
+        //        ProcessName = "CDRGenerationProcess",
+        //        InputArguments = CDRProcessInputArguments
+        //    };
+        //    ProcessManager processManager = new ProcessManager();
+        //    processManager.CreateNewProcess(input);
+        //}
 
+        //private static void TriggerProcessUpdateBillingPricingProcess(int SwitchID)
+        //{
+        //    TOne.CDRProcess.Arguments.UpdateBillingPricingProcessInput UpdateBillingPricingProcessInputArguments = new TOne.CDRProcess.Arguments.UpdateBillingPricingProcessInput { SwitchID = SwitchID };
+        //    CreateProcessInput input = new CreateProcessInput
+        //    {
+        //        ProcessName = "UpdateBillingPricingProcess",
+        //        InputArguments = UpdateBillingPricingProcessInputArguments
+        //    };
+        //    ProcessManager processManager = new ProcessManager();
+        //    processManager.CreateNewProcess(input);
+        //}
 
         static bool _isRunning;
         static object _lockObj = new object();
