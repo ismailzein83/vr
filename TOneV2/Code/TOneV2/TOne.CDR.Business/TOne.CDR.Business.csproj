@@ -74,6 +74,7 @@
     <Compile Include="PricingGenerator.cs" />
     <Compile Include="PricingGeneratorEntities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrafficStatisticGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">

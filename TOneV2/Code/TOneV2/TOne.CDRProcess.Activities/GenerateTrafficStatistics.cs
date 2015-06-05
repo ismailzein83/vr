@@ -6,6 +6,7 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using TOne.CDR.Entities;
+using TOne.CDR.Business;
 
 namespace TOne.CDRProcess.Activities
 {
@@ -47,6 +48,8 @@ namespace TOne.CDRProcess.Activities
 
         protected override void DoWork(GenerateTrafficStatisticsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            TrafficStatisticGenerator trafficStatGenerator = new TrafficStatisticGenerator();
+
             int sampleIntervalInMinute = (int)(60 / TABS.SystemParameter.TrafficStatsSamplesPerHour.NumericValue.Value);
             bool hasItem = false;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -82,7 +85,7 @@ namespace TOne.CDRProcess.Activities
                                     trafficStatistic = TrafficStatistic.CreateFromKey(billingCDR.SwitchId, cdr.Port_IN, cdr.Port_OUT, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierID, cdr.SupplierZoneID);
                                     trafficStatisticBatch.TrafficStatistics.Add(trafficStatisticKey, trafficStatistic);
                                 }
-                                UpdateTrafficStatisticFromCDR(trafficStatistic, cdr);
+                                trafficStatGenerator.UpdateTrafficStatisticFromCDR(trafficStatistic, cdr);
                             }
 
                             foreach (var trafficStatisticBatch in batches.Values)
@@ -94,11 +97,6 @@ namespace TOne.CDRProcess.Activities
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
-        }
-
-        private void UpdateTrafficStatisticFromCDR(TrafficStatistic trafficStatistic, BillingCDRBase cdr)
-        {
-            throw new NotImplementedException();
         }
     }
 }
