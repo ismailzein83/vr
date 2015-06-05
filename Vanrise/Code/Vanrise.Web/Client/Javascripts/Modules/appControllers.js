@@ -16,7 +16,8 @@ var appControllers = angular.module('appControllers', ['ui.grid',
     'cgNotify',
     'ui.grid.autoResize',
     'ngMessages',
-    'ivh.treeview'
+    'ivh.treeview',
+    'angularTreeview'
 ]);
 
 
