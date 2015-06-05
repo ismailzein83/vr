@@ -1,8 +1,31 @@
-﻿
-    <vr-panel ng-controller="Analytics_CDRLogController">
+﻿     <vr-panel ng-controller="Analytics_CDRLogController">
         <vr-form name="formFilter">
             <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
                 <vr-row removeline>
+                    <vr-columns colnum="2">
+                        <vr-select datasource="switches" datatextfield="Name" datavaluefield="SwitchId" selectedvalues="selectedSwitches" label="Switches:" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select datasource="customers" datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedCustomers" label="Customers:" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Suppliers:" datasource="suppliers"
+                                   datatextfield="Name" datavaluefield="CarrierAccountID" selectedvalues="selectedSuppliers" ismultipleselection></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select  ismultipleselection datasource="searchZones" label="Zones: "selectedvalues="optionsZonesFilter.selectedvalues" datatextfield="Name" datavaluefield="ZoneId"
+                                   entityname="Zones"></vr-select>
+                    </vr-columns>
+                    <!--<vr-columns colnum="2">
+                        <vr-select datasource="OriginatingZone" selectedvalues="selectedOriginatingZone" label="Originating Zone"></vr-select>
+                    </vr-columns>-->
+
+                    <vr-columns colnum="2">
+                        <vr-select datasource="OrderBy" selectedvalues="selectedOrderBy" label="Order By"></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select datasource="Size" selectedvalues="selectedsize" label="Limit Results to" isrequired></vr-select>
+                    </vr-columns>
                     <vr-columns colnum="2">
                         <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
                     </vr-columns>
@@ -10,9 +33,31 @@
                         <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
                     </vr-columns>
                     <vr-columns colnum="2">
-                        <vr-select datasource="Size" selectedvalues="selectedsize" label="" isrequired></vr-select>
+                        <vr-select datasource="CDROption" selectedvalues="selectedCDROption" label="CDR Option"></vr-select>
                     </vr-columns>
-                </vr-row>
+                    <!--  <vr-columns colnum="2">
+                        <vr-textbox value="All" onvaluechanged="" label="Phone Number"></vr-textbox>
+                    </vr-columns>
+                  <vr-columns colnum="2">
+                        <vr-textbox value="" onvaluechanged="" label="CLI"></vr-textbox>
+                    </vr-columns>-->
+                   
+                   <!-- <vr-columns colnum="2">
+                        <vr-textbox value="" customvalidate="" onvaluechanged="" label="Release Code"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select datasource="durationIn" selectedvalues="selectedDurationIn" label="Duration in"></vr-select>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-textbox value="" customvalidate="" onvaluechanged="" label="Min Duration"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-textbox value="" customvalidate="" onvaluechanged="" label="Max Duration"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-switch value="false" onvaluechanged="" label="Show ExtraFields"></vr-switch>
+                    </vr-columns>-->
+                </vr-row> 
             </div>
         </vr-form>
 

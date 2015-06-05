@@ -9,6 +9,6 @@ namespace TOne.Analytics.Data
 {
     public interface ICDRDataManager : IDataManager
     {
-        List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords);
+        List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords, string CDROption);
     }
 }

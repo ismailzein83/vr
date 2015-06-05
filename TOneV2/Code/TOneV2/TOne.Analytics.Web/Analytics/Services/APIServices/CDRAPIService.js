@@ -8,12 +8,13 @@ app.service('CDRAPIService', function (BaseAPIService) {
     });
 
  
-    function GetCDRData(fromDate, toDate, nRecords) {
+    function GetCDRData(fromDate, toDate, nRecords, CDROption) {
         return BaseAPIService.get("/api/CDR/GetCDRData",
         {
             fromDate: fromDate,
             toDate: toDate,
-            nRecords:nRecords
+            nRecords: nRecords,
+            CDROption:CDROption
         }
         );
     }

@@ -15,10 +15,10 @@ namespace TOne.Analytics.Web.Controllers
             __cdrManager = new CDRManager();
         }
 
-        public List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords)
+        public List<CDR> GetCDRData(DateTime fromDate, DateTime toDate, int nRecords, String CDROption)
         {
 
-            return __cdrManager.GetCDRData(fromDate, toDate, nRecords);
+            return __cdrManager.GetCDRData(fromDate, toDate, nRecords, CDROption);
         }
     }
 }

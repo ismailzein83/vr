@@ -5,6 +5,7 @@ var serviceObj = function (BaseAPIService) {
         GetCarriers: GetCarriers,
         GetCodeGroups: GetCodeGroups,
         GetSwitches: GetSwitches,
+        GetSalesZones: GetSalesZones,
         insertCarrierTest: insertCarrierTest,
         GetCarrierAccounts: GetCarrierAccounts,
         GetCarrierAccount: GetCarrierAccount,
@@ -35,6 +36,14 @@ var serviceObj = function (BaseAPIService) {
             {
             });
     }
+    function GetSalesZones(nameFilter) {
+        return BaseAPIService.get("/api/BusinessEntity/GetSalesZones",
+            {
+                nameFilter: nameFilter
+            });
+    }
+
+
     function GetCarrierAccounts(ProfileName, ProfileCompanyName, from, to) {
         return BaseAPIService.get("/api/BusinessEntity/GetCarrierAccounts",
             {
