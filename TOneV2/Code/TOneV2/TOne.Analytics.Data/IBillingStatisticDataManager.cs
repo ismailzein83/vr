@@ -14,5 +14,7 @@ namespace TOne.Analytics.Data
         List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale);
         List<CarrierProfile> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount);
         List<BillingStatistic> GetBillingStatistics(DateTime fromDate,DateTime toDate);
+
+        List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue);
     }
 }
