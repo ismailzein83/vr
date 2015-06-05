@@ -32,59 +32,61 @@ namespace VoIPSwitchService
             lock (_syncRoot)
                 while (locked != true)
                 {
+                    
                     locked = true;
 
                     try
                     {
                         CallGeneratorLibrary.Utilities.ScheduleManager.CLISchedule();
+                        PhoneNumberRepository.FreeAllLockedPhone();
 
-                        List<TestOperator> testoperators = TestOperatorRepository.GetMontyTestOperators();
-                        foreach (TestOperator op in testoperators)
+                        List<TestOperator> lstTestOperators = TestOperatorRepository.GetMontyTestOperators();
+                        foreach (TestOperator testOperator in lstTestOperators)
                         {
                             //if (op.Operator.ServiceAndroid == true)
                             {
-                                OperatorId = op.Id;
+                                OperatorId = testOperator.Id;
                                 //Check if the number is free or busy
 
-                                PhoneNumber ph = PhoneNumberRepository.GetFreePhoneNumber(op.Id);
+                                PhoneNumber phoneNumber = PhoneNumberRepository.GetFreePhoneNumber(testOperator.OperatorId.Value);
 
-                                if (ph == null)
+                                if (phoneNumber == null)
                                 {
-                                    TestOperator t = TestOperatorRepository.Load(op.Id);
-                                    t.ErrorMessage = "No Line Availables";
-                                    t.EndDate = DateTime.Now;
-                                    TestOperatorRepository.Save(t);
+                                    TestOperator tOperator = TestOperatorRepository.Load(testOperator.Id);
+                                    tOperator.ErrorMessage = "No Line Availables";
+                                    tOperator.EndDate = DateTime.Now;
+                                    TestOperatorRepository.Save(tOperator);
                                 }
                                 else
                                 {
-                                    GeneratedCall GenCall = new GeneratedCall();
-                                    GenCall.Number = op.CarrierPrefix + ph.Number + "@" + op.User.IpSwitch;
-                                    //GenCall.Number = resp.mobileNumber;
-                                    //SipAccount sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
-                                    User usParent = UserRepository.Load(op.UserId.Value);
-                                    SipAccount sp = new SipAccount();
-                                    if (usParent.ParentId == null)
-                                        sp = SipAccountRepository.LoadbyUser(op.UserId.Value);
+
+                                    User userParent = UserRepository.Load(testOperator.UserId.Value);
+                                    SipAccount sipAccount = new SipAccount();
+                                    if (userParent.ParentId == null)
+                                        sipAccount = SipAccountRepository.LoadbyUser(testOperator.UserId.Value);
                                     else
-                                        sp = SipAccountRepository.LoadbyUser(usParent.ParentId.Value);
-                                    GenCall.SipAccountId = sp.Id;
-                                    GeneratedCallRepository.Save(GenCall);
-                                    //WriteToEventLog("GeneratedCall: " + GenCall.Id);
+                                        sipAccount = SipAccountRepository.LoadbyUser(userParent.ParentId.Value);
 
-                                    GeneratedCall NewGen = GeneratedCallRepository.Load(GenCall.Id);
 
+                                    GeneratedCall generatedCall = new GeneratedCall() {
+                                        Number = String.Format("{0}{1}@{2}", testOperator.CarrierPrefix, phoneNumber.Number, testOperator.User.IpSwitch),
+                                        SipAccountId = sipAccount.Id
+                                    };
+                                    GeneratedCallRepository.Save(generatedCall);
+
+                                    GeneratedCall newGeneratedCall = GeneratedCallRepository.Load(generatedCall.Id);
+                                    
                                     //Save The MSISDN and the Request ID into MontyCall table
-                                    MontyCall montycall = new MontyCall();
-                                    montycall.TestOperatorId = op.Id;
-                                    montycall.MSISDN = op.CarrierPrefix + ph.Number;
-                                    montycall.CreationDate = DateTime.Now;
-                                    //montycall.RequestId = resp.Callid;
-                                    //RequestId = resp.Callid;
-                                    montycall.ReturnMessage = "";
-                                    montycall.CallEntryId = NewGen.Id;
-                                    montycall.ServiceId = (int)CallGeneratorLibrary.Utilities.Enums.Service.AndroidDevice;
-                                    //WriteToEventLog("Monty Table: Id: " + op.Id + " CarrierPrefix: " + op.CarrierPrefix + " mobileNumber: " + resp.mobileNumber + " RequestId " + resp.Callid);
-                                    MontyCallRepository.Save(montycall);
+                                    MontyCall montyCall = new MontyCall()
+                                    {
+                                        TestOperatorId = testOperator.Id,
+                                        MSISDN = testOperator.CarrierPrefix + phoneNumber.Number,
+                                        CreationDate = DateTime.Now,
+                                        ReturnMessage = String.Empty,
+                                        CallEntryId = newGeneratedCall.Id,
+                                        ServiceId = (int)CallGeneratorLibrary.Utilities.Enums.Service.AndroidDevice
+                                    };
+                                    MontyCallRepository.Save(montyCall);
                                 }
                             }
                         }
@@ -93,24 +95,24 @@ namespace VoIPSwitchService
                     {
                         WriteToEventLog(ex.ToString());
                         Logger.LogException(ex);
-                        TestOperator t = TestOperatorRepository.Load(OperatorId);
-                        if (t.EndDate == null)
+                        TestOperator tstOperator = TestOperatorRepository.Load(OperatorId);
+                        if (tstOperator.EndDate == null)
                         {
-                            t.ErrorMessage = "Failed while Processing";
-                            t.EndDate = DateTime.Now;
-                            TestOperatorRepository.Save(t);
+                            tstOperator.ErrorMessage = "Failed while Processing";
+                            tstOperator.EndDate = DateTime.Now;
+                            TestOperatorRepository.Save(tstOperator);
                         }
                     }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////
                     locked = false;
-
+                    
                     System.Threading.Thread.Sleep(1000);
                 }
         }
 
         private void WriteToEventLog(string message)
         {
-            string cs = "VoIPSwitchService";
+            string cs = "Android Service";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

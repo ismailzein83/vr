@@ -211,7 +211,7 @@ namespace CallGeneratorServiceCLI
                     config = s.phone.Config;
 
                     config.ActivePlaybackDevice = "";
-                    config.ActiveNetworkInterface = "Ethernet-IPV4-192.168.22.12";
+                    config.ActiveNetworkInterface = "91.236.236.53";
 
                     if (config.RecordDeviceCount > 0)
                         config.ActiveRecordDevice = config.get_RecordDevice(0);

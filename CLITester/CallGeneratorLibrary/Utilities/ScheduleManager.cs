@@ -44,7 +44,6 @@ namespace CallGeneratorLibrary.Utilities
                             if (lastlog != null)
                                 lastRunDate = lastlog.StartDate.Value;
 
-                            WriteToEventLogEx("LastRunDate " + lastRunDate);
                             DateTime currentRunDate = DateTime.Now;
 
                             if (schedule.StartDate <= DateTime.Now && (schedule.EndDate == null || schedule.EndDate.Value >= DateTime.Now))
@@ -52,7 +51,6 @@ namespace CallGeneratorLibrary.Utilities
                                 if (!schedule.OccursEvery.HasValue || schedule.OccursEvery.Value == 0) schedule.OccursEvery = 1;
                                 if (lastlog == null)
                                 {
-                                    WriteToEventLogEx("lastlog null ");
                                     if (schedule.SpecificTime.HasValue)
                                     {
                                         DateTime spec = (DateTime)schedule.SpecificTime.Value;
@@ -74,7 +72,6 @@ namespace CallGeneratorLibrary.Utilities
                                 }
                                 else
                                 {
-                                    WriteToEventLogEx("lastlog: " + lastlog.StartDate);
                                     if (schedule.SpecificTime1 == null)
                                     {
                                         if (schedule.SpecificTime != null && (lastRunDate.Hour < schedule.SpecificTime.Value.Hour))

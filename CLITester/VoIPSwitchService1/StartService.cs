@@ -29,8 +29,6 @@ namespace VoIPSwitchService
 
         public void Start()
         {
-            WriteToEventLog("Start VoIPSwitch Service: " + DateTime.Now);
-
             aTimer.Elapsed += OnTimedEvent;
             aTimer.Enabled = true;
             aTimer.Interval = 1000;
@@ -53,7 +51,7 @@ namespace VoIPSwitchService
 
         private void WriteToEventLog(string message)
         {
-            string cs = "VoIPSwitchService";
+            string cs = "Android Service";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {

@@ -27,7 +27,6 @@ namespace CallGeneratorLibrary.Repositories
                 session.CheckAfter = 0;
                 //session.UserId = Guid.Parse(Membership.GetUser().ProviderUserKey.ToString());
                 bool saved = CallSessionRepository.Insert(session);
-                WriteToEventLogAn("Saved CSRepos" + saved.ToString());
                 foreach (CallEntry entry in ListNumbers)
                 {
                     CallEntry en = new CallEntry();
@@ -98,7 +97,6 @@ namespace CallGeneratorLibrary.Repositories
             catch (System.Exception ex)
             {
                 WriteToEventLogEx(ex.ToString());
-                WriteToEventLog("ex::: " + ex.ToString());
                 Logger.LogException(ex);
             }
             return LstSessions;
