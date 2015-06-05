@@ -101,12 +101,12 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
 
                                     decimal durationInSeconds;
-                                    if (decimal.TryParse(i.Substring(588, 10).Trim(), out durationInSeconds))
+                                    if (decimal.TryParse(i.Substring(235, 5).Trim(), out durationInSeconds))
                                         cdr.DurationInSeconds = durationInSeconds;
 
 
                                     decimal upVolume;
-                                    if (decimal.TryParse(i.Substring(609, 9).Trim(), out upVolume))
+                                    if (decimal.TryParse(i.Substring(588, 10).Trim(), out upVolume))
                                         cdr.UpVolume = upVolume;
 
 

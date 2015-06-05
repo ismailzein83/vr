@@ -36,12 +36,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             dictionary.Add(15, new CriteriaDefinition() { CriteriaId = 15, Description = "Data_Usage", CompareOperator = CriteriaCompareOperator.LessThanorEqual, Expression = CalculateDataUsage });
             dictionary.Add(16, new CriteriaDefinition() { CriteriaId = 16, Description = "Consecutive_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateConsecutiveCalls });
             dictionary.Add(17, new CriteriaDefinition() { CriteriaId = 17, Description = "Fail_Consecutive_Calls", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateFailConsecutiveCalls });
-
+            dictionary.Add(18, new CriteriaDefinition() { CriteriaId = 18, Description = "Ratio (Count Incoming “low duration” Calls)  Vs (Count Incoming Calls)", CompareOperator = CriteriaCompareOperator.GreaterThanorEqual, Expression = CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls });
             return dictionary; 
         }
 
         
         // Funcs
+
+        static decimal CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
+        {
+            if (numberProfile.AggregateValues["CountInCalls"] != 0)
+                return (numberProfile.AggregateValues["CountInLowDurationCalls"] / numberProfile.AggregateValues["CountInCalls"]);
+            else
+                return 0;
+        }
+
+
         static decimal CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
         {
             if (numberProfile.AggregateValues["CountOutCalls"] != 0)

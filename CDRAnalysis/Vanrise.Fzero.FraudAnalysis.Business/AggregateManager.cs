@@ -21,10 +21,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Name = "CountOutLowDurationCalls",
+                Name = "CountInLowDurationCalls",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.OutgoingVoiceCall  &&  cdr.DurationInSeconds <=LowDurationMaxValue);
+                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall  &&  cdr.DurationInSeconds <=LowDurationMaxValue);
                 })
             });
 

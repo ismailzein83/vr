@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 List<string> sValues = new List<string>();
 
-                for (int i = 1; i <= 17; i++)
+                for (int i = 1; i <= 18; i++)
                 {
                     if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {

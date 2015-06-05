@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             string sFields = "";
 
 
-                for (int i = 1; i <= 15; i++)
+                for (int i = 1; i <= 18; i++)
                 {
                     if (suspiciousNumbers.FirstOrDefault().CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                 {
                     string sValues = "";
 
-                    for (int i = 1; i <= 17; i++)
+                    for (int i = 1; i <= 18; i++)
                     {
                         if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                         {
