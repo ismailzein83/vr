@@ -16,15 +16,23 @@ namespace TOne.Analytics.Web.Controllers
             __cdrManager = new CDRManager();
         }
         [HttpPost]
-        public List<CDR> GetCDRData(GetCDRSummaryInput input)
+        public CDRBigResult GetCDRData(GetCDRSummaryInput input)
         {
-         
-            return __cdrManager.GetCDRData(input.Filter,input.From, input.To, input.Size, input.CDROption);
+            System.Threading.Thread.Sleep(1000);
+            return __cdrManager.GetCDRData(input.TempTableKey, input.Filter, input.From, input.To, input.FromRow, input.ToRow, input.Size, input.CDROption, input.OrderBy, input.IsDescending);
         }
     }
     #region Argument Classes
     public class GetCDRSummaryInput
     {
+       
+       public string TempTableKey { get; set; }
+
+       public int FromRow { get; set; }
+       public int ToRow { get; set; }
+       public BillingCDRMeasures OrderBy { get; set; }
+       public bool IsDescending { get; set; }
+        
         public CDRFilter Filter { get; set; }
 
         public DateTime From { get; set; }
