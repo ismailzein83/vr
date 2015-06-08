@@ -352,11 +352,6 @@
                   <mca:CSharpValue x:TypeArguments="scg:List(tle:RouteRule)">routeRules</mca:CSharpValue>
                 </InArgument>
               </tla:BuildRoutes.RouteRules>
-              <tla:BuildRoutes.SupplierZoneRates>
-                <InArgument x:TypeArguments="tle:SupplierZoneRates">
-                  <mca:CSharpValue x:TypeArguments="tle:SupplierZoneRates">supplierZoneRates</mca:CSharpValue>
-                </InArgument>
-              </tla:BuildRoutes.SupplierZoneRates>
             </tla:BuildRoutes>
           </If.Then>
         </If>

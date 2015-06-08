@@ -15,14 +15,9 @@ namespace TOne.LCRProcess.Activities
     public class BuildRoutesInput
     {
         public ZoneCustomerRates CustomerZoneRates { get; set; }
-
-        public SupplierZoneRates SupplierZoneRates { get; set; }
-
-        public BaseQueue<SingleDestinationCodeMatches> InputQueue { get; set; }
-
-        public BaseQueue<RouteDetailBatch> OutputQueue { get; set; }
-
-        public List<RouteRule> RouteRules { get; set; }
+                public BaseQueue<SingleDestinationCodeMatches> InputQueue { get; set; }
+                public BaseQueue<RouteDetailBatch> OutputQueue { get; set; }
+                public List<RouteRule> RouteRules { get; set; }
     }
 
     #endregion
@@ -31,9 +26,6 @@ namespace TOne.LCRProcess.Activities
     {
         [RequiredArgument]
         public InArgument<ZoneCustomerRates> CustomerZoneRates { get; set; }
-
-        [RequiredArgument]
-        public InArgument<SupplierZoneRates> SupplierZoneRates { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<SingleDestinationCodeMatches>> InputQueue { get; set; }
@@ -49,7 +41,6 @@ namespace TOne.LCRProcess.Activities
             return new BuildRoutesInput
             {
                 CustomerZoneRates = this.CustomerZoneRates.Get(context),
-                SupplierZoneRates = this.SupplierZoneRates.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 RouteRules = this.RouteRules.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
@@ -78,7 +69,7 @@ namespace TOne.LCRProcess.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue((singleDestinationCodeMatches) =>
                     {
                         using (var context = new SingleDestinationRoutesBuildContext(singleDestinationCodeMatches,
-                            inputArgument.CustomerZoneRates, inputArgument.SupplierZoneRates, routeRulesByActionType, routeOptionRulesBySupplier))
+                            inputArgument.CustomerZoneRates, routeRulesByActionType, routeOptionRulesBySupplier))
                         {
                             var routes = context.BuildRoutes();
                             if (routes != null && routes.Count > 0)
@@ -90,12 +81,6 @@ namespace TOne.LCRProcess.Activities
                             }
                         }
                     });
-                    //MemoryQueue<RouteDetailBatch> outputQueue = inputArgument.OutputQueue as MemoryQueue<RouteDetailBatch>;
-                    // if (outputQueue != null)
-                    // {
-                    //     while (outputQueue.Count > 1000)
-                    //         System.Threading.Thread.Sleep(1000);
-                    // }
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
