@@ -72,6 +72,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
+            StrategyFilters : $scope.strategyFilters,
             StrategyCriterias: [
                                 { CriteriaId: 1, Threshold: 1 },
                                 { CriteriaId: 2, Threshold: 2 },
@@ -97,14 +98,49 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         };
-        console.log(StrategyObject);
         return StrategyObject;
     }
+
+    
+
+
+   
+
+
+    function buildStrategyFilterObjFromScope() {
+        var StrategyFilterObject = {
+            PeriodId: ($scope.selectedPeriod != null) ? $scope.selectedPeriod : 0,
+            Threshold: $scope.threshold,
+            MinimumValue: $scope.minimumValue
+        };
+        console.log(StrategyFilterObject);
+        return StrategyFilterObject;
+    }
+
+
+
+
+
+    function SaveStrategyFilters() {
+        $scope.issaving = true;
+        var StrategyObject = buildStrategyFilterObjFromScope();
+       
+    }
+
+
+
+
+
+
+
+
 
     function fillScopeFromStrategyObj(strategyObject) {
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
+        $scope.StrategyFilters = strategyObject.StrategyFilters;
+        console.log(strategyObject.StrategyFilters);
     }
 
     function AddStrategy() {
@@ -137,16 +173,13 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
 
-    $scope.filters = [];
-    $scope.selectedFilter = "";
-
-   
+    $scope.strategyFilters =  [];
 
 
     function loadFilters() {
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filters.push(itm);
+                $scope.strategyFilters.push({ Filter: itm.CriteriaId, Description: itm.Description, Period: 'Hour', Threshold: 1, MinimumValue: 1, IsRelated: true});
             });
         });
     }
@@ -164,6 +197,21 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
         });
     }
+
+
+
+
+
+    StrategyEditorController.isFilterTabShown = true;
+    StrategyEditorController.isLevelsTabShow = false;
+
+    StrategyEditorController.viewVisibilityChanged = function () {
+        isFilterTabShown = !isFilterTabShown;
+        isLevelsTabShow = !isLevelsTabShow;
+    };
+
+
+
 
 
 

@@ -11,15 +11,6 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
        
    
 
-   // function IsDefaultLabel(IsDefault) {
-   //     foreach (DataGridViewRow row in datagridviews.Rows)
-   //     {
-   //currQty += row.Cells["qty"].Value;
-   //     //More code here
-   // }
-   // }
-
-
     function defineScope() {
 
         $scope.gridMenuActions = [];
