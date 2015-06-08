@@ -8,7 +8,9 @@ namespace TOne.Analytics.Entities
 {
     public class BillingCDR
     {
+        
         public long ID { get; set; }
+        public String CustomerInfo { get; set; }
         public DateTime Attempt { get; set; }
         public DateTime Alert { get; set; }
         public DateTime Connect { get; set; }

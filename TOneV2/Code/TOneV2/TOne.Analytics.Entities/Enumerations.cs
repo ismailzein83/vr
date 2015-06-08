@@ -54,20 +54,27 @@ namespace TOne.Analytics.Entities
     }
     public enum BillingCDRMeasures
     {
-        ID = 0,
-        Attempt = 1,
-        Alert = 2,
-        Connect = 3,
-        Disconnect = 4,
-        DurationInSeconds = 5,
-        CustomerID = 6,
-        OurZoneID = 7,
+        SwitchID = 0,
+        CustomerInfo = 1,
+        Attempt = 2,
+        Alert = 3,
+        Connect = 4,
+        Disconnect = 5,
+        DurationInSeconds = 6,
+        CustomerID = 7,
         OriginatingZoneID = 8,
         SupplierID = 9,
         SupplierZoneID = 10,
-        CDPN = 11//,
+        CDPN = 11
+        //,
         //CeiledDuration = 12,
         //ReleaseSourceAParty = 13
+    }
+    public enum BillingCDROptionMeasures
+    {
+        Successful = 0,
+        Invalid = 1,
+        All = 2
     }
 
 }
