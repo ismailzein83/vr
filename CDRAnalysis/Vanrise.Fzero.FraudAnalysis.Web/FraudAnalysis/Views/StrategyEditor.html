@@ -16,40 +16,102 @@
             <vr-row>
 
                 <vr-columns colnum="12">
-                    Space
+
                 </vr-columns>
 
 
             </vr-row>
 
-            <vr-row>
 
-                <vr-columns colnum="12">
-                    <vr-select label="Filters:" datasource="filters"
-                               datatextfield="Description" datavaluefield="CriteriaId" selectedvalues="selectedFilter"></vr-select>
-                </vr-columns>
 
-              
-            </vr-row>
+
+
 
 
 
             <vr-row>
 
-                <vr-columns colnum="4">
-                    <vr-textbox value="threshold" label="Threshold" ng-required="true"></vr-textbox>
-                </vr-columns>
-
-                <vr-columns colnum="4">
-                    <vr-textbox value="minimumValue" label="Minimum Value" ></vr-textbox>
-                </vr-columns>
-
-                <vr-columns colnum="4">
-                    <vr-select label="Period:"  datasource="periods" datatextfield="Name" datavaluefield="Id" selectedvalues="selectedPeriod" ng-required="true"></vr-select>
-                </vr-columns>
+                <vr-columns colnum="12">
 
 
-            </vr-row>
+                    <vr-row>
+
+                        <vr-columns colnum="12">
+                            <vr-select label="Filters:" datasource="filters"
+                                       datatextfield="Description" datavaluefield="CriteriaId" selectedvalues="selectedFilter"></vr-select>
+                        </vr-columns>
+
+
+                    </vr-row>
+
+
+
+                    <vr-row>
+
+                        <vr-columns colnum="4">
+                            <vr-textbox value="threshold" label="Threshold" ng-required="true"></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns colnum="4">
+                            <vr-textbox value="minimumValue" label="Minimum Value"></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns colnum="4">
+                            <vr-select label="Period:" datasource="periods" datatextfield="Name" datavaluefield="Id" selectedvalues="selectedPeriod" ng-required="true"></vr-select>
+                        </vr-columns>
+
+
+                    </vr-row>
+
+                    <vr-row>
+
+                        <vr-columns colnum="12">
+                            <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                                <div transclude-to="buttons">
+                                    <vr-button type="Save" formname="formStrategyEditor" data-onclick="SaveStrategyFilters" ></vr-button>
+                                    <vr-button type="Reset" data-onclick="reset"></vr-button>
+                                </div>
+                            </vr-actionbar>
+                        </vr-columns>
+
+
+                    </vr-row>
+
+                    <vr-row>
+
+                        <vr-columns colnum="12">
+                            <vr-datagrid datasource="strategyFilters" menuactions="gridMenuActions" maxheight="400px"  on-ready="onMainGridReady">
+                                <vr-datagridcolumn headertext="'Field'" field="'Field'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Threshold'" field="'Threshold'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Minimum Value'" field="'MinimumValue'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Period'" field="'Period'"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+
+
+                    </vr-row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </vr-columns>
+                </vr-row>
+
+
+
+
+
+
+                  
 
 
 

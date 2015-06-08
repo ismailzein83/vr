@@ -6,6 +6,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyManager
     {
+
+       
+
+
         public Strategy GetStrategy(int StrategyId)
         {
 

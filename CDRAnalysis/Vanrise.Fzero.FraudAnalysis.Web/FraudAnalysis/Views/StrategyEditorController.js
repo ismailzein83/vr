@@ -39,7 +39,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function load() {
 
         $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadFilters, loadPeriods]).finally(function () {
             $scope.isInitializing = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error);
@@ -140,6 +140,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     $scope.filters = [];
     $scope.selectedFilter = "";
 
+   
+
 
     function loadFilters() {
         return StrategyAPIService.GetFilters().then(function (response) {
@@ -148,6 +150,22 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             });
         });
     }
+
+
+
+    $scope.periods = [];
+    $scope.selectedPeriod = "";
+
+    function loadPeriods() {
+        console.log("Periods");
+        return StrategyAPIService.GetPeriods().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.periods.push(itm);
+            });
+        });
+    }
+
+
 
     
 }

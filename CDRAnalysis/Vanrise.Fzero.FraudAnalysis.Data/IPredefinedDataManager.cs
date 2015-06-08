@@ -7,5 +7,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
 
         List<CallClass> GetAllCallClasses();
+
+        List<Period> GetPeriods();
     }
 }

@@ -5,7 +5,8 @@
         AddStrategy: AddStrategy,
         UpdateStrategy: UpdateStrategy,
         GetStrategy: GetStrategy,
-        GetFilters: GetFilters
+        GetFilters: GetFilters,
+        GetPeriods: GetPeriods
     });
 
     function GetFilteredStrategies(fromRow, toRow, name, description) {
@@ -45,6 +46,10 @@
 
     function GetFilters() {
         return BaseAPIService.get("/api/Strategy/GetFilters");
+    }
+
+    function GetPeriods() {
+        return BaseAPIService.get("/api/Strategy/GetPeriods");
     }
 
 

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AggregateDefinition.cs" />
     <Compile Include="AverageAggregate.cs" />
+    <Compile Include="Period.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="ConsecutiveAggregate.cs" />
     <Compile Include="CallClass.cs" />

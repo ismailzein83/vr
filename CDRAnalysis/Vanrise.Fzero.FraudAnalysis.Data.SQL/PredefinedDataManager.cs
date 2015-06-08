@@ -34,6 +34,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
              }, null);
             return callClasses;
           }
-      
+
+        public List<Period> GetPeriods()
+        {
+
+            var enumerationType = typeof(Enums.Period);
+            List<Period> periods = new List<Period>();
+
+            foreach (int value in Enum.GetValues(enumerationType))
+            {
+                var name = Enum.GetName(enumerationType, value);
+                periods.Add(new Period() { Id = value, Name = name });
+            }
+
+            return periods;
+        }
+
     }
 }

@@ -44,6 +44,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 
 
 
-       
+
+
+
+        public List<Period> GetPeriods()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

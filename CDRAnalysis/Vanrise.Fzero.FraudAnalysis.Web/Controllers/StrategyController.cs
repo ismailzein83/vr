@@ -53,6 +53,14 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
+        public List<Period> GetPeriods()
+        {
+            PredefinedManager manager = new PredefinedManager();
+
+            return manager.GetPeriods();
+        }
+
+
 
 
     }
