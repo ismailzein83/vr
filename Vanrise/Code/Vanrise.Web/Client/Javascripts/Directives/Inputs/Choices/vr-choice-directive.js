@@ -33,7 +33,13 @@ app.directive('vrChoice', [function () {
                         choicesCtrl.selectChoice(ctrl);
                     };
 
-                    $scope.$watch("ctrl.isselected", function () {
+                    $scope.$watch("ctrl.isselected", function (value) {
+                        if (ctrl.isSelected != value) {
+                            if (value)
+                                choicesCtrl.selectChoice(ctrl);
+                            else
+                                choicesCtrl.unselectChoice(ctrl);
+                        }
                         if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                             ctrl.onselectionchanged();
                         }

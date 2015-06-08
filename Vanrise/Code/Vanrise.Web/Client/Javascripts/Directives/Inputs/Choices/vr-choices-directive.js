@@ -57,11 +57,15 @@ app.directive('vrChoices', [function () {
             }
 
             $scope.$watch("ctrl.selectedindex", function (value) {
-                if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
-                    if (triggerSelectionChanged == true)
-                        ctrl.onselectionchanged();
+                if (!choiceCtrls[ctrl.selectedindex].isSelected)
+                    ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
+                else {
+                    if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
+                        if (triggerSelectionChanged == true)
+                            ctrl.onselectionchanged();
+                    }
+                    triggerSelectionChanged = false;
                 }
-                triggerSelectionChanged = false;
             });
 
             var api = {};
