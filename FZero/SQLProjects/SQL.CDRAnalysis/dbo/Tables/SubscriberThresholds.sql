@@ -17,6 +17,8 @@
     [Criteria13]        DECIMAL (18, 2) NULL,
     [Criteria14]        DECIMAL (18, 2) NULL,
     [Criteria15]        DECIMAL (18, 2) NULL,
+    [Criteria16]        DECIMAL (18, 2) NULL,
+    [Criteria17]        DECIMAL (18, 2) NULL,
     [SuspectionLevelId] INT             NULL,
     [StrategyId]        INT             NULL,
     [PeriodId]          INT             NULL,
@@ -24,6 +26,8 @@
     CONSTRAINT [FK_SubscriberThresholds_Periods] FOREIGN KEY ([PeriodId]) REFERENCES [dbo].[Periods] ([Id]),
     CONSTRAINT [FK_SubscriberThresholds_Suspection_Level] FOREIGN KEY ([SuspectionLevelId]) REFERENCES [dbo].[Suspicion_Level] ([Id])
 );
+
+
 
 
 GO

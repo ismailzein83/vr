@@ -21,9 +21,10 @@
     [In_Trunk]           VARCHAR (20)    NULL,
     [Out_Trunk]          VARCHAR (20)    NULL,
     [Service_Type]       INT             NULL,
-    [Service_VAS_Name]   VARCHAR (50)    NULL,
-    CONSTRAINT [PK_MobileCDR] PRIMARY KEY CLUSTERED ([Id] ASC) WITH (FILLFACTOR = 80, STATISTICS_NORECOMPUTE = ON)
+    [Service_VAS_Name]   VARCHAR (50)    NULL
 );
+
+
 
 
 GO
@@ -40,4 +41,14 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'1 or Zero d
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Zain, Korek ..', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'NormalCDR', @level2type = N'COLUMN', @level2name = N'Call_Class';
+
+
+GO
+CREATE CLUSTERED INDEX [index_MSISDN]
+    ON [dbo].[NormalCDR]([MSISDN] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [index_Connect]
+    ON [dbo].[NormalCDR]([ConnectDateTime] ASC);
 

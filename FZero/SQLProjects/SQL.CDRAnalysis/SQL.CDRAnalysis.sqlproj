@@ -65,6 +65,9 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Security\" />
+    <Folder Include="FraudAnalysis\" />
+    <Folder Include="FraudAnalysis\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Users.sql" />
@@ -101,20 +104,15 @@
     <Build Include="dbo\Tables\EmailTemplates.sql" />
     <Build Include="dbo\Tables\EmailReceiverTypes.sql" />
     <Build Include="dbo\Tables\EmailReceivers.sql" />
-    <Build Include="dbo\Tables\delete_Peak_Hours.sql" />
-    <Build Include="dbo\Tables\delete_NumberProfile.sql" />
     <Build Include="dbo\Tables\Criteria_Profile.sql" />
     <Build Include="dbo\Tables\ControlTable.sql" />
     <Build Include="dbo\Tables\CellProfile.sql" />
-    <Build Include="dbo\Tables\CDR.sql" />
-    <Build Include="dbo\Tables\Afghanistan.sql" />
     <Build Include="dbo\Views\vwSuspectionAnalysis.sql" />
     <Build Include="dbo\Views\vwReportedNumberNormalCDR.sql" />
     <Build Include="dbo\Views\vwReportedNumber.sql" />
     <Build Include="dbo\Views\vwDashboard.sql" />
     <Build Include="dbo\Stored Procedures\prSendMailWithAttachment.sql" />
     <Build Include="dbo\Stored Procedures\prSendMail.sql" />
-    <Build Include="dbo\Stored Procedures\prNumberProfiling.sql" />
     <Build Include="dbo\Stored Procedures\prNormalization.sql" />
     <Build Include="dbo\Stored Procedures\prImportfromSwitches.sql" />
     <Build Include="dbo\Stored Procedures\prImportfromSwitch.sql" />
@@ -124,20 +122,23 @@
     <Build Include="dbo\Stored Procedures\prGetReportedNumberNormalCDR.sql" />
     <Build Include="dbo\Stored Procedures\prGetEmails.sql" />
     <Build Include="dbo\Stored Procedures\prfindSuspicionOccurrence.sql" />
-    <Build Include="dbo\Stored Procedures\prFillSubscriberValues.sql" />
-    <Build Include="dbo\Stored Procedures\prFillSubscriberThresholds.sql" />
-    <Build Include="dbo\Stored Procedures\prFillHourlySubscriberValues.sql" />
     <Build Include="dbo\Stored Procedures\prFillHourlySubscriberThresholds.sql" />
     <Build Include="dbo\Stored Procedures\prFillHourlyProfile.sql" />
     <Build Include="dbo\Stored Procedures\prFillHourlyCellProfile.sql" />
-    <Build Include="dbo\Stored Procedures\prFillDailySubscriberValues.sql" />
     <Build Include="dbo\Stored Procedures\prFillDailySubscriberThresholds.sql" />
     <Build Include="dbo\Stored Procedures\prFillDailyProfile.sql" />
     <Build Include="dbo\Stored Procedures\prFillDailyCellProfile.sql" />
     <Build Include="dbo\Stored Procedures\prDeleteEmail.sql" />
     <Build Include="dbo\Stored Procedures\prDashboard.sql" />
-    <Build Include="dbo\Stored Procedures\prCollectNormalizedCDR.sql" />
-    <Build Include="dbo\Stored Procedures\delete_prFillHourlySubscriberValues.sql" />
-    <Build Include="dbo\Stored Procedures\delete_prFillDailySubscriberValues.sql" />
+    <Build Include="dbo\Views\vwReportVariables.sql" />
+    <Build Include="Security\zahraa.sql" />
+    <Build Include="Security\walid.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
+    <Build Include="Security\FraudAnalysis.sql" />
   </ItemGroup>
 </Project>

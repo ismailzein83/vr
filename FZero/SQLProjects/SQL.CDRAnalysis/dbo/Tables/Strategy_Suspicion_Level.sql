@@ -32,8 +32,14 @@
     [Cr14Per]      DECIMAL (18, 2) NULL,
     [CriteriaId15] INT             NULL,
     [Cr15Per]      DECIMAL (18, 2) NULL,
+    [CriteriaId16] INT             NULL,
+    [Cr16Per]      DECIMAL (18, 2) NULL,
+    [CriteriaId17] INT             NULL,
+    [Cr17Per]      DECIMAL (18, 2) NULL,
     CONSTRAINT [PK_Strategy_suspection_level] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Strategy_suspection_level_Strategy] FOREIGN KEY ([StrategyId]) REFERENCES [dbo].[Strategy] ([Id]),
     CONSTRAINT [FK_Strategy_suspection_level_suspection_level] FOREIGN KEY ([LevelId]) REFERENCES [dbo].[Suspicion_Level] ([Id])
 );
+
+
 
