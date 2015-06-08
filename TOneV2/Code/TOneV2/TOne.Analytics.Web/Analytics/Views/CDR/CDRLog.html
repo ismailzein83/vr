@@ -24,7 +24,7 @@
                         <vr-select datasource="OrderBy" selectedvalues="selectedOrderBy" label="Order By"></vr-select>
                     </vr-columns>
                     <vr-columns colnum="2">
-                        <vr-select datasource="Size" selectedvalues="selectedsize" label="Limit Results to" isrequired></vr-select>
+                        <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
                     </vr-columns>
                     <vr-columns colnum="2">
                         <vr-datetimepicker type="date" label="From:" value="fromDate" isrequired></vr-datetimepicker>
@@ -76,7 +76,7 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
+                    <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Attempt'" field="'Attempt'"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Alert'" field="'Alert'"></vr-datagridcolumn>
