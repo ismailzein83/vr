@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public class CriteriaDefinition
     {
-        public int CriteriaId { get; set; }
+        public int FilterId { get; set; }
 
         public CriteriaCompareOperator CompareOperator { get; set; }
 

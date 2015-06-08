@@ -23,11 +23,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 throw new ArgumentNullException("strategy");
             if (strategy.StrategyLevels == null)
                 throw new ArgumentNullException("strategy.StrategyLevels");
-            if (strategy.StrategyCriterias == null)
-                throw new ArgumentNullException("strategy.StrategyCriterias");
+            if (strategy.StrategyFilters == null)
+                throw new ArgumentNullException("strategy.StrategyFilters");
 
-            if (strategy.StrategyPeriods == null)
-                throw new ArgumentNullException("strategy.StrategyPeriods");
 
             var criteriaManager = new CriteriaManager();
             Dictionary<int, CriteriaDefinition> criteriaDefinitions = criteriaManager.GetCriteriaDefinitions();
@@ -48,12 +46,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 foreach (var j in i.StrategyLevelCriterias)
                 {
                     LevelCriteriaInfo levelCriteriasThresholdPercentage = new LevelCriteriaInfo();
-                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.CompareOperator, CriteriaId = j.CriteriaId, Description = criteriaDefinitions.Where(x => x.Value.CriteriaId == j.CriteriaId).FirstOrDefault().Value.Description };
+                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId, Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage=j.Percentage;
-                    levelCriteriasThresholdPercentage.Threshold=strategy.StrategyCriterias.Where(x=>x.CriteriaId==j.CriteriaId).FirstOrDefault().Threshold;
-                    levelCriteriasThresholdPercentage.Period = strategy.StrategyPeriods.Where(x => x.CriteriaId == j.CriteriaId).FirstOrDefault().Period;
-                    levelCriteriasThresholdPercentage.PeriodValue = strategy.StrategyPeriods.Where(x => x.CriteriaId == j.CriteriaId).FirstOrDefault().Value;
-
+                    levelCriteriasThresholdPercentage.Threshold = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Threshold;
+                    levelCriteriasThresholdPercentage.Period = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Period;
                     
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
                 }
@@ -82,20 +78,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 foreach (LevelCriteriaInfo LevelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                 {
                     Decimal criteriaValue;
-                    if (!criteriaValues.TryGetValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, out criteriaValue))
+                    if (!criteriaValues.TryGetValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValue))
                     {
                         criteriaValue = _criteriaManager.GetCriteriaValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions, profile) ;
-                        criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, criteriaValue);
+                        criteriaValues.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValue);
                     }
 
 
                     decimal criteriaValuesThreshold ;
 
 
-                    if (!criteriaValuesThresholds.TryGetValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, out criteriaValuesThreshold))
+                    if (!criteriaValuesThresholds.TryGetValue(LevelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValuesThreshold))
                     {
                         criteriaValuesThreshold = criteriaValue / LevelCriteriaThresholdPercentage.Threshold;
-                        criteriaValuesThresholds.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.CriteriaId, criteriaValuesThreshold);
+                        criteriaValuesThresholds.Add(LevelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValuesThreshold);
                     }
 
 
@@ -160,7 +156,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             public Decimal Threshold { get; set; }
 
             public Decimal Percentage { get; set; }
-            public int PeriodValue { get; set; }
             public Enums.Period? Period { get; set; }
 
         }

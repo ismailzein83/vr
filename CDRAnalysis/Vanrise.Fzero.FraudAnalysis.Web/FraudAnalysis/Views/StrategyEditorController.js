@@ -72,57 +72,68 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function buildStrategyObjFromScope() {
-        
+       
         var StrategyObject = {
             Id: ($scope.StrategyId != null) ? $scope.StrategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
-            StrategyFilters : $scope.strategyFilters,
-            StrategyCriterias: [
-                                { CriteriaId: 1, Threshold: 1 },
-                                { CriteriaId: 2, Threshold: 2 },
-                                { CriteriaId: 3, Threshold: 1 },
-                                { CriteriaId: 4, Threshold: 2 },
-                                { CriteriaId: 5, Threshold: 3 },
-                                { CriteriaId: 6, Threshold: 1 }
-                               ],
+            StrategyFilters: []
+            //,StrategyCriterias: [
+            //                    { CriteriaId: 1, Threshold: 1 },
+            //                    { CriteriaId: 2, Threshold: 2 },
+            //                    { CriteriaId: 3, Threshold: 1 },
+            //                    { CriteriaId: 4, Threshold: 2 },
+            //                    { CriteriaId: 5, Threshold: 3 },
+            //                    { CriteriaId: 6, Threshold: 1 }
+            //                   ]
 
-            StrategyPeriods:  [
-                                { CriteriaId: 1, Value: 1, Period: 1 },
-                                { CriteriaId: 2, Value: 1, Period: 6 },
-                                { CriteriaId: 3, Value: 1, Period: 1 },
-                                { CriteriaId: 4, Value: 1, Period: 6 },
-                                { CriteriaId: 5, Value: 1, Period: 6 },
-                                { CriteriaId: 6, Value: 1, Period: 1 }
-                              ],
+            //,StrategyPeriods:  [
+            //                    { CriteriaId: 1, Value: 1, Period: 1 },
+            //                    { CriteriaId: 2, Value: 1, Period: 6 },
+            //                    { CriteriaId: 3, Value: 1, Period: 1 },
+            //                    { CriteriaId: 4, Value: 1, Period: 6 },
+            //                    { CriteriaId: 5, Value: 1, Period: 6 },
+            //                    { CriteriaId: 6, Value: 1, Period: 1 }
+            //                  ]
 
-            StrategyLevels: [
-                                { SuspectionLevelId: 2, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.0 }, { CriteriaId: 2, Percentage: 1.0 }, { CriteriaId: 3, Percentage: 1.0 }] },
-                                { SuspectionLevelId: 3, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.25 }, { CriteriaId: 2, Percentage: 0.75 }, { CriteriaId: 3, Percentage: 1.0 }] }
-                             ]
+            //,StrategyLevels: [
+            //                    { SuspectionLevelId: 2, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.0 }, { CriteriaId: 2, Percentage: 1.0 }, { CriteriaId: 3, Percentage: 1.0 }] },
+            //                    { SuspectionLevelId: 3, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.25 }, { CriteriaId: 2, Percentage: 0.75 }, { CriteriaId: 3, Percentage: 1.0 }] }
+            //                 ]
 
-
+            
         };
-        console.log("strategyObject.StrategyFilters: " + StrategyObject.StrategyFilters[0]);
+
+
+
+        //StrategyObject.StrategyFilters = [];
+
+        angular.forEach($scope.strategyFilters, function (filter) {
+            var filterItem = {
+                FilterId: filter.filterId,
+                Description: filter.description,
+                Threshold: filter.threshold,
+                MinimumValue: filter.MinimumValue,
+                Period: filter.Period,
+                IsSelected: filter.isSelected
+
+            
+            };
+
+            StrategyObject.StrategyFilters.push(filterItem);
+        });
+
+
+        console.log(StrategyObject);
+
+
+        
+        
         return StrategyObject;
     }
 
-    function buildStrategyFilterObjFromScope() {
-        var StrategyFilterObject = {
-            PeriodId: ($scope.selectedPeriod != null) ? $scope.selectedPeriod : 0,
-            Threshold: $scope.threshold,
-            MinimumValue: $scope.minimumValue
-        };
-        console.log(StrategyFilterObject);
-        return StrategyFilterObject;
-    }
-
-    function SaveStrategyFilters() {
-        $scope.issaving = true;
-        var StrategyObject = buildStrategyFilterObjFromScope();
-       
-    }
+  
 
     function loadFiltersForAddMode() {
         angular.forEach($scope.filterDefinitions, function (filterDef) {
@@ -132,18 +143,23 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             };
             $scope.strategyFilters.push(filterItem);
         });
+
+        
     }
 
     function fillScopeFromStrategyObj(strategyObject) {
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
-        $scope.isDefault = strategyObject.IsDefault;        
+        $scope.isDefault = strategyObject.IsDefault;
+
+        
+
         angular.forEach($scope.filterDefinitions, function (filterDef) {
             var filterItem = {
                 filterId: filterDef.filterId,
                 filterDescription: filterDef.description
             };
-            var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "CriteriaId");
+            var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "FilterId");
             if (existingItem != undefined && existingItem != null) {
                 filterItem.isSelected = true;
                 filterItem.threshold = existingItem.Threshold;
@@ -158,6 +174,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function AddStrategy() {
         $scope.issaving = true;
         var StrategyObject = buildStrategyObjFromScope();
+
+        
+
+
         return StrategyAPIService.AddStrategy(StrategyObject)
           .then(function (response) {
               if (VRNotificationService.notifyOnItemAdded("Strategy", response)) {
@@ -191,7 +211,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function loadFilters() {
         return StrategyAPIService.GetFilters().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filterDefinitions.push({ filterId: itm.CriteriaId, description: itm.Description });
+                $scope.filterDefinitions.push({ filterId: itm.FilterId, description: itm.Description });
             });
         });
     }
@@ -202,7 +222,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     $scope.selectedPeriod = "";
 
     function loadPeriods() {
-        console.log("Periods");
         return StrategyAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
