@@ -12,7 +12,7 @@
                     Last : <number-filed ng-show="true" input-value="periodCount" place-holder="'Type period'" isrequired />
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="PeriodType" selectedvalues="periodTypeValue" label="" isrequired></vr-select>
+                    <vr-select datasource="TimePeriod" selectedvalues="periodTypeValue" label="" isrequired></vr-select>
                 </vr-columns>     
             </vr-row>
         </div>
@@ -79,17 +79,44 @@
             </vr-columns>
         </vr-row>
     </div>-->
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>PeriodTypeValueAverage AVG</th>
+            <th>PeriodTypeValuePercentage %</th>
+            <th>PreviousPeriodTypeValuePercentage %</th>
+            <th>CallDate & Total Duration</th>
+            <th>CarrierAccountID</th>
+        </tr>
+        <tr ng-repeat="item in data " >
+            <td>{{item.Name}}</td>
+            <td>{{item.PeriodTypeValueAverage}}</td>   
+            <td>{{item.PeriodTypeValuePercentage}}</td>
+            <td>{{item.PreviousPeriodTypeValuePercentage}}</td>
+            <td>
+                <table border="1" width="100%">
+                    <tr ng-repeat="i in item.TotalDurationsPerDate">
+                        <td>{{i.CallDate}}</td>
+                        <td>{{i.TotalDuration}}</td>
+                    </tr>
+                </table>  
+            </td>
+            <td>{{item.CarrierAccountID}}</td>
+        </tr>
+
+    </table>
    
-     <div>
+     <!--<div>
        <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid data-on-ready="onMainGridReady" datasource="data" pagersettings="mainGridPagerSettings" >
-                    <vr-datagridcolumn ng-repeat="item in data" headertext="data.gridHeader" field="'data[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="item" ></vr-datagridcolumn>
-                    <!--<vr-datagridcolumn ng-repeat="item in data" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="item" ></vr-datagridcolumn>-->
+                    <vr-datagridcolumn ng-repeat="item in data"  ></vr-datagridcolumn>
+                    
+                  
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
-    </div>
+    </div>-->
 
     <!--<div>
         <vr-row>

@@ -6,12 +6,14 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
     
     var mainGridAPI;
     $scope.data = [];
-    $scope.PeriodType = ['Days','Weeks','Months']
+    // $scope.TimePeriod = ['Days','Weeks','Months']
+    $scope.TimePeriod = TimePeriod;
     $scope.fromDate = '2013/07/31';
     $scope.toDate = '2015/05/01';
     $scope.periodTypeValue = 'Days';
     $scope.periodCount = 7;
     defineScope();
+    loadTimePeriods();
    
     function defineScope() {
        
@@ -40,6 +42,11 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
         $scope.getVariationReportsData = getVariationReportsData;
         $scope.getVariationReportsFinalData = getVariationReportsFinalData;
         
+    }
+    function loadTimePeriods() {
+        for (var prop in TimePeriodEnum) {
+            TimePeriod.push(TimePeriodEnum[prop]);
+        }
     }
    
 
@@ -90,6 +97,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
             
         });
     }
+   
 
 };
 
