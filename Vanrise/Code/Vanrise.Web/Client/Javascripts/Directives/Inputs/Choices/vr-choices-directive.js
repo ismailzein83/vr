@@ -8,7 +8,7 @@ app.directive('vrChoices', [function () {
         scope: {
             onReady: '=',
             selectedindex: '=?',
-            onselectionchanged: '='
+            onselectionchanged: '&'
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -20,8 +20,9 @@ app.directive('vrChoices', [function () {
                 choiceCtrls.push(choiceCtrl);
                 setDefaultChoiceSeletion();
             }
-
+            var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
+                triggerSelectionChanged = true;
                 angular.forEach(choiceCtrls, function (t) {
                     if (t != choiceCtrl)
                         setChoiceSelection(t, false);
@@ -50,15 +51,17 @@ app.directive('vrChoices', [function () {
                 if (choiceCtrl.isSelected != isSelected) {
                     choiceCtrl.isSelected = isSelected;
                     choiceCtrl.selectionChanged();
-                    if (isSelected)
-                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);
+                    if (isSelected == true)
+                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);                        
                 }
             }
 
-            $scope.$watch("ctrl.selectedindex", function () {
+            $scope.$watch("ctrl.selectedindex", function (value) {
                 if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
-                    ctrl.onselectionchanged();
+                    if (triggerSelectionChanged == true)
+                        ctrl.onselectionchanged();
                 }
+                triggerSelectionChanged = false;
             });
 
             var api = {};
