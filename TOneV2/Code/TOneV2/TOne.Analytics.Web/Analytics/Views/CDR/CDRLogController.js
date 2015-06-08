@@ -7,7 +7,6 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
 
     var mainGridAPI;
     $scope.data = [];
-    $scope.Size = ['5', '10', '20', '30']
     $scope.CDROption = ['All', 'Successful', 'Failed']
     $scope.selectedCDROption = 'All'
     $scope.durationIn = ['Min', 'Sec']
@@ -15,7 +14,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     $scope.fromDate = '2015/06/02';
     $scope.toDate = '2015/06/06';
     $scope.nRecords='5'
-    $scope.selectedsize = '5';
+    //$scope.selectedsize = '5';
     defineScope();
     load();
     defineScopeMethods();
@@ -34,13 +33,11 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             selectedvalues: [],
             datasource: []
         };
-
-
         $scope.mainGridPagerSettings = {
             currentPage: 1,
             totalDataCount: 0,
             pageChanged: function () {
-                //      return getData();
+                return GetCDRData();
             }
         };
         $scope.onMainGridReady = function (api) {
@@ -55,7 +52,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             //  return getData(true);
             return getData(true);
         };
-
+      
         $scope.GetCDRData = GetCDRData;
 
     }
@@ -102,6 +99,13 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             });
         });
     }
+
+
+    function loadMeasures() {
+        for (var prop in BillingCDRMeasureEnum) {
+            measures.push(BillingCDRMeasureEnum[prop]);
+        }
+    }
     //function loadZones() {
     //    return BusinessEntityAPIService.GetZones("1","MTN").then(function (response) {
     //        angular.forEach(response, function (itm) {
@@ -112,20 +116,29 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     function GetCDRData() {
         var filter = buildFilter();
 
+        var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
+        var count = $scope.mainGridPagerSettings.itemsPerPage;
         var getCDRLogSummaryInput = {
+            TempTableKey: null,
             Filter: filter,
-
             From: $scope.fromDate,
             To: $scope.toDate,
-            Size: $scope.selectedsize,
-            CDROption:$scope.selectedCDROption
+            FromRow: pageInfo.fromRow,
+            ToRow: pageInfo.toRow,
+            Size: $scope.nRecords,
+            CDROption: $scope.selectedCDROption,
+            OrderBy: 2,
+            IsDescending: true
         }
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             //  alert(response);
             $scope.data = [];
+            currentData = response.Data;
+            resultKey = response.ResultKey;
+            $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
             console.log(response);
             $scope.isInitializing = false;
-            angular.forEach(response, function (itm) {
+            angular.forEach(response.Data, function (itm) {
                 $scope.data.push(itm);
             });
 
