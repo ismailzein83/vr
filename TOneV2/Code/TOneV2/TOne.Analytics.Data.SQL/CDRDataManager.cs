@@ -17,19 +17,7 @@ namespace TOne.Analytics.Data.SQL
         {
             StringBuilder whereBuilder = new StringBuilder();
 
-            string queryData = "";
-            if (CDROption == "Successful")
-            {
-                queryData = GetSingleQuery("Billing_CDR_Main","MainCDR");
-            }
-            else if (CDROption == "Failed")
-            {
-                queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid");
-            }
-            else
-            {
-                queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR"), GetSingleQuery("Billing_CDR_Invalid", "Invalid"));
-            }
+            
             //string query="";
            
             TempTableName tempTableName = null;
@@ -42,17 +30,30 @@ namespace TOne.Analytics.Data.SQL
                 ResultKey = tempTableName.Key
             };
 
-            CreateTempTableIfNotExists(tempTableName.TableName, filter, queryData, fromDate, toDate, nRecords);
+            CreateTempTableIfNotExists(tempTableName.TableName, filter, fromDate, toDate, nRecords, CDROption);
 
             int totalDataCount;
-            rslt.Data = GetData(tempTableName.TableName, fromRow, toRow, out totalDataCount);
+            rslt.Data = GetData(tempTableName.TableName, fromRow, toRow,orderBy,isDescending, out totalDataCount);
             rslt.TotalCount = totalDataCount;
             return rslt;
             
         }
-
-        private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, String queryData, DateTime from, DateTime to, int nRecords)
+        #region Methods
+        private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, string CDROption)
         {
+            string queryData = "";
+            if (CDROption == "Successful")
+            {
+                queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR");
+            }
+            else if (CDROption == "Failed")
+            {
+                queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid");
+            }
+            else
+            {
+                queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR"), GetSingleQuery("Billing_CDR_Invalid", "Invalid"));
+            }
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
@@ -79,10 +80,10 @@ namespace TOne.Analytics.Data.SQL
             });
         }
 
-        private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, out int totalCount)
+        private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, BillingCDRMeasures orderBy, bool isDescending, out int totalCount)
         {
-            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER(ORDER BY Attempt DESC)  AS rowNumber FROM {0})
-	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName);
+            string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER(ORDER BY {1} {2})  AS rowNumber FROM {0})
+	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName,GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
 
             totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
             return GetItemsText(query,
@@ -203,5 +204,6 @@ namespace TOne.Analytics.Data.SQL
         {
             return reader[value] != DBNull.Value ? Convert.ToInt32(reader[value]) : 0;
         }
+        #endregion
     }
 }

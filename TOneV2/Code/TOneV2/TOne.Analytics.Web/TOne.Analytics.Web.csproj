@@ -122,6 +122,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytics\Constants\BillingCDRMeasureEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
     <Content Include="Analytics\Services\APIServices\AnalyticsAPIService.js" />

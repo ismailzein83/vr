@@ -20,8 +20,11 @@
                         <vr-select datasource="OriginatingZone" selectedvalues="selectedOriginatingZone" label="Originating Zone"></vr-select>
                     </vr-columns>-->
 
-                    <vr-columns colnum="2">
+                    <!--<vr-columns colnum="2">
                         <vr-select datasource="OrderBy" selectedvalues="selectedOrderBy" label="Order By"></vr-select>
+                    </vr-columns>-->
+                    <vr-columns colnum="2">
+                        <vr-select datasource="CDROption" selectedvalues="selectedCDROption" label="CDR Option"></vr-select>
                     </vr-columns>
                     <vr-columns colnum="2">
                         <vr-textbox value="nRecords" label="Limit Results to"></vr-textbox>
@@ -32,9 +35,7 @@
                     <vr-columns colnum="2">
                         <vr-datetimepicker type="date" label="To:" value="toDate" isrequired></vr-datetimepicker>
                     </vr-columns>
-                    <vr-columns colnum="2">
-                        <vr-select datasource="CDROption" selectedvalues="selectedCDROption" label="CDR Option"></vr-select>
-                    </vr-columns>
+                    
                     <!--  <vr-columns colnum="2">
                         <vr-textbox value="All" onvaluechanged="" label="Phone Number"></vr-textbox>
                     </vr-columns>
@@ -77,20 +78,9 @@
             <vr-row>
                 <vr-columns colnum="12" simplecol>
                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" menuactions="gridMenuActions">
-                        <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Attempt'" field="'Attempt'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Alert'" field="'Alert'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Connect'" field="'Connect'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Disconnect'" field="'Disconnect'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'DurationInSeconds'" field="'DurationInSeconds'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CustomerID'" field="'CustomerID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'OurZoneID'" field="'OurZoneID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'OriginatingZoneID'" field="'OriginatingZoneID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'SupplierID'" field="'SupplierID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'SupplierZoneID'" field="'SupplierZoneID'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'ReleaseCode'" field="'ReleaseCode'"></vr-datagridcolumn>
+                        <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+                       
+                        
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>

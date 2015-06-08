@@ -1,0 +1,26 @@
+﻿app.constant('BillingCDRMeasureEnum', {
+    //Switch: { value: 0, propertyName: "SwitchID", description: "Switch" },
+    //CustomerZone: { value: 1, propertyName: "CustomerZone", description: "Customer Zone" },
+    ////Attempts: { value: 2, propertyName: "Attempts", description: "Attempts" },
+    //OriginatingZone: { value: 3, propertyName: "OriginatingZoneID", description: "Originating Zone" },
+    //CallDate: { value: 5, propertyName: "CallDate", description: "CallDate" },
+    //Customer: { value: 4, propertyName: "CustomerID", description: "Customer" },
+    //CLI: { value: 6, propertyName: "CLI", description: "CLI" },
+    //PDD: { value: 7, propertyName: "PDDInSeconds", description: "PDD (sec)" },
+    //Number: { value: 8, propertyName: "Number", description: "Number" },
+    //NumberOfCalls: { value: 9, propertyName: "NumberOfCalls", description: "Nb of Calls", isSum: true },
+    //DeliveredNumberOfCalls: { value: 10, propertyName: "DeliveredNumberOfCalls", description: "Delivered Nb of Calls", isSum: true },
+    //PGAD: { value: 11, propertyName: "PGAD", description: "PGAD" }
+    ID: { value: 0, propertyName: "ID", description: "ID" },
+    Attempt: { value: 1, propertyName: "Attempt", description: "Attempt" },
+    Alert: { value: 2, propertyName: "Alert", description: "Alert" },
+    Connect: { value: 3, propertyName: "Connect", description: "Connect" },
+    Disconnect: { value: 5, propertyName: "Disconnect", description: "Disconnect" },
+    DurationInSeconds: { value: 4, propertyName: "DurationInSeconds", description: "DurationInSeconds" },
+    CustomerID: { value: 6, propertyName: "CustomerID", description: "CustomerID" },
+    OurZoneID: { value: 7, propertyName: "OurZoneID", description: "OurZoneID" },
+    OriginatingZoneID: { value: 8, propertyName: "OriginatingZoneID", description: "OriginatingZoneID" },
+    SupplierID: { value: 9, propertyName: "SupplierID", description: "SupplierID" },
+    SupplierZoneID: { value: 10, propertyName: "SupplierZoneID", description: "SupplierZoneID" },
+    CDPN: { value: 11, propertyName: "CDPN", description: "CDPN" }
+});

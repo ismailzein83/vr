@@ -1,6 +1,6 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum','TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, $q, BusinessEntityAPIService,BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService) {
 
     $scope.name = "test";
     $scope.isInitializing = false;
@@ -13,7 +13,11 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     $scope.selectedDurationIn = 'Min'
     $scope.fromDate = '2015/06/02';
     $scope.toDate = '2015/06/06';
-    $scope.nRecords='5'
+    $scope.nRecords = '5'
+    var measures = [];
+    var sortColumn = BillingCDRMeasureEnum.Attempt;
+    var sortDescending = true;
+    var currentSortedColDef;
     //$scope.selectedsize = '5';
     defineScope();
     load();
@@ -29,10 +33,15 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.zones = [];
         $scope.selectedZones = [];
 
+        $scope.gridAllMeasuresScope = {};
+        $scope.measures = measures;
+
+
         $scope.optionsZonesFilter = {
             selectedvalues: [],
             datasource: []
         };
+        
         $scope.mainGridPagerSettings = {
             currentPage: 1,
             totalDataCount: 0,
@@ -43,16 +52,21 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
+        $scope.onMainGridSortChanged = function (colDef, sortDirection) {
+            sortColumn = colDef.tag;
+            sortDescending = (sortDirection == "DESC");
+            return GetCDRData();
+        }
 
+        
         $scope.getData = function () {
             $scope.mainGridPagerSettings.currentPage = 1;
             resultKey = null;
-            //    mainGridAPI.resetSorting();
-            //    resetSorting();
+            mainGridAPI.resetSorting();
+            resetSorting();
             //  return getData(true);
-            return getData(true);
+            return GetCDRData();
         };
-      
         $scope.GetCDRData = GetCDRData;
 
     }
@@ -62,7 +76,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         }
     }
     function load() {
-        
+        loadMeasures();
+        overallSelectedMeasure = BillingCDRMeasureEnum.Attempt;
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers, loadSuppliers]).finally(function () {
             $scope.isInitializing = false;
@@ -76,6 +91,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
         filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
         return filter;
+    }
+    function resetSorting() {
+        sortColumn = BillingCDRMeasureEnum.Attempt;
+        sortDescending = true;
     }
 
     function loadSwitches() {
@@ -115,7 +134,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     //}
     function GetCDRData() {
         var filter = buildFilter();
-
+        //if (sortColumn == undefined)
+        //    return;
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
         var count = $scope.mainGridPagerSettings.itemsPerPage;
         var getCDRLogSummaryInput = {
@@ -127,11 +147,13 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             ToRow: pageInfo.toRow,
             Size: $scope.nRecords,
             CDROption: $scope.selectedCDROption,
-            OrderBy: 2,
+            OrderBy: sortColumn.value,
             IsDescending: true
         }
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             //  alert(response);
+            if (currentSortedColDef != undefined)
+                currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
             $scope.data = [];
             currentData = response.Data;
             resultKey = response.ResultKey;
