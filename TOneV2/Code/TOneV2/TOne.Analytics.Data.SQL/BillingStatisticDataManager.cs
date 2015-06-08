@@ -271,9 +271,9 @@ namespace TOne.Analytics.Data.SQL
                                                 LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
                                                 JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                 JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-                                            WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount, @FromDate) AND @FromDate 
+                                            WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate 
                                             GROUP BY cpc.Name,cac.CarrierAccountID , Calldate
-                                            ORDER BY SUM(BS.SaleDuration/60) desc");
+                                          --  ORDER BY SUM(BS.SaleDuration/60) desc");
             return GetItemsText(query, VariationReportsMapper,
            (cmd) =>
            {
