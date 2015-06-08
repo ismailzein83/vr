@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessEntityController.cs" />
+    <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -131,6 +132,8 @@
     <Content Include="Client\Views\CarrierAccountEditorController.js" />
     <Content Include="Client\Views\CarrierAccountManagement.html" />
     <Content Include="Client\Views\CarrierAccountManagementController.js" />
+    <Content Include="Client\Views\Rates.html" />
+    <Content Include="Client\Views\RatesController.js" />
     <Content Include="Client\Views\SwitchEditor.html" />
     <Content Include="Client\Views\SwitchEditorController.js" />
     <Content Include="Client\Views\SwitchManagment.html" />
