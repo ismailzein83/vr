@@ -175,7 +175,7 @@ namespace TOne.LCRProcess.Activities
                     {
                         if (inputArgument.CodeGroups.TryGetValue(singleDestinationCodeMatches.SysCodeMatch.Code, out codeGroup))
                         {
-                            List<CodeMatch> exactCodeMatches = GetExactCodeMatches(codeMatches, inputArgument.CodeGroups);
+                            List<CodeMatch> exactCodeMatches = GetExactCodeMatches(singleDestinationCodeMatches.OrderedCodeMatches, inputArgument.CodeGroups);
                             saleCodeMatch.SaleZoneId = singleDestinationCodeMatches.SysCodeMatch.SupplierZoneId;
                             saleCodeMatch.IsMatchingCodeGroup = true;
                             saleCodeMatch.SupplierCodeMatches = exactCodeMatches;
@@ -200,7 +200,7 @@ namespace TOne.LCRProcess.Activities
             List<CodeMatch> codeMatches = new List<CodeMatch>();
             foreach (var supplierCodeMatch in supplierCodeMatches)
             {
-                if (codeGroups.ContainsKey(supplierCodeMatch.SupplierCode) && String.Compare(supplierCodeMatch.SupplierId, "SYS", true) == -1)
+                if (codeGroups.ContainsKey(supplierCodeMatch.SupplierCode))
                 {
                     codeMatches.Add(supplierCodeMatch);
                 }
