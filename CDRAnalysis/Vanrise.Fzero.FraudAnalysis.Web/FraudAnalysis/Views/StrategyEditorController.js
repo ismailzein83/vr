@@ -1,6 +1,6 @@
-﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     
     var editMode;
     loadParameters();
@@ -37,6 +37,15 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function load() {
+
+        $scope.isInitializing = true;
+        UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
+            $scope.isInitializing = false;
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error);
+        });
+
+
         if (editMode) {
             $scope.isGettingData = true;
             getStrategy().finally(function () {
@@ -124,6 +133,19 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error);
+        });
+    }
+
+
+    $scope.filters = [];
+    $scope.selectedFilter = "";
+
+
+    function loadFilters() {
+        return StrategyAPIService.GetFilters().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.filters.push(itm);
+            });
         });
     }
 

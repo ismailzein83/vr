@@ -45,6 +45,15 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
 
 
+        public Dictionary<int, CriteriaDefinition> GetFilters()
+        {
+            CriteriaManager manager = new CriteriaManager();
+
+            return manager.GetCriteriaDefinitions();
+        }
+
+
+
 
     }
 }

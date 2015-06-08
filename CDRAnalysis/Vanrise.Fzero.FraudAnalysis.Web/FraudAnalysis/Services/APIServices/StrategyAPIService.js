@@ -4,7 +4,8 @@
         GetFilteredStrategies: GetFilteredStrategies,
         AddStrategy: AddStrategy,
         UpdateStrategy: UpdateStrategy,
-        GetStrategy: GetStrategy
+        GetStrategy: GetStrategy,
+        GetFilters: GetFilters
     });
 
     function GetFilteredStrategies(fromRow, toRow, name, description) {
@@ -39,6 +40,11 @@
         return BaseAPIService.post("/api/Strategy/UpdateStrategy",
             strategy
            );
+    }
+
+
+    function GetFilters() {
+        return BaseAPIService.get("/api/Strategy/GetFilters");
     }
 
 
