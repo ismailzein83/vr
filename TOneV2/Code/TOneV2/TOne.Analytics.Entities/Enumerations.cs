@@ -52,5 +52,22 @@ namespace TOne.Analytics.Entities
         //CeiledDuration = 12,
         //ReleaseSourceAParty = 13
     }
+    public enum BillingCDRMeasures
+    {
+        ID = 0,
+        Attempt = 1,
+        Alert = 2,
+        Connect = 3,
+        Disconnect = 4,
+        DurationInSeconds = 5,
+        CustomerID = 6,
+        OurZoneID = 7,
+        OriginatingZoneID = 8,
+        SupplierID = 9,
+        SupplierZoneID = 10,
+        CDPN = 11//,
+        //CeiledDuration = 12,
+        //ReleaseSourceAParty = 13
+    }
 
 }

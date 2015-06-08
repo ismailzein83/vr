@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public class CDR
+    public class BillingCDR
     {
         public long ID { get; set; }
         public DateTime Attempt { get; set; }

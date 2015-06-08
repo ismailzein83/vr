@@ -13,5 +13,6 @@ namespace TOne.Analytics.Entities
         public List<string> CustomerIds { get; set; }
 
         public List<string> SupplierIds { get; set; }
+        public List<string> ZoneIds { get; set; }
     }
 }
