@@ -13,7 +13,7 @@ namespace TOne.LCRProcess.Activities
 
     public class BuildZoneMatchInput
     {
-        public BaseQueue<SingleSaleCodeMatch> CodeMatches { get; set; }
+        public BaseQueue<ZoneMatchWithCodeGroup> CodeMatches { get; set; }
 
         public int RoutingDatabaseId { get; set; }
     }
@@ -21,7 +21,7 @@ namespace TOne.LCRProcess.Activities
     public sealed class BuildZoneMatch : DependentAsyncActivity<BuildZoneMatchInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<SingleSaleCodeMatch>> CodeMatches { get; set; }
+        public InArgument<BaseQueue<ZoneMatchWithCodeGroup>> CodeMatches { get; set; }
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
@@ -41,32 +41,22 @@ namespace TOne.LCRProcess.Activities
                         {
                             SupplierZones supplierZones;
                             if (!zoneMatches.TryGetValue(preparedCodeMatches.SaleZoneId, out supplierZones))
-                                zoneMatches.Add(preparedCodeMatches.SaleZoneId, GetSupplierZones(preparedCodeMatches));
-                            else
                             {
-                                supplierZones = zoneMatches[preparedCodeMatches.SaleZoneId];
-                                foreach (CodeMatch supplierCodeMatch in preparedCodeMatches.SupplierCodeMatches)
-                                {
-                                    SupplierZoneInfo supplierZoneInfo;
-                                    if (!supplierZones.TryGetValue(supplierCodeMatch.SupplierZoneId, out supplierZoneInfo))
-                                        supplierZones.Add(supplierCodeMatch.SupplierZoneId, new SupplierZoneInfo() { IsCodeGroup = preparedCodeMatches.IsMatchingCodeGroup, SupplierId = supplierCodeMatch.SupplierId });
-                                }
+                                supplierZones = new SupplierZones();
+                                zoneMatches.Add(preparedCodeMatches.SaleZoneId, supplierZones);
+                            }
+
+                            supplierZones = zoneMatches[preparedCodeMatches.SaleZoneId];
+                            foreach (CodeMatch supplierCodeMatch in preparedCodeMatches.SupplierCodeMatches)
+                            {
+                                if (!supplierZones.ContainsKey(supplierCodeMatch.SupplierZoneId))
+                                    supplierZones.Add(supplierCodeMatch.SupplierZoneId, new SupplierZoneInfo() { IsCodeGroup = preparedCodeMatches.IsMatchingCodeGroup, SupplierId = supplierCodeMatch.SupplierId });
                             }
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
             dataManager.ApplyZoneMatchesToTempTable(zoneMatches);
-        }
-
-        private SupplierZones GetSupplierZones(SingleSaleCodeMatch saleCodeMatch)
-        {
-            SupplierZones supplierZones = new SupplierZones();
-            foreach (CodeMatch codeMatch in saleCodeMatch.SupplierCodeMatches)
-                supplierZones.Add(codeMatch.SupplierZoneId, new SupplierZoneInfo() { IsCodeGroup = saleCodeMatch.IsMatchingCodeGroup, SupplierId = codeMatch.SupplierId });
-
-
-            return supplierZones;
         }
 
         protected override BuildZoneMatchInput GetInputArgument2(AsyncCodeActivityContext context)

@@ -35,13 +35,11 @@ namespace TOne.LCRProcess.Activities
 
         public bool IsLcrOnly { get; set; }
 
-        public BaseQueue<SingleSaleCodeMatch> OutputQueueForZoneMatch { get; set; }
+        public BaseQueue<ZoneMatchWithCodeGroup> OutputQueueForZoneMatch { get; set; }
     }
 
     public class BuildCodeMatchByCodeGroup : BaseAsyncActivity<BuildCodeMatchByCodeGroupInput>
     {
-
-
         [RequiredArgument]
         public InArgument<DateTime> EffectiveTime { get; set; }
 
@@ -69,7 +67,7 @@ namespace TOne.LCRProcess.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<SingleDestinationCodeMatches>> OutputQueueForRouting { get; set; }
         [RequiredArgument]
-        public InOutArgument<BaseQueue<SingleSaleCodeMatch>> OutputQueueForZoneMatch { get; set; }
+        public InOutArgument<BaseQueue<ZoneMatchWithCodeGroup>> OutputQueueForZoneMatch { get; set; }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
@@ -163,7 +161,6 @@ namespace TOne.LCRProcess.Activities
                                     }
                                 }
                             }
-
                             codeMatches.Add(codeMatch);
                         }
                         index++;
@@ -173,28 +170,27 @@ namespace TOne.LCRProcess.Activities
                 if (codeMatches.Count > 0)
                 {
                     CodeGroupInfo codeGroup;
-                    SingleSaleCodeMatch saleCodeMatch = new SingleSaleCodeMatch();
+                    ZoneMatchWithCodeGroup saleCodeMatch = new ZoneMatchWithCodeGroup();
                     if (singleDestinationCodeMatches.SysCodeMatch != null)
+                    {
                         if (inputArgument.CodeGroups.TryGetValue(singleDestinationCodeMatches.SysCodeMatch.Code, out codeGroup))
                         {
                             List<CodeMatch> exactCodeMatches = GetExactCodeMatches(codeMatches, inputArgument.CodeGroups);
                             saleCodeMatch.SaleZoneId = singleDestinationCodeMatches.SysCodeMatch.SupplierZoneId;
                             saleCodeMatch.IsMatchingCodeGroup = true;
                             saleCodeMatch.SupplierCodeMatches = exactCodeMatches;
-                            inputArgument.OutputQueueForZoneMatch.Enqueue(saleCodeMatch);
                         }
                         else
                         {
                             saleCodeMatch.SaleZoneId = singleDestinationCodeMatches.SysCodeMatch.SupplierZoneId;
                             saleCodeMatch.IsMatchingCodeGroup = false;
-                            saleCodeMatch.SupplierCodeMatches = codeMatches.Where(c => String.Compare(c.SupplierId, "SYS", true) == -1).ToList();
-                            inputArgument.OutputQueueForZoneMatch.Enqueue(saleCodeMatch);
+                            saleCodeMatch.SupplierCodeMatches = CloneHelper.Clone<List<CodeMatch>>(singleDestinationCodeMatches.OrderedCodeMatches);
                         }
-
-                    if (!inputArgument.IsLcrOnly && singleDestinationCodeMatches.SysCodeMatch != null)
-                        inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
-                    if (singleDestinationCodeMatches.SysCodeMatch != null)
+                        inputArgument.OutputQueueForZoneMatch.Enqueue(saleCodeMatch);
                         inputArgument.OutputQueue.Enqueue(codeMatches);
+                        if (!inputArgument.IsLcrOnly)
+                            inputArgument.OutputQueueForRouting.Enqueue(singleDestinationCodeMatches);
+                    }
                 }
             }
         }
@@ -211,6 +207,5 @@ namespace TOne.LCRProcess.Activities
             }
             return codeMatches;
         }
-
     }
 }

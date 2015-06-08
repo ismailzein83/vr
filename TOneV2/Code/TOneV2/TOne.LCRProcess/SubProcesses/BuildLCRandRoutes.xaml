@@ -98,9 +98,9 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="scg:Dictionary(x:String, tbe:CodeGroupInfo)" Name="codeGroups" />
-      <Variable x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)" Name="queueSingleCodeMatches">
+      <Variable x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)" Name="queueSingleCodeMatches">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)">new MemoryQueue&lt;SingleSaleCodeMatch&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)">new MemoryQueue&lt;ZoneMatchWithCodeGroup&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
     </Sequence.Variables>
@@ -230,8 +230,8 @@
           </InOutArgument>
         </tla:BuildCodeMatchByCodeGroup.OutputQueueForRouting>
         <tla:BuildCodeMatchByCodeGroup.OutputQueueForZoneMatch>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)">queueSingleCodeMatches</mca:CSharpReference>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)">queueSingleCodeMatches</mca:CSharpReference>
           </InOutArgument>
         </tla:BuildCodeMatchByCodeGroup.OutputQueueForZoneMatch>
         <tla:BuildCodeMatchByCodeGroup.Status>
@@ -252,8 +252,8 @@
       </tla:BuildCodeMatchByCodeGroup>
       <tla:BuildZoneMatch Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildZoneMatch_1">
         <tla:BuildZoneMatch.CodeMatches>
-          <InArgument x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:SingleSaleCodeMatch)">queueSingleCodeMatches</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tle:ZoneMatchWithCodeGroup)">queueSingleCodeMatches</mca:CSharpValue>
           </InArgument>
         </tla:BuildZoneMatch.CodeMatches>
         <tla:BuildZoneMatch.PreviousActivityStatus>

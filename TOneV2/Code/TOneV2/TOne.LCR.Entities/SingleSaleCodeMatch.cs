@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-  public  class SingleSaleCodeMatch
-
+    public class ZoneMatchWithCodeGroup
     {
         public int SaleZoneId { get; set; }
         public bool IsMatchingCodeGroup { get; set; }
