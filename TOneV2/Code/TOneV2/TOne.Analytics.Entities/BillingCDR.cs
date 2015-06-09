@@ -10,7 +10,9 @@ namespace TOne.Analytics.Entities
     {
         
         public long ID { get; set; }
+        public String SwitchName { get; set; }
         public String CustomerInfo { get; set; }
+        public String OurZoneName { get; set; }
         public DateTime Attempt { get; set; }
         public DateTime Alert { get; set; }
         public DateTime Connect { get; set; }

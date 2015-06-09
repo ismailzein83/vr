@@ -11,16 +11,16 @@
     //NumberOfCalls: { value: 9, propertyName: "NumberOfCalls", description: "Nb of Calls", isSum: true },
     //DeliveredNumberOfCalls: { value: 10, propertyName: "DeliveredNumberOfCalls", description: "Delivered Nb of Calls", isSum: true },
     //PGAD: { value: 11, propertyName: "PGAD", description: "PGAD" }
-    ID: { value: 0, propertyName: "ID", description: "ID" },
-    Attempt: { value: 1, propertyName: "Attempt", description: "Attempt" },
-    Alert: { value: 2, propertyName: "Alert", description: "Alert" },
-    Connect: { value: 3, propertyName: "Connect", description: "Connect" },
+    SwitchName: { value: 0, propertyName: "SwitchName", description: "SwitchName" },
+    OurZoneName: { value: 8, propertyName: "OurZoneName", description: "OurZoneName" },
+    CustomerInfo: { value: 1, propertyName: "CustomerInfo", description: "CustomerInfo" },
+    Attempt: { value: 2, propertyName: "Attempt", description: "Attempt" },
+    Alert: { value: 3, propertyName: "Alert", description: "Alert" },
+    Connect: { value: 4, propertyName: "Connect", description: "Connect" },
     Disconnect: { value: 5, propertyName: "Disconnect", description: "Disconnect" },
-    DurationInSeconds: { value: 4, propertyName: "DurationInSeconds", description: "DurationInSeconds" },
-    CustomerID: { value: 6, propertyName: "CustomerID", description: "CustomerID" },
-    OurZoneID: { value: 7, propertyName: "OurZoneID", description: "OurZoneID" },
-    OriginatingZoneID: { value: 8, propertyName: "OriginatingZoneID", description: "OriginatingZoneID" },
-    SupplierID: { value: 9, propertyName: "SupplierID", description: "SupplierID" },
-    SupplierZoneID: { value: 10, propertyName: "SupplierZoneID", description: "SupplierZoneID" },
-    CDPN: { value: 11, propertyName: "CDPN", description: "CDPN" }
+    DurationInSeconds: { value: 6, propertyName: "DurationInSeconds", description: "DurationInSeconds" },
+    OriginatingZoneID: { value: 9, propertyName: "OriginatingZoneID", description: "OriginatingZoneID" },
+    SupplierID: { value:10, propertyName: "SupplierID", description: "SupplierID" },
+    SupplierZoneID: { value: 11, propertyName: "SupplierZoneID", description: "SupplierZoneID" },
+    CDPN: { value: 12, propertyName: "CDPN", description: "CDPN" }
 });

@@ -1,20 +1,20 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum','TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, $q, BusinessEntityAPIService,BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, $q, BusinessEntityAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
     $scope.name = "test";
     $scope.isInitializing = false;
 
     var mainGridAPI;
     $scope.data = [];
-    $scope.CDROption = ['All', 'Successful', 'Failed']
-    $scope.selectedCDROption = 'All'
+    $scope.CDROption = [];
     $scope.durationIn = ['Min', 'Sec']
     $scope.selectedDurationIn = 'Min'
     $scope.fromDate = '2015/06/02';
     $scope.toDate = '2015/06/06';
-    $scope.nRecords = '5'
+    $scope.nRecords = '100'
     var measures = [];
+    var CDROption = [];
     var sortColumn = BillingCDRMeasureEnum.Attempt;
     var sortDescending = true;
     var currentSortedColDef;
@@ -23,6 +23,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     load();
     defineScopeMethods();
     function defineScope() {
+        $scope.showResult = false;
         $scope.switches = [];
         $scope.selectedSwitches = [];
 
@@ -35,7 +36,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
 
         $scope.gridAllMeasuresScope = {};
         $scope.measures = measures;
-
+        $scope.CDROption = CDROption;
 
         $scope.optionsZonesFilter = {
             selectedvalues: [],
@@ -76,6 +77,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         }
     }
     function load() {
+        loadCDROption();
         loadMeasures();
         overallSelectedMeasure = BillingCDRMeasureEnum.Attempt;
         $scope.isInitializing = true;
@@ -125,6 +127,12 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             measures.push(BillingCDRMeasureEnum[prop]);
         }
     }
+    function loadCDROption() {
+        for (var prop in BillingCDROptionMeasureEnum) {
+            CDROption.push(BillingCDROptionMeasureEnum[prop]);
+        }
+        $scope.selectedCDROption = CDROption[2];
+    }
     //function loadZones() {
     //    return BusinessEntityAPIService.GetZones("1","MTN").then(function (response) {
     //        angular.forEach(response, function (itm) {
@@ -146,10 +154,12 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             FromRow: pageInfo.fromRow,
             ToRow: pageInfo.toRow,
             Size: $scope.nRecords,
-            CDROption: $scope.selectedCDROption,
+            CDROption: $scope.selectedCDROption.value,
             OrderBy: sortColumn.value,
             IsDescending: true
         }
+        $scope.showResult = true;
+        $scope.isGettingData = true;
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             //  alert(response);
             if (currentSortedColDef != undefined)
@@ -164,6 +174,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
                 $scope.data.push(itm);
             });
 
+        }).finally(function () {
+            $scope.isGettingData = false;
         });
     }
    

@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Analytics\Constants\BillingCDRMeasureEnum.js" />
+    <Content Include="Analytics\Constants\BillingCDROptionMeasureEnum.js" />
     <Content Include="Analytics\Constants\TimePeriodEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />

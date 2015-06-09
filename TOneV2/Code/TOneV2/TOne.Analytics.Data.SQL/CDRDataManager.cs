@@ -14,12 +14,7 @@ namespace TOne.Analytics.Data.SQL
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
         public CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, string CDROption,BillingCDRMeasures orderBy, bool isDescending)
-        {
-            StringBuilder whereBuilder = new StringBuilder();
-
-            
-            //string query="";
-           
+        {   
             TempTableName tempTableName = null;
             if (tempTableKey != null)
                 tempTableName = GetTempTableName(tempTableKey);
@@ -42,11 +37,11 @@ namespace TOne.Analytics.Data.SQL
         private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, string CDROption)
         {
             string queryData = "";
-            if (CDROption == "Successful")
+            if (CDROption .Equals( "Successful"))
             {
                 queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR");
             }
-            else if (CDROption == "Failed")
+            else if (CDROption .Equals( "Failed"))
             {
                 queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid");
             }
@@ -59,19 +54,25 @@ namespace TOne.Analytics.Data.SQL
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
 
-                            WITH
+                             WITH SwitchName AS (SELECT s.SwitchID, s.Name FROM Switch s WITH (NOLOCK)),
+                       
+                        OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+                        CarrierInfo AS
+                            (
+                                Select P.Name + ' (' + A.NameSuffix + ')' AS Name, A.CarrierAccountID AS CarrierAccountID from CarrierAccount A LEFT JOIN CarrierProfile P on P.ProfileID=A.ProfileID
+                            ),
                             
 		                        AllResult AS
 		                        (
-			                        SELECT Top (@nRecords) * FROM (#0#)as newtable where Attempt between @FromDate AND @ToDate #FILTER#
+			                        SELECT Top (@nRecords) newtable.*,SwitchName.Name As switchName,OurZones.Name As OurZoneName,CarrierInfo.Name AS CustomerInfo  FROM (#Query#)as newtable LEFT JOIN SwitchName ON newtable.SwitchID=SwitchName.SwitchID LEFT JOIN OurZones ON newtable.OurZoneID=OurZones.ZoneID LEFT JOIN CarrierInfo ON newtable.CustomerID=CarrierInfo.CarrierAccountID where Attempt between @FromDate AND @ToDate #FILTER#
 		                        )
 		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
-            queryBuilder.Replace("#0#", queryData);
+            queryBuilder.Replace("#Query#", queryData);
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
-
+            //queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", from));
@@ -99,6 +100,7 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
         }
+
         private string GetColumnName(BillingCDRMeasures column)
         {
             switch (column)
@@ -169,7 +171,11 @@ namespace TOne.Analytics.Data.SQL
 
         void FillCDRDataFromReader(BillingCDR cdr, IDataReader reader)
         {
-                cdr.ID = GetReaderValue<Int64>(reader, "ID");
+
+
+                cdr.SwitchName = reader["switchName"] as string;
+                cdr.CustomerInfo = reader["CustomerInfo"] as string;
+                cdr.OurZoneName = reader["OurZoneName"] as string;
                 cdr.Attempt = GetReaderValue<DateTime>(reader,"Attempt");
                 cdr.Alert = GetReaderValue<DateTime>(reader, "Alert");
                 cdr.Connect = GetReaderValue<DateTime>(reader, "Connect");
