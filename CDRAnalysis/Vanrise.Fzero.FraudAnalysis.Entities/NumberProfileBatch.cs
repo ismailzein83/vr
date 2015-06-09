@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         static NumberProfileBatch()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfileBatch), "numberProfiles");
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfile),"AggregateValues",  "SubscriberNumber", "FromDate", "ToDate",  "IsOnNet",  "Period");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(NumberProfile),"AggregateValues",  "SubscriberNumber", "FromDate", "ToDate",  "IsOnNet",  "PeriodId");
         }
 
         public override string GenerateDescription()
