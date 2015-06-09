@@ -79,7 +79,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Description: $scope.description,
             IsDefault: $scope.isDefault,
             StrategyFilters:[]
-            //StrategyFilters: $scope.strategyFilters
 
             //,StrategyLevels: [
             //                    { SuspectionLevelId: 2, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.0 }, { CriteriaId: 2, Percentage: 1.0 }, { CriteriaId: 3, Percentage: 1.0 }] },
@@ -91,7 +90,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-       // console.log(strategyObject.StrategyFilters);
 
         angular.forEach($scope.strategyFilters, function (filter) {
             var filterItem = {
@@ -152,10 +150,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 filterItem.isSelected = existingItem.IsSelected;
                 filterItem.threshold = existingItem.Threshold;
                 filterItem.minimumValue = existingItem.MinimumValue;
-             
+                console.log(existingItem.PeriodId);
                 
                 if (existingItem.PeriodId != undefined )
-                    filterItem.periodId = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
+                    filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
 
                
 
