@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html ng-app="mainModule">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/AngularExtensions")
+    @*@Styles.Render("~/Content/Semantic")*@
+    @Styles.Render("~/Content/Styles")
+
+</head>
+<body ng-controller="mainCtrl">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+        <div class="container">
+            <div class="navbar-header">
+
+
+            </div>
+            <div id="navbar">
+
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div id="wrapper">
+        <div ng-include="'/Client/Modules/Security/Views/Login.html'"></div>
+    </div>
+
+</body>
+@Scripts.Render("~/bundles/helpers")
+@Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/AngularExtensions")
+
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/highchart")
+@*@Scripts.Render("~/bundles/Semantic")*@
+@Scripts.Render("~/bundles/Javascripts")
+@Scripts.Render("~/bundles/ModulesJavascripts")
+@Scripts.Render("~/bundles/waves")
+
+
+</html>
