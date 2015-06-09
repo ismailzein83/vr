@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBusinessEntityDataManager.cs" />
+    <Compile Include="IBusinessEntityModuleDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IModuleDataManager.cs" />
+    <Compile Include="IPermissionDataManager.cs" />
     <Compile Include="IRoleDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />

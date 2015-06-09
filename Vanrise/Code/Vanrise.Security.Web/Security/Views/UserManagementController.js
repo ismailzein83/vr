@@ -57,6 +57,10 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
         {
             name: "Reset Password",
             clicked: resetPassword
+        },
+        {
+            name: "Assign Permissions",
+            clicked: assignPermissions
         }
         ];
     }
@@ -105,6 +109,21 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/ResetPasswordEditor.html', parameters, modalSettings);
-    }    
+    }
+
+    function assignPermissions(userObj) {
+        var modalSettings = {
+        };
+        var parameters = {
+            holderType: 0,
+            holderId: userObj.UserId,
+            notificationResponseText: "User Permissions"
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Assign Permissions to User: " + userObj.Name;
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
+    }
 }
 appControllers.controller('Security_UserManagementController', UserManagementController);

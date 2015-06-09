@@ -114,8 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
+    <Content Include="Security\Services\APIServices\PermissionApiService.js" />
     <Content Include="Security\Services\APIServices\RoleAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Security\Views\PermissionEditor.html" />
+    <Content Include="Security\Views\PermissionEditorController.js" />
     <Content Include="Security\Views\ResetPasswordEditor.html" />
     <Content Include="Security\Views\ResetPasswordEditorController.js" />
     <Content Include="Security\Views\RoleEditor.html" />
@@ -129,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

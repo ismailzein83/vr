@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntityManager.cs" />
+    <Compile Include="BusinessEntityModuleDataManager.cs" />
     <Compile Include="ModuleDataManager.cs" />
+    <Compile Include="PermissionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleDataManager.cs" />
     <Compile Include="UserDataManager.cs" />

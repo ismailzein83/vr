@@ -36,7 +36,7 @@ app.directive('vrChoices', [function () {
             }
 
             function setDefaultChoiceSeletion() {
-                if (choiceCtrls.length == 0)
+                if (choiceCtrls.length == 0 || ctrl.selectedindex > -1)
                     return;
                 var isAnySelected = false;
                 angular.forEach(choiceCtrls, function (t) {

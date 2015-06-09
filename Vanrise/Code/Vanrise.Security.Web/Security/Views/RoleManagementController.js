@@ -51,7 +51,12 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
         $scope.gridMenuActions = [{
             name: "Edit",
             clicked: editRole
-        }];
+        },
+        {
+            name: "Assign Permissions",
+            clicked: assignPermissions
+        }
+        ];
     }
 
     function addRole() {
@@ -81,6 +86,21 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', parameters, modalSettings);
+    }
+
+    function assignPermissions(roleObj) {
+        var modalSettings = {
+        };
+        var parameters = {
+            holderType: 1,
+            holderId: roleObj.RoleId,
+            notificationResponseText: "Role Permissions"
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Assign Permissions to Role: " + roleObj.Name;
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/PermissionEditor.html', parameters, modalSettings);
     }
 }
 appControllers.controller('Security_RoleManagementController', RoleManagementController);
