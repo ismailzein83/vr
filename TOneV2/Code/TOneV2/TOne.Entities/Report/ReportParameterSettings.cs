@@ -22,6 +22,21 @@ namespace TOne.Entities
 
         public bool RequiresGroupByCustomer { get; set; }
 
+        public bool RequiresIsCost { get; set; }
+
+        public bool RequiresCurrencyId { get; set; }
+
+        public bool RequiresSupplierGroup { get; set; }
+
+        public bool RequiresCustomerGroup { get; set; }
+
+        public bool RequiresGroupBySupplier { get; set; }
+
+        public bool RequiresIsService { get; set; }
+
+        public bool RequiresIsCommission { get; set; }
+
+        public bool RequiresServicesForCustomer { get; set; }
 
     }
 }

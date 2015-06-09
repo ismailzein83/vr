@@ -53,6 +53,9 @@
     <Compile Include="BigResult.cs" />
     <Compile Include="Billing\ZoneProfitFormatted.cs" />
     <Compile Include="BillingCDR.cs" />
+    <Compile Include="Billing\ZoneSummary.cs" />
+    <Compile Include="Billing\ZoneSummaryDetailed.cs" />
+    <Compile Include="Billing\ZoneSummaryFormatted.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
     <Compile Include="KeyColumn.cs" />

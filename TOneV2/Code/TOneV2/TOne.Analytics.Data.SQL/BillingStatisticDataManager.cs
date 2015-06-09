@@ -14,7 +14,7 @@ namespace TOne.Analytics.Data.SQL
     {
         public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate ,string customerId ,string supplierId , bool groupByCustomer , int? supplierAMUId ,int? customerAMUId)
         {
-            return GetItemsSP("Analytics.sp_billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
+            return GetItemsSP("Analytics.SP_Billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
                 fromDate,
                 toDate,
                 (customerId == null || customerId == "") ? null : customerId,
@@ -22,6 +22,22 @@ namespace TOne.Analytics.Data.SQL
                 groupByCustomer,
                 (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
                 (customerAMUId== 0) ?  (object)DBNull.Value : customerAMUId );
+        }
+        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        {
+            return GetItemsSP("Analytics.SP_Billing_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               isCost,
+               currencyId,
+               (supplierGroup==null || supplierGroup=="")?null:supplierGroup,
+               (customerGroup == null || customerGroup == "") ? null : customerGroup,
+               (supplierAMUId == 0 || supplierAMUId==null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               groupBySupplier
+               );
         }
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {            
@@ -147,6 +163,26 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
+        private ZoneSummary ZoneSummaryMapper(IDataReader reader, bool groupBySupplier)
+        {
+            ZoneSummary instance = new ZoneSummary
+            {
+                Zone = reader["Zone"] as string,
+                Calls = GetReaderValue<int>(reader, "Calls"),
+                Rate = GetReaderValue<double>(reader, "Rate"),
+                DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                RateType = GetReaderValue<byte>(reader, "RateType"),
+                DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds"),
+                Net = GetReaderValue<double>(reader, "Net"),
+                CommissionValue = GetReaderValue<double>(reader, "CommissionValue"),
+                ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue")
+            };
+            if (groupBySupplier == true)
+            {
+                instance.SupplierID = reader["SupplierID"] as string;
+            }
+            return instance;
+        }
         private MonthTraffic MonthMapper(IDataReader reader)
         {
             MonthTraffic instance = new MonthTraffic

@@ -13,7 +13,11 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
         toDate: "",
         groupByCustomer: false,
         customer: null,
-        supplier:null
+        supplier: null,
+        isCost: false,
+        service: false,
+        commission: false,
+        bySupplier:false
     }
     function defineScope() {
        
@@ -24,6 +28,12 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
             paramsurl += "&fromDate=" + $scope.dateToString($scope.params.fromDate);
             paramsurl += "&toDate=" + $scope.dateToString($scope.params.toDate);
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
+            paramsurl += "&isCost=" + $scope.params.isCost;
+            paramsurl += "&service=" + $scope.params.service;
+            paramsurl += "&commission=" + $scope.params.commission;
+            paramsurl += "&bySupplier=" + $scope.params.bySupplier;
+
+
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
 

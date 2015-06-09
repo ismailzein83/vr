@@ -14,6 +14,8 @@ namespace TOne.Analytics.Business.BillingReports
         {
             BillingStatisticManager manager = new BillingStatisticManager();
             List<ZoneProfitFormatted> zoneProfit = manager.GetZoneProfit(parameters.FromTime, parameters.ToTime ,parameters.SupplierId, parameters.CustomerId ,parameters.GroupByCustomer ,parameters.SupplierAMUId ,parameters.CustomerAMUId );
+
+            List<ZoneSummaryFormatted> zs = manager.getZoneSummray(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, "USD", null, null, null, null, true);
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneProfit", zoneProfit);
             return dataSources;

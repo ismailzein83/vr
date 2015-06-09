@@ -77,4 +77,10 @@ namespace TOne.Analytics.Entities
         All = 2
     }
 
+    public enum RateType : byte
+    {
+        Normal = 0,
+        OffPeak = 1,
+        Weekend = 2
+    }
 }

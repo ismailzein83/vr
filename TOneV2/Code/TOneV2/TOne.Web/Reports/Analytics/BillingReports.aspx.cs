@@ -22,9 +22,17 @@ namespace TOne.Web.Reports.Analytics
                 int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                bool groupByCustomer = (Request.QueryString["groupByCustomer"] == "true");
+              
                 string customer = Request.QueryString["customer"];
                 string supplier = Request.QueryString["supplier"];
+
+                bool groupByCustomer = (Request.QueryString["groupByCustomer"] != null) ? (Request.QueryString["groupByCustomer"] == "true") : false;
+                bool isCost = (Request.QueryString["isCost"] != null) ? (Request.QueryString["isCost"] == "true") : false;
+                bool service = (Request.QueryString["service"] != null) ? (Request.QueryString["service"] == "true") : false;
+                bool commission = (Request.QueryString["commission"] != null) ? (Request.QueryString["commission"] == "true") : false;
+                bool bySupplier = (Request.QueryString["bySupplier"] != null) ? (Request.QueryString["bySupplier"] == "true") : false;
+
+                //bool ServicesForCustomer
 
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
@@ -40,6 +48,11 @@ namespace TOne.Web.Reports.Analytics
                 parameters.GroupByCustomer = groupByCustomer;
                 parameters.CustomerId = customer;
                 parameters.SupplierId = supplier;
+                parameters.IsCost = isCost;
+                parameters.IsService = service;
+                parameters.IsCommission = commission;
+                parameters.GroupBySupplier = bySupplier;
+                parameters.CurrencyId = "USD";
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 

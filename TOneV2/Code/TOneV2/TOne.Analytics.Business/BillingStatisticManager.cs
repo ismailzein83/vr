@@ -13,6 +13,7 @@ namespace TOne.Analytics.Business
     {
         private readonly IBillingStatisticDataManager _datamanager;
 
+
         public BillingStatisticManager()
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
@@ -28,6 +29,10 @@ namespace TOne.Analytics.Business
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId , supplierId ,  groupByCustomer ,  supplierAMUId , customerAMUId));
         }
 
+        public List<ZoneSummaryFormatted> getZoneSummray(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        {
+            return FormatZoneSummaries(_datamanager.GetZoneSummary( fromDate,  toDate,  customerId, supplierId,  isCost, currencyId,  supplierGroup,  customerGroup,  customerAMUId,  supplierAMUId,  groupBySupplier));
+        }
         public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
 
@@ -39,15 +44,27 @@ namespace TOne.Analytics.Business
             return _datamanager.GetCarrierProfile(fromDate, toDate, carrierAccountID, TopDestinations, isSale, IsAmount);
         }
 
+        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        {
 
+            return _datamanager.GetBillingStatistics(fromDate,toDate);
+        }
+
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        {
+            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+        }
+
+        #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
+            BusinessEntityInfoManager bsm = new BusinessEntityInfoManager();
             return new ZoneProfitFormatted
             {
                 CostZone = zoneProfit.CostZone,
                 SaleZone = zoneProfit.SaleZone,
-                SupplierID = zoneProfit.SupplierID,
-                CustomerID = zoneProfit.CustomerID,
+                SupplierID = bsm.GetCarrirAccountName(zoneProfit.SupplierID),
+                CustomerID =  bsm.GetCarrirAccountName(zoneProfit.CustomerID),
                 Calls = zoneProfit.Calls,
 
                 DurationNet = zoneProfit.DurationNet,
@@ -73,7 +90,43 @@ namespace TOne.Analytics.Business
             };
         }
 
+        private ZoneSummaryFormatted FormatZoneSummary(ZoneSummary zoneSummary)
+        {
+            BusinessEntityInfoManager bsm = new BusinessEntityInfoManager();
+            return new ZoneSummaryFormatted
+            {
+                Zone = zoneSummary.Zone,
+                SupplierID = (zoneSummary.SupplierID!=null)?bsm.GetCarrirAccountName(zoneSummary.SupplierID):null,
+
+                Calls = zoneSummary.Calls,
+
+                Rate = zoneSummary.Rate,
+                RateFormatted = FormatNumber(zoneSummary.Rate,5),
+
+                DurationNet = zoneSummary.DurationNet,
+                DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
+
+                RateType = zoneSummary.RateType,
+                RateTypeFormatted = ((RateType)zoneSummary.RateType).ToString(),
+
+                DurationInSeconds = zoneSummary.DurationInSeconds,
+                DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
+
+                Net =zoneSummary.Net,
+                NetFormatted = FormatNumber(zoneSummary.Net,5),
+
+                CommissionValue =zoneSummary.CommissionValue,
+                CommissionValueFormatted= FormatNumber(zoneSummary.CommissionValue),
+
+                ExtraChargeValue = zoneSummary.ExtraChargeValue 
+            };
+        }
+
         private string FormatNumber(Decimal? number, int precision)
+        {
+            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+        }
+        private string FormatNumber(Double? number, int precision)
         {
             return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
         }
@@ -83,6 +136,10 @@ namespace TOne.Analytics.Business
             return String.Format("{0:#0.00}", number);
         }
 
+        private string FormatNumber(Double? number)
+        {
+            return String.Format("{0:#0.00}", number);
+        }
         private List<ZoneProfitFormatted> FormatZoneProfits(List<ZoneProfit> zoneProfits)
         {
             List<ZoneProfitFormatted> models = new List<ZoneProfitFormatted>();
@@ -94,16 +151,17 @@ namespace TOne.Analytics.Business
             return models;
         }
 
-        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        private List<ZoneSummaryFormatted> FormatZoneSummaries(List<ZoneSummary> zoneSummaries)
         {
-
-            return _datamanager.GetBillingStatistics(fromDate,toDate);
+            List<ZoneSummaryFormatted> models = new List<ZoneSummaryFormatted>();
+            if (zoneSummaries != null)
+                foreach (var z in zoneSummaries)
+                {
+                    models.Add(FormatZoneSummary(z));
+                }
+            return models;
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
-        {
-            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
-        }
-
+        #endregion 
     }
 }
