@@ -160,7 +160,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
-                if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID))
+                if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID)>-1)
                     $scope.selectedCustomers.push(itm);
             });
         });
@@ -169,7 +169,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
-                if(receivedSupplierIds !=undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID))
+                if(receivedSupplierIds !=undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID)>-1)
                     $scope.selectedSuppliers.push(itm);
             });
         });
