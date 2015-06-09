@@ -44,7 +44,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     return null;
             }
             $scope.testModel = 'ZoneMonitorController';
-            
+
             defineGroupKeys();
             $scope.selectedGroupKeys = [];
             $scope.selectedGroupKeys.push($scope.groupKeys[0]);
@@ -74,7 +74,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     return getData();
                 }
             };
-
+            $scope.filter = {
+                resultKey: resultKey,
+                filter: {},
+                groupKeys: [],
+                fromDate: $scope.fromDate,
+                toDate: $scope.toDate,
+                sortDescending: sortDescending
+            };
             defineMenuActions();
             $scope.chartSelectedMeasureReady = function (api) {
                 chartSelectedMeasureAPI = api;
@@ -94,10 +101,25 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             };
 
             $scope.getData = function () {
+
                 $scope.mainGridPagerSettings.currentPage = 1;
                 resultKey = null;
                 mainGridAPI.resetSorting();
                 resetSorting();
+                var filter = buildFilter();
+                var groupKeys = [];
+
+                angular.forEach($scope.selectedGroupKeys, function (group) {
+                    groupKeys.push(group.groupKeyEnumValue);
+                });
+                $scope.filter = {
+                    resultKey: resultKey,
+                    filter: filter,
+                    groupKeys: groupKeys,
+                    fromDate: $scope.fromDate,
+                    toDate: $scope.toDate,
+                    sortDescending: sortDescending
+                };
                 return getData(true);
             };
 
@@ -181,7 +203,26 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                    gridHeader: "Supplier"
                }];
         }
+        function getObjectHeader(parameters, dataItem) {
+            for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
+                var groupKey = $scope.currentSearchCriteria.groupKeys[i];
+                switch (groupKey.groupKeyEnumValue) {
+                    case TrafficStatisticGroupKeysEnum.OurZone.value:
+                        parameters.zoneIds = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.zoneIds);
+                        break;
+                    case TrafficStatisticGroupKeysEnum.CustomerId.value:
+                        parameters.customerIds = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.customerIds);
+                        break;
+                    case TrafficStatisticGroupKeysEnum.SupplierId.value:
+                        parameters.supplierIds = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.supplierIds);
+                        break;
+                }
+            }
 
+        }
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "CDRs",
@@ -191,7 +232,17 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                         width: "80%",
                         maxHeight: "800px"
                     };
-                    VRModalService.showModal('/Client/Modules/Analytics/Views/Traffic Statistics/ZoneMonitor.html', null, modalSettings);
+                    var parameters = {
+                        fromDate: $scope.fromDate,
+                        toDate: $scope.toDate
+                        
+                        ///[dataItem.GroupKeyValues[0].Id]
+                    };
+                    getObjectHeader(parameters, dataItem);
+                    
+                        
+                    
+                    VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
                 }
             },
             {
@@ -256,24 +307,21 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 chartSelectedEntityAPI.hideChart();
 
             var count = $scope.mainGridPagerSettings.itemsPerPage;
-            var groupKeys = [];
-            
-            angular.forEach($scope.selectedGroupKeys, function (group) {
-                groupKeys.push(group.groupKeyEnumValue);
-            });
+          
             var pageInfo = $scope.mainGridPagerSettings.getPageInfo();            
-            var filter = buildFilter();
+            
+           
             var getTrafficStatisticSummaryInput = {
-                TempTableKey: resultKey,
-                Filter: filter,
+                TempTableKey: $scope.filter.resultKey,
+                Filter: $scope.filter.filter,
                 WithSummary: withSummary,
-                GroupKeys: groupKeys,
-                From: $scope.fromDate,
-                To: $scope.toDate,
+                GroupKeys: $scope.filter.groupKeys,
+                From: $scope.filter.fromDate,
+                To: $scope.filter.toDate,
                 FromRow: pageInfo.fromRow,
                 ToRow: pageInfo.toRow,
                 OrderBy: sortColumn.value,
-                IsDescending: sortDescending
+                IsDescending: $scope.filter.sortDescending
             };
             var isSucceeded;
             $scope.showResult = true;
