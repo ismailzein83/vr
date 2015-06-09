@@ -103,7 +103,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateCountofDailyActiveHours(NumberProfile numberProfile)
         {
-            if (numberProfile.Period == Enums.Period.Day)
+            if (numberProfile.PeriodId == (int)Enums.Period.Day)
             {
                 return numberProfile.AggregateValues["CountActiveHours"];
             }
@@ -112,7 +112,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateDistinctDestinationofNightCalls(NumberProfile numberProfile)
         {
-            if (numberProfile.Period == Enums.Period.Day)
+            if (numberProfile.PeriodId == (int)Enums.Period.Day)
             {
                 return numberProfile.AggregateValues["DiffOutputNumbNightCalls"]; 
             }
@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         static decimal CalculateCountofOutgoingDuringPeakHours(NumberProfile numberProfile)
         {
-            if (numberProfile.Period == Enums.Period.Day)
+            if (numberProfile.PeriodId == (int)Enums.Period.Day)
             {
                 return numberProfile.AggregateValues["CountOutCallsPeakHours"]; 
             }

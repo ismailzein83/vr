@@ -98,7 +98,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
                                     Math.Round(numberProfile.AggregateValues["TotalBTS"],2).ToString()	,	
                                     numberProfile.IsOnNet.ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["TotalDataVolume"],2).ToString()	,
-                                    ((int)numberProfile.Period).ToString()		,
+                                    ((int)numberProfile.PeriodId).ToString()		,
                                     Math.Round(numberProfile.AggregateValues["CountInCalls"],2).ToString()	,
                                     Math.Round(numberProfile.AggregateValues["CallInDurs"],2).ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["CountOutOnNets"],2).ToString()	,	

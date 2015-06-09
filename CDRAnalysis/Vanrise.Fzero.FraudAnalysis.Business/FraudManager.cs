@@ -49,7 +49,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     levelCriteriasThresholdPercentage.CriteriaDefinitions = new CriteriaDefinition() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId, Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage=j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Threshold;
-                    levelCriteriasThresholdPercentage.Period = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Period;
+                    levelCriteriasThresholdPercentage.PeriodId = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().PeriodId;
                     
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
                 }
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-                    if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual   && LevelCriteriaThresholdPercentage.Period==profile.Period )
+                    if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual   && LevelCriteriaThresholdPercentage.PeriodId==profile.PeriodId )
                     {
                         if (criteriaValuesThreshold >= LevelCriteriaThresholdPercentage.Percentage)
                         {
@@ -109,7 +109,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                             break;
                         }
                     }
-                    else if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && LevelCriteriaThresholdPercentage.Period == profile.Period)
+                    else if (LevelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && LevelCriteriaThresholdPercentage.PeriodId == profile.PeriodId)
                     {
                         if (criteriaValuesThreshold <= LevelCriteriaThresholdPercentage.Percentage)
                         {
@@ -156,7 +156,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             public Decimal Threshold { get; set; }
 
             public Decimal Percentage { get; set; }
-            public Enums.Period? Period { get; set; }
+            public int? PeriodId { get; set; }
 
         }
 

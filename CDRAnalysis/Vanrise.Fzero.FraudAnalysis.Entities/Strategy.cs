@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public Decimal MinimumValue { get; set; }
    
-        public Enums.Period? Period { get; set; }
+        public int? PeriodId { get; set; }
         public bool IsSelected { get; set; }
 
     }

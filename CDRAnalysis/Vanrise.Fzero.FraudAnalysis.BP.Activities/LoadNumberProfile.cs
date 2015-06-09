@@ -71,7 +71,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
             List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions(predefinedDataManager.GetAllCallClasses());
-            Enums.Period period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), inputArgument.PeriodId);
 
             NumberProfile currentNumberProfile = null;
 
@@ -88,7 +87,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         SubscriberNumber = cdr.MSISDN,
                         FromDate = inputArgument.FromDate,
                         ToDate = inputArgument.ToDate,
-                        Period = period,
+                        PeriodId = inputArgument.PeriodId,
                         IsOnNet = 1
                     };
                     foreach (var aggregateDef in aggregateDefinitions)
