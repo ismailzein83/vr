@@ -74,6 +74,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Strategy";
             modalScope.onStrategyAdded = function (strategy) {
+                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
                 mainGridAPI.itemAdded(strategy);
             };
         };
@@ -92,6 +93,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Strategy";
             modalScope.onStrategyUpdated = function (strategy) {
+                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
                 mainGridAPI.itemUpdated(strategy);
             };
         };
