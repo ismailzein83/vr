@@ -24,17 +24,28 @@ app.service('UtilsService', ['$q', function ($q) {
         if (pendingOperations == 0)
             deferred.resolve();
         angular.forEach(operations, function (operation) {
-            operation().then(function () {
-                if (isRejected)
-                    return;
+            var promise = operation();//the operation is expected to return a promise
+
+            if(promise != undefined)
+            {
+                promise.then(function () {
+                    if (isRejected)
+                        return;
+                    pendingOperations--;
+
+                    if (pendingOperations == 0)
+                        deferred.resolve();
+                }).catch(function (error) {
+                    deferred.reject(error);
+                    isRejected = true;
+                });
+            }
+            else {
                 pendingOperations--;
 
                 if (pendingOperations == 0)
                     deferred.resolve();
-            }).catch(function (error) {
-                deferred.reject(error);
-                isRejected = true;
-            });
+            }                
         });
         return deferred.promise;
     }
