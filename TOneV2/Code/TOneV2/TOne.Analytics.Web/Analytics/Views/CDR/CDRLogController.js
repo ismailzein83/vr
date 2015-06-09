@@ -1,54 +1,73 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, $q, BusinessEntityAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,VRNavigationService, $q, BusinessEntityAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
     $scope.name = "test";
     $scope.isInitializing = false;
-
+    var receivedCustomerIds;
+    var receivedSupplierIds;
+    var receivedZoneIds;
+    var getDataAfterLoading;
     var mainGridAPI;
-    $scope.data = [];
-    $scope.CDROption = [];
-    $scope.durationIn = ['Min', 'Sec']
-    $scope.selectedDurationIn = 'Min'
+   
+    //$scope.CDROption = [];
     $scope.fromDate = '2015/06/02';
     $scope.toDate = '2015/06/06';
     $scope.nRecords = '100'
     var measures = [];
     var CDROption = [];
-    var sortColumn = BillingCDRMeasureEnum.Attempt;
     var sortDescending = true;
     var currentSortedColDef;
-    //$scope.selectedsize = '5';
+    $scope.ZoneIds = [];
+    
     defineScope();
+    loadParameters();
+    var sortColumn;
     load();
     defineScopeMethods();
+
+    function loadParameters() {
+        var parameters = VRNavigationService.getParameters($scope);
+        if (parameters != undefined && parameters != null) {
+            $scope.fromDate = parameters.fromDate;
+            $scope.toDate = parameters.toDate;
+            receivedCustomerIds = parameters.customerIds;
+            receivedZoneIds = parameters.zoneIds;
+            receivedSupplierIds = parameters.supplierIds;
+
+            getDataAfterLoading = true;
+
+            console.log($scope.zoneIDs);
+        }
+            
+
+        if ($scope.fromDate != undefined)
+            editMode = true;
+        else
+            editMode = false;
+    }
     function defineScope() {
+        
         $scope.showResult = false;
         $scope.switches = [];
         $scope.selectedSwitches = [];
-
+        $scope.data = [];
         $scope.customers = [];
         $scope.selectedCustomers = [];
         $scope.suppliers = [];
         $scope.selectedSuppliers = [];
         $scope.zones = [];
         $scope.selectedZones = [];
-
         $scope.gridAllMeasuresScope = {};
         $scope.measures = measures;
         $scope.CDROption = CDROption;
-
-        $scope.optionsZonesFilter = {
-            selectedvalues: [],
-            datasource: []
-        };
-        
-        $scope.mainGridPagerSettings = {
-            currentPage: 1,
-            totalDataCount: 0,
-            pageChanged: function () {
-                return GetCDRData();
-            }
+        $scope.selectedCDROption = BillingCDROptionMeasureEnum.All.value
+        $scope.filter = {
+            filter: {},
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate,
+            nRecords: $scope.nRecords,
+            selectedCDROption: $scope.selectedCDROption.value
         };
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -65,8 +84,23 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             resultKey = null;
             mainGridAPI.resetSorting();
             resetSorting();
+            var  filter= buildFilter();
+            $scope.filter = {
+                filter: filter,
+                fromDate: $scope.fromDate,
+                toDate: $scope.toDate,
+                nRecords: $scope.nRecords,
+                selectedCDROption: $scope.selectedCDROption.value
+            };
             //  return getData(true);
             return GetCDRData();
+        };
+        $scope.mainGridPagerSettings = {
+            currentPage: 1,
+            totalDataCount: 0,
+            pageChanged: function () {
+                return GetCDRData();
+            }
         };
         $scope.GetCDRData = GetCDRData;
 
@@ -81,7 +115,12 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         loadMeasures();
         overallSelectedMeasure = BillingCDRMeasureEnum.Attempt;
         $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers, loadSuppliers]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomers, loadSuppliers, loadZonesFromReceivedIds])
+            .then(function () {
+                if (getDataAfterLoading)
+                    $scope.getData();
+            })
+            .finally(function () {
             $scope.isInitializing = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error);
@@ -92,11 +131,22 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
         filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
         filter.SupplierIds = getFilterIds($scope.selectedSuppliers, "CarrierAccountID");
+        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId"); 
         return filter;
     }
     function resetSorting() {
         sortColumn = BillingCDRMeasureEnum.Attempt;
         sortDescending = true;
+    }
+
+    function loadZonesFromReceivedIds() {
+        if (receivedZoneIds != undefined && receivedZoneIds.length > 0) {
+            return ZonesService.getZoneList(receivedZoneIds).then(function (response) {
+                angular.forEach(response, function (itm) {
+                    $scope.selectedZones.push(itm);
+                });
+            });
+        }
     }
 
     function loadSwitches() {
@@ -110,6 +160,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
+                if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID))
+                    $scope.selectedCustomers.push(itm);
             });
         });
     }
@@ -117,6 +169,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
         return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
+                if(receivedSupplierIds !=undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID))
+                    $scope.selectedSuppliers.push(itm);
             });
         });
     }
@@ -141,22 +195,27 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
     //    });
     //}
     function GetCDRData() {
-        var filter = buildFilter();
+      
+        if (sortColumn == undefined)
+            return;
         //if (sortColumn == undefined)
         //    return;
+        
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
         var count = $scope.mainGridPagerSettings.itemsPerPage;
         var getCDRLogSummaryInput = {
+            //ZoneIDs: $scope.zoneIDs,
             TempTableKey: null,
-            Filter: filter,
-            From: $scope.fromDate,
-            To: $scope.toDate,
+            Filter: $scope.filter.filter,
+            From: $scope.filter.fromDate,
+            To: $scope.filter.toDate,
             FromRow: pageInfo.fromRow,
             ToRow: pageInfo.toRow,
-            Size: $scope.nRecords,
-            CDROption: $scope.selectedCDROption.value,
+            Size: $scope.filter.nRecords,
+            CDROption: $scope.filter.selectedCDROption,
             OrderBy: sortColumn.value,
             IsDescending: true
+            
         }
         $scope.showResult = true;
         $scope.isGettingData = true;
