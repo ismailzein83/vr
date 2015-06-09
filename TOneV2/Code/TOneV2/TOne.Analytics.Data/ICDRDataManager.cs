@@ -9,6 +9,6 @@ namespace TOne.Analytics.Data
 {
     public interface ICDRDataManager : IDataManager
     {
-        CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, string CDROption, BillingCDRMeasures orderBy, bool isDescending);
+        CDRBigResult GetCDRData( string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, string CDROption, BillingCDRMeasures orderBy, bool isDescending);
     }
 }

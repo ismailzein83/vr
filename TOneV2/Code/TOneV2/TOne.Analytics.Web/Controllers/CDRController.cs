@@ -25,7 +25,6 @@ namespace TOne.Analytics.Web.Controllers
     #region Argument Classes
     public class GetCDRSummaryInput
     {
-       
        public string TempTableKey { get; set; }
 
        public int FromRow { get; set; }

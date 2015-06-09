@@ -64,7 +64,7 @@ namespace TOne.Analytics.Data.SQL
                             
 		                        AllResult AS
 		                        (
-			                        SELECT Top (@nRecords) newtable.*,SwitchName.Name As switchName,OurZones.Name As OurZoneName,CarrierInfo.Name AS CustomerInfo  FROM (#Query#)as newtable LEFT JOIN SwitchName ON newtable.SwitchID=SwitchName.SwitchID LEFT JOIN OurZones ON newtable.OurZoneID=OurZones.ZoneID LEFT JOIN CarrierInfo ON newtable.CustomerID=CarrierInfo.CarrierAccountID where Attempt between @FromDate AND @ToDate #FILTER#
+			                        SELECT Top (@nRecords) newtable.*,SwitchName.Name As switchName,OurZones.Name As OurZoneName,CarrierInfo.Name AS CustomerInfo  FROM (#Query#)as newtable LEFT JOIN SwitchName ON newtable.SwitchID=SwitchName.SwitchID LEFT JOIN OurZones ON newtable.OurZoneID=OurZones.ZoneID LEFT JOIN CarrierInfo ON newtable.CustomerID=CarrierInfo.CarrierAccountID where (Attempt between @FromDate AND @ToDate) #FILTER#
 		                        )
 		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
