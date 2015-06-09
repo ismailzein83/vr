@@ -112,7 +112,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         
 
 
-        console.log(strategyObject);
         
         return strategyObject;
     }
@@ -125,7 +124,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 filterId: filterDef.filterId,
                 description: filterDef.description
             };
-            //console(filterItem);
             $scope.strategyFilters.push(filterItem);
         });
 
@@ -133,10 +131,11 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function fillScopeFromStrategyObj(strategyObject) {
-        $scope.name = strategyObject.name;
-        $scope.description = strategyObject.description;
-        $scope.isDefault = strategyObject.isDefault;
+        $scope.name = strategyObject.Name;
+        $scope.description = strategyObject.Description;
+        $scope.isDefault = strategyObject.IsDefault;
 
+        var i = 0;
         
         angular.forEach($scope.filterDefinitions, function (filterDef) {
 
@@ -144,15 +143,16 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 filterId: filterDef.filterId,
                 description: filterDef.description
             };
-           
-            var existingItem = UtilsService.getItemByVal(strategyObject.strategyFilters, filterDef.filterId, "filterId");
-            if (existingItem != undefined && existingItem != null) {
 
-                filterItem.isSelected = true;
-                filterItem.threshold = existingItem.threshold;
-                filterItem.minimumValue = existingItem.minimumValue;
-                if (existingItem.period != undefined)
-                    filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.period, "Id");
+           console.log(filterDef.filterId)
+            var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "FilterId");
+            if (existingItem != undefined && existingItem != null) {
+                filterItem.isSelected = existingItem.IsSelected;
+                filterItem.threshold = existingItem.Threshold;
+                filterItem.minimumValue = existingItem.MinimumValue;
+
+                if (existingItem.Period != undefined)
+                    filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.Period, "Id");
 
                
 
@@ -160,7 +160,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyFilters.push(filterItem);
         });
 
-        console.log(strategyObject);
 
     }
 
