@@ -233,8 +233,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                         maxHeight: "800px"
                     };
                     var parameters = {
-                        fromDate: $scope.fromDate,
-                        toDate: $scope.toDate
+                        fromDate: $scope.filter.fromDate,
+                        toDate: $scope.filter.toDate
                         
                         ///[dataItem.GroupKeyValues[0].Id]
                     };
@@ -346,9 +346,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     $scope.trafficStatisticSummary = response.Summary;
                     $scope.overallData[0] = response.Summary;
                 }
-                angular.forEach(response.Data, function (itm) {
-                    $scope.data.push(itm);
-                });
+                //angular.forEach(response.Data, function (itm) {
+                //    $scope.data.push(itm);
+                //});
+                mainGridAPI.addItemsToSource(response.Data);
 
                 renderOverallChart();
                 isSucceeded = true;
