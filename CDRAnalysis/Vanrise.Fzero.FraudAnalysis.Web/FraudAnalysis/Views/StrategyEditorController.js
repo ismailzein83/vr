@@ -78,6 +78,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
+
             StrategyFilters: []
             //,StrategyCriterias: [
             //                    { CriteriaId: 1, Threshold: 1 },
@@ -112,10 +113,10 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         angular.forEach($scope.strategyFilters, function (filter) {
             var filterItem = {
                 FilterId: filter.filterId,
-                Description: filter.description,
+                Description: filter.filterDescription,
                 Threshold: filter.threshold,
-                MinimumValue: filter.MinimumValue,
-                Period: filter.Period,
+                MinimumValue: filter.minimumValue,
+                Period: filter.period,
                 IsSelected: filter.isSelected
 
             
@@ -128,7 +129,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         
 
 
-        
+        console.log(StrategyObject);
         
         return StrategyObject;
     }
