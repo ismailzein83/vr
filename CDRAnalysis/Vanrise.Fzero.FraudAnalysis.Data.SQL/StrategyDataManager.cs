@@ -41,13 +41,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         //    });
 
 
-        //    strategy.StrategyCriterias = GetItemsText<StrategyCriteria>(query, (reader) =>
+        //    strategy.StrategyFilters = GetItemsText<StrategyFilter>(query, (reader) =>
         //    {
 
-        //        StrategyCriteria strategyCriteria = new StrategyCriteria();
-        //        strategyCriteria.Threshold = GetReaderValue<decimal>(reader, "MaxValue");
-        //        strategyCriteria.CriteriaId = GetReaderValue<int>(reader, "CriteriaID");
-        //        return strategyCriteria;
+        //        StrategyFilter strategyFilter = new StrategyFilter();
+        //        strategyFilter.Threshold = GetReaderValue<decimal>(reader, "MaxValue");
+        //        strategyFilter.FilterId = GetReaderValue<int>(reader, "CriteriaID");
+        //        return strategyFilter;
+        //    }, (cmd) =>
+        //    {
+
+        //        cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
+
+        //    });
+
+
+           
+
+
+        //    List<StrategyFilter> strategyFilters = GetItemsText<StrategyFilter>(query1, (reader) =>
+        //    {
+        //        StrategyFilter strategyFilter = new StrategyFilter();
+        //        strategyFilter.Period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), GetReaderValue<int>(reader, "PeriodId"));
+        //        strategyFilter.FilterId = GetReaderValue<int>(reader, "CriteriaID");
+        //        return strategyFilter;
         //    }, (cmd) =>
         //    {
 
@@ -57,19 +74,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-        //    strategy.StrategyPeriods = GetItemsText<StrategyPeriod>(query1, (reader) =>
+        //    foreach (var i in strategy.StrategyFilters)
         //    {
-        //        StrategyPeriod strategyPeriod = new StrategyPeriod();
-        //        strategyPeriod.Period = (Enums.Period)Enum.ToObject(typeof(Enums.Period), GetReaderValue<int>(reader, "PeriodId"));
-        //        strategyPeriod.Value = GetReaderValue<int>(reader, "Value");
-        //        strategyPeriod.CriteriaId = GetReaderValue<int>(reader, "CriteriaID");
-        //        return strategyPeriod;
-        //    }, (cmd) =>
-        //    {
-
-        //        cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StrategyId", Value = strategyId });
-
-        //    });
+        //        i.Period = strategyFilters.Where(x => x.FilterId == i.FilterId).First().Period;
+        //    }
 
 
 
@@ -89,7 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         //            string CrPer = "Cr" + i.ToString() + "Per";
         //            if (reader[CrId].ToString() != "0")
         //            {
-        //                slc.CriteriaId = i;
+        //                slc.FilterId = i;
         //                slc.Percentage = GetReaderValue<decimal>(reader, CrPer);
         //                Lstslc.Add(slc);
         //            }
