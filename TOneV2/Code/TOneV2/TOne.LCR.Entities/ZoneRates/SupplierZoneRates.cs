@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.LCR.Entities
 {
-    public class SupplierZoneRates
+    public class  SupplierZoneRates
     {
         //public Dictionary<string, ZoneRates> SuppliersZonesRates { get; set; }
 

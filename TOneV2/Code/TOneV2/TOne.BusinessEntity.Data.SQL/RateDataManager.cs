@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,50 +15,23 @@ namespace TOne.BusinessEntity.Data.SQL
 
         private Rate RateMapper(IDataReader reader)
         {
-            //try
-            //{
-            //Rate rate = new Rate();
-            //rate.RateId = (long)reader["RateID"];
-            //rate.SupplierId = reader["SupplierID"] as string;
-            //rate.CustomerId = reader["CustomerID"] as string;
-            //rate.ZoneId = GetReaderValue<int>(reader, "ZoneId");
-            //rate.NormalRate = GetReaderValue<decimal>(reader, "Rate");
-            //rate.OffPeakRate = GetReaderValue<decimal?>(reader, "OffPeakRate");
-            //rate.WeekendRate = GetReaderValue<decimal?>(reader, "WeekendRate");
-            //rate.PriceListId = GetReaderValue<int>(reader, "PricelistId");
-            //rate.ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag");
-            //rate.BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "RateBeginEffectiveDate");
-            //rate.EndEffectiveDate = GetReaderValue<DateTime?>(reader, "RateEndEffectiveDate");
-            //rate.CurrencyID = reader["CurrencyID"] as string;
-            //rate.CurrencyLastRate = (float)GetReaderValue<double>(reader, "CurrencyLastRate");
-            //rate.Change = TOne.BusinessEntity.Entities.Change.None;
-            //return rate;
             return new Rate
-            {
-
-                RateId = (long)reader["RateID"],
-                SupplierId = reader["SupplierID"] as string,
-                CustomerId = reader["CustomerID"] as string,
-                ZoneId = GetReaderValue<int>(reader, "ZoneId"),
-                NormalRate = GetReaderValue<decimal>(reader, "Rate"),
-                OffPeakRate = GetReaderValue<decimal?>(reader, "OffPeakRate"),
-                WeekendRate = GetReaderValue<decimal?>(reader, "WeekendRate"),
-                PriceListId = GetReaderValue<int>(reader, "PricelistId"),
-                ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
-                BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "RateBeginEffectiveDate"),
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "RateEndEffectiveDate"),
-                CurrencyID = reader["CurrencyID"] as string,
-                //CurrencyLastRate = GetReaderValue<float>(reader, "CurrencyLastRate"),
-                CurrencyLastRate = (float)GetReaderValue<double>(reader, "CurrencyLastRate"),
-                Change = TOne.BusinessEntity.Entities.Change.None
-            };
-            //}
-            //catch (Exception ex)
-            //{
-            //    string s = ex.Message;
-
-            //}
-            //return new Rate();
+             {
+                 RateId = (long)reader["RateID"],
+                 SupplierId = reader["SupplierID"] as string,
+                 CustomerId = reader["CustomerID"] as string,
+                 ZoneId = GetReaderValue<int>(reader, "ZoneId"),
+                 NormalRate = GetReaderValue<decimal>(reader, "Rate"),
+                 OffPeakRate = GetReaderValue<decimal?>(reader, "OffPeakRate"),
+                 WeekendRate = GetReaderValue<decimal?>(reader, "WeekendRate"),
+                 PriceListId = GetReaderValue<int>(reader, "PricelistId"),
+                 ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                 BeginEffectiveDate = GetReaderValue<DateTime?>(reader, "RateBeginEffectiveDate"),
+                 EndEffectiveDate = GetReaderValue<DateTime?>(reader, "RateEndEffectiveDate"),
+                 CurrencyID = reader["CurrencyID"] as string,
+                 CurrencyLastRate = (float)GetReaderValue<double>(reader, "CurrencyLastRate"),
+                 Change = TOne.BusinessEntity.Entities.Change.None
+             };
         }
 
         public List<Rate> GetRate(int zoneId, string customerId, DateTime when)
@@ -69,7 +43,8 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             var customersZoneRates = new List<ZoneRate>();
             var suppliersZoneRates = new List<ZoneRate>();
-            ExecuteReaderSP("[BEntity].[sp_Rate_GetCaclulatedZoneRates]",
+            DataTable dtZoneIds = BuildInfoTable<int>(new List<int>(), "ID");
+            ExecuteReaderSPCmd("[BEntity].[sp_Rate_GetCaclulatedZoneRates]",
                 (reader) =>
                 {
                     while (reader.Read())
@@ -129,7 +104,78 @@ namespace TOne.BusinessEntity.Data.SQL
                             ZoneRates = customersZoneRates
                         });
                     }
-                }, effectiveTime, isFuture);
+                }, (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneIds", SqlDbType.Structured);
+                    dtPrm.TypeName = "LCR.IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveTime));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                });
+        }
+
+        public void GetCalculatedZoneRates(DateTime effectiveTime, bool isFuture, IEnumerable<int> zoneIds, out List<ZoneRate> customerZoneRates, out List<ZoneRate> supplierZoneRates)
+        {
+            var customersZoneRatesLocal = new List<ZoneRate>();
+            var suppliersZoneRatesLocal = new List<ZoneRate>();
+            DataTable dtZoneIds = BuildInfoTable<int>(zoneIds, "ID");
+            ExecuteReaderSPCmd("[BEntity].[sp_Rate_GetCaclulatedZoneRates]",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        ZoneRate zoneRate = new ZoneRate
+                        {
+                            RateId = (long)reader["RateID"],
+                            PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                            Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
+                            ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                            ZoneId = GetReaderValue<int>(reader, "ZoneID")
+                        };
+                        string supplierId = reader["SupplierID"] as string;
+                        string customerId = reader["CustomerID"] as string;
+                        if (supplierId == "SYS")
+                        {
+                            zoneRate.CarrierAccountId = customerId;
+                            customersZoneRatesLocal.Add(zoneRate);
+                        }
+                        else
+                        {
+                            zoneRate.CarrierAccountId = supplierId;
+                            suppliersZoneRatesLocal.Add(zoneRate);
+                        }
+
+
+                    }
+
+                }, (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@ZoneIds", SqlDbType.Structured);
+                    dtPrm.TypeName = "LCR.IntIDType";
+                    dtPrm.Value = dtZoneIds;
+                    cmd.Parameters.Add(dtPrm);
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveTime));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                });
+            customerZoneRates = customersZoneRatesLocal;
+            supplierZoneRates = suppliersZoneRatesLocal;
+        }
+
+
+        private DataTable BuildInfoTable<T>(IEnumerable<T> ids, string columnName)
+        {
+            DataTable dtInfoTable = new DataTable();
+            dtInfoTable.Columns.Add(columnName, typeof(T));
+            dtInfoTable.BeginLoadData();
+            foreach (var t in ids)
+            {
+                DataRow dr = dtInfoTable.NewRow();
+                dr[columnName] = t;
+                dtInfoTable.Rows.Add(dr);
+            }
+            dtInfoTable.EndLoadData();
+            return dtInfoTable;
         }
     }
 }

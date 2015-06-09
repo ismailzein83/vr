@@ -90,6 +90,7 @@
     <Compile Include="GetRouteRules.cs" />
     <Compile Include="GetSupplierZoneRates.cs" />
     <Compile Include="GetCustomerZoneRates.cs" />
+    <Compile Include="GetZoneRates.cs" />
     <Compile Include="LoadCodeMatches.cs" />
     <Compile Include="LoadZoneRatesFromRate.cs" />
     <Compile Include="PrepareRouteDetailsForDBApply.cs" />
@@ -99,9 +100,11 @@
     <Compile Include="SaveZoneRatesToDB.cs" />
     <Compile Include="SetRoutingDatabaseReady.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateCodeMatches.cs" />
     <Compile Include="UpdateRouteDetails.cs" />
     <Compile Include="UpdateZoneMatchInDB.cs" />
     <Compile Include="ApplyCodeMatchesToDB.cs" />
+    <Compile Include="UpdateZoneRates.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">

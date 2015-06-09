@@ -3,21 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using TOne.LCR.Entities;
+using TOne.LCR.Data;
 
 namespace TOne.LCRProcess.Activities
 {
 
     public sealed class LoadCodeMatches : CodeActivity
     {
-        // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<string>> TargetCodes { get; set; }
 
-        // If your activity returns a value, derive from CodeActivity<TResult>
-        // and return the value from the Execute method.
+        [RequiredArgument]
+        public InArgument<Int32> RoutingDatabaseId { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<CodeMatchesByZoneId> CodeMatchesByZoneId { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<HashSet<int>> SupplierZoneIds { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<HashSet<int>> CustomerZoneIds { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
-            // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
+            ICodeMatchDataManager dataManager = LCRDataManagerFactory.GetDataManager<ICodeMatchDataManager>();
+            dataManager.DatabaseId = this.RoutingDatabaseId.Get(context);
+            HashSet<int> supplierZoneIds = new HashSet<int>();
+            HashSet<int> customerZoneIds = new HashSet<int>();
+            CodeMatchesByZoneId codeMatches = dataManager.GetCodeMatchesByCodes(TargetCodes.Get(context), out supplierZoneIds, out customerZoneIds);
+            this.CodeMatchesByZoneId.Set(context, codeMatches);
+            this.SupplierZoneIds.Set(context, supplierZoneIds);
+            this.CustomerZoneIds.Set(context, customerZoneIds);
         }
     }
 }

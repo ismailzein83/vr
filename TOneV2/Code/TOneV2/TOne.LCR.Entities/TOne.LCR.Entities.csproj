@@ -66,7 +66,7 @@
     <Compile Include="Routing\DifferentialRouteState.cs" />
     <Compile Include="Routing\RouteDetailFilter.cs" />
     <Compile Include="Routing\RouteInfo.cs" />
-    <Compile Include="SingleSaleCodeMatch.cs" />
+    <Compile Include="ZoneMatchWithCodeGroup.cs" />
     <Compile Include="SupplierZones.cs" />
     <Compile Include="ZoneRates\CustomerRates.cs" />
     <Compile Include="ZoneRates\SupplierZoneRates.cs" />

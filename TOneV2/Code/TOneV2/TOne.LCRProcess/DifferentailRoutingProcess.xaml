@@ -46,7 +46,6 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
@@ -54,8 +53,6 @@
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
-      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
-      <AssemblyReference>TABS</AssemblyReference>
       <AssemblyReference>TOne.BusinessEntity.BProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.Business</AssemblyReference>
@@ -87,6 +84,11 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="tler:DifferentialRouteState" Name="differentialRouteState" />
+      <Variable x:TypeArguments="x:Boolean" Name="rebuildZoneRates">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Business.ConfigParameterManager.Current.GetRebuildZoneRatesValue()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
@@ -132,10 +134,9 @@
           </local:BuildDifferentialLCRandRoutes.RoutingDatabaseId>
           <sap2010:WorkflowViewState.ViewStateManager>
             <sap2010:ViewStateManager>
-              <sap2010:ViewStateData Id="GetDifferentialRouteRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-              <sap2010:ViewStateData Id="GetCodeCustomers_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-              <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-              <sap2010:ViewStateData Id="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+              <sap2010:ViewStateData Id="GetCodeCustomers_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+              <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+              <sap2010:ViewStateData Id="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
             </sap2010:ViewStateManager>
           </sap2010:WorkflowViewState.ViewStateManager>
         </local:BuildDifferentialLCRandRoutes>
@@ -151,7 +152,7 @@
         </Assign>
       </Sequence>
     </Parallel>
-    <sads:DebugSymbol.Symbol>dw1DOlxFbXB0eS54YW1sAA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuTENSUHJvY2Vzc1xEaWZmZXJlbnRhaWxSb3V0aW5nUHJvY2Vzcy54YW1sFUQDnAEOAgEBSAtIcwIBF04LTowBAgEQUwtTcAIBCVkLWYwBAgECXQVhEQIBVmIFaCQCAU5pBXQgAgE/dQWaARACAR5fCV96AgFXZQtlegIBT3ELcWsCAUdsC2xhAgFAdgeZARICAR93CY4BLwIBKY8BCZgBEgIBIH8Pf34CATiEAQ+EAV0CATF6D3ptAgEqlgE1lgE5AgEokgEPkgGJAQIBIQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -159,15 +160,14 @@
       <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="378,22" />
       <sap2010:ViewStateData Id="GetCurrentDatabaseId_1" sap:VirtualizedContainerService.HintSize="378,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="262,288" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="262,226" />
       <sap2010:ViewStateData Id="TOne.LCRProcess.BuildDifferentialLCRandRoutes_1" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,248">

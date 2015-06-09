@@ -67,6 +67,11 @@ namespace TOne.Business
             return GetIntValue(ConfigParameterName.RepricingParallelThreads);
         }
 
+        public bool GetRebuildZoneRatesValue()
+        {
+            return GetBoolValue(ConfigParameterName.RebuildZoneRates);
+        }
+
         #endregion
 
         #region Private
@@ -85,6 +90,11 @@ namespace TOne.Business
         private int GetIntValue(ConfigParameterName prmName)
         {
             return GetTypedValue<int>(prmName, int.TryParse);
+        }
+
+        private bool GetBoolValue(ConfigParameterName prmName)
+        {
+            return GetTypedValue<bool>(prmName, bool.TryParse);
         }
 
         private Decimal GetDecimalValue(ConfigParameterName prmName)

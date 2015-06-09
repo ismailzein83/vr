@@ -9,7 +9,7 @@ using TOne.BusinessEntity.Entities;
 namespace TOne.BusinessEntity.Business
 {
     public class RateManager
-    { 
+    {
         IRateDataManager _dataManager;
 
         public RateManager()
@@ -19,6 +19,10 @@ namespace TOne.BusinessEntity.Business
         public void LoadCalculatedZoneRates(DateTime effectiveTime, bool isFuture, int batchSize, Action<ZoneRateBatch> onBatchAvailable)
         {
             _dataManager.LoadCalculatedZoneRates(effectiveTime, isFuture, batchSize, onBatchAvailable);
+        }
+        public void GetCalculatedZoneRates(DateTime effectiveTime, bool isFuture, IEnumerable<int> zoneIds, out List<ZoneRate> customerZoneRates, out List<ZoneRate> supplierZoneRates)
+        {
+            _dataManager.GetCalculatedZoneRates(effectiveTime, isFuture, zoneIds, out customerZoneRates, out supplierZoneRates);
         }
     }
 }

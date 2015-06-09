@@ -8,7 +8,7 @@ namespace TOne.Entities
 {
     public enum ConfigParameterName
     {
-        [ConfigParameterName(DefaultValue="03:00:00")]
+        [ConfigParameterName(DefaultValue = "03:00:00")]
         DropOldRoutingDatabasesInterval = 1,
         [ConfigParameterName(DefaultValue = "1000000")]
         BCPBatchSize = 2,
@@ -21,7 +21,11 @@ namespace TOne.Entities
         [ConfigParameterName(DefaultValue = "1000000")]
         RouteBCPBatchSize = 6,
         [ConfigParameterName(DefaultValue = "5")]
-        RepricingParallelThreads = 7
+        RepricingParallelThreads = 7,
+        [ConfigParameterName(DefaultValue = "false")]
+        RebuildZoneRates = 8
+
+
     }
 
     public class ConfigParameterNameAttribute : Attribute

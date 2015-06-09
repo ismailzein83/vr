@@ -20,7 +20,18 @@ namespace TOne.LCR.Entities
 
     }
 
-    public class CodeMatchesByZoneId : Dictionary<int, CodeMatch>
+    /// <summary>
+    /// Key Code
+    /// </summary>
+    public class CodeMatchesByCode : Dictionary<string, CodeMatch>
+    {
+
+    }
+
+    /// <summary>
+    /// Key Supplier Zone Id
+    /// </summary>
+    public class CodeMatchesByZoneId : Dictionary<int, CodeMatchesByCode>
     {
 
     }

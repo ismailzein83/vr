@@ -175,7 +175,7 @@ namespace TOne.LCRProcess.Activities
                     {
                         if (inputArgument.CodeGroups.TryGetValue(singleDestinationCodeMatches.SysCodeMatch.Code, out codeGroup))
                         {
-                            List<CodeMatch> exactCodeMatches = GetExactCodeMatches(singleDestinationCodeMatches.OrderedCodeMatches, inputArgument.CodeGroups);
+                            List<CodeMatch> exactCodeMatches = GetExactCodeMatches(inputArgument.SuppliersCodes.Codes.Values, inputArgument.SupplierZoneRates, singleDestinationCodeMatches.SysCodeMatch.Code);
                             saleCodeMatch.SaleZoneId = singleDestinationCodeMatches.SysCodeMatch.SupplierZoneId;
                             saleCodeMatch.IsMatchingCodeGroup = true;
                             saleCodeMatch.SupplierCodeMatches = exactCodeMatches;
@@ -184,7 +184,7 @@ namespace TOne.LCRProcess.Activities
                         {
                             saleCodeMatch.SaleZoneId = singleDestinationCodeMatches.SysCodeMatch.SupplierZoneId;
                             saleCodeMatch.IsMatchingCodeGroup = false;
-                            saleCodeMatch.SupplierCodeMatches = CloneHelper.Clone<List<CodeMatch>>(singleDestinationCodeMatches.OrderedCodeMatches);
+                            saleCodeMatch.SupplierCodeMatches = new List<CodeMatch>(singleDestinationCodeMatches.OrderedCodeMatches);
                         }
                         inputArgument.OutputQueueForZoneMatch.Enqueue(saleCodeMatch);
                         inputArgument.OutputQueue.Enqueue(codeMatches);
@@ -195,14 +195,28 @@ namespace TOne.LCRProcess.Activities
             }
         }
 
-        private List<CodeMatch> GetExactCodeMatches(List<CodeMatch> supplierCodeMatches, Dictionary<string, CodeGroupInfo> codeGroups)
+        private List<CodeMatch> GetExactCodeMatches(IEnumerable<SupplierCodes> supplierCodes, SupplierZoneRates supplierRates, string codeGroup)
         {
             List<CodeMatch> codeMatches = new List<CodeMatch>();
-            foreach (var supplierCodeMatch in supplierCodeMatches)
+            Code supplierMatch;
+            foreach (var supplierCode in supplierCodes)
             {
-                if (codeGroups.ContainsKey(supplierCodeMatch.SupplierCode))
+                if (supplierCode.Codes.TryGetValue(codeGroup, out supplierMatch))
                 {
-                    codeMatches.Add(supplierCodeMatch);
+                    CodeMatch codeMatch = new CodeMatch
+                    {
+                        Code = codeGroup,
+                        SupplierCode = supplierMatch.Value,
+                        SupplierId = supplierMatch.SupplierId,
+                        SupplierZoneId = supplierMatch.ZoneId,
+                        SupplierCodeId = supplierMatch.ID
+                    };
+                    RateInfo rate;
+                    if (supplierRates.RatesByZoneId.TryGetValue(supplierMatch.ZoneId, out rate))
+                    {
+                        codeMatch.SupplierRate = rate;
+                    }
+                    codeMatches.Add(codeMatch);
                 }
             }
             return codeMatches;

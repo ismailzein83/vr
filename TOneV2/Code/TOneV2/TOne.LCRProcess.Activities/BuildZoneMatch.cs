@@ -46,7 +46,6 @@ namespace TOne.LCRProcess.Activities
                                 zoneMatches.Add(preparedCodeMatches.SaleZoneId, supplierZones);
                             }
 
-                            supplierZones = zoneMatches[preparedCodeMatches.SaleZoneId];
                             foreach (CodeMatch supplierCodeMatch in preparedCodeMatches.SupplierCodeMatches)
                             {
                                 if (!supplierZones.ContainsKey(supplierCodeMatch.SupplierZoneId))

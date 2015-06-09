@@ -170,6 +170,15 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                        [Code] ASC
                                                         )WITH (IGNORE_DUP_KEY = OFF)
                                                         )
+
+                                                    CREATE TYPE [StringIDType] AS TABLE(
+	                                                    [Code] [varchar](20) NOT NULL,
+	                                                    PRIMARY KEY CLUSTERED 
+                                                    (
+	                                                    [Code] ASC
+                                                    )WITH (IGNORE_DUP_KEY = OFF)
+                                                    )
+
                                                      CREATE TABLE [dbo].[TempZoneMatch](
 	                                                    [OurZoneId] [int] NOT NULL,
                                                         [SupplierZoneId] [int] NOT NULL,
