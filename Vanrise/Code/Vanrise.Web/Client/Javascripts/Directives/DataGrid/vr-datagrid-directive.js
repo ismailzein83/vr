@@ -22,12 +22,12 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
 
-            var dataGridObj = new DataGrid(ctrl);
+            var dataGridObj = new DataGrid(ctrl, $scope);
             dataGridObj.initializeController(isSubGrid);
             dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
             dataGridObj.defineExpandableRow();
             dataGridObj.defineMenuColumn(hasActionMenu, actionsAttribute);
-            dataGridObj.calculateDataColumnsSectionWidth();           
+            dataGridObj.calculateDataColumnsSectionWidth();
             dataGridObj.addActionTypeColumn();
             dataGridObj.defineAPI();
         },
@@ -51,8 +51,8 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
-      + '<a ng-show="colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{colDef.getValue(dataItem) #CELLFILTER#}}</a>'
-      + '<span ng-hide="colDef.isClickable(dataItem)" class="span-summary"> {{colDef.getValue(dataItem) #CELLFILTER#}}</span>'
+      + '<a ng-if="::colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{::colDef.getValue(dataItem) #CELLFILTER#}}</a>'
+      + '<span ng-if="::(!colDef.isClickable(dataItem))" class="span-summary"> {{::colDef.getValue(dataItem) #CELLFILTER#}}</span>'
       + ''
    + '</div>';
 
@@ -67,7 +67,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 + '</div>';
 
 
-    function DataGrid(ctrl) {
+    function DataGrid(ctrl, scope) {
 
         var gridApi = {};
         var maxHeight;
@@ -86,7 +86,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
                 onSort: function () {
                     if (col.onSortChanged != undefined) {
-                        var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";                        
+                        var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
                         var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
                         if (promise != undefined && promise != null)
                             promise.then(function () {
@@ -197,7 +197,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             ctrl.dataColumnsSectionWidth = width + '%';
         }
 
-        function initializeController (isSubgrid) {
+        function initializeController(isSubgrid) {
             ctrl.updateItems = [];
             ctrl.columnDefs = [];
 
@@ -255,6 +255,30 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 stopPagingOnScroll = false;
             };
 
+            gridApi.addItemsToSource = function (items) {
+                addFirstItem(items);
+            }
+
+            function addFirstItem(items) {
+                var numberOfItems = 10;
+                for (var i = 0; i < numberOfItems; i++)
+                {
+                    if(items.length > 0) {
+                        ctrl.datasource.push(items[0]);
+                        items.splice(0, 1);
+                    }
+                }
+                
+                if (items.length > 0) {                    
+                    setTimeout(function () {
+                        scope.$apply(function () {
+                            addFirstItem(items);
+                        });
+
+                    }, 1);
+                }
+            }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(gridApi);
         }
@@ -299,8 +323,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             return 20;
         }
 
-        function getPageInfo()
-        {
+        function getPageInfo() {
             var fromRow = ctrl.datasource.length + 1;
             return {
                 fromRow: fromRow,
@@ -308,7 +331,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             };
         }
 
-        function defineExpandableRow () {
+        function defineExpandableRow() {
             ctrl.setExpandableRowTemplate = function (template) {
                 expandableRowTemplate = template;
                 expandableColumnWidth = 2;
@@ -336,7 +359,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             };
         }
 
-        function defineMenuColumn(hasActionMenu, actionsAttribute) {            
+        function defineMenuColumn(hasActionMenu, actionsAttribute) {
             actionMenuWidth = hasActionMenu ? 3 : 0;
             ctrl.actionsColumnWidth = actionMenuWidth + '%';
 
@@ -355,7 +378,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
                 var dropDown = self.parent().find('ul');
                 $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto' });
-            }           
+            }
             ctrl.getMenuActions = function (dataItem) {
                 return typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute;
             }
@@ -377,7 +400,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
         this.definePagingOnScroll = definePagingOnScroll;
-        this.defineExpandableRow = defineExpandableRow;   
+        this.defineExpandableRow = defineExpandableRow;
         this.defineMenuColumn = defineMenuColumn;
         this.calculateDataColumnsSectionWidth = calculateDataColumnsSectionWidth;
         this.addActionTypeColumn = addActionTypeColumn;
