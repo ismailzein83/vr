@@ -39,7 +39,7 @@
                     </vr-choices>
 
                     <div ng-show="ctrl.isFilterTabShown">
-                        <vr-datagrid datasource="strategyFilters" maxheight="400px">
+                        <vr-datagrid datasource="strategyFilters" maxheight="300px">
                             <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
@@ -51,7 +51,18 @@
 
 
                     <div ng-show="ctrl.isLevelsTabShow">
-                        Grid 2
+                       
+
+                        <vr-datagrid datasource="strategyLevels" maxheight="300px">
+                            <vr-datagridcolumn headertext="'Suspection Level'" field="'SuspectionLevelId'" ></vr-datagridcolumn>
+                            <vr-datagridcolumn ng-repeat="x in filterDefinitions" headertext="x.filterId" >   <vr-switch value="false"></vr-switch>      <vr-select datasource="viewScope.percentages" datatextfield="Percentage" datavaluefield="Ratio" selectedvalues="dataItem.percentage"></vr-select>                </vr-datagridcolumn>
+                        </vr-datagrid>
+
+
+
+
+
+
                         
 
                     </div>

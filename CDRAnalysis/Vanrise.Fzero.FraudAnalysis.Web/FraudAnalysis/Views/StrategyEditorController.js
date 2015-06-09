@@ -7,6 +7,15 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     defineScope();
     load();
 
+
+
+
+
+
+
+
+
+
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         $scope.strategyId = undefined;
@@ -22,6 +31,19 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function defineScope() {
         $scope.strategyFilters = [];
+
+        $scope.strategyLevels = [
+                            { SuspectionLevelId: 2, StrategyLevelCriterias: [{ filterId: 1, Percentage: 1.0 }, { filterId: 2, Percentage: 1.0 }, { filterId: 3, Percentage: 1.0 }] },
+                            { SuspectionLevelId: 3, StrategyLevelCriterias: [{ filterId: 1, Percentage: 1.25 }, { filterId: 2, Percentage: 0.75 }, { filterId: 3, Percentage: 1.0 }] }
+        ];
+
+        $scope.percentages = [
+                          { Percentage: '25%' , Ratio: 1.25  },
+                          { Percentage: '0%', Ratio: 1.00 }
+        ];
+
+
+
         $scope.SaveStrategy = function () {
             if (editMode) {
                 
