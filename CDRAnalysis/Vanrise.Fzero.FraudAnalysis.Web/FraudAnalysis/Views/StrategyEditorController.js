@@ -125,7 +125,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
 
 
-        console.log(StrategyObject);
+        
 
 
         
@@ -169,6 +169,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             }
             $scope.strategyFilters.push(filterItem);
         });
+
+        console.log(strategyObject);
+
     }
 
     function AddStrategy() {
