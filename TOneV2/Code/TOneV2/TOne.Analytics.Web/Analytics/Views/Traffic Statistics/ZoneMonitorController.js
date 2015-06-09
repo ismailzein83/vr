@@ -301,6 +301,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 angular.forEach(response.Data, function (itm) {
                     $scope.data.push(itm);
                 });
+
                 renderOverallChart();
                 isSucceeded = true;
             })
@@ -313,7 +314,11 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             var chartData = [];
             var measure = overallSelectedMeasure;
             var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
+            var index = 1;
             angular.forEach(currentData, function (itm) {
+                if (index > 15)
+                    return;
+                index++;
                 var dataItem = {
                     groupKeyValues: itm.GroupKeyValues,
                     entityName: '',
