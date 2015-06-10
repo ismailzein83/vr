@@ -29,10 +29,16 @@ namespace Vanrise.Security.Business
             return datamanager.GetMembers(roleId);
         }
 
-        public User GetUser(int userId)
+        public User GetUserbyId(int userId)
         {
             IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return datamanager.GetUser(userId);
+            return datamanager.GetUserbyId(userId);
+        }
+
+        public User GetUserbyEmail(string email)
+        {
+            IUserDataManager datamanager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return datamanager.GetUserbyEmail(email);
         }
 
         public Vanrise.Entities.InsertOperationOutput<User> AddUser(User userObject)

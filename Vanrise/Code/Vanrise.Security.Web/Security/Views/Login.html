@@ -4,7 +4,7 @@
         <div>
             <vr-row removeline>
                 <vr-columns colnum="4">
-                    <vr-textbox value="userName" label="User Name"></vr-textbox>
+                    <vr-textbox value="email" label="Email"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-row>
@@ -12,11 +12,15 @@
                     <vr-textbox value="password" label="Password"></vr-textbox>
                 </vr-columns>
             </vr-row>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <input type="button" data-onclick="Login" value="Login" />
-                </vr-columns>
-            </vr-row>
+
+            <div>
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Login" formname="formLogin" data-onclick="Login"></vr-button>
+                    </div>
+                </vr-actionbar>
+
+            </div>
             
         </div>
 </vr-panel>

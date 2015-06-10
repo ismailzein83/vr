@@ -26,9 +26,14 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_User_GetMembers", UserMapper, roleId);
         }
 
-        public User GetUser(int userId)
+        public User GetUserbyId(int userId)
         {
-            return GetItemSP("sec.sp_User_GetUser", UserMapper, userId);
+            return GetItemSP("sec.sp_User_GetUserbyId", UserMapper, userId);
+        }
+
+        public User GetUserbyEmail(string email)
+        {
+            return GetItemSP("sec.sp_User_GetUserbyEmail", UserMapper, email);
         }
 
         public bool AddUser(User userObject, out int insertedId)
@@ -79,6 +84,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 UserId = Convert.ToInt32(reader["Id"]),
                 Name = reader["Name"] as string,
+                Password = reader["Password"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
                 Status = (int.Parse(reader["Status"].ToString()) == 0) ? Entities.UserStatus.Active : Entities.UserStatus.Inactive,

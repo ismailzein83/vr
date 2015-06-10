@@ -4,7 +4,7 @@
         Authenticate: Authenticate
     });
 
-    function Authenticate() {
-        return BaseAPIService.get("/api/Security/Authenticate");
+    function Authenticate(credentialsObject) {
+        return BaseAPIService.post("/api/Security/Authenticate", credentialsObject);
     }
 });

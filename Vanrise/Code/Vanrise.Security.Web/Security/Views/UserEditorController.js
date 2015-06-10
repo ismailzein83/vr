@@ -43,7 +43,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
     }
 
     function getUser() {
-        return UsersAPIService.GetUser($scope.userId)
+        return UsersAPIService.GetUserbyId($scope.userId)
            .then(function (response) {
                fillScopeFromUserObj(response);
            })

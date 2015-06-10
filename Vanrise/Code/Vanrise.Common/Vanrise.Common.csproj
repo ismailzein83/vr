@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compressor.cs" />
+    <Compile Include="TempEncryptionHelper.cs" />
     <Compile Include="Logging\ExceptionLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggerFactory.cs" />

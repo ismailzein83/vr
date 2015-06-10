@@ -1,5 +1,16 @@
 ﻿
-app.service('BaseAPIService', function ($http, $q, notify) {
+app.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push(function ($q, $cookies) {
+        return {
+            'request': function (config) {
+                config.headers['Auth-Token'] = $cookies['TOne_LoginTokenCookie'];
+                return config;
+            }
+        };
+    });
+}]);
+
+app.service('BaseAPIService', function ($http, $q, $rootScope, notify) {
 
     return ({
         get: get,
@@ -52,5 +63,4 @@ app.service('BaseAPIService', function ($http, $q, notify) {
         return deferred.promise;
 
     }
-
 });

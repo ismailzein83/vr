@@ -38,10 +38,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        public User GetUser(int userId)
+        public User GetUserbyId(int userId)
         {
             UserManager manager = new UserManager();
-            return manager.GetUser(userId);
+            return manager.GetUserbyId(userId);
         }
 
         [HttpPost]

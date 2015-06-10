@@ -11,6 +11,10 @@ namespace Vanrise.Security.Data.SQL
 {
     public class PermissionDataManager : BaseSQLDataManager, IPermissionDataManager
     {
+        public List<Entities.Permission> GetPermissions()
+        {
+            return GetItemsSP("sec.sp_Permissions_GetPermissions", PermissionMapper);
+        }
 
         public List<Entities.Permission> GetPermissions(Entities.HolderType entType, string holderId)
         {
@@ -23,6 +27,14 @@ namespace Vanrise.Security.Data.SQL
 
             int recordsEffected = ExecuteNonQuerySP("sec.sp_Permission_Update", permission.HolderType,
                 permission.HolderId, permission.EntityType, permission.EntityId, serialziedPermissionFlag);
+
+            return (recordsEffected > 0);
+        }
+
+        public bool DeletePermission(Permission permission)
+        {
+            int recordsEffected = ExecuteNonQuerySP("sec.sp_Permission_Delete", permission.HolderType,
+                permission.HolderId, permission.EntityType, permission.EntityId);
 
             return (recordsEffected > 0);
         }

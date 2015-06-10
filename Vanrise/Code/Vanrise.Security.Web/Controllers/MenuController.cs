@@ -14,7 +14,15 @@ namespace Vanrise.Security.Web.Controllers
         public IEnumerable<MenuItem> GetMenuItems()
         {
             MenuManager manager = new MenuManager();
-            return manager.GetMenuItems();
+            List<MenuItem> result = new List<MenuItem>();
+
+            if(Request.Headers.Contains("Auth-Token"))
+            {
+                //TODO: the logic of reading the token needs to be moved to the BaseAPIController
+                result = manager.GetMenuItems(Request.Headers.GetValues("Auth-Token").First());
+            }
+            
+            return result;
         }
     }
 }

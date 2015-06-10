@@ -52,6 +52,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "No",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
+            case "Login":
+                return {
+                    text: "Login",
+                    class: "glyphicon  glyphicon-log-in"
+                };
         }
     }
 }]);

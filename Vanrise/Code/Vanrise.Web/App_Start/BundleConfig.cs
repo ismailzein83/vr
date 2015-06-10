@@ -36,6 +36,7 @@ namespace Vanrise.Web
 
             bundles.Add(new ScriptBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/Angular/angular.js",
+               "~/Client/Libraries/Angular/angular-cookies.js",
                "~/Client/Libraries/Angular/angular-route.js",
                "~/Client/Libraries/Angular/angular-messages.js",
                "~/Client/Libraries/Angular/angular-animate.js",

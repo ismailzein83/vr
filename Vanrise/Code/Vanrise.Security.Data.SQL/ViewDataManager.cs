@@ -22,7 +22,8 @@ namespace Vanrise.Security.Data.SQL
                 ViewId = (int)reader["Id"],
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
-                ModuleId = (int) reader["Module"]
+                ModuleId = (int) reader["Module"],
+                RequiredPermissions = ((reader["RequiredPermissions"] as string) != null) ? Common.Serializer.Deserialize<Dictionary<string, List<string>>>(reader["RequiredPermissions"] as string) : null
             };
             return view;
         }

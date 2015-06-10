@@ -1,8 +1,16 @@
 ﻿'use strict';
 
 
-var app = angular.module('mainModule', ['appControllers', 'appRouting'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, notify, $animate) {
+var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, notify, $animate, $cookies) {
+    
+    var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
+
+    if (cookieUserToken == undefined)
+    {
+        window.location.href = '/Security/Login';
+    }
+
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
@@ -193,6 +201,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting'])
 });
 
 app.controller.$inject = ['MenuAPIService'];
+
+app.controller('loginCtrl', function loginCtrl($scope) {
+    
+});
 
 angular.module('mainModule')
 .config(function ($timepickerProvider) {

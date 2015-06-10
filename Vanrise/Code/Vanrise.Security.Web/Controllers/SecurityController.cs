@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Web.Controllers
 {
     public class SecurityController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        public string Authenticate(string userName, string password)
+        [HttpPost]
+        public AuthenticationToken Authenticate(CredentialsInput credentialsObject)
         {
-            //PermissionManager manager = new PermissionManager();
-            //return manager.GetEntityNodes();
+            SecurityManager manager = new SecurityManager();
+            return manager.Authenticate(credentialsObject.Email, credentialsObject.Password);
+        }
 
-            return "";
+        public class CredentialsInput
+        {
+            public string Email { get; set; }
+
+            public string Password { get; set; }
         }
     }
 }

@@ -2,12 +2,11 @@
 
 
 function LoginController($scope, SecurityAPIService) {
-    var arrMenuAction = [];
-
     defineScope();
     load();
 
     function defineScope() {
+        
         $scope.Login = login;
     }
 
@@ -16,7 +15,27 @@ function LoginController($scope, SecurityAPIService) {
 
     function login()
     {
+        var credentialsObject = {
+            Email: $scope.email,
+            Password: $scope.password
+        };
 
+        return SecurityAPIService.Authenticate(credentialsObject)
+            .then(function (response) {
+
+                setCookie('TOne_LoginTokenCookie', response.Token, '', '', '');
+
+                window.location.href = '/';
+        }
+        );       
+    }
+
+    function setCookie(name, value, expires, path, domain, secure) {
+        document.cookie = name + "=" + escape(value) +
+        ((expires) ? "; expires=" + expires.toGMTString() : "") +
+        ("; path=/") +       //you having wrong quote here
+        ((domain) ? "; domain=" + domain : "") +
+        ((secure) ? "; secure" : "");
     }
 }
 appControllers.controller('Security_LoginController', LoginController);

@@ -224,6 +224,7 @@
     <Content Include="Client\Libraries\AngularExtensions\treeview\img\jsfiddle02.png" />
     <Content Include="Client\Libraries\AngularExtensions\treeview\img\preview.png" />
     <Content Include="Client\Libraries\Angular\angular-animate.js" />
+    <Content Include="Client\Libraries\Angular\angular-cookies.js" />
     <Content Include="Client\Libraries\Angular\angular-messages.js" />
     <Content Include="Client\Libraries\Angular\angular-notify.js" />
     <Content Include="Client\Libraries\Angular\angular-route.js" />

@@ -15,7 +15,9 @@ namespace Vanrise.Security.Data
 
         List<User> GetMembers(int roleId);
 
-        User GetUser(int userId);
+        User GetUserbyId(int userId);
+
+        User GetUserbyEmail(string email);
 
         bool AddUser(User user, out int insertedId);
 

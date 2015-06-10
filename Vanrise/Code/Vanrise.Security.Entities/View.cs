@@ -15,5 +15,7 @@ namespace Vanrise.Security.Entities
         public string Url { get; set; }
 
         public int ModuleId { get; set; }
+
+        public Dictionary<string, List<string>> RequiredPermissions { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
     return ({
         GetFilteredUsers: GetFilteredUsers,
-        GetUser: GetUser,
+        GetUserbyId: GetUserbyId,
         AddUser: AddUser,
         UpdateUser: UpdateUser,
         CheckUserName: CheckUserName,
@@ -26,8 +26,8 @@
         return BaseAPIService.get("/api/Users/GetUsers");
     }
 
-    function GetUser(userId) {
-        return BaseAPIService.get("/api/Users/GetUser",
+    function GetUserbyId(userId) {
+        return BaseAPIService.get("/api/Users/GetUserbyId",
             {
                 UserId: userId
             }

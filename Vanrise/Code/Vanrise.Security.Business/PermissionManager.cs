@@ -33,6 +33,12 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
+        public List<Permission> GetPermissions()
+        {
+            IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
+            return dataManager.GetPermissions();
+        }
+
         public List<Permission> GetPermissions(int holderType, string holderId)
         {
             HolderType paramHolderType = (holderType == 0) ? HolderType.USER : HolderType.ROLE;
@@ -52,7 +58,14 @@ namespace Vanrise.Security.Business
 
             foreach (Permission item in permissions)
             {
-                if(!dataManager.UpdatePermission(item))
+                if (item.PermissionFlags.Count == 0)
+                {
+                    if(!dataManager.DeletePermission(item))
+                    {
+                        updateOperationOutput.Result = UpdateOperationResult.Failed;
+                    }
+                }
+                else if (!dataManager.UpdatePermission(item))
                 {
                     updateOperationOutput.Result = UpdateOperationResult.Failed;
                 }
@@ -68,7 +81,7 @@ namespace Vanrise.Security.Business
                 EntityId = module.ModuleId,
                 Name = module.Name,
                 EntType = EntityType.MODULE,
-                PermissionOptions = module.PermissionOptions
+                PermissionOptions = module.PermissionOptions,
             };
 
             List<BusinessEntityModule> subModules = modules.FindAll(x => x.Parent == module.ModuleId);
