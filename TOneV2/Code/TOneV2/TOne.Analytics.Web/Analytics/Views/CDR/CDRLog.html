@@ -50,7 +50,7 @@
          <div ng-show="showResult" vr-loader="isGettingData">
              <vr-row>
                  <vr-columns colnum="12" simplecol>
-                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" maxheight="600px" >
+                     <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady" maxheight="500px" >
                          <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName"  tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
 
 

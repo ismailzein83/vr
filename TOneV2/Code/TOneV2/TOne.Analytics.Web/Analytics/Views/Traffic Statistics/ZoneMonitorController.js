@@ -229,8 +229,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 clicked: function (dataItem) {
                     var modalSettings = {
                         useModalTemplate: true,
-                        width: "80%",
-                        maxHeight: "800px"
+                        width: "80%"//,
+                        //maxHeight: "800px"
                     };
                     var parameters = {
                         fromDate: $scope.filter.fromDate,
