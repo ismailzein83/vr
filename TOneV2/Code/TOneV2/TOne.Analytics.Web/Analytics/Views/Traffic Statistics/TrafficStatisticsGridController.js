@@ -3,16 +3,21 @@
 TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService'];
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
     var measures = [];
+    var filter = {};
     var notSelectedGroupKeys = [];
     defineScopeObjects();
     defineScopeMethods();
     load();
+    
+    var selectedGroupKeys = [];
     function defineScopeObjects() {
+        $scope.selectedGroupKeys = [];
         $scope.notSelectedGroupKeys = [];
         $scope.measures = measures;
         $scope.currentSearchCriteria = {
             groupKeys: []
         };
+        
         $scope.groupKeys = [];
         $scope.menuActions = [{
             name: "CDRs",
@@ -36,18 +41,39 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
         }];
     }
-    function getNotSelectedGroupKeys() {
+    function getNotSelectedGroupKeys(scope) {
         
-        for (var i = 0; i < $scope.groupKeys.length; i++) {
-            if ($scope.gridParentScope!=$scope.viewScope && $scope.gridParentScope.selectedGroupKey.groupKeyEnumValue != $scope.groupKeys[i].groupKeyEnumValue) 
-                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);
-            else if($scope.gridParentScope == $scope.viewScope)
-                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);
+        if (scope == $scope.viewScope)
+            return;
+        getSelectedGroupKeys(scope);
+        console.log(selectedGroupKeys);
+        if (scope.notSelectedGroupKeys.length == $scope.viewScope.groupKeys.length)
+            return;
+        if ($scope.gridParentScope == scope.viewScope) {
+            $scope.notSelectedGroupKeys = scope.groupKeys;
+        }
+        else
+        for (var i = 0; i < scope.selectedGroupKeys.length; i++) {
+            if (scope.gridParentScope != $scope.viewScope && scope.gridParentScope.selectedGroupKey.groupKeyEnumValue != scope.selectedGroupKeys[i].groupKeyEnumValue)
+                $scope.notSelectedGroupKeys.push(scope.selectedGroupKeys[i]);
+            
             //console.log($scope.groupKeys);
-               
+           
             
         }
+        
+        getNotSelectedGroupKeys(scope.gridParentScope);
         console.log($scope.notSelectedGroupKeys);
+    }
+    function getSelectedGroupKeys(scope) {
+       
+        if (scope == $scope.viewScope)
+            return;
+        else {
+            $scope.selectedGroupKeys.push(scope.selectedGroupKey);
+            getSelectedGroupKeys(scope.gridParentScope);
+        }
+
     }
     function updateParametersFromGroupKeys(parameters, scope, dataItem) {
         var groupKeys = [];
@@ -108,12 +134,13 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
 
     function load() {
+       
         loadMeasures();
         loadGroupKeys();
         // $scope.notSelectedGroupKeys = [$scope.selectedGroupKey.groupKeyEnumValue];
        // if ($scope.gridParentScope != $scope.viewScope)
             
-        getNotSelectedGroupKeys();
+        getNotSelectedGroupKeys($scope);
         $scope.selectedGroupKey = $scope.notSelectedGroupKeys[0];
         if ($scope.selectedGroupKey != undefined || $scope.getNotSelectedGroupKeys != undefined)
             getData();
@@ -163,13 +190,16 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     }
 
     function getData() {
+        if ($scope.notSelectedGroupKeys.length == 0)
+            return;
         var withSummary = false;
         var fromRow = 1;
         var toRow = 100;
-           
+        buildFilter($scope);
+        console.log(filter);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
-            Filter: buildFilter(),
+            Filter: filter,
             WithSummary: withSummary,
             GroupKeys: [$scope.selectedGroupKey.groupKeyEnumValue],
             From: $scope.viewScope.fromDate,
@@ -179,7 +209,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             OrderBy: 2,
             IsDescending: true
         };
-        console.log($scope.notSelectedGroupKeys);
+       // console.log($scope.notSelectedGroupKeys);
         var isSucceeded;
         $scope.isGettingData = true;
         $scope.currentSearchCriteria.groupKeys.length = 0;
@@ -187,7 +217,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             $scope.currentSearchCriteria.groupKeys.push(group);
         });
         return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
-
+            console.log(response);
             angular.forEach(response.Data, function (itm) {
                 $scope.selectedGroupKey.data.push(itm);
             });
@@ -198,25 +228,35 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             });
     }
 
-    function buildFilter() {
-        var filter = {};
-        var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
-        for(var i =0;i<parentGroupKeys.length;i++) {
+    function buildFilter(scope) {
+       
+        if (scope == $scope.viewScope)
+            return ;
+
+        if (scope.gridParentScope == $scope.viewScope)
+            var parentGroupKeys = scope.gridParentScope.currentSearchCriteria.groupKeys;
+        else
+        var parentGroupKeys = [scope.gridParentScope.selectedGroupKey];
+
+        for (var i = 0; i < parentGroupKeys.length; i++) {
             var groupKey = parentGroupKeys[i];
             switch(groupKey.groupKeyEnumValue)
             {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
-                    filter.ZoneIds = [$scope.dataItem.GroupKeyValues[i].Id];
+                    filter.ZoneIds = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.CustomerId.value: 
-                    filter.CustomerIds = [$scope.dataItem.GroupKeyValues[i].Id];
+                    filter.CustomerIds=[scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value: 
-                    filter.SupplierIds = [$scope.dataItem.GroupKeyValues[i].Id];
+                    filter.SupplierIds = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }
-        return filter;
+        
+        buildFilter(scope.gridParentScope);
+       
+        
     }
 
 
