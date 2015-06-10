@@ -31,17 +31,22 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function defineScope() {
         $scope.strategyFilters = [];
+        $scope.percentages = [
+                         { description: '-75%', value: 0.25 }, { description: '-50%', value: 0.5 }, { description: '-25%', value: 0.75 }, { description: '0%', value: 1.00 }, { description: '25%', value: 1.25 }, { description: '50%', value: 1.50 }, { description: '75%', value: 1.75 }
+                         
+        ];
+
+        $scope.suspectionLevels = [
+                         { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
+
+        ];
 
         $scope.strategyLevels = [
-                            { SuspectionLevelId: 2, StrategyLevelCriterias: [{ filterId: 1, Percentage: 1.0 }, { filterId: 2, Percentage: 1.0 }, { filterId: 3, Percentage: 1.0 }] },
-                            { SuspectionLevelId: 3, StrategyLevelCriterias: [{ filterId: 1, Percentage: 1.25 }, { filterId: 2, Percentage: 0.75 }, { filterId: 3, Percentage: 1.0 }] }
+                            { suspectionLevel: $scope.suspectionLevels[1].name, StrategyLevelCriterias: [{ filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3], isSelected: true }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }] },
+                            { suspectionLevel: $scope.suspectionLevels[2].name, StrategyLevelCriterias: [{ filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }] }
         ];
 
-        $scope.percentages = [
-                          { Percentage: '25%' , Ratio: 1.25  },
-                          { Percentage: '0%', Ratio: 1.00 }
-        ];
-
+       
 
 
         $scope.SaveStrategy = function () {

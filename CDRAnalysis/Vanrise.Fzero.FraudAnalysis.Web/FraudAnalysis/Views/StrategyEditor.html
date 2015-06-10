@@ -54,8 +54,18 @@
                        
 
                         <vr-datagrid datasource="strategyLevels" maxheight="300px">
-                            <vr-datagridcolumn headertext="'Suspection Level'" field="'SuspectionLevelId'" ></vr-datagridcolumn>
-                            <vr-datagridcolumn ng-repeat="x in filterDefinitions" headertext="x.filterId" >   <vr-switch value="false"></vr-switch>      <vr-select datasource="viewScope.percentages" datatextfield="Percentage" datavaluefield="Ratio" selectedvalues="dataItem.percentage"></vr-select>                </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel'" widthfactor="20"></vr-datagridcolumn>
+                            <vr-datagridcolumn ng-repeat="x in filterDefinitions" headertext="'Filter: ' + x.filterId" >  
+                                <div>
+                                          
+                                    <vr-switch value="dataItem.StrategyLevelCriterias[$index - 1].isSelected"></vr-switch>
+                                    <!--<vr-textbox ng-show="dataItem.StrategyLevelCriterias[$index - 1].isSelected && edit" value="dataItem.StrategyLevelCriterias[$index - 1].percentage"></vr-textbox>-->
+                                    <vr-select ng-show="dataItem.StrategyLevelCriterias[$index - 1].isSelected && edit" ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[$index - 1].percentage"></vr-select>
+                                   
+                                    <vr-label ng-click="edit = true" ng-hide="edit || !dataItem.StrategyLevelCriterias[$index - 1].isSelected">{{dataItem.StrategyLevelCriterias[$index - 1].percentage.description}}</vr-label>
+                                </div>
+                            
+                                             </vr-datagridcolumn>
                         </vr-datagrid>
 
 
