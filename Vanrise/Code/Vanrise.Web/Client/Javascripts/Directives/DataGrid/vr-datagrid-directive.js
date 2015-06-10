@@ -256,11 +256,11 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             };
 
             gridApi.addItemsToSource = function (items) {
-                addFirstItem(items);
+                addBatchItemsToSource(items);
             }
 
-            function addFirstItem(items) {
-                var numberOfItems = 10;
+            function addBatchItemsToSource(items) {
+                var numberOfItems = !stopPagingOnScroll ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
                 for (var i = 0; i < numberOfItems; i++)
                 {
                     if(items.length > 0) {
@@ -271,8 +271,9 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 
                 if (items.length > 0) {                    
                     setTimeout(function () {
+                        addBatchItemsToSource(items);
                         scope.$apply(function () {
-                            addFirstItem(items);
+                           
                         });
 
                     }, 1);
@@ -293,7 +294,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             ctrl.isLoadingMoreData = false;
 
             if (loadMoreDataFunction != undefined)
-                setMaxHeight("400px");
+                setMaxHeight("500px");
 
             //this event is called by the vrDatagridrows directive
             ctrl.onScrolling = function () {
