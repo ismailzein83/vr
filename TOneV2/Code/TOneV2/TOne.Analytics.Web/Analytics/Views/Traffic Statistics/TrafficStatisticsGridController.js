@@ -16,6 +16,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         $scope.menuActions = [{
             name: "CDRs",
             clicked: function (dataItem) {
+                $scope.dataItem = dataItem;
             var modalSettings = {
                 useModalTemplate: true,
                 width: "80%",
@@ -29,58 +30,50 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 supplierIds:[]
                 ///[dataItem.GroupKeyValues[0].Id]
             };
-            parameters=getObjectHeader(parameters, dataItem, $scope);
+            getObjectHeader(parameters, $scope);
             console.log(parameters.customerIds);
-
-
+            console.log(parameters.zoneIds);
+            console.log(parameters.supplierIds);
             VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
         }
         }];
     }
-    function getObjectHeader(parameters, dataItem,scope) {
-  
+    function getObjectHeader(parameters,scope) {
+       // var groupKeys = [];
         if (scope == undefined)
             return;
-
-        for (var i = 0; i < scope.currentSearchCriteria.groupKeys.length; i++) {
-            var groupKey = scope.currentSearchCriteria.groupKeys[i];
+        if (scope == $scope.viewScope)
+        {
+            
+            var groupKeys = scope.selectedGroupKeys;
+            console.log(scope);
+            return;
+           
+        }
+        else {
+            console.log(scope);
+           var groupKeys = [scope.selectedGroupKey];
+        }
+        
+        for (var i = 0; i < groupKeys.length; i++) {
+            var groupKey = groupKeys[i];
             switch (groupKey.groupKeyEnumValue) {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
-                    parameters.zoneIds.push(dataItem.GroupKeyValues[i].Id);
-                                console.log(dataItem.GroupKeyValues[i]);
+                    parameters.zoneIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                   // console.log(scope.dataItem.GroupKeyValues[i]);
                                 break;
-                            case TrafficStatisticGroupKeysEnum.CustomerId.value:
-                                parameters.customerIds.push(dataItem.GroupKeyValues[i].Id);
-                                console.log(dataItem.GroupKeyValues[i].Id);
+                case TrafficStatisticGroupKeysEnum.CustomerId.value: console.log(scope.dataItem.GroupKeyValues[i].Id);
+                                parameters.customerIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                               // console.log(scope.dataItem.GroupKeyValues[i]);
                                 break;
-                            case TrafficStatisticGroupKeysEnum.SupplierId.value:
-                                parameters.supplierIds.push(dataItem.GroupKeyValues[i].Id);
-                                console.log(dataItem.GroupKeyValues[i].Id);
+                case TrafficStatisticGroupKeysEnum.SupplierId.value:
+                                parameters.supplierIds.push(scope.dataItem.GroupKeyValues[i].Id);
+                               // console.log(scope.dataItem.GroupKeyValues[i]);
                                 break;
             }
         }
 
-
-        //var parentGroupKeys = scope.viewScope.currentSearchCriteria.groupKeys;
-        //for (var i = 0; i < parentGroupKeys.length; i++) {
-        //    var groupKey = parentGroupKeys[i];
-
-        //    switch (groupKey.groupKeyEnumValue) {
-        //        case TrafficStatisticGroupKeysEnum.OurZone.value:
-        //            parameters.zoneIds.push(scope.dataItem.GroupKeyValues[i].Id);
-        //            console.log(scope.dataItem.GroupKeyValues[i]);
-        //            break;
-        //        case TrafficStatisticGroupKeysEnum.CustomerId.value:
-        //            parameters.customerIds.push(scope.dataItem.GroupKeyValues[i].Id);
-        //            //console.log(parameters.customerIds);
-        //            break;
-        //        case TrafficStatisticGroupKeysEnum.SupplierId.value:
-        //            parameters.supplierIds.push(scope.dataItem.GroupKeyValues[i].Id);
-        //            //console.log(parameters.supplierIds);
-        //            break;
-        //    }
-        //}
-        getObjectHeader(parameters, dataItem,scope.viewScope)
+        getObjectHeader(parameters, scope.gridParentScope)
     }
 
     
