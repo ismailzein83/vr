@@ -60,7 +60,7 @@
                       <rd:DefaultName>textbox1</rd:DefaultName>
                       <ZIndex>28</ZIndex>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -92,7 +92,10 @@
                       <rd:DefaultName>Customer</rd:DefaultName>
                       <ZIndex>27</ZIndex>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
