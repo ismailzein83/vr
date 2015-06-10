@@ -16,5 +16,7 @@ namespace TOne.Analytics.Data
         List<BillingStatistic> GetBillingStatistics(DateTime fromDate,DateTime toDate);
 
         List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue);
+
+        List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier);
     }
 }

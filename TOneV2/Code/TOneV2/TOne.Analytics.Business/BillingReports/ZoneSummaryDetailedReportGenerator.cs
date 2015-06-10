@@ -8,41 +8,32 @@ using TOne.Entities;
 
 namespace TOne.Analytics.Business.BillingReports
 {
-    public class ZoneSummaryReportGenerator : TOne.Entities.IReportGenerator
+    public class ZoneSummaryDetailedReportGenerator : TOne.Entities.IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
 
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<ZoneSummaryFormatted> zoneSummaries = 
-                manager.GetZoneSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier);
+            List<ZoneSummaryDetailedFormatted> zoneSummaryDetailed = 
+                manager.GetZoneSummaryDetailed(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.IsCost, parameters.CurrencyId, parameters.SupplierGroup, parameters.CustomerGroup, parameters.CustomerAMUId, parameters.SupplierAMUId, parameters.GroupBySupplier);
             
             decimal services = 0;
             if (parameters.IsCost)
-                if(zoneSummaries.Count != 0)
-                    services = zoneSummaries[0].Calls != null ? zoneSummaries[0].Calls : 0;
+                if (zoneSummaryDetailed.Count != 0)
+                    services = zoneSummaryDetailed[0].Calls != null ? zoneSummaryDetailed[0].Calls : 0;
 
             parameters.ServicesForCustomer = services;
-            parameters.NormalDuration = zoneSummaries.Where(y => y.RateTypeFormatted == "Normal").Sum(x => x.DurationInSeconds);
-
-            parameters.OffPeakDuration = zoneSummaries.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => x.DurationInSeconds);
-
-            parameters.NormalNet = zoneSummaries.Where(y => y.RateTypeFormatted == "Normal").Sum(x => x.Net).Value;
-
-            parameters.OffPeakNet = zoneSummaries.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => x.Net).Value;
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 
-            //List<ZoneSummaryFormatted> zs = manager.getZoneSummray(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, "USD", null, null, null, null, true);
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("ZoneSummaries", zoneSummaries);
+            dataSources.Add("ZoneSummaryDetailed", zoneSummaryDetailed);
             return dataSources;
         }
 
         public Dictionary<string, RdlcParameter> GetRdlcReportParameters(TOne.Entities.ReportParameters parameters)
         {
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
-            
             
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
@@ -57,6 +48,7 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("NormalDuration", new RdlcParameter { Value = parameters.NormalDuration.ToString(), IsVisible = true });
             list.Add("OffPeakNet", new RdlcParameter { Value = parameters.OffPeakNet.ToString(), IsVisible = true });
             list.Add("OffPeakDuration", new RdlcParameter { Value = parameters.OffPeakDuration.ToString(), IsVisible = true });
+
             list.Add("IsService", new RdlcParameter { Value = parameters.IsService.ToString(), IsVisible = true });
             list.Add("IsCommission", new RdlcParameter { Value = parameters.IsCommission.ToString(), IsVisible = true });
             list.Add("TotalAmount", new RdlcParameter { Value = parameters.TotalAmount.ToString(), IsVisible = true });

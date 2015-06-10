@@ -39,6 +39,24 @@ namespace TOne.Analytics.Data.SQL
                groupBySupplier
                );
         }
+
+        public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        {
+            return GetItemsSP("Analytics.SP_Billing_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               isCost,
+               currencyId,
+               (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
+               (customerGroup == null || customerGroup == "") ? null : customerGroup,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               groupBySupplier
+               );
+        }
+
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {            
             string query = String.Format(@"SELECT
@@ -183,6 +201,35 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
+
+        private ZoneSummaryDetailed ZoneSummaryDetailedMapper(IDataReader reader, bool groupBySupplier)
+        {
+            ZoneSummaryDetailed instance = new ZoneSummaryDetailed
+            {
+                Zone = reader["Zone"] as string,
+                ZoneId = GetReaderValue<int>(reader, "ZoneId"),
+                Calls = GetReaderValue<int>(reader, "Calls"),
+                DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds"),
+                Rate = GetReaderValue<double>(reader, "Rate"),
+                Net = GetReaderValue<double>(reader, "Net"),
+                OffPeakDurationInSeconds = GetReaderValue<decimal>(reader, "OffPeakDurationInSeconds"),
+                OffPeakRate = GetReaderValue<double>(reader, "OffPeakRate"),
+                OffPeakNet = GetReaderValue<double>(reader, "OffPeakNet"),
+                WeekEndDurationInSeconds = GetReaderValue<decimal>(reader, "WeekEndDurationInSeconds"),
+                WeekEndRate = GetReaderValue<double>(reader, "WeekEndRate"),
+                WeekEndNet = GetReaderValue<double>(reader, "WeekEndNet"),
+                Discount = GetReaderValue<double>(reader, "Discount"),
+                CommissionValue = GetReaderValue<double>(reader, "CommissionValue"),
+                ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue")
+            };
+            if (groupBySupplier == true)
+            {
+                instance.SupplierID = reader["SupplierID"] as string;
+            }
+            return instance;
+        }
+
         private MonthTraffic MonthMapper(IDataReader reader)
         {
             MonthTraffic instance = new MonthTraffic

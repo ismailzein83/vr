@@ -367,6 +367,9 @@
     <EmbeddedResource Include="Reports\Analytics\rdlZoneSummary.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Analytics\rdlZoneSummaryDetailed.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Analytics\ZoneProfit.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

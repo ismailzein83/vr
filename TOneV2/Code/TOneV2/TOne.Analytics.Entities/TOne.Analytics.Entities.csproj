@@ -55,6 +55,7 @@
     <Compile Include="BillingCDR.cs" />
     <Compile Include="Billing\ZoneSummary.cs" />
     <Compile Include="Billing\ZoneSummaryDetailed.cs" />
+    <Compile Include="Billing\ZoneSummaryDetailedFormatted.cs" />
     <Compile Include="Billing\ZoneSummaryFormatted.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
