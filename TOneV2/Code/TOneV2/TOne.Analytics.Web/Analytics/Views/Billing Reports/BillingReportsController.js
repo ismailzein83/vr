@@ -17,7 +17,8 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
         isCost: false,
         service: false,
         commission: false,
-        bySupplier:false
+        bySupplier: false,
+        margin:10
     }
     function defineScope() {
        
@@ -32,7 +33,7 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
             paramsurl += "&service=" + $scope.params.service;
             paramsurl += "&commission=" + $scope.params.commission;
             paramsurl += "&bySupplier=" + $scope.params.bySupplier;
-
+            paramsurl += "&margin=" + $scope.params.margin;
 
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);

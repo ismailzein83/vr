@@ -47,5 +47,7 @@ namespace TOne.Entities
         public bool IsCommission { get; set; }
 
         public decimal ServicesForCustomer { get; set; }
+
+        public int Margin { get; set; }
     }
 }

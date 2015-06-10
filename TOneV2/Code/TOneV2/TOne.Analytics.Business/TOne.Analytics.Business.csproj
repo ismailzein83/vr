@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BillingReports\ZoneProfitReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneSummaryDetailedReportGenerator.cs" />
+    <Compile Include="BillingReports\CarrierLostReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneSummaryReportGenerator.cs" />
     <Compile Include="BillingStatisticManager.cs" />
     <Compile Include="CDRManager.cs" />

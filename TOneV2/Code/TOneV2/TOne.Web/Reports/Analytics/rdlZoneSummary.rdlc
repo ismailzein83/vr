@@ -2006,7 +2006,7 @@ FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCus
             <TablixMember />
             <TablixMember>
               <Visibility>
-                <Hidden>= IIf(Parameters!GroupeBySupplier.Value = "true" , False ,True)</Hidden>
+                <Hidden>=IIf(Parameters!GroupeBySupplier.Value = "true" , False ,True)</Hidden>
               </Visibility>
             </TablixMember>
             <TablixMember />

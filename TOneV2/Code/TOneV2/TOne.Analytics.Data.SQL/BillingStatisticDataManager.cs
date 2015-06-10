@@ -136,8 +136,21 @@ namespace TOne.Analytics.Data.SQL
 
             });
 
-        }     
+        }
 
+        public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_CarrierLostReport", CarrierLostMapper,
+            fromDate,
+            toDate,
+            (customerId == null || customerId == "") ? null : customerId,
+            (supplierId == null || supplierId == "") ? null : supplierId,
+            margin,            
+            (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+            (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+            );
+
+        }
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
             ZoneProfit instance = new ZoneProfit
@@ -159,6 +172,7 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
+
         private CarrierProfile CarrierProfileMapper(IDataReader reader, bool IsAmount)
         {
             CarrierProfile instance = new CarrierProfile
@@ -227,6 +241,23 @@ namespace TOne.Analytics.Data.SQL
             {
                 instance.SupplierID = reader["SupplierID"] as string;
             }
+            return instance;
+        }
+
+        private CarrierLost CarrierLostMapper(IDataReader reader)
+        {
+            CarrierLost instance = new CarrierLost
+            {
+                CustomerID = reader["CustomerID"] as string,
+                SupplierID = reader["SupplierID"] as string ,
+                CostZoneID = GetReaderValue<int>(reader, "CostZoneID"),
+                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostNet = GetReaderValue<double>(reader, "CostNet")
+                
+            };
+
             return instance;
         }
 

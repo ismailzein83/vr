@@ -12,11 +12,12 @@ namespace TOne.Analytics.Business
     public class BillingStatisticManager
     {
         private readonly IBillingStatisticDataManager _datamanager;
-
+        private readonly BusinessEntityInfoManager _bemanager;
 
         public BillingStatisticManager()
         {
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
+            _bemanager = new BusinessEntityInfoManager();
         }
         public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate,  bool groupByCustomer)
         {
@@ -37,6 +38,12 @@ namespace TOne.Analytics.Business
         {
             return FormatZoneSummariesDetailed(_datamanager.GetZoneSummaryDetailed(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
         }
+
+        public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
+        {
+            return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate,toDate,customerId,supplierId,margin,supplierAMUId,customerAMUId));
+        }
+        
         public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
 
@@ -62,13 +69,12 @@ namespace TOne.Analytics.Business
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
-            BusinessEntityInfoManager bsm = new BusinessEntityInfoManager();
             return new ZoneProfitFormatted
             {
                 CostZone = zoneProfit.CostZone,
                 SaleZone = zoneProfit.SaleZone,
-                SupplierID = bsm.GetCarrirAccountName(zoneProfit.SupplierID),
-                CustomerID =  bsm.GetCarrirAccountName(zoneProfit.CustomerID),
+                SupplierID = _bemanager.GetCarrirAccountName(zoneProfit.SupplierID),
+                CustomerID =  _bemanager.GetCarrirAccountName(zoneProfit.CustomerID),
                 Calls = zoneProfit.Calls,
 
                 DurationNet = zoneProfit.DurationNet,
@@ -96,11 +102,10 @@ namespace TOne.Analytics.Business
 
         private ZoneSummaryFormatted FormatZoneSummary(ZoneSummary zoneSummary)
         {
-            BusinessEntityInfoManager bsm = new BusinessEntityInfoManager();
             return new ZoneSummaryFormatted
             {
                 Zone = zoneSummary.Zone,
-                SupplierID = (zoneSummary.SupplierID!=null)?bsm.GetCarrirAccountName(zoneSummary.SupplierID):null,
+                SupplierID = (zoneSummary.SupplierID!=null)?_bemanager.GetCarrirAccountName(zoneSummary.SupplierID):null,
 
                 Calls = zoneSummary.Calls,
 
@@ -128,13 +133,12 @@ namespace TOne.Analytics.Business
 
         private ZoneSummaryDetailedFormatted FormatZoneSummaryDetailed(ZoneSummaryDetailed zoneSummaryDetailed)
         {
-            BusinessEntityInfoManager bsm = new BusinessEntityInfoManager();
             return new ZoneSummaryDetailedFormatted
             {
                 Zone = zoneSummaryDetailed.Zone,
                 ZoneId = zoneSummaryDetailed.ZoneId,
 
-                SupplierID = (zoneSummaryDetailed.SupplierID != null) ? bsm.GetCarrirAccountName(zoneSummaryDetailed.SupplierID) : null,
+                SupplierID = (zoneSummaryDetailed.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneSummaryDetailed.SupplierID) : null,
 
                 Calls = zoneSummaryDetailed.Calls,
 
@@ -177,6 +181,31 @@ namespace TOne.Analytics.Business
 
                 ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue ,
                 ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue),
+            };
+        }
+
+        private CarrierLostFormatted FormatCarrierLost(CarrierLost carrierLost)
+        {
+            
+            return new CarrierLostFormatted
+            {
+              CustomerID = carrierLost.CustomerID ,
+              CustomerName = _bemanager.GetCarrirAccountName(carrierLost.CustomerID),
+              SupplierID = carrierLost.SupplierID,
+              SupplierName = _bemanager.GetCarrirAccountName(carrierLost.SupplierID),
+              SaleZoneID = carrierLost.SaleZoneID ,
+              SaleZoneName = _bemanager.GetZoneName(carrierLost.SaleZoneID),
+              CostZoneID = carrierLost.CostZoneID ,
+              CostZoneName = _bemanager.GetZoneName(carrierLost.CostZoneID),
+              Duration = carrierLost.Duration ,
+              DurationFormatted = FormatNumber(carrierLost.Duration),
+              CostNet = carrierLost.CostNet,
+              CostNetFormatted = (carrierLost.CostNet==null)?"0.00":FormatNumber(carrierLost.CostNet,5),
+              SaleNet = carrierLost.SaleNet,
+              SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 5),
+              Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
+              Percentage = FormatNumber(1 - carrierLost.CostNet / carrierLost.SaleNet)
+
             };
         }
         private string FormatNumber(Decimal? number, int precision)
@@ -228,6 +257,18 @@ namespace TOne.Analytics.Business
                 }
             return models;
         }
+        private List<CarrierLostFormatted> FormatCarrierLost(List<CarrierLost> carriersLost) {
+
+            List<CarrierLostFormatted> models = new List<CarrierLostFormatted>();
+            if (carriersLost != null)
+                foreach (var z in carriersLost)
+                {
+                    models.Add(FormatCarrierLost(z));
+                }
+            return models;
+        
+        }
+
         #endregion 
     }
 }

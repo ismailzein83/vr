@@ -32,28 +32,31 @@ namespace TestRuntime.Tasks
 
             TOne.Entities.RDLCReportDefinition reportDefinition = new TOne.Entities.RDLCReportDefinition
             {
-                Name = "Zone Summary Detailed",
-                ReportGeneratorFQTN = "TOne.Analytics.Business.BillingReports.ZoneSummaryDetailedReportGenerator, TOne.Analytics.Business",
-                ReportURL = "~/Reports/Analytics/rdlZoneSummaryDetailed.rdlc",
+                Name = "Carrier Lost Summary",
+                ReportGeneratorFQTN = "TOne.Analytics.Business.BillingReports.CarrierLostReportGenerator, TOne.Analytics.Business",
+                ReportURL = "~/Reports/Analytics/rdlCarrierLostSummary.rdlc",
                 ParameterSettings = new TOne.Entities.ReportParameterSettings
                 {
                     RequiresFromTime = true,
-                    RequiresToTime = true,
-                    RequiresCustomerAMUId = true,
-                    RequiresGroupBySupplier = true,
-                    RequiresGroupByCustomer = false,
-                    RequiresSupllierAMUId = true,
+                    RequiresToTime = true,                    
+                    RequiresCustomerId = true,
                     RequiresSupllierId = true,
-                    RequiresCurrencyId = true,
-                    RequiresCustomerGroup = true,
-                    RequiresIsCommission = true,
-                    RequiresIsCost = true,
-                    RequiresIsService = true,
-                    RequiresServicesForCustomer = true,
-                    RequiresSupplierGroup= true,
-                    RequiresCustomerId = true
+                    RequiresMargin = true,
+                    RequiresCustomerAMUId = true,
+                    RequiresSupllierAMUId = true,
+
+                    RequiresGroupBySupplier = false,
+                    RequiresGroupByCustomer = false,
+                    RequiresCurrencyId = false,
+                    RequiresCustomerGroup = false,
+                    RequiresIsCommission = false,
+                    RequiresIsCost = false,
+                    RequiresIsService = false,
+                    RequiresServicesForCustomer = false,
+                    RequiresSupplierGroup= false
+               
                 },
-                ReportDefinitionId = 3
+                ReportDefinitionId = 4
             };
 
             string serializedReportDefinition = Vanrise.Common.Serializer.Serialize(reportDefinition);

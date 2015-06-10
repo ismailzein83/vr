@@ -31,8 +31,7 @@ namespace TOne.Web.Reports.Analytics
                 bool service = (Request.QueryString["service"] != null) ? (Request.QueryString["service"] == "true") : false;
                 bool commission = (Request.QueryString["commission"] != null) ? (Request.QueryString["commission"] == "true") : false;
                 bool bySupplier = (Request.QueryString["bySupplier"] != null) ? (Request.QueryString["bySupplier"] == "true") : false;
-
-                //bool ServicesForCustomer
+                int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
 
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
@@ -53,6 +52,7 @@ namespace TOne.Web.Reports.Analytics
                 parameters.IsCommission = commission;
                 parameters.GroupBySupplier = bySupplier;
                 parameters.CurrencyId = "USD";
+                parameters.Margin = margin;
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 

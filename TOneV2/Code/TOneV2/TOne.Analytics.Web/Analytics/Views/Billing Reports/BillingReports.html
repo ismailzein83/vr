@@ -30,6 +30,10 @@
                 
             </vr-row>
             <vr-row ng-if="reporttype">
+                <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresMargin">
+                    <vr-label>Margin</vr-label>
+                    <number-filed input-value="params.margin" />%
+                </vr-columns>
                 <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresGroupByCustomer">
                     <vr-label>Group By Customer</vr-label>
                     <vr-switch value="params.groupByCustomer"></vr-switch>
