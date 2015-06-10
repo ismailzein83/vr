@@ -1,5 +1,5 @@
 ﻿<div ng-controller="TrafficStatisticsGridController" vr-loader="isGettingData">
-    <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged">
+    <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged()">
         <vr-choice ng-repeat="groupKey in groupKeys">{{groupKey.title}}</vr-choice>
     </vr-choices>
     <div ng-repeat="groupKey in groupKeys">

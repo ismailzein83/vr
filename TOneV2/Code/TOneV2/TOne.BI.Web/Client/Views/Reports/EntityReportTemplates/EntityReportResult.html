@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="BI_EntityReportResultController" vr-loader="isGettingData">
     <vr-row>
-        <vr-choices selectedindex="selectedChoiceIndex" onselectionchanged="choiceSelectionChanged" on-ready="choicesReady">
+        <vr-choices selectedindex="selectedChoiceIndex" onselectionchanged="choiceSelectionChanged()" on-ready="choicesReady">
             <vr-choice ng-repeat="choice in choicesGroup">{{choice.title}}</vr-choice>
         </vr-choices>
     </vr-row>
