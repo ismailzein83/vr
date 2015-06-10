@@ -336,7 +336,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
                                 
 
-                currentData = response.Data;
+                currentData = [];
+                angular.forEach(response.Data, function (itm) {
+                    currentData.push(itm);
+                });
                 if (currentSortedColDef != undefined)
                     currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
 
@@ -359,7 +362,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 });
         }
 
-        function renderOverallChart(){
+        function renderOverallChart() {
             var chartData = [];
             var measure = overallSelectedMeasure;
             var othersValue = $scope.trafficStatisticSummary[measure.propertyName];
