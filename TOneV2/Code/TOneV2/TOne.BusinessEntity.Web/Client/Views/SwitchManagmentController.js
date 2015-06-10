@@ -37,10 +37,10 @@ function SwitchManagmentController($scope, $q, SwitchManagmentAPIService, $locat
     function getData() {
         var pageInfo = gridApi.getPageInfo();
         return SwitchManagmentAPIService.GetFilteredSwitches($scope.switchName, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-
-            angular.forEach(response, function (itm) {
-                $scope.switchsDataSource.push(itm);
-            });
+            gridApi.addItemsToSource(response);
+            //angular.forEach(response, function (itm) {
+            //    $scope.switchsDataSource.push(itm);
+            //});
         });
     }
 

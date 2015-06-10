@@ -27,10 +27,10 @@ function CarrierAccountManagementController($scope, BusinessEntityAPIService, VR
     function getData() {
         var pageInfo = gridApi.getPageInfo();
         return BusinessEntityAPIService.GetCarrierAccounts($scope.name, $scope.companyName, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-
-            angular.forEach(response, function (itm) {
-                $scope.CarrierAccountsDataSource.push(itm);
-            });
+            gridApi.addItemsToSource(response);
+            //angular.forEach(response, function (itm) {
+            //    $scope.CarrierAccountsDataSource.push(itm);
+            //});
         });
     }
 

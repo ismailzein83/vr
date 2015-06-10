@@ -1,6 +1,7 @@
 ﻿appControllers.controller('ZoneDashboardController',
     function ZoneDashboardController($scope, BIAPIService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum) {
-
+        
+        var gridAPI;
         defineScopeObjects();
         defineScopeMethods();
         load();
@@ -100,6 +101,9 @@
                 getAndShowZone();
             };
 
+            $scope.gridReady = function (api) {
+                gridAPI = api;
+            };
         }
 
         function load() {
@@ -132,9 +136,10 @@
             return BIAPIService.GetTopEntities(BIEntityTypeEnum.SaleZone.value, measureType.value, $scope.fromDate, $scope.toDate, $scope.optionsTopCount.lastselectedvalue.value, measures)
             .then(function (response) {
                 $scope.data.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.data.push(itm);
-                });
+                //angular.forEach(response, function (itm) {
+                //    $scope.data.push(itm);
+                //});
+                gridAPI.addItemsToSource(response);
                 var chartData = response;
                 var chartDefinition = {
                     type: "pie",
