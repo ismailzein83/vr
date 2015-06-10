@@ -3,11 +3,12 @@
 TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService'];
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
     var measures = [];
-
+    var notSelectedGroupKeys = [];
     defineScopeObjects();
     defineScopeMethods();
     load();
     function defineScopeObjects() {
+        $scope.notSelectedGroupKeys = [];
         $scope.measures = measures;
         $scope.currentSearchCriteria = {
             groupKeys: []
@@ -29,13 +30,26 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 zoneIds:[],
                 supplierIds:[]
             };
-            getObjectHeader(parameters, $scope, dataItem);
+            updateParametersFromGroupKeys(parameters, $scope, dataItem);
 
             VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
         }
         }];
     }
-    function getObjectHeader(parameters, scope, dataItem) {
+    function getNotSelectedGroupKeys() {
+        
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            if ($scope.gridParentScope!=$scope.viewScope && $scope.gridParentScope.selectedGroupKey.groupKeyEnumValue != $scope.groupKeys[i].groupKeyEnumValue) 
+                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);
+            else if($scope.gridParentScope == $scope.viewScope)
+                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);
+            //console.log($scope.groupKeys);
+               
+            
+        }
+        console.log($scope.notSelectedGroupKeys);
+    }
+    function updateParametersFromGroupKeys(parameters, scope, dataItem) {
         var groupKeys = [];
         if (scope == undefined)
             return;
@@ -62,7 +76,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             }
         }
 
-        getObjectHeader(parameters, scope.gridParentScope, scope.dataItem);
+        updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
     }
 
     
@@ -80,8 +94,12 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         $scope.groupKeySelectionChanged = function () {
             if ($scope.selectedGroupKeyIndex != undefined) {
                 $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
-                if (!$scope.selectedGroupKey.isDataLoaded)
+                if (!$scope.selectedGroupKey.isDataLoaded) {
+                    
+                   
                     getData();
+                }
+                    
             }
         };
     }
@@ -92,8 +110,14 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function load() {
         loadMeasures();
         loadGroupKeys();
-        if ($scope.selectedGroupKey != undefined)
+        // $scope.notSelectedGroupKeys = [$scope.selectedGroupKey.groupKeyEnumValue];
+       // if ($scope.gridParentScope != $scope.viewScope)
+            
+        getNotSelectedGroupKeys();
+        $scope.selectedGroupKey = $scope.notSelectedGroupKeys[0];
+        if ($scope.selectedGroupKey != undefined || $scope.getNotSelectedGroupKeys != undefined)
             getData();
+        
     }
 
     function loadMeasures() {
@@ -155,6 +179,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             OrderBy: 2,
             IsDescending: true
         };
+        console.log($scope.notSelectedGroupKeys);
         var isSucceeded;
         $scope.isGettingData = true;
         $scope.currentSearchCriteria.groupKeys.length = 0;

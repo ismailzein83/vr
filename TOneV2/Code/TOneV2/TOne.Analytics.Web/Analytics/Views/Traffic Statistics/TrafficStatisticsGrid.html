@@ -1,6 +1,6 @@
 ﻿<div ng-controller="TrafficStatisticsGridController" vr-loader="isGettingData">
     <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged()">
-        <vr-choice ng-repeat="groupKey in groupKeys">{{groupKey.title}}</vr-choice>
+        <vr-choice ng-repeat="groupKey in notSelectedGroupKeys">{{groupKey.title}}</vr-choice>
     </vr-choices>
     <div ng-repeat="groupKey in groupKeys">
         <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" menuactions="menuActions" issubgrid>
