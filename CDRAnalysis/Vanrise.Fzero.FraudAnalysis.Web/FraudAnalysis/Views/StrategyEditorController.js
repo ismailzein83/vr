@@ -1,7 +1,7 @@
 ﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
 function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
-    
+
     var editMode;
     loadParameters();
     defineScope();
@@ -22,18 +22,21 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         if (parameters != undefined && parameters != null)
             $scope.strategyId = parameters.strategyId;
-        
+
         if ($scope.strategyId != undefined)
             editMode = true;
         else
             editMode = false;
     }
 
+    
+
+
     function defineScope() {
         $scope.strategyFilters = [];
         $scope.percentages = [
                          { description: '-75%', value: 0.25 }, { description: '-50%', value: 0.5 }, { description: '-25%', value: 0.75 }, { description: '0%', value: 1.00 }, { description: '25%', value: 1.25 }, { description: '50%', value: 1.50 }, { description: '75%', value: 1.75 }
-                         
+
         ];
 
         $scope.suspectionLevels = [
@@ -41,17 +44,24 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         ];
 
-        $scope.strategyLevels = [
-                            { suspectionLevel: $scope.suspectionLevels[1].name, StrategyLevelCriterias: [{ filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3], isSelected: true }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }] },
-                            { suspectionLevel: $scope.suspectionLevels[2].name, StrategyLevelCriterias: [{ filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3], isSelected: true }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }] }
-        ];
+        $scope.selectedSuspectionLevel = $scope.suspectionLevels[0];
 
-       
+        $scope.strategyLevels = [];
 
+
+        $scope.AddSuspectionLevel = function () {
+
+            var indexSuspectionLevel = UtilsService.getItemIndexByVal($scope.suspectionLevels, $scope.selectedSuspectionLevel.id, "id");
+
+            $scope.strategyLevels.push({ suspectionLevel: $scope.suspectionLevels[indexSuspectionLevel], StrategyLevelCriterias: [{ filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }, { filterId: 2, percentage: $scope.percentages[3] }, { filterId: 3, percentage: $scope.percentages[3] }, { filterId: 1, percentage: $scope.percentages[3] }] });
+        };
+
+
+        
 
         $scope.SaveStrategy = function () {
             if (editMode) {
-                
+
                 return UpdateStrategy();
             }
             else {
@@ -78,7 +88,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 loadFiltersForAddMode();
                 $scope.isGettingData = false;
             }
-            
+
         })
         .catch(function (error) {
             $scope.isGettingData = false;
@@ -87,7 +97,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
     function getStrategy() {
-        
+
         return StrategyAPIService.GetStrategy($scope.strategyId)
            .then(function (response) {
                fillScopeFromStrategyObj(response);
@@ -99,20 +109,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function buildStrategyObjFromScope() {
-        
+
         var strategyObject = {
             Id: ($scope.strategyId != null) ? $scope.strategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
-            StrategyFilters:[]
-
-            //,StrategyLevels: [
-            //                    { SuspectionLevelId: 2, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.0 }, { CriteriaId: 2, Percentage: 1.0 }, { CriteriaId: 3, Percentage: 1.0 }] },
-            //                    { SuspectionLevelId: 3, StrategyLevelCriterias: [{ CriteriaId: 1, Percentage: 1.25 }, { CriteriaId: 2, Percentage: 0.75 }, { CriteriaId: 3, Percentage: 1.0 }] }
-            //                 ]
-
-            
+            StrategyFilters: [],
+            StrategyLevels: []
         };
 
 
@@ -126,24 +130,62 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 MinimumValue: filter.minimumValue,
                 IsSelected: filter.isSelected
 
-            
+
             };
 
             console.log(filter.period)
             if (filter.period != undefined)
-                filterItem.PeriodId= filter.period.Id;
-           
+                filterItem.PeriodId = filter.period.Id;
+
             strategyObject.StrategyFilters.push(filterItem);
         });
 
 
-        
+             
 
+
+        angular.forEach($scope.strategyLevels, function (level) {
+
+            var strategyLevelItem = {
+                SuspectionLevelId: level.suspectionLevel.id,
+                StrategyLevelCriterias: []
+            };
+
+
+            angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
+                
+                if (levelCriteria.isSelected && levelCriteria.isSelected != undefined) {
+
+                    var levelCriteriaItem = {
+                        FilterId: levelCriteria.filterId,
+                        Percentage: levelCriteria.percentage.value
+                    };
+
+                    console.log("levelCriteriaItem.FilterId" + levelCriteriaItem.FilterId)
+                    console.log("levelCriteriaItem.Percentage" + levelCriteriaItem.Percentage)
+                    console.log("levelCriteriaItem.FilterId" + levelCriteriaItem.FilterId)
+
+                    strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem)  ;
+
+                }
+
+               
+
+            });
+
+            strategyObject.StrategyLevels.push(strategyLevelItem);
+
+
+        });
+
+
+
+        console.log(strategyObject)
 
         return strategyObject;
     }
 
-  
+
 
     function loadFiltersForAddMode() {
         angular.forEach($scope.filterDefinitions, function (filterDef) {
@@ -154,7 +196,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyFilters.push(filterItem);
         });
 
-        
+
     }
 
     function fillScopeFromStrategyObj(strategyObject) {
@@ -162,7 +204,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
 
-        
+
         angular.forEach($scope.filterDefinitions, function (filterDef) {
 
             var filterItem = {
@@ -170,19 +212,19 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                 description: filterDef.description
             };
 
-            
-           
+
+
             var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "FilterId");
             if (existingItem != undefined && existingItem != null) {
                 filterItem.isSelected = existingItem.IsSelected;
                 filterItem.threshold = existingItem.Threshold;
                 filterItem.minimumValue = existingItem.MinimumValue;
                 console.log(existingItem.PeriodId);
-                
-                if (existingItem.PeriodId != undefined )
+
+                if (existingItem.PeriodId != undefined)
                     filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
 
-               
+
 
             }
             $scope.strategyFilters.push(filterItem);
@@ -195,7 +237,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.issaving = true;
         var strategyObject = buildStrategyObjFromScope();
 
-        
+
 
 
         return StrategyAPIService.AddStrategy(strategyObject)
@@ -225,7 +267,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     }
 
 
-    $scope.filterDefinitions =  [];
+    $scope.filterDefinitions = [];
 
 
     function loadFilters() {
@@ -266,6 +308,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-    
+
 }
 appControllers.controller('StrategyEditorController', StrategyEditorController);
