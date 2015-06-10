@@ -12,7 +12,10 @@
                     Last : <number-filed ng-show="true" input-value="periodCount" place-holder="'Type period'" isrequired />
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="TimePeriod" selectedvalues="periodTypeValue" label="" isrequired></vr-select>
+                    <vr-select datasource="timePeriod" field="timePeriod.propertyName" selectedvalues="periodTypeValue" label="" isrequired></vr-select>
+                </vr-columns>    
+                <vr-columns colnum="2">
+                    <vr-select datasource="variationReportOptions" field="variationReportOptions.propertyName" selectedvalues="selectedReportOption" label="Variation Reports" isrequired></vr-select>
                 </vr-columns>     
             </vr-row>
         </div>

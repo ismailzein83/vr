@@ -1,19 +1,25 @@
-﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService'];
+﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'TimePeriodEnum', 'VariationReportOptionsEnum'];
 
-function VariationReportsController($scope, BillingStatisticsAPIService) {
+function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum) {
     $scope.name = "test";
     $scope.isInitializing = false;
     
     var mainGridAPI;
     $scope.data = [];
     // $scope.TimePeriod = ['Days','Weeks','Months']
-    $scope.TimePeriod = TimePeriod;
+   // $scope.variationReportOptions = ['InBoundMinutes', 'OutBoundMinutes', 'InOutBoundMinutes', 'TopDestinationMinutes', 'InBoundAmount', 'OutBoundAmount', 'InOutBoundAmount', 'TopDestinationAmount', 'Profit' ]
+    var timePeriod =[];
     $scope.fromDate = '2013/07/31';
     $scope.toDate = '2015/05/01';
     $scope.periodTypeValue = 'Days';
+    $scope.selectedReportOption = 'InBoundMinutes';
     $scope.periodCount = 7;
+    var variationReportOptions = [];
+    //$scope.variationReportOption
     defineScope();
     loadTimePeriods();
+    loadVariationReportsOptions();
+  
    
     function defineScope() {
        
@@ -36,20 +42,14 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
           //  return getData(true);
            return getData(true);
         };
-       
         $scope.getZoneProfit = getZoneProfit;
         $scope.getBillingStats = getBillingStats;
         $scope.getVariationReportsData = getVariationReportsData;
         $scope.getVariationReportsFinalData = getVariationReportsFinalData;
+        $scope.timePeriod = timePeriod;
+        $scope.variationReportOptions = variationReportOptions;
         
     }
-    function loadTimePeriods() {
-        for (var prop in TimePeriodEnum) {
-            TimePeriod.push(TimePeriodEnum[prop]);
-        }
-    }
-   
-
     function getData(withSummary) {
         // alert($scope.name);
         //if ($scope.name == undefined)
@@ -97,7 +97,18 @@ function VariationReportsController($scope, BillingStatisticsAPIService) {
             
         });
     }
-   
+    function loadTimePeriods() {
+        for (var prop in TimePeriodEnum) {
+            timePeriod.push(TimePeriodEnum[prop].propertyName);
+        }
+    }
+
+    function loadVariationReportsOptions() {
+        for (var prop in VariationReportOptionsEnum) {
+            variationReportOptions.push(VariationReportOptionsEnum[prop].propertyName);
+        }
+    }
+
 
 };
 
