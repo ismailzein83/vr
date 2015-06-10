@@ -1,5 +1,26 @@
 ﻿
-app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', function (SelectService, BaseDirService, ValidationMessagesEnum) {
+app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', function (SelectService, BaseDirService, ValidationMessagesEnum, UtilsService) {
+    var openedDropDownIds = [];
+    var rootScope;
+    vrSelectSharedObject = {
+        onOpenDropDown: function (idAttribute) {
+            openedDropDownIds.push(idAttribute);
+            rootScope.$apply(function () { });
+        },
+        onCloseDropDown: function (idAttribute) {
+            var index = openedDropDownIds.indexOf(idAttribute);
+            if (index >= 0) {
+                openedDropDownIds.splice(index, 1);
+                setTimeout(function () {
+                    rootScope.$apply(function () { });
+                }, 300);                
+            }
+        },
+        isDropDownOpened: function (idAttribute) {
+            return openedDropDownIds.indexOf(idAttribute) >= 0;
+        }
+    };
+        
 
     var directiveDefinitionObject = {
 
@@ -20,6 +41,8 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             onselectionchanged: '='
         },
         controller: function ($scope, $element, $attrs) {
+            if (rootScope == undefined)
+                rootScope = $scope.$root;
             var controller = this;
             this.ValidationMessagesEnum = ValidationMessagesEnum;
             this.limitcharactercount = $attrs.limitcharactercount;
@@ -27,6 +50,10 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             this.filtername = '';
             this.showloading = false;
             this.data = {};
+
+            this.isDropDownOpened = function () {
+                return vrSelectSharedObject.isDropDownOpened($attrs.id);
+            };
             
             this.isContainerVisible = function () {
                 if (controller.isMultiple()) return true;
@@ -89,7 +116,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             };
 
             this.findExsite = function (item) {
-                return BaseDirService.findExsite(controller.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
+                return UtilsService.getItemIndexByVal(controller.selectedvalues, controller.getObjectValue(item), controller.datavaluefield);
             };
 
             this.muteAction = function (e) {
@@ -145,7 +172,6 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 if (!controller.selectedSectionVisible()) return 'single-col-checklist';
                 return controller.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
-
             
         },
         controllerAs: 'ctrl',
@@ -232,10 +258,12 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
              
                 setTimeout(function () {
                     $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
+                        vrSelectSharedObject.onOpenDropDown(attrs.id);
                         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                     });
 
                     $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function (e) {
+                        vrSelectSharedObject.onCloseDropDown(attrs.id);
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                     });
                 }, 100)

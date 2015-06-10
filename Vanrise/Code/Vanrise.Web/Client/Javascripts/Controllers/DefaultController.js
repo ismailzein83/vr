@@ -92,6 +92,7 @@
         };
        
         $scope.selectChoice = function () {
-            choicesApi.selectChoice($scope.choiceIndex);
+            //$scope.testObj.choiceSelectedIndex = 
+           // choicesApi.selectChoice();
         };
     });
