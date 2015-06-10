@@ -37,7 +37,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
 
             getDataAfterLoading = true;
 
-            console.log($scope.zoneIDs);
+            console.log(receivedZoneIds);
         }
             
 
@@ -229,10 +229,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
             console.log(response);
             $scope.isInitializing = false;
-            //angular.forEach(response.Data, function (itm) {
-            //    $scope.data.push(itm);
-            //});
-            mainGridAPI.addItemsToSource(response.Data);
+            angular.forEach(response.Data, function (itm) {
+                $scope.data.push(itm);
+            });
+            //mainGridAPI.addItemsToSource(response.Data);
 
         }).finally(function () {
             $scope.isGettingData = false;
