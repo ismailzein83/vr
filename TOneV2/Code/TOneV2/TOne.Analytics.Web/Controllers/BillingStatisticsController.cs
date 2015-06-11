@@ -58,7 +58,6 @@ namespace TOne.Analytics.Web.Controllers
             List<VariationReports> variationReports = new List<VariationReports>();//__billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
 
-
             VariationReportsData current = null;
 
             foreach (var item in variationReports.OrderBy(v => v.CarrierAccountID))

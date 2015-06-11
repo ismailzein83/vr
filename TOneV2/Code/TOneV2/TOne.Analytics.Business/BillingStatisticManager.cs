@@ -42,11 +42,7 @@ namespace TOne.Analytics.Business
         public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
         {
             return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate,toDate,customerId,supplierId,margin,supplierAMUId,customerAMUId));
-        }
-        public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
-        {
-            return new List<CarrierSummaryDailyFormatted>();
-        }
+        }       
         public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
 
@@ -62,6 +58,10 @@ namespace TOne.Analytics.Business
         {
 
             return _datamanager.GetBillingStatistics(fromDate,toDate);
+        }
+        public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
+        {
+            return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
         //public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
@@ -277,6 +277,44 @@ namespace TOne.Analytics.Business
                 }
             return models;
         
+        }
+
+        private List<CarrierSummaryDailyFormatted> FormatCarrieresSummaryDaily(List<CarrierSummaryDaily> carrierSummaryDaily, bool isGroupeByday)
+        {
+
+            List<CarrierSummaryDailyFormatted> models = new List<CarrierSummaryDailyFormatted>();
+            if (carrierSummaryDaily != null)
+                foreach (var z in carrierSummaryDaily)
+                {
+                    models.Add(FormatCarrierSummaryDaily(z, isGroupeByday));
+                }
+            return models;
+
+        }
+
+
+        private CarrierSummaryDailyFormatted FormatCarrierSummaryDaily(CarrierSummaryDaily carrierSummaryDaily, bool isGroupeByday)
+        {
+
+            CarrierSummaryDailyFormatted obj = new CarrierSummaryDailyFormatted
+            {
+
+                Day = carrierSummaryDaily.Day,
+                CarrierID = carrierSummaryDaily.CarrierID,
+                Carrier = _bemanager.GetCarrirAccountName(carrierSummaryDaily.CarrierID),
+                Attempts = carrierSummaryDaily.Attempts,
+                DurationNet = carrierSummaryDaily.DurationNet,
+                DurationNetFormatted = FormatNumber(carrierSummaryDaily.DurationNet),
+                Duration = carrierSummaryDaily.Duration,
+                DurationFormatted = FormatNumber(carrierSummaryDaily.Duration),
+                Net = carrierSummaryDaily.Net,
+                NetFormatted = FormatNumber(carrierSummaryDaily.Net, 5)
+
+            };
+            if (isGroupeByday)
+                obj.Date = obj.Day.ToString();
+
+            return obj;
         }
 
         #endregion 
