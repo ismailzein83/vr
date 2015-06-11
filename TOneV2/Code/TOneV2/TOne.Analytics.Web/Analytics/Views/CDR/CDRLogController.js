@@ -219,20 +219,21 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         }
         $scope.showResult = true;
         $scope.isGettingData = true;
+        
         return CDRAPIService.GetCDRData(getCDRLogSummaryInput).then(function (response) {
             //  alert(response);
             if (currentSortedColDef != undefined)
                 currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
-            $scope.data = [];
+            $scope.data.length = 0;
             currentData = response.Data;
             resultKey = response.ResultKey;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
             console.log(response);
             $scope.isInitializing = false;
-            angular.forEach(response.Data, function (itm) {
-                $scope.data.push(itm);
-            });
-            //mainGridAPI.addItemsToSource(response.Data);
+            //angular.forEach(response.Data, function (itm) {
+            //    $scope.data.push(itm);
+            //});
+            mainGridAPI.addItemsToSource(response.Data);
 
         }).finally(function () {
             $scope.isGettingData = false;
