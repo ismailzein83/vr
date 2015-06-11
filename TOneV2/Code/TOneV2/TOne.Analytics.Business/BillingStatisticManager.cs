@@ -74,7 +74,7 @@ namespace TOne.Analytics.Business
         //    return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
         //}
 
-        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
             return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue,variationReportOptionValue);
         }
@@ -247,8 +247,8 @@ namespace TOne.Analytics.Business
               SaleNet = carrierLost.SaleNet,
               SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 5),
               Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
-              Percentage = FormatNumber(1 - carrierLost.CostNet / carrierLost.SaleNet)
-
+              Percentage = (carrierLost.SaleNet !=null) ? String.Format("{0:#,##0.00%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
+              
             };
         }
         private string FormatNumber(Decimal? number, int precision)

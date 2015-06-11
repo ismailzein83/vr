@@ -48,7 +48,7 @@ namespace TOne.Analytics.Web.Controllers
         //{
         //    return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
         //}
-        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
             return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue,variationReportOptionValue);
         }

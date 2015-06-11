@@ -5,9 +5,9 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         GetTest: GetTest,
         GetZoneProfit: GetZoneProfit,
         GetBillingStatistics: GetBillingStatistics,
-        GetVariationReportsData: GetVariationReportsData,
-        GetVariationReportsFinalData: GetVariationReportsFinalData
-
+       // GetVariationReportsData: GetVariationReportsData,
+        GetVariationReportsFinalData: GetVariationReportsFinalData,
+        GetVariationReportsData : GetVariationReportsData
     });
 
     function GetTest(name){
@@ -35,15 +35,25 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             );
         }
 
+        //function GetVariationReportsData(selectedDate, periodCount, periodTypeValue) {
+        //    return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
+        //        {
+        //            selectedDate: selectedDate,
+        //            periodCount: periodCount,
+        //            periodTypeValue: periodTypeValue
+        //        }
+        //        );
+        //}
         function GetVariationReportsData(selectedDate, periodCount, periodTypeValue) {
-            return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
-                {
-                    selectedDate: selectedDate,
-                    periodCount: periodCount,
-                    periodTypeValue: periodTypeValue
-                }
-                );
-        }
+                return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
+                    {
+                        selectedDate: selectedDate,
+                        periodCount: periodCount,
+                        periodTypeValue: periodTypeValue,
+                        variationReportOptionValue: variationReportOptionValue
+                    }
+                    );
+            }
 
         function GetVariationReportsFinalData(selectedDate, periodCount, periodTypeValue) {
             return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsFinalData",

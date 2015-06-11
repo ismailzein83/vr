@@ -8,17 +8,19 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     $scope.data = [];
     // $scope.TimePeriod = ['Days','Weeks','Months']
    // $scope.variationReportOptions = ['InBoundMinutes', 'OutBoundMinutes', 'InOutBoundMinutes', 'TopDestinationMinutes', 'InBoundAmount', 'OutBoundAmount', 'InOutBoundAmount', 'TopDestinationAmount', 'Profit' ]
-    var timePeriod =[];
+    var timePeriod = [];
+    var variationReportOptions = [];
+
     $scope.fromDate = '2013/07/31';
     $scope.toDate = '2015/05/01';
     $scope.periodTypeValue = 'Days';
     $scope.selectedReportOption = 'InBoundMinutes';
     $scope.periodCount = 7;
-    var variationReportOptions = [];
+ 
     //$scope.variationReportOption
     defineScope();
     loadTimePeriods();
-    loadVariationReportsOptions();
+    loadVariationReportOptions();
   
    
     function defineScope() {
@@ -80,13 +82,23 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             angular.forEach(response, function (itm) { $scope.data.push(itm);});
         });
     }
+    //function getVariationReportsData() {
+    //    $scope.isInitializing = true;
+    //    BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
+    //        $scope.isInitializing = false;
+    //        angular.forEach(response, function (itm) { $scope.data.push(itm); });
+    //    });
+    //}
+
     function getVariationReportsData() {
-        $scope.isInitializing = true;
-        BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
-            $scope.isInitializing = false;
-            angular.forEach(response, function (itm) { $scope.data.push(itm); });
-        });
-    }
+            $scope.isInitializing = true;
+            BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue, $scope.variationReportOptions.value).then(function (response) {
+                $scope.isInitializing = false;
+                angular.forEach(response, function (itm) { $scope.data.push(itm); });
+            });
+        }
+
+    
     function getVariationReportsFinalData() {
         $scope.isInitializing = true;
         BillingStatisticsAPIService.GetVariationReportsFinalData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
@@ -103,9 +115,9 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         }
     }
 
-    function loadVariationReportsOptions() {
+    function loadVariationReportOptions() {
         for (var prop in VariationReportOptionsEnum) {
-            variationReportOptions.push(VariationReportOptionsEnum[prop].propertyName);
+        variationReportOptions.push(VariationReportOptionsEnum[prop].propertyName);
         }
     }
 
