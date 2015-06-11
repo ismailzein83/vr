@@ -20,6 +20,7 @@
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
                         <vr-choice isselected="ctrl.isFilterTabShown">Filters</vr-choice>
                         <vr-choice isselected="ctrl.isLevelsTabShow">Suspicion Levels</vr-choice>
+                        <vr-choice isselected="ctrl.isParamsTabShow">Parameters</vr-choice>
                     </vr-choices>
 
                     <div ng-show="ctrl.isFilterTabShown">
@@ -39,18 +40,18 @@
                                 <vr-select datasource="suspectionLevels" datatextfield="name" datavaluefield="id" label="Suspection Level" colnum="2" selectedvalues="selectedSuspectionLevel"></vr-select>
                             </vr-columns>
                             <vr-columns colnum="1">
-                                <div style="background-color:darkgray" >
-                                    <vr-button type="Add"  data-onclick="AddSuspectionLevel"></vr-button>
+                                <div style="background-color:darkgray">
+                                    <vr-button type="Add" data-onclick="AddSuspectionLevel"></vr-button>
                                 </div>
-                                
+
 
                             </vr-columns>
 
                         </vr-row>
 
                         <div>
-                          
-                            
+
+
                         </div>
 
                         <div>
@@ -70,19 +71,29 @@
                                 </vr-datagridcolumn>
                             </vr-datagrid>
 
-                            {{strategyLevels}}
 
 
 
                         </div>
 
-                       
+
 
 
 
                     </div>
 
+                    <div ng-show="ctrl.isParamsTabShow">
+                        <vr-row>
 
+                            <vr-columns colnum="3">
+                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                            </vr-columns>
+
+                            {{selectedPeakHours}}
+                            
+
+                        </vr-row>
+                    </div>
 
 
                 </vr-columns>
@@ -108,7 +119,7 @@
 
 
 
-            
+
 
 
 
