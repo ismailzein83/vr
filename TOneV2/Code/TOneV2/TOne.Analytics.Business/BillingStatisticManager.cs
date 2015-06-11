@@ -64,10 +64,17 @@ namespace TOne.Analytics.Business
             return _datamanager.GetBillingStatistics(fromDate,toDate);
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        //public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        //{
+        //    return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+        //}
+
+        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
-            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue,variationReportOptionValue);
         }
+
+        
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
