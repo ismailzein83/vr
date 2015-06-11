@@ -32,9 +32,9 @@
 
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
 
-                    var colDef;
-                    if (show)
-                        colDef = dataGridCtrl.addColumn(col, columnIndex);
+                    var colDef = dataGridCtrl.addColumn(col, columnIndex);
+                    if (!show)
+                        dataGridCtrl.hideColumn(colDef);
 
                     iElem.bind("$destroy", function () {
                         if (colDef != undefined) {
@@ -47,17 +47,13 @@
                         $scope.$watch(function () {
                             return $parse(expr)($scope);
                         }, function (value) {
-                            if (value == false) {
-                                if (colDef != undefined) {
-                                    dataGridCtrl.removeColumn(colDef);
-                                    colDef = undefined;
-                                }
-                            }
-                            else if (value == true)
-                            {
-                                if (colDef == undefined)
-                                    colDef = dataGridCtrl.addColumn(col, columnIndex);
-                            }
+                            if (colDef != undefined) {
+                                if (value) 
+                                    dataGridCtrl.showColumn(colDef);
+                                else
+                                    dataGridCtrl.hideColumn(colDef);
+                                    
+                            }                            
                         })
                     });
                 }
