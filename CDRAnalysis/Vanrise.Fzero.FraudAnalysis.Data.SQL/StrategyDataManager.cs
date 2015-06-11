@@ -155,8 +155,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 Vanrise.Common.Serializer.Serialize(strategyObject)
 
             );
-            insertedId = (int)id;
-            return (recordesEffected > 0);
+
+            if (recordesEffected > 0)
+            {
+                insertedId = (int)id;
+                return true;
+            }
+            else
+            {
+                insertedId = 0;
+                return false;
+            }
+
+            
         }
 
         public bool UpdateStrategy(Strategy strategyObject)

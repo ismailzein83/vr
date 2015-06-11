@@ -172,7 +172,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
 
 
-
+        console.log(strategyObject)
 
         return strategyObject;
     }
@@ -254,7 +254,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
     function AddStrategy() {
         $scope.issaving = true;
         var strategyObject = buildStrategyObjFromScope();
+           
 
+       
 
 
 
