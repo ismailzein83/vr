@@ -47,7 +47,7 @@
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}">
             <div vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
         </div>
-        <div ng-style="{'width': $parent.ctrl.actionsColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.isActionMenuVisible(dataItem)">
+        <div ng-style="{'width': $parent.ctrl.actionsColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
             <div class="vr-datagrid-cell">
                 <div class="vr-datagrid-celltext">
                     <div ng-mouseleave="show = false">
@@ -55,7 +55,7 @@
                             <span class="glyphicon glyphicon-list-alt"></span>
                         </label>
                         <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
-                            <li role="presentation">
+                            <li role="presentation" ng-if="show==true">
                                 <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
                                     <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
                                 </div>

@@ -21,7 +21,7 @@
         <div class="container">
             <div class="navbar-header">
                 
-                Welcome {{userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
+                Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
                                                  
             </div>
             <div id="navbar">
@@ -46,7 +46,7 @@
                     <div class="panel-heading hand-cursor dll-menu boxes float-box waves-effect waves-float waves-block" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 4px;"></span>
-                            <span>{{item.Name}} </span>
+                            <span>{{::item.Name}} </span>
                             <span class=" hand-cursor  toggel">
 
                                 <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
@@ -56,7 +56,7 @@
 
                         <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
                             <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
-                                <a class="menulink  " ng-href="{{item.Location}}">{{item.Name}}</a>
+                                <a class="menulink  " ng-href="{{::item.Location}}">{{::item.Name}}</a>
                             </li>
                         </ul>
 
@@ -68,13 +68,13 @@
                         <div class="panel-body ">
                             <ul class="nav">
                                 <li ng-if="c.Childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.Childs">
-                                    <a class=" menulink" ng-click="setIndexSub($index,$event)" ng-href=" {{c.Location}}">{{c.Name}}</a>
+                                    <a class=" menulink" ng-click="setIndexSub($index,$event)" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
                                 </li>
                                 <li ng-if="c.Childs != undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-repeat="c in item.Childs">
-                                    <a class=" menulink " ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{c.Name}}</a>
+                                    <a class=" menulink " ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{::c.Name}}</a>
                                     <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
                                         <li ng-repeat="a in c.Childs">
-                                            <a class=" menulink" style="color:#333;" ng-href="{{a.Location}}">{{a.Name}}</a>
+                                            <a class=" menulink" style="color:#333;" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -97,18 +97,18 @@
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
                         <li role="presentation">
 
-                            <label class="titel-groupe"> {{item.name}}</label>
+                            <label class="titel-groupe"> {{::item.name}}</label>
                         </li>
                         <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs">
 
-                            <a ng-href="{{c.Location}}" ng-click="setActiveClass(null,item , c);setIndexSub($index,$event)">{{c.Name}}</a>
+                            <a ng-href="{{::c.Location}}" ng-click="setActiveClass(null,item , c);setIndexSub($index,$event)">{{::c.Name}}</a>
 
                         </li>
                         <li ng-if="c.Childs != undefined" class="innerlist" ng-repeat="c in item.Childs">
-                            <a ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub($index,$event) ; setActiveClass(null,item , c);" href="">{{c.name}}</a>
+                            <a ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub($index,$event) ; setActiveClass(null,item , c);" href="">{{::c.name}}</a>
                             <ul class="nav" ng-show="menusubItemsCurrent == $index">
                                 <li ng-repeat="a in c.Childs" class="innerlist">
-                                    <a class="menulink" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{a.Location}}">{{a.Name}}</a>
+                                    <a class="menulink" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                 </li>
                             </ul>
                         </li>

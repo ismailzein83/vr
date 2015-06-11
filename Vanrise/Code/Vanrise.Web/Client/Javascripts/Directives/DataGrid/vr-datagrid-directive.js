@@ -253,11 +253,12 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         function buildRowHtml() {
             ctrl.rowHtml = '';
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
-                var currentColumn = '$parent.ctrl.columnDefs[' + i + ']';
-                ctrl.rowHtml += '<div ng-hide="' + currentColumn + '.isHidden" ng-style="{\'width\': ' + currentColumn + '.width, \'display\':\'inline-block\', \'border-left\': ' + (i != 0 ? (currentColumn + '.borderRight') : '\'\'') + '}">'
+                var currentColumn = ctrl.columnDefs[i];
+                var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
+                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" style="width: ' + currentColumn.width + '; display:inline-block' + (i != 0 ? (';border-left: ' + currentColumn.borderRight) : '') +'">'
                 +'<div class="vr-datagrid-cell">'
                 +'    <div class="vr-datagrid-celltext">'
-                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumn)
+                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
                     +'</div>'
                 +'</div>'
 
