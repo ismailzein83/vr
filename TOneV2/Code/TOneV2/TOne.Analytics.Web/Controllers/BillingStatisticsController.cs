@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using TOne.Analytics.Business;
 using TOne.Analytics.Entities;
@@ -43,15 +44,18 @@ namespace TOne.Analytics.Web.Controllers
             return __billingStatisticsManager.GetBillingStatistics(fromDate, toDate);
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+       //public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        //{
+        //    return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+        //}
+        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
-            return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+            return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue,variationReportOptionValue);
         }
-
 
         public List<VariationReportsData> GetVariationReportsFinalData(DateTime selectedDate, int periodCount, string periodTypeValue)
         {
-            List<VariationReports> variationReports = __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
+            List<VariationReports> variationReports = new List<VariationReports>();//__billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
 
 
