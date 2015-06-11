@@ -51,10 +51,11 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
 
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
-      + '<a ng-if="::colDef.isClickable(dataItem)" class="span-summary" ng-click="colDef.onClicked(dataItem)" style="cursor:pointer;"> {{::colDef.getValue(dataItem) #CELLFILTER#}}</a>'
-      + '<span ng-if="::(!colDef.isClickable(dataItem))" class="span-summary"> {{::colDef.getValue(dataItem) #CELLFILTER#}}</span>'
+      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)" class="span-summary" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</a>'
+      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" class="span-summary"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</span>'
       + ''
    + '</div>';
+
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
@@ -127,6 +128,8 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             }
             colDef.cellTemplate = columnCellTemplate;
             if (col.isClickable != undefined) {
+                colDef.isClickableAttr = col.isClickable;
+                colDef.onClickedAttr = col.onClicked;
                 colDef.isClickable = function (dataItem) {
                     if (typeof (col.isClickable) == 'function')
                         return col.isClickable(dataItem);
@@ -153,6 +156,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             else
                 ctrl.columnDefs.splice(columnIndex, 0, colDef);
             calculateColumnsWidth();
+            buildRowHtml();
             return colDef;
         }
 
@@ -160,6 +164,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             var index = ctrl.columnDefs.indexOf(colDef);
             ctrl.columnDefs.splice(index, 1);
             calculateColumnsWidth();
+            buildRowHtml();
         }
 
         function hideColumn(colDef) {
@@ -227,8 +232,39 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             ctrl.removeColumn = removeColumn;
             ctrl.hideColumn = hideColumn;
             ctrl.showColumn = showColumn;
-        }
 
+            ctrl.getColumnValue = function (colDef, dataItem) {
+                return eval('dataItem.' + colDef.field);
+            };
+
+            ctrl.isColumnClickable = function (colDef, dataItem) {
+                if (typeof (colDef.isClickableAttr) == 'function')
+                    return colDef.isClickableAttr(dataItem);
+                else
+                    return colDef.isClickableAttr;
+            };
+            ctrl.onColumnClicked = function (colDef, dataItem) {
+                if (colDef.onClickedAttr != undefined)
+                    colDef.onClickedAttr(dataItem, colDef);
+            };
+            
+        }
+        
+        function buildRowHtml() {
+            ctrl.rowHtml = '';
+            for (var i = 0; i < ctrl.columnDefs.length; i++) {
+                var currentColumn = '$parent.ctrl.columnDefs[' + i + ']';
+                ctrl.rowHtml += '<div ng-hide="' + currentColumn + '.isHidden" ng-style="{\'width\': ' + currentColumn + '.width, \'display\':\'inline-block\', \'border-left\': ' + (i != 0 ? (currentColumn + '.borderRight') : '\'\'') + '}">'
+                +'<div class="vr-datagrid-cell">'
+                +'    <div class="vr-datagrid-celltext">'
+                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumn)
+                    +'</div>'
+                +'</div>'
+
+            +'</div>'
+            }
+        }
+        
         function defineAPI() {
             gridApi.resetSorting = function () {
                 if (lastSortColumnDef != undefined) {
@@ -277,7 +313,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                            
                         });
 
-                    }, 1);
+                    }, 10);
                 }
             }
 
