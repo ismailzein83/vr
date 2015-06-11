@@ -73,7 +73,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
             angular.forEach($scope.strategyFilters, function (filter) {
 
-                if (filter.isSelected && filter.isSelected != undefined) {
+                if (filter.isSelected != undefined) {
 
                     var levelCriteriaItem = {
                         filterId: filter.filterId,
@@ -81,6 +81,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     };
                     strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
+               
             });
 
             $scope.strategyLevels.push(strategyLevelItem);

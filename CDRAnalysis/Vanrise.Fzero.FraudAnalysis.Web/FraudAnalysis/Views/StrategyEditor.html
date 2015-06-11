@@ -57,21 +57,22 @@
                         <div>
 
                             <vr-datagrid datasource="strategyLevels" maxheight="300px">
-                                <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel.name'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn ng-repeat="x in strategyFilters | filter: { isSelected: true }" headertext="'Filter: ' + x.filterId">
-                                    <div>
+                                <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel.name'" widthfactor="20" columnindex="0"></vr-datagridcolumn>
+                                <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" tag="filter">
+                                    <div ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)">
+                                        <!--{{filterIndex}}{{dataItem.StrategyLevelCriterias[filterIndex]}}
+                                        {{dataItem.StrategyLevelCriterias}}-->
+                                        <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
 
-                                        <vr-switch value="dataItem.StrategyLevelCriterias[$index - 1].isSelected"></vr-switch>
+                                        <vr-select ng-show="dataItem.StrategyLevelCriterias[filterIndex ].isSelected && edit" ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
 
-                                        <vr-select ng-show="dataItem.StrategyLevelCriterias[$index - 1].isSelected && edit" ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[$index - 1].percentage"></vr-select>
-
-                                        <vr-label ng-click="edit = true" ng-hide="edit || !dataItem.StrategyLevelCriterias[$index - 1].isSelected">{{dataItem.StrategyLevelCriterias[$index - 1].percentage.description}}</vr-label>
+                                        <vr-label ng-click="edit = true" ng-hide="edit || !dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-label>
                                     </div>
 
                                 </vr-datagridcolumn>
                             </vr-datagrid>
 
-
+                            <!--{{strategyLevels}}-->
 
 
                         </div>
@@ -85,35 +86,26 @@
                     <div ng-show="ctrl.isParamsTabShow">
                         <vr-row>
 
-                            <vr-columns colnum="3">
+                            <vr-columns colnum="2">
                                 <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
                             </vr-columns>
 
-                        </vr-row>
 
-                        <vr-row>
 
-                            <vr-columns colnum="3">
-                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                            <vr-columns colnum="2">
+                                <vr-textbox value="gapbetweenconsecutivecalls" label="Gap Between Consecutive Calls"></vr-textbox>
                             </vr-columns>
 
-                        </vr-row>
 
 
-
-                        <vr-row>
-
-                            <vr-columns colnum="3">
-                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                            <vr-columns colnum="2">
+                                <vr-textbox value="maxLowDurationCall" label="Max. Low Duration Call (s) "></vr-textbox>
                             </vr-columns>
 
-                        </vr-row>
 
 
-                        <vr-row>
-
-                            <vr-columns colnum="3">
-                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                            <vr-columns colnum="2">
+                                <vr-textbox value="minimumCountofCallstoBeActiveHour" label="Min. Count of Calls in an Active Hour"></vr-textbox>
                             </vr-columns>
 
                         </vr-row>
