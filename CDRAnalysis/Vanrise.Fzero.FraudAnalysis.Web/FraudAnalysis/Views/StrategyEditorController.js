@@ -54,8 +54,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             var indexSuspectionLevel = UtilsService.getItemIndexByVal($scope.suspectionLevels, $scope.selectedSuspectionLevel.id, "id");
 
             var strategyLevelItem = {
-                suspectionLevelId: $scope.selectedSuspectionLevel.id,
-                strategyLevelCriterias: []
+                suspectionLevel: $scope.selectedSuspectionLevel,
+                StrategyLevelCriterias: []
             };
 
             angular.forEach($scope.strategyFilters, function (filter) {
@@ -66,12 +66,11 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                         filterId: filter.filterId,
                         percentage: $scope.percentages[3]
                     };
-
-                    strategyLevelItem.strategyLevelCriterias.push(levelCriteriaItem);
+                    strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
                 }
             });
 
-            $scope.strategyLevels.push({ suspectionLevel: $scope.suspectionLevels[indexSuspectionLevel], strategyLevelCriterias: $scope.strategyLevelCriterias });
+            $scope.strategyLevels.push(strategyLevelItem);
         };
 
 
@@ -161,7 +160,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         angular.forEach($scope.strategyLevels, function (level) {
-
+           
             var strategyLevelItem = {
                 SuspectionLevelId: level.suspectionLevel.id,
                 StrategyLevelCriterias: []
