@@ -28,7 +28,6 @@
                             <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Threshold'">  <vr-textbox value="dataItem.threshold"></vr-textbox>            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Minimum Value'">  <vr-textbox value="dataItem.minimumValue"></vr-textbox>            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" selectedvalues="dataItem.period"></vr-select>       </vr-datagridcolumn>
                         </vr-datagrid>
                     </div>
@@ -58,7 +57,7 @@
 
                             <vr-datagrid datasource="strategyLevels" maxheight="300px">
                                 <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel.name'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn ng-repeat="x in filterDefinitions" headertext="'Filter: ' + x.filterId">
+                                <vr-datagridcolumn ng-repeat="x in strategyFilters | filter: { isSelected: true }" headertext="'Filter: ' + x.filterId">
                                     <div>
 
                                         <vr-switch value="dataItem.StrategyLevelCriterias[$index - 1].isSelected"></vr-switch>
@@ -70,6 +69,11 @@
 
                                 </vr-datagridcolumn>
                             </vr-datagrid>
+
+                            {{strategyLevels}}
+
+
+
                         </div>
 
                        

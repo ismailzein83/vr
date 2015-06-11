@@ -15,10 +15,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string StrategyContent { get; set;}
 
-        //public List<StrategyCriteria> StrategyCriterias { get; set; }
-
-        //public List<StrategyPeriod> StrategyPeriods { get; set; }
-
         public List<StrategyLevel> StrategyLevels { get; set; }
 
         public List<StrategyFilter> StrategyFilters { get; set; }
@@ -34,29 +30,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public Decimal Threshold { get; set; }
 
-        public Decimal MinimumValue { get; set; }
-   
         public int? PeriodId { get; set; }
         public bool IsSelected { get; set; }
 
     }
 
 
-
-    //public class StrategyCriteria
-    //{
-    //    public int CriteriaId { get; set; }
-
-    //    public Decimal Threshold { get; set; }
-    //}
-
-    //public class StrategyPeriod
-    //{
-    //    public int CriteriaId { get; set; }
-    //    public int Value { get; set; }
-
-    //    public Enums.Period? Period { get; set; }
-    //}
 
     public class StrategyLevel
     {
