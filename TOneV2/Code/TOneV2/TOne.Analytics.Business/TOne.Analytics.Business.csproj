@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingReports\DailySummaryReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneProfitReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneSummaryDetailedReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierLostReportGenerator.cs" />

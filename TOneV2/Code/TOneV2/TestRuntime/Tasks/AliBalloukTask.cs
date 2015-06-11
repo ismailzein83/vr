@@ -32,16 +32,16 @@ namespace TestRuntime.Tasks
 
             TOne.Entities.RDLCReportDefinition reportDefinition = new TOne.Entities.RDLCReportDefinition
             {
-                Name = "Carrier Lost Summary",
-                ReportGeneratorFQTN = "TOne.Analytics.Business.BillingReports.CarrierLostReportGenerator, TOne.Analytics.Business",
-                ReportURL = "~/Reports/Analytics/rdlCarrierLostSummary.rdlc",
+                Name = "Daily Summary",
+                ReportGeneratorFQTN = "TOne.Analytics.Business.BillingReports.DailySummaryReportGenerator, TOne.Analytics.Business",
+                ReportURL = "~/Reports/Analytics/rdlDailySummary.rdlc",
                 ParameterSettings = new TOne.Entities.ReportParameterSettings
                 {
                     RequiresFromTime = true,
-                    RequiresToTime = true,                    
-                    RequiresCustomerId = true,
-                    RequiresSupllierId = true,
-                    RequiresMargin = true,
+                    RequiresToTime = true,
+                    RequiresCustomerId = false,
+                    RequiresSupllierId = false,
+                    RequiresMargin = false,
                     RequiresCustomerAMUId = true,
                     RequiresSupllierAMUId = true,
 
@@ -56,7 +56,7 @@ namespace TestRuntime.Tasks
                     RequiresSupplierGroup= false
                
                 },
-                ReportDefinitionId = 4
+                ReportDefinitionId = 5
             };
 
             string serializedReportDefinition = Vanrise.Common.Serializer.Serialize(reportDefinition);

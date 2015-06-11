@@ -257,6 +257,16 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
             });
         }
+
+        public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper ,
+              fromDate,
+              toDate,
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+              );
+        }
       
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
@@ -349,6 +359,20 @@ namespace TOne.Analytics.Data.SQL
             {
                 instance.SupplierID = reader["SupplierID"] as string;
             }
+            return instance;
+        }
+
+        private DailySummary DailySummaryMapper(IDataReader reader)
+        {
+            DailySummary instance = new DailySummary
+            {
+                Day = reader["Day"] as string,
+                Calls = GetReaderValue<int>(reader, "Calls"),
+                DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostNet = GetReaderValue<double>(reader, "CostNet")
+            };
             return instance;
         }
 

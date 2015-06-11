@@ -30,6 +30,11 @@ namespace TOne.Analytics.Business
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId , supplierId ,  groupByCustomer ,  supplierAMUId , customerAMUId));
         }
 
+        public List<DailySummaryFormatted> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+            return FormatDailySummaries(_datamanager.GetDailySummary(fromDate, toDate, customerAMUId, supplierAMUId));
+        }
+
         public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
             return FormatZoneSummaries(_datamanager.GetZoneSummary( fromDate,  toDate,  customerId, supplierId,  isCost, currencyId,  supplierGroup,  customerGroup,  customerAMUId,  supplierAMUId,  groupBySupplier));
@@ -194,6 +199,34 @@ namespace TOne.Analytics.Business
             };
         }
 
+        private DailySummaryFormatted FormatDailySummary(DailySummary dailySummary)
+        {
+            return new DailySummaryFormatted
+            {
+                Day = dailySummary.Day,
+                Calls = dailySummary.Calls,
+
+                DurationNet = dailySummary.DurationNet,
+                DurationNetFormatted = FormatNumber(dailySummary.DurationNet),
+
+                SaleDuration = dailySummary.SaleDuration,
+                SaleDurationFormatted = FormatNumber(dailySummary.SaleDuration, 2),
+
+                SaleNet = dailySummary.SaleNet,
+                SaleNetFormatted = FormatNumber(dailySummary.SaleNet, 5),
+
+                CostNet = dailySummary.CostNet,
+                CostNetFormatted = FormatNumber(dailySummary.CostNet, 2),
+
+                ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet , 2),
+
+                //=IIf(IsNothing(Fields!SaleNet.Value) ,"-100%",FormatPercent(1- Fields!CostNet.Value/Fields!SaleNet.Value,2))
+
+                ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - dailySummary.CostNet / dailySummary.SaleNet)) : "-100%",
+                //ProfitPercentageFormatted = dailySummary.SaleNet == null ? "-100%" : FormatNumber(1 - dailySummary.CostNet / dailySummary.SaleNet, 2)
+            };
+        }
+
         private CarrierLostFormatted FormatCarrierLost(CarrierLost carrierLost)
         {
             
@@ -264,6 +297,17 @@ namespace TOne.Analytics.Business
                 foreach (var z in zoneSummariesDetailed)
                 {
                     models.Add(FormatZoneSummaryDetailed(z));
+                }
+            return models;
+        }
+
+        private List<DailySummaryFormatted> FormatDailySummaries(List<DailySummary> dailySummary)
+        {
+            List<DailySummaryFormatted> models = new List<DailySummaryFormatted>();
+            if (dailySummary != null)
+                foreach (var z in dailySummary)
+                {
+                    models.Add(FormatDailySummary(z));
                 }
             return models;
         }
