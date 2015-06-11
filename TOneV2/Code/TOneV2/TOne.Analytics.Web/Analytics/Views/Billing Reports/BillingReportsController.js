@@ -38,9 +38,23 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
 
-            window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=400, height=200,scrollbars=1");
+            window.open("/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
         }
-        
+        $scope.resetReportParams = function () {
+
+            $scope.params = {
+                fromDate: "",
+                toDate: "",
+                groupByCustomer: false,
+                customer: null,
+                supplier: null,
+                isCost: false,
+                service: false,
+                commission: false,
+                bySupplier: false,
+                margin: 10
+            }
+        }
     }
     function load() {
         loadReportTypes();
