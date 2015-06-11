@@ -294,7 +294,11 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             };
 
             gridApi.addItemsToSource = function (items) {
-                addBatchItemsToSource(items);
+                var itemsToAdd = [];//create a new array to avoid changing the original items
+                angular.forEach(items, function (itm) {
+                    itemsToAdd.push(itm);
+                })
+                addBatchItemsToSource(itemsToAdd);
             }
 
             function addBatchItemsToSource(items) {
