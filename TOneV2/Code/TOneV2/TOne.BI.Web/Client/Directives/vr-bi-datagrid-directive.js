@@ -59,6 +59,7 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
 
             ctrl.entityType = settings.entityType;
             ctrl.measureTypes = settings.measureTypes;
+            ctrl.data = [];
         }
 
         function defineAPI() {
@@ -78,7 +79,8 @@ app.directive('vrBiDatagrid', ['BIAPIService', 'BIUtilitiesService', 'BIVisualEl
         }
 
         function refreshDataGrid(response) {
-            ctrl.data = response;
+            ctrl.data.length = 0;
+            gridAPI.addItemsToSource(response);
         }
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
