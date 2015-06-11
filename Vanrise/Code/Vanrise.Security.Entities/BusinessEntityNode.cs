@@ -64,7 +64,7 @@ namespace Vanrise.Security.Entities
                 path.AppendFormat("{0}/", item);
             }
 
-            return path.ToString();
+            return path.ToString().TrimEnd('/');
         }
     }
 
