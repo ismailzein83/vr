@@ -22,7 +22,7 @@ namespace Vanrise.Security.Data.SQL
                 ModuleId = (int)reader["Id"],
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
-                Parent = GetReaderValue<int>(reader, "Parent"),
+                ParentId = GetReaderValue<int>(reader, "ParentId"),
                 Icon = reader["Icon"] as string
             };
             return module;

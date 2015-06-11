@@ -27,7 +27,7 @@ namespace Vanrise.Security.Business
 
             foreach (Module item in modules)
             {
-                if(item.Parent == 0)
+                if(item.ParentId == 0)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissions);
                     if(rootItem.Childs.Count > 0)
@@ -42,7 +42,7 @@ namespace Vanrise.Security.Business
         {
             MenuItem menu = new MenuItem() { Name = module.Name, Location = module.Url, Icon = module.Icon };
 
-            List<Module> subModules = modules.FindAll(x => x.Parent == module.ModuleId);
+            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
             List<View> childViews = views.FindAll(x => x.ModuleId == module.ModuleId);
 
@@ -144,27 +144,36 @@ namespace Vanrise.Security.Business
             {
                 foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
                 {
-                    if (allowedPermissions.ContainsKey(kvp.Key))
-                    {
-                        foreach (string requiredFlag in kvp.Value)
-                        {
-                            string found = allowedPermissions[kvp.Key].Find(x => x == requiredFlag);
-                            if (found == null)
-                            {
-                                result = false;
-                                break;
-                            }
-                        }
-                    }
-                    else
+                    if (!(result = CheckPermissions(kvp.Key, kvp.Value, allowedPermissions)))
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, List<string>> allowedPermissions)
+        {
+            bool result = true;
+
+            if (allowedPermissions.ContainsKey(requiredPath))
+            {
+                foreach (string requiredFlag in requiredFlags)
+                {
+                    if(allowedPermissions[requiredPath].Find(x => x == requiredFlag) == null)
                     {
                         result = false;
                         break;
                     }
                 }
             }
+            else
+            {
+                result = false;
+            }
 
             return result;
         }
+        
     }
 }

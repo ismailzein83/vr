@@ -24,7 +24,7 @@ namespace Vanrise.Security.Business
 
             foreach (BusinessEntityModule item in modules)
             {
-                if (item.Parent == 0)
+                if (item.ParentId == 0)
                 {
                     retVal.Add(GetModuleNode(item, modules, entities, null));
                 }
@@ -85,7 +85,7 @@ namespace Vanrise.Security.Business
                 Parent = parent
             };
 
-            List<BusinessEntityModule> subModules = modules.FindAll(x => x.Parent == module.ModuleId);
+            List<BusinessEntityModule> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
             List<BusinessEntity> childEntities = entities.FindAll(x => x.ModuleId == module.ModuleId);
 

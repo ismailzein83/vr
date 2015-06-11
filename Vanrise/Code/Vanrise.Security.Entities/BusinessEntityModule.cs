@@ -12,7 +12,7 @@ namespace Vanrise.Security.Entities
 
         public string Name { get; set; }
 
-        public int? Parent { get; set; }
+        public int? ParentId { get; set; }
 
         public List<string> PermissionOptions { get; set; }
     }

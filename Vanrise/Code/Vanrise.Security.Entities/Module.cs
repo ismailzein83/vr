@@ -14,7 +14,7 @@ namespace Vanrise.Security.Entities
         
         public string Url { get; set; }
 
-        public int Parent { get; set; }
+        public int ParentId { get; set; }
 
         public string Icon { get; set; }
     }
