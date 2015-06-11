@@ -77,6 +77,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         var expandableRowTemplate;
         var actionTypeColumn;
         var stopPagingOnScroll;
+        var pagingOnScrollEnabled;
 
         function addColumn(col, columnIndex) {
             var colDef = {
@@ -260,7 +261,7 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
             }
 
             function addBatchItemsToSource(items) {
-                var numberOfItems = !stopPagingOnScroll ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
+                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
                 for (var i = 0; i < numberOfItems; i++)
                 {
                     if(items.length > 0) {
@@ -293,8 +294,10 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
         function definePagingOnScroll($scope, loadMoreDataFunction) {
             ctrl.isLoadingMoreData = false;
 
-            if (loadMoreDataFunction != undefined)
+            if (loadMoreDataFunction != undefined) {
+                pagingOnScrollEnabled = true;
                 setMaxHeight("500px");
+            }
 
             //this event is called by the vrDatagridrows directive
             ctrl.onScrolling = function () {
