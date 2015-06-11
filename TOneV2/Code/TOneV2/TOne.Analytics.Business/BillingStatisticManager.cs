@@ -43,7 +43,10 @@ namespace TOne.Analytics.Business
         {
             return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate,toDate,customerId,supplierId,margin,supplierAMUId,customerAMUId));
         }
-        
+        public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
+        {
+            return new List<CarrierSummaryDailyFormatted>();
+        }
         public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
 

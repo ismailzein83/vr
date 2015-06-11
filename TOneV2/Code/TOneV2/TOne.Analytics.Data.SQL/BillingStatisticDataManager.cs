@@ -151,6 +151,114 @@ namespace TOne.Analytics.Data.SQL
             );
 
         }
+
+        public List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_billing_DailyCarrierSummary", CarrierSummaryDailyMapper,
+                 fromDate,
+                 toDate,
+                 (customerId == null || customerId == "") ? null : customerId,
+                 (supplierId == null || supplierId == "") ? null : supplierId,
+                 isCost,
+                 isGroupedByDay,
+                 (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+                 (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+             );
+        }
+
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
+        {
+            string query = String.Format(@"DECLARE @ExchangeRates TABLE(
+		                                             Currency VARCHAR(3),
+		                                             Date SMALLDATETIME,
+		                                             Rate FLOAT
+		                                             PRIMARY KEY(Currency, Date) )
+	                                                                                 
+	                                  	
+                                           INSERT INTO @ExchangeRates 
+                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -@PeriodCount, @FromDate), @FromDate)
+                                            SELECT  cpc.Name , 0.0 as [AVG], 0.0 as [%], CallDate,
+                                            SUM(BS.SaleDuration/60) AS [TotalDuration], 0.0 as [Prev %],cac.CarrierAccountID   
+                                            From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
+                                                LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+                                                LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
+                                                JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
+                                            WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate 
+                                            GROUP BY cpc.Name,cac.CarrierAccountID , Calldate
+                                          --  ORDER BY SUM(BS.SaleDuration/60) desc");
+            return GetItemsText(query, VariationReportsMapper,
+           (cmd) =>
+           {
+               cmd.Parameters.Add(new SqlParameter("@FromDate", selectedDate));
+               cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
+               cmd.Parameters.Add(new SqlParameter("@PeriodTypeValue", periodTypeValue));
+           });
+
+        }
+
+        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.AppendFormat(@"DECLARE @ExchangeRates TABLE(
+		                                             Currency VARCHAR(3),
+		                                             Date SMALLDATETIME,
+		                                             Rate FLOAT
+		                                             PRIMARY KEY(Currency, Date))
+                                            INSERT INTO @ExchangeRates 
+                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -{0}, {1}), {1}) ", periodCount, selectedDate);
+            queryBuilder.AppendFormat(" \n" + selectColumnFunction(variationReportOptionValue));
+            queryBuilder.AppendFormat(@" \n From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+                                      \n  LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+                                      \n LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate ");
+            queryBuilder.AppendFormat(@" \n JOIN CarrierAccount ca With(Nolock) ON ca.CarrierAccountID=" + (variationReportOptionValue == 0 ? "BS.CustomerID" : "BS.SupplierID")
+                                    + @") \n JOIN CarrierProfile cp With(Nolock) ON cp.ProfileID = ca.ProfileID ");
+            queryBuilder.AppendFormat(@" \n WHERE CallDate BETWEEN DATEADD(Day, -{0}+1, {1}) AND {1} ", periodCount, selectedDate);
+            if (variationReportOptionValue == 1)
+            {
+                queryBuilder.AppendFormat(@" \n   AND  ca.RepresentsASwitch <> 'Y'");
+
+            }
+            queryBuilder.AppendFormat("\n GROUP BY cp.Name,ca.CarrierAccountID,CallDate");
+            return queryBuilder;
+
+
+
+        }
+
+        public string selectColumnFunction(int variationReportOptionValue)
+        {
+            // if() Report Type
+            string duration;
+            switch (variationReportOptionValue)
+            {
+                case 0: duration = "SaleDuration";
+                    break;
+                case 1: duration = "CostDuration";
+                    break;
+
+                default: duration = "CostDuration";
+                    break;
+            }
+            string selectQuery = @"SELECT  cp.Name , 0.0 as [Days AVG], 0.0 as [Days %],  0.0 as [Prev Day %],CallDate, 
+            
+              sum(" + duration + "/60) as TotalDuration,ca.CarrierAccountID";
+
+            return selectQuery;
+        }
+        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        {
+            string query = String.Format(@"SELECT TOP 100 * FROM Billing_Stats Where CallDate Between @FromDate AND @ToDate");
+
+            return GetItemsText(query, BillingStatisticsMapper,
+            (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
+            });
+        }
+      
+        #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
             ZoneProfit instance = new ZoneProfit
@@ -315,19 +423,7 @@ namespace TOne.Analytics.Data.SQL
                     models.Add(MapZoneProfit(z));
                 }
             return models;
-        }
-
-        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
-        {
-            string query = String.Format(@"SELECT TOP 100 * FROM Billing_Stats Where CallDate Between @FromDate AND @ToDate");
-
-            return GetItemsText(query, BillingStatisticsMapper,
-            (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
-            });
-        }
+        }       
 
         private BillingStatistic BillingStatisticsMapper(IDataReader reader)
         {
@@ -366,87 +462,6 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
-        {
-            string query = String.Format(@"DECLARE @ExchangeRates TABLE(
-		                                             Currency VARCHAR(3),
-		                                             Date SMALLDATETIME,
-		                                             Rate FLOAT
-		                                             PRIMARY KEY(Currency, Date) )
-	                                                                                 
-	                                  	
-                                           INSERT INTO @ExchangeRates 
-                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -@PeriodCount, @FromDate), @FromDate)
-                                            SELECT  cpc.Name , 0.0 as [AVG], 0.0 as [%], CallDate,
-                                            SUM(BS.SaleDuration/60) AS [TotalDuration], 0.0 as [Prev %],cac.CarrierAccountID   
-                                            From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
-                                                LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-                                                LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
-                                                JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-                                            WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate 
-                                            GROUP BY cpc.Name,cac.CarrierAccountID , Calldate
-                                          --  ORDER BY SUM(BS.SaleDuration/60) desc");
-            return GetItemsText(query, VariationReportsMapper,
-           (cmd) =>
-           {
-               cmd.Parameters.Add(new SqlParameter("@FromDate", selectedDate));
-               cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
-               cmd.Parameters.Add(new SqlParameter("@PeriodTypeValue", periodTypeValue));
-           });
-
-        }
-
-        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
-        {
-            StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.AppendFormat(@"DECLARE @ExchangeRates TABLE(
-		                                             Currency VARCHAR(3),
-		                                             Date SMALLDATETIME,
-		                                             Rate FLOAT
-		                                             PRIMARY KEY(Currency, Date))
-                                            INSERT INTO @ExchangeRates 
-                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -{0}, {1}), {1}) ",periodCount,selectedDate);
-            queryBuilder.AppendFormat(" \n" + selectColumnFunction(variationReportOptionValue));
-            queryBuilder.AppendFormat(@" \n From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
-                                      \n  LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-                                      \n LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate ");
-            queryBuilder.AppendFormat(@" \n JOIN CarrierAccount ca With(Nolock) ON ca.CarrierAccountID="+(variationReportOptionValue==0?"BS.CustomerID":"BS.SupplierID")
-                                    +@") \n JOIN CarrierProfile cp With(Nolock) ON cp.ProfileID = ca.ProfileID ");
-            queryBuilder.AppendFormat(@" \n WHERE CallDate BETWEEN DATEADD(Day, -{0}+1, {1}) AND {1} ", periodCount, selectedDate);
-            if (variationReportOptionValue == 1) {
-                queryBuilder.AppendFormat(@" \n   AND  ca.RepresentsASwitch <> 'Y'");
-
-            }
-            queryBuilder.AppendFormat("\n GROUP BY cp.Name,ca.CarrierAccountID,CallDate");
-            return queryBuilder;
-
-
-
-        }
-
-        public string selectColumnFunction(int variationReportOptionValue)
-        {
-            // if() Report Type
-            string duration;
-            switch (variationReportOptionValue)
-            {
-                case 0: duration = "SaleDuration";
-                        break;
-                case 1: duration = "CostDuration";
-                        break;
-                
-                default: duration = "CostDuration";
-                        break;
-            }
-            string selectQuery = @"SELECT  cp.Name , 0.0 as [Days AVG], 0.0 as [Days %],  0.0 as [Prev Day %],CallDate, 
-            
-              sum(" + duration +"/60) as TotalDuration,ca.CarrierAccountID";
-
-            return selectQuery;
-        }
-
-
         private VariationReports VariationReportsMapper(IDataReader reader)
         {
 
@@ -463,6 +478,24 @@ namespace TOne.Analytics.Data.SQL
 
             return instance;
         }
+
+        private CarrierSummaryDaily CarrierSummaryDailyMapper(IDataReader reader )
+        {
+
+            CarrierSummaryDaily instance = new CarrierSummaryDaily
+            {
+                Day = reader["Day"] as string ,
+                CarrierID = reader["CarrierID"] as string,
+                Attempts = GetReaderValue<int>(reader, "Attempts"),
+                DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                Duration = GetReaderValue<decimal>(reader, "DurationNet"),
+                Net = GetReaderValue<double>(reader, "Net")
+            };
+
+            return instance;
+        }
+
+        #endregion
 
     }
 }
