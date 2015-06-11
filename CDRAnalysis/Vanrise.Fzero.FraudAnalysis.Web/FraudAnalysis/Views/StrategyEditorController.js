@@ -34,6 +34,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     function defineScope() {
         $scope.strategyFilters = [];
+        $scope.selectedPeakHours = [];
+
         $scope.percentages = [
                          { description: '-75%', value: 0.25 }, { description: '-50%', value: 0.5 }, { description: '-25%', value: 0.75 }, { description: '0%', value: 1.00 }, { description: '25%', value: 1.25 }, { description: '50%', value: 1.50 }, { description: '75%', value: 1.75 }
 
@@ -53,8 +55,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         ];
 
-
-        $scope.selectedPeakHours = [];
 
 
         $scope.selectedSuspectionLevel = $scope.suspectionLevels[0];
@@ -140,12 +140,16 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function buildStrategyObjFromScope() {
-
+        
         var strategyObject = {
             Id: ($scope.strategyId != null) ? $scope.strategyId : 0,
             Name: $scope.name,
             Description: $scope.description,
             IsDefault: $scope.isDefault,
+            GapBetweenConsecutiveCalls:$scope.gapbetweenconsecutivecalls,
+            MaxLowDurationCall:$scope.maxLowDurationCall,
+            MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour,
+            PeakHours: $scope.selectedPeakHours,
             StrategyFilters: [],
             StrategyLevels: []
         };
@@ -231,6 +235,25 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.name = strategyObject.Name;
         $scope.description = strategyObject.Description;
         $scope.isDefault = strategyObject.IsDefault;
+        $scope.gapbetweenconsecutivecalls=strategyObject.GapBetweenConsecutiveCalls;
+        $scope.maxLowDurationCall = strategyObject.MaxLowDurationCall;
+        $scope.minCountofCallsinActiveHour = strategyObject.MinimumCountofCallsinActiveHour;
+
+        angular.forEach(strategyObject.PeakHours, function (peakHour) {
+
+            var peakHourItem = {
+                id: peakHour.Id,
+                name: peakHour.Name
+            };
+
+            $scope.selectedPeakHours.push(peakHourItem);
+        });
+
+
+
+
+
+
 
 
         angular.forEach($scope.filterDefinitions, function (filterDef) {

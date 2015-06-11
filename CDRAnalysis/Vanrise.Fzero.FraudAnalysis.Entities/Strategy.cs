@@ -15,6 +15,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string StrategyContent { get; set;}
 
+        public int GapBetweenConsecutiveCalls { get; set; }
+
+        public int MaxLowDurationCall { get; set; }
+
+        public int MinimumCountofCallsinActiveHour { get; set; }
+
+        public List<Hour> PeakHours { get; set; }
+
         public List<StrategyLevel> StrategyLevels { get; set; }
 
         public List<StrategyFilter> StrategyFilters { get; set; }
@@ -50,4 +58,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public decimal Percentage { get; set; }
     }
+
+
+    public class Hour
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+    }
+
 }
