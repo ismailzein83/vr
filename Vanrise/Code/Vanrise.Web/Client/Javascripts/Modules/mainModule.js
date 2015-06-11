@@ -11,6 +11,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         window.location.href = '/Security/Login';
     }
 
+    $scope.userDisplayName = $cookies['TOne_LoginUserDisplayNameCookie'];
+
     Waves.displayEffect();
     var dropdownHidingTimeoutHandlerc;
 
@@ -23,6 +25,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.toogled = !$scope.toogled;
 
 
+    }
+
+    $scope.logout = function () {
+        window.location.href = '/Security/Login';
     }
 
     $scope.showMenu = function (e) {

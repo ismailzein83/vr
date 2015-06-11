@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ namespace Vanrise.Security.Entities
 
         public List<string> PermissionOptions { get; set; }
 
+        [JsonIgnore]
+        public BusinessEntityNode Parent { get; set; }
+
         public List<BusinessEntityNode> Children { get; set; }
 
     }
@@ -25,4 +29,43 @@ namespace Vanrise.Security.Entities
         MODULE,
         ENTITY
     }
+
+    public static class BusinessEntityHelper
+    {
+        public static IEnumerable<BusinessEntityNode> Descendants(this BusinessEntityNode root)
+        {
+            var nodes = new Stack<BusinessEntityNode>(new[] { root });
+            while (nodes.Any())
+            {
+                BusinessEntityNode node = nodes.Pop();
+                yield return node;
+                if(node.Children != null)
+                    foreach (var n in node.Children) nodes.Push(n);
+            }
+        }
+
+        public static string GetRelativePath(this BusinessEntityNode node)
+        {
+            List<string> listofNames = new List<string>();
+
+            while(node.Parent != null)
+            {
+                listofNames.Add(node.Name);
+                node = node.Parent;
+            }
+
+            listofNames.Add(node.Name);
+            listofNames.Reverse();
+
+            StringBuilder path = new StringBuilder();
+
+            foreach (string item in listofNames)
+            {
+                path.AppendFormat("{0}/", item);
+            }
+
+            return path.ToString();
+        }
+    }
+
 }

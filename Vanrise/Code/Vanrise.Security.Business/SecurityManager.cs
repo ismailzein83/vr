@@ -18,6 +18,7 @@ namespace Vanrise.Security.Business
             AuthenticationToken result = new AuthenticationToken();
             result.TokenName = "Auth-Token";
             result.Token = null;
+            result.UserDisplayName = email;
 
             if (user.Status != UserStatus.Inactive && user.Password == password)
             {

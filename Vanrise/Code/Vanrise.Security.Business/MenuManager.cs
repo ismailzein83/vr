@@ -29,7 +29,9 @@ namespace Vanrise.Security.Business
             {
                 if(item.Parent == 0)
                 {
-                    retVal.Add(GetModuleMenu(item, modules, views, effectivePermissions));
+                    MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissions);
+                    if(rootItem.Childs.Count > 0)
+                        retVal.Add(rootItem);
                 }
             }
 
@@ -84,21 +86,19 @@ namespace Vanrise.Security.Business
 
             foreach (Permission item in userPermissions)
             {
-                string result = "";
+                BusinessEntityNode result = null;
+
+                //Get the node that matches the permission item in the business entity hierarchy tree
                 foreach (BusinessEntityNode node in businessEntityHierarchy)
                 {
-                    bool found = false;
-                    result = this.GetPathAggregation(item, node, businessEntityHierarchy, out found).ToString();
-                    if (found)
+                    result = node.Descendants().Where(x => x.EntType == item.EntityType && x.EntityId.ToString() == item.EntityId).FirstOrDefault();
+                    if (result != null)
                     {
                         break;
                     }
-                    else
-                    {
-                        result = "";
-                    }
                 }
 
+                //Just prepare the allowed flags in a list of strings, only add the flags that marked as Allow to the list
                 List<string> allowedFlags = new List<string>();
 
                 foreach (PermissionFlag flag in item.PermissionFlags)
@@ -109,38 +109,31 @@ namespace Vanrise.Security.Business
 
                 if (allowedFlags.Count > 0)
                 {
-                    effectivePermissions.Add(result, allowedFlags);
+                    //The get relative path will convert the business entity node into a path string
+                    //Add a new record to the dictionary of effective permissions that is about the path as a key and the list of allowed permissions as a value
+                    //TODO: this is to be cached later and moved to the base API Controller and done once in a user session
+                    effectivePermissions.Add(result.GetRelativePath(), allowedFlags);
                 }
             }
 
             return effectivePermissions;
         }
 
-        private StringBuilder GetPathAggregation(Permission permission, BusinessEntityNode node, List<BusinessEntityNode> businessEntityHierarchy, out bool found)
+        private BusinessEntityNode GetBusinessEntityNode(Permission permission, BusinessEntityNode node, List<BusinessEntityNode> businessEntityHierarchy)
         {
-            found = false;
-
-            StringBuilder path = new StringBuilder();
-
-            path.Append(node.Name);
-            path.Append("/");
-
             if(node.EntType == permission.EntityType && node.EntityId.ToString() == permission.EntityId)
             {
-                found = true;
+                return node;
             }
             else if(node.Children != null && node.Children.Count > 0)
             {
                 foreach(BusinessEntityNode subNode in node.Children)
                 {
-                   if(found)
-                       break;
-                    
-                    path.Append(this.GetPathAggregation(permission, subNode, node.Children, out found));
+                    return GetBusinessEntityNode(permission, subNode, node.Children);
                 }
             }
 
-            return path;
+            return null;
         }
 
         private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, List<string>> allowedPermissions)

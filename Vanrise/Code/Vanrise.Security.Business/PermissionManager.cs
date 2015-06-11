@@ -26,7 +26,7 @@ namespace Vanrise.Security.Business
             {
                 if (item.Parent == 0)
                 {
-                    retVal.Add(GetModuleNode(item, modules, entities));
+                    retVal.Add(GetModuleNode(item, modules, entities, null));
                 }
             }
 
@@ -74,7 +74,7 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, List<BusinessEntityModule> modules, List<BusinessEntity> entities)
+        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, List<BusinessEntityModule> modules, List<BusinessEntity> entities, BusinessEntityNode parent)
         {
             BusinessEntityNode node = new BusinessEntityNode()
             {
@@ -82,6 +82,7 @@ namespace Vanrise.Security.Business
                 Name = module.Name,
                 EntType = EntityType.MODULE,
                 PermissionOptions = module.PermissionOptions,
+                Parent = parent
             };
 
             List<BusinessEntityModule> subModules = modules.FindAll(x => x.Parent == module.ModuleId);
@@ -98,7 +99,8 @@ namespace Vanrise.Security.Business
                         EntityId = entityItem.EntityId,
                         Name = entityItem.Name,
                         EntType = EntityType.ENTITY,
-                        PermissionOptions = entityItem.PermissionOptions
+                        PermissionOptions = entityItem.PermissionOptions,
+                        Parent = node
                     };
 
                     node.Children.Add(entityNode);
@@ -112,7 +114,7 @@ namespace Vanrise.Security.Business
 
                 foreach (BusinessEntityModule item in subModules)
                 {
-                    node.Children.Add(GetModuleNode(item, modules, entities));
+                    node.Children.Add(GetModuleNode(item, modules, entities, node));
                 }
             }
 

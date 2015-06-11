@@ -24,6 +24,7 @@ function LoginController($scope, SecurityAPIService) {
             .then(function (response) {
 
                 setCookie('TOne_LoginTokenCookie', response.Token, '', '', '');
+                setCookie('TOne_LoginUserDisplayNameCookie', response.UserDisplayName, '', '', '');
 
                 window.location.href = '/';
         }
