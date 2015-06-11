@@ -12,7 +12,7 @@ namespace TOne.Analytics.Data.SQL
 {
     class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
-        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate ,string customerId ,string supplierId , bool groupByCustomer , int? supplierAMUId ,int? customerAMUId)
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, int? supplierAMUId, int? customerAMUId)
         {
             return GetItemsSP("Analytics.SP_Billing_GetZoneProfits", (reader) => ZoneProfitMapper(reader, groupByCustomer),
                 fromDate,
@@ -21,7 +21,7 @@ namespace TOne.Analytics.Data.SQL
                 (supplierId == null || supplierId == "") ? null : supplierId,
                 groupByCustomer,
                 (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
-                (customerAMUId== 0) ?  (object)DBNull.Value : customerAMUId );
+                (customerAMUId == 0) ? (object)DBNull.Value : customerAMUId);
         }
         public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
@@ -32,9 +32,9 @@ namespace TOne.Analytics.Data.SQL
                (supplierId == null || supplierId == "") ? null : supplierId,
                isCost,
                currencyId,
-               (supplierGroup==null || supplierGroup=="")?null:supplierGroup,
+               (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
                (customerGroup == null || customerGroup == "") ? null : customerGroup,
-               (supplierAMUId == 0 || supplierAMUId==null) ? (object)DBNull.Value : supplierAMUId,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
                (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
                groupBySupplier
                );
@@ -58,7 +58,7 @@ namespace TOne.Analytics.Data.SQL
         }
 
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
-        {            
+        {
             string query = String.Format(@"SELECT
                             Convert(varchar(7), BS.CallDate,121) AS [Month] , 
                             IsNull(SUM(BS.SaleDuration) / 60.0,0) AS Durations ,
@@ -83,9 +83,9 @@ namespace TOne.Analytics.Data.SQL
             (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-                cmd.Parameters.Add(new SqlParameter("@ToDate",new DateTime(toDate.Year, toDate.Month, DateTime.DaysInMonth(toDate.Year, toDate.Month))));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(toDate.Year, toDate.Month, DateTime.DaysInMonth(toDate.Year, toDate.Month))));
                 cmd.Parameters.Add(new SqlParameter("@CarrierAccountID", carrierAccountID));
-               
+
             });
 
         }
@@ -145,7 +145,7 @@ namespace TOne.Analytics.Data.SQL
             toDate,
             (customerId == null || customerId == "") ? null : customerId,
             (supplierId == null || supplierId == "") ? null : supplierId,
-            margin,            
+            margin,
             (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
             (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
             );
@@ -177,15 +177,15 @@ namespace TOne.Analytics.Data.SQL
         {
             CarrierProfile instance = new CarrierProfile
             {
-               Zone = reader["Zone"] as string,
+                Zone = reader["Zone"] as string,
 
-               MonthYear = GetReaderValue<int>(reader, "CalldateMonth").ToString() + " " + reader["CalldateYear"] as string,
+                MonthYear = GetReaderValue<int>(reader, "CalldateMonth").ToString() + " " + reader["CalldateYear"] as string,
 
-               Month =  GetReaderValue<int>(reader, "CalldateMonth"), 
+                Month = GetReaderValue<int>(reader, "CalldateMonth"),
             };
             if (IsAmount == true)
             {
-                instance.Amount = GetReaderValue<double>(reader, "Amount") ;
+                instance.Amount = GetReaderValue<double>(reader, "Amount");
 
             }
             else
@@ -249,13 +249,13 @@ namespace TOne.Analytics.Data.SQL
             CarrierLost instance = new CarrierLost
             {
                 CustomerID = reader["CustomerID"] as string,
-                SupplierID = reader["SupplierID"] as string ,
+                SupplierID = reader["SupplierID"] as string,
                 CostZoneID = GetReaderValue<int>(reader, "CostZoneID"),
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
                 Duration = GetReaderValue<decimal>(reader, "Duration"),
                 SaleNet = GetReaderValue<double>(reader, "SaleNet"),
                 CostNet = GetReaderValue<double>(reader, "CostNet")
-                
+
             };
 
             return instance;
@@ -368,7 +368,6 @@ namespace TOne.Analytics.Data.SQL
 
         public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
         {
-
             string query = String.Format(@"DECLARE @ExchangeRates TABLE(
 		                                             Currency VARCHAR(3),
 		                                             Date SMALLDATETIME,
@@ -395,8 +394,58 @@ namespace TOne.Analytics.Data.SQL
                cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
                cmd.Parameters.Add(new SqlParameter("@PeriodTypeValue", periodTypeValue));
            });
-        
+
         }
+
+        public StringBuilder GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.AppendFormat(@"DECLARE @ExchangeRates TABLE(
+		                                             Currency VARCHAR(3),
+		                                             Date SMALLDATETIME,
+		                                             Rate FLOAT
+		                                             PRIMARY KEY(Currency, Date))
+                                            INSERT INTO @ExchangeRates 
+                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -{0}, {1}), {1}) ",periodCount,selectedDate);
+            queryBuilder.AppendFormat(" \n" + selectColumnFunction(variationReportOptionValue));
+            queryBuilder.AppendFormat(@" \n From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+                                      \n  LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+                                      \n LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate ");
+            queryBuilder.AppendFormat(@" \n JOIN CarrierAccount ca With(Nolock) ON ca.CarrierAccountID="+(variationReportOptionValue==0?"BS.CustomerID":"BS.SupplierID")
+                                    +@") \n JOIN CarrierProfile cp With(Nolock) ON cp.ProfileID = ca.ProfileID ");
+            queryBuilder.AppendFormat(@" \n WHERE CallDate BETWEEN DATEADD(Day, -{0}+1, {1}) AND {1} ", periodCount, selectedDate);
+            if (variationReportOptionValue == 1) {
+                queryBuilder.AppendFormat(@" \n   AND  ca.RepresentsASwitch <> 'Y'");
+
+            }
+            queryBuilder.AppendFormat("\n GROUP BY cp.Name,ca.CarrierAccountID,CallDate");
+            return queryBuilder;
+
+
+
+        }
+
+        public string selectColumnFunction(int variationReportOptionValue)
+        {
+            // if() Report Type
+            string duration;
+            switch (variationReportOptionValue)
+            {
+                case 0: duration = "SaleDuration";
+                        break;
+                case 1: duration = "CostDuration";
+                        break;
+                
+                default: duration = "CostDuration";
+                        break;
+            }
+            string selectQuery = @"SELECT  cp.Name , 0.0 as [Days AVG], 0.0 as [Days %],  0.0 as [Prev Day %],CallDate, 
+            
+              sum(" + duration +"/60) as TotalDuration,ca.CarrierAccountID";
+
+            return selectQuery;
+        }
+
 
         private VariationReports VariationReportsMapper(IDataReader reader)
         {
@@ -411,7 +460,7 @@ namespace TOne.Analytics.Data.SQL
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
                 CarrierAccountID = reader["CarrierAccountID"] as string,
             };
-            
+
             return instance;
         }
 
