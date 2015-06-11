@@ -14,8 +14,8 @@ namespace Vanrise.Security.Business
         {
             SecurityToken secToken = Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
 
-            Dictionary<string, List<string>> effectivePermissions = this.GetEffectivePermissions(secToken.UserId);
-            string x = Common.Serializer.Serialize(effectivePermissions);
+            Dictionary<string, Dictionary<string, Flag>> effectivePermissions = this.GetEffectivePermissions(secToken.UserId);
+            //string x = Common.Serializer.Serialize(effectivePermissions);
 
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
@@ -38,7 +38,7 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
-        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, List<string>> effectivePermissions)
+        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions)
         {
             MenuItem menu = new MenuItem() { Name = module.Name, Location = module.Url, Icon = module.Icon };
 
@@ -51,7 +51,7 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if(isAllowed(viewItem.RequiredPermissions, effectivePermissions))
+                    if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions))
                     {
                         MenuItem viewMenu = new MenuItem() { Name = viewItem.Name, Location = viewItem.Url };
                         menu.Childs.Add(viewMenu);
@@ -71,9 +71,9 @@ namespace Vanrise.Security.Business
         }
 
 
-        private Dictionary<string, List<string>> GetEffectivePermissions(int userId)
+        private Dictionary<string, Dictionary<string, Flag>> GetEffectivePermissions(int userId)
         {
-            Dictionary<string, List<string>> effectivePermissions = new Dictionary<string, List<string>>();
+            Dictionary<string, Dictionary<string, Flag>> effectivePermissions = new Dictionary<string, Dictionary<string, Flag>>();
 
             PermissionManager permissionManager = new PermissionManager();
             
@@ -98,22 +98,18 @@ namespace Vanrise.Security.Business
                     }
                 }
 
-                //Just prepare the allowed flags in a list of strings, only add the flags that marked as Allow to the list
-                List<string> allowedFlags = new List<string>();
+                //Map the Permission Flags into a dictionary of strings
+                Dictionary<string, Flag> effectiveFlags = new Dictionary<string, Flag>();
 
                 foreach (PermissionFlag flag in item.PermissionFlags)
                 {
-                    if (flag.Value == Flag.ALLOW)
-                        allowedFlags.Add(flag.Name);
+                    effectiveFlags.Add(flag.Name, flag.Value);
                 }
-
-                if (allowedFlags.Count > 0)
-                {
-                    //The get relative path will convert the business entity node into a path string
-                    //Add a new record to the dictionary of effective permissions that is about the path as a key and the list of allowed permissions as a value
-                    //TODO: this is to be cached later and moved to the base API Controller and done once in a user session
-                    effectivePermissions.Add(result.GetRelativePath(), allowedFlags);
-                }
+                
+                //The get relative path will convert the business entity node into a path string
+                //Add a new record to the dictionary of effective permissions that is about the path as a key and the list of allowed permissions as a value
+                //TODO: this is to be cached later and moved to the base API Controller and done once in a user session
+                effectivePermissions.Add(result.GetRelativePath(), effectiveFlags);
             }
 
             return effectivePermissions;
@@ -136,40 +132,56 @@ namespace Vanrise.Security.Business
             return null;
         }
 
-        private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, List<string>> allowedPermissions)
+        private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, Dictionary<string, Flag>> effectivePermissions)
         {
+            //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
             bool result = true;
 
-            if (requiredPermissions != null)
+            foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
             {
-                foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
-                {
-                    if (!(result = CheckPermissions(kvp.Key, kvp.Value, allowedPermissions)))
-                        break;
-                }
+                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, false);
+                if (!result)
+                    break;
             }
 
             return result;
         }
 
-        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, List<string>> allowedPermissions)
+        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, bool allowedFlagFound)
         {
             bool result = true;
 
-            if (allowedPermissions.ContainsKey(requiredPath))
+            if (effectivePermissions.ContainsKey(requiredPath))
             {
                 foreach (string requiredFlag in requiredFlags)
                 {
-                    if(allowedPermissions[requiredPath].Find(x => x == requiredFlag) == null)
+                    if (effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
                     {
-                        result = false;
-                        break;
+                        return false;
+                    }
+                    else
+                    {
+                        allowedFlagFound = true;
                     }
                 }
             }
+
+            //The required path might be in one level up, then check it on that level recursively
+            int index = requiredPath.LastIndexOf('/');
+            if (index > 0)
+            {
+                //Keep looping recursively until you finish trimming the whole string requiredPath
+                string oneLevelUp = requiredPath.Remove(index);
+                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, allowedFlagFound);
+            }
             else
             {
-                result = false;
+                //in this case, you have reached the end of the string
+                //in case one of the parts was marked as Deny, the method would have returned and not reached here
+                //in case one of the parts was marked as Allow, then the allowedFlagFound should be true and no need to return false
+                //in case all parts did not match, the allowedFlagFound will be false and the return result should be false to prevent the user from seeing this view
+                if(!allowedFlagFound)
+                    return false;
             }
 
             return result;
