@@ -32,7 +32,7 @@ namespace TOne.Web.Reports.Analytics
                 bool commission = (Request.QueryString["commission"] != null) ? (Request.QueryString["commission"] == "true") : false;
                 bool bySupplier = (Request.QueryString["bySupplier"] != null) ? (Request.QueryString["bySupplier"] == "true") : false;
                 int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
-
+                int zoneId = (Request.QueryString["zone"] != null) ? Convert.ToInt32(Request.QueryString["zone"]) : 0;
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
                 RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(reportId);
@@ -53,6 +53,7 @@ namespace TOne.Web.Reports.Analytics
                 parameters.GroupBySupplier = bySupplier;
                 parameters.CurrencyId = "USD";
                 parameters.Margin = margin;
+                parameters.ZoneId = zoneId;
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 

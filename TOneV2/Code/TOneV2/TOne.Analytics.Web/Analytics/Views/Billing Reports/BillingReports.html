@@ -15,7 +15,7 @@
                                selectedvalues="params.customer" datatextfield="Name" datavaluefield="CarrierAccountID"
                                entityname="Customers"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="3" ng-show="reporttype.ParameterSettings.RequiresSupllierId">
+                <vr-columns colnum="3" ng-show="reporttype.ParameterSettings.RequiresSupplierId">
                     <vr-label>Supplier</vr-label>
                     <vr-select limitheight="true" hideselectedvaluessection="true" datasource="optionsSuppliers"
                                selectedvalues="params.supplier" datatextfield="Name" datavaluefield="CarrierAccountID"
@@ -29,7 +29,13 @@
                 </vr-columns>
                 
             </vr-row>
-            <vr-row ng-if="reporttype">
+            <vr-row ng-show="reporttype">
+                <vr-columns colnum="3" ng-show="reporttype.ParameterSettings.RequiresZoneId">
+                    <vr-label>Zone</vr-label>
+                    <vr-select limitheight="true" hideselectedvaluessection="true" datasource="optionsZones"
+                               selectedvalues="params.zone" datatextfield="Name" datavaluefield="ZoneId"
+                               entityname="Zone"></vr-select>
+                </vr-columns>
                 <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresMargin">
                     <vr-label>Margin %</vr-label>
                     <number-filed input-value="params.margin" />

@@ -215,13 +215,13 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
+            
             return GetItemsSP("Analytics.SP_Billing_RateLoss", RateLossMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
               (supplierId == null || supplierId == "") ? null : supplierId,
-              0,
-              (zoneId == null || zoneId == 0) ? (object)DBNull.Value : supplierId,
+              (zoneId == null || zoneId == 0)? (object)DBNull.Value : zoneId,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
               );

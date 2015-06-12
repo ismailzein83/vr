@@ -1,19 +1,21 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarriersService'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarriersService', 'ZonesService'];
 
-function BillingReportsController($scope, ReportAPIService, CarriersService) {
+function BillingReportsController($scope, ReportAPIService, CarriersService, ZonesService) {
    
     defineScope();
     load();
     $scope.reportsTypes = [];
     $scope.optionsCustomers = [];
     $scope.optionsSuppliers = [];
+    $scope.optionsZone = [];
     $scope.reportsTypes = [];
-    $scope.params= {
+    $scope.params = {
         fromDate: "",
         toDate: "",
         groupByCustomer: false,
         customer: null,
         supplier: null,
+        zone:null,
         isCost: false,
         service: false,
         commission: false,
@@ -23,7 +25,6 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
     function defineScope() {
        
         $scope.openReport = function () {
-
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + $scope.dateToString($scope.params.fromDate);
@@ -34,7 +35,7 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
             paramsurl += "&commission=" + $scope.params.commission;
             paramsurl += "&bySupplier=" + $scope.params.bySupplier;
             paramsurl += "&margin=" + $scope.params.margin;
-
+            paramsurl += "&zone=" + (($scope.params.zone == null) ? 0 : $scope.params.zone.ZoneId);
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
 
@@ -48,6 +49,7 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
                 groupByCustomer: false,
                 customer: null,
                 supplier: null,
+                zone: null,
                 isCost: false,
                 service: false,
                 commission: false,
@@ -60,6 +62,7 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
         loadReportTypes();
         loadCustomers();
         loadSuppliers();
+        loadZones();
     }
 
     function loadReportTypes() {
@@ -75,6 +78,11 @@ function BillingReportsController($scope, ReportAPIService, CarriersService) {
     function loadSuppliers() {
         CarriersService.getSuppliers().then(function (response) {
             $scope.optionsSuppliers = response;
+        })
+    }
+    function loadZones() {
+        ZonesService.getSalesZones("%").then(function (response) {
+            $scope.optionsZones = response;
         })
     }
 

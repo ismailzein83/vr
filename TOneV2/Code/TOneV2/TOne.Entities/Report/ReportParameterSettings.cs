@@ -14,7 +14,7 @@ namespace TOne.Entities
 
         public bool RequiresCustomerId { get; set; }
 
-        public bool RequiresSupllierId { get; set; }
+        public bool RequiresSupplierId { get; set; }
 
         public bool RequiresCustomerAMUId { get; set; }
 
