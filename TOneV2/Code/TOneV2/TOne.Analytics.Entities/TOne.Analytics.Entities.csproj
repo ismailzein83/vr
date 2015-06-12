@@ -54,6 +54,8 @@
     <Compile Include="Billing\DetailedCarrierSummary.cs" />
     <Compile Include="Billing\DetailedCarrierSummaryFormatted.cs" />
     <Compile Include="Billing\MonthTraffic.cs" />
+    <Compile Include="Billing\RateLoss.cs" />
+    <Compile Include="Billing\RateLossFormatted.cs" />
     <Compile Include="Billing\TotalDurationPerDate.cs" />
     <Compile Include="Billing\VariationReports.cs" />
     <Compile Include="Billing\VariationReportsData.cs" />
