@@ -260,10 +260,10 @@ namespace Vanrise.Security.Business
             Dictionary<string, Flag> effectivePermissionFlags;
             if (effectivePermissions.TryGetValue(requiredPath, out effectivePermissionFlags))
             {
-                Flag effectivePermissionFlag;
-                if (effectivePermissionFlags.TryGetValue("Full Control", out effectivePermissionFlag))
+                Flag fullControlFlag;
+                if (effectivePermissionFlags.TryGetValue("Full Control", out fullControlFlag))
                 {
-                    if (effectivePermissionFlag == Flag.DENY)
+                    if (fullControlFlag == Flag.DENY)
                         return false;
                     else
                     {
@@ -275,10 +275,10 @@ namespace Vanrise.Security.Business
                 {
                     foreach (string requiredFlag in requiredFlags)
                     {
-                        Flag effectivePermissionFlag2;
-                        if (effectivePermissionFlags.TryGetValue(requiredFlag, out effectivePermissionFlag2))
+                        Flag effectivePermissionFlag;
+                        if (effectivePermissionFlags.TryGetValue(requiredFlag, out effectivePermissionFlag))
                         {
-                            if (effectivePermissionFlag2 == Flag.DENY)
+                            if (effectivePermissionFlag == Flag.DENY)
                             {
                                 return false;
                             }
