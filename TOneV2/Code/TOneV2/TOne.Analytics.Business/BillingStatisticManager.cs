@@ -88,8 +88,8 @@ namespace TOne.Analytics.Business
             {
                 CostZone = zoneProfit.CostZone,
                 SaleZone = zoneProfit.SaleZone,
-                SupplierID = _bemanager.GetCarrirAccountName(zoneProfit.SupplierID),
-                CustomerID =  _bemanager.GetCarrirAccountName(zoneProfit.CustomerID),
+                SupplierID =(zoneProfit.SupplierID!=null)? _bemanager.GetCarrirAccountName(zoneProfit.SupplierID):null,
+                CustomerID = (zoneProfit.CustomerID!= null) ? _bemanager.GetCarrirAccountName(zoneProfit.CustomerID) : null,
                 Calls = zoneProfit.Calls,
 
                 DurationNet = zoneProfit.DurationNet,
