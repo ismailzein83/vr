@@ -107,6 +107,7 @@
     <Compile Include="GenerateBillingAndPricingCDRs.cs" />
     <Compile Include="ProcessRawCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreStatisticsToDB.cs" />
     <Compile Include="UpdateTrafficStatisticsInDB.cs" />
     <Compile Include="StoreCDRsToDB.cs" />
     <Compile Include="StoreInvalidCDRsToDB.cs" />
