@@ -20,17 +20,69 @@
                     <vr-choices onselectionchanged="ctrl.viewVisibilityChanged">
                         <vr-choice isselected="ctrl.isFilterTabShown">Filters</vr-choice>
                         <vr-choice isselected="ctrl.isLevelsTabShow">Suspicion Levels</vr-choice>
-                        <vr-choice isselected="ctrl.isParamsTabShow">Parameters</vr-choice>
                     </vr-choices>
 
                     <div ng-show="ctrl.isFilterTabShown">
-                        <vr-datagrid datasource="strategyFilters" maxheight="300px">
-                            <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Threshold'">  <vr-textbox value="dataItem.threshold" isrequired ng-if="dataItem.isSelected" min="0" max="99"></vr-textbox>            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" ng-init="dataItem.period = (dataItem.period == undefined ? viewScope.periods[0] : dataItem.period)" selectedvalues="dataItem.period" isrequired ng-show="dataItem.isSelected"></vr-select>       </vr-datagridcolumn>
-                        </vr-datagrid>
+
+                        <vr-row>
+
+
+
+                            <vr-columns colnum="10">
+                                <div>
+
+                                    <vr-datagrid datasource="strategyFilters" maxheight="300px">
+                                        <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Threshold'">  <vr-textbox value="dataItem.threshold" isrequired ng-if="dataItem.isSelected" min="0" max="99"></vr-textbox>            </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" ng-init="dataItem.period = (dataItem.period == undefined ? viewScope.periods[0] : dataItem.period)" selectedvalues="dataItem.period" isrequired ng-show="dataItem.isSelected"></vr-select>       </vr-datagridcolumn>
+                                    </vr-datagrid>
+
+                                </div>
+                            </vr-columns>
+                            <vr-columns colnum="2">
+                                    <vr-row>
+
+                                        <vr-columns colnum="12">
+
+                                            <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row>
+
+                                        <vr-columns colnum="12">
+                                            <vr-textbox value="gapbetweenconsecutivecalls" label="Gap Between Consecutive Calls"></vr-textbox>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row>
+
+
+                                        <vr-columns colnum="12">
+                                            <vr-textbox value="maxLowDurationCall" label="Max. Low Duration Call (s) "></vr-textbox>
+                                        </vr-columns>
+
+                                    </vr-row>
+                                    <vr-row>
+
+                                        <vr-columns colnum="12">
+                                            <vr-textbox value="minCountofCallsinActiveHour" label="Min. Count of Calls in an Active Hour"></vr-textbox>
+                                        </vr-columns>
+
+                                    </vr-row>
+
+                            </vr-columns>
+
+
+
+
+
+
+                        </vr-row>
+
+
+
+
                     </div>
 
                     <div ng-show="ctrl.isLevelsTabShow">
@@ -60,8 +112,8 @@
                                 <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel.name'" widthfactor="20" columnindex="0"></vr-datagridcolumn>
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" tag="filter">
                                     <div ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)">
-                                        <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" style="width:50%"  ></vr-switch>
-                                        <vr-select style="width:50%"  ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
+                                        <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected" style="width:50%"></vr-switch>
+                                        <vr-select style="width:50%" ng-show="dataItem.StrategyLevelCriterias[filterIndex].isSelected" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
                                     </div>
 
                                 </vr-datagridcolumn>
@@ -75,35 +127,7 @@
 
                     </div>
 
-                    <div ng-show="ctrl.isParamsTabShow">
-                        <vr-row>
 
-                            <vr-columns colnum="2">
-
-                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
-                            </vr-columns>
-
-
-
-                            <vr-columns colnum="2">
-                                <vr-textbox value="gapbetweenconsecutivecalls" label="Gap Between Consecutive Calls"></vr-textbox>
-                            </vr-columns>
-
-
-
-                            <vr-columns colnum="2">
-                                <vr-textbox value="maxLowDurationCall" label="Max. Low Duration Call (s) "></vr-textbox>
-                            </vr-columns>
-
-
-
-                            <vr-columns colnum="2">
-                                <vr-textbox value="minCountofCallsinActiveHour" label="Min. Count of Calls in an Active Hour"></vr-textbox>
-                            </vr-columns>
-
-                        </vr-row>
-
-                    </div>
 
 
                 </vr-columns>

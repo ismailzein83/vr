@@ -377,10 +377,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
     StrategyEditorController.isFilterTabShown = true;
     StrategyEditorController.isLevelsTabShow = false;
-    StrategyEditorController.isParamsTabShow = false;
 
     StrategyEditorController.viewVisibilityChanged = function () {
-        isParamsTabShow = !isParamsTabShow;
+      
         isFilterTabShown = !isFilterTabShown;
         isLevelsTabShow = !isLevelsTabShow;
     };
