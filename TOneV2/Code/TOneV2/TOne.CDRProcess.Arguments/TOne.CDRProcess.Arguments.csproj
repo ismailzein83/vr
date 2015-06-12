@@ -50,6 +50,7 @@
     <Compile Include="ImportCDRProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawCDRsProcessInput.cs" />
+    <Compile Include="SaveStatisticsToDBProcessInput.cs" />
     <Compile Include="StoreCDRsInDBProcessInput.cs" />
     <Compile Include="StoreInvalidCDRsInDBProcessInput.cs" />
     <Compile Include="StoreMainCDRsInDBProcessInput.cs" />

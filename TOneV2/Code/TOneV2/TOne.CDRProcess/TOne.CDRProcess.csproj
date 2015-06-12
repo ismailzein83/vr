@@ -85,6 +85,7 @@
     <Compile Include="CDRImport\BillingCDRsProcess.cs" />
     <Compile Include="CDRGenerationProcess.cs" />
     <Compile Include="CDRImport\GenerateStatisticsProcess.cs" />
+    <Compile Include="CDRImport\SaveStatisticsToDBProcess.cs" />
     <Compile Include="Repricing\DailyRepricingProcess.cs" />
     <Compile Include="CDRImport\ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,6 +181,12 @@
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRImport\GenerateStatisticsProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="CDRImport\SaveStatisticsToDBProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
