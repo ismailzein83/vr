@@ -245,7 +245,7 @@ namespace Vanrise.Security.Business
 
             foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
             {
-                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, false);
+                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, new List<string>());
                 if (!result)
                     break;
             }
@@ -253,7 +253,7 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, bool allowedFlagFound)
+        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, List<string> allowedFlags)
         {
             bool result = true;
 
@@ -261,14 +261,14 @@ namespace Vanrise.Security.Business
             {
                 foreach (string requiredFlag in requiredFlags)
                 {
-                    if (effectivePermissions[requiredPath].ContainsKey(requiredFlag) &&
+                    if(effectivePermissions[requiredPath].ContainsKey(requiredFlag) && 
                         effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
                     {
                         return false;
                     }
                     else
                     {
-                        allowedFlagFound = true;
+                        allowedFlags.Add(requiredFlag);
                     }
                 }
             }
@@ -279,16 +279,16 @@ namespace Vanrise.Security.Business
             {
                 //Keep looping recursively until you finish trimming the whole string requiredPath
                 string oneLevelUp = requiredPath.Remove(index);
-                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, allowedFlagFound);
+                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, allowedFlags);
             }
             else
             {
-                //in this case, you have reached the end of the string
-                //in case one of the parts was marked as Deny, the method would have returned and not reached here
-                //in case one of the parts was marked as Allow, then the allowedFlagFound should be true and no need to return false
-                //in case all parts did not match, the allowedFlagFound will be false and the return result should be false to prevent the user from seeing this view
-                if(!allowedFlagFound)
-                    return false;
+                //Validation logic
+                foreach (string item in requiredFlags)
+                {
+                    if (!allowedFlags.Contains(item))
+                        return false;
+                }
             }
 
             return result;
