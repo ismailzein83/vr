@@ -194,7 +194,24 @@ namespace TOne.CDR.Data.SQL
 
         private Dictionary<string, int> GetTrafficStatisticsIdsByGroupKeys(DateTime batchStart, DateTime batchEnd)
         {
-            throw new NotImplementedException();
+            Dictionary<string, int> trafficStatistics = new Dictionary<string, int>();
+
+            ExecuteReaderSP("[Analytics].[sp_TrafficStats_GetIdsByGroupedKeys]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    trafficStatistics.Add(
+                    TrafficStatistic.GetGroupKey(GetReaderValue<int>(reader, "SwitchId"),
+                        reader["Port_IN"] as string,
+                        reader["Port_OUT"] as string,
+                        reader["CustomerID"] as string,
+                        GetReaderValue<int>(reader, "OurZoneID"),
+                        GetReaderValue<int>(reader, "OriginatingZoneID"),
+                        GetReaderValue<int>(reader, "SupplierZoneID")), (int)reader["ID"]);
+                }
+            }, batchStart, batchEnd);
+
+            return trafficStatistics;
         }
 
         public void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsDailyByKey trafficStatisticsByKey)
