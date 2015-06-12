@@ -259,16 +259,28 @@ namespace Vanrise.Security.Business
 
             if (effectivePermissions.ContainsKey(requiredPath))
             {
-                foreach (string requiredFlag in requiredFlags)
+                if (effectivePermissions[requiredPath].ContainsKey("Full Control"))
                 {
-                    if(effectivePermissions[requiredPath].ContainsKey(requiredFlag) && 
-                        effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
-                    {
+                    if (effectivePermissions[requiredPath]["Full Control"] == Flag.DENY)
                         return false;
-                    }
                     else
+                        allowedFlags.AddRange(requiredFlags);
+                }
+                else
+                {
+                    foreach (string requiredFlag in requiredFlags)
                     {
-                        allowedFlags.Add(requiredFlag);
+                        if (effectivePermissions[requiredPath].ContainsKey(requiredFlag))
+                        {
+                            if (effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                allowedFlags.Add(requiredFlag);
+                            }
+                        }
                     }
                 }
             }
