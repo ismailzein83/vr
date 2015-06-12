@@ -198,10 +198,15 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                    gridHeader: "Customer"
                },
                {
-                   title: "Supplier",
+                   title: "Suppliers",
                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
                    gridHeader: "Supplier"
-               }];
+               },
+                {
+                 title: "Switch",
+                 groupKeyEnumValue: TrafficStatisticGroupKeysEnum.Switch.value,
+                 gridHeader: "Switch"
+             }];
         }
         function getObjectHeader(parameters, dataItem) {
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
@@ -218,6 +223,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     case TrafficStatisticGroupKeysEnum.SupplierId.value:
                         parameters.supplierIds = [dataItem.GroupKeyValues[i].Id];
                         console.log(parameters.supplierIds);
+                        break;
+                    case TrafficStatisticGroupKeysEnum.Switch.value:
+                        parameters.Switch = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.Switch);
                         break;
                 }
             }

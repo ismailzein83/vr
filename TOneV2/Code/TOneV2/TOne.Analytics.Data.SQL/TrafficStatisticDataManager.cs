@@ -227,6 +227,8 @@ namespace TOne.Analytics.Data.SQL
                     return String.Format("{0} = '{1}'", CustomerIDColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.SupplierId:
                     return String.Format("{0} = '{1}'", SupplierIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.Switch:
+                    return String.Format("{0} = '{1}'", SwitchIdColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -274,6 +276,10 @@ namespace TOne.Analytics.Data.SQL
                     idColumn = SupplierIDColumnName;
                     nameColumn = SupplierNameColumnName;
                     break;
+                case TrafficStatisticGroupKeys.Switch:
+                    idColumn = SwitchIdColumnName;
+                    nameColumn = SwitchNameColumnName;
+                    break;
                 default:
                     idColumn = null;
                     nameColumn = null;
@@ -301,6 +307,11 @@ namespace TOne.Analytics.Data.SQL
                     joinStatement = " LEFT JOIN CarrierInfo supp ON ts.SupplierID = supp.CarrierAccountID";
                     groupByStatement = "ts.SupplierID, supp.Name";
                     break;
+                case TrafficStatisticGroupKeys.Switch:
+                    selectStatement = String.Format(" ts.SwitchId as {0}, swit.Name as {1}, ", SwitchIdColumnName, SwitchNameColumnName);
+                    joinStatement = " LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID";
+                    groupByStatement = "ts.SwitchId, swit.Name";
+                    break;
                 default:
                     selectStatement = null;
                     joinStatement = null;
@@ -310,7 +321,8 @@ namespace TOne.Analytics.Data.SQL
         }
 
         #endregion
-
+        const string SwitchIdColumnName = "SwitchId";
+        const string SwitchNameColumnName = "SwitchName";
         const string OurZoneIDColumnName = "OurZoneID";
         const string OurZoneNameColumnName = "ZoneName";
         const string CustomerIDColumnName = "CustomerID";

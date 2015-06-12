@@ -41,34 +41,37 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
         }];
     }
-    function getNotSelectedGroupKeys(scope) {
-        
-        if (scope == $scope.viewScope)
-            return;
-        getSelectedGroupKeys(scope);
-        console.log(selectedGroupKeys);
-        if (scope.notSelectedGroupKeys.length == $scope.viewScope.groupKeys.length)
-            return;
-        if ($scope.gridParentScope == scope.viewScope) {
-            $scope.notSelectedGroupKeys = scope.groupKeys;
-        }
-        else
-        for (var i = 0; i < scope.selectedGroupKeys.length; i++) {
-            if (scope.gridParentScope != $scope.viewScope && scope.gridParentScope.selectedGroupKey.groupKeyEnumValue != scope.selectedGroupKeys[i].groupKeyEnumValue)
-                $scope.notSelectedGroupKeys.push(scope.selectedGroupKeys[i]);
-            
-            //console.log($scope.groupKeys);
-           
-            
-        }
-        
-        getNotSelectedGroupKeys(scope.gridParentScope);
-        console.log($scope.notSelectedGroupKeys);
-    }
-    function getSelectedGroupKeys(scope) {
+    function getNotSelectedGroupKeys() {
        
-        if (scope == $scope.viewScope)
+        if ($scope == $scope.viewScope)
             return;
+        $scope.selectedGroupKeys = [];
+        getSelectedGroupKeys($scope.gridParentScope);
+
+        var count = 0;
+        for (var i = 0; i < $scope.groupKeys.length; i++) {
+            count = 0;
+            for (var j = 0; j < $scope.selectedGroupKeys.length; j++) {
+                if ($scope.groupKeys[i].groupKeyEnumValue == $scope.selectedGroupKeys[j].groupKeyEnumValue) {
+                    count++;
+                   // break;
+                } 
+            }
+            if (count == 0 && !contains($scope.groupKeys[i], $scope.notSelectedGroupKeys))
+                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);   
+ 
+        }
+    }
+
+    function getSelectedGroupKeys(scope) {
+        
+        if (scope == $scope.viewScope){
+            for (var i = 0; i < scope.selectedGroupKeys.length; i++)
+            {
+                $scope.selectedGroupKeys.push(scope.selectedGroupKeys[i]);
+            }
+            return;
+        }
         else {
             $scope.selectedGroupKeys.push(scope.selectedGroupKey);
             getSelectedGroupKeys(scope.gridParentScope);
@@ -119,10 +122,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         $scope.groupKeySelectionChanged = function () {
             if ($scope.selectedGroupKeyIndex != undefined) {
-                $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
+                $scope.selectedGroupKey = $scope.notSelectedGroupKeys[$scope.selectedGroupKeyIndex];
                 if (!$scope.selectedGroupKey.isDataLoaded) {
-                    
-                   
+                    getNotSelectedGroupKeys(); 
                     getData();
                 }
                     
@@ -134,17 +136,12 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
 
     function load() {
-       
         loadMeasures();
         loadGroupKeys();
-        // $scope.notSelectedGroupKeys = [$scope.selectedGroupKey.groupKeyEnumValue];
-       // if ($scope.gridParentScope != $scope.viewScope)
-            
-        getNotSelectedGroupKeys($scope);
-        $scope.selectedGroupKey = $scope.notSelectedGroupKeys[0];
-        if ($scope.selectedGroupKey != undefined || $scope.getNotSelectedGroupKeys != undefined)
-            getData();
-        
+        getNotSelectedGroupKeys();
+       $scope.selectedGroupKey = $scope.notSelectedGroupKeys[0];
+        if ($scope.selectedGroupKey != undefined)
+            getData(); 
     }
 
     function loadMeasures() {
@@ -163,7 +160,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             gridHeader: "Zone"
         });
         addGroupKeyIfNotExistsInParent({
-            title: "Customers",
+            title: "Customer",
             groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
             data: [],
             isDataLoaded: false,
@@ -176,11 +173,27 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             isDataLoaded: false,
             gridHeader: "Supplier"
         });
-
+        addGroupKeyIfNotExistsInParent({
+            title: "Switch",
+            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.Switch.value,
+            data: [],
+            isDataLoaded: false,
+            gridHeader: "Switch"
+        });
         if ($scope.groupKeys.length > 0)
             $scope.selectedGroupKey = $scope.groupKeys[0];
-    }
 
+    }
+    function contains(obj, list) {
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i] === obj) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     function addGroupKeyIfNotExistsInParent(groupKey) {
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
         if ($.grep(parentGroupKeys, function (parentGrpKey) {
@@ -190,8 +203,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     }
 
     function getData() {
-        if ($scope.notSelectedGroupKeys.length == 0)
-            return;
+        //if ($scope.notSelectedGroupKeys.length == 0)
+        //    return;
         var withSummary = false;
         var fromRow = 1;
         var toRow = 100;
@@ -209,7 +222,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             OrderBy: 2,
             IsDescending: true
         };
-       // console.log($scope.notSelectedGroupKeys);
+        console.log($scope.selectedGroupKey.groupKeyEnumValue);
         var isSucceeded;
         $scope.isGettingData = true;
         $scope.currentSearchCriteria.groupKeys.length = 0;
@@ -250,6 +263,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value: 
                     filter.SupplierIds = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.Switch.value:
+                    filter.Switch = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }
