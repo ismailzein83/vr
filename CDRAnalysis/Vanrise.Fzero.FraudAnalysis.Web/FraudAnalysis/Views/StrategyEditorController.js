@@ -41,7 +41,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         ];
 
-        $scope.suspectionLevels = [
+        $scope.suspicionLevels = [
                          { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
 
         ];
@@ -62,9 +62,9 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.strategyLevels = [];
 
 
-        $scope.AddSuspectionLevel = function () {
+        $scope.AddSuspicionLevel = function () {
             var strategyLevelItem = {
-                suspectionLevel: $scope.suspectionLevels[0],
+                suspicionLevel: $scope.suspicionLevels[0],
                 StrategyLevelCriterias: []
             };
 
@@ -177,7 +177,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         angular.forEach($scope.strategyLevels, function (level) {
            
             var strategyLevelItem = {
-                SuspectionLevelId: level.suspectionLevel.id,
+                SuspicionLevelId: level.suspicionLevel.id,
                 StrategyLevelCriterias: []
             };
 
@@ -280,7 +280,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         angular.forEach(strategyObject.StrategyLevels, function (level) {
             var strategyLevelItem = {
-                suspectionLevel: UtilsService.getItemByVal($scope.suspectionLevels, level.SuspectionLevelId, "id"),
+                suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, "id"),
                 StrategyLevelCriterias: []
             };
 
