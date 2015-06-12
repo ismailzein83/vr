@@ -55,7 +55,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         public List<Period> GetPeriods()
         {
-            PredefinedManager manager = new PredefinedManager();
+            StrategyManager manager = new StrategyManager();
 
             return manager.GetPeriods();
         }

@@ -89,5 +89,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         {
             throw new NotImplementedException();
         }
+
+        public List<CallClass> GetAllCallClasses()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Period> GetPeriods()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

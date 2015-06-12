@@ -195,7 +195,40 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return strategy;
         }
 
-        
+        public List<CallClass> GetAllCallClasses()
+        {
+            string query_GetCallClasses = @"SELECT Id, Description, NetType FROM Set_CallClass; ";
+            List<CallClass> callClasses = new List<CallClass>();
+
+
+            ExecuteReaderText(query_GetCallClasses, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    CallClass callClass = new CallClass();
+                    callClass.Id = (int)reader["Id"];
+                    callClass.Description = reader["Description"] as string;
+                    callClass.NetType = (Enums.NetType)Enum.ToObject(typeof(Enums.NetType), GetReaderValue<int>(reader, "NetType"));
+                    callClasses.Add(callClass);
+                }
+            }, null);
+            return callClasses;
+        }
+
+        public List<Period> GetPeriods()
+        {
+
+            var enumerationType = typeof(Enums.Period);
+            List<Period> periods = new List<Period>();
+
+            foreach (int value in Enum.GetValues(enumerationType))
+            {
+                var name = Enum.GetName(enumerationType, value);
+                periods.Add(new Period() { Id = value, Name = name });
+            }
+
+            return periods;
+        }
 
 
         #endregion

@@ -15,6 +15,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool UpdateStrategy(Strategy strategy);
 
+        List<CallClass> GetAllCallClasses();
+
+        List<Period> GetPeriods();
         
     }
 }

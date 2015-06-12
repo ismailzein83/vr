@@ -64,13 +64,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadNumberProfilesInput inputArgument, AsyncActivityHandle handle)
         {
-            IPredefinedDataManager predefinedDataManager = FraudDataManagerFactory.GetDataManager<IPredefinedDataManager>();
+            IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
             List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions(predefinedDataManager.GetAllCallClasses());
+            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions(strategyManager.GetAllCallClasses());
 
             NumberProfile currentNumberProfile = null;
 

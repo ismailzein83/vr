@@ -56,7 +56,6 @@
     <Compile Include="MySQLManager.cs" />
     <Compile Include="NumberProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PredefinedDataManager.cs" />
     <Compile Include="StrategyDataManager.cs" />
     <Compile Include="SuspiciousNumberDataManager.cs" />
   </ItemGroup>

@@ -49,7 +49,6 @@
     <Compile Include="FraudDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
-    <Compile Include="IPredefinedDataManager.cs" />
     <Compile Include="IStrategyDataManager.cs" />
     <Compile Include="ISuspiciousNumberDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
