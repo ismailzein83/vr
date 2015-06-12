@@ -36,7 +36,7 @@ app.directive('vrSwitch', [function () {
             var label = attrs.label;
             if (label == undefined)
                 label = '';
-            return '<vr-label><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch>' + label + '</vr-label>';
+            return '<vr-label>' + label + '</vr-label><div><switch ng-model="value" ng-change="notifyUserChange()" class="green"></switch></div>';
         }
 
     };
