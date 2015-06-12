@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Activities;
 using TOne.LCR.Entities;
 using TOne.LCR.Data;
 using TOne.BusinessEntity.Entities;
@@ -66,7 +65,6 @@ namespace TOne.LCRProcess.Activities
         {
             SupplierZoneRates supplierZoneRates = new SupplierZoneRates();
             supplierZoneRates.RatesByZoneId = new Dictionary<int, RateInfo>();
-            List<RateInfo> rateInfos = new List<RateInfo>();
             foreach (ZoneRate zoneRate in zoneRates)
             {
                 var rate = new RateInfo
@@ -77,10 +75,7 @@ namespace TOne.LCRProcess.Activities
                            PriceListId = zoneRate.PriceListId
                        };
                 if (!supplierZoneRates.RatesByZoneId.ContainsKey(rate.ZoneId))
-                {
                     supplierZoneRates.RatesByZoneId.Add(rate.ZoneId, rate);
-                    rateInfos.Add(rate);
-                }
             }
             return supplierZoneRates;
         }

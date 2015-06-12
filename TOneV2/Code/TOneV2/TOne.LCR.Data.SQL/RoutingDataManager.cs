@@ -104,7 +104,6 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                      )
                                                     ) 
                                                     CREATE TABLE [dbo].[SupplierZoneRate](
-	                                                    [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
 	                                                    [SupplierID] [varchar](5) NOT NULL,
@@ -112,7 +111,6 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ServicesFlag] [smallint] NULL
                                                     ) 
                                                     CREATE TABLE [dbo].[CustomerZoneRate](
-	                                                    [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
 	                                                    [CustomerID] [varchar](5) NOT NULL,
@@ -171,6 +169,13 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                         )WITH (IGNORE_DUP_KEY = OFF)
                                                         )
 
+                                                         CREATE TYPE [dbo].[RouteType] AS TABLE(
+	                                                        [Code] [varchar](20) NOT NULL,
+	                                                        [CustomerId] [varchar](5) NOT NULL,
+                                                            [Rate] [decimal](18,5) NULL,
+                                                            [Options] varchar(500)
+	                                                        )
+
                                                     CREATE TYPE [StringIDType] AS TABLE(
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    PRIMARY KEY CLUSTERED 
@@ -186,18 +191,7 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                         [IsCodeGroup] BIT NOT NULL
                                                     ) 
                                                     ";
-        const string query_GetRoutes = @"
-	                                    SELECT 
-	                                       r.[CustomerID]
-                                          ,r.[Code]
-                                          ,r.[OurZoneID]
-                                          ,r.[OurActiveRate]
-                                          ,r.[OurServicesFlag]
-                                          ,r.[Options]
-                                      FROM [dbo].[Route] r
-	                                    WHERE (r.CustomerID = @CustomerID OR @CustomerID IS NULL)
-	                                           AND (r.Code LIKE @Code + '%' OR @Code IS NULL)
-                                        ";
+
         #endregion
 
     }

@@ -453,59 +453,60 @@ namespace TOne.LCR.Data.SQL
         /// <returns>List of All Route Rules having Begin Effective Date </returns>
         public List<RouteRule> GetDifferentialRouteRules(DateTime lastRun)
         {
+            lastRun = DateTime.Now.AddMonths(-1);
             List<RouteRule> routeRules = new List<RouteRule>();
             MultipleSelection<string> customers = new MultipleSelection<string>();
             customers.SelectionOption = MultipleSelectionOption.AllExceptItems;
             customers.SelectedValues = null;
-            ExecuteReaderSP("sp_RoutingRules_GetDifferentialBlockRules",
+            ExecuteReaderSP("[LCR].sp_RoutingRules_GetDifferentialBlockRules",
                 (reader) =>
                 {
                     while (reader.Read())
                     {
                         RouteRule rule = GetBlockRule(reader);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        //rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
                         routeRules.Add(rule);
                     }
                 }, lastRun);
 
 
-            ExecuteReaderSP("sp_RoutingRules_GetDifferentialBlockSupplierRouteRules",
+            ExecuteReaderSP("[LCR].sp_RoutingRules_GetDifferentialBlockSupplierRouteRules",
                 (reader) =>
                 {
                     while (reader.Read())
                     {
                         RouteRule rule = GetBlockSupplierRule(reader);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        //rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
                         routeRules.Add(rule);
                     }
                 }, lastRun);
 
 
-            ExecuteReaderSP("sp_RoutingRules_GetDiffrentialOptionBlockRules",
+            ExecuteReaderSP("[LCR].sp_RoutingRules_GetDiffrentialOptionBlockRules",
                 (reader) =>
                 {
                     while (reader.Read())
                     {
                         RouteRule rule = GetBlockOptionRule(reader);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                        //rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
                         routeRules.Add(rule);
                     }
                 }, lastRun);
 
 
-            ExecuteReaderSP("sp_RoutingRules_GetDifferentialOverrideRules",
+            ExecuteReaderSP("[LCR].sp_RoutingRules_GetDifferentialOverrideRules",
                 (reader) =>
                 {
                     while (reader.Read())
                     {
                         RouteRule rule = GetOverrideRule(reader);
-                        rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
+                       // rule.CarrierAccountSet = new CustomerSelectionSet() { Customers = customers };
                         routeRules.Add(rule);
                     }
                 }, lastRun);
 
 
-            ExecuteReaderSP("sp_RoutingRules_GetDifferentialPriorityRules",
+            ExecuteReaderSP("[LCR].sp_RoutingRules_GetDifferentialPriorityRules",
                 (reader) =>
                 {
                     string currentCustomer = null;

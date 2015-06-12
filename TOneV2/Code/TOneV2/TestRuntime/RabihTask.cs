@@ -73,7 +73,8 @@ namespace TestRuntime
 
 
 
-            RunCompleteRouteBuild();
+            //RunCompleteRouteBuild();
+            RunPartialRouteBuild();
         }
 
         private static void RunCompleteRouteBuild()
@@ -86,7 +87,7 @@ namespace TestRuntime
                 {
                     EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    IsLcrOnly = true
+                    IsLcrOnly = false
                 }
             });
         }
@@ -96,7 +97,7 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "DifferentailRoutingProcess"
+                ProcessName = "DifferentialRoutingProcess"
                 
             });
         }

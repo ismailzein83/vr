@@ -17,6 +17,6 @@ namespace TOne.LCR.Data
 
         object FinishDBApplyStream(object stream);
 
-        CodeMatchesByZoneId GetCodeMatchesByCodes(IEnumerable<String> codes, out HashSet<int> supplierZoneIds, out HashSet<int> customerZoneIds);
+        CodeMatchesByCode GetCodeMatchesByCodes(IEnumerable<String> codes, out HashSet<int> supplierZoneIds, out HashSet<int> customerZoneIds);
     }
 }

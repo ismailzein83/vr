@@ -18,7 +18,7 @@ namespace TOne.LCRProcess.Activities
         public InArgument<Int32> RoutingDatabaseId { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<CodeMatchesByZoneId> CodeMatchesByZoneId { get; set; }
+        public InOutArgument<CodeMatchesByCode> CodeMatchesByCode { get; set; }
 
         [RequiredArgument]
         public InOutArgument<HashSet<int>> SupplierZoneIds { get; set; }
@@ -31,8 +31,8 @@ namespace TOne.LCRProcess.Activities
             dataManager.DatabaseId = this.RoutingDatabaseId.Get(context);
             HashSet<int> supplierZoneIds = new HashSet<int>();
             HashSet<int> customerZoneIds = new HashSet<int>();
-            CodeMatchesByZoneId codeMatches = dataManager.GetCodeMatchesByCodes(TargetCodes.Get(context), out supplierZoneIds, out customerZoneIds);
-            this.CodeMatchesByZoneId.Set(context, codeMatches);
+            CodeMatchesByCode codeMatches = dataManager.GetCodeMatchesByCodes(TargetCodes.Get(context), out supplierZoneIds, out customerZoneIds);
+            this.CodeMatchesByCode.Set(context, codeMatches);
             this.SupplierZoneIds.Set(context, supplierZoneIds);
             this.CustomerZoneIds.Set(context, customerZoneIds);
         }

@@ -14,7 +14,6 @@ namespace TOne.LCR.Data.SQL
 {
     public class RouteDetailDataManager : RoutingDataManager, IRouteDetailDataManager
     {
-
         public List<RouteDetail> GetRoutesDetail(string customerId, string code, int? ourZoneId)
         {
             List<RouteDetail> routesDetails = new List<RouteDetail>();
@@ -60,12 +59,6 @@ namespace TOne.LCR.Data.SQL
             byte[] serialized = Vanrise.Common.ProtoBufSerializer.Serialize<RouteOptions>(routeOptions);
             return Convert.ToBase64String(serialized);
         }
-
-        //string Serialize3(RouteOptions routeOptions)
-        //{
-        //    MemoryStream
-        //    //ProtoBuf.Serializer.Serialize<RouteOptions>()
-        //}
 
         string Serialize2(RouteOptions routeOptions)
         {
@@ -133,6 +126,39 @@ namespace TOne.LCR.Data.SQL
 
         }
 
+        public void UpdateRoutes(IEnumerable<RouteDetail> routeDetails)
+        {
+            DataTable dtRoutes = GetRouteDetailTypeTable(routeDetails);
+            ExecuteNonQueryText(query_UpdateRoutes, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@RouteTable", SqlDbType.Structured);
+                dtPrm.TypeName = "RouteType";
+                dtPrm.Value = dtRoutes;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        DataTable GetRouteDetailTypeTable(IEnumerable<RouteDetail> routeDetails)
+        {
+            DataTable routesDataTable = new DataTable();
+            routesDataTable.Columns.Add("Code", typeof(String));
+            routesDataTable.Columns.Add("CustomerId", typeof(String));
+            routesDataTable.Columns.Add("Rate", typeof(Decimal));
+            routesDataTable.Columns.Add("Options", typeof(String));
+            routesDataTable.BeginLoadData();
+            foreach (var route in routeDetails)
+            {
+                DataRow dr = routesDataTable.NewRow();
+                dr["Code"] = route.Code;
+                dr["CustomerId"] = route.CustomerID;
+                dr["Rate"] = route.Rate;
+                dr["Options"] = route.Options != null ? Serialize2(route.Options) : null;
+                routesDataTable.Rows.Add(dr);
+            }
+            routesDataTable.EndLoadData();
+            return routesDataTable;
+        }
+
         #region Queries
 
         const string query_CreateIndexesOnTable = @"   CREATE NONCLUSTERED INDEX [IX_Route_Code] ON [Route] 
@@ -148,17 +174,25 @@ namespace TOne.LCR.Data.SQL
 			                                                [OurZoneId] ASC
 		                                                )";
 
-        const string query_GetRoutes = @" 
-                                         select r.CustomerId,
+        const string query_GetRoutes = @"Select r.CustomerId,
                                                 r.Code,
                                                 r.SaleZoneId,
                                                 r.OurActiveRate,
                                                 r.ServicesFlag,
                                                 r.Options
-                                                From Route where 1 = 1  {0}
-                                       ";
+                                                From Route where 1 = 1  {0}";
+
+        const string query_UpdateRoutes = @"
+                                            UPDATE r
+                                              SET r.OurActiveRate = rt.Rate,
+	                                              r.Options = rt.Options
+                                              FROM [Route] AS r
+                                              INNER JOIN @RouteTable AS rt  ON r.Code = rt.Code and r.CustomerId = rt.CustomerId";
 
         #endregion
+
+
+
 
 
 

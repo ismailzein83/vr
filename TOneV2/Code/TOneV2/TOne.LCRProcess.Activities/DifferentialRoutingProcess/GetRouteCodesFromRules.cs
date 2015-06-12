@@ -18,7 +18,7 @@ namespace TOne.LCRProcess.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            DateTime lastRun = context.GetValue(this.LastRun);
+            DateTime lastRun = DateTime.Now.AddMonths(-1);// context.GetValue(this.LastRun);
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
             CodeCustomers codeCustomers = dataManager.GetRulesRouteCodes(lastRun);
             this.CodeCustomers.Set(context, codeCustomers);

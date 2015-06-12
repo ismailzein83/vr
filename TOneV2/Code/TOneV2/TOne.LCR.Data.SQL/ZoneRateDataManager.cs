@@ -20,7 +20,7 @@ namespace TOne.LCR.Data.SQL
             {
                 foreach (var zr in zoneRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", zr.RateId, zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag));
                 }
                 wr.Close();
             }
@@ -38,7 +38,6 @@ namespace TOne.LCR.Data.SQL
         {
             return new ZoneRate()
             {
-                RateId = (int)reader["RateID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 ZoneId = GetReaderValue<int>(reader, "ZoneID"),
                 CarrierAccountId = reader[string.Format("{0}ID", isSupplierZoneRates ? "Supplier" : "Customer")] as string,
@@ -53,38 +52,33 @@ namespace TOne.LCR.Data.SQL
             DataTable dtZoneIds = BuildZoneInfoTable(lstZoneIds);
             allCustomerZoneRates.ZonesCustomersRates = new Dictionary<int, CustomerRates>();
 
-
             ExecuteReaderText(string.Format(query_GetZoneRates, "Customer"),
+                   (reader) =>
+                   {
+                       while (reader.Read())
+                       {
+                           string customerId = reader["CustomerID"] as string;
+                           var rate = new RateInfo
+                           {
+                               ZoneId = GetReaderValue<int>(reader, "ZoneID"),
+                               Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
+                               ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                               PriceListId = GetReaderValue<int>(reader, "PriceListID")
+                           };
 
+                           CustomerRates customerRates;
+                           if (!allCustomerZoneRates.ZonesCustomersRates.TryGetValue(rate.ZoneId, out customerRates))
+                           {
+                               customerRates = new CustomerRates();
+                               customerRates.CustomersRates = new Dictionary<string, RateInfo>();
+                               allCustomerZoneRates.ZonesCustomersRates.Add(rate.ZoneId, customerRates);
+                           }
 
-                (reader) =>
-                {
-                    while (reader.Read())
-                    {
+                           if (!customerRates.CustomersRates.ContainsKey(customerId))
+                               customerRates.CustomersRates.Add(customerId, rate);
+                       }
 
-                        
-                        string customerId = reader["CustomerID"] as string;
-                        var rate = new RateInfo
-                        {
-                            ZoneId = GetReaderValue<int>(reader, "ZoneID"),
-                            Rate = reader["NormalRate"] != DBNull.Value ? Convert.ToDecimal(reader["NormalRate"]) : 0,
-                            ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
-                            PriceListId = GetReaderValue<int>(reader, "PriceListID")
-                        };
-
-                        CustomerRates customerRates;
-                        if (!allCustomerZoneRates.ZonesCustomersRates.TryGetValue(rate.ZoneId, out customerRates))
-                        {
-                            customerRates = new CustomerRates();
-                            customerRates.CustomersRates = new Dictionary<string, RateInfo>();
-                            allCustomerZoneRates.ZonesCustomersRates.Add(rate.ZoneId, customerRates);
-                        }
-
-                        if (!customerRates.CustomersRates.ContainsKey(customerId))
-                            customerRates.CustomersRates.Add(customerId, rate);
-                    }
-
-                },
+                   },
 
                 (cmd) =>
                 {
@@ -117,17 +111,6 @@ namespace TOne.LCR.Data.SQL
                              ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
                              PriceListId = GetReaderValue<int>(reader, "PriceListID")
                          };
-                         //string carrierID = reader["SupplierID"] as string;
-                         //ZoneRates supplierRates;
-                         //if (!allSupplierZoneRates.SuppliersZonesRates.TryGetValue(carrierID, out supplierRates))
-                         //{
-                         //    supplierRates = new ZoneRates();
-                         //    supplierRates.ZonesRates = new Dictionary<int, RateInfo>();
-                         //    allSupplierZoneRates.SuppliersZonesRates.Add(carrierID, supplierRates);
-                         //}
-
-                         //if (!supplierRates.ZonesRates.ContainsKey(rate.ZoneId))
-                         //    supplierRates.ZonesRates.Add(rate.ZoneId, rate);
 
                          if (!allSupplierZoneRates.RatesByZoneId.ContainsKey(rate.ZoneId))
                          {
@@ -145,7 +128,6 @@ namespace TOne.LCR.Data.SQL
                     dtPrm.Value = dtZoneIds;
                     cmd.Parameters.Add(dtPrm);
                 });
-            //allSupplierZoneRates.OrderedRates = zoneRates.OrderBy(itm => itm.Rate).ToArray();
             return allSupplierZoneRates;
 
         }

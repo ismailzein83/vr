@@ -48,45 +48,56 @@ namespace TOne.LCR.Data.SQL
         {
             InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
         }
-        public CodeMatchesByZoneId GetCodeMatchesByCodes(IEnumerable<string> codes, out HashSet<int> supplierZoneIds, out HashSet<int> customerZoneIds)
+        public CodeMatchesByCode GetCodeMatchesByCodes(IEnumerable<string> codes, out HashSet<int> supplierZoneIds, out HashSet<int> customerZoneIds)
         {
             HashSet<int> customerZoneIdsTemp = new HashSet<int>();
             HashSet<int> SupplierZoneIdsTemp = new HashSet<int>();
             supplierZoneIds = new HashSet<int>();
-            CodeMatchesByZoneId codeMatches = new CodeMatchesByZoneId();
+            CodeMatchesByCode codeMatchesByCode = new CodeMatchesByCode();
             DataTable codesDataTable = BuildInfoTable<string>(codes, "Code");
             ExecuteReaderText(query_GetCodeMatchesByCodes,
                 (reader) =>
                 {
                     while (reader.Read())
                     {
-                        CodeMatchesByCode codeMatchesByCode;
-                        CodeMatch codeMatch = new CodeMatch
-                       {
-                           Code = reader["Code"] as string,
-                           SupplierCode = reader["SupplierCode"] as string,
-                           SupplierCodeId = GetReaderValue<Int64>(reader, "SupplierCodeId"),
-                           SupplierId = reader["SupplierId"] as string,
-                           SupplierRate = new RateInfo()
-                           {
-                               PriceListId = GetReaderValue<Int32>(reader, "PriceListId"),
-                               Rate = GetReaderValue<decimal>(reader, "SupplierRate"),
-                               ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
-                               ZoneId = GetReaderValue<Int32>(reader, "SupplierZoneId")
-                           }
-                       };
-
-                        if (!codeMatches.TryGetValue(codeMatch.SupplierRate.ZoneId, out codeMatchesByCode))
+                        List<CodeMatch> codeMatches;
+                        try
                         {
-                            codeMatchesByCode = new CodeMatchesByCode();
-                            codeMatches.Add(codeMatch.SupplierRate.ZoneId, codeMatchesByCode);
+                            CodeMatch codeMatch = new CodeMatch
+                                                 {
+                                                     Code = reader["Code"] as string,
+                                                     SupplierCode = reader["SupplierCode"] as string,
+                                                     SupplierCodeId = GetReaderValue<Int64>(reader, "SupplierCodeId"),
+                                                     SupplierId = reader["SupplierId"] as string,
+                                                     SupplierZoneId = GetReaderValue<Int32>(reader, "SupplierZoneId"),
+                                                     SupplierRate = new RateInfo()
+                                                     {
+                                                         PriceListId = GetReaderValue<Int32>(reader, "PriceListId"),
+                                                         Rate = Convert.ToDecimal(GetReaderValue<double>(reader, "SupplierRate")),
+                                                         ServicesFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                                                         ZoneId = GetReaderValue<Int32>(reader, "SupplierZoneId")
+                                                     }
+                                                 };
+                            if (!codeMatchesByCode.TryGetValue(codeMatch.Code, out codeMatches))
+                            {
+                                codeMatches = new List<CodeMatch>();
+                                codeMatchesByCode.Add(codeMatch.Code, codeMatches);
+                            }
+                            if (codeMatchesByCode.TryGetValue(codeMatch.Code, out codeMatches))
+                                codeMatches.Add(codeMatch);
+                            if (String.Compare(codeMatch.SupplierId, "SYS") == 0)
+                                customerZoneIdsTemp.Add(codeMatch.SupplierZoneId);
+                            else
+                                SupplierZoneIdsTemp.Add(codeMatch.SupplierZoneId);
                         }
-                        if (!codeMatchesByCode.ContainsKey(codeMatch.Code))
-                            codeMatchesByCode.Add(codeMatch.Code, codeMatch);
-                        if (String.Compare(codeMatch.SupplierId, "SYS") == 0)
-                            customerZoneIdsTemp.Add(codeMatch.SupplierZoneId);
-                        else
-                            SupplierZoneIdsTemp.Add(codeMatch.SupplierZoneId);
+                        catch (Exception ex)
+                        {
+
+                            throw ex;
+                        }
+
+
+
                     }
                 },
 
@@ -100,7 +111,7 @@ namespace TOne.LCR.Data.SQL
             supplierZoneIds = SupplierZoneIdsTemp;
             customerZoneIds = customerZoneIdsTemp;
 
-            return codeMatches;
+            return codeMatchesByCode;
         }
 
         private DataTable BuildInfoTable<T>(IEnumerable<T> ids, string columnName)

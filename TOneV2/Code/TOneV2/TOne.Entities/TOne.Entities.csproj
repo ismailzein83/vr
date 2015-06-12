@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheObjectType.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="GenericEntity.cs" />
     <Compile Include="GenericEntityStatus.cs" />
     <Compile Include="OperationResults\InsertOperationOutput.cs" />

@@ -82,6 +82,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DifferentialRoutingProcess.cs" />
     <Compile Include="Entities\CodeZoneMatchProcessLastRunInfo.cs" />
     <Compile Include="Entities\ZoneRateProcessLastRunInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,7 +148,7 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="DifferentailRoutingProcess.xaml">
+    <XamlAppDef Include="DifferentialRoutingProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

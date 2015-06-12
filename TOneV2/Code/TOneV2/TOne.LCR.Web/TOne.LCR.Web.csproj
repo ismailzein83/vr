@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Controllers\RouteRulesController.cs" />
     <Compile Include="Controllers\RoutingController.cs" />
     <Compile Include="ModelMappers\Mappers.cs" />
     <Compile Include="Models\RouteDetailModel.cs" />
@@ -125,7 +126,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Routing\Constants\RoutingRulesEnum.js" />
     <Content Include="Routing\Services\RoutingAPIService.js" />
+    <Content Include="Routing\Services\RoutingRulesAPIService.js" />
     <Content Include="Routing\Views\Management\EditorTemplates\CodeController.js" />
     <Content Include="Routing\Views\Management\EditorTemplates\CodeTemplate.html" />
     <Content Include="Routing\Views\Management\EditorTemplates\CustomerController.js" />
@@ -150,6 +153,8 @@
     <Content Include="Routing\Views\Management\RouteRuleManager.html" />
     <Content Include="Routing\Views\Management\RouteManagerController.js" />
     <Content Include="Routing\Views\Management\RouteRuleManagerController.js" />
+    <Content Include="Routing\Views\RoutingRules\RoutingRulesManagement.html" />
+    <Content Include="Routing\Views\RoutingRules\RoutingRulesManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

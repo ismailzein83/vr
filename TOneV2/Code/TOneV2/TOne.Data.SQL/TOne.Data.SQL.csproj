@@ -75,6 +75,7 @@
     <Compile Include="ReportDefinitionDataManager.cs" />
     <Compile Include="RoleDataManager.cs" />
     <Compile Include="SecurityDataManager.cs" />
+    <Compile Include="SystemParameterDataManger.cs" />
     <Compile Include="UserDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

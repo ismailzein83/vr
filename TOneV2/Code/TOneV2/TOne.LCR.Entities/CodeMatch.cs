@@ -23,7 +23,7 @@ namespace TOne.LCR.Entities
     /// <summary>
     /// Key Code
     /// </summary>
-    public class CodeMatchesByCode : Dictionary<string, CodeMatch>
+    public class CodeMatchesByCode : Dictionary<string, List<CodeMatch>>
     {
 
     }

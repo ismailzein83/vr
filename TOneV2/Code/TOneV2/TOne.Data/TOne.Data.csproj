@@ -113,6 +113,7 @@
     <Compile Include="IReportDefinitionDataManager.cs" />
     <Compile Include="IRoleDataManager.cs" />
     <Compile Include="ISecurityDataManager.cs" />
+    <Compile Include="ISystemParameterDataManger.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

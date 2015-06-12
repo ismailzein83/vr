@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.DifferentailRoutingProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.DifferentailRoutingProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.LCRProcess.DifferentialRoutingProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.LCRProcess.DifferentialRoutingProcess_1"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:local="clr-namespace:TOne.LCRProcess"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -185,7 +185,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.LCRProcess.DifferentailRoutingProcess_1" sap:VirtualizedContainerService.HintSize="440,724" />
+      <sap2010:ViewStateData Id="TOne.LCRProcess.DifferentialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="440,724" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
