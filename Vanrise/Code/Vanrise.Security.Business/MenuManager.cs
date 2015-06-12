@@ -253,26 +253,32 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, List<string> allowedFlags)
+        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> allowedFlags)
         {
             bool result = true;
 
-            if (effectivePermissions.ContainsKey(requiredPath))
+            Dictionary<string, Flag> effectivePermissionFlags;
+            if (effectivePermissions.TryGetValue(requiredPath, out effectivePermissionFlags))
             {
-                if (effectivePermissions[requiredPath].ContainsKey("Full Control"))
+                Flag effectivePermissionFlag;
+                if (effectivePermissionFlags.TryGetValue("Full Control", out effectivePermissionFlag))
                 {
-                    if (effectivePermissions[requiredPath]["Full Control"] == Flag.DENY)
+                    if (effectivePermissionFlag == Flag.DENY)
                         return false;
                     else
-                        allowedFlags.AddRange(requiredFlags);
+                    {
+                        foreach(var flag in requiredFlags)
+                            allowedFlags.Add(flag);
+                    }
                 }
                 else
                 {
                     foreach (string requiredFlag in requiredFlags)
                     {
-                        if (effectivePermissions[requiredPath].ContainsKey(requiredFlag))
+                        Flag effectivePermissionFlag2;
+                        if (effectivePermissionFlags.TryGetValue(requiredFlag, out effectivePermissionFlag2))
                         {
-                            if (effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
+                            if (effectivePermissionFlag2 == Flag.DENY)
                             {
                                 return false;
                             }
