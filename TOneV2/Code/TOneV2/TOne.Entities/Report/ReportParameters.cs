@@ -49,5 +49,7 @@ namespace TOne.Entities
         public decimal ServicesForCustomer { get; set; }
 
         public int Margin { get; set; }
+
+        public int ZoneId { get; set; }
     }
 }

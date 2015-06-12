@@ -211,7 +211,20 @@ namespace TOne.Analytics.Data.SQL
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
               );
         }
-      
+        public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_RateLoss", RateLossMapper,
+              fromDate,
+              toDate,
+              (customerId == null || customerId == "") ? null : customerId,
+              (supplierId == null || supplierId == "") ? null : supplierId,
+              0,
+              (zoneId == null || zoneId == 0) ? (object)DBNull.Value : supplierId,
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
+              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+              );
+        }
+
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
@@ -461,6 +474,24 @@ namespace TOne.Analytics.Data.SQL
             };
 
             return instance;
+        }
+        private RateLoss RateLossMapper(IDataReader reader)
+        {
+            return new RateLoss
+            {
+
+                CostZone = reader["CostZone"] as string,
+                SaleZone = reader["SaleZone"] as string,
+                SupplierID = reader["SupplierID"] as string,
+                CustomerID = reader["CustomerID"] as string,
+                SaleRate = GetReaderValue<double>(reader, "SaleRate"),
+                CostRate = GetReaderValue<double>(reader, "CostRate"),
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID")
+            };
         }
 
         #endregion

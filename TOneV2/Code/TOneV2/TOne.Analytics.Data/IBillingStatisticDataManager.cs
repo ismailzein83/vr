@@ -19,5 +19,6 @@ namespace TOne.Analytics.Data
         List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId);
         List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId);
         List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId);
+        List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate,string customerID, string supplier ,int? zoneId , int? customerAMUId, int? supplierAMUId);
     }
 }

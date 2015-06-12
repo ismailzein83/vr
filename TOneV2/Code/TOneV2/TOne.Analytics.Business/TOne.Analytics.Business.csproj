@@ -47,6 +47,7 @@
     <Compile Include="BillingReports\DailyCarrierSummaryReportGenerator.cs" />
     <Compile Include="BillingReports\DailySummaryReportGenerator.cs" />
     <Compile Include="BillingReports\DetailedCarrierSummaryReportGenerator.cs" />
+    <Compile Include="BillingReports\RateLossReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneProfitReportGenerator.cs" />
     <Compile Include="BillingReports\ZoneSummaryDetailedReportGenerator.cs" />
     <Compile Include="BillingReports\CarrierLostReportGenerator.cs" />

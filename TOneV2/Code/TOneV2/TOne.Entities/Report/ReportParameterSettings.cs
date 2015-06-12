@@ -39,5 +39,6 @@ namespace TOne.Entities
         public bool RequiresServicesForCustomer { get; set; }
 
         public bool RequiresMargin { get; set; }
+        public bool RequiresZoneId { get; set; }
     }
 }

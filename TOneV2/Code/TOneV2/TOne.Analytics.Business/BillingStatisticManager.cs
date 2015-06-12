@@ -106,6 +106,11 @@ namespace TOne.Analytics.Business
             }
             return variationReportsData;
         }
+        public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
+        {
+
+            return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zoneId, supplierAMUId, customerAMUId));
+        }
 
 
         #region Private Methods
@@ -277,6 +282,43 @@ namespace TOne.Analytics.Business
                 Percentage = (carrierLost.SaleNet != null) ? String.Format("{0:#,##0.00%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
 
             };
+        }
+        private List<RateLossFormatted> FormatRateLosses(List<RateLoss> rateLosses)
+        {
+            List<RateLossFormatted> models = new List<RateLossFormatted>();
+            if (rateLosses != null)
+                foreach (var z in rateLosses)
+                {
+                    models.Add(FormatRateLoss(z));
+                }
+            return models;
+        }
+        private RateLossFormatted FormatRateLoss(RateLoss rateLoss)
+        {
+	         return new RateLossFormatted
+	        { 
+		        CostZone = rateLoss.CostZone ,
+		        SaleZone = rateLoss.SaleZone ,	 
+		        CustomerID = rateLoss.CustomerID ,
+		        Customer =(rateLoss.CustomerID !=null )? _bemanager.GetCarrirAccountName(rateLoss.CustomerID):null,
+		        SupplierID = rateLoss.SupplierID,
+		        Supplier = (rateLoss.SupplierID !=null )? _bemanager.GetCarrirAccountName(rateLoss.SupplierID):null,	  
+		        SaleRate = rateLoss.SaleRate ,
+		        SaleRateFormatted = FormatNumber(rateLoss.SaleRate,5),
+		        CostRate = rateLoss.CostRate,
+		        CostRateFormatted = FormatNumber(rateLoss.CostRate,5),
+		        CostDuration = rateLoss.CostDuration,
+		        CostDurationFormatted = FormatNumber(rateLoss.CostDuration),
+		        SaleDuration = rateLoss.SaleDuration,
+		        SaleDurationFormatted =FormatNumber(rateLoss.SaleDuration),
+		        CostNet = rateLoss.CostNet,
+		        CostNetFormatted = FormatNumber(rateLoss.CostNet,5),
+		        SaleNet = rateLoss.SaleNet ,
+		        SaleNetFormatted = FormatNumber(rateLoss.SaleNet,5),
+		        SaleZoneID = rateLoss.SaleZoneID , 
+		        LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet )
+	  
+	        };
         }
         private string FormatNumber(Decimal? number, int precision)
         {
