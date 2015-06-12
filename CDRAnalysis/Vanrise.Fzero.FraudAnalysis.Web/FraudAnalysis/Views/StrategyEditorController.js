@@ -57,17 +57,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
 
-        $scope.selectedSuspectionLevel = $scope.suspectionLevels[0];
+       
 
         $scope.strategyLevels = [];
 
 
         $scope.AddSuspectionLevel = function () {
-
-            var indexSuspectionLevel = UtilsService.getItemIndexByVal($scope.suspectionLevels, $scope.selectedSuspectionLevel.id, "id");
-
             var strategyLevelItem = {
-                suspectionLevel: $scope.selectedSuspectionLevel,
+                suspectionLevel: $scope.suspectionLevels[0],
                 StrategyLevelCriterias: []
             };
 
