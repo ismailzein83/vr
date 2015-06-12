@@ -178,6 +178,8 @@ namespace TOne.Analytics.Data.SQL
                     break;
                 case 2: selectedReportQuery = selectedReportQuery + query_GetInBoundMinutesData + " UNION " + query_GetOutBoundMinutesData;
                     break;
+                case 3: selectedReportQuery += query_GetInBoundAmountData;
+                    break;
             }
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 return GetItemsText(selectedReportQuery, VariationReportsMapper,
@@ -535,6 +537,40 @@ namespace TOne.Analytics.Data.SQL
         WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate
         AND  cas.RepresentsASwitch <> 'Y'
         GROUP BY cps.Name,cas.CarrierAccountID,CallDate ";
+
+        const string query_GetInBoundAmountData = @"SELECT  cpc.Name , 
+        0.0 as [AVG],
+        0.0 as [%], 
+        0.0 as [Prev %],
+        CallDate,
+        sum(Sale_Nets/60) as TotalAmount,
+        cac.CarrierAccountID
+        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
+        JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
+        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate  
+        GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
+       
+        const string query_GetOutBoundAmountData = @"SELECT  cpc.Name , 
+        0.0 as [AVG],
+        0.0 as [%], 
+        0.0 as [Prev %],
+        CallDate,
+        sum(Cost_Nets/60) as TotalAmount,
+        cac.CarrierAccountID
+        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
+        JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
+        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
+        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate  
+        AND  cas.RepresentsASwitch <> 'Y'
+        GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
+
+
+
         #endregion
     }
 }
