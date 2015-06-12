@@ -245,7 +245,7 @@ namespace Vanrise.Security.Business
 
             foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
             {
-                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, new List<string>());
+                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, new HashSet<string>());
                 if (!result)
                     break;
             }
