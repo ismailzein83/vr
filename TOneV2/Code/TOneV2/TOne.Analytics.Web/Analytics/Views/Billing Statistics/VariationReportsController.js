@@ -16,7 +16,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     $scope.periodTypeValue = 'Days';
     $scope.selectedReportOption = 'InBoundMinutes';
     $scope.periodCount = 7;
- 
+   
     //$scope.variationReportOption
     defineScope();
     loadTimePeriods();
@@ -91,8 +91,9 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     //}
 
     function getVariationReportsData() {
-            $scope.isInitializing = true;
-            BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue, $scope.variationReportOptions.value).then(function (response) {
+        $scope.isInitializing = true;
+        $scope.data = [];
+            BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue, VariationReportOptionsEnum[$scope.selectedReportOption].value).then(function (response) {
                 $scope.isInitializing = false;
                 angular.forEach(response, function (itm) { $scope.data.push(itm); });
             });
@@ -101,7 +102,8 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     
     function getVariationReportsFinalData() {
         $scope.isInitializing = true;
-        BillingStatisticsAPIService.GetVariationReportsFinalData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue).then(function (response) {
+        $scope.data = [];
+        BillingStatisticsAPIService.GetVariationReportsFinalData($scope.fromDate, $scope.periodCount, $scope.periodTypeValue, VariationReportOptionsEnum[$scope.selectedReportOption].value).then(function (response) {
         //    alert('here');
         //  console.log(response);
          $scope.isInitializing = false;

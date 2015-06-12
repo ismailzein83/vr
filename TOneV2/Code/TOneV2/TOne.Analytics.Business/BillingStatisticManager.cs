@@ -19,15 +19,15 @@ namespace TOne.Analytics.Business
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
             _bemanager = new BusinessEntityInfoManager();
         }
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate,  bool groupByCustomer)
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
         {
 
             return GetZoneProfit(fromDate, toDate, null, null, groupByCustomer, null, null);
         }
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate,string customerId ,string supplierId , bool groupByCustomer , int? supplierAMUId ,int? customerAMUId)
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, int? supplierAMUId, int? customerAMUId)
         {
 
-            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId , supplierId ,  groupByCustomer ,  supplierAMUId , customerAMUId));
+            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId, supplierId, groupByCustomer, supplierAMUId, customerAMUId));
         }
 
         public List<DailySummaryFormatted> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
@@ -37,7 +37,7 @@ namespace TOne.Analytics.Business
 
         public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
-            return FormatZoneSummaries(_datamanager.GetZoneSummary( fromDate,  toDate,  customerId, supplierId,  isCost, currencyId,  supplierGroup,  customerGroup,  customerAMUId,  supplierAMUId,  groupBySupplier));
+            return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customerAMUId, supplierAMUId, groupBySupplier));
         }
         public List<ZoneSummaryDetailedFormatted> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
@@ -46,9 +46,9 @@ namespace TOne.Analytics.Business
 
         public List<CarrierLostFormatted> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
         {
-            return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate,toDate,customerId,supplierId,margin,supplierAMUId,customerAMUId));
-        }       
-        public List<MonthTraffic>GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
+            return FormatCarrierLost(_datamanager.GetCarrierLost(fromDate, toDate, customerId, supplierId, margin, supplierAMUId, customerAMUId));
+        }
+        public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
 
             return _datamanager.GetMonthTraffic(fromDate, toDate, carrierAccountID, isSale);
@@ -62,24 +62,51 @@ namespace TOne.Analytics.Business
         public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
         {
 
-            return _datamanager.GetBillingStatistics(fromDate,toDate);
+            return _datamanager.GetBillingStatistics(fromDate, toDate);
         }
         public List<CarrierSummaryDailyFormatted> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
         {
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        //public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue)
-        //{
-        //    return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue);
-        //}
-
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReportsData> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
-            return _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue,variationReportOptionValue);
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue, variationReportOptionValue);
+            List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
+            VariationReportsData current = null;
+            foreach (var item in variationReports.OrderBy(v => v.CarrierAccountID))
+            {
+                if (current == null || current.CarrierAccountID != item.CarrierAccountID)
+                {
+                    current = new VariationReportsData
+                    {
+                        CarrierAccountID = item.CarrierAccountID,
+                        Name = item.Name,
+                        TotalDurationsPerDate = new List<TotalDurationPerDate>()
+                    };
+                    variationReportsData.Add(current);
+                }
+                current.TotalDurationsPerDate.Add(new TotalDurationPerDate(item.CallDate, item.TotalDuration));
+            }
+
+            variationReportsData.OrderBy(v => v.TotalDurationsPerDate.OrderBy(d => d.CallDate));
+
+            foreach (var item in variationReportsData)
+            {
+                decimal average = 0;
+                double CurrentDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault().CallDate.ToString()) : 0;
+                double PrevDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault().CallDate.ToString()) : 0;
+                foreach (var totalDurations in item.TotalDurationsPerDate)
+                    average += totalDurations.TotalDuration;
+                average = average / periodCount;
+                item.PeriodTypeValueAverage = average;
+                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
+
+            }
+            return variationReportsData;
         }
 
-        
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
@@ -88,8 +115,8 @@ namespace TOne.Analytics.Business
             {
                 CostZone = zoneProfit.CostZone,
                 SaleZone = zoneProfit.SaleZone,
-                SupplierID =(zoneProfit.SupplierID!=null)? _bemanager.GetCarrirAccountName(zoneProfit.SupplierID):null,
-                CustomerID = (zoneProfit.CustomerID!= null) ? _bemanager.GetCarrirAccountName(zoneProfit.CustomerID) : null,
+                SupplierID = (zoneProfit.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneProfit.SupplierID) : null,
+                CustomerID = (zoneProfit.CustomerID != null) ? _bemanager.GetCarrirAccountName(zoneProfit.CustomerID) : null,
                 Calls = zoneProfit.Calls,
 
                 DurationNet = zoneProfit.DurationNet,
@@ -120,12 +147,12 @@ namespace TOne.Analytics.Business
             return new ZoneSummaryFormatted
             {
                 Zone = zoneSummary.Zone,
-                SupplierID = (zoneSummary.SupplierID!=null)?_bemanager.GetCarrirAccountName(zoneSummary.SupplierID):null,
+                SupplierID = (zoneSummary.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneSummary.SupplierID) : null,
 
                 Calls = zoneSummary.Calls,
 
                 Rate = zoneSummary.Rate,
-                RateFormatted = FormatNumber(zoneSummary.Rate,5),
+                RateFormatted = FormatNumber(zoneSummary.Rate, 5),
 
                 DurationNet = zoneSummary.DurationNet,
                 DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
@@ -136,13 +163,13 @@ namespace TOne.Analytics.Business
                 DurationInSeconds = zoneSummary.DurationInSeconds,
                 DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
 
-                Net =zoneSummary.Net,
-                NetFormatted = FormatNumber(zoneSummary.Net,5),
+                Net = zoneSummary.Net,
+                NetFormatted = FormatNumber(zoneSummary.Net, 5),
 
-                CommissionValue =zoneSummary.CommissionValue,
-                CommissionValueFormatted= FormatNumber(zoneSummary.CommissionValue),
+                CommissionValue = zoneSummary.CommissionValue,
+                CommissionValueFormatted = FormatNumber(zoneSummary.CommissionValue),
 
-                ExtraChargeValue = zoneSummary.ExtraChargeValue 
+                ExtraChargeValue = zoneSummary.ExtraChargeValue
             };
         }
 
@@ -164,22 +191,22 @@ namespace TOne.Analytics.Business
                 DurationNetFormatted = FormatNumber(zoneSummaryDetailed.DurationNet),
 
                 OffPeakDurationInSeconds = zoneSummaryDetailed.OffPeakDurationInSeconds,
-                OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds,2),
+                OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds, 2),
 
                 OffPeakRate = zoneSummaryDetailed.OffPeakRate,
-                OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate,5),
+                OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 5),
 
                 OffPeakNet = zoneSummaryDetailed.OffPeakNet,
-                OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate,2),
+                OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 2),
 
                 WeekEndDurationInSeconds = zoneSummaryDetailed.WeekEndDurationInSeconds,
-                WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds,2),
+                WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds, 2),
 
                 WeekEndRate = zoneSummaryDetailed.WeekEndRate,
-                WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate,2),
+                WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 2),
 
                 WeekEndNet = zoneSummaryDetailed.WeekEndNet,
-                WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet,2),
+                WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 2),
 
                 DurationInSeconds = zoneSummaryDetailed.DurationInSeconds,
                 DurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.DurationInSeconds),
@@ -187,14 +214,14 @@ namespace TOne.Analytics.Business
                 Net = zoneSummaryDetailed.Net,
                 NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 5),
 
-                TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds),2),
+                TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds), 2),
 
-                TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet,2),
+                TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 2),
 
                 CommissionValue = zoneSummaryDetailed.CommissionValue,
-                CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue,2),
+                CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue, 2),
 
-                ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue ,
+                ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue,
                 ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue),
             };
         }
@@ -218,7 +245,7 @@ namespace TOne.Analytics.Business
                 CostNet = dailySummary.CostNet,
                 CostNetFormatted = FormatNumber(dailySummary.CostNet, 2),
 
-                ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet , 2),
+                ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet, 2),
 
                 //=IIf(IsNothing(Fields!SaleNet.Value) ,"-100%",FormatPercent(1- Fields!CostNet.Value/Fields!SaleNet.Value,2))
 
@@ -229,26 +256,26 @@ namespace TOne.Analytics.Business
 
         private CarrierLostFormatted FormatCarrierLost(CarrierLost carrierLost)
         {
-            
+
             return new CarrierLostFormatted
             {
-              CustomerID = carrierLost.CustomerID ,
-              CustomerName = _bemanager.GetCarrirAccountName(carrierLost.CustomerID),
-              SupplierID = carrierLost.SupplierID,
-              SupplierName = _bemanager.GetCarrirAccountName(carrierLost.SupplierID),
-              SaleZoneID = carrierLost.SaleZoneID ,
-              SaleZoneName = _bemanager.GetZoneName(carrierLost.SaleZoneID),
-              CostZoneID = carrierLost.CostZoneID ,
-              CostZoneName = _bemanager.GetZoneName(carrierLost.CostZoneID),
-              Duration = carrierLost.Duration ,
-              DurationFormatted = FormatNumber(carrierLost.Duration),
-              CostNet = carrierLost.CostNet,
-              CostNetFormatted = (carrierLost.CostNet==null)?"0.00":FormatNumber(carrierLost.CostNet,5),
-              SaleNet = carrierLost.SaleNet,
-              SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 5),
-              Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
-              Percentage = (carrierLost.SaleNet !=null) ? String.Format("{0:#,##0.00%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
-              
+                CustomerID = carrierLost.CustomerID,
+                CustomerName = _bemanager.GetCarrirAccountName(carrierLost.CustomerID),
+                SupplierID = carrierLost.SupplierID,
+                SupplierName = _bemanager.GetCarrirAccountName(carrierLost.SupplierID),
+                SaleZoneID = carrierLost.SaleZoneID,
+                SaleZoneName = _bemanager.GetZoneName(carrierLost.SaleZoneID),
+                CostZoneID = carrierLost.CostZoneID,
+                CostZoneName = _bemanager.GetZoneName(carrierLost.CostZoneID),
+                Duration = carrierLost.Duration,
+                DurationFormatted = FormatNumber(carrierLost.Duration),
+                CostNet = carrierLost.CostNet,
+                CostNetFormatted = (carrierLost.CostNet == null) ? "0.00" : FormatNumber(carrierLost.CostNet, 5),
+                SaleNet = carrierLost.SaleNet,
+                SaleNetFormatted = (carrierLost.SaleNet == null) ? "0.00" : FormatNumber(carrierLost.SaleNet, 5),
+                Margin = FormatNumber(carrierLost.SaleNet - carrierLost.CostNet),
+                Percentage = (carrierLost.SaleNet != null) ? String.Format("{0:#,##0.00%}", (1 - carrierLost.CostNet / carrierLost.SaleNet)) : "-100%"
+
             };
         }
         private string FormatNumber(Decimal? number, int precision)
@@ -311,7 +338,8 @@ namespace TOne.Analytics.Business
                 }
             return models;
         }
-        private List<CarrierLostFormatted> FormatCarrierLost(List<CarrierLost> carriersLost) {
+        private List<CarrierLostFormatted> FormatCarrierLost(List<CarrierLost> carriersLost)
+        {
 
             List<CarrierLostFormatted> models = new List<CarrierLostFormatted>();
             if (carriersLost != null)
@@ -320,7 +348,7 @@ namespace TOne.Analytics.Business
                     models.Add(FormatCarrierLost(z));
                 }
             return models;
-        
+
         }
 
         private List<CarrierSummaryDailyFormatted> FormatCarrieresSummaryDaily(List<CarrierSummaryDaily> carrierSummaryDaily, bool isGroupeByday)
@@ -361,6 +389,6 @@ namespace TOne.Analytics.Business
             return obj;
         }
 
-        #endregion 
+        #endregion
     }
 }

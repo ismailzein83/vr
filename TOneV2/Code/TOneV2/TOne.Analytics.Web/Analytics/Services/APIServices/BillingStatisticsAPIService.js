@@ -44,7 +44,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         //        }
         //        );
         //}
-        function GetVariationReportsData(selectedDate, periodCount, periodTypeValue) {
+        function GetVariationReportsData(selectedDate, periodCount, periodTypeValue, variationReportOptionValue) {
                 return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
                     {
                         selectedDate: selectedDate,
@@ -55,12 +55,13 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
                     );
             }
 
-        function GetVariationReportsFinalData(selectedDate, periodCount, periodTypeValue) {
+        function GetVariationReportsFinalData(selectedDate, periodCount, periodTypeValue, variationReportOptionValue) {
             return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsFinalData",
                 {
                     selectedDate: selectedDate,
                     periodCount: periodCount,
-                    periodTypeValue: periodTypeValue
+                    periodTypeValue: periodTypeValue,
+                    variationReportOptionValue : variationReportOptionValue
                 }
                 );
         }
