@@ -23,6 +23,12 @@ namespace Vanrise.Security.Business
             return dataManager.GetRole(roleId);
         }
 
+        public List<int> GetUserRoles(int userId)
+        {
+            IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();
+            return dataManager.GetUserRoles(userId);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<Role> AddRole(Role roleObject, int[] members)
         {
             InsertOperationOutput<Role> insertOperationOutput = new InsertOperationOutput<Role>();

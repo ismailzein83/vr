@@ -12,6 +12,8 @@ namespace Vanrise.Security.Data
         List<Role> GetFilteredRoles(int fromRow, int toRow, string name);
 
         Role GetRole(int roleId);
+
+        List<int> GetUserRoles(int userId);
         
         bool AddRole(Role role, out int insertedId);
         

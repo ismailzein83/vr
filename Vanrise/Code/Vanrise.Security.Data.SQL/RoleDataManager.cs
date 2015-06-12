@@ -23,6 +23,21 @@ namespace Vanrise.Security.Data.SQL
         }
 
 
+        public List<int> GetUserRoles(int userId)
+        {
+            List<int> result = new List<int>();
+            
+            ExecuteReaderSP("sec.sp_Roles_GetUserRoles", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    result.Add((int)reader["RoleID"]);
+                }
+            }, userId);
+
+            return result;
+        }
+
         public bool AddRole(Entities.Role roleObject, out int insertedId)
         {
             object roleID;

@@ -73,18 +73,124 @@ namespace Vanrise.Security.Business
 
         private Dictionary<string, Dictionary<string, Flag>> GetEffectivePermissions(int userId)
         {
-            Dictionary<string, Dictionary<string, Flag>> effectivePermissions = new Dictionary<string, Dictionary<string, Flag>>();
-
-            PermissionManager permissionManager = new PermissionManager();
-            
             //TODO: consider these are read from the cache
-            List<Permission> allPermissions = permissionManager.GetPermissions();
+            PermissionManager permissionManager = new PermissionManager();
+            List<Permission> permissionsRecords = permissionManager.GetPermissions();
+
+            List<Dictionary<string, Dictionary<string, Flag>>> listOfAllPermissions = new List<Dictionary<string, Dictionary<string, Flag>>>();
+
+            //This should be read from cache
             List<BusinessEntityNode> businessEntityHierarchy = permissionManager.GetEntityNodes();
 
-            //TODO: consider here to get also the aggregation from User Groups
-            List<Permission> userPermissions = allPermissions.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == userId.ToString());
+            List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == userId.ToString());
+            listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(userPermissions, businessEntityHierarchy));
 
-            foreach (Permission item in userPermissions)
+            RoleManager roleManager = new RoleManager();
+            List<int> roles = roleManager.GetUserRoles(userId);
+
+            foreach (int roleId in roles)
+            {
+                List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == roleId.ToString());
+                if(rolePermissions.Count > 0)
+                    listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(rolePermissions, businessEntityHierarchy));
+            }
+
+            Dictionary<string, List<string>> allowPermissions = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> denyPermissions = new Dictionary<string, List<string>>();
+
+            foreach (Dictionary<string, Dictionary<string, Flag>> singlePermission in listOfAllPermissions)
+            {
+                foreach (KeyValuePair<string, Dictionary<string, Flag>> permkvp in singlePermission)
+                {
+                    List<string> allowValues = new List<string>();
+                    List<string> denyValues = new List<string>();
+
+                    foreach (KeyValuePair<string, Flag> flagKVP in permkvp.Value)
+                    {
+                        if (flagKVP.Value == Flag.ALLOW)
+                        {
+                            allowValues.Add(flagKVP.Key);
+                        }
+                        else
+                        {
+                            denyValues.Add(flagKVP.Key);
+                        }
+                    }
+                    
+                    //Add distinct allow and deny permissions from the list of all permissions
+
+                    if (!allowPermissions.ContainsKey(permkvp.Key) && allowValues.Count > 0)
+                        allowPermissions.Add(permkvp.Key, allowValues);
+
+                    if (!denyPermissions.ContainsKey(permkvp.Key) && denyValues.Count > 0)
+                        denyPermissions.Add(permkvp.Key, denyValues);
+                }
+            }
+
+            //Filter the allowPermissions based on the denyPermissions list
+            foreach (KeyValuePair<string, List<string>> allowPerm in allowPermissions)
+            {
+                if(denyPermissions.ContainsKey(allowPerm.Key))
+                {
+                    List<string> filteredValues = new List<string>();
+                    foreach (string allowFlag in allowPerm.Value)
+                    {
+                        if(!denyPermissions[allowPerm.Key].Contains(allowFlag))
+                        {
+                            filteredValues.Add(allowFlag);
+                        }
+                    }
+                    allowPerm.Value.Clear();
+                    allowPerm.Value.AddRange(filteredValues);
+                }
+            }
+
+            Dictionary<string, Dictionary<string, Flag>> finalResult = new Dictionary<string, Dictionary<string, Flag>>();
+
+            //Loop on all allowPermissions and build the result value from it, make sure to add the flags of denied as well
+            //that are respective to allowpermission
+            foreach (KeyValuePair<string, List<string>> item in allowPermissions)
+            {
+                Dictionary<string, Flag> allflags = new Dictionary<string, Flag>();
+                foreach (string allowStr in item.Value)
+                {
+                    allflags.Add(allowStr, Flag.ALLOW);
+                }
+
+                if (denyPermissions.ContainsKey(item.Key))
+                {
+                    foreach (string denyStr in denyPermissions[item.Key])
+                    {
+                        allflags.Add(denyStr, Flag.DENY);
+                    }
+                }
+
+                finalResult.Add(item.Key, allflags);
+            }
+
+            //Now loop and add all missing denypermissions that we could not add in the previous loop
+            foreach (KeyValuePair<string, List<string>> missingFlag in denyPermissions)
+            {
+                if(!finalResult.ContainsKey(missingFlag.Key))
+                {
+                    Dictionary<string, Flag> missingDenyflags = new Dictionary<string, Flag>();
+                    foreach (string denyStr in missingFlag.Value)
+                    {
+                        missingDenyflags.Add(denyStr, Flag.DENY);
+                    }
+
+                    finalResult.Add(missingFlag.Key, missingDenyflags);
+                }
+            }
+
+            return finalResult;
+        }
+
+        private Dictionary<string, Dictionary<string, Flag>> ConvertPermissionsToPathDictionary(List<Permission> permissions, List<BusinessEntityNode> businessEntityHierarchy)
+        {
+            Dictionary<string, Dictionary<string, Flag>> convertedPermissions = new Dictionary<string, Dictionary<string, Flag>>();
+
+            foreach (Permission item in permissions)
             {
                 BusinessEntityNode result = null;
 
@@ -105,14 +211,14 @@ namespace Vanrise.Security.Business
                 {
                     effectiveFlags.Add(flag.Name, flag.Value);
                 }
-                
+
                 //The get relative path will convert the business entity node into a path string
                 //Add a new record to the dictionary of effective permissions that is about the path as a key and the list of allowed permissions as a value
                 //TODO: this is to be cached later and moved to the base API Controller and done once in a user session
-                effectivePermissions.Add(result.GetRelativePath(), effectiveFlags);
+                convertedPermissions.Add(result.GetRelativePath(), effectiveFlags);
             }
 
-            return effectivePermissions;
+            return convertedPermissions;
         }
 
         private BusinessEntityNode GetBusinessEntityNode(Permission permission, BusinessEntityNode node, List<BusinessEntityNode> businessEntityHierarchy)
@@ -155,7 +261,8 @@ namespace Vanrise.Security.Business
             {
                 foreach (string requiredFlag in requiredFlags)
                 {
-                    if (effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
+                    if (effectivePermissions[requiredPath].ContainsKey(requiredFlag) &&
+                        effectivePermissions[requiredPath][requiredFlag] == Flag.DENY)
                     {
                         return false;
                     }
