@@ -11,6 +11,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     
     var selectedGroupKeys = [];
     function defineScopeObjects() {
+        
+        console.log("hjds"+$scope.viewScope.value);
         $scope.selectedGroupKeys = [];
         $scope.notSelectedGroupKeys = [];
         $scope.measures = measures;
@@ -41,30 +43,27 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
         }];
     }
-    function getNotSelectedGroupKeys() {
-       
-        if ($scope == $scope.viewScope)
-            return;
-        $scope.selectedGroupKeys = [];
-        getSelectedGroupKeys($scope.gridParentScope);
 
-        var count = 0;
-        for (var i = 0; i < $scope.groupKeys.length; i++) {
-            count = 0;
-            for (var j = 0; j < $scope.selectedGroupKeys.length; j++) {
-                if ($scope.groupKeys[i].groupKeyEnumValue == $scope.selectedGroupKeys[j].groupKeyEnumValue) {
-                    count++;
-                   // break;
-                } 
-            }
-            if (count == 0 && !contains($scope.groupKeys[i], $scope.notSelectedGroupKeys))
-                $scope.notSelectedGroupKeys.push($scope.groupKeys[i]);   
- 
+    function getNotSelectedGroupKeys(groupKeys, length) {
+        if (length <= 0)
+            return; 
+        if (checkSelectedGroupKeys($scope.selectedGroupKeys, groupKeys, length, $scope.selectedGroupKeys.length - 1) == 0 && !contains(groupKeys[length - 1], $scope.notSelectedGroupKeys))
+                $scope.notSelectedGroupKeys.push($scope.groupKeys[length-1]);
+        getNotSelectedGroupKeys(groupKeys, length - 1);
+    }
+    function checkSelectedGroupKeys(selectedGroupKeys, groupKeys,lengthGroupKey, length) {
+        if (length <= 0)
+            return 0;
+        if (groupKeys[lengthGroupKey-1].groupKeyEnumValue == selectedGroupKeys[length-1].groupKeyEnumValue) {
+            return 1 + checkSelectedGroupKeys(selectedGroupKeys, groupKeys, lengthGroupKey, length - 1);
         }
+        else
+            return checkSelectedGroupKeys(selectedGroupKeys, groupKeys, lengthGroupKey, length - 1);
+ 
     }
 
-    function getSelectedGroupKeys(scope) {
-        
+
+    function getSelectedGroupKeys(scope) { 
         if (scope == $scope.viewScope){
             for (var i = 0; i < scope.selectedGroupKeys.length; i++)
             {
@@ -124,7 +123,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             if ($scope.selectedGroupKeyIndex != undefined) {
                 $scope.selectedGroupKey = $scope.notSelectedGroupKeys[$scope.selectedGroupKeyIndex];
                 if (!$scope.selectedGroupKey.isDataLoaded) {
-                    getNotSelectedGroupKeys(); 
+                    $scope.selectedGroupKeys = [];
+                    getSelectedGroupKeys($scope.gridParentScope);
+                    getNotSelectedGroupKeys($scope.groupKeys, $scope.groupKeys.length);
                     getData();
                 }
                     
@@ -138,7 +139,11 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function load() {
         loadMeasures();
         loadGroupKeys();
-        getNotSelectedGroupKeys();
+        $scope.selectedGroupKeys = [];
+        getSelectedGroupKeys($scope.gridParentScope);
+        getNotSelectedGroupKeys($scope.groupKeys, $scope.groupKeys.length);
+
+       // getNotSelectedGroupKeys();
        $scope.selectedGroupKey = $scope.notSelectedGroupKeys[0];
         if ($scope.selectedGroupKey != undefined)
             getData(); 

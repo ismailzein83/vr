@@ -14,7 +14,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         var currentSortedColDef;
         var measures = [];
         var currentData;
-
+        var groupKeys = [];
         loadParameters();
         defineScope();
         load();
@@ -24,6 +24,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
 
         function defineScope() {
+            
             $scope.currentSearchCriteria = {
                 groupKeys: []
             };
@@ -46,6 +47,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             $scope.testModel = 'ZoneMonitorController';
 
             defineGroupKeys();
+            $scope.groupKeys = groupKeys;
             $scope.selectedGroupKeys = [];
             $scope.selectedGroupKeys.push($scope.groupKeys[0]);
 
@@ -110,7 +112,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 var groupKeys = [];
 
                 angular.forEach($scope.selectedGroupKeys, function (group) {
-                    groupKeys.push(group.groupKeyEnumValue);
+                    groupKeys.push(group.value);
                 });
                 $scope.filter = {
                     resultKey: resultKey,
@@ -134,7 +136,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             };
 
             $scope.selectEntity = function (groupKey, entityId, entityName) {
-                $scope.selectedEntityType = groupKey.title;
+                $scope.selectedEntityType = groupKey.description;
                 $scope.selectedEntityId = entityId;
                 $scope.selectedEntityName = entityName;
                 getAndShowEntityStatistics(groupKey);
@@ -161,7 +163,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     var valueIndex = $scope.currentSearchCriteria.groupKeys.indexOf(groupKey);
                     if (dataItem.groupKeyValues != undefined && dataItem.groupKeyValues[valueIndex].Name != null) {
                         menuActions.push({
-                            name: groupKey.title + ' (' + dataItem.groupKeyValues[valueIndex].Name + ')',
+                            name: groupKey.description + ' (' + dataItem.groupKeyValues[valueIndex].Name + ')',
                             clicked: function (dataItem) {
                                 $scope.selectEntity(groupKey, dataItem.groupKeyValues[valueIndex].Id, dataItem.groupKeyValues[valueIndex].Name)
                             }
@@ -186,7 +188,10 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
 
         function defineGroupKeys() {
-            $scope.groupKeys = [
+            for (var prop in TrafficStatisticGroupKeysEnum) {
+                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
+            }
+            /*$scope.groupKeys = [
                {
                    title: "Zone",
                    groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
@@ -206,12 +211,12 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                  title: "Switch",
                  groupKeyEnumValue: TrafficStatisticGroupKeysEnum.Switch.value,
                  gridHeader: "Switch"
-             }];
+             }];*/
         }
         function getObjectHeader(parameters, dataItem) {
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
                 var groupKey = $scope.currentSearchCriteria.groupKeys[i];
-                switch (groupKey.groupKeyEnumValue) {
+                switch (groupKey.value) {
                     case TrafficStatisticGroupKeysEnum.OurZone.value:
                         parameters.zoneIds = [dataItem.GroupKeyValues[i].Id];
                         console.log(parameters.zoneIds);
@@ -445,7 +450,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
         function getAndShowEntityStatistics(groupKey) {
             $scope.isGettingEntityStatistics = true;
-            AnalyticsAPIService.GetTrafficStatistics(groupKey.groupKeyEnumValue, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
+            AnalyticsAPIService.GetTrafficStatistics(groupKey.value, $scope.selectedEntityId, $scope.fromDate, $scope.toDate)
             .then(function (response) {
                 var chartData = response;
 
