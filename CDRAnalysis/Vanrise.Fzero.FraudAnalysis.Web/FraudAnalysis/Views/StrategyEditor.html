@@ -28,8 +28,8 @@
                             <vr-datagridcolumn headertext="' '" widthfactor="3">       <vr-switch value="dataItem.isSelected"></vr-switch>            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Filter #'" field="'filterId'" widthfactor="3">                   </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="20">                   </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Threshold'">  <vr-textbox value="dataItem.threshold"></vr-textbox>            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" selectedvalues="dataItem.period"></vr-select>       </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Threshold'">  <vr-textbox value="dataItem.threshold" isrequired ng-if="dataItem.isSelected"  min="0" max="99"></vr-textbox>            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Period'">  <vr-select datasource="viewScope.periods" datatextfield="Name" datavaluefield="Id" ng-init="dataItem.period = (dataItem.period == undefined ? viewScope.periods[0] : dataItem.period)" selectedvalues="dataItem.period" isrequired ng-show="dataItem.isSelected"></vr-select>       </vr-datagridcolumn>
                         </vr-datagrid>
                     </div>
 
@@ -60,12 +60,17 @@
                                 <vr-datagridcolumn headertext="'Suspection Level'" field="'suspectionLevel.name'" widthfactor="20" columnindex="0"></vr-datagridcolumn>
                                 <vr-datagridcolumn ng-repeat="filter in strategyFilters" ng-show="filter.isSelected" columnindex="$index + 1" headertext="'Filter: ' + filter.filterId" tag="filter">
                                     <div ng-init="filterIndex = viewScope.strategyFilters.indexOf(colDef.tag)">
-                                        <!--{{filterIndex}}{{dataItem.StrategyLevelCriterias[filterIndex]}}
-                                        {{dataItem.StrategyLevelCriterias}}-->
+                                        {{filterIndex}}{{dataItem.StrategyLevelCriterias[filterIndex].percentage}}
+                                        <!--{{dataItem.StrategyLevelCriterias}}-->
                                         <vr-switch value="dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-switch>
 
-                                        <vr-select ng-show="dataItem.StrategyLevelCriterias[filterIndex ].isSelected && edit" ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
+                                        <!--<vr-select ng-show="dataItem.StrategyLevelCriterias[filterIndex ].isSelected && edit" ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>-->
 
+                                        <vr-row>
+                                            <vr-columns colnum="2">
+                                                <vr-select ng-mouseleave="edit=false" datasource="viewScope.percentages" datatextfield="description" datavaluefield="value" selectedvalues="dataItem.StrategyLevelCriterias[filterIndex].percentage"></vr-select>
+                                            </vr-columns>
+                                        </vr-row>
                                         <vr-label ng-click="edit = true" ng-hide="edit || !dataItem.StrategyLevelCriterias[filterIndex].isSelected"></vr-label>
                                     </div>
 
@@ -87,8 +92,8 @@
                         <vr-row>
 
                             <vr-columns colnum="2">
-                                
-                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select> 
+
+                                <vr-select datasource="hours" datatextfield="name" datavaluefield="id" label="Peak Hours" selectedvalues="selectedPeakHours" ismultipleselection></vr-select>
                             </vr-columns>
 
 
