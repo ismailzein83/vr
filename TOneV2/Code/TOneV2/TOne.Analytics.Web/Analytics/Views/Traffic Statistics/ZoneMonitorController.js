@@ -96,7 +96,16 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 //    getAndShowEntityStatistics();
                 //};
             };
-
+            $scope.customvalidateSelectGroup = function (selectedGroupKeys) {
+                var count=0;
+                for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
+                    if ($scope.selectedGroupKeys[i].value == 4 || $scope.selectedGroupKeys[i].value == 8)
+                        count++;
+                }
+                if (count > 1)
+                    return "You should choose either Zone Or Code Group";
+                else return null;
+            };
             $scope.chartSelectedEntityReady = function (api) {
                 chartSelectedEntityAPI = api;
 
@@ -189,29 +198,9 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
 
         function defineGroupKeys() {
             for (var prop in TrafficStatisticGroupKeysEnum) {
+                if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey)
                 groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
             }
-            /*$scope.groupKeys = [
-               {
-                   title: "Zone",
-                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
-                   gridHeader: "Zone"
-               },
-               {
-                   title: "Customer",
-                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
-                   gridHeader: "Customer"
-               },
-               {
-                   title: "Suppliers",
-                   groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
-                   gridHeader: "Supplier"
-               },
-                {
-                 title: "Switch",
-                 groupKeyEnumValue: TrafficStatisticGroupKeysEnum.Switch.value,
-                 gridHeader: "Switch"
-             }];*/
         }
         function getObjectHeader(parameters, dataItem) {
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
@@ -232,6 +221,14 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                     case TrafficStatisticGroupKeysEnum.Switch.value:
                         parameters.Switch = [dataItem.GroupKeyValues[i].Id];
                         console.log(parameters.Switch);
+                        break;
+                    case TrafficStatisticGroupKeysEnum.PortIn.value:
+                        parameters.PortIn = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.PortIn);
+                        break;
+                    case TrafficStatisticGroupKeysEnum.PortOut.value:
+                        parameters.PortOut = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.PortOut);
                         break;
                 }
             }

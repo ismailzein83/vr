@@ -185,6 +185,20 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             isDataLoaded: false,
             gridHeader: "Switch"
         });
+        addGroupKeyIfNotExistsInParent({
+            title: "PortIn",
+            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.PortIn.value,
+            data: [],
+            isDataLoaded: false,
+            gridHeader: "PortIn"
+        });
+        addGroupKeyIfNotExistsInParent({
+            title: "PortOut",
+            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.PortOut.value,
+            data: [],
+            isDataLoaded: false,
+            gridHeader: "PortOut"
+        });
         if ($scope.groupKeys.length > 0)
             $scope.selectedGroupKey = $scope.groupKeys[0];
 

@@ -5,7 +5,7 @@
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-select label="Group By:" datasource="groupKeys"
-                               datatextfield="title" datavaluefield="groupKeyEnumValue" selectedvalues="selectedGroupKeys" ismultipleselection isrequired></vr-select>
+                               datatextfield="description" datavaluefield="value" selectedvalues="selectedGroupKeys" customvalidate="customvalidateSelectGroup" ismultipleselection isrequired></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-select label="Switches:" datasource="switches"
@@ -72,7 +72,7 @@
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid data-on-ready="onMainGridReady" datasource="data"
                              pagersettings="mainGridPagerSettings" menuactions="gridMenuActions">
-                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.gridHeader" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="groupKey in currentSearchCriteria.groupKeys" headertext="groupKey.description" field="'GroupKeyValues[' + $index + '].Name'" columnindex="$index" widthfactor="15" enablehiding="'false'" isclickable="'true'" tag="groupKey" onclicked="onGroupKeyClicked"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" type="'Number'" tag="measure" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
                     <vr-datagridexpandablerow >
                         <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>

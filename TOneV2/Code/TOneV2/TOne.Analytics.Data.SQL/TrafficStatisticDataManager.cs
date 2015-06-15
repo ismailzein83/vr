@@ -280,6 +280,14 @@ namespace TOne.Analytics.Data.SQL
                     idColumn = SwitchIdColumnName;
                     nameColumn = SwitchNameColumnName;
                     break;
+                case TrafficStatisticGroupKeys.PortIn:
+                    idColumn = Port_INColumnName;
+                    nameColumn = Port_INColumnName;
+                    break;
+                case TrafficStatisticGroupKeys.PortOut:
+                    idColumn = Port_OutColumnName;
+                    nameColumn = Port_OutColumnName;
+                    break;
                 default:
                     idColumn = null;
                     nameColumn = null;
@@ -312,6 +320,16 @@ namespace TOne.Analytics.Data.SQL
                     joinStatement = " LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID";
                     groupByStatement = "ts.SwitchId, swit.Name";
                     break;
+                case TrafficStatisticGroupKeys.PortIn:
+                    selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
+                    joinStatement = null;
+                    groupByStatement = "ts.Port_IN";
+                    break;
+                case TrafficStatisticGroupKeys.PortOut:
+                    selectStatement = String.Format(" ts.Port_OUT as {0}, ", Port_OutColumnName);
+                    joinStatement = null;
+                    groupByStatement = "ts.Port_OUT";
+                    break;
                 default:
                     selectStatement = null;
                     joinStatement = null;
@@ -329,5 +347,8 @@ namespace TOne.Analytics.Data.SQL
         const string CustomerNameColumnName = "CustomerName";
         const string SupplierIDColumnName = "SupplierID";
         const string SupplierNameColumnName = "SupplierName";
+        const string Port_INColumnName = "PortIn";
+        const string Port_OutColumnName = "PortOut";
+       
     }
 }
