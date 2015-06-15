@@ -112,8 +112,12 @@ namespace TOne.Analytics.Business
             return FormatRateLosses(_datamanager.GetRateLoss(fromDate, toDate, customerId, supplierId, zoneId, supplierAMUId, customerAMUId));
         }
 
+        public List<CarrierSummaryFormatted> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        {
 
-
+            return FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+        }
+       
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
@@ -433,9 +437,19 @@ namespace TOne.Analytics.Business
             return obj;
         }
 
+        private List<CarrierSummaryFormatted> FormatCarrierSummaries(List<CarrierSummary> carrierSummaries)
+        {
+            List<CarrierSummaryFormatted> models = new List<CarrierSummaryFormatted>();
+            if (carrierSummaries != null)
+                foreach (var c in carrierSummaries)
+                {
+                    models.Add(FormatCarrierSummary(c));
+                }
+            return models;
+        }
+
         private CarrierSummaryFormatted FormatCarrierSummary(CarrierSummary carrierSummary)
         {
-            //double a =;
             return new CarrierSummaryFormatted
             {
               
@@ -453,14 +467,14 @@ namespace TOne.Analytics.Business
 		        SaleNetFormatted = (carrierSummary.SaleNet ==0.00)?"0.00":FormatNumber(carrierSummary.SaleNet,5),
 		        CostCommissionValue =  carrierSummary.CostCommissionValue,
 		        CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.CostCommissionValue))),
-                //SaleCommissionValue = carrierSummary.SaleCommissionValue,
-                //SaleCommissionValueFormatted 
-                //CostExtraChargeValue
-                //CostExtraChargeValueFormatted 
-                //SaleExtraChargeValue
-                //SaleExtraChargeValueFormatted
-                //Profit = FormatNumber(carrierSummary.SaleNet- carrierSummary.CostNet),
-                //AvgMin
+                SaleCommissionValue = carrierSummary.SaleCommissionValue,
+                SaleCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.SaleCommissionValue))),
+                CostExtraChargeValue= carrierSummary.CostExtraChargeValue,
+                CostExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.CostExtraChargeValue))),
+                SaleExtraChargeValue = carrierSummary.SaleExtraChargeValue ,
+                SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.SaleExtraChargeValue))),
+                Profit = FormatNumber(carrierSummary.SaleNet- carrierSummary.CostNet),
+                AvgMin = FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration)
 
 
             };
