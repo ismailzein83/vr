@@ -229,6 +229,12 @@ namespace TOne.Analytics.Data.SQL
                     return String.Format("{0} = '{1}'", SupplierIDColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.Switch:
                     return String.Format("{0} = '{1}'", SwitchIdColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.PortIn:
+                    return String.Format("{0} = '{1}'", Port_INColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.PortOut:
+                    return String.Format("{0} = '{1}'", Port_OutColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.CodeGroup:
+                    return String.Format("{0} = '{1}'", CodeGroupIDColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -288,6 +294,10 @@ namespace TOne.Analytics.Data.SQL
                     idColumn = Port_OutColumnName;
                     nameColumn = Port_OutColumnName;
                     break;
+                case TrafficStatisticGroupKeys.CodeGroup:
+                    idColumn = CodeGroupIDColumnName;
+                    nameColumn = CodeGroupNameColumnName;
+                    break;
                 default:
                     idColumn = null;
                     nameColumn = null;
@@ -320,6 +330,11 @@ namespace TOne.Analytics.Data.SQL
                     joinStatement = " LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID";
                     groupByStatement = "ts.SwitchId, swit.Name";
                     break;
+                case TrafficStatisticGroupKeys.CodeGroup:
+                    selectStatement = String.Format(" ts.OurZoneID as {0},zz.Code as {1}, zz.Name as {2}, ", OurZoneIDColumnName, CodeGroupIDColumnName, CodeGroupNameColumnName);
+                    joinStatement = " LEFT JOIN (select z.ZoneID,c.Name,c.Code from Zone as z LEFT JOIN CodeGroup as c ON z.CodeGroup=c.Code) as zz ON ts.OurZoneID = zz.ZoneID";
+                    groupByStatement = "ts.OurZoneID,zz.Code, zz.Name";
+                    break;
                 case TrafficStatisticGroupKeys.PortIn:
                     selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
                     joinStatement = null;
@@ -349,6 +364,8 @@ namespace TOne.Analytics.Data.SQL
         const string SupplierNameColumnName = "SupplierName";
         const string Port_INColumnName = "PortIn";
         const string Port_OutColumnName = "PortOut";
+        const string CodeGroupIDColumnName = "CodeGroupID";
+        const string CodeGroupNameColumnName = "CodeGroupName";
        
     }
 }

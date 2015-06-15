@@ -216,7 +216,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function addGroupKeyIfNotExistsInParent(groupKey) {
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
         if ($.grep(parentGroupKeys, function (parentGrpKey) {
-            return parentGrpKey.groupKeyEnumValue == groupKey.groupKeyEnumValue;
+            return parentGrpKey.value == groupKey.groupKeyEnumValue;
         }).length == 0)
             $scope.groupKeys.push(groupKey);
     }
@@ -285,6 +285,15 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
                 case TrafficStatisticGroupKeysEnum.Switch.value:
                     filter.Switch = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.CodeGroup.value:
+                    filter.CodeGroup = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.PortIn.value:
+                    filter.PortIn = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.PortOut.value:
+                    filter.PortOut = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }
