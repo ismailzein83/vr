@@ -33,9 +33,17 @@ namespace TOne.Analytics.Business
                 SaleDuration = customerSummary.SaleDuration,
                 SaleNet = customerSummary.SaleNet,
                 CostDuration = customerSummary.CostDuration,
-                CostNet = customerSummary.CostNet
-
-
+                CostNet = customerSummary.CostNet,
+                SaleDurationFormatted = FormatNumber(customerSummary.SaleDuration, 2),
+                SaleNetFormatted = FormatNumber(customerSummary.SaleNet, 2),
+                CostDurationFormatted = FormatNumber(customerSummary.CostDuration, 2),
+                CostNetFormatted = FormatNumber(customerSummary.CostNet, 2)
+                //ProfitFormatted = FormatNumber((SaleNet - CostNet),2),
+                
+                
+                //=FormatNumber(Fields!Services.Value,2) services
+                //=FormatNumber(Fields!SaleNet.Value-Fields!CostNet.Value,2)
+                //=IIf(IsNothing(Fields!CostNet.Value),"0.00",FormatNumber(Fields!CostNet.Value,Parameters!DigitRate.Value))
 
 
                 //                SupplierID = (zoneSummaryDetailed.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneSummaryDetailed.SupplierID) : null,

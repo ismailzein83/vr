@@ -422,7 +422,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -586,14 +585,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Services">
+                    <Textbox Name="Carrier1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Services.Value,2)</Value>
+                              <Value>=Fields!Carrier.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -604,7 +603,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Services</rd:DefaultName>
+                      <rd:DefaultName>Carrier1</rd:DefaultName>
                       <Visibility>
                         <Hidden>=IIF(Parameters!ShowProfit.Value = "false", True, False)</Hidden>
                       </Visibility>
