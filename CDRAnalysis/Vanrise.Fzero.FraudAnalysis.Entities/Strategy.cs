@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
     public class StrategyLevel
     {
-        public int SuspectionLevelId { get; set; }
+        public int SuspicionLevelId { get; set; }
 
         public List<StrategyLevelCriteria> StrategyLevelCriterias { get; set; }
     }

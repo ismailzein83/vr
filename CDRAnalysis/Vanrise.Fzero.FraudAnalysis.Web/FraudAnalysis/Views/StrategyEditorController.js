@@ -181,7 +181,6 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
            
-            
 
             var index = 0;
             angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
@@ -191,7 +190,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                    
 
                     var levelCriteriaItem = {
-                        FilterId: levelCriteria.filterId
+                        FilterId: $scope.strategyFilters[index].filterId
                     };
 
                     if (levelCriteria.percentage != undefined) {
@@ -211,7 +210,8 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
         });
 
-
+       
+        console.log(strategyObject)
 
         return strategyObject;
     }
@@ -249,19 +249,12 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         });
 
 
-
-
-
-
-
-
         angular.forEach($scope.filterDefinitions, function (filterDef) {
 
             var filterItem = {
                 filterId: filterDef.filterId,
                 description: filterDef.description
             };
-
 
 
             var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "FilterId");
@@ -273,71 +266,40 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
                     filterItem.period = UtilsService.getItemByVal($scope.periods, existingItem.PeriodId, "Id");
             }
             $scope.strategyFilters.push(filterItem);
-
-
             
+        });
 
-
-
+       
+        angular.forEach(strategyObject.StrategyLevels, function (level) {
+            
             var strategyLevelItem = {
                 suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, "id"),
                 StrategyLevelCriterias: []
             };
 
 
+            angular.forEach($scope.filterDefinitions, function (filterDef) {
 
-            var existingItem = UtilsService.getItemByVal(strategyObject.StrategyLevels, filterDef.filterId, "FilterId");
-            if (existingItem != undefined && existingItem != null) {
-                filterItem.isSelected = existingItem.IsSelected;
-                filterItem.threshold = existingItem.Threshold;
+                var levelCriteriaItem = {
+                    filterId: filterDef.FilterId
+                };
 
-                angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
+                var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, "FilterId");
+                if (existingItem != undefined && existingItem != null) {
+                    levelCriteriaItem.isSelected = true ;
 
-                    var levelCriteriaItem = {
-                        filterId: levelCriteria.FilterId,
-                        isSelected: true
-                    };
+                    if (existingItem.Percentage != undefined)
+                        levelCriteriaItem.percentage = UtilsService.getItemByVal($scope.percentages, existingItem.Percentage, "value");
 
+                }
+                strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
+            });
 
-                    if (levelCriteria.Percentage != undefined)
-                        levelCriteriaItem.percentage = UtilsService.getItemByVal($scope.percentages, levelCriteria.Percentage, "value");
-
-
-                    strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-                });
-            }
             $scope.strategyLevels.push(strategyLevelItem);
-            
         });
+              
 
-
-
-        //angular.forEach(strategyObject.StrategyLevels, function (level) {
-        //    var strategyLevelItem = {
-        //        suspicionLevel: UtilsService.getItemByVal($scope.suspicionLevels, level.SuspicionLevelId, "id"),
-        //        StrategyLevelCriterias: []
-        //    };
-
-
-        //    angular.forEach(level.StrategyLevelCriterias, function (levelCriteria) {
-
-        //        var levelCriteriaItem = {
-        //            filterId: levelCriteria.FilterId,
-        //            isSelected: true
-        //        };
-
-
-        //        if (levelCriteria.Percentage != undefined)
-        //            levelCriteriaItem.percentage = UtilsService.getItemByVal($scope.percentages, levelCriteria.Percentage, "value");
-
-
-        //        strategyLevelItem.StrategyLevelCriterias.push(levelCriteriaItem);
-        //    });
-
-        //    $scope.strategyLevels.push(strategyLevelItem);
-        //});
-
-      
+        
 
     }
 

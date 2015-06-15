@@ -53,7 +53,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             }
 
                 MySqlConnection mySqlConnection = new MySqlConnection(GetConnectionString());
-            string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE SubscriberThresholds FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspectionLevelId, StrategyId, PeriodId)  ;", filename.Replace(@"\", @"\\"));
+                string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE SubscriberThresholds FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspicionLevelId, StrategyId, PeriodId)  ;", filename.Replace(@"\", @"\\"));
             mySqlConnection.Open();
             MySqlCommand mySqlCommand = new MySqlCommand(query, mySqlConnection);
             mySqlCommand.CommandTimeout = int.MaxValue;

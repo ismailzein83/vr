@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public int strategyId { get; set; }
         public string SubscriberNumber { get; set; }
-        public int SuspectionLevelId { get; set; }
+        public int SuspicionLevelId { get; set; }
         public string SuspectionLevelName { get; set; }
         public int Number_of_occurance { get; set; }
         public string LastreportNumber { get; set; }

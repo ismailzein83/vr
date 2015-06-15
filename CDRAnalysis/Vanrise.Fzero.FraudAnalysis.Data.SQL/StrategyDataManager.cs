@@ -88,7 +88,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         //        List<StrategyLevelCriteria> Lstslc = new List<StrategyLevelCriteria>();
 
-        //        strategyLevel.SuspectionLevelId = GetReaderValue<int>(reader, "LevelId");
+        //        strategyLevel.SuspicionLevelId = GetReaderValue<int>(reader, "LevelId");
 
         //        for (int i = 1; i <= 18; i++)
         //        {

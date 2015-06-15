@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             foreach (StrategyLevel i in strategy.StrategyLevels)
             {
                 StrategyLevelWithCriterias strategyLevelWithCriterias = new StrategyLevelWithCriterias();
-                strategyLevelWithCriterias.SuspectionLevelId = i.SuspectionLevelId;
+                strategyLevelWithCriterias.SuspicionLevelId = i.SuspicionLevelId;
 
 
                 strategyLevelWithCriterias.LevelCriteriasThresholdPercentage = new List<LevelCriteriaInfo>();
@@ -128,7 +128,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 {
                     suspiciousNumber = new SuspiciousNumber();
                     suspiciousNumber.Number = profile.SubscriberNumber;
-                    suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspectionLevelId;
+                    suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspicionLevelId;
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
                     suspiciousNumber.StrategyId = StrategyId;
@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         private class StrategyLevelWithCriterias
         {
-            public int SuspectionLevelId { get; set; }
+            public int SuspicionLevelId { get; set; }
 
            
 

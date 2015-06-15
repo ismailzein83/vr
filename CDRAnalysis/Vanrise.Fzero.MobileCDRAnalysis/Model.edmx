@@ -458,7 +458,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a p
           <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Criteria18" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="SuspectionLevelId" Type="int" />
+          <Property Name="SuspicionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
           <Property Name="PeriodId" Type="int" />
         </EntityType>
@@ -586,7 +586,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           <Key>
             <PropertyRef Name="strategyId" />
             <PropertyRef Name="SubscriberNumber" />
-            <PropertyRef Name="SuspectionLevelId" />
+            <PropertyRef Name="SuspicionLevelId" />
             <PropertyRef Name="SuspectionLevelName" />
             <PropertyRef Name="Number_of_occurance" />
             <PropertyRef Name="LastreportNumber" />
@@ -594,7 +594,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
           </Key>
           <Property Name="strategyId" Type="int" Nullable="false" />
           <Property Name="SubscriberNumber" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="SuspectionLevelId" Type="int" Nullable="false" />
+          <Property Name="SuspicionLevelId" Type="int" Nullable="false" />
           <Property Name="SuspectionLevelName" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="Number_of_occurance" Type="int" Nullable="false" />
           <Property Name="LastreportNumber" Type="varchar" MaxLength="1" Nullable="false" />
@@ -1004,7 +1004,7 @@ warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does n
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="SubscriberThresholds">
-              <PropertyRef Name="SuspectionLevelId" />
+              <PropertyRef Name="SuspicionLevelId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1302,15 +1302,16 @@ FROM [dbo].[vwReportedNumberNormalCDR] AS [vwReportedNumberNormalCDR]</DefiningQ
 FROM [dbo].[vwReportVariables] AS [vwReportVariables]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwSuspectionAnalysis" EntityType="Self.vwSuspectionAnalysis" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwSuspectionAnalysis].[strategyId] AS [strategyId], 
-[vwSuspectionAnalysis].[SubscriberNumber] AS [SubscriberNumber], 
-[vwSuspectionAnalysis].[SuspectionLevelId] AS [SuspectionLevelId], 
-[vwSuspectionAnalysis].[SuspectionLevelName] AS [SuspectionLevelName], 
-[vwSuspectionAnalysis].[Number_of_occurance] AS [Number_of_occurance], 
-[vwSuspectionAnalysis].[LastreportNumber] AS [LastreportNumber], 
-[vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
-FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
+            <DefiningQuery>
+              SELECT
+              [vwSuspectionAnalysis].[strategyId] AS [strategyId],
+              [vwSuspectionAnalysis].[SubscriberNumber] AS [SubscriberNumber],
+              [vwSuspectionAnalysis].[SuspicionLevelId] AS [SuspicionLevelId],
+              [vwSuspectionAnalysis].[SuspectionLevelName] AS [SuspectionLevelName],
+              [vwSuspectionAnalysis].[Number_of_occurance] AS [Number_of_occurance],
+              [vwSuspectionAnalysis].[LastreportNumber] AS [LastreportNumber],
+              [vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
+              FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_ControlTable_OperationType" Association="Self.FK_ControlTable_OperationType">
             <End Role="OperationType" EntitySet="OperationType" />
@@ -2343,7 +2344,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Criteria18" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="SuspectionLevelId" Type="Int32" />
+          <Property Name="SuspicionLevelId" Type="Int32" />
           <Property Name="StrategyId" Type="Int32" />
           <Property Name="PeriodId" Type="Int32" />
           <NavigationProperty Name="Period" Relationship="Model.FK_SubscriberThresholds_Periods" FromRole="SubscriberThreshold" ToRole="Period" />
@@ -2504,7 +2505,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Key>
             <PropertyRef Name="strategyId" />
             <PropertyRef Name="SubscriberNumber" />
-            <PropertyRef Name="SuspectionLevelId" />
+            <PropertyRef Name="SuspicionLevelId" />
             <PropertyRef Name="SuspectionLevelName" />
             <PropertyRef Name="Number_of_occurance" />
             <PropertyRef Name="LastreportNumber" />
@@ -2512,7 +2513,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </Key>
           <Property Name="strategyId" Type="Int32" Nullable="false" />
           <Property Name="SubscriberNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="SuspectionLevelId" Type="Int32" Nullable="false" />
+          <Property Name="SuspicionLevelId" Type="Int32" Nullable="false" />
           <Property Name="SuspectionLevelName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="Number_of_occurance" Type="Int32" Nullable="false" />
           <Property Name="LastreportNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
@@ -2934,7 +2935,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="SubscriberThreshold">
-              <PropertyRef Name="SuspectionLevelId" />
+              <PropertyRef Name="SuspicionLevelId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3504,7 +3505,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               <MappingFragment StoreEntitySet="SubscriberThresholds">
                 <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
                 <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
                 <ScalarProperty Name="Criteria18" ColumnName="Criteria18" />
                 <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
                 <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
@@ -3676,7 +3677,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="LastreportNumber" ColumnName="LastreportNumber" />
                 <ScalarProperty Name="Number_of_occurance" ColumnName="Number_of_occurance" />
                 <ScalarProperty Name="SuspectionLevelName" ColumnName="SuspectionLevelName" />
-                <ScalarProperty Name="SuspectionLevelId" ColumnName="SuspectionLevelId" />
+                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
                 <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
                 <ScalarProperty Name="strategyId" ColumnName="strategyId" />
               </MappingFragment>
