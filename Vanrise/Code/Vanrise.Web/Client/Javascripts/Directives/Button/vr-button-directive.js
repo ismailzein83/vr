@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
+app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (ButtonDirService, SecurityService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -8,7 +8,8 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
         scope: {
             onclick: '=',
             isasynchronous: '=',
-            formname: '@'
+            formname: '@',
+            permissions: '@'
         },
         controller: function ($scope, $element) {
             
@@ -78,7 +79,10 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
             }
         },
         template: function (element, attrs) {
-            return ButtonDirService.getTemplate(attrs.type);
+            if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions))
+                return ButtonDirService.getTemplate(attrs.type);
+            else
+                return "";
         }
 
     };

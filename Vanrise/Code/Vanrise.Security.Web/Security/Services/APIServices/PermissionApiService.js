@@ -3,7 +3,8 @@
     return ({
         GetEntityNodes: GetEntityNodes,
         GetPermissions: GetPermissions,
-        UpdatePermissions: UpdatePermissions
+        UpdatePermissions: UpdatePermissions,
+        GetEffectivePermissions: GetEffectivePermissions
     });
 
     function GetEntityNodes() {
@@ -15,6 +16,13 @@
             {
                 holderType : holderType,
                 holderId : holderId
+            });
+    }
+
+    function GetEffectivePermissions(token) {
+        return BaseAPIService.get("/api/Permission/GetEffectivePermissions",
+            {
+                token: token
             });
     }
 

@@ -6,7 +6,8 @@ app.service('UtilsService', ['$q', function ($q) {
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
         getItemIndexByVal: getItemIndexByVal,
-        getItemByVal: getItemByVal
+        getItemByVal: getItemByVal,
+        contains: contains
     });
 
     function replaceAll(string, find, replace) {
@@ -66,5 +67,14 @@ app.service('UtilsService', ['$q', function ($q) {
             }
         }
         return null;
+    }
+
+    function contains(array, obj) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === obj) {
+                return true;
+            }
+        }
+        return false;
     }
 }]);

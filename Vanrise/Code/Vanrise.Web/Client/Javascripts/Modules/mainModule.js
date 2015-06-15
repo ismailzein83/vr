@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, notify, $animate, $cookies) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies) {
     
     var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
 
@@ -10,6 +10,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     {
         window.location.href = '/Security/Login';
     }
+
+    PermissionAPIService.GetEffectivePermissions(cookieUserToken).then(function (response) {
+        $rootScope.effectivePermissions = response;
+    }
+    );
 
     $scope.userDisplayName = $cookies['TOne_LoginUserDisplayNameCookie'];
 
@@ -205,8 +210,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
 });
-
-app.controller.$inject = ['MenuAPIService'];
 
 app.controller('loginCtrl', function loginCtrl($scope) {
     

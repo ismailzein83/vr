@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService, $compile) {
+app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', function (UtilsService, SecurityService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -425,7 +425,24 @@ app.directive('vrDatagrid', ['UtilsService', '$compile', function (UtilsService,
                 $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto' });
             }
             ctrl.getMenuActions = function (dataItem) {
-                return typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute;
+                var arrayofActions = (typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute);
+
+                if (arrayofActions != undefined && arrayofActions != null)
+                {
+                    for(var i=arrayofActions.length -1; i >= 0; i--)
+                    {
+                        if (arrayofActions[i].permissions != undefined && arrayofActions[i].permissions != null)
+                        {
+                            var isAllowed = SecurityService.isAllowed(arrayofActions[i].permissions);
+                            if(!isAllowed)
+                            {
+                                arrayofActions.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+
+                return arrayofActions;
             }
 
             ctrl.menuActionClicked = function (action, dataItem) {

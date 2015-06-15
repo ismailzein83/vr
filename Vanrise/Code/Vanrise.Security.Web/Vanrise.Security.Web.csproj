@@ -113,11 +113,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
     <Content Include="Security\Services\APIServices\RoleAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
     <Content Include="Security\Views\PermissionEditor.html" />
