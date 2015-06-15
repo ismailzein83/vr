@@ -89,7 +89,6 @@
     <Compile Include="Classes\vwReportedNumberNormalCDR.cs" />
     <Compile Include="Classes\vwReportedNumber.cs" />
     <Compile Include="Classes\Criteria_profile.cs" />
-    <Compile Include="Classes\DataStatistics.cs" />
     <Compile Include="Classes\NormalCDR.cs" />
     <Compile Include="Classes\NumberProfile.cs" />
     <Compile Include="Classes\Period.cs" />
@@ -99,34 +98,7 @@
     <Compile Include="Classes\SubscriberThreshold.cs" />
     <Compile Include="Classes\SuspectionOccurance.cs" />
     <Compile Include="Classes\Suspection_Level.cs" />
-    <Compile Include="ControlTable.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Criteria_Profile.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_Peak_Time.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_SourceMappings.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_StrategyPeriods.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_StrategyThreshold.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_Strategy_Min_Values.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_Strategy_Suspicion_Level.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete_SwitchProfiles.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="delete__Switch_DatabaseConnections.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EmailReceiver.cs">
@@ -166,9 +138,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NumberProfile.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OperationType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Period.cs">

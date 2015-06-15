@@ -17,144 +17,12 @@
           <Property Name="Distinct_IMEI" Type="int" />
           <Property Name="Distinct_MSISDN_Msg" Type="int" />
         </EntityType>
-        <EntityType Name="ControlTable">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OperationTypeID" Type="int" Nullable="false" />
-          <Property Name="StartedDateTime" Type="datetime" Nullable="false" />
-          <Property Name="FinishedDateTime" Type="datetime" />
-          <Property Name="RowsPassed" Type="int" />
-          <Property Name="TotalRows" Type="int" />
-          <Property Name="StartID" Type="int" />
-          <Property Name="EndID" Type="int" />
-          <Property Name="StartingUnitdate" Type="datetime" />
-          <Property Name="EndingUnitdate" Type="datetime" />
-          <Property Name="Lastid" Type="int" />
-          <Property Name="PeriodId" Type="int" />
-          <Property Name="NumberOfProfileRecords" Type="int" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="NumberOfCalls" Type="int" />
-        </EntityType>
         <EntityType Name="Criteria_Profile">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="delete_ Switch_DatabaseConnections">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="ServerName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="DatabaseName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UserId" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UserPassword" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="delete_Peak_Time">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Peak_Hour" Type="int" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="delete_SourceMappings">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SwitchID" Type="int" Nullable="false" />
-          <Property Name="ColumnName" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="MappedtoColumnNumber" Type="int" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime2" Precision="0" />
-          <Property Name="CreatedBy" Type="int" />
-          <Property Name="LastUpdateDate" Type="datetime2" Precision="0" />
-          <Property Name="LastUpdatedBy" Type="int" />
-        </EntityType>
-        <EntityType Name="delete_Strategy_Min_Values">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="Min_Count_Value" Type="int" />
-          <Property Name="Min_Aggreg_Volume" Type="numeric" Precision="13" Scale="4" />
-          <Property Name="CriteriaId" Type="int" />
-        </EntityType>
-        <EntityType Name="delete_Strategy_Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="LevelId" Type="int" />
-          <Property Name="CriteriaId1" Type="int" />
-          <Property Name="Cr1Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId2" Type="int" />
-          <Property Name="Cr2Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId3" Type="int" />
-          <Property Name="Cr3Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId4" Type="int" />
-          <Property Name="Cr4Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId5" Type="int" />
-          <Property Name="Cr5Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId6" Type="int" />
-          <Property Name="Cr6Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId7" Type="int" />
-          <Property Name="Cr7Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId8" Type="int" />
-          <Property Name="Cr8Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId9" Type="int" />
-          <Property Name="Cr9Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId10" Type="int" />
-          <Property Name="Cr10Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId11" Type="int" />
-          <Property Name="Cr11Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId12" Type="int" />
-          <Property Name="Cr12Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId13" Type="int" />
-          <Property Name="Cr13Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId14" Type="int" />
-          <Property Name="Cr14Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId15" Type="int" />
-          <Property Name="Cr15Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId16" Type="int" />
-          <Property Name="Cr16Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId17" Type="int" />
-          <Property Name="Cr17Per" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId18" Type="int" />
-          <Property Name="Cr18Per" Type="decimal" Precision="18" Scale="2" />
-        </EntityType>
-        <EntityType Name="delete_StrategyPeriods">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="PeriodId" Type="int" />
-          <Property Name="Value" Type="int" />
-          <Property Name="CriteriaID" Type="int" />
-        </EntityType>
-        <EntityType Name="delete_StrategyThreshold">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="MaxValue" Type="decimal" Precision="18" Scale="3" />
-          <Property Name="CriteriaID" Type="int" />
-        </EntityType>
-        <EntityType Name="delete_SwitchProfiles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="AllowAutoImport" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="EmailReceivers">
           <Key>
@@ -276,17 +144,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
           <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
           <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="OperationType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="SPName" Type="varchar" MaxLength="50" />
-          <Property Name="StepOrder" Type="int" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Periods">
           <Key>
@@ -533,30 +390,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <Property Name="LastreportNumber" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="StrategyName" Type="varchar" MaxLength="1" Nullable="false" />
         </EntityType>
-        <Association Name="FK_ControlTable_OperationType">
-          <End Role="OperationType" Type="Self.OperationType" Multiplicity="1" />
-          <End Role="ControlTable" Type="Self.ControlTable" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OperationType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ControlTable">
-              <PropertyRef Name="OperationTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ControlTable_Periods">
-          <End Role="Periods" Type="Self.Periods" Multiplicity="0..1" />
-          <End Role="ControlTable" Type="Self.ControlTable" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Periods">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ControlTable">
-              <PropertyRef Name="PeriodId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_EmailReceivers_EmailReceiverTypes">
           <End Role="EmailReceiverTypes" Type="Self.EmailReceiverTypes" Multiplicity="0..1" />
           <End Role="EmailReceivers" Type="Self.EmailReceivers" Multiplicity="*" />
@@ -614,18 +447,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Principal>
             <Dependent Role="Imports">
               <PropertyRef Name="ImportedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Peak_time_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="delete_Peak_Time" Type="Self.delete_Peak_Time" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Peak_Time">
-              <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -725,78 +546,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SourceMappings_PredefinedColumns">
-          <End Role="PredefinedColumns" Type="Self.PredefinedColumns" Multiplicity="1" />
-          <End Role="delete_SourceMappings" Type="Self.delete_SourceMappings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PredefinedColumns">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="delete_SourceMappings">
-              <PropertyRef Name="MappedtoColumnNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SourceMappings_SwitchProfiles">
-          <End Role="delete_SwitchProfiles" Type="Self.delete_SwitchProfiles" Multiplicity="1" />
-          <End Role="delete_SourceMappings" Type="Self.delete_SourceMappings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="delete_SwitchProfiles">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_SourceMappings">
-              <PropertyRef Name="SwitchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Min_Values_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="delete_Strategy_Min_Values" Type="Self.delete_Strategy_Min_Values" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Min_Values">
-              <PropertyRef Name="CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Min_Values_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="delete_Strategy_Min_Values" Type="Self.delete_Strategy_Min_Values" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Min_Values">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_suspection_level_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="delete_Strategy_Suspicion_Level" Type="Self.delete_Strategy_Suspicion_Level" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Suspicion_Level">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_suspection_level_suspection_level">
-          <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
-          <End Role="delete_Strategy_Suspicion_Level" Type="Self.delete_Strategy_Suspicion_Level" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Suspicion_Level">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Suspicion_Level">
-              <PropertyRef Name="LevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Strategy_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
@@ -809,66 +558,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_StrategyPeriods_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="delete_StrategyPeriods" Type="Self.delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyPeriods_Periods">
-          <End Role="Periods" Type="Self.Periods" Multiplicity="0..1" />
-          <End Role="delete_StrategyPeriods" Type="Self.delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Periods">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="PeriodId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyPeriods_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="delete_StrategyPeriods" Type="Self.delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="delete_StrategyThreshold" Type="Self.delete_StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyThreshold">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="delete_StrategyThreshold" Type="Self.delete_StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyThreshold">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubscriberThresholds_Suspection_Level">
           <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
           <End Role="SubscriberThresholds" Type="Self.SubscriberThresholds" Multiplicity="*" />
@@ -878,20 +567,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Principal>
             <Dependent Role="SubscriberThresholds">
               <PropertyRef Name="SuspicionLevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Switch_DatabaseConnections_Switchs">
-          <End Role="delete_SwitchProfiles" Type="Self.delete_SwitchProfiles" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="delete_ Switch_DatabaseConnections" Type="Self.delete_ Switch_DatabaseConnections" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="delete_SwitchProfiles">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_ Switch_DatabaseConnections">
-              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -922,21 +597,8 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           </ReferentialConstraint>
         </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="prDashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Database" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Ids" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="prFillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="StrategyId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prFillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="StrategyId" Type="int" Mode="In" />
         </Function>
         <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
@@ -954,23 +616,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <Parameter Name="ReportID" Type="int" Mode="In" />
         </Function>
         <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prGetUnNormalizedCDPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FromDate" Type="datetime" Mode="In" />
-          <Parameter Name="ToDate" Type="datetime" Mode="In" />
-          <Parameter Name="SwitchID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prGetUnNormalizedCGPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FromDate" Type="datetime" Mode="In" />
-          <Parameter Name="ToDate" Type="datetime" Mode="In" />
-          <Parameter Name="SwitchID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prImportfromSwitch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SwitchID" Type="int" Mode="In" />
-          <Parameter Name="DBName" Type="varchar" Mode="In" />
-          <Parameter Name="Reference" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prImportfromSwitches" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="prSendMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="profile_name" Type="varchar" Mode="In" />
           <Parameter Name="recipients" Type="varchar" Mode="In" />
@@ -1048,16 +693,7 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
         </Function>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="CellProfile" EntityType="Self.CellProfile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ControlTable" EntityType="Self.ControlTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Criteria_Profile" EntityType="Self.Criteria_Profile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_ Switch_DatabaseConnections" EntityType="Self.delete_ Switch_DatabaseConnections" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_Peak_Time" EntityType="Self.delete_Peak_Time" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_SourceMappings" EntityType="Self.delete_SourceMappings" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_Strategy_Min_Values" EntityType="Self.delete_Strategy_Min_Values" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_Strategy_Suspicion_Level" EntityType="Self.delete_Strategy_Suspicion_Level" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_StrategyPeriods" EntityType="Self.delete_StrategyPeriods" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_StrategyThreshold" EntityType="Self.delete_StrategyThreshold" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="delete_SwitchProfiles" EntityType="Self.delete_SwitchProfiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailReceivers" EntityType="Self.EmailReceivers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailReceiverTypes" EntityType="Self.EmailReceiverTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
@@ -1065,7 +701,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <EntitySet Name="Imports" EntityType="Self.Imports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImportTypes" EntityType="Self.ImportTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Periods" EntityType="Self.Periods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PredefinedColumns" EntityType="Self.PredefinedColumns" Schema="dbo" store:Type="Tables" />
@@ -1156,14 +791,6 @@ FROM [dbo].[vwReportVariables] AS [vwReportVariables]</DefiningQuery>
 [vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
 FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_ControlTable_OperationType" Association="Self.FK_ControlTable_OperationType">
-            <End Role="OperationType" EntitySet="OperationType" />
-            <End Role="ControlTable" EntitySet="ControlTable" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ControlTable_Periods" Association="Self.FK_ControlTable_Periods">
-            <End Role="Periods" EntitySet="Periods" />
-            <End Role="ControlTable" EntitySet="ControlTable" />
-          </AssociationSet>
           <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Self.FK_EmailReceivers_EmailReceiverTypes">
             <End Role="EmailReceiverTypes" EntitySet="EmailReceiverTypes" />
             <End Role="EmailReceivers" EntitySet="EmailReceivers" />
@@ -1183,10 +810,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <AssociationSet Name="FK_Imports_Users" Association="Self.FK_Imports_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Imports" EntitySet="Imports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Peak_time_Strategy" Association="Self.FK_Peak_time_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="delete_Peak_Time" EntitySet="delete_Peak_Time" />
           </AssociationSet>
           <AssociationSet Name="FK_Permissions_Permissions" Association="Self.FK_Permissions_Permissions">
             <End Role="Permissions" EntitySet="Permissions" />
@@ -1220,61 +843,13 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="Strategy" EntitySet="Strategy" />
             <End Role="ReportDetails" EntitySet="ReportDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_PredefinedColumns" Association="Self.FK_SourceMappings_PredefinedColumns">
-            <End Role="PredefinedColumns" EntitySet="PredefinedColumns" />
-            <End Role="delete_SourceMappings" EntitySet="delete_SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_SwitchProfiles" Association="Self.FK_SourceMappings_SwitchProfiles">
-            <End Role="delete_SwitchProfiles" EntitySet="delete_SwitchProfiles" />
-            <End Role="delete_SourceMappings" EntitySet="delete_SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_criteria_profile" Association="Self.FK_Strategy_Min_Values_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_Strategy_Min_Values" EntitySet="delete_Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_Strategy" Association="Self.FK_Strategy_Min_Values_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="delete_Strategy_Min_Values" EntitySet="delete_Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="Self.FK_Strategy_suspection_level_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="delete_Strategy_Suspicion_Level" EntitySet="delete_Strategy_Suspicion_Level" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_suspection_level" Association="Self.FK_Strategy_suspection_level_suspection_level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="delete_Strategy_Suspicion_Level" EntitySet="delete_Strategy_Suspicion_Level" />
-          </AssociationSet>
           <AssociationSet Name="FK_Strategy_Users" Association="Self.FK_Strategy_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Strategy" EntitySet="Strategy" />
           </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="Self.FK_StrategyPeriods_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Periods" Association="Self.FK_StrategyPeriods_Periods">
-            <End Role="Periods" EntitySet="Periods" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="Self.FK_StrategyPeriods_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="Self.FK_StrategyThreshold_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_StrategyThreshold" EntitySet="delete_StrategyThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="Self.FK_StrategyThreshold_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="delete_StrategyThreshold" EntitySet="delete_StrategyThreshold" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Self.FK_SubscriberThresholds_Suspection_Level">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="Self.FK_Switch_DatabaseConnections_Switchs">
-            <End Role="delete_SwitchProfiles" EntitySet="delete_SwitchProfiles" />
-            <End Role="delete_ Switch_DatabaseConnections" EntitySet="delete_ Switch_DatabaseConnections" />
           </AssociationSet>
           <AssociationSet Name="FK_UserPermissions_Permissions" Association="Self.FK_UserPermissions_Permissions">
             <End Role="Permissions" EntitySet="Permissions" />
@@ -1455,16 +1030,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <Parameter Name="StrategyContent" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
-          <EntitySet Name="ControlTables" EntityType="Model.ControlTable" />
           <EntitySet Name="Criteria_Profile" EntityType="Model.Criteria_Profile" />
-          <EntitySet Name="delete__Switch_DatabaseConnections" EntityType="Model.delete__Switch_DatabaseConnections" />
-          <EntitySet Name="delete_Peak_Time" EntityType="Model.delete_Peak_Time" />
-          <EntitySet Name="delete_SourceMappings" EntityType="Model.delete_SourceMappings" />
-          <EntitySet Name="delete_Strategy_Min_Values" EntityType="Model.delete_Strategy_Min_Values" />
-          <EntitySet Name="delete_Strategy_Suspicion_Level" EntityType="Model.delete_Strategy_Suspicion_Level" />
-          <EntitySet Name="delete_StrategyPeriods" EntityType="Model.delete_StrategyPeriods" />
-          <EntitySet Name="delete_StrategyThreshold" EntityType="Model.delete_StrategyThreshold" />
-          <EntitySet Name="delete_SwitchProfiles" EntityType="Model.delete_SwitchProfiles" />
           <EntitySet Name="EmailReceivers" EntityType="Model.EmailReceiver" />
           <EntitySet Name="EmailReceiverTypes" EntityType="Model.EmailReceiverType" />
           <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
@@ -1472,7 +1038,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="Imports" EntityType="Model.Import" />
           <EntitySet Name="ImportTypes" EntityType="Model.ImportType" />
           <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
-          <EntitySet Name="OperationTypes" EntityType="Model.OperationType" />
           <EntitySet Name="Periods" EntityType="Model.Period" />
           <EntitySet Name="Permissions" EntityType="Model.Permission" />
           <EntitySet Name="PredefinedColumns" EntityType="Model.PredefinedColumn" />
@@ -1495,14 +1060,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="Model.vwReportedNumberNormalCDR" />
           <EntitySet Name="vwReportVariables" EntityType="Model.vwReportVariable" />
           <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.vwSuspectionAnalysi" />
-          <AssociationSet Name="FK_ControlTable_OperationType" Association="Model.FK_ControlTable_OperationType">
-            <End Role="OperationType" EntitySet="OperationTypes" />
-            <End Role="ControlTable" EntitySet="ControlTables" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ControlTable_Periods" Association="Model.FK_ControlTable_Periods">
-            <End Role="Period" EntitySet="Periods" />
-            <End Role="ControlTable" EntitySet="ControlTables" />
-          </AssociationSet>
           <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Model.FK_Related_Criteria_criteria_profile">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
             <End Role="Related_Criteria" EntitySet="Related_Criteria" />
@@ -1510,58 +1067,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="Model.FK_Related_Criteria_criteria_profile1">
             <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
             <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_criteria_profile" Association="Model.FK_Strategy_Min_Values_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_Strategy_Min_Values" EntitySet="delete_Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_criteria_profile" Association="Model.FK_StrategyPeriods_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_criteria_profile" Association="Model.FK_StrategyThreshold_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="delete_StrategyThreshold" EntitySet="delete_StrategyThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Switch_DatabaseConnections_Switchs" Association="Model.FK_Switch_DatabaseConnections_Switchs">
-            <End Role="delete_SwitchProfiles" EntitySet="delete_SwitchProfiles" />
-            <End Role="delete__Switch_DatabaseConnections" EntitySet="delete__Switch_DatabaseConnections" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Peak_time_Strategy" Association="Model.FK_Peak_time_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="delete_Peak_Time" EntitySet="delete_Peak_Time" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_PredefinedColumns" Association="Model.FK_SourceMappings_PredefinedColumns">
-            <End Role="PredefinedColumn" EntitySet="PredefinedColumns" />
-            <End Role="delete_SourceMappings" EntitySet="delete_SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SourceMappings_SwitchProfiles" Association="Model.FK_SourceMappings_SwitchProfiles">
-            <End Role="delete_SwitchProfiles" EntitySet="delete_SwitchProfiles" />
-            <End Role="delete_SourceMappings" EntitySet="delete_SourceMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Min_Values_Strategy" Association="Model.FK_Strategy_Min_Values_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="delete_Strategy_Min_Values" EntitySet="delete_Strategy_Min_Values" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_Strategy" Association="Model.FK_Strategy_suspection_level_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="delete_Strategy_Suspicion_Level" EntitySet="delete_Strategy_Suspicion_Level" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_suspection_level_suspection_level" Association="Model.FK_Strategy_suspection_level_suspection_level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="delete_Strategy_Suspicion_Level" EntitySet="delete_Strategy_Suspicion_Level" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Periods" Association="Model.FK_StrategyPeriods_Periods">
-            <End Role="Period" EntitySet="Periods" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyPeriods_Strategy" Association="Model.FK_StrategyPeriods_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="delete_StrategyPeriods" EntitySet="delete_StrategyPeriods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_StrategyThreshold_Strategy" Association="Model.FK_StrategyThreshold_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="delete_StrategyThreshold" EntitySet="delete_StrategyThreshold" />
           </AssociationSet>
           <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Model.FK_EmailReceivers_EmailReceiverTypes">
             <End Role="EmailReceiverType" EntitySet="EmailReceiverTypes" />
@@ -1674,28 +1179,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Distinct_IMEI" Type="Int32" />
           <Property Name="Distinct_MSISDN_Msg" Type="Int32" />
         </EntityType>
-        <EntityType Name="ControlTable">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OperationTypeID" Type="Int32" Nullable="false" />
-          <Property Name="StartedDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FinishedDateTime" Type="DateTime" Precision="3" />
-          <Property Name="RowsPassed" Type="Int32" />
-          <Property Name="TotalRows" Type="Int32" />
-          <Property Name="StartID" Type="Int32" />
-          <Property Name="EndID" Type="Int32" />
-          <Property Name="StartingUnitdate" Type="DateTime" Precision="3" />
-          <Property Name="EndingUnitdate" Type="DateTime" Precision="3" />
-          <Property Name="Lastid" Type="Int32" />
-          <Property Name="PeriodId" Type="Int32" />
-          <Property Name="NumberOfProfileRecords" Type="Int32" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="NumberOfCalls" Type="Int32" />
-          <NavigationProperty Name="OperationType" Relationship="Model.FK_ControlTable_OperationType" FromRole="ControlTable" ToRole="OperationType" />
-          <NavigationProperty Name="Period" Relationship="Model.FK_ControlTable_Periods" FromRole="ControlTable" ToRole="Period" />
-        </EntityType>
         <EntityType Name="Criteria_Profile">
           <Key>
             <PropertyRef Name="Id" />
@@ -1704,136 +1187,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_criteria_profile" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
           <NavigationProperty Name="Related_Criteria1" Relationship="Model.FK_Related_Criteria_criteria_profile1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
-          <NavigationProperty Name="delete_Strategy_Min_Values" Relationship="Model.FK_Strategy_Min_Values_criteria_profile" FromRole="Criteria_Profile" ToRole="delete_Strategy_Min_Values" />
-          <NavigationProperty Name="delete_StrategyPeriods" Relationship="Model.FK_StrategyPeriods_criteria_profile" FromRole="Criteria_Profile" ToRole="delete_StrategyPeriods" />
-          <NavigationProperty Name="delete_StrategyThreshold" Relationship="Model.FK_StrategyThreshold_criteria_profile" FromRole="Criteria_Profile" ToRole="delete_StrategyThreshold" />
-        </EntityType>
-        <EntityType Name="delete__Switch_DatabaseConnections">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="ServerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="delete_SwitchProfiles" Relationship="Model.FK_Switch_DatabaseConnections_Switchs" FromRole="delete__Switch_DatabaseConnections" ToRole="delete_SwitchProfiles" />
-        </EntityType>
-        <EntityType Name="delete_Peak_Time">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Peak_Hour" Type="Int32" Nullable="false" />
-          <Property Name="StrategyId" Type="Int32" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_Peak_time_Strategy" FromRole="delete_Peak_Time" ToRole="Strategy" />
-        </EntityType>
-        <EntityType Name="delete_SourceMappings">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SwitchID" Type="Int32" Nullable="false" />
-          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="MappedtoColumnNumber" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Precision="0" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="LastUpdateDate" Type="DateTime" Precision="0" />
-          <Property Name="LastUpdatedBy" Type="Int32" />
-          <NavigationProperty Name="PredefinedColumn" Relationship="Model.FK_SourceMappings_PredefinedColumns" FromRole="delete_SourceMappings" ToRole="PredefinedColumn" />
-          <NavigationProperty Name="delete_SwitchProfiles" Relationship="Model.FK_SourceMappings_SwitchProfiles" FromRole="delete_SourceMappings" ToRole="delete_SwitchProfiles" />
-        </EntityType>
-        <EntityType Name="delete_Strategy_Min_Values">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="Min_Count_Value" Type="Int32" />
-          <Property Name="Min_Aggreg_Volume" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="CriteriaId" Type="Int32" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Strategy_Min_Values_criteria_profile" FromRole="delete_Strategy_Min_Values" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_Min_Values_Strategy" FromRole="delete_Strategy_Min_Values" ToRole="Strategy" />
-        </EntityType>
-        <EntityType Name="delete_Strategy_Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="LevelId" Type="Int32" />
-          <Property Name="CriteriaId1" Type="Int32" />
-          <Property Name="Cr1Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId2" Type="Int32" />
-          <Property Name="Cr2Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId3" Type="Int32" />
-          <Property Name="Cr3Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId4" Type="Int32" />
-          <Property Name="Cr4Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId5" Type="Int32" />
-          <Property Name="Cr5Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId6" Type="Int32" />
-          <Property Name="Cr6Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId7" Type="Int32" />
-          <Property Name="Cr7Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId8" Type="Int32" />
-          <Property Name="Cr8Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId9" Type="Int32" />
-          <Property Name="Cr9Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId10" Type="Int32" />
-          <Property Name="Cr10Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId11" Type="Int32" />
-          <Property Name="Cr11Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId12" Type="Int32" />
-          <Property Name="Cr12Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId13" Type="Int32" />
-          <Property Name="Cr13Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId14" Type="Int32" />
-          <Property Name="Cr14Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId15" Type="Int32" />
-          <Property Name="Cr15Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId16" Type="Int32" />
-          <Property Name="Cr16Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId17" Type="Int32" />
-          <Property Name="Cr17Per" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CriteriaId18" Type="Int32" />
-          <Property Name="Cr18Per" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="delete_Strategy_Suspicion_Level" ToRole="Strategy" />
-          <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="delete_Strategy_Suspicion_Level" ToRole="Suspicion_Level" />
-        </EntityType>
-        <EntityType Name="delete_StrategyPeriods">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="PeriodId" Type="Int32" />
-          <Property Name="Value" Type="Int32" />
-          <Property Name="CriteriaID" Type="Int32" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_StrategyPeriods_criteria_profile" FromRole="delete_StrategyPeriods" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Period" Relationship="Model.FK_StrategyPeriods_Periods" FromRole="delete_StrategyPeriods" ToRole="Period" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_StrategyPeriods_Strategy" FromRole="delete_StrategyPeriods" ToRole="Strategy" />
-        </EntityType>
-        <EntityType Name="delete_StrategyThreshold">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="MaxValue" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CriteriaID" Type="Int32" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_StrategyThreshold_criteria_profile" FromRole="delete_StrategyThreshold" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_StrategyThreshold_Strategy" FromRole="delete_StrategyThreshold" ToRole="Strategy" />
-        </EntityType>
-        <EntityType Name="delete_SwitchProfiles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AllowAutoImport" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="delete__Switch_DatabaseConnections" Relationship="Model.FK_Switch_DatabaseConnections_Switchs" FromRole="delete_SwitchProfiles" ToRole="delete__Switch_DatabaseConnections" />
-          <NavigationProperty Name="delete_SourceMappings" Relationship="Model.FK_SourceMappings_SwitchProfiles" FromRole="delete_SwitchProfiles" ToRole="delete_SourceMappings" />
         </EntityType>
         <EntityType Name="EmailReceiver">
           <Key>
@@ -1934,26 +1287,12 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="CountInLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="StrategyId" Type="Int32" />
         </EntityType>
-        <EntityType Name="OperationType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SPName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="StepOrder" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ControlTables" Relationship="Model.FK_ControlTable_OperationType" FromRole="OperationType" ToRole="ControlTable" />
-        </EntityType>
         <EntityType Name="Period">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ControlTables" Relationship="Model.FK_ControlTable_Periods" FromRole="Period" ToRole="ControlTable" />
-          <NavigationProperty Name="delete_StrategyPeriods" Relationship="Model.FK_StrategyPeriods_Periods" FromRole="Period" ToRole="delete_StrategyPeriods" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -1974,7 +1313,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="delete_SourceMappings" Relationship="Model.FK_SourceMappings_PredefinedColumns" FromRole="PredefinedColumn" ToRole="delete_SourceMappings" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
@@ -2058,11 +1396,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IsDefault" Type="Boolean" />
           <Property Name="StrategyContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="delete_Peak_Time" Relationship="Model.FK_Peak_time_Strategy" FromRole="Strategy" ToRole="delete_Peak_Time" />
-          <NavigationProperty Name="delete_Strategy_Min_Values" Relationship="Model.FK_Strategy_Min_Values_Strategy" FromRole="Strategy" ToRole="delete_Strategy_Min_Values" />
-          <NavigationProperty Name="delete_Strategy_Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_Strategy" FromRole="Strategy" ToRole="delete_Strategy_Suspicion_Level" />
-          <NavigationProperty Name="delete_StrategyPeriods" Relationship="Model.FK_StrategyPeriods_Strategy" FromRole="Strategy" ToRole="delete_StrategyPeriods" />
-          <NavigationProperty Name="delete_StrategyThreshold" Relationship="Model.FK_StrategyThreshold_Strategy" FromRole="Strategy" ToRole="delete_StrategyThreshold" />
           <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_Strategy" FromRole="Strategy" ToRole="Related_Criteria" />
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
           <NavigationProperty Name="User" Relationship="Model.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
@@ -2101,7 +1434,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="delete_Strategy_Suspicion_Level" Relationship="Model.FK_Strategy_suspection_level_suspection_level" FromRole="Suspicion_Level" ToRole="delete_Strategy_Suspicion_Level" />
           <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
         </EntityType>
         <EntityType Name="sysdiagram">
@@ -2242,30 +1574,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="LastreportNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="StrategyName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="FK_ControlTable_OperationType">
-          <End Type="Model.OperationType" Role="OperationType" Multiplicity="1" />
-          <End Type="Model.ControlTable" Role="ControlTable" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OperationType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ControlTable">
-              <PropertyRef Name="OperationTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ControlTable_Periods">
-          <End Type="Model.Period" Role="Period" Multiplicity="0..1" />
-          <End Type="Model.ControlTable" Role="ControlTable" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Period">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ControlTable">
-              <PropertyRef Name="PeriodId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Related_Criteria_criteria_profile">
           <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
           <End Type="Model.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
@@ -2287,164 +1595,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Principal>
             <Dependent Role="Related_Criteria">
               <PropertyRef Name="Related_CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Min_Values_criteria_profile">
-          <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="Model.delete_Strategy_Min_Values" Role="delete_Strategy_Min_Values" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Min_Values">
-              <PropertyRef Name="CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyPeriods_criteria_profile">
-          <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="Model.delete_StrategyPeriods" Role="delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_criteria_profile">
-          <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="Model.delete_StrategyThreshold" Role="delete_StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyThreshold">
-              <PropertyRef Name="CriteriaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Switch_DatabaseConnections_Switchs">
-          <End Type="Model.delete_SwitchProfiles" Role="delete_SwitchProfiles" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.delete__Switch_DatabaseConnections" Role="delete__Switch_DatabaseConnections" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="delete_SwitchProfiles">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete__Switch_DatabaseConnections">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Peak_time_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.delete_Peak_Time" Role="delete_Peak_Time" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Peak_Time">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SourceMappings_PredefinedColumns">
-          <End Type="Model.PredefinedColumn" Role="PredefinedColumn" Multiplicity="1" />
-          <End Type="Model.delete_SourceMappings" Role="delete_SourceMappings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PredefinedColumn">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="delete_SourceMappings">
-              <PropertyRef Name="MappedtoColumnNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SourceMappings_SwitchProfiles">
-          <End Type="Model.delete_SwitchProfiles" Role="delete_SwitchProfiles" Multiplicity="1" />
-          <End Type="Model.delete_SourceMappings" Role="delete_SourceMappings" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="delete_SwitchProfiles">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_SourceMappings">
-              <PropertyRef Name="SwitchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Min_Values_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.delete_Strategy_Min_Values" Role="delete_Strategy_Min_Values" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Min_Values">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_suspection_level_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.delete_Strategy_Suspicion_Level" Role="delete_Strategy_Suspicion_Level" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Suspicion_Level">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_suspection_level_suspection_level">
-          <End Type="Model.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
-          <End Type="Model.delete_Strategy_Suspicion_Level" Role="delete_Strategy_Suspicion_Level" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Suspicion_Level">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_Strategy_Suspicion_Level">
-              <PropertyRef Name="LevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyPeriods_Periods">
-          <End Type="Model.Period" Role="Period" Multiplicity="0..1" />
-          <End Type="Model.delete_StrategyPeriods" Role="delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Period">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="PeriodId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyPeriods_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.delete_StrategyPeriods" Role="delete_StrategyPeriods" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyPeriods">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StrategyThreshold_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.delete_StrategyThreshold" Role="delete_StrategyThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="delete_StrategyThreshold">
-              <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2636,14 +1786,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
-          <FunctionImportMapping FunctionImportName="prDashboard" FunctionName="Model.Store.prDashboard" />
           <FunctionImportMapping FunctionImportName="prDeleteEmail" FunctionName="Model.Store.prDeleteEmail" />
-          <FunctionImportMapping FunctionImportName="prFillDailyCellProfile" FunctionName="Model.Store.prFillDailyCellProfile" />
-          <FunctionImportMapping FunctionImportName="prFillDailyProfile" FunctionName="Model.Store.prFillDailyProfile" />
-          <FunctionImportMapping FunctionImportName="prFillDailySubscriberThresholds" FunctionName="Model.Store.prFillDailySubscriberThresholds" />
-          <FunctionImportMapping FunctionImportName="prFillHourlyCellProfile" FunctionName="Model.Store.prFillHourlyCellProfile" />
-          <FunctionImportMapping FunctionImportName="prFillHourlyProfile" FunctionName="Model.Store.prFillHourlyProfile" />
-          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberThresholds" FunctionName="Model.Store.prFillHourlySubscriberThresholds" />
           <FunctionImportMapping FunctionImportName="prfindSuspicionOccurrence" FunctionName="Model.Store.prfindSuspicionOccurrence" />
           <FunctionImportMapping FunctionImportName="prGetEmails" FunctionName="Model.Store.prGetEmails" />
           <FunctionImportMapping FunctionImportName="prGetReportedNumberNormalCDR" FunctionName="Model.Store.prGetReportedNumberNormalCDR" />
@@ -2655,11 +1798,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCDPN" FunctionName="Model.Store.prGetUnNormalizedCDPN" />
-          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
-          <FunctionImportMapping FunctionImportName="prImportfromSwitch" FunctionName="Model.Store.prImportfromSwitch" />
-          <FunctionImportMapping FunctionImportName="prImportfromSwitches" FunctionName="Model.Store.prImportfromSwitches" />
-          <FunctionImportMapping FunctionImportName="prNormalization" FunctionName="Model.Store.prNormalization" />
           <FunctionImportMapping FunctionImportName="prSendMail" FunctionName="Model.Store.prSendMail" />
           <FunctionImportMapping FunctionImportName="prSendMailWithAttachment" FunctionName="Model.Store.prSendMailWithAttachment" />
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Model.Store.sp_alterdiagram" />
@@ -2736,151 +1874,10 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ControlTables">
-            <EntityTypeMapping TypeName="Model.ControlTable">
-              <MappingFragment StoreEntitySet="ControlTable">
-                <ScalarProperty Name="NumberOfCalls" ColumnName="NumberOfCalls" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="NumberOfProfileRecords" ColumnName="NumberOfProfileRecords" />
-                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
-                <ScalarProperty Name="Lastid" ColumnName="Lastid" />
-                <ScalarProperty Name="EndingUnitdate" ColumnName="EndingUnitdate" />
-                <ScalarProperty Name="StartingUnitdate" ColumnName="StartingUnitdate" />
-                <ScalarProperty Name="EndID" ColumnName="EndID" />
-                <ScalarProperty Name="StartID" ColumnName="StartID" />
-                <ScalarProperty Name="TotalRows" ColumnName="TotalRows" />
-                <ScalarProperty Name="RowsPassed" ColumnName="RowsPassed" />
-                <ScalarProperty Name="FinishedDateTime" ColumnName="FinishedDateTime" />
-                <ScalarProperty Name="StartedDateTime" ColumnName="StartedDateTime" />
-                <ScalarProperty Name="OperationTypeID" ColumnName="OperationTypeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Criteria_Profile">
             <EntityTypeMapping TypeName="Model.Criteria_Profile">
               <MappingFragment StoreEntitySet="Criteria_Profile">
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete__Switch_DatabaseConnections">
-            <EntityTypeMapping TypeName="Model.delete__Switch_DatabaseConnections">
-              <MappingFragment StoreEntitySet="delete_ Switch_DatabaseConnections">
-                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
-                <ScalarProperty Name="ServerName" ColumnName="ServerName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_Peak_Time">
-            <EntityTypeMapping TypeName="Model.delete_Peak_Time">
-              <MappingFragment StoreEntitySet="delete_Peak_Time">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Peak_Hour" ColumnName="Peak_Hour" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_SourceMappings">
-            <EntityTypeMapping TypeName="Model.delete_SourceMappings">
-              <MappingFragment StoreEntitySet="delete_SourceMappings">
-                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
-                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="MappedtoColumnNumber" ColumnName="MappedtoColumnNumber" />
-                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
-                <ScalarProperty Name="SwitchID" ColumnName="SwitchID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_Strategy_Min_Values">
-            <EntityTypeMapping TypeName="Model.delete_Strategy_Min_Values">
-              <MappingFragment StoreEntitySet="delete_Strategy_Min_Values">
-                <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
-                <ScalarProperty Name="Min_Aggreg_Volume" ColumnName="Min_Aggreg_Volume" />
-                <ScalarProperty Name="Min_Count_Value" ColumnName="Min_Count_Value" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_Strategy_Suspicion_Level">
-            <EntityTypeMapping TypeName="Model.delete_Strategy_Suspicion_Level">
-              <MappingFragment StoreEntitySet="delete_Strategy_Suspicion_Level">
-                <ScalarProperty Name="Cr18Per" ColumnName="Cr18Per" />
-                <ScalarProperty Name="CriteriaId18" ColumnName="CriteriaId18" />
-                <ScalarProperty Name="Cr17Per" ColumnName="Cr17Per" />
-                <ScalarProperty Name="CriteriaId17" ColumnName="CriteriaId17" />
-                <ScalarProperty Name="Cr16Per" ColumnName="Cr16Per" />
-                <ScalarProperty Name="CriteriaId16" ColumnName="CriteriaId16" />
-                <ScalarProperty Name="Cr15Per" ColumnName="Cr15Per" />
-                <ScalarProperty Name="CriteriaId15" ColumnName="CriteriaId15" />
-                <ScalarProperty Name="Cr14Per" ColumnName="Cr14Per" />
-                <ScalarProperty Name="CriteriaId14" ColumnName="CriteriaId14" />
-                <ScalarProperty Name="Cr13Per" ColumnName="Cr13Per" />
-                <ScalarProperty Name="CriteriaId13" ColumnName="CriteriaId13" />
-                <ScalarProperty Name="Cr12Per" ColumnName="Cr12Per" />
-                <ScalarProperty Name="CriteriaId12" ColumnName="CriteriaId12" />
-                <ScalarProperty Name="Cr11Per" ColumnName="Cr11Per" />
-                <ScalarProperty Name="CriteriaId11" ColumnName="CriteriaId11" />
-                <ScalarProperty Name="Cr10Per" ColumnName="Cr10Per" />
-                <ScalarProperty Name="CriteriaId10" ColumnName="CriteriaId10" />
-                <ScalarProperty Name="Cr9Per" ColumnName="Cr9Per" />
-                <ScalarProperty Name="CriteriaId9" ColumnName="CriteriaId9" />
-                <ScalarProperty Name="Cr8Per" ColumnName="Cr8Per" />
-                <ScalarProperty Name="CriteriaId8" ColumnName="CriteriaId8" />
-                <ScalarProperty Name="Cr7Per" ColumnName="Cr7Per" />
-                <ScalarProperty Name="CriteriaId7" ColumnName="CriteriaId7" />
-                <ScalarProperty Name="Cr6Per" ColumnName="Cr6Per" />
-                <ScalarProperty Name="CriteriaId6" ColumnName="CriteriaId6" />
-                <ScalarProperty Name="Cr5Per" ColumnName="Cr5Per" />
-                <ScalarProperty Name="CriteriaId5" ColumnName="CriteriaId5" />
-                <ScalarProperty Name="Cr4Per" ColumnName="Cr4Per" />
-                <ScalarProperty Name="CriteriaId4" ColumnName="CriteriaId4" />
-                <ScalarProperty Name="Cr3Per" ColumnName="Cr3Per" />
-                <ScalarProperty Name="CriteriaId3" ColumnName="CriteriaId3" />
-                <ScalarProperty Name="Cr2Per" ColumnName="Cr2Per" />
-                <ScalarProperty Name="CriteriaId2" ColumnName="CriteriaId2" />
-                <ScalarProperty Name="Cr1Per" ColumnName="Cr1Per" />
-                <ScalarProperty Name="CriteriaId1" ColumnName="CriteriaId1" />
-                <ScalarProperty Name="LevelId" ColumnName="LevelId" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_StrategyPeriods">
-            <EntityTypeMapping TypeName="Model.delete_StrategyPeriods">
-              <MappingFragment StoreEntitySet="delete_StrategyPeriods">
-                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_StrategyThreshold">
-            <EntityTypeMapping TypeName="Model.delete_StrategyThreshold">
-              <MappingFragment StoreEntitySet="delete_StrategyThreshold">
-                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
-                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="delete_SwitchProfiles">
-            <EntityTypeMapping TypeName="Model.delete_SwitchProfiles">
-              <MappingFragment StoreEntitySet="delete_SwitchProfiles">
-                <ScalarProperty Name="AllowAutoImport" ColumnName="AllowAutoImport" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2980,18 +1977,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
                 <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OperationTypes">
-            <EntityTypeMapping TypeName="Model.OperationType">
-              <MappingFragment StoreEntitySet="OperationType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="StepOrder" ColumnName="StepOrder" />
-                <ScalarProperty Name="SPName" ColumnName="SPName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -108,7 +108,7 @@
                                     <li id="btnEmailTemplates" runat="server"><a href="EmailTemplates.aspx"><i class="icon-picture"></i> &nbsp; Email Templates</a></li>
                                     <li id="btnEmailReceivers" runat="server"><a href="EmailReceivers.aspx"><i class="icon-share"></i> &nbsp; Email Receivers</a></li>
                                     <li id="btnSentEmails" runat="server"><a href="SentEmails.aspx"><i class="icon-hdd"></i> &nbsp; Sent Emails</a></li>
-                                    <li id="btnSourcesMappings" runat="server" ><a href="SourceMappings.aspx"><i class="icon-bookmark"></i> &nbsp; Sources Mappings</a></li>
+                                    
                                 </ul>
                             </li>
 
@@ -151,37 +151,10 @@
                 <div id="sidebar" class="nav-collapse collapse">
                     <!-- BEGIN SIDEBAR MENU -->
                     <ul class="sidebar-menu">
-                        <li class="sub-menu" id="btnDashboard" runat="server">
-                            <a class="" href="Dashboard.aspx">
-                                <i class="icon-home"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="sub-menu" id="btnSwitches" runat="server">
-                            <a class="" href="SwitchProfiles.aspx">
-                                <i class="icon-fullscreen"></i>
-                                <span>Sources</span>
-                            </a>
-                        </li>
+                       
                       
-                        <li class="sub-menu" id="btnNormalizationRules" runat="server">
-                            <a class="" href="NormalizationRules.aspx">
-                                <i class="icon-list"></i>
-                                <span>Normalization Rules</span>
-                            </a>
-                        </li>
-                        <li class="sub-menu" id="btnUnNormalizationRules" runat="server">
-                            <a class="" href="UnNormalizedCalls.aspx">
-                                <i class="icon-warning-sign"></i>
-                                <span>UnNormalized Cases</span>
-                            </a>
-                        </li>
-                        <li class="sub-menu" id="btnStrategies" runat="server">
-                            <a class="" href="Strategies.aspx">
-                                <i class="icon-edit"></i>
-                                <span>Detection Strategies</span>
-                            </a>
-                        </li>
+                     
+                       
 
                         <li class="sub-menu" id="btnSuspectionAnalysis" runat="server">
                             <a class="" href="SuspectionAnalysis.aspx">

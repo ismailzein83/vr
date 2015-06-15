@@ -14,16 +14,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
     public partial class Period
     {
-        public Period()
-        {
-            this.ControlTables = new HashSet<ControlTable>();
-            this.delete_StrategyPeriods = new HashSet<delete_StrategyPeriods>();
-        }
-    
         public int Id { get; set; }
         public string Description { get; set; }
-    
-        public virtual ICollection<ControlTable> ControlTables { get; set; }
-        public virtual ICollection<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
     }
 }

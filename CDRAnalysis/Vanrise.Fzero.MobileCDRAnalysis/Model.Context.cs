@@ -29,16 +29,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         }
     
         public DbSet<CellProfile> CellProfiles { get; set; }
-        public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
-        public DbSet<delete__Switch_DatabaseConnections> delete__Switch_DatabaseConnections { get; set; }
-        public DbSet<delete_Peak_Time> delete_Peak_Time { get; set; }
-        public DbSet<delete_SourceMappings> delete_SourceMappings { get; set; }
-        public DbSet<delete_Strategy_Min_Values> delete_Strategy_Min_Values { get; set; }
-        public DbSet<delete_Strategy_Suspicion_Level> delete_Strategy_Suspicion_Level { get; set; }
-        public DbSet<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
-        public DbSet<delete_StrategyThreshold> delete_StrategyThreshold { get; set; }
-        public DbSet<delete_SwitchProfiles> delete_SwitchProfiles { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -46,7 +37,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Import> Imports { get; set; }
         public DbSet<ImportType> ImportTypes { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
-        public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PredefinedColumn> PredefinedColumns { get; set; }

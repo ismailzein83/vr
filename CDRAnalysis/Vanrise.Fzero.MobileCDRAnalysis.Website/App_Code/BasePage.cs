@@ -74,7 +74,7 @@ public class BasePage : System.Web.UI.Page
         Response.Redirect(page);
     }
 
-    private static string defaultPage = "~/Dashboard.aspx";
+    private static string defaultPage = "~/SuspectionAnalysis.aspx";
     protected static string authenticationPage = "~/Login.aspx";
     public void DefaultPageRedirect()
     {

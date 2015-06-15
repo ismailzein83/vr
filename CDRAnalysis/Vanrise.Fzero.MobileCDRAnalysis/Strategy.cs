@@ -16,11 +16,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public Strategy()
         {
-            this.delete_Peak_Time = new HashSet<delete_Peak_Time>();
-            this.delete_Strategy_Min_Values = new HashSet<delete_Strategy_Min_Values>();
-            this.delete_Strategy_Suspicion_Level = new HashSet<delete_Strategy_Suspicion_Level>();
-            this.delete_StrategyPeriods = new HashSet<delete_StrategyPeriods>();
-            this.delete_StrategyThreshold = new HashSet<delete_StrategyThreshold>();
             this.Related_Criteria = new HashSet<Related_Criteria>();
             this.ReportDetails = new HashSet<ReportDetail>();
         }
@@ -33,11 +28,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<bool> IsDefault { get; set; }
         public string StrategyContent { get; set; }
     
-        public virtual ICollection<delete_Peak_Time> delete_Peak_Time { get; set; }
-        public virtual ICollection<delete_Strategy_Min_Values> delete_Strategy_Min_Values { get; set; }
-        public virtual ICollection<delete_Strategy_Suspicion_Level> delete_Strategy_Suspicion_Level { get; set; }
-        public virtual ICollection<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
-        public virtual ICollection<delete_StrategyThreshold> delete_StrategyThreshold { get; set; }
         public virtual ICollection<Related_Criteria> Related_Criteria { get; set; }
         public virtual ICollection<ReportDetail> ReportDetails { get; set; }
         public virtual User User { get; set; }

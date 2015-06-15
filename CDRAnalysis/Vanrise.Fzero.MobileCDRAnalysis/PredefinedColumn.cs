@@ -14,14 +14,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
     public partial class PredefinedColumn
     {
-        public PredefinedColumn()
-        {
-            this.delete_SourceMappings = new HashSet<delete_SourceMappings>();
-        }
-    
         public int ID { get; set; }
         public string Name { get; set; }
-    
-        public virtual ICollection<delete_SourceMappings> delete_SourceMappings { get; set; }
     }
 }
