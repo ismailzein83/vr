@@ -17,46 +17,50 @@ namespace TOne.CDR.Data.SQL
         public void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsByKey trafficStatisticsByKey)
         {
             Dictionary<string, int> existingItemsIdByGroupKeys = GetTrafficStatisticsIdsByGroupKeys(batchStart, batchEnd);
-            
-            string filePathNewStatistics = GetFilePathForBulkInsert();
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
             DataTable dtStatisticsToUpdate = GetTrafficStatsTable();
             
             dtStatisticsToUpdate.BeginLoadData();
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePathNewStatistics))
+           
+            foreach (var item in trafficStatisticsByKey)
             {
-                foreach (var item in trafficStatisticsByKey)
+                TrafficStatistic trafficStatistic = item.Value;
+                int existingId;
+                if (existingItemsIdByGroupKeys != null && existingItemsIdByGroupKeys.TryGetValue(item.Key, out existingId))
                 {
-                    TrafficStatistic trafficStatistic = item.Value;
-                    int existingId;
-                    if (existingItemsIdByGroupKeys != null && existingItemsIdByGroupKeys.TryGetValue(item.Key, out existingId))
-                    {
-                        trafficStatistic.ID = existingId;
-                        DataRow dr = dtStatisticsToUpdate.NewRow();
-                        FillStatisticRow(dr, trafficStatistic);
-                        dtStatisticsToUpdate.Rows.Add(dr);
-                    }
-                    else
-                    {
-                        AddTrafficStatisticToStream(wr, trafficStatistic);
-                    }
+                    trafficStatistic.ID = existingId;
+                    DataRow dr = dtStatisticsToUpdate.NewRow();
+                    FillStatisticRow(dr, trafficStatistic);
+                    dtStatisticsToUpdate.Rows.Add(dr);
                 }
-                wr.Close();
+                else
+                {
+                    AddTrafficStatisticToStream(stream, trafficStatistic);
+                }
             }
-            dtStatisticsToUpdate.EndLoadData();
+            stream.Close();
             
-            ExecuteNonQuerySPCmd("Update",
-                (cmd) =>
-                {
-                });
+            dtStatisticsToUpdate.EndLoadData();
 
-            base.InsertBulkToTable(new Vanrise.Data.SQL.BulkInsertInfo
+            if(dtStatisticsToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[Analytics].[sp_TrafficStats_Update]",
+                    (cmd) =>
+                    {
+                        var dtPrm = new System.Data.SqlClient.SqlParameter("@TrafficStats", SqlDbType.Structured);
+                        dtPrm.Value = dtStatisticsToUpdate;
+                        cmd.Parameters.Add(dtPrm);
+                    });
+
+            base.InsertBulkToTable(new Vanrise.Data.SQL.StreamBulkInsertInfo
                 {
-                    DataFilePath = filePathNewStatistics,
+                    Stream = stream,
                     TableName = TRAFFICSTATISTIC_TABLENAME,
+                    TabLock = false,
                     FieldSeparator = '^'
                 });
         }
-
 
         private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
         {
@@ -109,9 +113,9 @@ namespace TOne.CDR.Data.SQL
             };
         }
 
-        private void AddTrafficStatisticToStream(System.IO.StreamWriter wr, TrafficStatistic trafficStatistic)
+        private void AddTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatistic trafficStatistic)
         {
-            wr.WriteLine("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^",
+            stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}",
                 trafficStatistic.SwitchId,
                 trafficStatistic.Port_IN,
                 trafficStatistic.Port_OUT,
@@ -120,8 +124,8 @@ namespace TOne.CDR.Data.SQL
                 trafficStatistic.OriginatingZoneId,
                 trafficStatistic.SupplierId,
                 trafficStatistic.SupplierZoneId,
-                trafficStatistic.FirstCDRAttempt,
-                trafficStatistic.LastCDRAttempt,
+                trafficStatistic.FirstCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                trafficStatistic.LastCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 trafficStatistic.Attempts,
                 trafficStatistic.DeliveredAttempts,
                 trafficStatistic.SuccessfulAttempts,
@@ -139,14 +143,6 @@ namespace TOne.CDR.Data.SQL
         void FillStatisticRow(DataRow dr, TrafficStatistic trafficStatistic)
         {
             dr["ID"] = trafficStatistic.ID;
-            dr["SwitchId"] = (short)trafficStatistic.SwitchId;
-            dr["Port_IN"] = trafficStatistic.Port_IN;
-            dr["Port_OUT"] = trafficStatistic.Port_OUT;
-            dr["CustomerID"] = trafficStatistic.CustomerId;
-            dr["OurZoneID"] = trafficStatistic.OurZoneId;
-            dr["OriginatingZoneID"] = trafficStatistic.OriginatingZoneId;
-            dr["SupplierID"] = trafficStatistic.SupplierId;
-            dr["SupplierZoneID"] = trafficStatistic.SupplierZoneId;
             dr["FirstCDRAttempt"] = trafficStatistic.FirstCDRAttempt;
             dr["LastCDRAttempt"] = trafficStatistic.LastCDRAttempt;
             dr["Attempts"] = trafficStatistic.Attempts;
@@ -167,14 +163,6 @@ namespace TOne.CDR.Data.SQL
         {
             DataTable dt = new DataTable(TRAFFICSTATISTIC_TABLENAME);
             dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("SwitchId", typeof(short));
-            dt.Columns.Add("Port_IN", typeof(string));
-            dt.Columns.Add("Port_OUT", typeof(string));
-            dt.Columns.Add("CustomerID", typeof(string));
-            dt.Columns.Add("OurZoneID", typeof(int));
-            dt.Columns.Add("OriginatingZoneID", typeof(int));
-            dt.Columns.Add("SupplierID", typeof(string));
-            dt.Columns.Add("SupplierZoneID", typeof(int));
             dt.Columns.Add("FirstCDRAttempt", typeof(DateTime));
             dt.Columns.Add("LastCDRAttempt", typeof(DateTime));
             dt.Columns.Add("Attempts", typeof(int));
@@ -186,7 +174,7 @@ namespace TOne.CDR.Data.SQL
             dt.Columns.Add("UtilizationInSeconds", typeof(decimal));
             dt.Columns.Add("NumberOfCalls", typeof(int));
             dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
-            dt.Columns.Add("PGAD", typeof(int));
+            dt.Columns.Add("PGAD", typeof(decimal));
             dt.Columns.Add("CeiledDuration", typeof(int));
             dt.Columns.Add("ReleaseSourceAParty", typeof(int));
             return dt;
@@ -196,7 +184,7 @@ namespace TOne.CDR.Data.SQL
         {
             Dictionary<string, int> trafficStatistics = new Dictionary<string, int>();
 
-            ExecuteReaderSP("[Analytics].[sp_TrafficStats_GetIdsByGroupedKeys]", (reader) =>
+            ExecuteReaderSP("Analytics.sp_TrafficStats_GetIdsByGroupedKeys", (reader) =>
             {
                 while (reader.Read())
                 {
