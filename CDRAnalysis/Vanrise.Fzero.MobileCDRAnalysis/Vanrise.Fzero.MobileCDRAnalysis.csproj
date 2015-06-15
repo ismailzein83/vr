@@ -83,6 +83,7 @@
     <Compile Include="Classes\Enums.cs" />
     <Compile Include="Classes\Permission.cs" />
     <Compile Include="Classes\SourceMapping.cs" />
+    <Compile Include="Classes\Strategy.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserPermission.cs" />
     <Compile Include="Classes\Constants.cs" />
