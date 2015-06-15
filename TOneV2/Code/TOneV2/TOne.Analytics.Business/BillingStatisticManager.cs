@@ -466,15 +466,15 @@ namespace TOne.Analytics.Business
 		        SaleNet = carrierSummary.SaleNet,
 		        SaleNetFormatted = (carrierSummary.SaleNet ==0.00)?"0.00":FormatNumber(carrierSummary.SaleNet,5),
 		        CostCommissionValue =  carrierSummary.CostCommissionValue,
-		        CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.CostCommissionValue))),
+		        CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.CostCommissionValue.Value))),
                 SaleCommissionValue = carrierSummary.SaleCommissionValue,
-                SaleCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.SaleCommissionValue))),
+                SaleCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.SaleCommissionValue.Value))),
                 CostExtraChargeValue= carrierSummary.CostExtraChargeValue,
-                CostExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.CostExtraChargeValue))),
+                CostExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.CostExtraChargeValue.Value))),
                 SaleExtraChargeValue = carrierSummary.SaleExtraChargeValue ,
-                SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.SaleExtraChargeValue))),
+                SaleExtraChargeValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs(carrierSummary.SaleExtraChargeValue.Value))),
                 Profit = FormatNumber(carrierSummary.SaleNet- carrierSummary.CostNet),
-                AvgMin = FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration)
+                AvgMin = (carrierSummary.SaleDuration.Value != 0 &&  carrierSummary.SaleDuration.Value!=0)?FormatNumber((decimal)carrierSummary.SaleNet / carrierSummary.SaleDuration - (decimal)carrierSummary.CostNet / carrierSummary.SaleDuration):"0.00"
 
 
             };

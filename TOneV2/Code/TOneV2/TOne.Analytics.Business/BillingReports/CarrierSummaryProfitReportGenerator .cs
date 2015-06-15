@@ -8,17 +8,17 @@ using TOne.Entities;
 
 namespace TOne.Analytics.Business.BillingReports
 {
-    public class CarrierLostReportGenerator : TOne.Entities.IReportGenerator
+    public class CarrierSummaryProfitReportGenerator : TOne.Entities.IReportGenerator
     {
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
 
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<CarrierLostFormatted> carrieresLost =
-                manager.GetCarrierLost(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.Margin, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<CarrierSummaryFormatted> carrierSummary =
+                manager.GetCarrierSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierId, parameters.SupplierAMUId, parameters.CustomerAMUId);
             
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("CarrierLost", carrieresLost);
+            dataSources.Add("CarrierSummary", carrierSummary);
             return dataSources;
         }
 
@@ -29,11 +29,11 @@ namespace TOne.Analytics.Business.BillingReports
             
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
-            list.Add("Title", new RdlcParameter { Value = "Carrier Lost Summary", IsVisible = true });
+            list.Add("Title", new RdlcParameter { Value = "Carrier Profit Summary", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });            
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
-
+            list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsCommission.ToString(), IsVisible = true });
             
             
             return list;
