@@ -1,9 +1,11 @@
-﻿/// <reference path="ZoneMonitorSettings.html" />
+﻿'use strict'
+/// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
 TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum', 'VRModalService'];
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
     var measures = [];
     var filter = {};
+    var supplierZoneIdIsAdded = false;
     var notSelectedGroupKeys = [];
     defineScopeObjects();
     defineScopeMethods();
@@ -35,7 +37,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 toDate: $scope.viewScope.toDate,
                 customerIds:[],
                 zoneIds:[],
-                supplierIds:[]
+                supplierIds: [],
+                switchIds:[]
             };
             updateParametersFromGroupKeys(parameters, $scope, dataItem);
 
@@ -47,14 +50,20 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function getNotSelectedGroupKeys(groupKeys, length) {
         if (length <= 0)
             return; 
-        if (checkSelectedGroupKeys($scope.selectedGroupKeys, groupKeys, length, $scope.selectedGroupKeys.length - 1) == 0 && !contains(groupKeys[length - 1], $scope.notSelectedGroupKeys))
+        if (checkSelectedGroupKeys($scope.selectedGroupKeys, groupKeys, length, $scope.selectedGroupKeys.length - 1) == 0 && !contains(groupKeys[length - 1], $scope.notSelectedGroupKeys) && $scope.groupKeys[length-1].value!=7)
                 $scope.notSelectedGroupKeys.push($scope.groupKeys[length-1]);
         getNotSelectedGroupKeys(groupKeys, length - 1);
     }
     function checkSelectedGroupKeys(selectedGroupKeys, groupKeys,lengthGroupKey, length) {
         if (length <= 0)
             return 0;
-        if (groupKeys[lengthGroupKey-1].groupKeyEnumValue == selectedGroupKeys[length-1].groupKeyEnumValue) {
+        
+        console.log(supplierZoneIdIsAdded);
+        if (!supplierZoneIdIsAdded && selectedGroupKeys[length - 1].value == TrafficStatisticGroupKeysEnum.SupplierId.value) {
+            supplierZoneIdIsAdded = true;
+        $scope.notSelectedGroupKeys.push(groupKeys[5]);
+    }
+        if (groupKeys[lengthGroupKey - 1].value == selectedGroupKeys[length - 1].value) {
             return 1 + checkSelectedGroupKeys(selectedGroupKeys, groupKeys, lengthGroupKey, length - 1);
         }
         else
@@ -67,11 +76,15 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         if (scope == $scope.viewScope){
             for (var i = 0; i < scope.selectedGroupKeys.length; i++)
             {
+                if (scope.selectedGroupKeys[i].value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
+                    supplierZoneIdIsAdded = true;
                 $scope.selectedGroupKeys.push(scope.selectedGroupKeys[i]);
             }
             return;
         }
         else {
+            if (scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
+                supplierZoneIdIsAdded = true;
             $scope.selectedGroupKeys.push(scope.selectedGroupKey);
             getSelectedGroupKeys(scope.gridParentScope);
         }
@@ -91,7 +104,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         
         for (var i = 0; i < groupKeys.length; i++) {
             var groupKey = groupKeys[i];
-            switch (groupKey.groupKeyEnumValue) {
+            switch (groupKey.value) {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
                     parameters.zoneIds.push(dataItem.GroupKeyValues[i].Id);
                                 break;
@@ -101,6 +114,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 case TrafficStatisticGroupKeysEnum.SupplierId.value:
                                 parameters.supplierIds.push(dataItem.GroupKeyValues[i].Id);
                                 break;
+                case TrafficStatisticGroupKeysEnum.Switch.value:
+                    parameters.switchIds.push(dataItem.GroupKeyValues[i].Id);
+                    break;
             }
         }
 
@@ -114,7 +130,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             var parentGroupKeys = $scope.viewScope.groupKeys;
 
             var selectedGroupKeyInParent = $.grep(parentGroupKeys, function (parentGrpKey) {
-                return parentGrpKey.groupKeyEnumValue == $scope.selectedGroupKey.groupKeyEnumValue;
+                return parentGrpKey.value == $scope.selectedGroupKey.value;
             })[0];
             $scope.viewScope.selectEntity(selectedGroupKeyInParent, dataItem.GroupKeyValues[0].Id, dataItem.GroupKeyValues[0].Name)
         };
@@ -156,49 +172,16 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     }
 
     function loadGroupKeys() {
-
-        addGroupKeyIfNotExistsInParent({
-            title: "Zones",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.OurZone.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "Zone"
-        });
-        addGroupKeyIfNotExistsInParent({
-            title: "Customer",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.CustomerId.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "Customer"
-        });
-        addGroupKeyIfNotExistsInParent({
-            title: "Suppliers",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.SupplierId.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "Supplier"
-        });
-        addGroupKeyIfNotExistsInParent({
-            title: "Switch",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.Switch.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "Switch"
-        });
-        addGroupKeyIfNotExistsInParent({
-            title: "PortIn",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.PortIn.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "PortIn"
-        });
-        addGroupKeyIfNotExistsInParent({
-            title: "PortOut",
-            groupKeyEnumValue: TrafficStatisticGroupKeysEnum.PortOut.value,
-            data: [],
-            isDataLoaded: false,
-            gridHeader: "PortOut"
-        });
+        for (var prop in TrafficStatisticGroupKeysEnum) {
+          
+            addGroupKeyIfNotExistsInParent({
+                title: TrafficStatisticGroupKeysEnum[prop].title,
+                value: TrafficStatisticGroupKeysEnum[prop].value,
+                data: [],
+                isDataLoaded: false,
+                gridHeader: TrafficStatisticGroupKeysEnum[prop].gridHeader
+            }); 
+        }
         if ($scope.groupKeys.length > 0)
             $scope.selectedGroupKey = $scope.groupKeys[0];
 
@@ -216,7 +199,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function addGroupKeyIfNotExistsInParent(groupKey) {
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
         if ($.grep(parentGroupKeys, function (parentGrpKey) {
-            return parentGrpKey.value == groupKey.groupKeyEnumValue;
+            return parentGrpKey.value == groupKey.value;
         }).length == 0)
             $scope.groupKeys.push(groupKey);
     }
@@ -228,12 +211,12 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var fromRow = 1;
         var toRow = 100;
         buildFilter($scope);
-        console.log(filter);
+        console.log(filter.CodeGroup);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
             Filter: filter,
             WithSummary: withSummary,
-            GroupKeys: [$scope.selectedGroupKey.groupKeyEnumValue],
+            GroupKeys: [$scope.selectedGroupKey.value],
             From: $scope.viewScope.fromDate,
             To: $scope.viewScope.toDate,
             FromRow: fromRow,
@@ -241,7 +224,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             OrderBy: 2,
             IsDescending: true
         };
-        console.log($scope.selectedGroupKey.groupKeyEnumValue);
+        console.log($scope.selectedGroupKey.value);
         var isSucceeded;
         $scope.isGettingData = true;
         $scope.currentSearchCriteria.groupKeys.length = 0;
@@ -272,7 +255,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
 
         for (var i = 0; i < parentGroupKeys.length; i++) {
             var groupKey = parentGroupKeys[i];
-            switch(groupKey.groupKeyEnumValue)
+            switch (groupKey.value)
             {
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
                     filter.ZoneIds = [scope.dataItem.GroupKeyValues[i].Id];
@@ -294,6 +277,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
                 case TrafficStatisticGroupKeysEnum.PortOut.value:
                     filter.PortOut = [scope.dataItem.GroupKeyValues[i].Id];
+                    break;
+                case TrafficStatisticGroupKeysEnum.SupplierZoneId.value:
+                    filter.SupplierZoneId = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
             }
         }

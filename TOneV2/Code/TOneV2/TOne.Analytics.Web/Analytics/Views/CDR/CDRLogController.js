@@ -7,6 +7,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
     var receivedCustomerIds;
     var receivedSupplierIds;
     var receivedZoneIds;
+    var receivedSwitchIds;
     var getDataAfterLoading;
     var mainGridAPI;
    
@@ -34,10 +35,10 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
             receivedCustomerIds = parameters.customerIds;
             receivedZoneIds = parameters.zoneIds;
             receivedSupplierIds = parameters.supplierIds;
-
+            receivedSwitchIds = parameters.switchIds;
             getDataAfterLoading = true;
 
-            console.log(receivedZoneIds);
+            console.log(receivedSwitchIds);
         }
             
 
@@ -153,6 +154,8 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         return BusinessEntityAPIService.GetSwitches().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.switches.push(itm);
+                if (receivedSwitchIds != undefined && receivedSwitchIds.indexOf(itm.CarrierAccountID) > -1)
+                    $scope.selectedSwitches.push(itm);
             });
         });
     }

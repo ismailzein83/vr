@@ -73,6 +73,7 @@ namespace TOne.Analytics.Data.SQL
 	                            BEGIN
 
                             WITH OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
+                           
                             CarrierInfo AS
                             (
                                 Select P.Name + ' (' + A.NameSuffix + ')' AS Name, A.CarrierAccountID AS CarrierAccountID from CarrierAccount A LEFT JOIN CarrierProfile P on P.ProfileID=A.ProfileID
@@ -138,8 +139,11 @@ namespace TOne.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
-            AddFilter(whereBuilder, filter.CodeGroups, "z.CodeGroup");
+            AddFilter(whereBuilder, filter.CodeGroup, "z.CodeGroup");
+            AddFilter(whereBuilder, filter.PortIn, "ts.Port_IN");
+            AddFilter(whereBuilder, filter.PortOut, "ts.Port_OUT");
             AddFilter(whereBuilder, filter.ZoneIds, "ts.OurZoneID");
+            AddFilter(whereBuilder, filter.SupplierZoneId, "ts.SupplierZoneID");
         }
 
         void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
@@ -235,6 +239,8 @@ namespace TOne.Analytics.Data.SQL
                     return String.Format("{0} = '{1}'", Port_OutColumnName, columnFilterValue);
                 case TrafficStatisticGroupKeys.CodeGroup:
                     return String.Format("{0} = '{1}'", CodeGroupIDColumnName, columnFilterValue);
+                case TrafficStatisticGroupKeys.SupplierZoneId:
+                    return String.Format("{0} = '{1}'", SupplierZoneIDColumnName, columnFilterValue);
                 default: return null;
             }
         }
@@ -298,6 +304,10 @@ namespace TOne.Analytics.Data.SQL
                     idColumn = CodeGroupIDColumnName;
                     nameColumn = CodeGroupNameColumnName;
                     break;
+                case TrafficStatisticGroupKeys.SupplierZoneId:
+                    idColumn = SupplierZoneIDColumnName;
+                    nameColumn = SupplierZoneNameColumnName;
+                    break;
                 default:
                     idColumn = null;
                     nameColumn = null;
@@ -331,9 +341,9 @@ namespace TOne.Analytics.Data.SQL
                     groupByStatement = "ts.SwitchId, swit.Name";
                     break;
                 case TrafficStatisticGroupKeys.CodeGroup:
-                    selectStatement = String.Format(" ts.OurZoneID as {0},zz.Code as {1}, zz.Name as {2}, ", OurZoneIDColumnName, CodeGroupIDColumnName, CodeGroupNameColumnName);
-                    joinStatement = " LEFT JOIN (select z.ZoneID,c.Name,c.Code from Zone as z LEFT JOIN CodeGroup as c ON z.CodeGroup=c.Code) as zz ON ts.OurZoneID = zz.ZoneID";
-                    groupByStatement = "ts.OurZoneID,zz.Code, zz.Name";
+                    selectStatement = String.Format(" z.CodeGroup as {0}, c.Name as {1}, ", CodeGroupIDColumnName, CodeGroupNameColumnName);
+                    joinStatement = " LEFT JOIN OurZones z ON ts.OurZoneID = z.ZoneID LEFT JOIN CodeGroup c ON z.CodeGroup=c.Code";
+                    groupByStatement = "z.CodeGroup, c.Name";
                     break;
                 case TrafficStatisticGroupKeys.PortIn:
                     selectStatement = String.Format(" ts.Port_IN as {0}, ", Port_INColumnName);
@@ -344,6 +354,11 @@ namespace TOne.Analytics.Data.SQL
                     selectStatement = String.Format(" ts.Port_OUT as {0}, ", Port_OutColumnName);
                     joinStatement = null;
                     groupByStatement = "ts.Port_OUT";
+                    break;
+                case TrafficStatisticGroupKeys.SupplierZoneId:
+                    selectStatement = String.Format(" ts.SupplierZoneID as {0}, supplierZones.Name as {1}, ", SupplierZoneIDColumnName, SupplierZoneNameColumnName);
+                    joinStatement = " LEFT JOIN Zone supplierZones WITH (NOLOCK) ON ts.SupplierZoneID = supplierZones.ZoneID";
+                    groupByStatement = "ts.SupplierZoneID,  supplierZones.Name";
                     break;
                 default:
                     selectStatement = null;
@@ -366,6 +381,8 @@ namespace TOne.Analytics.Data.SQL
         const string Port_OutColumnName = "PortOut";
         const string CodeGroupIDColumnName = "CodeGroupID";
         const string CodeGroupNameColumnName = "CodeGroupName";
+        const string SupplierZoneIDColumnName = "SupplierZoneID";
+        const string SupplierZoneNameColumnName = "SupplierZoneName";
        
     }
 }

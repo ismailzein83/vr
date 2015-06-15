@@ -97,7 +97,28 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 //};
             };
             $scope.customvalidateSelectGroup = function (selectedGroupKeys) {
-                var count=0;
+
+                
+                //for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
+                //    if ($scope.selectedGroupKeys[i].value == 4) {
+                //        //TrafficStatisticGroupKeysEnum[8].isShownInGroupKey = false;
+                //        groupKeys = [];
+                //        for (var prop in TrafficStatisticGroupKeysEnum) {
+                //            if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey && TrafficStatisticGroupKeysEnum[prop].value != 8)
+                //                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
+                //        }
+                //    }
+                //    else if ($scope.selectedGroupKeys[i].value == 8) {
+                //        groupKeys = [];
+                //        for (var prop in TrafficStatisticGroupKeysEnum) {
+                //            if (TrafficStatisticGroupKeysEnum[prop].isShownInGroupKey && TrafficStatisticGroupKeysEnum[prop].value!=4)
+                //                groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
+                //        }
+
+                //    }
+                //}
+
+                var count = 0;
                 for (var i = 0; i < $scope.selectedGroupKeys.length; i++) {
                     if ($scope.selectedGroupKeys[i].value == 4 || $scope.selectedGroupKeys[i].value == 8)
                         count++;
