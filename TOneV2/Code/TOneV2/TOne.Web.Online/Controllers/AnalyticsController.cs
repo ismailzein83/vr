@@ -13,7 +13,7 @@ namespace TOne.Web.Online.Controllers
         private readonly AnalyticsManager _analyticsManager;
         public AnalyticsController()
         {
-            _analyticsManager = new AnalyticsManager() ;
+            _analyticsManager = new AnalyticsManager();
         }
 
         [HttpGet]
@@ -21,11 +21,11 @@ namespace TOne.Web.Online.Controllers
             , char groupByCodeGroup = 'N', char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null, int? topCount = null)
         {
             string orderTarget = "Quantity";
-            return _analyticsManager.GetTopNDestinations( fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
+            return _analyticsManager.GetTopNDestinations(fromDate, toDate, sortOrder, customerID, supplierID, switchID, groupByCodeGroup, codeGroup, showSupplier, orderTarget, from, to, topCount);
         }
 
         [HttpGet]
-        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(DateTime fromDate, DateTime toDate,  int from, int to,string sortOrder = "DESC", char groupByCodeGroup = 'N'
+        public List<TOne.Analytics.Entities.TopNDestinationView> GetTopNDestinationsQuality(DateTime fromDate, DateTime toDate, int from, int to, string sortOrder = "DESC", char groupByCodeGroup = 'N'
             , char showSupplier = 'N', string customerID = null, string supplierID = null, int? switchID = null, string codeGroup = null, int? topCount = null)
         {
             string orderTarget = "Quality";
@@ -35,7 +35,7 @@ namespace TOne.Web.Online.Controllers
         [HttpGet]
         public List<TOne.Analytics.Entities.AlertView> GetAlerts(int from, int to, int? topCount = null, int? alertLevel = null, char showHiddenAlerts = 'N', string tag = null, string source = null, int? userID = null)
         {
-            
+
             return _analyticsManager.GetAlerts(from, to, topCount, showHiddenAlerts, alertLevel, tag, source, userID);
         }
 
@@ -66,9 +66,9 @@ namespace TOne.Web.Online.Controllers
         [HttpGet]
         public List<TOne.Analytics.Entities.ProfitByWeekDayView> GetLastTwoWeeksProfit(DateTime fromDate, DateTime toDate)
         {
-            if (toDate.Subtract(fromDate).TotalDays > 14)
-               throw new  HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Date Range must be 14 days or less"));
-                
+            //if (toDate.Subtract(fromDate).TotalDays > 14)
+            //   throw new  HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Date Range must be 14 days or less"));
+
             return _analyticsManager.GetLastWeeksProfit(fromDate, toDate);
         }
 
@@ -79,7 +79,7 @@ namespace TOne.Web.Online.Controllers
         }
 
         [HttpGet]
-        public TOne.Analytics.Entities.TrafficSummaryView  GetSummaryOneDay(DateTime day)
+        public TOne.Analytics.Entities.TrafficSummaryView GetSummaryOneDay(DateTime day)
         {
             return _analyticsManager.GetSummary(day, day.AddDays(1));
         }
