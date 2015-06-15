@@ -47,8 +47,10 @@
     <Compile Include="Billing\CarrierLost.cs" />
     <Compile Include="Billing\CarrierLostFormatted.cs" />
     <Compile Include="Billing\CarrierProfile.cs" />
+    <Compile Include="Billing\CarrierSummary.cs" />
     <Compile Include="Billing\CarrierSummaryDaily.cs" />
     <Compile Include="Billing\CarrierSummaryDailyFormatted.cs" />
+    <Compile Include="Billing\CarrierSummaryFormatted.cs" />
     <Compile Include="Billing\CustomerSummary.cs" />
     <Compile Include="Billing\CustomerSummaryFormatted.cs" />
     <Compile Include="Billing\DailySummary.cs" />
