@@ -154,13 +154,13 @@ namespace TOne.Analytics.Data.SQL
                 {
                     return new Entities.TrafficSummaryView
                     {
-                        Sales = Convert.ToDecimal(reader["Sales"]),
-                        Purchases = Convert.ToDecimal(reader["Purchases"]),
-                        Profit = Convert.ToDecimal(reader["Profit"]),
-                        DurationInMinutes = Convert.ToDecimal(reader["DurationsInMinutes"]),
-                        NumberOfCalls = Convert.ToInt32(reader["Attempts"]),
-                        AveragePurchases = Convert.ToDecimal(reader["AveragePurchases"]),
-                        AverageSales = Convert.ToDecimal(reader["AverageSales"])
+                        Sales = reader["Sales"] != DBNull.Value ? Convert.ToDecimal(reader["Sales"]) : (Decimal)0,
+                        Purchases = reader["Purchases"] != DBNull.Value ? Convert.ToDecimal(reader["Purchases"]) : (Decimal)0,
+                        Profit = reader["Profit"] != DBNull.Value ? Convert.ToDecimal(reader["Profit"]) : (Decimal)0,
+                        DurationInMinutes = reader["DurationsInMinutes"] != DBNull.Value ? Convert.ToDecimal(reader["DurationsInMinutes"]) : (Decimal)0,
+                        NumberOfCalls = reader["Attempts"] != DBNull.Value ? Convert.ToInt32(reader["Attempts"]) : (Int32)0,
+                        AveragePurchases = reader["AveragePurchases"] != DBNull.Value ? Convert.ToDecimal(reader["AveragePurchases"]) : (Decimal)0,
+                        AverageSales = reader["AverageSales"] != DBNull.Value ? Convert.ToDecimal(reader["AverageSales"]) : (Decimal)0
                     };
                 }, fromDate, toDate);
         }
