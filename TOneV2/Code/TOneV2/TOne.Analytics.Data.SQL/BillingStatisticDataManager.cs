@@ -10,7 +10,7 @@ using TOne.Data.SQL;
 
 namespace TOne.Analytics.Data.SQL
 {
-    class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
+    partial class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
         public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, int? supplierAMUId, int? customerAMUId)
         {
@@ -226,7 +226,17 @@ namespace TOne.Analytics.Data.SQL
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
               );
         }
-
+        public List<CarrierSummary> GetCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_CarrierSummary", CarrierSummaryMapper,
+              fromDate,
+              toDate,
+              (customerId == null || customerId == "") ? null : customerId,
+              (supplierId == null || supplierId == "") ? null : supplierId,
+              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+              );
+        }
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
@@ -495,7 +505,26 @@ namespace TOne.Analytics.Data.SQL
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID")
             };
         }
-
+        private CarrierSummary CarrierSummaryMapper(IDataReader reader)
+        {
+	        return new CarrierSummary
+	        {
+	
+		        SupplierID = reader["SupplierID"] as string,
+		        CustomerID = reader["CustomerID"] as string,
+		        SaleDuration =GetReaderValue<decimal>(reader, "SaleDuration"),
+		        CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+		        CostNet = GetReaderValue<double>(reader, "CostNet"),
+		        SaleNet = GetReaderValue<double>(reader, "SaleNet"),		
+		        CostCommissionValue = GetReaderValue<double>(reader, "CostCommissionValue"),
+		        SaleCommissionValue = GetReaderValue<double>(reader, "SaleCommissionValue"),
+		        CostExtraChargeValue = GetReaderValue<double>(reader, "CostExtraChargeValue"),
+		        SaleExtraChargeValue = GetReaderValue<double>(reader, "SaleExtraChargeValue")
+		
+	        };
+	
+	
+        }
         #endregion
 
         #region ConstantVariableRegion

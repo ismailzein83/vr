@@ -9,7 +9,7 @@ using TOne.BusinessEntity.Business;
 
 namespace TOne.Analytics.Business
 {
-    public class BillingStatisticManager
+    public partial class BillingStatisticManager
     {
         private readonly IBillingStatisticDataManager _datamanager;
         private readonly BusinessEntityInfoManager _bemanager;
@@ -297,30 +297,30 @@ namespace TOne.Analytics.Business
         }
         private RateLossFormatted FormatRateLoss(RateLoss rateLoss)
         {
-	         return new RateLossFormatted
-	        { 
-		        CostZone = rateLoss.CostZone ,
-		        SaleZone = rateLoss.SaleZone ,	 
-		        CustomerID = rateLoss.CustomerID ,
-		        Customer =(rateLoss.CustomerID !=null )? _bemanager.GetCarrirAccountName(rateLoss.CustomerID):null,
-		        SupplierID = rateLoss.SupplierID,
-		        Supplier = (rateLoss.SupplierID !=null )? _bemanager.GetCarrirAccountName(rateLoss.SupplierID):null,	  
-		        SaleRate = rateLoss.SaleRate ,
-		        SaleRateFormatted = FormatNumber(rateLoss.SaleRate,5),
-		        CostRate = rateLoss.CostRate,
-		        CostRateFormatted = FormatNumber(rateLoss.CostRate,5),
-		        CostDuration = rateLoss.CostDuration,
-		        CostDurationFormatted = FormatNumber(rateLoss.CostDuration),
-		        SaleDuration = rateLoss.SaleDuration,
-		        SaleDurationFormatted =FormatNumber(rateLoss.SaleDuration),
-		        CostNet = rateLoss.CostNet,
-		        CostNetFormatted = FormatNumber(rateLoss.CostNet,5),
-		        SaleNet = rateLoss.SaleNet ,
-		        SaleNetFormatted = FormatNumber(rateLoss.SaleNet,5),
-		        SaleZoneID = rateLoss.SaleZoneID , 
-		        LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet )
-	  
-	        };
+            return new RateLossFormatted
+           {
+               CostZone = rateLoss.CostZone,
+               SaleZone = rateLoss.SaleZone,
+               CustomerID = rateLoss.CustomerID,
+               Customer = (rateLoss.CustomerID != null) ? _bemanager.GetCarrirAccountName(rateLoss.CustomerID) : null,
+               SupplierID = rateLoss.SupplierID,
+               Supplier = (rateLoss.SupplierID != null) ? _bemanager.GetCarrirAccountName(rateLoss.SupplierID) : null,
+               SaleRate = rateLoss.SaleRate,
+               SaleRateFormatted = FormatNumber(rateLoss.SaleRate, 5),
+               CostRate = rateLoss.CostRate,
+               CostRateFormatted = FormatNumber(rateLoss.CostRate, 5),
+               CostDuration = rateLoss.CostDuration,
+               CostDurationFormatted = FormatNumber(rateLoss.CostDuration),
+               SaleDuration = rateLoss.SaleDuration,
+               SaleDurationFormatted = FormatNumber(rateLoss.SaleDuration),
+               CostNet = rateLoss.CostNet,
+               CostNetFormatted = FormatNumber(rateLoss.CostNet, 5),
+               SaleNet = rateLoss.SaleNet,
+               SaleNetFormatted = FormatNumber(rateLoss.SaleNet, 5),
+               SaleZoneID = rateLoss.SaleZoneID,
+               LossFormatted = FormatNumber(rateLoss.CostNet - rateLoss.SaleNet)
+
+           };
         }
         private string FormatNumber(Decimal? number, int precision)
         {
@@ -431,6 +431,39 @@ namespace TOne.Analytics.Business
                 obj.Date = obj.Day.ToString();
 
             return obj;
+        }
+
+        private CarrierSummaryFormatted FormatCarrierSummary(CarrierSummary carrierSummary)
+        {
+            //double a =;
+            return new CarrierSummaryFormatted
+            {
+              
+                SupplierID = carrierSummary.SupplierID,
+                Supplier = (carrierSummary.SupplierID!=null)?_bemanager.GetCarrirAccountName(carrierSummary.SupplierID):null,
+                CustomerID = carrierSummary.CustomerID,
+                Customer = (carrierSummary.CustomerID != null) ? _bemanager.GetCarrirAccountName(carrierSummary.CustomerID) : null,
+                SaleDuration  = carrierSummary.SaleDuration,
+		        SaleDurationFormatted = FormatNumber(carrierSummary.SaleDuration),
+		        CostDuration  = carrierSummary.CostDuration,
+		        CostDurationFormatted= FormatNumber(carrierSummary.CostDuration),
+		        CostNet = carrierSummary.CostNet,
+		        CostNetFormatted = (carrierSummary.CostNet ==0.00)?"0.00":FormatNumber(carrierSummary.CostNet,5),
+		        SaleNet = carrierSummary.SaleNet,
+		        SaleNetFormatted = (carrierSummary.SaleNet ==0.00)?"0.00":FormatNumber(carrierSummary.SaleNet,5),
+		        CostCommissionValue =  carrierSummary.CostCommissionValue,
+		        CostCommissionValueFormatted = FormatNumber(Convert.ToDouble(Math.Abs((decimal)carrierSummary.CostCommissionValue))),
+                //SaleCommissionValue = carrierSummary.SaleCommissionValue,
+                //SaleCommissionValueFormatted 
+                //CostExtraChargeValue
+                //CostExtraChargeValueFormatted 
+                //SaleExtraChargeValue
+                //SaleExtraChargeValueFormatted
+                //Profit = FormatNumber(carrierSummary.SaleNet- carrierSummary.CostNet),
+                //AvgMin
+
+
+            };
         }
 
         #endregion
