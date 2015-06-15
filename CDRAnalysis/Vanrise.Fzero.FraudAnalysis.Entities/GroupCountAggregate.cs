@@ -10,12 +10,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         Func<CDR, bool> _condition;
         Dictionary<int, int> _HoursvsCalls = new Dictionary<int, int>();
-        int _MinCallsPerHour=5;
+        int _MinimumCountofCallsinActiveHour;
 
 
-        public GroupCountAggregate(Func<CDR, bool> condition)
+        public GroupCountAggregate(Func<CDR, bool> condition, Strategy strategy)
         {
             this._condition = condition;
+            this._MinimumCountofCallsinActiveHour = strategy.MinimumCountofCallsinActiveHour;
         }
 
         public void Reset()
@@ -43,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public decimal GetResult()
         {
-            return _HoursvsCalls.Where(x => x.Value >= _MinCallsPerHour).Count();
+            return _HoursvsCalls.Where(x => x.Value >= _MinimumCountofCallsinActiveHour).Count();
         }
 
 

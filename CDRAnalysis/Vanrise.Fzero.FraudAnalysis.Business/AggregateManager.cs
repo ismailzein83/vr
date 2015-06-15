@@ -7,14 +7,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class AggregateManager
     {
 
-
+        Strategy _strategy;
         IList<int> NightCallHours = new List<int>() { 0,1,2,3,4,5};
-        IList<int> PeakHours = new List<int>() { 11,12,13,14 };
-        int LowDurationMaxValue = 20;
 
         public AggregateManager(Strategy strategy)
         {
-
+            _strategy = strategy;
         }
 
 
@@ -305,6 +303,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountOutCallsPeakHours",
                 Aggregation = new CountAggregate((cdr) =>
                 {
+                    List<int> PeakHours = new List<int>();
+                    foreach (var i in _strategy.PeakHours)
+                    {
+                        PeakHours.Add(i.Id);
+                    }
                     return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.ConnectDateTime.HasValue && PeakHours.Contains(cdr.ConnectDateTime.Value.Hour));
                 })
             });
@@ -318,6 +321,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == Enums.CallType.OutgoingVoiceCall);
                       }
+                      ,_strategy
                   )
             });
 
@@ -332,6 +336,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == Enums.CallType.OutgoingVoiceCall);
                       }
+                      , _strategy
                   )
             });
 
@@ -345,6 +350,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                       {
                           return (cdr.CallType == Enums.CallType.OutgoingVoiceCall && cdr.DurationInSeconds==0);
                       }
+                      , _strategy
                   )
             });
 
@@ -354,7 +360,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 Name = "CountInLowDurationCalls",
                 Aggregation = new CountAggregate((cdr) =>
                 {
-                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall && cdr.DurationInSeconds <= LowDurationMaxValue);
+                    return (cdr.CallType == Enums.CallType.IncomingVoiceCall && cdr.DurationInSeconds <= _strategy.MaxLowDurationCall);
                 })
             });
 

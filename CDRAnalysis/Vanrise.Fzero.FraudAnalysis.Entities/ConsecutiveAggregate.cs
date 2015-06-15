@@ -12,12 +12,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
               
         DateTime PreviousDateTime = new DateTime();
         int _Count;
-        int _MinimumGapBetweenConsecutiveCallsInSeconds = 10;
+        int _MinimumGapBetweenConsecutiveCallsInSeconds;
        
 
-        public ConsecutiveAggregate( Func<CDR, bool> condition)
+        public ConsecutiveAggregate( Func<CDR, bool> condition, Strategy strategy)
         {
             this._condition = condition;
+            this._MinimumGapBetweenConsecutiveCallsInSeconds = strategy.GapBetweenConsecutiveCalls;
         }
 
         public void Reset()
