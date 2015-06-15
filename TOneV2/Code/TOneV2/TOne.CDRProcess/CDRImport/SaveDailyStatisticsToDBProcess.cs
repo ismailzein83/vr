@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess
 {
-    class SaveDailyStatisticsToDBProcess
+    public partial class SaveDailyStatisticsToDBProcess
     {
     }
 }
