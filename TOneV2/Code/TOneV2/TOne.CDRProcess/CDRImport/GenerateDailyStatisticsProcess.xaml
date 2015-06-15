@@ -8,6 +8,9 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
+ xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
+ xmlns:tce="clr-namespace:TOne.CDR.Entities;assembly=TOne.CDR.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(tca:GenerateDailyStatisticsProcessInput)" />
@@ -22,6 +25,8 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.CDRProcess.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>TOne.CDR.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -58,34 +63,56 @@
       <AssemblyReference>TOne.CDRProcess</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
-    <WriteLine>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)" Name="CDRBillingQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">TOne.CDR.Business.CDRQueueFactory.GetCDRBillingForStatisticsDailyQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticDailyBatch)" Name="CDRStatsQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticDailyBatch)">TOne.CDR.Business.CDRQueueFactory.GetTrafficStatsDailyQueue(Input.SwitchID)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Generate Daily Statistics Process stared for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_1</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
-    <WriteLine>
+    <tca1:GenerateDailyTrafficStatistics PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GenerateDailyTrafficStatistics_1">
+      <tca1:GenerateDailyTrafficStatistics.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(tce:CDRBillingBatch)">CDRBillingQueue</mca:CSharpValue>
+        </InArgument>
+      </tca1:GenerateDailyTrafficStatistics.InputQueue>
+      <tca1:GenerateDailyTrafficStatistics.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticDailyBatch)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(tce:TrafficStatisticDailyBatch)">CDRStatsQueue</mca:CSharpReference>
+        </InOutArgument>
+      </tca1:GenerateDailyTrafficStatistics.OutputQueue>
+    </tca1:GenerateDailyTrafficStatistics>
+    <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_2">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Generate Daily Statistics Process finished for switch :{0} @ {1}", Input.SwitchID, DateTime.Now)</mca:CSharpValue>
       </InArgument>
-      <sap2010:WorkflowViewState.IdRef>WriteLine_2</sap2010:WorkflowViewState.IdRef>
     </WriteLine>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRcR2VuZXJhdGVEYWlseVN0YXRpc3RpY3NQcm9jZXNzLnhhbWwFPQNMDgIBAT4FQxECAQVEBUkRAgECQAlAtAECAQZGCUa2AQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1dDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xDRFJJbXBvcnRcR2VuZXJhdGVEYWlseVN0YXRpc3RpY3NQcm9jZXNzLnhhbWwKQgNmDgIBAUYLRrgBAgEGSwtLuAECAQJPBVMRAgEYVAVfKwIBD2AFZBECAQpRCVG0AQIBGVcLV3ECARRcC1yCAQIBEGIJYrYBAgEL</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="211,62" />
+      <sap2010:ViewStateData Id="GenerateDailyTrafficStatistics_1" sap:VirtualizedContainerService.HintSize="211,22" />
       <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="211,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,288">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="233,350">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.CDRProcess.GenerateDailyStatisticsProcess_1" sap:VirtualizedContainerService.HintSize="273,368" />
+      <sap2010:ViewStateData Id="TOne.CDRProcess.GenerateDailyStatisticsProcess_1" sap:VirtualizedContainerService.HintSize="273,430" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
