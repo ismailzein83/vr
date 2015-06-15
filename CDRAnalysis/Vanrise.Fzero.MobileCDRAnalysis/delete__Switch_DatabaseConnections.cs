@@ -12,20 +12,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class SwitchProfile
+    public partial class delete__Switch_DatabaseConnections
     {
-        public SwitchProfile()
-        {
-            this.NormalizationRules = new HashSet<NormalizationRule>();
-            this.SourceMappings = new HashSet<SourceMapping>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public bool AllowAutoImport { get; set; }
+        public string ServerName { get; set; }
+        public string DatabaseName { get; set; }
+        public string UserId { get; set; }
+        public string UserPassword { get; set; }
     
-        public virtual ICollection<NormalizationRule> NormalizationRules { get; set; }
-        public virtual ICollection<SourceMapping> SourceMappings { get; set; }
-        public virtual Switch_DatabaseConnections Switch_DatabaseConnections { get; set; }
+        public virtual delete_SwitchProfiles delete_SwitchProfiles { get; set; }
     }
 }

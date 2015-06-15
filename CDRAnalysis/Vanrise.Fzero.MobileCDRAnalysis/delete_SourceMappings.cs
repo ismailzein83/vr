@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class SourceMapping
+    public partial class delete_SourceMappings
     {
         public int ID { get; set; }
         public int SwitchID { get; set; }
@@ -24,6 +24,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<int> LastUpdatedBy { get; set; }
     
         public virtual PredefinedColumn PredefinedColumn { get; set; }
-        public virtual SwitchProfile SwitchProfile { get; set; }
+        public virtual delete_SwitchProfiles delete_SwitchProfiles { get; set; }
     }
 }

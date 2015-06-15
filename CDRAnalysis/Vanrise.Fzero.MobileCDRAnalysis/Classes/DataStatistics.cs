@@ -38,8 +38,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 {
                     dataStatistics.ReportDetails = context.ReportDetails.Count();
                     dataStatistics.ReportsCount = context.Reports.Count();
-                    dataStatistics.SwitchesCount = context.SwitchProfiles.Count();
-                    dataStatistics.RulesCount= context.NormalizationRules.Count();
+                    dataStatistics.SwitchesCount = 0;
+                    dataStatistics.RulesCount= 0;
                     dataStatistics.StrategyCount = context.Strategies.Count();
                 }
             }

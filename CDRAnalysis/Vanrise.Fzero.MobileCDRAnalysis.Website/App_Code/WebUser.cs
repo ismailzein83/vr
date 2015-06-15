@@ -55,7 +55,6 @@ public class WebUser
         }
     }
 
-    public Parameters Params { get; set; }
 
     #endregion
 

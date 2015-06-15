@@ -31,20 +31,22 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<CellProfile> CellProfiles { get; set; }
         public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
+        public DbSet<delete__Switch_DatabaseConnections> delete__Switch_DatabaseConnections { get; set; }
+        public DbSet<delete_Peak_Time> delete_Peak_Time { get; set; }
+        public DbSet<delete_SourceMappings> delete_SourceMappings { get; set; }
         public DbSet<delete_Strategy_Min_Values> delete_Strategy_Min_Values { get; set; }
         public DbSet<delete_Strategy_Suspicion_Level> delete_Strategy_Suspicion_Level { get; set; }
         public DbSet<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
         public DbSet<delete_StrategyThreshold> delete_StrategyThreshold { get; set; }
+        public DbSet<delete_SwitchProfiles> delete_SwitchProfiles { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<EmailToken> EmailTokens { get; set; }
         public DbSet<Import> Imports { get; set; }
         public DbSet<ImportType> ImportTypes { get; set; }
-        public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
-        public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<PredefinedColumn> PredefinedColumns { get; set; }
@@ -55,12 +57,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Set_CallClass> Set_CallClass { get; set; }
         public DbSet<Set_CallType> Set_CallType { get; set; }
         public DbSet<Set_SubType> Set_SubType { get; set; }
-        public DbSet<SourceMapping> SourceMappings { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
-        public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }
-        public DbSet<SwitchProfile> SwitchProfiles { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }

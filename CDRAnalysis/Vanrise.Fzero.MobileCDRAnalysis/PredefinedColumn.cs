@@ -16,12 +16,12 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public PredefinedColumn()
         {
-            this.SourceMappings = new HashSet<SourceMapping>();
+            this.delete_SourceMappings = new HashSet<delete_SourceMappings>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<SourceMapping> SourceMappings { get; set; }
+        public virtual ICollection<delete_SourceMappings> delete_SourceMappings { get; set; }
     }
 }

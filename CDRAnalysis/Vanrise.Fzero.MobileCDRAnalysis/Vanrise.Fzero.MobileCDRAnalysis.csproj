@@ -82,7 +82,6 @@
     <Compile Include="Classes\ReportingStatus.cs" />
     <Compile Include="Classes\Enums.cs" />
     <Compile Include="Classes\Permission.cs" />
-    <Compile Include="Classes\SourceMapping.cs" />
     <Compile Include="Classes\Strategy.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserPermission.cs" />
@@ -100,13 +99,16 @@
     <Compile Include="Classes\SubscriberThreshold.cs" />
     <Compile Include="Classes\SuspectionOccurance.cs" />
     <Compile Include="Classes\Suspection_Level.cs" />
-    <Compile Include="Classes\Switch_DatabaseConnection.cs" />
-    <Compile Include="Classes\NormalizationCall.cs" />
-    <Compile Include="Classes\SwitchProfile.cs" />
     <Compile Include="ControlTable.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Criteria_Profile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_Peak_Time.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_SourceMappings.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="delete_StrategyPeriods.cs">
@@ -119,6 +121,12 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="delete_Strategy_Suspicion_Level.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_SwitchProfiles.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete__Switch_DatabaseConnections.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EmailReceiver.cs">
@@ -157,16 +165,10 @@
     <Compile Include="NormalCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="NormalizationRule.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="OperationType.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Peak_Time.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Period.cs">
@@ -203,9 +205,6 @@
     <Compile Include="Set_SubType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SourceMapping.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -228,12 +227,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Suspicion_Level.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SwitchProfile.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Switch_DatabaseConnections.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagram.cs">

@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Peak_Time
+    public partial class delete_Peak_Time
     {
         public int Id { get; set; }
         public int Peak_Hour { get; set; }
