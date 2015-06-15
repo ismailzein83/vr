@@ -13,20 +13,17 @@ namespace TOne.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<CustomerSummaryFormatted> customerSummary = new List<CustomerSummaryFormatted>();
-                //manager.GetZoneProfit(parameters.FromTime, parameters.ToTime, parameters.SupplierId, parameters.CustomerId, parameters.GroupByCustomer, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<CustomerSummaryFormatted> customerSummary = 
+                manager.GetCustomerSummary(parameters.FromTime, parameters.ToTime, parameters.CustomerId, parameters.SupplierAMUId, parameters.CustomerAMUId);
 
-            //List<CarrierSummaryDailyFormatted> zs = manager.GetDailyCarrierSummary(DateTime.Parse("2012-05-01 00:00:00"), DateTime.Parse("2015-05-01 00:00:00"), null, null, false, true, null , null );
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add(" CustomerSummary", customerSummary);
+            dataSources.Add("CustomerSummary", customerSummary);
             return dataSources;
         }
 
         public Dictionary<string, RdlcParameter> GetRdlcReportParameters(TOne.Entities.ReportParameters parameters)
         {
-
             Dictionary<string, RdlcParameter> list = new Dictionary<string, RdlcParameter>();
-            list.Add("GroupByCustomer", new RdlcParameter() { Value = parameters.GroupByCustomer.ToString(), IsVisible = false });
             list.Add("FromDate", new RdlcParameter { Value = parameters.FromTime.ToString(), IsVisible = true });
             list.Add("ToDate", new RdlcParameter { Value = parameters.ToTime.ToString(), IsVisible = true });
             list.Add("Title", new RdlcParameter { Value = "Zone Profit", IsVisible = true });

@@ -11,7 +11,7 @@ namespace TOne.Analytics.Business
 {
     public partial class BillingStatisticManager
     {
-        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
+        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
         {
             return FormatCustomerSummaries(_datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId));
         }
@@ -34,6 +34,53 @@ namespace TOne.Analytics.Business
                 SaleNet = customerSummary.SaleNet,
                 CostDuration = customerSummary.CostDuration,
                 CostNet = customerSummary.CostNet
+
+
+
+
+                //                SupplierID = (zoneSummaryDetailed.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneSummaryDetailed.SupplierID) : null,
+
+                //Calls = zoneSummaryDetailed.Calls,
+
+                //Rate = zoneSummaryDetailed.Rate,
+                //RateFormatted = FormatNumber(zoneSummaryDetailed.Rate, 5),
+
+                //DurationNet = zoneSummaryDetailed.DurationNet,
+                //DurationNetFormatted = FormatNumber(zoneSummaryDetailed.DurationNet),
+
+                //OffPeakDurationInSeconds = zoneSummaryDetailed.OffPeakDurationInSeconds,
+                //OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds, 2),
+
+                //OffPeakRate = zoneSummaryDetailed.OffPeakRate,
+                //OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 5),
+
+                //OffPeakNet = zoneSummaryDetailed.OffPeakNet,
+                //OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 2),
+
+                //WeekEndDurationInSeconds = zoneSummaryDetailed.WeekEndDurationInSeconds,
+                //WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds, 2),
+
+                //WeekEndRate = zoneSummaryDetailed.WeekEndRate,
+                //WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 2),
+
+                //WeekEndNet = zoneSummaryDetailed.WeekEndNet,
+                //WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 2),
+
+                //DurationInSeconds = zoneSummaryDetailed.DurationInSeconds,
+                //DurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.DurationInSeconds),
+
+                //Net = zoneSummaryDetailed.Net,
+                //NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 5),
+
+                //TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds), 2),
+
+                //TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 2),
+
+                //CommissionValue = zoneSummaryDetailed.CommissionValue,
+                //CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue, 2),
+
+                //ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue,
+                //ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue),
             };
         }
 
