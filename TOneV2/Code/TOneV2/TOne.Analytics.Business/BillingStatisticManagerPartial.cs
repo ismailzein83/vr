@@ -37,8 +37,14 @@ namespace TOne.Analytics.Business
                 SaleDurationFormatted = FormatNumber(customerSummary.SaleDuration, 2),
                 SaleNetFormatted = FormatNumber(customerSummary.SaleNet, 2),
                 CostDurationFormatted = FormatNumber(customerSummary.CostDuration, 2),
-                CostNetFormatted = FormatNumber(customerSummary.CostNet, 2)
-                //ProfitFormatted = FormatNumber((SaleNet - CostNet),2),
+                CostNetFormatted = FormatNumber(customerSummary.CostNet, 2),
+                ProfitFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet), 2),
+                ProfitPercentageFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet) / customerSummary.SaleNet, 2),
+                
+                
+                
+                //=FormatPercent((Fields!SaleNet.Value-Fields!CostNet.Value)/Fields!SaleNet.Value,2)
+                
                 
                 
                 //=FormatNumber(Fields!Services.Value,2) services
