@@ -39,7 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public Decimal Threshold { get; set; }
 
         public int? PeriodId { get; set; }
-        public bool IsSelected { get; set; }
+        //public bool IsSelected { get; set; }
 
     }
 

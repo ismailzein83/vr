@@ -152,19 +152,23 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         angular.forEach($scope.strategyFilters, function (filter) {
-            var filterItem = {
-                FilterId: filter.filterId,
-                Description: filter.description,
-                Threshold: filter.threshold,
-                IsSelected: filter.isSelected
+            if (filter.isSelected)
+            {
+                var filterItem = {
+                    FilterId: filter.filterId,
+                    Description: filter.description,
+                    Threshold: filter.threshold
 
 
-            };
+                };
 
-            if (filter.period != undefined)
-                filterItem.PeriodId = filter.period.Id;
+                if (filter.period != undefined)
+                    filterItem.PeriodId = filter.period.Id;
 
-            strategyObject.StrategyFilters.push(filterItem);
+
+                strategyObject.StrategyFilters.push(filterItem);
+            }
+           
         });
 
 
@@ -259,7 +263,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
             var existingItem = UtilsService.getItemByVal(strategyObject.StrategyFilters, filterDef.filterId, "FilterId");
             if (existingItem != undefined && existingItem != null) {
-                filterItem.isSelected = existingItem.IsSelected;
+                filterItem.isSelected = true;
                 filterItem.threshold = existingItem.Threshold;
 
                 if (existingItem.PeriodId != undefined)
