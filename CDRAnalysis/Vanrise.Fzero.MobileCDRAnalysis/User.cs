@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public User()
         {
             this.EmailTemplates = new HashSet<EmailTemplate>();
-            this.Imports = new HashSet<Import>();
             this.Reports = new HashSet<Report>();
             this.Strategies = new HashSet<Strategy>();
             this.UserPermissions = new HashSet<UserPermission>();
@@ -36,7 +35,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string MobileNumber { get; set; }
     
         public virtual ICollection<EmailTemplate> EmailTemplates { get; set; }
-        public virtual ICollection<Import> Imports { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<Strategy> Strategies { get; set; }
         public virtual ICollection<UserPermission> UserPermissions { get; set; }

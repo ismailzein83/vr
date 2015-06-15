@@ -34,12 +34,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<EmailToken> EmailTokens { get; set; }
-        public DbSet<Import> Imports { get; set; }
-        public DbSet<ImportType> ImportTypes { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<PredefinedColumn> PredefinedColumns { get; set; }
         public DbSet<Related_Criteria> Related_Criteria { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportDetail> ReportDetails { get; set; }
@@ -54,7 +51,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
-        public DbSet<vwDashboard> vwDashboards { get; set; }
         public DbSet<vwReportedNumber> vwReportedNumbers { get; set; }
         public DbSet<vwReportedNumberNormalCDR> vwReportedNumberNormalCDRs { get; set; }
         public DbSet<vwReportVariable> vwReportVariables { get; set; }

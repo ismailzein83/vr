@@ -59,22 +59,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Token" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Imports">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ImportDate" Type="datetime2" Precision="0" Nullable="false" />
-          <Property Name="ImportedBy" Type="int" />
-          <Property Name="ImportTypeId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ImportTypes">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NormalCDR">
@@ -161,13 +145,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Category" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentID" Type="int" />
-        </EntityType>
-        <EntityType Name="PredefinedColumns">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
@@ -316,18 +293,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vwDashboard">
-          <Key>
-            <PropertyRef Name="CountNewCDRs" />
-            <PropertyRef Name="MaxAttemptDateTime" />
-            <PropertyRef Name="CountCDPN" />
-            <PropertyRef Name="CountCGPN" />
-          </Key>
-          <Property Name="CountNewCDRs" Type="int" Nullable="false" />
-          <Property Name="MaxAttemptDateTime" Type="datetime" Nullable="false" />
-          <Property Name="CountCDPN" Type="int" Nullable="false" />
-          <Property Name="CountCGPN" Type="int" Nullable="false" />
-        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwReportedNumber">
@@ -423,30 +388,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Principal>
             <Dependent Role="EmailTemplates">
               <PropertyRef Name="LastUpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Imports_ImportTypes">
-          <End Role="ImportTypes" Type="Self.ImportTypes" Multiplicity="1" />
-          <End Role="Imports" Type="Self.Imports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImportTypes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Imports">
-              <PropertyRef Name="ImportTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Imports_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Imports" Type="Self.Imports" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Imports">
-              <PropertyRef Name="ImportedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -698,12 +639,9 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <EntitySet Name="EmailReceiverTypes" EntityType="Self.EmailReceiverTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTokens" EntityType="Self.EmailTokens" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Imports" EntityType="Self.Imports" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ImportTypes" EntityType="Self.ImportTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Periods" EntityType="Self.Periods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PredefinedColumns" EntityType="Self.PredefinedColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Related_Criteria" EntityType="Self.Related_Criteria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportDetails" EntityType="Self.ReportDetails" Schema="dbo" store:Type="Tables" />
@@ -743,14 +681,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
 [NormalCDR].[Service_Type] AS [Service_Type], 
 [NormalCDR].[Service_VAS_Name] AS [Service_VAS_Name]
 FROM [dbo].[NormalCDR] AS [NormalCDR]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vwDashboard" EntityType="Self.vwDashboard" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwDashboard].[CountNewCDRs] AS [CountNewCDRs], 
-[vwDashboard].[MaxAttemptDateTime] AS [MaxAttemptDateTime], 
-[vwDashboard].[CountCDPN] AS [CountCDPN], 
-[vwDashboard].[CountCGPN] AS [CountCGPN]
-FROM [dbo].[vwDashboard] AS [vwDashboard]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwReportedNumber" EntityType="Self.vwReportedNumber" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -802,14 +732,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <AssociationSet Name="FK_EmailTemplates_Users" Association="Self.FK_EmailTemplates_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="EmailTemplates" EntitySet="EmailTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_ImportTypes" Association="Self.FK_Imports_ImportTypes">
-            <End Role="ImportTypes" EntitySet="ImportTypes" />
-            <End Role="Imports" EntitySet="Imports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_Users" Association="Self.FK_Imports_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Imports" EntitySet="Imports" />
           </AssociationSet>
           <AssociationSet Name="FK_Permissions_Permissions" Association="Self.FK_Permissions_Permissions">
             <End Role="Permissions" EntitySet="Permissions" />
@@ -1035,12 +957,9 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="EmailReceiverTypes" EntityType="Model.EmailReceiverType" />
           <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
           <EntitySet Name="EmailTokens" EntityType="Model.EmailToken" />
-          <EntitySet Name="Imports" EntityType="Model.Import" />
-          <EntitySet Name="ImportTypes" EntityType="Model.ImportType" />
           <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
           <EntitySet Name="Periods" EntityType="Model.Period" />
           <EntitySet Name="Permissions" EntityType="Model.Permission" />
-          <EntitySet Name="PredefinedColumns" EntityType="Model.PredefinedColumn" />
           <EntitySet Name="Related_Criteria" EntityType="Model.Related_Criteria" />
           <EntitySet Name="Reports" EntityType="Model.Report" />
           <EntitySet Name="ReportDetails" EntityType="Model.ReportDetail" />
@@ -1055,7 +974,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="UserPermissions" EntityType="Model.UserPermission" />
           <EntitySet Name="Users" EntityType="Model.User" />
           <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
-          <EntitySet Name="vwDashboards" EntityType="Model.vwDashboard" />
           <EntitySet Name="vwReportedNumbers" EntityType="Model.vwReportedNumber" />
           <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="Model.vwReportedNumberNormalCDR" />
           <EntitySet Name="vwReportVariables" EntityType="Model.vwReportVariable" />
@@ -1079,14 +997,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <AssociationSet Name="FK_EmailTemplates_Users" Association="Model.FK_EmailTemplates_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="EmailTemplate" EntitySet="EmailTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_ImportTypes" Association="Model.FK_Imports_ImportTypes">
-            <End Role="ImportType" EntitySet="ImportTypes" />
-            <End Role="Import" EntitySet="Imports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Imports_Users" Association="Model.FK_Imports_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Import" EntitySet="Imports" />
           </AssociationSet>
           <AssociationSet Name="FK_Permissions_Permissions" Association="Model.FK_Permissions_Permissions">
             <End Role="Permission" EntitySet="Permissions" />
@@ -1228,25 +1138,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Token" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Import">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImportDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ImportedBy" Type="Int32" />
-          <Property Name="ImportTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ImportType" Relationship="Model.FK_Imports_ImportTypes" FromRole="Import" ToRole="ImportType" />
-          <NavigationProperty Name="User" Relationship="Model.FK_Imports_Users" FromRole="Import" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ImportType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Imports" Relationship="Model.FK_Imports_ImportTypes" FromRole="ImportType" ToRole="Import" />
-        </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
             <PropertyRef Name="Id" />
@@ -1306,13 +1197,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <NavigationProperty Name="Permissions1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission" ToRole="Permission1" />
           <NavigationProperty Name="Permission1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission1" ToRole="Permission" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Permissions" FromRole="Permission" ToRole="UserPermission" />
-        </EntityType>
-        <EntityType Name="PredefinedColumn">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Related_Criteria">
           <Key>
@@ -1475,7 +1359,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EmailTemplates" Relationship="Model.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
-          <NavigationProperty Name="Imports" Relationship="Model.FK_Imports_Users" FromRole="User" ToRole="Import" />
           <NavigationProperty Name="Reports" Relationship="Model.FK_Report_Users" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Strategies" Relationship="Model.FK_Strategy_Users" FromRole="User" ToRole="Strategy" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
@@ -1507,18 +1390,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Out_Trunk" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Service_Type" Type="Int32" />
           <Property Name="Service_VAS_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vwDashboard">
-          <Key>
-            <PropertyRef Name="CountNewCDRs" />
-            <PropertyRef Name="MaxAttemptDateTime" />
-            <PropertyRef Name="CountCDPN" />
-            <PropertyRef Name="CountCGPN" />
-          </Key>
-          <Property Name="CountNewCDRs" Type="Int32" Nullable="false" />
-          <Property Name="MaxAttemptDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CountCDPN" Type="Int32" Nullable="false" />
-          <Property Name="CountCGPN" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="vwReportedNumber">
           <Key>
@@ -1631,30 +1502,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Principal>
             <Dependent Role="EmailTemplate">
               <PropertyRef Name="LastUpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Imports_ImportTypes">
-          <End Type="Model.ImportType" Role="ImportType" Multiplicity="1" />
-          <End Type="Model.Import" Role="Import" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImportType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Import">
-              <PropertyRef Name="ImportTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Imports_Users">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
-          <End Type="Model.Import" Role="Import" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Import">
-              <PropertyRef Name="ImportedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1921,24 +1768,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Imports">
-            <EntityTypeMapping TypeName="Model.Import">
-              <MappingFragment StoreEntitySet="Imports">
-                <ScalarProperty Name="ImportTypeId" ColumnName="ImportTypeId" />
-                <ScalarProperty Name="ImportedBy" ColumnName="ImportedBy" />
-                <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ImportTypes">
-            <EntityTypeMapping TypeName="Model.ImportType">
-              <MappingFragment StoreEntitySet="ImportTypes">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NumberProfiles">
             <EntityTypeMapping TypeName="Model.NumberProfile">
               <MappingFragment StoreEntitySet="NumberProfile">
@@ -1994,14 +1823,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PredefinedColumns">
-            <EntityTypeMapping TypeName="Model.PredefinedColumn">
-              <MappingFragment StoreEntitySet="PredefinedColumns">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2190,16 +2011,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="IMSI" ColumnName="IMSI" />
                 <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwDashboards">
-            <EntityTypeMapping TypeName="Model.vwDashboard">
-              <MappingFragment StoreEntitySet="vwDashboard">
-                <ScalarProperty Name="CountCGPN" ColumnName="CountCGPN" />
-                <ScalarProperty Name="CountCDPN" ColumnName="CountCDPN" />
-                <ScalarProperty Name="MaxAttemptDateTime" ColumnName="MaxAttemptDateTime" />
-                <ScalarProperty Name="CountNewCDRs" ColumnName="CountNewCDRs" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -72,8 +72,6 @@
     </Compile>
     <Compile Include="Classes\CallsStatistics.cs" />
     <Compile Include="Classes\EmailReceiverType.cs" />
-    <Compile Include="Classes\Import.cs" />
-    <Compile Include="Classes\PredefinedColumn.cs" />
     <Compile Include="Classes\prGetEmails_Result.cs" />
     <Compile Include="Classes\EmailReceiver.cs" />
     <Compile Include="Classes\EmailManager.cs" />
@@ -113,12 +111,6 @@
     <Compile Include="EmailToken.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Import.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ImportType.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -144,9 +136,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Permission.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PredefinedColumn.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="prGetReportVariables_Result.cs">
@@ -205,9 +194,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="UserPermission.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="vwDashboard.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="vwReportedNumber.cs">
