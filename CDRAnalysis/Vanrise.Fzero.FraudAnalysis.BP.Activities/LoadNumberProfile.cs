@@ -95,7 +95,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             FromDate = inputArgument.FromDate,
                             ToDate = inputArgument.ToDate,
                             PeriodId = inputArgument.PeriodId,
-                            IsOnNet = 1
+                            IsOnNet = 1,
+                            StrategyId=strategy.Id
                         };
                         foreach (var aggregateDef in aggregateDefinitions)
                         {
