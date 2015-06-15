@@ -48,5 +48,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<decimal> CountFailConsecutiveCalls { get; set; }
         public Nullable<decimal> CountConsecutiveCalls { get; set; }
         public Nullable<decimal> CountInLowDurationCalls { get; set; }
+        public Nullable<int> StrategyId { get; set; }
     }
 }

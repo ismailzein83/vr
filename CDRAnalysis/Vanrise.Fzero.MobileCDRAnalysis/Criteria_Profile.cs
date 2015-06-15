@@ -18,10 +18,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         {
             this.Related_Criteria = new HashSet<Related_Criteria>();
             this.Related_Criteria1 = new HashSet<Related_Criteria>();
-            this.Strategy_Min_Values = new HashSet<Strategy_Min_Values>();
-            this.StrategyPeriods = new HashSet<StrategyPeriod>();
-            this.StrategyThresholds = new HashSet<StrategyThreshold>();
-            this.Subscriber_Values = new HashSet<Subscriber_Values>();
+            this.delete_Strategy_Min_Values = new HashSet<delete_Strategy_Min_Values>();
+            this.delete_StrategyPeriods = new HashSet<delete_StrategyPeriods>();
+            this.delete_StrategyThreshold = new HashSet<delete_StrategyThreshold>();
         }
     
         public int Id { get; set; }
@@ -29,9 +28,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
         public virtual ICollection<Related_Criteria> Related_Criteria { get; set; }
         public virtual ICollection<Related_Criteria> Related_Criteria1 { get; set; }
-        public virtual ICollection<Strategy_Min_Values> Strategy_Min_Values { get; set; }
-        public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
-        public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
-        public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
+        public virtual ICollection<delete_Strategy_Min_Values> delete_Strategy_Min_Values { get; set; }
+        public virtual ICollection<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
+        public virtual ICollection<delete_StrategyThreshold> delete_StrategyThreshold { get; set; }
     }
 }

@@ -96,23 +96,28 @@
     <Compile Include="Classes\Related_Criteria.cs" />
     <Compile Include="Classes\Report.cs" />
     <Compile Include="Classes\ReportDetail.cs" />
-    <Compile Include="Classes\Strategy.cs" />
-    <Compile Include="Classes\StrategyPeriod.cs" />
-    <Compile Include="Classes\StrategyThreshold.cs" />
-    <Compile Include="Classes\Strategy_Min_Values.cs" />
-    <Compile Include="Classes\Strategy_Suspection_level.cs" />
     <Compile Include="Classes\SubscriberThreshold.cs" />
-    <Compile Include="Classes\Subscriber_Values.cs" />
     <Compile Include="Classes\SuspectionOccurance.cs" />
     <Compile Include="Classes\Suspection_Level.cs" />
     <Compile Include="Classes\Switch_DatabaseConnection.cs" />
     <Compile Include="Classes\NormalizationCall.cs" />
     <Compile Include="Classes\SwitchProfile.cs" />
-    <Compile Include="Classes\StrategyProperty.cs" />
     <Compile Include="ControlTable.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Criteria_Profile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_StrategyPeriods.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_StrategyThreshold.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_Strategy_Min_Values.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="delete_Strategy_Suspicion_Level.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EmailReceiver.cs">
@@ -155,9 +160,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NumberProfile.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Ol_NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="OperationType.cs">
@@ -221,22 +223,7 @@
     <Compile Include="Strategy.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="StrategyPeriod.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="StrategyThreshold.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Strategy_Min_Values.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Strategy_Suspicion_Level.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="SubscriberThreshold.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Subscriber_Values.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Suspicion_Level.cs">

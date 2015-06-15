@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
-using Vanrise.Fzero.MobileCDRAnalysis.Providers;
+
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
     public partial  class NormalCDR

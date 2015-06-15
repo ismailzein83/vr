@@ -31,6 +31,10 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<CellProfile> CellProfiles { get; set; }
         public DbSet<ControlTable> ControlTables { get; set; }
         public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
+        public DbSet<delete_Strategy_Min_Values> delete_Strategy_Min_Values { get; set; }
+        public DbSet<delete_Strategy_Suspicion_Level> delete_Strategy_Suspicion_Level { get; set; }
+        public DbSet<delete_StrategyPeriods> delete_StrategyPeriods { get; set; }
+        public DbSet<delete_StrategyThreshold> delete_StrategyThreshold { get; set; }
         public DbSet<EmailReceiver> EmailReceivers { get; set; }
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -39,7 +43,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<ImportType> ImportTypes { get; set; }
         public DbSet<NormalizationRule> NormalizationRules { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
-        public DbSet<Ol_NumberProfile> Ol_NumberProfile { get; set; }
         public DbSet<OperationType> OperationTypes { get; set; }
         public DbSet<Peak_Time> Peak_Time { get; set; }
         public DbSet<Period> Periods { get; set; }
@@ -54,11 +57,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Set_SubType> Set_SubType { get; set; }
         public DbSet<SourceMapping> SourceMappings { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
-        public DbSet<Strategy_Min_Values> Strategy_Min_Values { get; set; }
-        public DbSet<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
-        public DbSet<StrategyPeriod> StrategyPeriods { get; set; }
-        public DbSet<StrategyThreshold> StrategyThresholds { get; set; }
-        public DbSet<Subscriber_Values> Subscriber_Values { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<Switch_DatabaseConnections> Switch_DatabaseConnections { get; set; }

@@ -12,15 +12,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Strategy_Min_Values
+    public partial class delete_StrategyPeriods
     {
         public int Id { get; set; }
         public Nullable<int> StrategyId { get; set; }
-        public Nullable<int> Min_Count_Value { get; set; }
-        public Nullable<decimal> Min_Aggreg_Volume { get; set; }
-        public Nullable<int> CriteriaId { get; set; }
+        public Nullable<int> PeriodId { get; set; }
+        public Nullable<int> Value { get; set; }
+        public Nullable<int> CriteriaID { get; set; }
     
         public virtual Criteria_Profile Criteria_Profile { get; set; }
+        public virtual Period Period { get; set; }
         public virtual Strategy Strategy { get; set; }
     }
 }

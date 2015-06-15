@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Vanrise.Fzero.MobileCDRAnalysis;
-using Vanrise.Fzero.MobileCDRAnalysis.Providers;
 using Vanrise.CommonLibrary;
 using System.Data;
 using Microsoft.Reporting.WebForms;

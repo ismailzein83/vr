@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
-using Vanrise.Fzero.MobileCDRAnalysis.Providers;
 using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis

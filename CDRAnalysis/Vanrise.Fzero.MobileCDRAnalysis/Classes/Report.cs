@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 using Vanrise.CommonLibrary;
-using Vanrise.Fzero.MobileCDRAnalysis.Providers;
 using System.Data.Entity.Infrastructure;
 
 namespace Vanrise.Fzero.MobileCDRAnalysis
