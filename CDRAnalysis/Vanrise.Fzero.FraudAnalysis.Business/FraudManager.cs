@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     suspiciousNumber.SuspectionLevel = strategyLevelWithCriterias.SuspicionLevelId;
                     suspiciousNumber.CriteriaValues = criteriaValuesThresholds;
                     suspiciousNumber.DateDay = profile.FromDate;
-                    suspiciousNumber.StrategyId = StrategyId;
+                    suspiciousNumber.StrategyId = profile.StrategyId;
                     return IsSuspicious;
                 }
             }

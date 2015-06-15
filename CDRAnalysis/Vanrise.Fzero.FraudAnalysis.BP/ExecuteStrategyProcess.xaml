@@ -106,6 +106,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadNumberProfilesStatus</mca:CSharpReference>
           </OutArgument>
         </vffba1:LoadNumberProfiles.Status>
+        <vffba1:LoadNumberProfiles.Strategies>
+          <InArgument x:TypeArguments="scg:List(vffe:Strategy)">
+            <mca:CSharpValue x:TypeArguments="scg:List(vffe:Strategy)">strategies</mca:CSharpValue>
+          </InArgument>
+        </vffba1:LoadNumberProfiles.Strategies>
         <vffba1:LoadNumberProfiles.ToDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
@@ -172,7 +177,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("End Executing Strategies Count: {0}", Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBs7A7ABDgIBAT8FQxEDAYkBRAVPGgMBggFQBakBEAIBBqoBBa4BEQIBAkEJQZUBAwGKAUwLTGMDAYYBRwtHagMBgwFYB3IjAgFZcweSASQCASiTAQeoAScCAQesAQmsAZQBAgEDWw1bWwIBemoNankCAXJgDWCCAQIBamUNZVgCAWJvDW9ZAgFajwENjwFkAgFRhQENhQFxAgFJdg12egIBQYABDYABhQECATmKAQ2KAXoCATF7DXuIAQIBKaUBDaUBZAIBIKABDaABcgIBGJYBDZYBgAECARCbAQ2bAX0CAQg=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbBw7A7UBDgIBAT8FQxEDAZEBRAVPGgMBigFQBa4BEAIBBq8BBbMBEQIBAkEJQZUBAwGSAUwLTGMDAY4BRwtHagMBiwFYB3cjAgFZeAeXASQCASiYAQetAScCAQexAQmxAZQBAgEDbw1vZAMBggFbDVtbAgF6ag1qeQIBcmANYIIBAgFqZQ1lWAIBYnQNdFkCAVqUAQ2UAWQCAVGKAQ2KAXECAUl7DXt6AgFBhQENhQGFAQIBOY8BDY8BegIBMYABDYABiAECASmqAQ2qAWQCASClAQ2lAXICARibAQ2bAYABAgEQoAENoAF9AgEI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

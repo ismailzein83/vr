@@ -12,6 +12,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         IList<int> PeakHours = new List<int>() { 11,12,13,14 };
         int LowDurationMaxValue = 20;
 
+        public AggregateManager(Strategy strategy)
+        {
+
+        }
+
 
         public List<AggregateDefinition> GetAggregateDefinitions(List<CallClass> CallClasses)
         {

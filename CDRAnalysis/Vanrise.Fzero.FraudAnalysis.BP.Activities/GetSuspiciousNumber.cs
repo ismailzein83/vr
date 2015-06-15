@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
+using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -78,14 +79,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 {
                                     SuspiciousNumber sNumber = new SuspiciousNumber();
                                     foreach (FraudManager manager in managers)
-                                        if (manager.IsNumberSuspicious(number, out sNumber, manager.StrategyId))
-                                        {
-                                            sNumbers.Add(sNumber);
-                                            //numbers.Add(number);
-                                        }
+                                        if(manager.StrategyId==number.StrategyId)
+                                            if (manager.IsNumberSuspicious(number, out sNumber, number.StrategyId))
+                                            {
+                                                sNumbers.Add(sNumber);
+                                                numbers.Add(number);
+                                            }
 
 
-                                    numbers.Add(number);
+                                    //numbers.Add(number);
                                 }
                                 if (sNumbers.Count > 0)
                                 {

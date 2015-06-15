@@ -26,6 +26,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public int PeriodId { get; set; }
 
+        [RequiredArgument]
+        public List<Strategy> Strategies { get; set; }
+
     }
 
     #endregion
@@ -49,6 +52,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<int> PeriodId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<List<Strategy>> Strategies { get; set; }
 
         #endregion
 
@@ -69,47 +74,50 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             int batchSize = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NumberProfileBatchSize"]);
             handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Started ");
 
-            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            List<AggregateDefinition> aggregateDefinitions = new AggregateManager().GetAggregateDefinitions(strategyManager.GetAllCallClasses());
-
-            NumberProfile currentNumberProfile = null;
-
-            dataManager.LoadCDR(inputArgument.FromDate,inputArgument.ToDate, batchSize, (cdr) =>
+            foreach (var strategy in inputArgument.Strategies)
             {
-                if (currentNumberProfile == null || currentNumberProfile.SubscriberNumber != cdr.MSISDN)
+                List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+                List<AggregateDefinition> aggregateDefinitions = new AggregateManager(strategy).GetAggregateDefinitions(strategyManager.GetAllCallClasses());
+
+                NumberProfile currentNumberProfile = null;
+
+                dataManager.LoadCDR(inputArgument.FromDate, inputArgument.ToDate, batchSize, (cdr) =>
                 {
-                    if(currentNumberProfile != null)
+                    if (currentNumberProfile == null || currentNumberProfile.SubscriberNumber != cdr.MSISDN)
                     {
-                        FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, batchSize, aggregateDefinitions);
+                        if (currentNumberProfile != null)
+                        {
+                            FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, batchSize, aggregateDefinitions);
+                        }
+                        currentNumberProfile = new NumberProfile()
+                        {
+                            SubscriberNumber = cdr.MSISDN,
+                            FromDate = inputArgument.FromDate,
+                            ToDate = inputArgument.ToDate,
+                            PeriodId = inputArgument.PeriodId,
+                            IsOnNet = 1
+                        };
+                        foreach (var aggregateDef in aggregateDefinitions)
+                        {
+                            aggregateDef.Aggregation.Reset();
+                            aggregateDef.Aggregation.EvaluateCDR(cdr);
+                        }
                     }
-                    currentNumberProfile = new NumberProfile()
+                    else
                     {
-                        SubscriberNumber = cdr.MSISDN,
-                        FromDate = inputArgument.FromDate,
-                        ToDate = inputArgument.ToDate,
-                        PeriodId = inputArgument.PeriodId,
-                        IsOnNet = 1
-                    };
-                    foreach (var aggregateDef in aggregateDefinitions)
-                    {
-                        aggregateDef.Aggregation.Reset();
-                        aggregateDef.Aggregation.EvaluateCDR(cdr);
+                        foreach (var aggregateDef in aggregateDefinitions)
+                        {
+                            aggregateDef.Aggregation.EvaluateCDR(cdr);
+                        }
                     }
-                }
-                else
-                {
-                    foreach (var aggregateDef in aggregateDefinitions)
-                    {
-                        aggregateDef.Aggregation.EvaluateCDR(cdr);
-                    }
-                }
 
-            });
+                });
 
-            if (currentNumberProfile != null)
-                FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, 0, aggregateDefinitions);
+                if (currentNumberProfile != null)
+                    FinishNumberProfileProcessing(currentNumberProfile, ref numberProfileBatch, inputArgument, handle, 0, aggregateDefinitions);
 
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
+                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "LoadNumberProfiles.DoWork.Ended");
+            }
 
         }
 
@@ -139,7 +147,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
                 ToDate = this.ToDate.Get(context),
-                PeriodId = this.PeriodId.Get(context)
+                PeriodId = this.PeriodId.Get(context),
+                Strategies = this.Strategies.Get(context)
             };
         }
 
