@@ -163,7 +163,7 @@ namespace TOne.Analytics.Business
                 customerSummariesFormatted.Add(entitie);
             }
 
-            return customerSummariesFormatted;
+            return customerSummariesFormatted.OrderBy(cs => cs.Customer).ToList();
         }
 
         public List<ProfitSummary> GetCustomerProfitSummary(List<CustomerSummaryFormatted> summarieslist)
