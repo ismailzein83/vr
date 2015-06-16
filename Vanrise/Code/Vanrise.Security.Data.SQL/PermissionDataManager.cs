@@ -72,7 +72,7 @@ namespace Vanrise.Security.Data.SQL
                 EntityType = ((int)reader["EntityType"]) == 0 ? EntityType.MODULE : EntityType.ENTITY,
                 EntityId = reader["EntityId"] as string,
                 PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string),
-                //HolderName = reader["HolderName"] as string
+                HolderName = reader["HolderName"] as string
             };
             return permission;
         }

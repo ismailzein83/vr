@@ -23,8 +23,8 @@
                     <vr-row>
                         <vr-columns colnum="12">
                             <vr-datagrid datasource="permissions" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                                <vr-datagridcolumn headertext="'Holder Name'" field="'HolderId'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Holder Type'">{{dataItem.HolderType == "0"? 'User': 'Role' }}</vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Holder Name'" field="'HolderName'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Holder Type'" widthfactor="5">{{dataItem.HolderType == "0"? 'User': 'Role' }}</vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Permissions'" field="'PermissionFlagsDescription'"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
