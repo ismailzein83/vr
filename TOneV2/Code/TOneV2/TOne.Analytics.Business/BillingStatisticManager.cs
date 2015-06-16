@@ -146,7 +146,7 @@ namespace TOne.Analytics.Business
                     CostNet = cs.CostNet,
                     CostNetFormatted = FormatNumber(cs.CostNet),
                     ProfitFormatted = FormatNumber(cs.SaleNet-cs.CostNet),
-                    ProfitPercentageFormatted = String.Format("{0:#,##0.00%}", (1 - cs.CostNet / cs.SaleNet))
+                    ProfitPercentageFormatted = (cs.SaleNet > 0) ? String.Format("{0:#,##0.00%}", ((cs.SaleNet - cs.CostNet) / cs.SaleNet)) : String.Format("{0:#,##0.00%}", 0),
 
                 };
                 if(cs.Carrier!=null){
