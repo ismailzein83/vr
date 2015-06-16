@@ -9,7 +9,16 @@ namespace TOne.CDR.Entities
 {
     public class TrafficStatisticDailyBatch : PersistentQueueItem
     {
-        public Dictionary<string, TrafficStatisticDaily> TrafficStatistics { get; set; }
+        static TrafficStatisticDailyBatch()
+        {
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TrafficStatisticDailyBatch), "TrafficStatistics", "BatchStart", "BatchEnd");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(TrafficStatisticDaily), "SwitchId", "CustomerId", "OurZoneId", "OriginatingZoneId", "SupplierId", "SupplierZoneId",
+                "CallDate", "ID", "Attempts", "DeliveredAttempts", "SuccessfulAttempts", "DurationsInSeconds", "PDD",
+                "PDDInSeconds", "MaxDurationInSeconds", "Utilization", "UtilizationInSeconds", "NumberOfCalls", "DeliveredNumberOfCalls", "PGAD",
+                "CeiledDuration", "ReleaseSourceAParty");
+        }
+
+        public TrafficStatisticsDailyByKey TrafficStatistics { get; set; }
 
         public DateTime BatchStart { get; set; }
 
