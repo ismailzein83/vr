@@ -5,27 +5,20 @@ TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'Tra
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
     var measures = [];
     var filter = {};
-    var supplierZoneIdIsAdded = false;
-   // var notSelectedGroupKeys = [];
     defineScopeObjects();
-    defineScopeMethods();
     load();
-    
+    defineScopeMethods();
     var selectedGroupKeys = [];
-    function defineScopeObjects() {
-        $scope.selectedGroupKeys = [];
-      //  $scope.notSelectedGroupKeys = [];
+    function defineScopeObjects() { 
         $scope.parentGroupKeys = [];
         $scope.measures = measures;
         $scope.currentSearchCriteria = {
             groupKeys: []
         };
-        
         $scope.groupKeys = [];
         $scope.menuActions = [{
             name: "CDRs",
             clicked: function (dataItem) {
-
             var modalSettings = {
                 useModalTemplate: true,
                 width: "80%",
@@ -40,17 +33,13 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 switchIds:[]
             };
             updateParametersFromGroupKeys(parameters, $scope, dataItem);
-
             VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
         }
         }];
+
+     
     }
-    function eliminateGroupKeysNotInParent() {
-        getParentGroupKeys($scope.gridParentScope);
-        applyGroupKeysRules();
-        getNotInParentGroupKeys();
-    }
-    function getParentGroupKeys(scope) {
+    function LoadParentGroupKeys(scope) {
         if (scope == $scope.viewScope) {
             for (var i = 0; i < scope.selectedGroupKeys.length; i++) {
                 $scope.parentGroupKeys.push(scope.selectedGroupKeys[i]);
@@ -59,18 +48,11 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
         else {
             $scope.parentGroupKeys.push(scope.selectedGroupKey);
-            getParentGroupKeys(scope.gridParentScope);
+            LoadParentGroupKeys(scope.gridParentScope);
         }
 
     }
-
-    function applyGroupKeysRules() {
-                supplierZoneIdRule();
-                codeGroupRule();
-        }
-    
-
-    function supplierZoneIdRule() {
+    function applySupplierZoneIdRule() {
         for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
             if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.SupplierId.value)
                 return;
@@ -85,7 +67,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             }
         }
     }
-    function codeGroupRule(){
+    function applyCodeGroupRule() {
         for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
             if ($scope.parentGroupKeys[i].value == TrafficStatisticGroupKeysEnum.OurZone.value)
                 removeCodeGroupFromGroupKeys();
@@ -99,7 +81,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             }
         }
     }
-    function getNotInParentGroupKeys() {
+    function eliminateGroupKeysNotInParent() {
         
         for (var i = 0; i < $scope.parentGroupKeys.length; i++) {
             for(var j=0;j< $scope.groupKeys.length;j++)
@@ -107,53 +89,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     $scope.groupKeys.splice(j, 1);
         }
     }
-    //function getNotSelectedGroupKeys(groupKeys, length) {
-    //    if (length <= 0)
-    //        return; 
-    //    if (checkSelectedGroupKeys($scope.selectedGroupKeys, groupKeys, length, $scope.selectedGroupKeys.length - 1) == 0 && !contains(groupKeys[length - 1], $scope.notSelectedGroupKeys) && $scope.groupKeys[length-1].value!=7)
-    //            $scope.notSelectedGroupKeys.push($scope.groupKeys[length-1]);
-    //    getNotSelectedGroupKeys(groupKeys, length - 1);
-    //}
-    //function checkSelectedGroupKeys(selectedGroupKeys, groupKeys,lengthGroupKey, length) {
-    //    if (length <= 0)
-    //        return 0;
-        
-    //   // console.log(supplierZoneIdIsAdded);
-    //    if (!supplierZoneIdIsAdded && selectedGroupKeys[length - 1].value == TrafficStatisticGroupKeysEnum.SupplierId.value) {
-    //        supplierZoneIdIsAdded = true;
-    //    $scope.notSelectedGroupKeys.push(groupKeys[5]);
-    //}
-    //    if (groupKeys[lengthGroupKey - 1].value == selectedGroupKeys[length - 1].value) {
-    //        return 1 + checkSelectedGroupKeys(selectedGroupKeys, groupKeys, lengthGroupKey, length - 1);
-    //    }
-    //    else
-    //        return checkSelectedGroupKeys(selectedGroupKeys, groupKeys, lengthGroupKey, length - 1);
- 
-    //}
-
-
-    //function getSelectedGroupKeys(scope) { 
-    //    if (scope == $scope.viewScope){
-    //        for (var i = 0; i < scope.selectedGroupKeys.length; i++)
-    //        {
-    //            if (scope.selectedGroupKeys[i].value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
-    //                supplierZoneIdIsAdded = true;
-    //            if (scope.selectedGroupKeys[i].value == TrafficStatisticGroupKeysEnum.OurZone.value)
-    //                $scope.selectedGroupKeys.push($scope.groupKeys[$scope.groupKeys.length - 1]);
-    //            $scope.selectedGroupKeys.push(scope.selectedGroupKeys[i]);
-    //        }
-    //        return;
-    //    }
-    //    else {
-    //        if (scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
-    //            supplierZoneIdIsAdded = true;
-    //        if (scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value)
-    //            $scope.selectedGroupKeys.push($scope.groupKeys[$scope.groupKeys.length - 1]);
-    //        $scope.selectedGroupKeys.push(scope.selectedGroupKey);
-    //        getSelectedGroupKeys(scope.gridParentScope);
-    //    }
-
-    //}
     function updateParametersFromGroupKeys(parameters, scope, dataItem) {
         var groupKeys = [];
         if (scope == undefined)
@@ -185,9 +120,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
 
         updateParametersFromGroupKeys(parameters, scope.gridParentScope, scope.dataItem);
-    }
-
-    
+    }   
     function defineScopeMethods() {
 
         $scope.onEntityClicked = function (dataItem) {
@@ -203,40 +136,35 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             if ($scope.selectedGroupKeyIndex != undefined) {
                 $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
                 if (!$scope.selectedGroupKey.isDataLoaded) {
-                    $scope.parentGroupKeys = [];
-                    //getSelectedGroupKeys($scope.gridParentScope);
-                    //getNotSelectedGroupKeys($scope.groupKeys, $scope.groupKeys.length);
-                   // eliminateGroupKeysNotInParent();
+                   // $scope.parentGroupKeys = [];
                     getData();
                 }
                     
             }
         };
+
+        $scope.checkExpandablerow = function () {
+            if ($scope.groupKeys.length > 1)
+                return true;
+            else if ($scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierId.value)
+                return true;
+            else
+                return false;
+        };
     }
-
-  
-
-
     function load() {
         loadMeasures();
         loadGroupKeys();
-        $scope.parentGroupKeys = [];
-        //getSelectedGroupKeys($scope.gridParentScope);
-        //getNotSelectedGroupKeys($scope.groupKeys, $scope.groupKeys.length);
-        eliminateGroupKeysNotInParent();
-        // getNotSelectedGroupKeys();
-
+       // $scope.parentGroupKeys = [];
        $scope.selectedGroupKey = $scope.groupKeys[0];
         if ($scope.selectedGroupKey != undefined)
             getData(); 
     }
-
     function loadMeasures() {
         for (var prop in TrafficStatisticsMeasureEnum) {
             measures.push(TrafficStatisticsMeasureEnum[prop]);
         }
     }
-
     function loadGroupKeys() {
         for (var prop in TrafficStatisticGroupKeysEnum) {
           
@@ -251,17 +179,11 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         if ($scope.groupKeys.length > 0)
             $scope.selectedGroupKey = $scope.groupKeys[0];
 
+        LoadParentGroupKeys($scope.gridParentScope);
+        applySupplierZoneIdRule();
+        applyCodeGroupRule();
+        eliminateGroupKeysNotInParent();
     }
-    //function contains(obj, list) {
-    //    var i;
-    //    for (i = 0; i < list.length; i++) {
-    //        if (list[i] === obj) {
-    //            return true;
-    //        }
-    //    }
-
-    //    return false;
-    //}
     function addGroupKeyIfNotExistsInParent(groupKey) {
         var parentGroupKeys = $scope.viewScope.currentSearchCriteria.groupKeys;
         if ($.grep(parentGroupKeys, function (parentGrpKey) {
@@ -269,7 +191,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }).length == 0)
             $scope.groupKeys.push(groupKey);
     }
-
     function getData() {
         //if ($scope.notSelectedGroupKeys.length == 0)
         //    return;
@@ -308,7 +229,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 $scope.isGettingData = false;
             });
     }
-
     function buildFilter(scope) {
        
         if (scope == $scope.viewScope)
@@ -355,8 +275,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
        
         
     }
-
-
 };
 
 appControllers.controller('TrafficStatisticsGridController', TrafficStatisticsGridController);
