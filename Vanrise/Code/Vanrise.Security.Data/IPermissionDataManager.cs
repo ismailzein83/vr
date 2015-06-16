@@ -11,10 +11,14 @@ namespace Vanrise.Security.Data
     {
         List<Permission> GetPermissions();
 
-        List<Permission> GetPermissions(HolderType holderType, string holderId);
+        List<Permission> GetPermissionsByHolder(HolderType holderType, string holderId);
+
+        List<BEPermission> GetPermissionsByEntity(EntityType entityType, string entityId);
 
         bool UpdatePermission(Permission permission);
 
         bool DeletePermission(Permission permission);
+
+        bool DeletePermission(int holderType, string holderId, int entityType, string entityId);
     }
 }

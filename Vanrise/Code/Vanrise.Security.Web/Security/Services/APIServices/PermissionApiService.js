@@ -1,21 +1,26 @@
 ﻿app.service('PermissionAPIService', function (BaseAPIService) {
 
     return ({
-        GetEntityNodes: GetEntityNodes,
-        GetPermissions: GetPermissions,
+        GetPermissionsByHolder: GetPermissionsByHolder,
+        GetPermissionsByEntity: GetPermissionsByEntity,
         UpdatePermissions: UpdatePermissions,
+        DeletePermission: DeletePermission,
         GetEffectivePermissions: GetEffectivePermissions
     });
 
-    function GetEntityNodes() {
-        return BaseAPIService.get("/api/Permission/GetEntityNodes");
-    }
-
-    function GetPermissions(holderType, holderId) {
-        return BaseAPIService.get("/api/Permission/GetPermissions", 
+    function GetPermissionsByHolder(holderType, holderId) {
+        return BaseAPIService.get("/api/Permission/GetPermissionsByHolder",
             {
                 holderType : holderType,
                 holderId : holderId
+            });
+    }
+
+    function GetPermissionsByEntity(entityType, entityId) {
+        return BaseAPIService.get("/api/Permission/GetPermissionsByEntity",
+            {
+                entityType: entityType,
+                entityId: entityId
             });
     }
 
@@ -26,8 +31,18 @@
             });
     }
 
-    function UpdatePermissions(permissionObject) {
+    function DeletePermission(holderType, holderId, entityType, entityId) {
+        return BaseAPIService.get("/api/Permission/DeletePermission",
+            {
+                holderType : holderType,
+                holderId : holderId,
+                entityType: entityType,
+                entityId: entityId
+            });
+    }
+
+    function UpdatePermissions(permissionsArray) {
         return BaseAPIService.post("/api/Permission/UpdatePermissions",
-             permissionObject);
+             permissionsArray);
     }
 });

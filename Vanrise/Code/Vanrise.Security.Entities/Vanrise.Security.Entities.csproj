@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationToken.cs" />
+    <Compile Include="BEPermission.cs" />
     <Compile Include="BusinessEntity.cs" />
     <Compile Include="BusinessEntityNode.cs" />
     <Compile Include="BusinessEntityModule.cs" />

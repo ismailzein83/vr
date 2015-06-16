@@ -24,6 +24,13 @@ namespace Vanrise.Security.Web.Controllers
             return manager.GetRole(roleId);
         }
 
+        [HttpGet]
+        public List<Role> GetRoles()
+        {
+            RoleManager manager = new RoleManager();
+            return manager.GetRoles();
+        }
+
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<Role> AddRole(RoleEditorInput roleObject)
         {

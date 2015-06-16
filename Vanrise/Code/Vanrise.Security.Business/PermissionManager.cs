@@ -11,40 +11,42 @@ namespace Vanrise.Security.Business
 {
     public class PermissionManager
     {
-        public List<BusinessEntityNode> GetEntityNodes()
-        {
-            //TODO: pass the holder id to load the saved permissions
-            IBusinessEntityModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
-            List<BusinessEntityModule> modules = moduleDataManager.GetModules();
-
-            IBusinessEntityDataManager entityDataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
-            List<BusinessEntity> entities = entityDataManager.GetEntities();
-
-            List<BusinessEntityNode> retVal = new List<BusinessEntityNode>();
-
-            foreach (BusinessEntityModule item in modules)
-            {
-                if (item.ParentId == 0)
-                {
-                    retVal.Add(GetModuleNode(item, modules, entities, null));
-                }
-            }
-
-            return retVal;
-        }
-
         public List<Permission> GetPermissions()
         {
             IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
             return dataManager.GetPermissions();
         }
 
-        public List<Permission> GetPermissions(int holderType, string holderId)
+        public List<Permission> GetPermissionsByHolder(int holderType, string holderId)
         {
             HolderType paramHolderType = (holderType == 0) ? HolderType.USER : HolderType.ROLE;
 
             IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
-            return dataManager.GetPermissions(paramHolderType, holderId);
+            return dataManager.GetPermissionsByHolder(paramHolderType, holderId);
+        }
+
+        public List<BEPermission> GetPermissionsByEntity(int entityType, string entityId)
+        {
+            EntityType paramEntityType = (entityType == 0) ? EntityType.MODULE : EntityType.ENTITY;
+
+            IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
+            return dataManager.GetPermissionsByEntity(paramEntityType, entityId);
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(int holderType, string holderId, int entityType, string entityId)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
+
+            IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
+            bool result = dataManager.DeletePermission(holderType, holderId, entityType, entityId);
+            if (result)
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            else
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+
+            updateOperationOutput.UpdatedObject = null;
+
+            return updateOperationOutput;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(IEnumerable<Permission> permissions)
@@ -85,7 +87,8 @@ namespace Vanrise.Security.Business
             List<Dictionary<string, Dictionary<string, Flag>>> listOfAllPermissions = new List<Dictionary<string, Dictionary<string, Flag>>>();
 
             //This should be read from cache
-            List<BusinessEntityNode> businessEntityHierarchy = permissionManager.GetEntityNodes();
+            BusinessEntityManager businessEntityManager = new BusinessEntityManager();
+            List<BusinessEntityNode> businessEntityHierarchy = businessEntityManager.GetEntityNodes();
 
             List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == secToken.UserId.ToString());
             listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(userPermissions, businessEntityHierarchy));
@@ -224,53 +227,6 @@ namespace Vanrise.Security.Business
             }
 
             return convertedPermissions;
-        }
-
-        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, List<BusinessEntityModule> modules, List<BusinessEntity> entities, BusinessEntityNode parent)
-        {
-            BusinessEntityNode node = new BusinessEntityNode()
-            {
-                EntityId = module.ModuleId,
-                Name = module.Name,
-                EntType = EntityType.MODULE,
-                PermissionOptions = module.PermissionOptions,
-                Parent = parent
-            };
-
-            List<BusinessEntityModule> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
-
-            List<BusinessEntity> childEntities = entities.FindAll(x => x.ModuleId == module.ModuleId);
-
-            if (childEntities.Count > 0)
-            {
-                node.Children = new List<BusinessEntityNode>();
-                foreach (BusinessEntity entityItem in childEntities)
-                {
-                    BusinessEntityNode entityNode = new BusinessEntityNode()
-                    {
-                        EntityId = entityItem.EntityId,
-                        Name = entityItem.Name,
-                        EntType = EntityType.ENTITY,
-                        PermissionOptions = entityItem.PermissionOptions,
-                        Parent = node
-                    };
-
-                    node.Children.Add(entityNode);
-                }
-            }
-
-            if (subModules.Count > 0)
-            {
-                if (node.Children == null)
-                    node.Children = new List<BusinessEntityNode>();
-
-                foreach (BusinessEntityModule item in subModules)
-                {
-                    node.Children.Add(GetModuleNode(item, modules, entities, node));
-                }
-            }
-
-            return node;
         }
     }
 }

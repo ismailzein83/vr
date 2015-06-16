@@ -1,0 +1,40 @@
+﻿<vr-panel ng-controller="Security_BusinessEntityManagementController">
+
+    <vr-form name="formBusinessEntity">
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" formname="formBusinessEntity" permissions="TOne/Administration Module/Users: View" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="4">
+                <div data-tree-id="beTree"
+                     data-angular-treeview="true"
+                     data-tree-model="beList"
+                     data-node-id="EntityId"
+                     data-node-label="Name"
+                     data-node-children="Children">
+                </div>
+            </vr-columns>
+            <vr-columns colnum="6">
+                <div>
+                    <vr-row>
+                        <vr-columns colnum="12">
+                            <vr-datagrid datasource="permissions" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                                <vr-datagridcolumn headertext="'Holder Name'" field="'HolderId'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Holder Type'">{{dataItem.HolderType == "0"? 'User': 'Role' }}</vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Permissions'" field="'PermissionFlagsDescription'"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </div>
+            </vr-columns>
+
+</vr-form>
+
+
+
+
+</vr-panel>

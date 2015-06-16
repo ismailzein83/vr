@@ -1,0 +1,41 @@
+﻿<div vr-modalcontent ng-controller="Security_BusinessEntityEditorController">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="formBusinessEntityEditor">
+            <vr-row>
+                <vr-columns colnum="6" ng-show="{{!isEditMode}}">
+                    <vr-label>Select Users</vr-label>
+                    <vr-select ismultipleselection datasource="optionsUsers.datasource" selectedvalues="optionsUsers.selectedvalues" datatextfield="Name" datavaluefield="UserId"
+                               entityname="Users">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="6" ng-show="{{!isEditMode}}">
+                    <vr-label>Select Roles</vr-label>
+                    <vr-select ismultipleselection datasource="optionsRoles.datasource" selectedvalues="optionsRoles.selectedvalues" datatextfield="Name" datavaluefield="RoleId"
+                               entityname="Roles">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <div>
+                        <ul ng-repeat="permission in entityPermissions">
+                            <li>
+                                {{permission.name}}
+                                <vr-choices onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
+                                    <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
+                                </vr-choices>
+                            </li>
+                        </ul>
+                    </div>
+                </vr-columns>
+
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPermissionEditor" data-onclick="SavePermissions"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

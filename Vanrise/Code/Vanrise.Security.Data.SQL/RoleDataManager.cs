@@ -22,6 +22,10 @@ namespace Vanrise.Security.Data.SQL
             return GetItemSP("sec.sp_Roles_GetRole", RoleMapper, roleId);
         }
 
+        public List<Entities.Role> GetRoles()
+        {
+            return GetItemsSP("sec.sp_Roles_GetRoles", RoleMapper);
+        }
 
         public List<int> GetUserRoles(int userId)
         {

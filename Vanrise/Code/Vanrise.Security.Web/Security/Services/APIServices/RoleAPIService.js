@@ -3,6 +3,7 @@
     return ({
         GetFilteredRoles: GetFilteredRoles,
         GetRole: GetRole,
+        GetRoles: GetRoles,
         AddRole: AddRole,
         UpdateRole: UpdateRole
     });
@@ -23,6 +24,10 @@
                 roleId: roleId
             }
            );
+    }
+
+    function GetRoles() {
+        return BaseAPIService.get("/api/Roles/GetRoles");
     }
 
     function AddRole(role) {

@@ -1,8 +1,7 @@
-﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'BusinessEntityAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function PermissionEditorController($scope, PermissionAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+function PermissionEditorController($scope, PermissionAPIService, BusinessEntityAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
-    var editMode;
     loadParameters();
     defineScope();
     load();
@@ -165,15 +164,13 @@ function PermissionEditorController($scope, PermissionAPIService, VRModalService
                     });
 
                     $scope.entityPermissions.push(entityPermission);
-                    //$scope.entityPermissions.entityType = $scope.beTree.currentNode.EntType;
-                    //$scope.entityPermissions.entityId = $scope.beTree.currentNode.EntityId;
                 });
             }
         }, false);
     }
 
     function loadTree() {
-        return PermissionAPIService.GetEntityNodes()
+        return BusinessEntityAPIService.GetEntityNodes()
            .then(function (response) {
                $scope.beList = response;
            })
@@ -183,24 +180,13 @@ function PermissionEditorController($scope, PermissionAPIService, VRModalService
     }
 
     function loadPermissions() {
-        return PermissionAPIService.GetPermissions($scope.holderType, $scope.holderId)
+        return PermissionAPIService.GetPermissionsByHolder($scope.holderType, $scope.holderId)
            .then(function (response) {
                $scope.permissions = response;
            })
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error);
             });
-    }
-
-    function buildUserObjFromScope() {
-        var userObject = {
-            userId: ($scope.userId != null) ? $scope.userId : 0,
-            name: $scope.name,
-            email: $scope.email,
-            description: $scope.description,
-            Status: $scope.isActive == false ? "0" : "1"
-        };
-        return userObject;
     }
 }
 appControllers.controller('Security_PermissionEditorController', PermissionEditorController);

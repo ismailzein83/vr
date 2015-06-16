@@ -23,6 +23,12 @@ namespace Vanrise.Security.Business
             return dataManager.GetRole(roleId);
         }
 
+        public List<Role> GetRoles()
+        {
+            IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();
+            return dataManager.GetRoles();
+        }
+
         public List<int> GetUserRoles(int userId)
         {
             IRoleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRoleDataManager>();

@@ -13,6 +13,8 @@ namespace Vanrise.Security.Data
 
         Role GetRole(int roleId);
 
+        List<Role> GetRoles();
+
         List<int> GetUserRoles(int userId);
         
         bool AddRole(Role role, out int insertedId);

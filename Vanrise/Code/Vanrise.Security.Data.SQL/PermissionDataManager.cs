@@ -16,9 +16,14 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_Permissions_GetPermissions", PermissionMapper);
         }
 
-        public List<Entities.Permission> GetPermissions(Entities.HolderType entType, string holderId)
+        public List<Entities.Permission> GetPermissionsByHolder(Entities.HolderType holderType, string holderId)
         {
-            return GetItemsSP("sec.sp_Permissions_GetPermissionsbyHolderTypeandId", PermissionMapper, entType, holderId);
+            return GetItemsSP("sec.sp_Permissions_GetPermissionsbyHolder", PermissionMapper, holderType, holderId);
+        }
+
+        public List<Entities.BEPermission> GetPermissionsByEntity(Entities.EntityType entityType, string entityId)
+        {
+            return GetItemsSP("sec.sp_Permissions_GetPermissionsbyEntity", BEPermissionMapper, entityType, entityId);
         }
 
         public bool UpdatePermission(Permission permission)
@@ -39,6 +44,12 @@ namespace Vanrise.Security.Data.SQL
             return (recordsEffected > 0);
         }
 
+        public bool DeletePermission(int holderType, string holderId, int entityType, string entityId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("sec.sp_Permission_Delete", holderType, holderId, entityType, entityId);
+            return (recordsEffected > 0);
+        }
+
         Permission PermissionMapper(IDataReader reader)
         {
             Permission permission = new Permission
@@ -48,6 +59,20 @@ namespace Vanrise.Security.Data.SQL
                 EntityType = ((int)reader["EntityType"]) == 0 ? EntityType.MODULE : EntityType.ENTITY,
                 EntityId = reader["EntityId"] as string,
                 PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string)
+            };
+            return permission;
+        }
+
+        BEPermission BEPermissionMapper(IDataReader reader)
+        {
+            BEPermission permission = new BEPermission
+            {
+                HolderType = ((int)reader["HolderType"]) == 0 ? HolderType.USER : HolderType.ROLE,
+                HolderId = reader["HolderId"] as string,
+                EntityType = ((int)reader["EntityType"]) == 0 ? EntityType.MODULE : EntityType.ENTITY,
+                EntityId = reader["EntityId"] as string,
+                PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string),
+                //HolderName = reader["HolderName"] as string
             };
             return permission;
         }
