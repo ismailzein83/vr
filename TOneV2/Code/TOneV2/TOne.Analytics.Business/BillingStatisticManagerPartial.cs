@@ -11,10 +11,10 @@ namespace TOne.Analytics.Business
 {
     public partial class BillingStatisticManager
     {
-        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
-        {
-            return FormatCustomerSummaries(_datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId));
-        }
+        //public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
+        //{
+        //    return FormatCustomerSummaries(_datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId));
+        //}
         private List<CustomerSummaryFormatted> FormatCustomerSummaries(List<CustomerSummary> zoneSummariesDetailed)
         {
             List<CustomerSummaryFormatted> models = new List<CustomerSummaryFormatted>();
