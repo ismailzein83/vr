@@ -95,7 +95,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             return;
         if (scope == $scope.viewScope)
         {     
-            groupKeys = scope.parentGroupKeys;
+            groupKeys = scope.selectedGroupKeys;
         }
         else {
             groupKeys = [scope.selectedGroupKey];
