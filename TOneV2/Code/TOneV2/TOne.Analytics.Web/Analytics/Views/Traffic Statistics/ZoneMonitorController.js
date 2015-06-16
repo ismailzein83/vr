@@ -240,8 +240,8 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                         console.log(parameters.supplierIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.Switch.value:
-                        parameters.Switch = [dataItem.GroupKeyValues[i].Id];
-                        console.log(parameters.Switch);
+                        parameters.switchIds = [dataItem.GroupKeyValues[i].Id];
+                        console.log(parameters.switchIds);
                         break;
                     case TrafficStatisticGroupKeysEnum.PortIn.value:
                         parameters.PortIn = [dataItem.GroupKeyValues[i].Id];
