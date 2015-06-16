@@ -11,6 +11,14 @@ namespace TOne.CDR.Business
     {
         public void UpdateTrafficStatisticFromCDR(TrafficStatistic trafficStatistic, BillingCDRBase cdr)
         {
+            UpdateBaseTrafficStatisticFromCDR(trafficStatistic, cdr);
+            // Update Min/Max Date/ID of CDRs
+            if (cdr.Attempt > trafficStatistic.LastCDRAttempt) trafficStatistic.LastCDRAttempt = cdr.Attempt;
+            if (cdr.Attempt < trafficStatistic.FirstCDRAttempt) trafficStatistic.FirstCDRAttempt = cdr.Attempt;
+        }
+
+        public void UpdateBaseTrafficStatisticFromCDR(BaseTrafficStatistic trafficStatistic, BillingCDRBase cdr)
+        {
 
             TABS.Switch cdrSwitch = null;
             if (cdr.SwitchID != 0)
@@ -76,10 +84,9 @@ namespace TOne.CDR.Business
             trafficStatistic.CeiledDuration += (int)Math.Ceiling(cdr.DurationInSeconds);
 
             // Update Min/Max Date/ID of CDRs
-            if (cdr.Attempt > trafficStatistic.LastCDRAttempt) trafficStatistic.LastCDRAttempt = cdr.Attempt;
-            if (cdr.Attempt < trafficStatistic.FirstCDRAttempt) trafficStatistic.FirstCDRAttempt = cdr.Attempt;
             if (cdr.DurationInSeconds >= trafficStatistic.MaxDurationInSeconds) trafficStatistic.MaxDurationInSeconds = cdr.DurationInSeconds;
             if (cdr.ReleaseSource != null && cdr.ReleaseSource.ToUpper().Equals("A")) trafficStatistic.ReleaseSourceAParty += 1;
         }
+
     }
 }

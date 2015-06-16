@@ -35,7 +35,7 @@ namespace TOne.CDRProcess.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((dailyTrafficStatisticsBatch) =>
                     {
-                        dataManager.UpdateTrafficStatisticDailyBatch(dailyTrafficStatisticsBatch.BatchStart, dailyTrafficStatisticsBatch.BatchEnd, dailyTrafficStatisticsBatch.TrafficStatistics);
+                        dataManager.UpdateTrafficStatisticDailyBatch(dailyTrafficStatisticsBatch.BatchDate, dailyTrafficStatisticsBatch.TrafficStatistics);
                     });
                 }
                 while (!ShouldStop(handle) && hasItem);

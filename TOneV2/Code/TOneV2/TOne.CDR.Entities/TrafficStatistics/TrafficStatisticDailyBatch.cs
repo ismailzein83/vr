@@ -20,9 +20,7 @@ namespace TOne.CDR.Entities
 
         public TrafficStatisticsDailyByKey TrafficStatistics { get; set; }
 
-        public DateTime BatchStart { get; set; }
-
-        public DateTime BatchEnd { get; set; }
+        public DateTime BatchDate { get; set; }
 
         public override string GenerateDescription()
         {

@@ -11,6 +11,6 @@ namespace TOne.CDR.Data
     {
         void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsByKey trafficStatisticsByKey);
 
-        void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsDailyByKey trafficStatisticsByKey);
+        void UpdateTrafficStatisticDailyBatch(DateTime batchDate,TrafficStatisticsDailyByKey trafficStatisticsByKey);
     }
 }

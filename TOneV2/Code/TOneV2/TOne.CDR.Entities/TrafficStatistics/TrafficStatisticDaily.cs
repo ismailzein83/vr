@@ -31,5 +31,19 @@ namespace TOne.CDR.Entities
         {
             return String.Format("{0}^{1}^{2}^{3}^{4}", switchId, customerId, ourZoneId, originatingZoneId, supplierZoneId);
         }
+
+        public static TrafficStatisticDaily CreateFromKey(int switchId,string customerId, int ourZoneId, int originatingZoneId, string supplierId, int supplierZoneId)
+        {
+            return new TrafficStatisticDaily
+            {
+                SwitchId = switchId,
+                CustomerId = customerId,
+                OurZoneId = ourZoneId,
+                OriginatingZoneId = originatingZoneId,
+                SupplierId = supplierId,
+                SupplierZoneId = supplierZoneId
+            };
+        }
+
     }
 }

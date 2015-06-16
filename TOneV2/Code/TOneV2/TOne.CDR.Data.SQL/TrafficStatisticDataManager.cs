@@ -12,8 +12,11 @@ namespace TOne.CDR.Data.SQL
 {
     public class TrafficStatisticDataManager : BaseTOneDataManager, ITrafficStatisticDataManager
     {
-        const string TRAFFICSTATISTIC_TABLENAME = "TrafficStats";
 
+        #region TRAFFIC STAT
+
+        const string TRAFFICSTATISTIC_TABLENAME = "TrafficStats";
+        
         public void UpdateTrafficStatisticBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsByKey trafficStatisticsByKey)
         {
             Dictionary<string, int> existingItemsIdByGroupKeys = GetTrafficStatisticsIdsByGroupKeys(batchStart, batchEnd);
@@ -21,9 +24,9 @@ namespace TOne.CDR.Data.SQL
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
             DataTable dtStatisticsToUpdate = GetTrafficStatsTable();
-            
+
             dtStatisticsToUpdate.BeginLoadData();
-           
+
             foreach (var item in trafficStatisticsByKey)
             {
                 TrafficStatistic trafficStatistic = item.Value;
@@ -41,10 +44,10 @@ namespace TOne.CDR.Data.SQL
                 }
             }
             stream.Close();
-            
+
             dtStatisticsToUpdate.EndLoadData();
 
-            if(dtStatisticsToUpdate.Rows.Count > 0)
+            if (dtStatisticsToUpdate.Rows.Count > 0)
                 ExecuteNonQuerySPCmd("[Analytics].[sp_TrafficStats_Update]",
                     (cmd) =>
                     {
@@ -54,63 +57,12 @@ namespace TOne.CDR.Data.SQL
                     });
 
             base.InsertBulkToTable(new Vanrise.Data.SQL.StreamBulkInsertInfo
-                {
-                    Stream = stream,
-                    TableName = TRAFFICSTATISTIC_TABLENAME,
-                    TabLock = false,
-                    FieldSeparator = '^'
-                });
-        }
-
-        private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
-        {
-            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}",
-                        0,
-                        trafficStatistic.SwitchId,
-                        trafficStatistic.Port_IN,
-                        trafficStatistic.Port_OUT,
-                        trafficStatistic.CustomerId,
-                        trafficStatistic.OurZoneId,
-                        trafficStatistic.OriginatingZoneId,
-                        trafficStatistic.SupplierId,
-                        trafficStatistic.SupplierZoneId,
-                        trafficStatistic.FirstCDRAttempt,
-                        trafficStatistic.LastCDRAttempt,
-                        trafficStatistic.Attempts,
-                        trafficStatistic.DeliveredAttempts,
-                        trafficStatistic.SuccessfulAttempts,
-                        trafficStatistic.DurationsInSeconds,
-                        trafficStatistic.PDDInSeconds,
-                        trafficStatistic.MaxDurationInSeconds,
-                        trafficStatistic.UtilizationInSeconds,
-                        trafficStatistic.NumberOfCalls,
-                        trafficStatistic.DeliveredNumberOfCalls,
-                        Math.Round(trafficStatistic.PGAD, 5),
-                        trafficStatistic.CeiledDuration,
-                        trafficStatistic.ReleaseSourceAParty
-                        ));
-        }
-
-        public Object PrepareTrafficStatsForDBApply(List<TOne.CDR.Entities.TrafficStatistic> trafficStatistics)
-        {
-            string filePath = GetFilePathForBulkInsert();
-
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
-                foreach (TOne.CDR.Entities.TrafficStatistic trafficStatistic in trafficStatistics)
-                {
-                    PrepareTrafficStatsBaseForDBApply(trafficStatistic, wr);
-                }
-                wr.Close();
-            }
-
-            return new BulkInsertInfo
-            {
-                TableName = "[dbo].[TrafficStats]",
-                DataFilePath = filePath,
+                Stream = stream,
+                TableName = TRAFFICSTATISTIC_TABLENAME,
                 TabLock = false,
                 FieldSeparator = '^'
-            };
+            });
         }
 
         private void AddTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatistic trafficStatistic)
@@ -202,10 +154,193 @@ namespace TOne.CDR.Data.SQL
             return trafficStatistics;
         }
 
-        public void UpdateTrafficStatisticDailyBatch(DateTime batchStart, DateTime batchEnd, TrafficStatisticsDailyByKey trafficStatisticsByKey)
+        #endregion
+
+
+        #region DAILY TRAFFIC STAT
+
+        const string DAILYTRAFFICSTATISTIC_TABLENAME = "TrafficStatsDaily";
+
+        public void UpdateTrafficStatisticDailyBatch(DateTime batchDate, TrafficStatisticsDailyByKey trafficStatisticsByKey)
         {
-            //Same as UpdateTrafficStatisticBatch for the TrafficStatsDaily
-            throw new NotImplementedException();
+            Dictionary<string, int> existingItemsIdByGroupKeys = GetDailyTrafficStatisticsIdsByGroupKeys(batchDate);
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            DataTable dtStatisticsToUpdate = GetDailyTrafficStatsTable();
+
+            dtStatisticsToUpdate.BeginLoadData();
+
+            foreach (var item in trafficStatisticsByKey)
+            {
+                TrafficStatisticDaily trafficStatistic = item.Value;
+                int existingId;
+                if (existingItemsIdByGroupKeys != null && existingItemsIdByGroupKeys.TryGetValue(item.Key, out existingId))
+                {
+                    trafficStatistic.ID = existingId;
+                    DataRow dr = dtStatisticsToUpdate.NewRow();
+                    FillDailyStatisticRow(dr, trafficStatistic);
+                    dtStatisticsToUpdate.Rows.Add(dr);
+                }
+                else
+                {
+                    AddDailyTrafficStatisticToStream(stream, trafficStatistic);
+                }
+            }
+            stream.Close();
+
+            dtStatisticsToUpdate.EndLoadData();
+
+            if (dtStatisticsToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[Analytics].[sp_TrafficStatsDaily_Update]",
+                    (cmd) =>
+                    {
+                        var dtPrm = new System.Data.SqlClient.SqlParameter("@TrafficStats", SqlDbType.Structured);
+                        dtPrm.Value = dtStatisticsToUpdate;
+                        cmd.Parameters.Add(dtPrm);
+                    });
+
+            base.InsertBulkToTable(new Vanrise.Data.SQL.StreamBulkInsertInfo
+            {
+                Stream = stream,
+                TableName = DAILYTRAFFICSTATISTIC_TABLENAME,
+                TabLock = false,
+                FieldSeparator = '^'
+            });
         }
+
+        private void AddDailyTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatisticDaily trafficStatistic)
+        {
+            stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+                trafficStatistic.SwitchId,
+                trafficStatistic.CallDate,
+                trafficStatistic.CustomerId,
+                trafficStatistic.OurZoneId,
+                trafficStatistic.OriginatingZoneId,
+                trafficStatistic.SupplierId,
+                trafficStatistic.SupplierZoneId,
+                trafficStatistic.Attempts,
+                trafficStatistic.DeliveredAttempts,
+                trafficStatistic.SuccessfulAttempts,
+                trafficStatistic.DurationsInSeconds,
+                trafficStatistic.PDDInSeconds,
+                trafficStatistic.UtilizationInSeconds,
+                trafficStatistic.NumberOfCalls,
+                trafficStatistic.DeliveredNumberOfCalls,
+                trafficStatistic.PGAD,
+                trafficStatistic.CeiledDuration,
+                trafficStatistic.MaxDurationInSeconds,
+                trafficStatistic.ReleaseSourceAParty);
+        }
+
+        void FillDailyStatisticRow(DataRow dr, TrafficStatisticDaily trafficStatistic)
+        {
+            dr["ID"] = trafficStatistic.ID;
+            dr["Attempts"] = trafficStatistic.Attempts;
+            dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
+            dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
+            dr["DurationsInSeconds"] = trafficStatistic.DurationsInSeconds;
+            dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds;
+            dr["MaxDurationInSeconds"] = trafficStatistic.MaxDurationInSeconds;
+            dr["UtilizationInSeconds"] = trafficStatistic.UtilizationInSeconds;
+            dr["NumberOfCalls"] = trafficStatistic.NumberOfCalls;
+            dr["DeliveredNumberOfCalls"] = trafficStatistic.DeliveredNumberOfCalls;
+            dr["PGAD"] = trafficStatistic.PGAD;
+            dr["CeiledDuration"] = trafficStatistic.CeiledDuration;
+            dr["ReleaseSourceAParty"] = trafficStatistic.ReleaseSourceAParty;
+        }
+
+        DataTable GetDailyTrafficStatsTable()
+        {
+            DataTable dt = new DataTable(DAILYTRAFFICSTATISTIC_TABLENAME);
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("Attempts", typeof(int));
+            dt.Columns.Add("DeliveredAttempts", typeof(int));
+            dt.Columns.Add("SuccessfulAttempts", typeof(int));
+            dt.Columns.Add("DurationsInSeconds", typeof(decimal));
+            dt.Columns.Add("PDDInSeconds", typeof(decimal));
+            dt.Columns.Add("UtilizationInSeconds", typeof(decimal));
+            dt.Columns.Add("NumberOfCalls", typeof(int));
+            dt.Columns.Add("DeliveredNumberOfCalls", typeof(int));
+            dt.Columns.Add("PGAD", typeof(decimal));
+            dt.Columns.Add("CeiledDuration", typeof(int));
+            dt.Columns.Add("MaxDurationInSeconds", typeof(decimal));
+            dt.Columns.Add("ReleaseSourceAParty", typeof(int));
+            return dt;
+        }
+
+        private Dictionary<string, int> GetDailyTrafficStatisticsIdsByGroupKeys(DateTime batchDate)
+        {
+            Dictionary<string, int> trafficStatistics = new Dictionary<string, int>();
+
+            ExecuteReaderSP("Analytics.sp_TrafficStatsDaily_GetIdsByGroupedKeys", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    trafficStatistics.Add(
+                    TrafficStatisticDaily.GetGroupKey(GetReaderValue<int>(reader, "SwitchId"),
+                        reader["CustomerID"] as string,
+                        GetReaderValue<int>(reader, "OurZoneID"),
+                        GetReaderValue<int>(reader, "OriginatingZoneID"),
+                        GetReaderValue<int>(reader, "SupplierZoneID")), (int)reader["ID"]);
+                }
+            }, batchDate);
+
+            return trafficStatistics;
+        }
+
+        #endregion
+
+        private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
+        {
+            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}",
+                        0,
+                        trafficStatistic.SwitchId,
+                        trafficStatistic.Port_IN,
+                        trafficStatistic.Port_OUT,
+                        trafficStatistic.CustomerId,
+                        trafficStatistic.OurZoneId,
+                        trafficStatistic.OriginatingZoneId,
+                        trafficStatistic.SupplierId,
+                        trafficStatistic.SupplierZoneId,
+                        trafficStatistic.FirstCDRAttempt,
+                        trafficStatistic.LastCDRAttempt,
+                        trafficStatistic.Attempts,
+                        trafficStatistic.DeliveredAttempts,
+                        trafficStatistic.SuccessfulAttempts,
+                        trafficStatistic.DurationsInSeconds,
+                        trafficStatistic.PDDInSeconds,
+                        trafficStatistic.MaxDurationInSeconds,
+                        trafficStatistic.UtilizationInSeconds,
+                        trafficStatistic.NumberOfCalls,
+                        trafficStatistic.DeliveredNumberOfCalls,
+                        Math.Round(trafficStatistic.PGAD, 5),
+                        trafficStatistic.CeiledDuration,
+                        trafficStatistic.ReleaseSourceAParty
+                        ));
+        }
+
+        public Object PrepareTrafficStatsForDBApply(List<TOne.CDR.Entities.TrafficStatistic> trafficStatistics)
+        {
+            string filePath = GetFilePathForBulkInsert();
+
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
+            {
+                foreach (TOne.CDR.Entities.TrafficStatistic trafficStatistic in trafficStatistics)
+                {
+                    PrepareTrafficStatsBaseForDBApply(trafficStatistic, wr);
+                }
+                wr.Close();
+            }
+
+            return new BulkInsertInfo
+            {
+                TableName = "[dbo].[TrafficStats]",
+                DataFilePath = filePath,
+                TabLock = false,
+                FieldSeparator = '^'
+            };
+        }
+
     }
 }
