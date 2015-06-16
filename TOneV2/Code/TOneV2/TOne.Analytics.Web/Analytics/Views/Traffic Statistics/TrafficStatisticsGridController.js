@@ -5,6 +5,10 @@ TrafficStatisticsGridController.$inject = ['$scope', 'AnalyticsAPIService', 'Tra
 function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum, VRModalService) {
     var measures = [];
     var filter = {};
+    var sortColumn;
+    var sortDescending = true;
+    var currentData;
+    var currentSortedColDef;
     defineScopeObjects();
     load();
     defineScopeMethods();
@@ -37,6 +41,14 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         }
         }];
 
+        $scope.mainGridPagerSettings = {
+            currentPage: 1,
+            totalDataCount: 0,
+            pageChanged: function () {
+                return getData();
+            }
+        };
+       
      
     }
     function LoadParentGroupKeys(scope) {
@@ -151,11 +163,17 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             else
                 return false;
         };
+
+        $scope.onMainGridSortChanged = function (colDef, sortDirection) {
+            sortColumn = colDef.tag;
+            sortDescending = (sortDirection == "DESC");
+            return getData();
+        }
     }
     function load() {
         loadMeasures();
         loadGroupKeys();
-       // $scope.parentGroupKeys = [];
+        resetSorting();
        $scope.selectedGroupKey = $scope.groupKeys[0];
         if ($scope.selectedGroupKey != undefined)
             getData(); 
@@ -194,6 +212,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     function getData() {
         //if ($scope.notSelectedGroupKeys.length == 0)
         //    return;
+        if (sortColumn == undefined)
+            return;
         var withSummary = false;
         var fromRow = 1;
         var toRow = 100;
@@ -208,8 +228,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             To: $scope.viewScope.toDate,
             FromRow: fromRow,
             ToRow: toRow,
-            OrderBy: 2,
-            IsDescending: true
+            OrderBy: sortColumn.value,
+            IsDescending: sortDescending
         };
        
         var isSucceeded;
@@ -220,9 +240,13 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         });
         return AnalyticsAPIService.GetTrafficStatisticSummary(getTrafficStatisticSummaryInput).then(function (response) {
             console.log(response);
+            $scope.selectedGroupKey.data = [];
             angular.forEach(response.Data, function (itm) {
                 $scope.selectedGroupKey.data.push(itm);
+              //  currentData.push(itm);
             });
+            if (currentSortedColDef != undefined)
+                currentSortedColDef.currentSorting = sortDescending ? 'DESC' : 'ASC';
             $scope.selectedGroupKey.isDataLoaded = true;
         })
             .finally(function () {
@@ -274,6 +298,10 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         buildFilter(scope.gridParentScope);
        
         
+    }
+    function resetSorting() {
+        sortColumn = TrafficStatisticsMeasureEnum.Attempts;
+        sortDescending = true;
     }
 };
 

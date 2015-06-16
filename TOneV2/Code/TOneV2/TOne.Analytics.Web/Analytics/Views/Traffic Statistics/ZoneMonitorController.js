@@ -223,7 +223,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 groupKeys.push(TrafficStatisticGroupKeysEnum[prop]);
             }
         }
-        function getObjectHeader(parameters, dataItem) {
+        function loadCDRParameters(parameters, dataItem) {
             for (var i = 0; i < $scope.currentSearchCriteria.groupKeys.length; i++) {
                 var groupKey = $scope.currentSearchCriteria.groupKeys[i];
                 switch (groupKey.value) {
@@ -270,7 +270,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                         
                         ///[dataItem.GroupKeyValues[0].Id]
                     };
-                    getObjectHeader(parameters, dataItem);
+                    loadCDRParameters(parameters, dataItem);
                     
                         
                     
