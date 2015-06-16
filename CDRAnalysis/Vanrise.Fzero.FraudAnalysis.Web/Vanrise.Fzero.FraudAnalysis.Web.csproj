@@ -113,7 +113,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\New.pubxml" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
