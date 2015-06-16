@@ -67,7 +67,7 @@ namespace TOne.CDR.Data.SQL
 
         private void AddTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatistic trafficStatistic)
         {
-            stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}",
+            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^",
                 trafficStatistic.SwitchId,
                 trafficStatistic.Port_IN,
                 trafficStatistic.Port_OUT,
@@ -82,7 +82,7 @@ namespace TOne.CDR.Data.SQL
                 trafficStatistic.DeliveredAttempts,
                 trafficStatistic.SuccessfulAttempts,
                 trafficStatistic.DurationsInSeconds,
-                trafficStatistic.PDDInSeconds,
+                trafficStatistic.PDDInSeconds.HasValue ? trafficStatistic.PDDInSeconds.Value.ToString():"",
                 trafficStatistic.MaxDurationInSeconds,
                 trafficStatistic.UtilizationInSeconds,
                 trafficStatistic.NumberOfCalls,
@@ -211,9 +211,9 @@ namespace TOne.CDR.Data.SQL
 
         private void AddDailyTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatisticDaily trafficStatistic)
         {
-            stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+                trafficStatistic.CallDate.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 trafficStatistic.SwitchId,
-                trafficStatistic.CallDate,
                 trafficStatistic.CustomerId,
                 trafficStatistic.OurZoneId,
                 trafficStatistic.OriginatingZoneId,
@@ -293,7 +293,7 @@ namespace TOne.CDR.Data.SQL
 
         private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
         {
-            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}",
+            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^",
                         0,
                         trafficStatistic.SwitchId,
                         trafficStatistic.Port_IN,
@@ -303,8 +303,8 @@ namespace TOne.CDR.Data.SQL
                         trafficStatistic.OriginatingZoneId,
                         trafficStatistic.SupplierId,
                         trafficStatistic.SupplierZoneId,
-                        trafficStatistic.FirstCDRAttempt,
-                        trafficStatistic.LastCDRAttempt,
+                        trafficStatistic.FirstCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                        trafficStatistic.LastCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                         trafficStatistic.Attempts,
                         trafficStatistic.DeliveredAttempts,
                         trafficStatistic.SuccessfulAttempts,
