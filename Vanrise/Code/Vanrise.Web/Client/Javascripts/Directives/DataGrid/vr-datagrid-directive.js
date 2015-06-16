@@ -129,17 +129,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', func
             colDef.cellTemplate = columnCellTemplate;
             if (col.isClickable != undefined) {
                 colDef.isClickableAttr = col.isClickable;
-                colDef.onClickedAttr = col.onClicked;
-                colDef.isClickable = function (dataItem) {
-                    if (typeof (col.isClickable) == 'function')
-                        return col.isClickable(dataItem);
-                    else
-                        return col.isClickable;
-                };
-                colDef.onClicked = function (dataItem) {
-                    if (col.onClicked != undefined)
-                        col.onClicked(dataItem, colDef);
-                };
+                colDef.onClickedAttr = col.onClicked;                
             }
             if (ctrl.noverticallines == "true")
                 colDef.borderRight = 'none';
@@ -238,10 +228,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', func
             };
 
             ctrl.isColumnClickable = function (colDef, dataItem) {
-                if (typeof (colDef.isClickableAttr) == 'function')
-                    return colDef.isClickableAttr(dataItem);
-                else
-                    return colDef.isClickableAttr;
+                if (colDef.isClickableAttr == undefined)
+                    return false;
+                else {
+                    if (typeof (colDef.isClickableAttr) == 'function')
+                        return colDef.isClickableAttr(dataItem);
+                    else
+                        return colDef.isClickableAttr;
+                }
             };
             ctrl.onColumnClicked = function (colDef, dataItem) {
                 if (colDef.onClickedAttr != undefined)
