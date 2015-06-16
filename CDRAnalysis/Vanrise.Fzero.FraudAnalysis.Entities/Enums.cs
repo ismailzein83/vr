@@ -6,8 +6,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
              
         public enum Period
         {
-            Day = 1,
-            Hour = 6
+            Hour = 1,
+            Day = 2
         };
 
 
