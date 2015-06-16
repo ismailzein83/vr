@@ -51,6 +51,8 @@
     <Compile Include="Billing\CarrierSummaryDaily.cs" />
     <Compile Include="Billing\CarrierSummaryDailyFormatted.cs" />
     <Compile Include="Billing\CarrierSummaryFormatted.cs" />
+    <Compile Include="Billing\ProfitSummary.cs" />
+    <Compile Include="Billing\SaleAmountSummary.cs" />
     <Compile Include="Billing\CustomerSummary.cs" />
     <Compile Include="Billing\CustomerSummaryFormatted.cs" />
     <Compile Include="Billing\DailySummary.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Billing\ZoneSummaryFormatted.cs" />
     <Compile Include="CDRFilter.cs" />
     <Compile Include="CDRBigResult.cs" />
+    <Compile Include="Billing\CustomerServices.cs" />
     <Compile Include="KeyColumn.cs" />
     <Compile Include="Mobile\AlertView.cs" />
     <Compile Include="Mobile\CarrierRateView.cs" />

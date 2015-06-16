@@ -14,15 +14,23 @@ namespace TOne.Analytics.Data.SQL
     {
         public List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetCustomerSummary", (reader) => CustomerSummaryMapper(reader),
+            return GetItemsSP("Analytics.SP_Billing_CustomerSummary", CustomerSummaryMapper,
+               (customerId == null || customerId == "") ? null : customerId,
                fromDate,
                toDate,
-               (customerId == null || customerId == "") ? null : customerId,
-               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
-               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
                );
         }
+        public List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate)
+        {
+            return GetItemsSP("Analytics.SP_Billing_GetCustomerSummary",  CustomerServicesMapper,
+              fromDate,
+              toDate
+            );
+        }
 
+        #region privateMethods
         private CustomerSummary CustomerSummaryMapper(IDataReader reader)
         {
             CustomerSummary instance = new CustomerSummary
@@ -36,5 +44,15 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
+        private CustomerServices CustomerServicesMapper(IDataReader reader)
+        {
+            CustomerServices instance = new CustomerServices
+            {
+                AccountId = reader["AccountID"] as string ,
+                Services = GetReaderValue<decimal>(reader, "Services")
+            };
+            return instance;
+        }
+        #endregion
     }
 }

@@ -22,5 +22,6 @@ namespace TOne.Analytics.Data
         List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate,string customerID, string supplier ,int? zoneId , int? customerAMUId, int? supplierAMUId);
         List<CarrierSummary> GetCarrierSummary(DateTime fromDate, DateTime toDate,string customerID, string supplier , int? customerAMUId, int? supplierAMUId);
         List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId);
+        List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate);
     }
 }

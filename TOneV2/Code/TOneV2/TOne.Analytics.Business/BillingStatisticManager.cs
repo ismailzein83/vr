@@ -117,8 +117,89 @@ namespace TOne.Analytics.Business
 
             return FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
         }
-       
+        public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId,  int? customerAMUId, int? supplierAMUId)
+        {
 
+            List<CustomerSummary> customerSummaries = _datamanager.GetCustomerSummary(fromDate, toDate, customerId,  customerAMUId , supplierAMUId);
+
+            List<CustomerServices> customerServices = _datamanager.GetCustomerServices(fromDate, toDate);
+            List<CustomerSummaryFormatted> customerSummariesFormatted = new List<CustomerSummaryFormatted>();
+
+            Dictionary<string, decimal> totalServicesPerCustomer = new Dictionary<string, decimal>();
+            foreach (var obj in customerServices)
+            {
+                if (obj.AccountId != null && obj.Services != null)
+                    totalServicesPerCustomer.Add(obj.AccountId, obj.Services);
+
+            }
+            foreach (var cs in customerSummaries)
+            {
+                CustomerSummaryFormatted entitie = new CustomerSummaryFormatted()
+                {
+                    Carrier = cs.Carrier,
+                    SaleDuration = cs.SaleDuration,
+                    SaleDurationFormatted = FormatNumber(cs.SaleDuration),
+                    SaleNet = cs.SaleNet,
+                    SaleNetFormatted = FormatNumber(cs.SaleNet,5),
+                    CostDuration = cs.CostDuration,
+                    CostDurationFormatted = FormatNumber(cs.CostDuration),
+                    CostNet = cs.CostNet,
+                    CostNetFormatted = FormatNumber(cs.CostNet),
+                    ProfitFormatted = FormatNumber(cs.SaleNet-cs.CostNet),
+                    ProfitPercentageFormatted = String.Format("{0:#,##0.00%}", (1 - cs.CostNet / cs.SaleNet))
+
+                };
+                if(cs.Carrier!=null){
+                    entitie.Customer = _bemanager.GetCarrirAccountName(cs.Carrier);
+                    entitie.Services = (totalServicesPerCustomer.ContainsKey(cs.Carrier))? totalServicesPerCustomer[cs.Carrier]:0;
+                    entitie.ServicesFormatted = FormatNumber((totalServicesPerCustomer.ContainsKey(cs.Carrier)) ? totalServicesPerCustomer[cs.Carrier] : 0);
+                }
+                else{
+                    entitie.Customer = null;
+                    entitie.Services =  0;
+                    entitie.ServicesFormatted = FormatNumber(0.00);
+
+                }
+                customerSummariesFormatted.Add(entitie);
+            }
+
+            return customerSummariesFormatted;
+        }
+
+        public List<ProfitSummary> GetCustomerProfitSummary(List<CustomerSummaryFormatted> summarieslist)
+        {
+            List<ProfitSummary> profitsummaries = new List<ProfitSummary>();
+           
+            foreach (var cs in summarieslist)
+            {
+                ProfitSummary p = new ProfitSummary()
+                {
+                    Profit = (cs.SaleNet != null ? (double)cs.SaleNet : 0 - (cs.CostNet != null ? (double)cs.CostNet : 0)),
+                    FormattedProfit = string.Format("{0:#,##0.00}", (cs.SaleNet != null ? (double)cs.SaleNet : 0) - (cs.CostNet != null ? (double)cs.CostNet : 0)),
+                    Customer = cs.Customer
+                };
+                profitsummaries.Add(p);
+            }
+            profitsummaries.OrderByDescending(r => r.Profit).Take(10).ToList();
+            return profitsummaries;
+        }
+        public List<SaleAmountSummary> GetCustomerSaleAmountSummary(List<CustomerSummaryFormatted> summarieslist)
+        {
+            List<SaleAmountSummary> saleAmountSummary = new List<SaleAmountSummary>();
+
+            foreach (var cs in summarieslist)
+            {
+                SaleAmountSummary s = new SaleAmountSummary()
+                {
+                    SaleAmount = cs.SaleNet!=null? (double)cs.SaleNet:0,
+                    FormattedSaleAmount = string.Format("{0:#,##0.00}", cs.SaleNet != null ? (double)cs.SaleNet : 0),
+                    Customer = cs.Customer
+                };
+                saleAmountSummary.Add(s);
+            }
+            saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
+            return saleAmountSummary;
+        }
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
@@ -478,8 +559,7 @@ namespace TOne.Analytics.Business
 
 
             };
-        }
-
+        }       
         #endregion
     }
 }

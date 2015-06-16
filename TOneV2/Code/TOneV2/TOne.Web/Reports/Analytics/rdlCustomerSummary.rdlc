@@ -394,14 +394,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleDuration">
+                    <Textbox Name="SaleDurationFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleDuration.Value,2)</Value>
+                              <Value>=Fields!SaleDurationFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -412,7 +412,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleDuration</rd:DefaultName>
+                      <rd:DefaultName>SaleDurationFormatted</rd:DefaultName>
                       <ZIndex>5</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -426,14 +426,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CostDuration">
+                    <Textbox Name="CostDurationFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!CostDuration.Value,2)</Value>
+                              <Value>=Fields!CostDurationFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -444,7 +444,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CostDuration</rd:DefaultName>
+                      <rd:DefaultName>CostDurationFormatted</rd:DefaultName>
                       <ZIndex>4</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -458,14 +458,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleNet">
+                    <Textbox Name="SaleNetFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!SaleNet.Value),"0.00",FormatNumber(Fields!SaleNet.Value,Parameters!DigitRate.Value))</Value>
+                              <Value>=Fields!SaleNetFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -476,7 +476,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleNet</rd:DefaultName>
+                      <rd:DefaultName>SaleNetFormatted</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -490,14 +490,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CostNet">
+                    <Textbox Name="CostNetFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(IsNothing(Fields!CostNet.Value),"0.00",FormatNumber(Fields!CostNet.Value,Parameters!DigitRate.Value))</Value>
+                              <Value>=Fields!CostNetFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -508,7 +508,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CostNet</rd:DefaultName>
+                      <rd:DefaultName>CostNetFormatted</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -522,14 +522,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleNet_1">
+                    <Textbox Name="ProfitFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleNet.Value-Fields!CostNet.Value,2)</Value>
+                              <Value>=Fields!ProfitFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -540,7 +540,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleNet_1</rd:DefaultName>
+                      <rd:DefaultName>ProfitFormatted</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
@@ -554,14 +554,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SaleNet_2">
+                    <Textbox Name="ProfitPercentageFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((Fields!SaleNet.Value-Fields!CostNet.Value)/Fields!SaleNet.Value,2)</Value>
+                              <Value>=Fields!ProfitPercentageFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -572,7 +572,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SaleNet_2</rd:DefaultName>
+                      <rd:DefaultName>ProfitPercentageFormatted</rd:DefaultName>
                       <Style>
                         <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -585,14 +585,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Carrier1">
+                    <Textbox Name="ServicesFormatted">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Carrier.Value</Value>
+                              <Value>=Fields!ServicesFormatted.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -603,7 +603,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Carrier1</rd:DefaultName>
+                      <rd:DefaultName>ServicesFormatted</rd:DefaultName>
                       <Visibility>
                         <Hidden>=IIF(Parameters!ShowProfit.Value = "false", True, False)</Hidden>
                       </Visibility>
@@ -2254,7 +2254,7 @@
         </TablixRowHierarchy>
         <DataSetName>CustomerSummary</DataSetName>
         <Height>2in</Height>
-        <Width>25.42535cm</Width>
+        <Width>25.42538cm</Width>
         <Style />
       </Tablix>
       <Chart Name="chart1">
@@ -2553,7 +2553,7 @@
             <VerticalAlign>Top</VerticalAlign>
           </Style>
         </ChartNoDataMessage>
-        <DataSetName>ReportsDataSet_rpt_SaleAmountChart</DataSetName>
+        <DataSetName>SaleAmount</DataSetName>
         <Top>2.375in</Top>
         <Height>3in</Height>
         <Width>8.625in</Width>
@@ -2869,7 +2869,7 @@
             <VerticalAlign>Top</VerticalAlign>
           </Style>
         </ChartNoDataMessage>
-        <DataSetName>ReportsDataSet_rpt_ProfitChart</DataSetName>
+        <DataSetName>ProfitSummary</DataSetName>
         <Top>6in</Top>
         <Left>0.0425in</Left>
         <Height>3in</Height>
@@ -3199,79 +3199,29 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="TestToneNewVersionConnectionString">
-      <ConnectionProperties>
-        <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=192.168.110.159;Initial Catalog=TestToneNewVersion;Persist Security Info=True;User ID=sa;Password=Vanrise200800*</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>6bb5aa00-543e-409b-ba94-48a3de356cff</rd:DataSourceID>
-    </DataSource>
-    <DataSource Name="DummyDataSource">
-      <ConnectionProperties>
-        <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=192.168.111.159;Initial Catalog=TestToneNewVersion;Persist Security Info=True;User ID=sa;Password=Vanrise200800*</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>9225d320-5539-46d3-a33c-1ab844ea5af1</rd:DataSourceID>
-    </DataSource>
     <DataSource Name="TOneAnalyticsBusiness">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>a69b4c1d-1476-47f9-9c6a-27b5441eea4a</rd:DataSourceID>
+      <rd:DataSourceID>21148eca-8cf8-4166-8c14-b9bd754f8a18</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="TOneAnalyticsBusiness1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>645c13f2-ea18-4f70-b997-7f1f0291fbd7</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="TOneAnalyticsBusiness2">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>356373ba-d61d-48f4-815e-4f4e5e25b683</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ReportsDataSet_rpt_SaleAmountChart">
-      <Query>
-        <DataSourceName>DummyDataSource</DataSourceName>
-        <CommandText />
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
-      </Query>
-      <Fields>
-        <Field Name="Customer">
-          <DataField>Customer</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FormattedSaleAmount">
-          <DataField>FormattedSaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>ReportsDataSet</rd:DataSetName>
-        <rd:TableName>rpt_SaleAmountChart</rd:TableName>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="ReportsDataSet_rpt_ProfitChart">
-      <Query>
-        <DataSourceName>DummyDataSource</DataSourceName>
-        <CommandText />
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
-      </Query>
-      <Fields>
-        <Field Name="Customer">
-          <DataField>Customer</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FormattedProfit">
-          <DataField>FormattedProfit</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="Profit">
-          <DataField>Profit</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>ReportsDataSet</rd:DataSetName>
-        <rd:TableName>rpt_ProfitChart</rd:TableName>
-      </rd:DataSetInfo>
-    </DataSet>
     <DataSet Name="CustomerSummary">
       <Query>
         <DataSourceName>TOneAnalyticsBusiness</DataSourceName>
@@ -3286,17 +3236,53 @@
           <DataField>SaleDuration</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="SaleDurationFormatted">
+          <DataField>SaleDurationFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="SaleNet">
           <DataField>SaleNet</DataField>
           <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="SaleNetFormatted">
+          <DataField>SaleNetFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CostDuration">
           <DataField>CostDuration</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="CostDurationFormatted">
+          <DataField>CostDurationFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="CostNet">
           <DataField>CostNet</DataField>
           <rd:TypeName>System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="CostNetFormatted">
+          <DataField>CostNetFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProfitFormatted">
+          <DataField>ProfitFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProfitPercentageFormatted">
+          <DataField>ProfitPercentageFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Customer">
+          <DataField>Customer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Services">
+          <DataField>Services</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ServicesFormatted">
+          <DataField>ServicesFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
@@ -3304,6 +3290,60 @@
         <rd:TableName>BillingStatisticManager</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetCustomerSummary</rd:ObjectDataSourceSelectMethod>
         <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.CustomerSummaryFormatted] GetCustomerSummary(System.DateTime, System.DateTime, System.String, System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="SaleAmount">
+      <Query>
+        <DataSourceName>TOneAnalyticsBusiness1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="SaleAmount">
+          <DataField>SaleAmount</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="FormattedSaleAmount">
+          <DataField>FormattedSaleAmount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Customer">
+          <DataField>Customer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
+        <rd:TableName>BillingStatisticManager</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerSaleAmountSummary</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.SaleAmountSummary] GetCustomerSaleAmountSummary(System.Collections.Generic.List`1[TOne.Analytics.Entities.CustomerSummaryFormatted])</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="ProfitSummary">
+      <Query>
+        <DataSourceName>TOneAnalyticsBusiness2</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Profit">
+          <DataField>Profit</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="FormattedProfit">
+          <DataField>FormattedProfit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Customer">
+          <DataField>Customer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.Analytics.Business</rd:DataSetName>
+        <rd:TableName>BillingStatisticManager</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetCustomerProfitSummary</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[TOne.Analytics.Entities.ProfitSummary] GetCustomerProfitSummary(System.Collections.Generic.List`1[TOne.Analytics.Entities.CustomerSummaryFormatted])</rd:ObjectDataSourceSelectMethodSignature>
         <rd:ObjectDataSourceType>TOne.Analytics.Business.BillingStatisticManager, TOne.Analytics.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
