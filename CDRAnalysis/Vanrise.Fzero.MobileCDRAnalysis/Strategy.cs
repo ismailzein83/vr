@@ -14,11 +14,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
     public partial class Strategy
     {
-        public Strategy()
-        {
-            this.ReportDetails = new HashSet<ReportDetail>();
-        }
-    
         public int Id { get; set; }
         public string Description { get; set; }
         public Nullable<int> UserId { get; set; }
@@ -26,8 +21,5 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Name { get; set; }
         public Nullable<bool> IsDefault { get; set; }
         public string StrategyContent { get; set; }
-    
-        public virtual ICollection<ReportDetail> ReportDetails { get; set; }
-        public virtual User User { get; set; }
     }
 }

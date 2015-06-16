@@ -12,14 +12,9 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class vwSuspectionAnalysi
+    public partial class SubType
     {
-        public int strategyId { get; set; }
-        public string SubscriberNumber { get; set; }
-        public int SuspicionLevelId { get; set; }
-        public string SuspectionLevelName { get; set; }
-        public int Number_of_occurance { get; set; }
-        public string LastreportNumber { get; set; }
-        public string StrategyName { get; set; }
+        public int Id { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -5,62 +5,34 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="CellProfile">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="CallClass">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
-          <Property Name="Date_Day" Type="datetime" />
-          <Property Name="Day_Hour" Type="int" />
-          <Property Name="Distinct_MSISDN_Calls" Type="int" />
-          <Property Name="Distinct_IMEI" Type="int" />
-          <Property Name="Distinct_MSISDN_Msg" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="NetType" Type="int" />
         </EntityType>
-        <EntityType Name="Criteria_Profile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="EmailReceivers">
+        <EntityType Name="CallType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="EmailTemplateID" Type="int" />
-          <Property Name="EmailReceiverTypeID" Type="int" />
-        </EntityType>
-        <EntityType Name="EmailReceiverTypes">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="EmailTemplates">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MessageBody" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Subject" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="LastUpdateDate" Type="datetime2" Precision="0" Nullable="false" />
-          <Property Name="LastUpdatedBy" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="EmailTokens">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Token" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CDRAnalysisMobile_WF.FraudAnalysis.NormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NormalCDR">
           <Key>
             <PropertyRef Name="Id" />
@@ -88,118 +60,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
           <Property Name="Service_Type" Type="int" />
           <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Permissions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="500" />
-          <Property Name="Category" Type="nvarchar" MaxLength="50" />
-          <Property Name="ParentID" Type="int" />
-        </EntityType>
-        <EntityType Name="Report">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ReportDate" Type="datetime" />
-          <Property Name="UserId" Type="int" />
-          <Property Name="ReportNumber" Type="varchar" MaxLength="12" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="ReportingStatusID" Type="int" Nullable="false" />
-          <Property Name="ReportID" Type="varchar" MaxLength="50" />
-          <Property Name="SentDate" Type="datetime" />
-          <Property Name="SentBy" Type="int" />
-        </EntityType>
-        <EntityType Name="ReportDetails">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ReportId" Type="int" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="ReportingStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Set_CallClass">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="NetType" Type="int" />
-        </EntityType>
-        <EntityType Name="Set_CallType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="int" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Set_SubType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Strategy">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="UserId" Type="int" />
-          <Property Name="CreationDate" Type="datetime" />
-          <Property Name="Name" Type="varchar" MaxLength="20" />
-          <Property Name="IsDefault" Type="bit" />
-          <Property Name="StrategyContent" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="UserPermissions">
-          <Key>
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="PermissionID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="PermissionID" Type="int" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime2" Precision="0" Nullable="false" />
-          <Property Name="CreatedBy" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Users">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="LastLoginTime" Type="datetime2" Precision="0" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="IsSuperUser" Type="bit" Nullable="false" />
-          <Property Name="VerificationCode" Type="nchar" MaxLength="6" />
-          <Property Name="Address" Type="nvarchar" MaxLength="500" />
-          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
@@ -241,14 +101,14 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
           <Property Name="StrategyId" Type="int" />
         </EntityType>
-        <EntityType Name="Periods">
+        <EntityType Name="Period">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="Strategy1">
+        <EntityType Name="Strategy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -287,6 +147,13 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="SuspicionLevelId" Type="int" />
           <Property Name="StrategyId" Type="int" />
         </EntityType>
+        <EntityType Name="SubType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Suspicion_Level">
           <Key>
             <PropertyRef Name="Id" />
@@ -294,176 +161,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="20" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vwReportedNumber">
-          <Key>
-            <PropertyRef Name="TerminatedVolume" />
-            <PropertyRef Name="ReportID" />
-          </Key>
-          <Property Name="CLI" Type="varchar" MaxLength="30" />
-          <Property Name="Date_Day" Type="datetime" />
-          <Property Name="OriginatedVolume" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="TerminatedVolume" Type="numeric" Precision="38" Scale="2" Nullable="false" />
-          <Property Name="NumberofAttempts" Type="int" />
-          <Property Name="CountDistinctCalledParties" Type="int" />
-          <Property Name="ReportID" Type="int" Nullable="false" />
-          <Property Name="MonthYear" Type="varchar" MaxLength="9" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vwReportedNumberNormalCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="A_Temp" />
-            <PropertyRef Name="In_Trunk" />
-            <PropertyRef Name="Switch" />
-            <PropertyRef Name="ReportID" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="A_Temp" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="In_Trunk" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="Switch" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="ReportID" Type="int" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwReportVariables' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vwReportVariables">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ReportDate" Type="datetime" />
-          <Property Name="ReportNumber" Type="varchar" MaxLength="12" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vwSuspectionAnalysis">
-          <Key>
-            <PropertyRef Name="strategyId" />
-            <PropertyRef Name="SubscriberNumber" />
-            <PropertyRef Name="SuspicionLevelId" />
-            <PropertyRef Name="SuspectionLevelName" />
-            <PropertyRef Name="Number_of_occurance" />
-            <PropertyRef Name="LastreportNumber" />
-            <PropertyRef Name="StrategyName" />
-          </Key>
-          <Property Name="strategyId" Type="int" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="SuspicionLevelId" Type="int" Nullable="false" />
-          <Property Name="SuspectionLevelName" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="Number_of_occurance" Type="int" Nullable="false" />
-          <Property Name="LastreportNumber" Type="varchar" MaxLength="1" Nullable="false" />
-          <Property Name="StrategyName" Type="varchar" MaxLength="1" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_EmailReceivers_EmailReceiverTypes">
-          <End Role="EmailReceiverTypes" Type="Self.EmailReceiverTypes" Multiplicity="0..1" />
-          <End Role="EmailReceivers" Type="Self.EmailReceivers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EmailReceiverTypes">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EmailReceivers">
-              <PropertyRef Name="EmailReceiverTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmailReceivers_EmailTemplates">
-          <End Role="EmailTemplates" Type="Self.EmailTemplates" Multiplicity="0..1" />
-          <End Role="EmailReceivers" Type="Self.EmailReceivers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EmailTemplates">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="EmailReceivers">
-              <PropertyRef Name="EmailTemplateID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmailTemplates_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="EmailTemplates" Type="Self.EmailTemplates" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="EmailTemplates">
-              <PropertyRef Name="LastUpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Permissions_Permissions">
-          <End Role="Permissions" Type="Self.Permissions" Multiplicity="0..1" />
-          <End Role="Permissions1" Type="Self.Permissions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permissions">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Permissions1">
-              <PropertyRef Name="ParentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Report_ReportingStatus">
-          <End Role="ReportingStatus" Type="Self.ReportingStatus" Multiplicity="1" />
-          <End Role="Report" Type="Self.Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ReportingStatus">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="ReportingStatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Report_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Report" Type="Self.Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="SentBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportDetails_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
-          <End Role="ReportDetails" Type="Self.ReportDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportDetails">
-              <PropertyRef Name="ReportId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportDetails_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="ReportDetails" Type="Self.ReportDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportDetails">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Strategy">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubscriberThreshold_Suspicion_Level">
           <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
           <End Role="SubscriberThreshold" Type="Self.SubscriberThreshold" Multiplicity="*" />
@@ -476,68 +173,13 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserPermissions_Permissions">
-          <End Role="Permissions" Type="Self.Permissions" Multiplicity="1" />
-          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permissions">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPermissions">
-              <PropertyRef Name="PermissionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserPermissions_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="UserPermissions" Type="Self.UserPermissions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPermissions">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Ids" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="strategyId" Type="int" Mode="In" />
           <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
           <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prGetEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DestinationEmail" Type="varchar" Mode="In" />
-          <Parameter Name="FromDate" Type="datetime" Mode="In" />
-          <Parameter Name="ToDate" Type="datetime" Mode="In" />
-        </Function>
-        <Function Name="prGetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ReportID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="prSendMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="profile_name" Type="varchar" Mode="In" />
-          <Parameter Name="recipients" Type="varchar" Mode="In" />
-          <Parameter Name="subject" Type="nvarchar" Mode="In" />
-          <Parameter Name="copy_recipients" Type="nvarchar" Mode="In" />
-          <Parameter Name="body" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="blind_copy_recipients" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="prSendMailWithAttachment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="profile_name" Type="varchar" Mode="In" />
-          <Parameter Name="recipients" Type="varchar" Mode="In" />
-          <Parameter Name="subject" Type="nvarchar" Mode="In" />
-          <Parameter Name="copy_recipients" Type="nvarchar" Mode="In" />
-          <Parameter Name="body" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="file_attachments" Type="varchar" Mode="In" />
-          <Parameter Name="blind_copy_recipients" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -603,29 +245,16 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <Parameter Name="StrategyContent" Type="nvarchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="ModelStoreContainer">
-          <EntitySet Name="CellProfile" EntityType="Self.CellProfile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Criteria_Profile" EntityType="Self.Criteria_Profile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailReceivers" EntityType="Self.EmailReceivers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailReceiverTypes" EntityType="Self.EmailReceiverTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmailTokens" EntityType="Self.EmailTokens" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReportDetails" EntityType="Self.ReportDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReportingStatus" EntityType="Self.ReportingStatus" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Set_CallClass" EntityType="Self.Set_CallClass" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Set_CallType" EntityType="Self.Set_CallType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Set_SubType" EntityType="Self.Set_SubType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CallClass" EntityType="Self.CallClass" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="CallType" EntityType="Self.CallType" Schema="FraudAnalysis" store:Type="Tables" />
           <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="Periods" EntityType="Self.Periods" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="Strategy1" EntityType="Self.Strategy1" Schema="FraudAnalysis" Table="Strategy" store:Type="Tables" />
+          <EntitySet Name="Period" EntityType="Self.Period" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="FraudAnalysis" store:Type="Tables" />
           <EntitySet Name="SubscriberThreshold" EntityType="Self.SubscriberThreshold" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="SubType" EntityType="Self.SubType" Schema="FraudAnalysis" store:Type="Tables" />
           <EntitySet Name="Suspicion_Level" EntityType="Self.Suspicion_Level" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" store:Type="Tables" store:Schema="dbo">
+          <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" store:Type="Tables" store:Schema="FraudAnalysis">
             <DefiningQuery>SELECT 
 [NormalCDR].[Id] AS [Id], 
 [NormalCDR].[MSISDN] AS [MSISDN], 
@@ -650,94 +279,11 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
 [NormalCDR].[Out_Trunk] AS [Out_Trunk], 
 [NormalCDR].[Service_Type] AS [Service_Type], 
 [NormalCDR].[Service_VAS_Name] AS [Service_VAS_Name]
-FROM [dbo].[NormalCDR] AS [NormalCDR]</DefiningQuery>
+FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vwReportedNumber" EntityType="Self.vwReportedNumber" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwReportedNumber].[CLI] AS [CLI], 
-[vwReportedNumber].[Date_Day] AS [Date_Day], 
-[vwReportedNumber].[OriginatedVolume] AS [OriginatedVolume], 
-[vwReportedNumber].[TerminatedVolume] AS [TerminatedVolume], 
-[vwReportedNumber].[NumberofAttempts] AS [NumberofAttempts], 
-[vwReportedNumber].[CountDistinctCalledParties] AS [CountDistinctCalledParties], 
-[vwReportedNumber].[ReportID] AS [ReportID], 
-[vwReportedNumber].[MonthYear] AS [MonthYear]
-FROM [dbo].[vwReportedNumber] AS [vwReportedNumber]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vwReportedNumberNormalCDR" EntityType="Self.vwReportedNumberNormalCDR" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwReportedNumberNormalCDR].[Id] AS [Id], 
-[vwReportedNumberNormalCDR].[A_Temp] AS [A_Temp], 
-[vwReportedNumberNormalCDR].[In_Trunk] AS [In_Trunk], 
-[vwReportedNumberNormalCDR].[Switch] AS [Switch], 
-[vwReportedNumberNormalCDR].[ReportID] AS [ReportID]
-FROM [dbo].[vwReportedNumberNormalCDR] AS [vwReportedNumberNormalCDR]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vwReportVariables" EntityType="Self.vwReportVariables" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwReportVariables].[Id] AS [Id], 
-[vwReportVariables].[ReportDate] AS [ReportDate], 
-[vwReportVariables].[ReportNumber] AS [ReportNumber]
-FROM [dbo].[vwReportVariables] AS [vwReportVariables]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vwSuspectionAnalysis" EntityType="Self.vwSuspectionAnalysis" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vwSuspectionAnalysis].[strategyId] AS [strategyId], 
-[vwSuspectionAnalysis].[SubscriberNumber] AS [SubscriberNumber], 
-[vwSuspectionAnalysis].[SuspicionLevelId] AS [SuspicionLevelId], 
-[vwSuspectionAnalysis].[SuspectionLevelName] AS [SuspectionLevelName], 
-[vwSuspectionAnalysis].[Number_of_occurance] AS [Number_of_occurance], 
-[vwSuspectionAnalysis].[LastreportNumber] AS [LastreportNumber], 
-[vwSuspectionAnalysis].[StrategyName] AS [StrategyName]
-FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Self.FK_EmailReceivers_EmailReceiverTypes">
-            <End Role="EmailReceiverTypes" EntitySet="EmailReceiverTypes" />
-            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailReceivers_EmailTemplates" Association="Self.FK_EmailReceivers_EmailTemplates">
-            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
-            <End Role="EmailReceivers" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailTemplates_Users" Association="Self.FK_EmailTemplates_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="EmailTemplates" EntitySet="EmailTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Permissions_Permissions" Association="Self.FK_Permissions_Permissions">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="Permissions1" EntitySet="Permissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_ReportingStatus" Association="Self.FK_Report_ReportingStatus">
-            <End Role="ReportingStatus" EntitySet="ReportingStatus" />
-            <End Role="Report" EntitySet="Report" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_Users" Association="Self.FK_Report_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Report" EntitySet="Report" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Report" Association="Self.FK_ReportDetails_Report">
-            <End Role="Report" EntitySet="Report" />
-            <End Role="ReportDetails" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Strategy" Association="Self.FK_ReportDetails_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="ReportDetails" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Users" Association="Self.FK_Strategy_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Strategy" EntitySet="Strategy" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Self.FK_SubscriberThreshold_Suspicion_Level">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
             <End Role="SubscriberThreshold" EntitySet="SubscriberThreshold" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Permissions" Association="Self.FK_UserPermissions_Permissions">
-            <End Role="Permissions" EntitySet="Permissions" />
-            <End Role="UserPermissions" EntitySet="UserPermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Users" Association="Self.FK_UserPermissions_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="UserPermissions" EntitySet="UserPermissions" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -909,86 +455,25 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
             <Parameter Name="StrategyContent" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="CellProfiles" EntityType="Model.CellProfile" />
-          <EntitySet Name="Criteria_Profile" EntityType="Model.Criteria_Profile" />
-          <EntitySet Name="EmailReceivers" EntityType="Model.EmailReceiver" />
-          <EntitySet Name="EmailReceiverTypes" EntityType="Model.EmailReceiverType" />
-          <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
-          <EntitySet Name="EmailTokens" EntityType="Model.EmailToken" />
-          <EntitySet Name="Permissions" EntityType="Model.Permission" />
-          <EntitySet Name="Reports" EntityType="Model.Report" />
-          <EntitySet Name="ReportDetails" EntityType="Model.ReportDetail" />
-          <EntitySet Name="ReportingStatus" EntityType="Model.ReportingStatu" />
-          <EntitySet Name="Set_CallClass" EntityType="Model.Set_CallClass" />
-          <EntitySet Name="Set_CallType" EntityType="Model.Set_CallType" />
-          <EntitySet Name="Set_SubType" EntityType="Model.Set_SubType" />
-          <EntitySet Name="Strategies" EntityType="Model.Strategy" />
-          <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
-          <EntitySet Name="UserPermissions" EntityType="Model.UserPermission" />
-          <EntitySet Name="Users" EntityType="Model.User" />
-          <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
-          <EntitySet Name="Periods" EntityType="Model.Period" />
-          <EntitySet Name="Strategy1" EntityType="Model.Strategy1" />
-          <EntitySet Name="SubscriberThresholds" EntityType="Model.SubscriberThreshold" />
-          <EntitySet Name="Suspicion_Level" EntityType="Model.Suspicion_Level" />
-          <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
-          <EntitySet Name="vwReportedNumbers" EntityType="Model.vwReportedNumber" />
-          <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="Model.vwReportedNumberNormalCDR" />
-          <EntitySet Name="vwReportVariables" EntityType="Model.vwReportVariable" />
-          <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.vwSuspectionAnalysi" />
-          <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Model.FK_EmailReceivers_EmailReceiverTypes">
-            <End Role="EmailReceiverType" EntitySet="EmailReceiverTypes" />
-            <End Role="EmailReceiver" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailReceivers_EmailTemplates" Association="Model.FK_EmailReceivers_EmailTemplates">
-            <End Role="EmailTemplate" EntitySet="EmailTemplates" />
-            <End Role="EmailReceiver" EntitySet="EmailReceivers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmailTemplates_Users" Association="Model.FK_EmailTemplates_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="EmailTemplate" EntitySet="EmailTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Permissions_Permissions" Association="Model.FK_Permissions_Permissions">
-            <End Role="Permission" EntitySet="Permissions" />
-            <End Role="Permission1" EntitySet="Permissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Permissions" Association="Model.FK_UserPermissions_Permissions">
-            <End Role="Permission" EntitySet="Permissions" />
-            <End Role="UserPermission" EntitySet="UserPermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_ReportingStatus" Association="Model.FK_Report_ReportingStatus">
-            <End Role="ReportingStatu" EntitySet="ReportingStatus" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_Users" Association="Model.FK_Report_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Report" Association="Model.FK_ReportDetails_Report">
-            <End Role="Report" EntitySet="Reports" />
-            <End Role="ReportDetail" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportDetails_Strategy" Association="Model.FK_ReportDetails_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="ReportDetail" EntitySet="ReportDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Strategy_Users" Association="Model.FK_Strategy_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Strategy" EntitySet="Strategies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPermissions_Users" Association="Model.FK_UserPermissions_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserPermission" EntitySet="UserPermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Model.FK_SubscriberThreshold_Suspicion_Level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
-          </AssociationSet>
           <FunctionImport Name="sp_CallClass_GetAll" ReturnType="Collection(Model.sp_CallClass_GetAll_Result)" />
           <FunctionImport Name="sp_NormalCDR_Load" ReturnType="Collection(Model.sp_NormalCDR_Load_Result)">
             <Parameter Name="From" Mode="In" Type="DateTime" />
             <Parameter Name="To" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
+          <EntitySet Name="CallClasses" EntityType="Model.CallClass" />
+          <EntitySet Name="CallTypes" EntityType="Model.CallType" />
+          <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
+          <EntitySet Name="Periods" EntityType="Model.Period" />
+          <EntitySet Name="Strategies" EntityType="Model.Strategy" />
+          <EntitySet Name="SubscriberThresholds" EntityType="Model.SubscriberThreshold" />
+          <EntitySet Name="SubTypes" EntityType="Model.SubType" />
+          <EntitySet Name="Suspicion_Level" EntityType="Model.Suspicion_Level" />
+          <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
+          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Model.FK_SubscriberThreshold_Suspicion_Level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="prGetReportVariables_Result">
           <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="23" />
@@ -1028,151 +513,36 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Type="Boolean" Name="IsDefault" Nullable="true" />
           <Property Type="String" Name="StrategyContent" Nullable="true" />
         </ComplexType>
-        <EntityType Name="CellProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Cell_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Date_Day" Type="DateTime" Precision="3" />
-          <Property Name="Day_Hour" Type="Int32" />
-          <Property Name="Distinct_MSISDN_Calls" Type="Int32" />
-          <Property Name="Distinct_IMEI" Type="Int32" />
-          <Property Name="Distinct_MSISDN_Msg" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Criteria_Profile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="EmailReceiver">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EmailTemplateID" Type="Int32" />
-          <Property Name="EmailReceiverTypeID" Type="Int32" />
-          <NavigationProperty Name="EmailReceiverType" Relationship="Model.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiver" ToRole="EmailReceiverType" />
-          <NavigationProperty Name="EmailTemplate" Relationship="Model.FK_EmailReceivers_EmailTemplates" FromRole="EmailReceiver" ToRole="EmailTemplate" />
-        </EntityType>
-        <EntityType Name="EmailReceiverType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="EmailReceivers" Relationship="Model.FK_EmailReceivers_EmailReceiverTypes" FromRole="EmailReceiverType" ToRole="EmailReceiver" />
-        </EntityType>
-        <EntityType Name="EmailTemplate">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MessageBody" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Subject" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="LastUpdateDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LastUpdatedBy" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="EmailReceivers" Relationship="Model.FK_EmailReceivers_EmailTemplates" FromRole="EmailTemplate" ToRole="EmailReceiver" />
-          <NavigationProperty Name="User" Relationship="Model.FK_EmailTemplates_Users" FromRole="EmailTemplate" ToRole="User" />
-        </EntityType>
-        <EntityType Name="EmailToken">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Token" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Permission">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ParentID" Type="Int32" />
-          <NavigationProperty Name="Permissions1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission" ToRole="Permission1" />
-          <NavigationProperty Name="Permission1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission1" ToRole="Permission" />
-          <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Permissions" FromRole="Permission" ToRole="UserPermission" />
-        </EntityType>
-        <EntityType Name="Report">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportDate" Type="DateTime" Precision="3" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="ReportNumber" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ReportingStatusID" Type="Int32" Nullable="false" />
-          <Property Name="ReportID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SentDate" Type="DateTime" Precision="3" />
-          <Property Name="SentBy" Type="Int32" />
-          <NavigationProperty Name="ReportingStatu" Relationship="Model.FK_Report_ReportingStatus" FromRole="Report" ToRole="ReportingStatu" />
-          <NavigationProperty Name="User" Relationship="Model.FK_Report_Users" FromRole="Report" ToRole="User" />
-          <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Report" FromRole="Report" ToRole="ReportDetail" />
-        </EntityType>
-        <EntityType Name="ReportDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportId" Type="Int32" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="StrategyId" Type="Int32" />
-          <NavigationProperty Name="Report" Relationship="Model.FK_ReportDetails_Report" FromRole="ReportDetail" ToRole="Report" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_ReportDetails_Strategy" FromRole="ReportDetail" ToRole="Strategy" />
-        </EntityType>
-        <EntityType Name="ReportingStatu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Reports" Relationship="Model.FK_Report_ReportingStatus" FromRole="ReportingStatu" ToRole="Report" />
-        </EntityType>
-        <EntityType Name="Set_CallClass">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="NetType" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Set_CallType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Set_SubType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Strategy">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IsDefault" Type="Boolean" />
-          <Property Name="StrategyContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
-          <NavigationProperty Name="User" Relationship="Model.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
-        </EntityType>
+        <ComplexType Name="sp_CallClass_GetAll_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="NetType" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_NormalCDR_Load_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="MSISDN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="IMSI" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="ConnectDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Destination" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="DurationInSeconds" Nullable="true" Precision="13" Scale="4" />
+          <Property Type="DateTime" Name="DisconnectDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Call_Class" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IsOnNet" Nullable="true" />
+          <Property Type="Int32" Name="Call_Type" Nullable="true" />
+          <Property Type="String" Name="Sub_Type" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="BTS_Id" Nullable="true" />
+          <Property Type="String" Name="Cell_Id" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="SwitchRecordId" Nullable="true" />
+          <Property Type="Decimal" Name="Up_Volume" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Down_Volume" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cell_Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Cell_Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="String" Name="In_Trunk" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Out_Trunk" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Service_Type" Nullable="true" />
+          <Property Type="String" Name="Service_VAS_Name" Nullable="true" MaxLength="50" />
+        </ComplexType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -1183,38 +553,21 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="UserPermission">
+        <EntityType Name="CallClass">
           <Key>
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="PermissionID" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="PermissionID" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Permission" Relationship="Model.FK_UserPermissions_Permissions" FromRole="UserPermission" ToRole="Permission" />
-          <NavigationProperty Name="User" Relationship="Model.FK_UserPermissions_Users" FromRole="UserPermission" ToRole="User" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NetType" Type="Int32" />
         </EntityType>
-        <EntityType Name="User">
+        <EntityType Name="CallType">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LastLoginTime" Type="DateTime" Precision="0" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="IsSuperUser" Type="Boolean" Nullable="false" />
-          <Property Name="VerificationCode" Type="String" MaxLength="6" FixedLength="true" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="EmailTemplates" Relationship="Model.FK_EmailTemplates_Users" FromRole="User" ToRole="EmailTemplate" />
-          <NavigationProperty Name="Reports" Relationship="Model.FK_Report_Users" FromRole="User" ToRole="Report" />
-          <NavigationProperty Name="Strategies" Relationship="Model.FK_Strategy_Users" FromRole="User" ToRole="Strategy" />
-          <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="NumberProfile">
           <Key>
@@ -1263,7 +616,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Strategy1">
+        <EntityType Name="Strategy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1303,6 +656,13 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="StrategyId" Type="Int32" />
           <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThreshold_Suspicion_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
         </EntityType>
+        <EntityType Name="SubType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="Suspicion_Level">
           <Key>
             <PropertyRef Name="Id" />
@@ -1339,194 +699,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Service_Type" Type="Int32" />
           <Property Name="Service_VAS_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="vwReportedNumber">
-          <Key>
-            <PropertyRef Name="TerminatedVolume" />
-            <PropertyRef Name="ReportID" />
-          </Key>
-          <Property Name="CLI" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Date_Day" Type="DateTime" Precision="3" />
-          <Property Name="OriginatedVolume" Type="Decimal" Precision="38" Scale="2" />
-          <Property Name="TerminatedVolume" Type="Decimal" Nullable="false" Precision="38" Scale="2" />
-          <Property Name="NumberofAttempts" Type="Int32" />
-          <Property Name="CountDistinctCalledParties" Type="Int32" />
-          <Property Name="ReportID" Type="Int32" Nullable="false" />
-          <Property Name="MonthYear" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vwReportedNumberNormalCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="A_Temp" />
-            <PropertyRef Name="In_Trunk" />
-            <PropertyRef Name="Switch" />
-            <PropertyRef Name="ReportID" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="A_Temp" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="In_Trunk" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Switch" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ReportID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="vwReportVariable">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportDate" Type="DateTime" Precision="3" />
-          <Property Name="ReportNumber" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vwSuspectionAnalysi">
-          <Key>
-            <PropertyRef Name="strategyId" />
-            <PropertyRef Name="SubscriberNumber" />
-            <PropertyRef Name="SuspicionLevelId" />
-            <PropertyRef Name="SuspectionLevelName" />
-            <PropertyRef Name="Number_of_occurance" />
-            <PropertyRef Name="LastreportNumber" />
-            <PropertyRef Name="StrategyName" />
-          </Key>
-          <Property Name="strategyId" Type="Int32" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="SuspicionLevelId" Type="Int32" Nullable="false" />
-          <Property Name="SuspectionLevelName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Number_of_occurance" Type="Int32" Nullable="false" />
-          <Property Name="LastreportNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="StrategyName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <Association Name="FK_EmailReceivers_EmailReceiverTypes">
-          <End Type="Model.EmailReceiverType" Role="EmailReceiverType" Multiplicity="0..1" />
-          <End Type="Model.EmailReceiver" Role="EmailReceiver" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EmailReceiverType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EmailReceiver">
-              <PropertyRef Name="EmailReceiverTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmailReceivers_EmailTemplates">
-          <End Type="Model.EmailTemplate" Role="EmailTemplate" Multiplicity="0..1" />
-          <End Type="Model.EmailReceiver" Role="EmailReceiver" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EmailTemplate">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="EmailReceiver">
-              <PropertyRef Name="EmailTemplateID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmailTemplates_Users">
-          <End Type="Model.User" Role="User" Multiplicity="1" />
-          <End Type="Model.EmailTemplate" Role="EmailTemplate" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="EmailTemplate">
-              <PropertyRef Name="LastUpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Permissions_Permissions">
-          <End Type="Model.Permission" Role="Permission" Multiplicity="0..1" />
-          <End Type="Model.Permission" Role="Permission1" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permission">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Permission1">
-              <PropertyRef Name="ParentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserPermissions_Permissions">
-          <End Type="Model.Permission" Role="Permission" Multiplicity="1" />
-          <End Type="Model.UserPermission" Role="UserPermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Permission">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPermission">
-              <PropertyRef Name="PermissionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Report_ReportingStatus">
-          <End Type="Model.ReportingStatu" Role="ReportingStatu" Multiplicity="1" />
-          <End Type="Model.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ReportingStatu">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="ReportingStatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Report_Users">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
-          <End Type="Model.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="SentBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportDetails_Report">
-          <End Type="Model.Report" Role="Report" Multiplicity="0..1" />
-          <End Type="Model.ReportDetail" Role="ReportDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportDetail">
-              <PropertyRef Name="ReportId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportDetails_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.ReportDetail" Role="ReportDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportDetail">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Strategy_Users">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Strategy">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserPermissions_Users">
-          <End Type="Model.User" Role="User" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.UserPermission" Role="UserPermission" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPermission">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubscriberThreshold_Suspicion_Level">
           <End Type="Model.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
           <End Type="Model.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
@@ -1539,56 +711,13 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_CallClass_GetAll_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="NetType" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_NormalCDR_Load_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="MSISDN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="IMSI" Nullable="true" MaxLength="20" />
-          <Property Type="DateTime" Name="ConnectDateTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Destination" Nullable="true" MaxLength="40" />
-          <Property Type="Decimal" Name="DurationInSeconds" Nullable="true" Precision="13" Scale="4" />
-          <Property Type="DateTime" Name="DisconnectDateTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Call_Class" Nullable="true" MaxLength="50" />
-          <Property Type="Byte" Name="IsOnNet" Nullable="true" />
-          <Property Type="Int32" Name="Call_Type" Nullable="true" />
-          <Property Type="String" Name="Sub_Type" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="BTS_Id" Nullable="true" />
-          <Property Type="String" Name="Cell_Id" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="SwitchRecordId" Nullable="true" />
-          <Property Type="Decimal" Name="Up_Volume" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Down_Volume" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Cell_Latitude" Nullable="true" Precision="18" Scale="8" />
-          <Property Type="Decimal" Name="Cell_Longitude" Nullable="true" Precision="18" Scale="8" />
-          <Property Type="String" Name="In_Trunk" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Out_Trunk" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="Service_Type" Nullable="true" />
-          <Property Type="String" Name="Service_VAS_Name" Nullable="true" MaxLength="50" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
-          <FunctionImportMapping FunctionImportName="prDeleteEmail" FunctionName="Model.Store.prDeleteEmail" />
           <FunctionImportMapping FunctionImportName="prfindSuspicionOccurrence" FunctionName="Model.Store.prfindSuspicionOccurrence" />
-          <FunctionImportMapping FunctionImportName="prGetEmails" FunctionName="Model.Store.prGetEmails" />
-          <FunctionImportMapping FunctionImportName="prGetReportedNumberNormalCDR" FunctionName="Model.Store.prGetReportedNumberNormalCDR" />
-          <FunctionImportMapping FunctionImportName="prGetReportVariables" FunctionName="Model.Store.prGetReportVariables">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.prGetReportVariables_Result">
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="prSendMail" FunctionName="Model.Store.prSendMail" />
-          <FunctionImportMapping FunctionImportName="prSendMailWithAttachment" FunctionName="Model.Store.prSendMailWithAttachment" />
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Model.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Model.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Model.Store.sp_dropdiagram" />
@@ -1650,149 +779,44 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_Strategy_Insert" FunctionName="Model.Store.sp_Strategy_Insert" />
           <FunctionImportMapping FunctionImportName="sp_Strategy_Update" FunctionName="Model.Store.sp_Strategy_Update" />
-          <EntitySetMapping Name="CellProfiles">
-            <EntityTypeMapping TypeName="Model.CellProfile">
-              <MappingFragment StoreEntitySet="CellProfile">
-                <ScalarProperty Name="Distinct_MSISDN_Msg" ColumnName="Distinct_MSISDN_Msg" />
-                <ScalarProperty Name="Distinct_IMEI" ColumnName="Distinct_IMEI" />
-                <ScalarProperty Name="Distinct_MSISDN_Calls" ColumnName="Distinct_MSISDN_Calls" />
-                <ScalarProperty Name="Day_Hour" ColumnName="Day_Hour" />
-                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
-                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+          <FunctionImportMapping FunctionImportName="sp_CallClass_GetAll" FunctionName="Model.Store.sp_CallClass_GetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_CallClass_GetAll_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Criteria_Profile">
-            <EntityTypeMapping TypeName="Model.Criteria_Profile">
-              <MappingFragment StoreEntitySet="Criteria_Profile">
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailReceivers">
-            <EntityTypeMapping TypeName="Model.EmailReceiver">
-              <MappingFragment StoreEntitySet="EmailReceivers">
-                <ScalarProperty Name="EmailReceiverTypeID" ColumnName="EmailReceiverTypeID" />
-                <ScalarProperty Name="EmailTemplateID" ColumnName="EmailTemplateID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailReceiverTypes">
-            <EntityTypeMapping TypeName="Model.EmailReceiverType">
-              <MappingFragment StoreEntitySet="EmailReceiverTypes">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailTemplates">
-            <EntityTypeMapping TypeName="Model.EmailTemplate">
-              <MappingFragment StoreEntitySet="EmailTemplates">
-                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
-                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="MessageBody" ColumnName="MessageBody" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailTokens">
-            <EntityTypeMapping TypeName="Model.EmailToken">
-              <MappingFragment StoreEntitySet="EmailTokens">
-                <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Permissions">
-            <EntityTypeMapping TypeName="Model.Permission">
-              <MappingFragment StoreEntitySet="Permissions">
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Reports">
-            <EntityTypeMapping TypeName="Model.Report">
-              <MappingFragment StoreEntitySet="Report">
-                <ScalarProperty Name="SentBy" ColumnName="SentBy" />
-                <ScalarProperty Name="SentDate" ColumnName="SentDate" />
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReportDetails">
-            <EntityTypeMapping TypeName="Model.ReportDetail">
-              <MappingFragment StoreEntitySet="ReportDetails">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReportingStatus">
-            <EntityTypeMapping TypeName="Model.ReportingStatu">
-              <MappingFragment StoreEntitySet="ReportingStatus">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Set_CallClass">
-            <EntityTypeMapping TypeName="Model.Set_CallClass">
-              <MappingFragment StoreEntitySet="Set_CallClass">
                 <ScalarProperty Name="NetType" ColumnName="NetType" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_NormalCDR_Load" FunctionName="Model.Store.sp_NormalCDR_Load">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_NormalCDR_Load_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Set_CallType">
-            <EntityTypeMapping TypeName="Model.Set_CallType">
-              <MappingFragment StoreEntitySet="Set_CallType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Set_SubType">
-            <EntityTypeMapping TypeName="Model.Set_SubType">
-              <MappingFragment StoreEntitySet="Set_SubType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Strategies">
-            <EntityTypeMapping TypeName="Model.Strategy">
-              <MappingFragment StoreEntitySet="Strategy">
-                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
-                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
+                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="Model.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -1804,31 +828,21 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserPermissions">
-            <EntityTypeMapping TypeName="Model.UserPermission">
-              <MappingFragment StoreEntitySet="UserPermissions">
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+          <EntitySetMapping Name="CallClasses">
+            <EntityTypeMapping TypeName="Model.CallClass">
+              <MappingFragment StoreEntitySet="CallClass">
+                <ScalarProperty Name="NetType" ColumnName="NetType" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="Model.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
-                <ScalarProperty Name="IsSuperUser" ColumnName="IsSuperUser" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="LastLoginTime" ColumnName="LastLoginTime" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+          <EntitySetMapping Name="CallTypes">
+            <EntityTypeMapping TypeName="Model.CallType">
+              <MappingFragment StoreEntitySet="CallType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1875,15 +889,15 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </EntitySetMapping>
           <EntitySetMapping Name="Periods">
             <EntityTypeMapping TypeName="Model.Period">
-              <MappingFragment StoreEntitySet="Periods">
+              <MappingFragment StoreEntitySet="Period">
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Strategy1">
-            <EntityTypeMapping TypeName="Model.Strategy1">
-              <MappingFragment StoreEntitySet="Strategy1">
+          <EntitySetMapping Name="Strategies">
+            <EntityTypeMapping TypeName="Model.Strategy">
+              <MappingFragment StoreEntitySet="Strategy">
                 <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1918,6 +932,14 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="Criteria1" ColumnName="Criteria1" />
                 <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
                 <ScalarProperty Name="DateDay" ColumnName="DateDay" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubTypes">
+            <EntityTypeMapping TypeName="Model.SubType">
+              <MappingFragment StoreEntitySet="SubType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1959,91 +981,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vwReportedNumbers">
-            <EntityTypeMapping TypeName="Model.vwReportedNumber">
-              <MappingFragment StoreEntitySet="vwReportedNumber">
-                <ScalarProperty Name="MonthYear" ColumnName="MonthYear" />
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="CountDistinctCalledParties" ColumnName="CountDistinctCalledParties" />
-                <ScalarProperty Name="NumberofAttempts" ColumnName="NumberofAttempts" />
-                <ScalarProperty Name="TerminatedVolume" ColumnName="TerminatedVolume" />
-                <ScalarProperty Name="OriginatedVolume" ColumnName="OriginatedVolume" />
-                <ScalarProperty Name="Date_Day" ColumnName="Date_Day" />
-                <ScalarProperty Name="CLI" ColumnName="CLI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwReportedNumberNormalCDRs">
-            <EntityTypeMapping TypeName="Model.vwReportedNumberNormalCDR">
-              <MappingFragment StoreEntitySet="vwReportedNumberNormalCDR">
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="Switch" ColumnName="Switch" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="A_Temp" ColumnName="A_Temp" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwReportVariables">
-            <EntityTypeMapping TypeName="Model.vwReportVariable">
-              <MappingFragment StoreEntitySet="vwReportVariables">
-                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
-                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwSuspectionAnalysis">
-            <EntityTypeMapping TypeName="Model.vwSuspectionAnalysi">
-              <MappingFragment StoreEntitySet="vwSuspectionAnalysis">
-                <ScalarProperty Name="StrategyName" ColumnName="StrategyName" />
-                <ScalarProperty Name="LastreportNumber" ColumnName="LastreportNumber" />
-                <ScalarProperty Name="Number_of_occurance" ColumnName="Number_of_occurance" />
-                <ScalarProperty Name="SuspectionLevelName" ColumnName="SuspectionLevelName" />
-                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="strategyId" ColumnName="strategyId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_CallClass_GetAll" FunctionName="Model.Store.sp_CallClass_GetAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_CallClass_GetAll_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="NetType" ColumnName="NetType" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_NormalCDR_Load" FunctionName="Model.Store.sp_NormalCDR_Load">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_NormalCDR_Load_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
-                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
-                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
-                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
-                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
-                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
-                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
-                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
-                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
-                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
-                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
-                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
-                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
-                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

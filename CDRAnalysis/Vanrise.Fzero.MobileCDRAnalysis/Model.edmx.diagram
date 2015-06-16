@@ -5,44 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ae5acfff0c8a4d58a4072b177c7355c6" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.CellProfile" Width="1.5" PointX="8.75" PointY="9.5" />
-        <EntityTypeShape EntityType="Model.Criteria_Profile" Width="1.5" PointX="5.75" PointY="2.5" />
-        <EntityTypeShape EntityType="Model.EmailReceiver" Width="1.5" PointX="5.25" PointY="7.25" />
-        <EntityTypeShape EntityType="Model.EmailReceiverType" Width="1.5" PointX="3" PointY="4.5" />
-        <EntityTypeShape EntityType="Model.EmailTemplate" Width="1.5" PointX="3" PointY="6.875" />
-        <EntityTypeShape EntityType="Model.EmailToken" Width="1.5" PointX="10.75" PointY="9.5" />
-        <EntityTypeShape EntityType="Model.Permission" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.Report" Width="1.5" PointX="3" PointY="11.375" />
-        <EntityTypeShape EntityType="Model.ReportDetail" Width="1.5" PointX="5.25" PointY="14.75" />
-        <EntityTypeShape EntityType="Model.ReportingStatu" Width="1.5" PointX="0.75" PointY="13.25" />
-        <EntityTypeShape EntityType="Model.Set_CallClass" Width="1.5" PointX="10.75" PointY="12.5" />
-        <EntityTypeShape EntityType="Model.Set_CallType" Width="1.5" PointX="12.75" PointY="2.5" />
-        <EntityTypeShape EntityType="Model.Set_SubType" Width="1.5" PointX="12.75" PointY="5.5" />
-        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="3" PointY="17.625" />
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="12.75" PointY="8.5" />
-        <EntityTypeShape EntityType="Model.UserPermission" Width="1.5" PointX="6" PointY="10.875" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="8.125" />
-        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="7.75" PointY="14.5" />
-        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="12.75" PointY="11.5" />
-        <EntityTypeShape EntityType="Model.Strategy1" Width="1.5" PointX="12.75" PointY="14.5" />
-        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="10" PointY="2.875" />
-        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="7.75" PointY="4.875" />
-        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="9.75" PointY="15.5" />
-        <EntityTypeShape EntityType="Model.vwReportedNumber" Width="1.5" PointX="14.75" PointY="2.5" />
-        <EntityTypeShape EntityType="Model.vwReportedNumberNormalCDR" Width="1.5" PointX="14.75" PointY="6.5" />
-        <EntityTypeShape EntityType="Model.vwReportVariable" Width="1.5" PointX="14.75" PointY="9.5" />
-        <EntityTypeShape EntityType="Model.vwSuspectionAnalysi" Width="1.5" PointX="14.75" PointY="12.5" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailReceiverTypes" />
-        <AssociationConnector Association="Model.FK_EmailReceivers_EmailTemplates" />
-        <AssociationConnector Association="Model.FK_EmailTemplates_Users" />
-        <AssociationConnector Association="Model.FK_Permissions_Permissions" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Permissions" />
-        <AssociationConnector Association="Model.FK_Report_ReportingStatus" />
-        <AssociationConnector Association="Model.FK_Report_Users" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Report" />
-        <AssociationConnector Association="Model.FK_ReportDetails_Strategy" />
-        <AssociationConnector Association="Model.FK_Strategy_Users" />
-        <AssociationConnector Association="Model.FK_UserPermissions_Users" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.CallClass" Width="1.5" PointX="5.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.CallType" Width="1.5" PointX="5.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="Model.SubType" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="9.75" PointY="3.75" />
         <AssociationConnector Association="Model.FK_SubscriberThreshold_Suspicion_Level" />
       </Diagram>
     </edmx:Diagrams>

@@ -427,31 +427,6 @@ public partial class SuspectionAnalysis : BasePage
         return dt;
     }
 
-    protected List<ReportDetail> GetSelectedReportDetails(DataTable dt,Report report)
-    {
-        List<ReportDetail> reportDetails = new List<ReportDetail> ();
-
-        foreach (DataRow dr in dt.Rows)
-        {
-            //if ((string)dr["lastReport"] != report.ReportNumber)
-            //{
-            
-                    ReportDetail reportDetail = new ReportDetail();
-                    reportDetail.StrategyId = int.Parse((string)dr["StrategyId"]);
-                    reportDetail.SubscriberNumber =   ( (string)dr["SubscriberNumber"] =="&nbsp;" ? string.Empty  :(string)dr["SubscriberNumber"])           ;
-
-
-                    if ((reportDetails.Where(s => s.SubscriberNumber == (string)dr["SubscriberNumber"])).ToList().Count() == 0)
-                    {
-                        if (ReportDetail.CheckNumberExistance(reportDetail.SubscriberNumber, report.Id)==false)
-                        reportDetails.Add(reportDetail);
-                    }
-              
-            //}
-        }
-
-        return reportDetails;
-    }
 
 
     protected void gvData_RowDataBound(object sender, GridViewRowEventArgs e)

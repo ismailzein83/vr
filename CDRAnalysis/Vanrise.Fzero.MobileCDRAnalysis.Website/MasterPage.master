@@ -96,37 +96,6 @@
                             <!-- BEGIN SUPPORT -->
                             <!-- END SUPPORT -->
                             <!-- BEGIN USER LOGIN DROPDOWN -->
-
-                            <li id="liConfigurations" runat="server" class="dropdown">
-                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                                    <i class="icon-check"></i>
-                                    <span class="username">
-                                        <span>Configurations</span>
-                                        <b class="caret"></b></span></a>
-                                <ul class="dropdown-menu extended logout">
-                                    <li id="btnUsers" runat="server"><a href="Users.aspx"><i class="icon-user"></i> &nbsp; Users</a></li>
-                                    <li id="btnEmailTemplates" runat="server"><a href="EmailTemplates.aspx"><i class="icon-picture"></i> &nbsp; Email Templates</a></li>
-                                    <li id="btnEmailReceivers" runat="server"><a href="EmailReceivers.aspx"><i class="icon-share"></i> &nbsp; Email Receivers</a></li>
-                                    <li id="btnSentEmails" runat="server"><a href="SentEmails.aspx"><i class="icon-hdd"></i> &nbsp; Sent Emails</a></li>
-                                    
-                                </ul>
-                            </li>
-
-
-                            <li id="liLogin" runat="server" class="dropdown">
-                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                                    <i class="icon-user"></i>
-                                    <span class="username">
-                                        <span><%= (BasePage.CurrentUser.User==null? "":  BasePage.CurrentUser.User.FullName) %></span>
-                                        <b class="caret"></b></span></a>
-                                <ul class="dropdown-menu extended logout">
-                                    <li><a href='<%= (BasePage.CurrentUser.User==null? "#":  "UserProfile.aspx") %>'><i class="icon-user"></i>My Profile</a></li>
-                                    <li><a href="ChangePassword.aspx"><i class="icon-asterisk"></i>Change Password</a></li>
-                                    <li><a href="LogoutPage.aspx"><i class="icon-off"></i>Log Out
-                                        <br />
-                                        <%= (BasePage.CurrentUser.User==null? "":  DateTime.Now.ToString()) %>  </a></li>
-                                </ul>
-                            </li>
                             <!-- END USER LOGIN DROPDOWN -->
                         </ul>
                         <!-- END TOP NAVIGATION MENU -->
@@ -162,15 +131,6 @@
                                 <span>Suspicion Analysis</span>
                             </a>
                         </li>
-                        <li class="sub-menu" id="btnReportManagement" runat="server">
-                            <a class="" href="ReportManagement.aspx">
-                                <i class="icon-file"></i>
-                                <span>Reports</span>
-                            </a>
-                        </li>
-
-
-
 
 
 

@@ -18,19 +18,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 {
     public class SuspectionOccurance
     {
-        public string SubscriberNumber { get; set; }
-        public Suspicion_Level Suspicion_Level { get; set; }
-        public int? NumberOfOccurance { get; set; }
-        public Strategy Strategy { get; set; }
-        public string LastReport { get; set; }
-
-
-        public static List<vwSuspectionAnalysi> GetList(int strategyId, DateTime? fromDate, DateTime? toDate, string suspectionList, int minimumOccurance, string SQLType)
+         public static dynamic GetList(int strategyId, DateTime? fromDate, DateTime? toDate, string suspectionList, int minimumOccurance, string SQLType)
         {
-            List<vwSuspectionAnalysi> suspectionOccurance = new List<vwSuspectionAnalysi>();
-         
-            try
-            {
                 using (Entities context = new Entities())
                 {
                     ((IObjectContextAdapter)context).ObjectContext.CommandTimeout = 18000;
@@ -44,7 +33,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                         MySqlParameter MySQL_suspectionList = new MySqlParameter("@SuspectionList", suspectionList);
                         MySqlParameter MySQL_minimumOccurance = new MySqlParameter("@MinimumOccurance", minimumOccurance);
 
-                        suspectionOccurance = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwSuspectionAnalysi>("call prfindSuspicionOccurrence (@fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance)", MySQL_fromDate, MySQL_toDate, MySQL_strategyId, MySQL_suspectionList, MySQL_minimumOccurance).ToList();
+                        return ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<dynamic>("call prfindSuspicionOccurrence (@fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance)", MySQL_fromDate, MySQL_toDate, MySQL_strategyId, MySQL_suspectionList, MySQL_minimumOccurance).ToList();
 
 
                     }
@@ -57,7 +46,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                         SqlParameter SQL_suspectionList = new SqlParameter("@SuspectionList", suspectionList);
                         SqlParameter SQL_minimumOccurance = new SqlParameter("@MinimumOccurance", minimumOccurance);
 
-                        suspectionOccurance = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<vwSuspectionAnalysi>("prfindSuspicionOccurrence @fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance", SQL_fromDate, SQL_toDate, SQL_strategyId, SQL_suspectionList, SQL_minimumOccurance).ToList();
+                        return ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<dynamic>("prfindSuspicionOccurrence @fromDate,  @ToDate, @strategyId, @SuspectionList, @MinimumOccurance", SQL_fromDate, SQL_toDate, SQL_strategyId, SQL_suspectionList, SQL_minimumOccurance).ToList();
 
                     }
                     
@@ -65,16 +54,8 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
 
                  
                 }
-            }
-            catch (Exception err)
-            {
-                FileLogger.Write("DataLayer.SuspectionOccurance.GetSuspectionOccurance", err);
-            }
-            return suspectionOccurance;
+           
         }
-
-
-
-
+        
     }
 }

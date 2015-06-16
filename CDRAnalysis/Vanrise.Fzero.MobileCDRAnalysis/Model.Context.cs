@@ -28,33 +28,16 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<CellProfile> CellProfiles { get; set; }
-        public DbSet<Criteria_Profile> Criteria_Profile { get; set; }
-        public DbSet<EmailReceiver> EmailReceivers { get; set; }
-        public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
-        public DbSet<EmailTemplate> EmailTemplates { get; set; }
-        public DbSet<EmailToken> EmailTokens { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Report> Reports { get; set; }
-        public DbSet<ReportDetail> ReportDetails { get; set; }
-        public DbSet<ReportingStatu> ReportingStatus { get; set; }
-        public DbSet<Set_CallClass> Set_CallClass { get; set; }
-        public DbSet<Set_CallType> Set_CallType { get; set; }
-        public DbSet<Set_SubType> Set_SubType { get; set; }
-        public DbSet<Strategy> Strategies { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
-        public DbSet<UserPermission> UserPermissions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<CallClass> CallClasses { get; set; }
+        public DbSet<CallType> CallTypes { get; set; }
         public DbSet<NumberProfile> NumberProfiles { get; set; }
         public DbSet<Period> Periods { get; set; }
-        public DbSet<Strategy1> Strategy1 { get; set; }
+        public DbSet<Strategy> Strategies { get; set; }
         public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
+        public DbSet<SubType> SubTypes { get; set; }
         public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
-        public DbSet<vwReportedNumber> vwReportedNumbers { get; set; }
-        public DbSet<vwReportedNumberNormalCDR> vwReportedNumberNormalCDRs { get; set; }
-        public DbSet<vwReportVariable> vwReportVariables { get; set; }
-        public DbSet<vwSuspectionAnalysi> vwSuspectionAnalysis { get; set; }
     
         public virtual int prCollectNormalizedCDR()
         {

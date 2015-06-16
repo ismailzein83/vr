@@ -54,7 +54,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             InsertBulkToTable(  
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[dbo].[NormalCDR]",
+                    TableName = "[FraudAnalysis].[NormalCDR]",
                     Stream = stream,
                     TabLock = false,
                     KeepIdentity = false,
