@@ -89,53 +89,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Service_Type" Type="int" />
           <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="NumberProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
-          <Property Name="FromDate" Type="datetime" />
-          <Property Name="ToDate" Type="datetime" />
-          <Property Name="Count_Out_Calls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Inter" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Inter" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="InCalls_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="DiffDest_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="OutInter_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Call_Out_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="OutOffNet_Vs_OutOnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Fail" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Input_Numbers" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_SMS" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_IMEI" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_BTS" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="IsOnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Data_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="PeriodId" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OffNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OffNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountFailConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="Periods">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="Permissions">
           <Key>
             <PropertyRef Name="ID" />
@@ -145,15 +98,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Category" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentID" Type="int" />
-        </EntityType>
-        <EntityType Name="Related_Criteria">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StrategyId" Type="int" />
-          <Property Name="CriteriaId" Type="int" />
-          <Property Name="Related_CriteriaId" Type="int" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
@@ -220,40 +164,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="IsDefault" Type="bit" />
           <Property Name="StrategyContent" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="SubscriberThresholds">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DateDay" Type="datetime" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
-          <Property Name="Criteria1" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria2" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria3" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria4" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria5" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria6" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria7" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria8" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria9" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria10" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria11" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria12" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria13" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria14" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="SuspicionLevelId" Type="int" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="20" />
-        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -291,8 +201,99 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.NormalCDR' does not have 
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="Count_Out_Calls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Output_Numb" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_Inter" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Inter" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="InCalls_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="DiffDest_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="OutInter_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Call_Out_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="OutOffNet_Vs_OutOnNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_Fail" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Fail" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Total_Out_Volume" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Total_In_Volume" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Input_Numbers" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_SMS" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Total_IMEI" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Total_BTS" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="IsOnNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Total_Data_Volume" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="PeriodId" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Calls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_OnNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_OnNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_OffNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_OffNet" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountFailConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="StrategyId" Type="int" />
+        </EntityType>
+        <EntityType Name="Periods">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Strategy1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="Name" Type="varchar" MaxLength="20" />
+          <Property Name="IsDefault" Type="bit" />
+          <Property Name="StrategyContent" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="SubscriberThreshold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateDay" Type="datetime" />
+          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Criteria1" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria2" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria3" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria4" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria5" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria6" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria7" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria8" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria9" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria10" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria11" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria12" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria13" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria14" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SuspicionLevelId" Type="int" />
+          <Property Name="StrategyId" Type="int" />
+        </EntityType>
+        <EntityType Name="Suspicion_Level">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="20" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwReportedNumber">
@@ -403,42 +404,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Related_Criteria_criteria_profile">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Related_Criteria_criteria_profile1">
-          <End Role="Criteria_Profile" Type="Self.Criteria_Profile" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="Related_CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Related_Criteria_Strategy">
-          <End Role="Strategy" Type="Self.Strategy" Multiplicity="0..1" />
-          <End Role="Related_Criteria" Type="Self.Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="StrategyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Report_ReportingStatus">
           <End Role="ReportingStatus" Type="Self.ReportingStatus" Multiplicity="1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
@@ -499,14 +464,14 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SubscriberThresholds_Suspection_Level">
+        <Association Name="FK_SubscriberThreshold_Suspicion_Level">
           <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
-          <End Role="SubscriberThresholds" Type="Self.SubscriberThresholds" Multiplicity="*" />
+          <End Role="SubscriberThreshold" Type="Self.SubscriberThreshold" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Suspicion_Level">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="SubscriberThresholds">
+            <Dependent Role="SubscriberThreshold">
               <PropertyRef Name="SuspicionLevelId" />
             </Dependent>
           </ReferentialConstraint>
@@ -604,6 +569,11 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_CallClass_GetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis" />
+        <Function Name="sp_NormalCDR_Load" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis">
+          <Parameter Name="From" Type="datetime" Mode="In" />
+          <Parameter Name="To" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="sp_Strategy_GetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis" />
         <Function Name="sp_Strategy_GetFilteredStrategies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis">
           <Parameter Name="FromRow" Type="int" Mode="In" />
@@ -639,10 +609,7 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <EntitySet Name="EmailReceiverTypes" EntityType="Self.EmailReceiverTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailTokens" EntityType="Self.EmailTokens" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Periods" EntityType="Self.Periods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Related_Criteria" EntityType="Self.Related_Criteria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportDetails" EntityType="Self.ReportDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportingStatus" EntityType="Self.ReportingStatus" Schema="dbo" store:Type="Tables" />
@@ -650,11 +617,14 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.dbo.vwSuspectionAnalysis' doe
           <EntitySet Name="Set_CallType" EntityType="Self.Set_CallType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Set_SubType" EntityType="Self.Set_SubType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SubscriberThresholds" EntityType="Self.SubscriberThresholds" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Suspicion_Level" EntityType="Self.Suspicion_Level" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermissions" EntityType="Self.UserPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="Periods" EntityType="Self.Periods" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="Strategy1" EntityType="Self.Strategy1" Schema="FraudAnalysis" Table="Strategy" store:Type="Tables" />
+          <EntitySet Name="SubscriberThreshold" EntityType="Self.SubscriberThreshold" Schema="FraudAnalysis" store:Type="Tables" />
+          <EntitySet Name="Suspicion_Level" EntityType="Self.Suspicion_Level" Schema="FraudAnalysis" store:Type="Tables" />
           <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [NormalCDR].[Id] AS [Id], 
@@ -737,18 +707,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="Permissions" EntitySet="Permissions" />
             <End Role="Permissions1" EntitySet="Permissions" />
           </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Self.FK_Related_Criteria_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="Self.FK_Related_Criteria_criteria_profile1">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_Strategy" Association="Self.FK_Related_Criteria_Strategy">
-            <End Role="Strategy" EntitySet="Strategy" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
           <AssociationSet Name="FK_Report_ReportingStatus" Association="Self.FK_Report_ReportingStatus">
             <End Role="ReportingStatus" EntitySet="ReportingStatus" />
             <End Role="Report" EntitySet="Report" />
@@ -769,9 +727,9 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="Users" EntitySet="Users" />
             <End Role="Strategy" EntitySet="Strategy" />
           </AssociationSet>
-          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Self.FK_SubscriberThresholds_Suspection_Level">
+          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Self.FK_SubscriberThreshold_Suspicion_Level">
             <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThresholds" EntitySet="SubscriberThresholds" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThreshold" />
           </AssociationSet>
           <AssociationSet Name="FK_UserPermissions_Permissions" Association="Self.FK_UserPermissions_Permissions">
             <End Role="Permissions" EntitySet="Permissions" />
@@ -957,10 +915,7 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="EmailReceiverTypes" EntityType="Model.EmailReceiverType" />
           <EntitySet Name="EmailTemplates" EntityType="Model.EmailTemplate" />
           <EntitySet Name="EmailTokens" EntityType="Model.EmailToken" />
-          <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
-          <EntitySet Name="Periods" EntityType="Model.Period" />
           <EntitySet Name="Permissions" EntityType="Model.Permission" />
-          <EntitySet Name="Related_Criteria" EntityType="Model.Related_Criteria" />
           <EntitySet Name="Reports" EntityType="Model.Report" />
           <EntitySet Name="ReportDetails" EntityType="Model.ReportDetail" />
           <EntitySet Name="ReportingStatus" EntityType="Model.ReportingStatu" />
@@ -968,24 +923,19 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <EntitySet Name="Set_CallType" EntityType="Model.Set_CallType" />
           <EntitySet Name="Set_SubType" EntityType="Model.Set_SubType" />
           <EntitySet Name="Strategies" EntityType="Model.Strategy" />
-          <EntitySet Name="SubscriberThresholds" EntityType="Model.SubscriberThreshold" />
-          <EntitySet Name="Suspicion_Level" EntityType="Model.Suspicion_Level" />
           <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
           <EntitySet Name="UserPermissions" EntityType="Model.UserPermission" />
           <EntitySet Name="Users" EntityType="Model.User" />
+          <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
+          <EntitySet Name="Periods" EntityType="Model.Period" />
+          <EntitySet Name="Strategy1" EntityType="Model.Strategy1" />
+          <EntitySet Name="SubscriberThresholds" EntityType="Model.SubscriberThreshold" />
+          <EntitySet Name="Suspicion_Level" EntityType="Model.Suspicion_Level" />
           <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
           <EntitySet Name="vwReportedNumbers" EntityType="Model.vwReportedNumber" />
           <EntitySet Name="vwReportedNumberNormalCDRs" EntityType="Model.vwReportedNumberNormalCDR" />
           <EntitySet Name="vwReportVariables" EntityType="Model.vwReportVariable" />
           <EntitySet Name="vwSuspectionAnalysis" EntityType="Model.vwSuspectionAnalysi" />
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile" Association="Model.FK_Related_Criteria_criteria_profile">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_criteria_profile1" Association="Model.FK_Related_Criteria_criteria_profile1">
-            <End Role="Criteria_Profile" EntitySet="Criteria_Profile" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
-          </AssociationSet>
           <AssociationSet Name="FK_EmailReceivers_EmailReceiverTypes" Association="Model.FK_EmailReceivers_EmailReceiverTypes">
             <End Role="EmailReceiverType" EntitySet="EmailReceiverTypes" />
             <End Role="EmailReceiver" EntitySet="EmailReceivers" />
@@ -1005,10 +955,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <AssociationSet Name="FK_UserPermissions_Permissions" Association="Model.FK_UserPermissions_Permissions">
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Related_Criteria_Strategy" Association="Model.FK_Related_Criteria_Strategy">
-            <End Role="Strategy" EntitySet="Strategies" />
-            <End Role="Related_Criteria" EntitySet="Related_Criteria" />
           </AssociationSet>
           <AssociationSet Name="FK_Report_ReportingStatus" Association="Model.FK_Report_ReportingStatus">
             <End Role="ReportingStatu" EntitySet="ReportingStatus" />
@@ -1030,14 +976,19 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             <End Role="User" EntitySet="Users" />
             <End Role="Strategy" EntitySet="Strategies" />
           </AssociationSet>
-          <AssociationSet Name="FK_SubscriberThresholds_Suspection_Level" Association="Model.FK_SubscriberThresholds_Suspection_Level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
-          </AssociationSet>
           <AssociationSet Name="FK_UserPermissions_Users" Association="Model.FK_UserPermissions_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="UserPermission" EntitySet="UserPermissions" />
           </AssociationSet>
+          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Model.FK_SubscriberThreshold_Suspicion_Level">
+            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
+            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
+          </AssociationSet>
+          <FunctionImport Name="sp_CallClass_GetAll" ReturnType="Collection(Model.sp_CallClass_GetAll_Result)" />
+          <FunctionImport Name="sp_NormalCDR_Load" ReturnType="Collection(Model.sp_NormalCDR_Load_Result)">
+            <Parameter Name="From" Mode="In" Type="DateTime" />
+            <Parameter Name="To" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="prGetReportVariables_Result">
           <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="23" />
@@ -1095,8 +1046,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_criteria_profile" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
-          <NavigationProperty Name="Related_Criteria1" Relationship="Model.FK_Related_Criteria_criteria_profile1" FromRole="Criteria_Profile" ToRole="Related_Criteria" />
         </EntityType>
         <EntityType Name="EmailReceiver">
           <Key>
@@ -1138,53 +1087,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Token" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="NumberProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="FromDate" Type="DateTime" Precision="3" />
-          <Property Name="ToDate" Type="DateTime" Precision="3" />
-          <Property Name="Count_Out_Calls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Inter" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Inter" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="InCalls_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="DiffDest_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="OutInter_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Call_Out_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="OutOffNet_Vs_OutOnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Fail" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Input_Numbers" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_SMS" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_IMEI" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_BTS" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="IsOnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Data_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="PeriodId" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OffNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OffNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountFailConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountInLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="StrategyId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Period">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Permission">
           <Key>
             <PropertyRef Name="ID" />
@@ -1197,18 +1099,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <NavigationProperty Name="Permissions1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission" ToRole="Permission1" />
           <NavigationProperty Name="Permission1" Relationship="Model.FK_Permissions_Permissions" FromRole="Permission1" ToRole="Permission" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Permissions" FromRole="Permission" ToRole="UserPermission" />
-        </EntityType>
-        <EntityType Name="Related_Criteria">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StrategyId" Type="Int32" />
-          <Property Name="CriteriaId" Type="Int32" />
-          <Property Name="Related_CriteriaId" Type="Int32" />
-          <NavigationProperty Name="Criteria_Profile" Relationship="Model.FK_Related_Criteria_criteria_profile" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Criteria_Profile1" Relationship="Model.FK_Related_Criteria_criteria_profile1" FromRole="Related_Criteria" ToRole="Criteria_Profile" />
-          <NavigationProperty Name="Strategy" Relationship="Model.FK_Related_Criteria_Strategy" FromRole="Related_Criteria" ToRole="Strategy" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
@@ -1280,45 +1170,8 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IsDefault" Type="Boolean" />
           <Property Name="StrategyContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Related_Criteria" Relationship="Model.FK_Related_Criteria_Strategy" FromRole="Strategy" ToRole="Related_Criteria" />
           <NavigationProperty Name="ReportDetails" Relationship="Model.FK_ReportDetails_Strategy" FromRole="Strategy" ToRole="ReportDetail" />
           <NavigationProperty Name="User" Relationship="Model.FK_Strategy_Users" FromRole="Strategy" ToRole="User" />
-        </EntityType>
-        <EntityType Name="SubscriberThreshold">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateDay" Type="DateTime" Precision="3" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Criteria1" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria2" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria3" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria4" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria5" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria6" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria7" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria8" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria9" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria10" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria11" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria12" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria13" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria14" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria15" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="SuspicionLevelId" Type="Int32" />
-          <Property Name="StrategyId" Type="Int32" />
-          <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
-        </EntityType>
-        <EntityType Name="Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThresholds_Suspection_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -1362,6 +1215,101 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <NavigationProperty Name="Reports" Relationship="Model.FK_Report_Users" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Strategies" Relationship="Model.FK_Strategy_Users" FromRole="User" ToRole="Strategy" />
           <NavigationProperty Name="UserPermissions" Relationship="Model.FK_UserPermissions_Users" FromRole="User" ToRole="UserPermission" />
+        </EntityType>
+        <EntityType Name="NumberProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="FromDate" Type="DateTime" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Precision="3" />
+          <Property Name="Count_Out_Calls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Output_Numb" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_Inter" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Inter" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="InCalls_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="DiffDest_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="OutInter_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Call_Out_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="OutOffNet_Vs_OutOnNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_Fail" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Fail" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Total_Out_Volume" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Total_In_Volume" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Diff_Input_Numbers" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_SMS" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Total_IMEI" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Total_BTS" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="IsOnNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Total_Data_Volume" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="PeriodId" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_Calls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Call_In_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_OnNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_OnNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_Out_OffNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Count_In_OffNet" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountFailConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="CountInLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="StrategyId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Period">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Strategy1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsDefault" Type="Boolean" />
+          <Property Name="StrategyContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SubscriberThreshold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateDay" Type="DateTime" Precision="3" />
+          <Property Name="SubscriberNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Criteria1" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria2" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria3" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria4" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria5" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria6" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria7" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria8" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria9" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria10" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria11" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria12" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria13" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria14" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria15" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SuspicionLevelId" Type="Int32" />
+          <Property Name="StrategyId" Type="Int32" />
+          <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThreshold_Suspicion_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
+        </EntityType>
+        <EntityType Name="Suspicion_Level">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThreshold_Suspicion_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
         </EntityType>
         <EntityType Name="NormalCDR">
           <Key>
@@ -1445,30 +1393,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
           <Property Name="LastreportNumber" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="StrategyName" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="FK_Related_Criteria_criteria_profile">
-          <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="Model.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Related_Criteria_criteria_profile1">
-          <End Type="Model.Criteria_Profile" Role="Criteria_Profile" Multiplicity="0..1" />
-          <End Type="Model.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Criteria_Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="Related_CriteriaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_EmailReceivers_EmailReceiverTypes">
           <End Type="Model.EmailReceiverType" Role="EmailReceiverType" Multiplicity="0..1" />
           <End Type="Model.EmailReceiver" Role="EmailReceiver" Multiplicity="*" />
@@ -1526,18 +1450,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Principal>
             <Dependent Role="UserPermission">
               <PropertyRef Name="PermissionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Related_Criteria_Strategy">
-          <End Type="Model.Strategy" Role="Strategy" Multiplicity="0..1" />
-          <End Type="Model.Related_Criteria" Role="Related_Criteria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Strategy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Related_Criteria">
-              <PropertyRef Name="StrategyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1601,18 +1513,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SubscriberThresholds_Suspection_Level">
-          <End Type="Model.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
-          <End Type="Model.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Suspicion_Level">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubscriberThreshold">
-              <PropertyRef Name="SuspicionLevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserPermissions_Users">
           <End Type="Model.User" Role="User" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1627,6 +1527,48 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SubscriberThreshold_Suspicion_Level">
+          <End Type="Model.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
+          <End Type="Model.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suspicion_Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubscriberThreshold">
+              <PropertyRef Name="SuspicionLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_CallClass_GetAll_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="NetType" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_NormalCDR_Load_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="MSISDN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="IMSI" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="ConnectDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Destination" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="DurationInSeconds" Nullable="true" Precision="13" Scale="4" />
+          <Property Type="DateTime" Name="DisconnectDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Call_Class" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="IsOnNet" Nullable="true" />
+          <Property Type="Int32" Name="Call_Type" Nullable="true" />
+          <Property Type="String" Name="Sub_Type" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="BTS_Id" Nullable="true" />
+          <Property Type="String" Name="Cell_Id" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="SwitchRecordId" Nullable="true" />
+          <Property Type="Decimal" Name="Up_Volume" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Down_Volume" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Cell_Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Cell_Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="String" Name="In_Trunk" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Out_Trunk" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Service_Type" Nullable="true" />
+          <Property Type="String" Name="Service_VAS_Name" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1768,55 +1710,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NumberProfiles">
-            <EntityTypeMapping TypeName="Model.NumberProfile">
-              <MappingFragment StoreEntitySet="NumberProfile">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="CountInLowDurationCalls" ColumnName="CountInLowDurationCalls" />
-                <ScalarProperty Name="CountConsecutiveCalls" ColumnName="CountConsecutiveCalls" />
-                <ScalarProperty Name="CountFailConsecutiveCalls" ColumnName="CountFailConsecutiveCalls" />
-                <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
-                <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
-                <ScalarProperty Name="Count_In_OnNet" ColumnName="Count_In_OnNet" />
-                <ScalarProperty Name="Count_Out_OnNet" ColumnName="Count_Out_OnNet" />
-                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
-                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
-                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
-                <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
-                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
-                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
-                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
-                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
-                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
-                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
-                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
-                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
-                <ScalarProperty Name="OutOffNet_Vs_OutOnNet" ColumnName="OutOffNet_Vs_OutOnNet" />
-                <ScalarProperty Name="AvrDurIn_Vs_AvrDurOut" ColumnName="AvrDurIn_Vs_AvrDurOut" />
-                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
-                <ScalarProperty Name="OutInter_Vs_OutCalls" ColumnName="OutInter_Vs_OutCalls" />
-                <ScalarProperty Name="DiffDest_Vs_OutCalls" ColumnName="DiffDest_Vs_OutCalls" />
-                <ScalarProperty Name="InCalls_Vs_OutCalls" ColumnName="InCalls_Vs_OutCalls" />
-                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
-                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
-                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
-                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
-                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Periods">
-            <EntityTypeMapping TypeName="Model.Period">
-              <MappingFragment StoreEntitySet="Periods">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Permissions">
             <EntityTypeMapping TypeName="Model.Permission">
               <MappingFragment StoreEntitySet="Permissions">
@@ -1825,16 +1718,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Related_Criteria">
-            <EntityTypeMapping TypeName="Model.Related_Criteria">
-              <MappingFragment StoreEntitySet="Related_Criteria">
-                <ScalarProperty Name="Related_CriteriaId" ColumnName="Related_CriteriaId" />
-                <ScalarProperty Name="CriteriaId" ColumnName="CriteriaId" />
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1910,42 +1793,6 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SubscriberThresholds">
-            <EntityTypeMapping TypeName="Model.SubscriberThreshold">
-              <MappingFragment StoreEntitySet="SubscriberThresholds">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
-                <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
-                <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
-                <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
-                <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
-                <ScalarProperty Name="Criteria13" ColumnName="Criteria13" />
-                <ScalarProperty Name="Criteria12" ColumnName="Criteria12" />
-                <ScalarProperty Name="Criteria11" ColumnName="Criteria11" />
-                <ScalarProperty Name="Criteria10" ColumnName="Criteria10" />
-                <ScalarProperty Name="Criteria9" ColumnName="Criteria9" />
-                <ScalarProperty Name="Criteria8" ColumnName="Criteria8" />
-                <ScalarProperty Name="Criteria7" ColumnName="Criteria7" />
-                <ScalarProperty Name="Criteria6" ColumnName="Criteria6" />
-                <ScalarProperty Name="Criteria5" ColumnName="Criteria5" />
-                <ScalarProperty Name="Criteria4" ColumnName="Criteria4" />
-                <ScalarProperty Name="Criteria3" ColumnName="Criteria3" />
-                <ScalarProperty Name="Criteria2" ColumnName="Criteria2" />
-                <ScalarProperty Name="Criteria1" ColumnName="Criteria1" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Suspicion_Level">
-            <EntityTypeMapping TypeName="Model.Suspicion_Level">
-              <MappingFragment StoreEntitySet="Suspicion_Level">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="Model.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -1982,6 +1829,104 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
                 <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NumberProfiles">
+            <EntityTypeMapping TypeName="Model.NumberProfile">
+              <MappingFragment StoreEntitySet="NumberProfile">
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="CountInLowDurationCalls" ColumnName="CountInLowDurationCalls" />
+                <ScalarProperty Name="CountConsecutiveCalls" ColumnName="CountConsecutiveCalls" />
+                <ScalarProperty Name="CountFailConsecutiveCalls" ColumnName="CountFailConsecutiveCalls" />
+                <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
+                <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
+                <ScalarProperty Name="Count_In_OnNet" ColumnName="Count_In_OnNet" />
+                <ScalarProperty Name="Count_Out_OnNet" ColumnName="Count_Out_OnNet" />
+                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
+                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
+                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
+                <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
+                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
+                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
+                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
+                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
+                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
+                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
+                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
+                <ScalarProperty Name="OutOffNet_Vs_OutOnNet" ColumnName="OutOffNet_Vs_OutOnNet" />
+                <ScalarProperty Name="AvrDurIn_Vs_AvrDurOut" ColumnName="AvrDurIn_Vs_AvrDurOut" />
+                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
+                <ScalarProperty Name="OutInter_Vs_OutCalls" ColumnName="OutInter_Vs_OutCalls" />
+                <ScalarProperty Name="DiffDest_Vs_OutCalls" ColumnName="DiffDest_Vs_OutCalls" />
+                <ScalarProperty Name="InCalls_Vs_OutCalls" ColumnName="InCalls_Vs_OutCalls" />
+                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
+                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
+                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
+                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Periods">
+            <EntityTypeMapping TypeName="Model.Period">
+              <MappingFragment StoreEntitySet="Periods">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Strategy1">
+            <EntityTypeMapping TypeName="Model.Strategy1">
+              <MappingFragment StoreEntitySet="Strategy1">
+                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriberThresholds">
+            <EntityTypeMapping TypeName="Model.SubscriberThreshold">
+              <MappingFragment StoreEntitySet="SubscriberThreshold">
+                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
+                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
+                <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
+                <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
+                <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
+                <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
+                <ScalarProperty Name="Criteria13" ColumnName="Criteria13" />
+                <ScalarProperty Name="Criteria12" ColumnName="Criteria12" />
+                <ScalarProperty Name="Criteria11" ColumnName="Criteria11" />
+                <ScalarProperty Name="Criteria10" ColumnName="Criteria10" />
+                <ScalarProperty Name="Criteria9" ColumnName="Criteria9" />
+                <ScalarProperty Name="Criteria8" ColumnName="Criteria8" />
+                <ScalarProperty Name="Criteria7" ColumnName="Criteria7" />
+                <ScalarProperty Name="Criteria6" ColumnName="Criteria6" />
+                <ScalarProperty Name="Criteria5" ColumnName="Criteria5" />
+                <ScalarProperty Name="Criteria4" ColumnName="Criteria4" />
+                <ScalarProperty Name="Criteria3" ColumnName="Criteria3" />
+                <ScalarProperty Name="Criteria2" ColumnName="Criteria2" />
+                <ScalarProperty Name="Criteria1" ColumnName="Criteria1" />
+                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
+                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suspicion_Level">
+            <EntityTypeMapping TypeName="Model.Suspicion_Level">
+              <MappingFragment StoreEntitySet="Suspicion_Level">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2061,6 +2006,44 @@ FROM [dbo].[vwSuspectionAnalysis] AS [vwSuspectionAnalysis]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_CallClass_GetAll" FunctionName="Model.Store.sp_CallClass_GetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_CallClass_GetAll_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="NetType" ColumnName="NetType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_NormalCDR_Load" FunctionName="Model.Store.sp_NormalCDR_Load">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.sp_NormalCDR_Load_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
+                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
+                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
+                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
+                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
+                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
+                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
+                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
+                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
+                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
+                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
+                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
+                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
+                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
+                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
+                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
+                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -90,7 +90,6 @@
     <Compile Include="Classes\NormalCDR.cs" />
     <Compile Include="Classes\NumberProfile.cs" />
     <Compile Include="Classes\Period.cs" />
-    <Compile Include="Classes\Related_Criteria.cs" />
     <Compile Include="Classes\Report.cs" />
     <Compile Include="Classes\ReportDetail.cs" />
     <Compile Include="Classes\SubscriberThreshold.cs" />
@@ -142,9 +141,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Related_Criteria.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Report.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -163,10 +159,16 @@
     <Compile Include="Set_SubType.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_CallClass_GetAll_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_NormalCDR_Load_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_Strategy_GetAll_Result.cs">
@@ -179,6 +181,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Strategy.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Strategy1.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SubscriberThreshold.cs">

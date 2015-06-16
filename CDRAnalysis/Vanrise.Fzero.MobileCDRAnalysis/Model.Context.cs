@@ -34,10 +34,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<EmailReceiverType> EmailReceiverTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<EmailToken> EmailTokens { get; set; }
-        public DbSet<NumberProfile> NumberProfiles { get; set; }
-        public DbSet<Period> Periods { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Related_Criteria> Related_Criteria { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportDetail> ReportDetails { get; set; }
         public DbSet<ReportingStatu> ReportingStatus { get; set; }
@@ -45,11 +42,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public DbSet<Set_CallType> Set_CallType { get; set; }
         public DbSet<Set_SubType> Set_SubType { get; set; }
         public DbSet<Strategy> Strategies { get; set; }
-        public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
-        public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<NumberProfile> NumberProfiles { get; set; }
+        public DbSet<Period> Periods { get; set; }
+        public DbSet<Strategy1> Strategy1 { get; set; }
+        public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
+        public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
         public DbSet<NormalCDR> NormalCDRs { get; set; }
         public DbSet<vwReportedNumber> vwReportedNumbers { get; set; }
         public DbSet<vwReportedNumberNormalCDR> vwReportedNumberNormalCDRs { get; set; }
@@ -638,6 +638,24 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 new ObjectParameter("StrategyContent", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Strategy_Update", idParameter, userIdParameter, nameParameter, descriptionParameter, creationDateParameter, isDefaultParameter, strategyContentParameter);
+        }
+    
+        public virtual ObjectResult<sp_CallClass_GetAll_Result> sp_CallClass_GetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_CallClass_GetAll_Result>("sp_CallClass_GetAll");
+        }
+    
+        public virtual ObjectResult<sp_NormalCDR_Load_Result> sp_NormalCDR_Load(Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_NormalCDR_Load_Result>("sp_NormalCDR_Load", fromParameter, toParameter);
         }
     }
 }

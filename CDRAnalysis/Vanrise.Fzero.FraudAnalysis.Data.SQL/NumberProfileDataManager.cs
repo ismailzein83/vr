@@ -16,13 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public void LoadCDR(DateTime from, DateTime to, int? batchSize, Action<CDR> onBatchReady)
         {
-            string query_GetCDRRange = @"SELECT  [Id] ,[MSISDN] ,[IMSI] ,[ConnectDateTime] ,[Destination] ,[DurationInSeconds] ,[DisconnectDateTime] ,[Call_Class]  ,[IsOnNet] ,[Call_Type] ,[Sub_Type] ,[IMEI]
-                                                ,[BTS_Id]  ,[Cell_Id]  ,[SwitchRecordId]  ,[Up_Volume]  ,[Down_Volume] ,[Cell_Latitude]  ,[Cell_Longitude]  ,[In_Trunk]  ,[Out_Trunk]  ,[Service_Type]  ,[Service_VAS_Name] FROM NormalCDR
-                                                 with(nolock)    where (connectDateTime between @From and @To)  order by MSISDN, connectdatetime; ";
-
-
-
-            ExecuteReaderText(query_GetCDRRange, (reader) =>
+            ExecuteReaderSP("FraudAnalysis.sp_NormalCDR_Load", (reader) =>
                 {
 
                     CDR normalCDR = new CDR();
@@ -71,12 +65,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
                    
 
-                },
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@From", from));
-                    cmd.Parameters.Add(new SqlParameter("@To", to));
-                });
+                },from,to
+               );
         }
 
     }

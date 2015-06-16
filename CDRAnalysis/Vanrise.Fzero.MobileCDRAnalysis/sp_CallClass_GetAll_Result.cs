@@ -10,17 +10,11 @@
 namespace Vanrise.Fzero.MobileCDRAnalysis
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Related_Criteria
+    public partial class sp_CallClass_GetAll_Result
     {
         public int Id { get; set; }
-        public Nullable<int> StrategyId { get; set; }
-        public Nullable<int> CriteriaId { get; set; }
-        public Nullable<int> Related_CriteriaId { get; set; }
-    
-        public virtual Criteria_Profile Criteria_Profile { get; set; }
-        public virtual Criteria_Profile Criteria_Profile1 { get; set; }
-        public virtual Strategy Strategy { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> NetType { get; set; }
     }
 }

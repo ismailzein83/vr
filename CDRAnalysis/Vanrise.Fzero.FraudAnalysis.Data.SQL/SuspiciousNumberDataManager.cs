@@ -48,7 +48,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[dbo].[SubscriberThresholds]",
+                    TableName = "[FraudAnalysis].[SubscriberThreshold]",
                     Stream = stream,
                     TabLock = false,
                     KeepIdentity = false,
@@ -115,7 +115,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[dbo].[NumberProfile]",
+                    TableName = "[FraudAnalysis].[NumberProfile]",
                     Stream = stream,
                     TabLock = false,
                     KeepIdentity = false,

@@ -16,7 +16,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public Strategy()
         {
-            this.Related_Criteria = new HashSet<Related_Criteria>();
             this.ReportDetails = new HashSet<ReportDetail>();
         }
     
@@ -28,7 +27,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public Nullable<bool> IsDefault { get; set; }
         public string StrategyContent { get; set; }
     
-        public virtual ICollection<Related_Criteria> Related_Criteria { get; set; }
         public virtual ICollection<ReportDetail> ReportDetails { get; set; }
         public virtual User User { get; set; }
     }

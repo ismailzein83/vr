@@ -53,7 +53,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             }
 
                 MySqlConnection mySqlConnection = new MySqlConnection(GetConnectionString());
-                string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE SubscriberThresholds FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspicionLevelId, StrategyId)  ;", filename.Replace(@"\", @"\\"));
+                string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE FraudAnalysis.SubscriberThreshold FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'  (Id, DateDay, SubscriberNumber " + sFields + ", SuspicionLevelId, StrategyId)  ;", filename.Replace(@"\", @"\\"));
             mySqlConnection.Open();
             MySqlCommand mySqlCommand = new MySqlCommand(query, mySqlConnection);
             mySqlCommand.CommandTimeout = int.MaxValue;
@@ -120,7 +120,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             }
 
             MySqlConnection mySqlConnection = new MySqlConnection(GetConnectionString());
-            string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE NumberProfile FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'   ;", filename.Replace(@"\", @"\\"));
+            string query = String.Format(@"LOAD DATA LOCAL  INFILE '{0}' INTO TABLE [FraudAnalysis].NumberProfile FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r'   ;", filename.Replace(@"\", @"\\"));
             mySqlConnection.Open();
             MySqlCommand mySqlCommand = new MySqlCommand(query, mySqlConnection);
             mySqlCommand.CommandTimeout = int.MaxValue;

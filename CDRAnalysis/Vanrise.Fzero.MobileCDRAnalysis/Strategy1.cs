@@ -12,9 +12,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     using System;
     using System.Collections.Generic;
     
-    public partial class Criteria_Profile
+    public partial class Strategy1
     {
         public int Id { get; set; }
         public string Description { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public Nullable<System.DateTime> CreationDate { get; set; }
+        public string Name { get; set; }
+        public Nullable<bool> IsDefault { get; set; }
+        public string StrategyContent { get; set; }
     }
 }
