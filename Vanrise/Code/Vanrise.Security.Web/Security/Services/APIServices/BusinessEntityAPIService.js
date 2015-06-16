@@ -1,4 +1,4 @@
-﻿app.service('BusinessEntityAPIService', function (BaseAPIService) {
+﻿app.service('BusinessEntityAPIService2', function (BaseAPIService) {
 
     return ({
         GetEntityNodes: GetEntityNodes
