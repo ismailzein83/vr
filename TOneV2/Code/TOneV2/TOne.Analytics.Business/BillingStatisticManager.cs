@@ -125,7 +125,7 @@ namespace TOne.Analytics.Business
             List<CustomerServices> customerServices = _datamanager.GetCustomerServices(fromDate, toDate);
             List<CustomerSummaryFormatted> customerSummariesFormatted = new List<CustomerSummaryFormatted>();
 
-            Dictionary<string, decimal> totalServicesPerCustomer = new Dictionary<string, decimal>();
+            Dictionary<string, double> totalServicesPerCustomer = new Dictionary<string, double>();
             foreach (var obj in customerServices)
             {
                 if (obj.AccountId != null && obj.Services != null)
@@ -180,8 +180,7 @@ namespace TOne.Analytics.Business
                 };
                 profitsummaries.Add(p);
             }
-            profitsummaries.OrderByDescending(r => r.Profit).Take(10).ToList();
-            return profitsummaries;
+            return profitsummaries.OrderByDescending(r => r.Profit).Take(10).ToList();
         }
         public List<SaleAmountSummary> GetCustomerSaleAmountSummary(List<CustomerSummaryFormatted> summarieslist)
         {
@@ -197,8 +196,7 @@ namespace TOne.Analytics.Business
                 };
                 saleAmountSummary.Add(s);
             }
-            saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
-            return saleAmountSummary;
+            return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)

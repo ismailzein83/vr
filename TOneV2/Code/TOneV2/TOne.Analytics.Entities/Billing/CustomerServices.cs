@@ -9,6 +9,6 @@ namespace TOne.Analytics.Entities
     public class CustomerServices
     {
         public string AccountId { get; set; }
-        public decimal Services { get; set; }
+        public double Services { get; set; }
     }
 }

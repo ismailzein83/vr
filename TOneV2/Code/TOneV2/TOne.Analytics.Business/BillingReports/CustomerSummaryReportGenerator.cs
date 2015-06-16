@@ -38,7 +38,6 @@ namespace TOne.Analytics.Business.BillingReports
             list.Add("Title", new RdlcParameter { Value = "Customer Sales and Profits", IsVisible = true });
             list.Add("Currency", new RdlcParameter { Value = "[USD] United States Dollars", IsVisible = true });
             list.Add("LogoPath", new RdlcParameter { Value = "logo", IsVisible = true });
-            list.Add("Customer", new RdlcParameter { Value = "", IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = "2", IsVisible = true });
             list.Add("ShowProfit", new RdlcParameter { Value = parameters.IsService.ToString(), IsVisible = true });
             list.Add("ServicesPerCustomer", new RdlcParameter { Value = parameters.ServicesForCustomer.ToString(), IsVisible = true });

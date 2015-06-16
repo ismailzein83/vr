@@ -20,7 +20,7 @@ namespace TOne.Analytics.Entities
         public string ProfitFormatted { get; set; }
         public string ProfitPercentageFormatted { get; set; }
         public string Customer { get; set; }
-        public decimal Services { get; set; }
+        public double Services { get; set; }
         public string ServicesFormatted { get; set; }
 
 

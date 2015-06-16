@@ -24,7 +24,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetCustomerSummary",  CustomerServicesMapper,
+            return GetItemsSP("Analytics.SP_Billing_CustomerServices", CustomerServicesMapper,
               fromDate,
               toDate
             );
@@ -49,7 +49,7 @@ namespace TOne.Analytics.Data.SQL
             CustomerServices instance = new CustomerServices
             {
                 AccountId = reader["AccountID"] as string ,
-                Services = GetReaderValue<decimal>(reader, "Services")
+                Services = GetReaderValue<double>(reader, "Services")
             };
             return instance;
         }
