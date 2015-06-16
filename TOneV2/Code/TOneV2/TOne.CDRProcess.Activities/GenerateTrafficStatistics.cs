@@ -78,11 +78,11 @@ namespace TOne.CDRProcess.Activities
                                     batches.Add(cdrTrafficBatchStart, trafficStatisticBatch);
                                 }
 
-                                string trafficStatisticKey = TrafficStatistic.GetGroupKey(billingCDR.SwitchId, cdr.Port_IN, cdr.Port_OUT, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierZoneID);
+                                string trafficStatisticKey = TrafficStatistic.GetGroupKey(cdr.SwitchID, cdr.Port_IN, cdr.Port_OUT, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierZoneID);
                                 TrafficStatistic trafficStatistic;
                                 if(!trafficStatisticBatch.TrafficStatistics.TryGetValue(trafficStatisticKey, out trafficStatistic))
                                 {
-                                    trafficStatistic = TrafficStatistic.CreateFromKey(billingCDR.SwitchId, cdr.Port_IN, cdr.Port_OUT, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierID, cdr.SupplierZoneID);
+                                    trafficStatistic = TrafficStatistic.CreateFromKey(cdr.SwitchID, cdr.Port_IN, cdr.Port_OUT, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierID, cdr.SupplierZoneID);
                                     trafficStatisticBatch.TrafficStatistics.Add(trafficStatisticKey, trafficStatistic);
                                 }
                                 trafficStatGenerator.UpdateTrafficStatisticFromCDR(trafficStatistic, cdr);

@@ -14,7 +14,7 @@ namespace TOne.CDR.Business
             UpdateBaseTrafficStatisticFromCDR(trafficStatistic, cdr);
             // Update Min/Max Date/ID of CDRs
             if (cdr.Attempt > trafficStatistic.LastCDRAttempt) trafficStatistic.LastCDRAttempt = cdr.Attempt;
-            if (cdr.Attempt < trafficStatistic.FirstCDRAttempt) trafficStatistic.FirstCDRAttempt = cdr.Attempt;
+            if (trafficStatistic.FirstCDRAttempt == DateTime.MinValue || cdr.Attempt < trafficStatistic.FirstCDRAttempt) trafficStatistic.FirstCDRAttempt = cdr.Attempt;
         }
 
         public void UpdateBaseTrafficStatisticFromCDR(BaseTrafficStatistic trafficStatistic, BillingCDRBase cdr)

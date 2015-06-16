@@ -48,7 +48,7 @@ namespace TOne.CDRProcess.Activities
                             foreach (var cdr in billingCDR.CDRs)
                             {
                                 DateTime cdrTime = cdr.Attempt;
-                                DateTime cdrTrafficBatchStart = new DateTime(cdrTime.Year, cdrTime.Month, cdrTime.Day, cdrTime.Hour, ((int)(cdrTime.Minute / sampleIntervalInMinute)) * sampleIntervalInMinute, 0);
+                                DateTime cdrTrafficBatchStart = new DateTime(cdrTime.Year, cdrTime.Month, cdrTime.Day, 0, 0, 0);
 
                                 TrafficStatisticDailyBatch trafficStatisticBatch;
                                 if (!batches.TryGetValue(cdrTrafficBatchStart, out trafficStatisticBatch))
@@ -61,13 +61,14 @@ namespace TOne.CDRProcess.Activities
                                     batches.Add(cdrTrafficBatchStart, trafficStatisticBatch);
                                 }
 
-                                string trafficStatisticKey = TrafficStatisticDaily.GetGroupKey(billingCDR.SwitchId, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierZoneID);
+                                string trafficStatisticKey = TrafficStatisticDaily.GetGroupKey(cdr.SwitchID, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierZoneID);
                                 TrafficStatisticDaily trafficStatistic;
                                 if (!trafficStatisticBatch.TrafficStatistics.TryGetValue(trafficStatisticKey, out trafficStatistic))
                                 {
-                                    trafficStatistic = TrafficStatisticDaily.CreateFromKey(billingCDR.SwitchId,cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierID, cdr.SupplierZoneID);
+                                    trafficStatistic = TrafficStatisticDaily.CreateFromKey(cdr.SwitchID, cdr.CustomerID, cdr.OurZoneID, cdr.OriginatingZoneID, cdr.SupplierID, cdr.SupplierZoneID);
                                     trafficStatisticBatch.TrafficStatistics.Add(trafficStatisticKey, trafficStatistic);
                                 }
+                                trafficStatistic.CallDate = cdrTrafficBatchStart;
                                 trafficStatGenerator.UpdateBaseTrafficStatisticFromCDR(trafficStatistic, cdr);
                             }
 

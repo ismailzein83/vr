@@ -101,7 +101,12 @@ namespace TOne.CDR.Data.SQL
             dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
             dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
             dr["DurationsInSeconds"] = trafficStatistic.DurationsInSeconds;
-            dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds;
+
+            if (trafficStatistic.PDDInSeconds.HasValue)
+                dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds.Value.ToString();
+            else
+                dr["PDDInSeconds"] = DBNull.Value;
+
             dr["MaxDurationInSeconds"] = trafficStatistic.MaxDurationInSeconds;
             dr["UtilizationInSeconds"] = trafficStatistic.UtilizationInSeconds;
             dr["NumberOfCalls"] = trafficStatistic.NumberOfCalls;
@@ -141,13 +146,13 @@ namespace TOne.CDR.Data.SQL
                 while (reader.Read())
                 {
                     trafficStatistics.Add(
-                    TrafficStatistic.GetGroupKey(GetReaderValue<int>(reader, "SwitchId"),
+                    TrafficStatistic.GetGroupKey(Int32.Parse(reader["SwitchId"].ToString().Trim()),
                         reader["Port_IN"] as string,
                         reader["Port_OUT"] as string,
                         reader["CustomerID"] as string,
-                        GetReaderValue<int>(reader, "OurZoneID"),
-                        GetReaderValue<int>(reader, "OriginatingZoneID"),
-                        GetReaderValue<int>(reader, "SupplierZoneID")), (int)reader["ID"]);
+                        (int)reader["OurZoneID"],
+                        (int)reader["OriginatingZoneID"],
+                        (int)reader["SupplierZoneID"]),  Int32.Parse(reader["ID"].ToString().Trim()));
                 }
             }, batchStart, batchEnd);
 
@@ -240,7 +245,12 @@ namespace TOne.CDR.Data.SQL
             dr["DeliveredAttempts"] = trafficStatistic.DeliveredAttempts;
             dr["SuccessfulAttempts"] = trafficStatistic.SuccessfulAttempts;
             dr["DurationsInSeconds"] = trafficStatistic.DurationsInSeconds;
-            dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds;
+
+            if (trafficStatistic.PDDInSeconds.HasValue)
+                dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds.Value;
+            else
+                dr["PDDInSeconds"] = DBNull.Value;
+
             dr["MaxDurationInSeconds"] = trafficStatistic.MaxDurationInSeconds;
             dr["UtilizationInSeconds"] = trafficStatistic.UtilizationInSeconds;
             dr["NumberOfCalls"] = trafficStatistic.NumberOfCalls;
@@ -278,11 +288,11 @@ namespace TOne.CDR.Data.SQL
                 while (reader.Read())
                 {
                     trafficStatistics.Add(
-                    TrafficStatisticDaily.GetGroupKey(GetReaderValue<int>(reader, "SwitchId"),
+                    TrafficStatisticDaily.GetGroupKey(Int32.Parse(reader["SwitchId"].ToString().Trim()),
                         reader["CustomerID"] as string,
-                        GetReaderValue<int>(reader, "OurZoneID"),
-                        GetReaderValue<int>(reader, "OriginatingZoneID"),
-                        GetReaderValue<int>(reader, "SupplierZoneID")), (int)reader["ID"]);
+                        (int)reader["OurZoneID"],
+                        (int)reader["OriginatingZoneID"],
+                        (int)reader["SupplierZoneID"]), Int32.Parse(reader["ID"].ToString().Trim()));
                 }
             }, batchDate);
 
