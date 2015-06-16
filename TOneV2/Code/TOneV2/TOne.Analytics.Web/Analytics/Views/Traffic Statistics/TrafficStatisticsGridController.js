@@ -13,8 +13,6 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
     
     var selectedGroupKeys = [];
     function defineScopeObjects() {
-        
-        console.log("hjds"+$scope.viewScope.value);
         $scope.selectedGroupKeys = [];
         $scope.notSelectedGroupKeys = [];
         $scope.measures = measures;
@@ -58,7 +56,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         if (length <= 0)
             return 0;
         
-        console.log(supplierZoneIdIsAdded);
+       // console.log(supplierZoneIdIsAdded);
         if (!supplierZoneIdIsAdded && selectedGroupKeys[length - 1].value == TrafficStatisticGroupKeysEnum.SupplierId.value) {
             supplierZoneIdIsAdded = true;
         $scope.notSelectedGroupKeys.push(groupKeys[5]);
@@ -112,7 +110,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                 case TrafficStatisticGroupKeysEnum.OurZone.value:
                     parameters.zoneIds.push(dataItem.GroupKeyValues[i].Id);
                                 break;
-                case TrafficStatisticGroupKeysEnum.CustomerId.value: console.log(dataItem.GroupKeyValues[i].Id);
+                case TrafficStatisticGroupKeysEnum.CustomerId.value:
                                 parameters.customerIds.push(dataItem.GroupKeyValues[i].Id);
                                 break;
                 case TrafficStatisticGroupKeysEnum.SupplierId.value:
@@ -215,7 +213,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var fromRow = 1;
         var toRow = 100;
         buildFilter($scope);
-        console.log(filter);
+        //console.log(filter);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
             Filter: filter,
@@ -228,7 +226,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             OrderBy: 2,
             IsDescending: true
         };
-        console.log($scope.selectedGroupKey.value);
+       
         var isSucceeded;
         $scope.isGettingData = true;
         $scope.currentSearchCriteria.groupKeys.length = 0;
