@@ -78,6 +78,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
             {
                 if (scope.selectedGroupKeys[i].value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
                     supplierZoneIdIsAdded = true;
+                if (scope.selectedGroupKeys[i].value == TrafficStatisticGroupKeysEnum.OurZone.value)
+                    $scope.selectedGroupKeys.push($scope.groupKeys[$scope.groupKeys.length - 1]);
                 $scope.selectedGroupKeys.push(scope.selectedGroupKeys[i]);
             }
             return;
@@ -85,6 +87,8 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         else {
             if (scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierZoneId.value)
                 supplierZoneIdIsAdded = true;
+            if (scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value)
+                $scope.selectedGroupKeys.push($scope.groupKeys[$scope.groupKeys.length - 1]);
             $scope.selectedGroupKeys.push(scope.selectedGroupKey);
             getSelectedGroupKeys(scope.gridParentScope);
         }
@@ -211,7 +215,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         var fromRow = 1;
         var toRow = 100;
         buildFilter($scope);
-        console.log(filter.CodeGroup);
+        console.log(filter);
         var getTrafficStatisticSummaryInput = {
             TempTableKey: null,
             Filter: filter,
@@ -267,7 +271,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     filter.SupplierIds = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.Switch.value:
-                    filter.Switch = [scope.dataItem.GroupKeyValues[i].Id];
+                    filter.SwitchIds = [scope.dataItem.GroupKeyValues[i].Id];
                     break;
                 case TrafficStatisticGroupKeysEnum.CodeGroup.value:
                     filter.CodeGroup = [scope.dataItem.GroupKeyValues[i].Id];
@@ -283,6 +287,7 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
                     break;
             }
         }
+       
         
         buildFilter(scope.gridParentScope);
        

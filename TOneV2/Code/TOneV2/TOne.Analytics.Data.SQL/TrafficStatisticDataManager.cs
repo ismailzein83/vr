@@ -124,6 +124,10 @@ namespace TOne.Analytics.Data.SQL
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
             queryBuilder.Replace("#SELECTPART#", groupKeysSelectPart.ToString());
+            if (filter.CodeGroup != null)
+            {
+                groupKeysJoinPart.Append(" LEFT JOIN OurZones oz ON ts.OurZoneID = oz.ZoneID");
+            }
             queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupKeysGroupByPart.ToString());
 
@@ -139,7 +143,7 @@ namespace TOne.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SwitchIds, "ts.SwitchId");
             AddFilter(whereBuilder, filter.CustomerIds, "ts.CustomerID");
             AddFilter(whereBuilder, filter.SupplierIds, "ts.SupplierID");
-            AddFilter(whereBuilder, filter.CodeGroup, "z.CodeGroup");
+            AddFilter(whereBuilder, filter.CodeGroup, "oz.CodeGroup");
             AddFilter(whereBuilder, filter.PortIn, "ts.Port_IN");
             AddFilter(whereBuilder, filter.PortOut, "ts.Port_OUT");
             AddFilter(whereBuilder, filter.ZoneIds, "ts.OurZoneID");
@@ -337,7 +341,7 @@ namespace TOne.Analytics.Data.SQL
                     break;
                 case TrafficStatisticGroupKeys.Switch:
                     selectStatement = String.Format(" ts.SwitchId as {0}, swit.Name as {1}, ", SwitchIdColumnName, SwitchNameColumnName);
-                    joinStatement = " LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID";
+                    joinStatement = " LEFT JOIN Switch swit ON ts.SwitchId = swit.SwitchID ";
                     groupByStatement = "ts.SwitchId, swit.Name";
                     break;
                 case TrafficStatisticGroupKeys.CodeGroup:
@@ -357,7 +361,7 @@ namespace TOne.Analytics.Data.SQL
                     break;
                 case TrafficStatisticGroupKeys.SupplierZoneId:
                     selectStatement = String.Format(" ts.SupplierZoneID as {0}, supplierZones.Name as {1}, ", SupplierZoneIDColumnName, SupplierZoneNameColumnName);
-                    joinStatement = " LEFT JOIN Zone supplierZones WITH (NOLOCK) ON ts.SupplierZoneID = supplierZones.ZoneID";
+                    joinStatement = " LEFT JOIN Zone supplierZones WITH (NOLOCK) ON ts.SupplierZoneID = supplierZones.ZoneID ";
                     groupByStatement = "ts.SupplierZoneID,  supplierZones.Name";
                     break;
                 default:
