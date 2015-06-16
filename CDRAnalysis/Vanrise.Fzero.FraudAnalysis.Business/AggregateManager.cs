@@ -126,7 +126,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Name = "CallOutDurs",
+                Name = "CallOutDurAvg",
                 Aggregation = new SumAggregate(
                (cdr) =>
                {
@@ -142,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             AggregateDefinitions.Add(new AggregateDefinition()
             {
-                Name = "CallInDurs",
+                Name = "CallInDurAvg",
                 Aggregation = new SumAggregate(
                (cdr) =>
                {

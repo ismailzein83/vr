@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 {
                     if (suspiciousNumber.CriteriaValues.Where(x => x.Key == i).Count() == 1)
                     {
-                       sValues.Add( Math.Round(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value,2).ToString());
+                        sValues.Add(Math.Round(suspiciousNumber.CriteriaValues.Where(x => x.Key == i).FirstOrDefault().Value, 2).ToString());
                     }
                     else
                     {
@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     "0",	
                                     "0",		
                                     "0",		
-                                    Math.Round(numberProfile.AggregateValues["CallOutDurs"],2).ToString(),	
+                                    Math.Round(numberProfile.AggregateValues["CallOutDurAvg"],2).ToString(),	
                                     "0",	
                                     "0",		
                                     Math.Round(numberProfile.AggregateValues["CountOutFails"],2).ToString()	,
@@ -93,7 +93,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                                     Math.Round(numberProfile.AggregateValues["TotalDataVolume"],2).ToString()	,
                                     ((int)numberProfile.PeriodId).ToString()		,
                                     Math.Round(numberProfile.AggregateValues["CountInCalls"],2).ToString()	,
-                                    Math.Round(numberProfile.AggregateValues["CallInDurs"],2).ToString()	,	
+                                    Math.Round(numberProfile.AggregateValues["CallInDurAvg"],2).ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["CountOutOnNets"],2).ToString()	,	
                                     Math.Round(numberProfile.AggregateValues["CountInOnNets"],2).ToString()	,
                                     Math.Round(numberProfile.AggregateValues["CountOutOffNets"],2).ToString()	,
