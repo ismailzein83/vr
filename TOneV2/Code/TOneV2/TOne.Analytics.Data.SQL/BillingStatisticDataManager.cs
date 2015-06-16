@@ -170,15 +170,29 @@ namespace TOne.Analytics.Data.SQL
         public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
         {
             string selectedReportQuery = query_Common;
+            if (selectedReportQuery.Contains("@TimePeriod")) selectedReportQuery = selectedReportQuery.Replace("@TimePeriod", periodTypeValue);
             switch (variationReportOptionValue)
             {
-                case 0: selectedReportQuery += query_GetInBoundMinutesData;
+                case 0:
+                    if (query_GetInBoundMinutesData.Contains("@TimePeriod")) query_GetInBoundMinutesData=query_GetInBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
+                    selectedReportQuery += query_GetInBoundMinutesData;
                     break;
-                case 1: selectedReportQuery += query_GetOutBoundMinutesData;
+                case 1:
+                    if (query_GetOutBoundMinutesData.Contains("@TimePeriod")) query_GetOutBoundMinutesData=query_GetOutBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
+                    selectedReportQuery += query_GetOutBoundMinutesData;
                     break;
-                case 2: selectedReportQuery = selectedReportQuery + query_GetInBoundMinutesData + " UNION " + query_GetOutBoundMinutesData;
+                case 2:
+                    if (query_GetInBoundMinutesData.Contains("@TimePeriod")) query_GetInBoundMinutesData=query_GetInBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
+                    if (query_GetOutBoundMinutesData.Contains("@TimePeriod")) query_GetOutBoundMinutesData = query_GetOutBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
+                    selectedReportQuery = selectedReportQuery + query_GetInBoundMinutesData + " UNION " + query_GetOutBoundMinutesData;
                     break;
-                case 3: selectedReportQuery += query_GetInBoundAmountData;
+                case 3 :
+                    if (query_GetTopDestinationMinutesData.Contains("@TimePeriod")) query_GetTopDestinationMinutesData = query_GetTopDestinationMinutesData.Replace("@TimePeriod", periodTypeValue);
+                    selectedReportQuery += query_GetTopDestinationMinutesData;
+                    break;
+                case 4:
+                    if (query_GetInBoundAmountData.Contains("@TimePeriod")) query_GetInBoundAmountData=query_GetInBoundAmountData.Replace("@TimePeriod", periodTypeValue);
+                    selectedReportQuery += query_GetInBoundAmountData;
                     break;
             }
             if (!string.IsNullOrEmpty(selectedReportQuery))
@@ -192,7 +206,7 @@ namespace TOne.Analytics.Data.SQL
             else return new List<VariationReports>();
         }
 
-       public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
+        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
         {
             string query = String.Format(@"SELECT TOP 100 * FROM Billing_Stats Where CallDate Between @FromDate AND @ToDate");
 
@@ -203,7 +217,6 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
             });
         }
-
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper ,
@@ -464,9 +477,9 @@ namespace TOne.Analytics.Data.SQL
                 PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
                 PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
                 CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
-                TotalDuration = GetReaderValue<decimal>(reader, "TotalDuration"),
+                TotalDuration = GetReaderValue<decimal>(reader, "Total"),
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
-                CarrierAccountID = reader["CarrierAccountID"] as string,
+                ID = reader["ID"]!=null? reader["ID"].ToString(): string.Empty
             };
 
             return instance;
@@ -528,76 +541,91 @@ namespace TOne.Analytics.Data.SQL
         #endregion
 
         #region ConstantVariableRegion
-        const string query_Common = @"DECLARE @ExchangeRates TABLE(
+        string query_Common = @"DECLARE @ExchangeRates TABLE(
 		                                             Currency VARCHAR(3),
 		                                             Date SMALLDATETIME,
 		                                             Rate FLOAT
 		                                             PRIMARY KEY(Currency, Date))
                                             INSERT INTO @ExchangeRates 
-                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(Day, -@PeriodCount+1, @FromDate), @FromDate)  ";
+                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate), @FromDate)  ";
 
-        const string query_GetInBoundMinutesData = @"SELECT  cpc.Name , 
+        string query_GetInBoundMinutesData = @"SELECT  cpc.Name , 
         0.0 as [AVG],
         0.0 as [%], 
         0.0 as [Prev %],
         CallDate,
-        sum(SaleDuration/60) as TotalDuration,
-        cac.CarrierAccountID
+        sum(SaleDuration/60) as Total,
+        cac.CarrierAccountID as ID
         From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
         LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
         LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
         JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate  
+        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
         GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
 
-        const string query_GetOutBoundMinutesData = @"SELECT  cps.Name , 
+        string query_GetOutBoundMinutesData = @"SELECT  cps.Name , 
         0.0 as [AVG], 
         0.0 as [%],
         0.0 as [Prev %],
         CallDate ,
-        sum(CostDuration/60) as TotalDuration,
-        cas.CarrierAccountID  
+        sum(CostDuration/60) as Total,
+        cas.CarrierAccountID as ID
         From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
         LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
         LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
         JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID
-        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate
+        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
         AND  cas.RepresentsASwitch <> 'Y'
         GROUP BY cps.Name,cas.CarrierAccountID,CallDate ";
 
-        const string query_GetInBoundAmountData = @"SELECT  cpc.Name , 
+        string query_GetInBoundAmountData = @"SELECT  cpc.Name , 
         0.0 as [AVG],
         0.0 as [%], 
         0.0 as [Prev %],
         CallDate,
-        sum(Sale_Nets/60) as TotalAmount,
-        cac.CarrierAccountID
+        sum(Sale_Nets/60) as Total,
+        cac.CarrierAccountID as ID
         From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
         LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
         LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
         JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate  
+        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
         GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
        
-        const string query_GetOutBoundAmountData = @"SELECT  cpc.Name , 
+        string query_GetOutBoundAmountData = @"SELECT  cpc.Name , 
         0.0 as [AVG],
         0.0 as [%], 
         0.0 as [Prev %],
         CallDate,
-        sum(Cost_Nets/60) as TotalAmount,
-        cac.CarrierAccountID
+        sum(Cost_Nets/60) as Total,
+        cac.CarrierAccountID as ID
         From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
         LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
         LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
         JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(Day, -@PeriodCount+1, @FromDate) AND @FromDate  
+        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
         AND  cas.RepresentsASwitch <> 'Y'
         GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
 
+        string query_GetTopDestinationMinutesData = @" SET ROWCount 5
+        SELECT  SZ.Name ,
+        0.0 as [AVG],
+        0.0 as [%],
+        0.0 as [Prev %],
+        CallDate,
+        SUM(BS.SaleDuration/60) AS Total,
+        SZ.ZoneID as ID
+        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
+        JOIN Zone SZ With(Nolock) ON SZ.ZoneID=BS.SaleZoneID 
+        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
+        GROUP BY SZ.Name,SZ.ZoneID,CallDate
+        ORDER BY  CallDate desc,SUM(BS.SaleDuration / 60) DESC";
 
 
         #endregion

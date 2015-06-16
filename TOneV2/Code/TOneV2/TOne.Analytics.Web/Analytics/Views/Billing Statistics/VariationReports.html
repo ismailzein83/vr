@@ -88,8 +88,8 @@
             <th>PeriodTypeValueAverage AVG</th>
             <th>PeriodTypeValuePercentage %</th>
             <th>PreviousPeriodTypeValuePercentage %</th>
-            <th>CallDate & Total Duration</th>
-            <th>CarrierAccountID</th>
+            <th>CallDate & Total Duration/Amount</th>
+            <th>CarrierAccountID/ZoneID</th>
         </tr>
         <tr ng-repeat="item in data " >
             <td>{{item.Name}}</td>
@@ -104,7 +104,7 @@
                     </tr>
                 </table>  
             </td>
-            <td>{{item.CarrierAccountID}}</td>
+            <td>{{item.ID}}</td>
         </tr>
 
     </table>

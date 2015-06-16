@@ -23,7 +23,7 @@ namespace TOne.Analytics.Entities
        // public List<decimal> TotalDurationPerDate {get;set;}
 
         public List<TotalDurationPerDate> TotalDurationsPerDate { get; set; }
-        public string CarrierAccountID { get; set; }
+        public string ID { get; set; }
 
         //public VariationReportsData(int periodCount) { 
        

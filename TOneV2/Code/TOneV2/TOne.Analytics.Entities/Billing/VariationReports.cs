@@ -20,7 +20,7 @@ namespace TOne.Analytics.Entities
 
         public decimal PreviousPeriodTypeValuePercentage { get; set; }
 
-        public string CarrierAccountID { get; set; }
+        public string ID { get; set; }
 
 
 
