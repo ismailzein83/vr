@@ -10,6 +10,8 @@ namespace Vanrise.Security.Entities
     {
         public HolderType HolderType { get; set; }
 
+        public string HolderName { get; set; }
+
         public string HolderId { get; set; }
 
         public EntityType EntityType { get; set; }

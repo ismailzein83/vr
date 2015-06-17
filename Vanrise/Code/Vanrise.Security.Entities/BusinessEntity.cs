@@ -14,6 +14,8 @@ namespace Vanrise.Security.Entities
 
         public int ModuleId { get; set; }
 
+        public bool BreakInheritance { get; set; }
+
         public List<string> PermissionOptions { get; set; }
     }
 }

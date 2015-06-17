@@ -13,7 +13,7 @@ namespace Vanrise.Security.Business
         public List<MenuItem> GetMenuItems(string token)
         {
             PermissionManager permmissionManager = new PermissionManager();
-            Dictionary<string, Dictionary<string, Flag>> effectivePermissions = permmissionManager.GetEffectivePermissions(token);
+            EffectivePermissionsWrapper effectivePermissionsWrapper = permmissionManager.GetEffectivePermissions(token);
 
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
@@ -27,7 +27,7 @@ namespace Vanrise.Security.Business
             {
                 if(item.ParentId == 0)
                 {
-                    MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissions);
+                    MenuItem rootItem = GetModuleMenu(item, modules, views, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities);
                     if(rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
@@ -36,7 +36,7 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
-        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions)
+        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
         {
             MenuItem menu = new MenuItem() { Name = module.Name, Location = module.Url, Icon = module.Icon };
 
@@ -49,7 +49,7 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions))
+                    if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions, breakInheritanceEntities))
                     {
                         MenuItem viewMenu = new MenuItem() { Name = viewItem.Name, Location = viewItem.Url };
                         menu.Childs.Add(viewMenu);
@@ -61,38 +61,21 @@ namespace Vanrise.Security.Business
             {
                 foreach (Module item in subModules)
                 {
-                    menu.Childs.Add(GetModuleMenu(item, modules, views, effectivePermissions));
+                    menu.Childs.Add(GetModuleMenu(item, modules, views, effectivePermissions, breakInheritanceEntities));
                 }
             }
 
             return menu;
         }
 
-        private BusinessEntityNode GetBusinessEntityNode(Permission permission, BusinessEntityNode node, List<BusinessEntityNode> businessEntityHierarchy)
-        {
-            if(node.EntType == permission.EntityType && node.EntityId.ToString() == permission.EntityId)
-            {
-                return node;
-            }
-            else if(node.Children != null && node.Children.Count > 0)
-            {
-                foreach(BusinessEntityNode subNode in node.Children)
-                {
-                    return GetBusinessEntityNode(permission, subNode, node.Children);
-                }
-            }
-
-            return null;
-        }
-
-        private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, Dictionary<string, Flag>> effectivePermissions)
+        private bool isAllowed(Dictionary<string, List<string>> requiredPermissions, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
         {
             //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
             bool result = true;
 
             foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
             {
-                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, new HashSet<string>());
+                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissions, breakInheritanceEntities, new HashSet<string>());
                 if (!result)
                     break;
             }
@@ -100,7 +83,8 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> allowedFlags)
+        private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions,
+            HashSet<string> breakInheritanceEntities, HashSet<string> allowedFlags)
         {
             bool result = true;
 
@@ -140,11 +124,11 @@ namespace Vanrise.Security.Business
 
             //The required path might be in one level up, then check it on that level recursively
             int index = requiredPath.LastIndexOf('/');
-            if (index > 0)
+            if (index > 0 && !breakInheritanceEntities.Contains(requiredPath))
             {
                 //Keep looping recursively until you finish trimming the whole string requiredPath
                 string oneLevelUp = requiredPath.Remove(index);
-                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, allowedFlags);
+                result = CheckPermissions(oneLevelUp, requiredFlags, effectivePermissions, breakInheritanceEntities, allowedFlags);
             }
             else
             {

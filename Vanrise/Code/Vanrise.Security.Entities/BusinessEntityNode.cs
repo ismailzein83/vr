@@ -17,6 +17,8 @@ namespace Vanrise.Security.Entities
 
         public List<string> PermissionOptions { get; set; }
 
+        public bool BreakInheritance { get; set; }
+
         [JsonIgnore]
         public BusinessEntityNode Parent { get; set; }
 

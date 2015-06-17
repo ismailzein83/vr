@@ -12,7 +12,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
 
     PermissionAPIService.GetEffectivePermissions(cookieUserToken).then(function (response) {
-        $rootScope.effectivePermissions = response;
+        $rootScope.effectivePermissionsWrapper = response;
     }
     );
 

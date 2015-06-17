@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -32,6 +33,31 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(int entityType, string entityId)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
+            updateOperationOutput.UpdatedObject = null;
+
+            EntityType paramEntityType = (entityType == 0) ? EntityType.MODULE : EntityType.ENTITY;
+
+            bool result = false;
+
+            if (paramEntityType == EntityType.MODULE)
+            {
+                IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
+                result = manager.ToggleBreakInheritance(entityId);
+            }
+            else
+            {
+                IBusinessEntityDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+                result = manager.ToggleBreakInheritance(entityId);
+            }
+
+            updateOperationOutput.Result = (result) ? UpdateOperationResult.Succeeded : UpdateOperationResult.Failed;
+
+            return updateOperationOutput;
+        }
+
         private BusinessEntityNode GetModuleNode(BusinessEntityModule module, List<BusinessEntityModule> modules, List<BusinessEntity> entities, BusinessEntityNode parent)
         {
             BusinessEntityNode node = new BusinessEntityNode()
@@ -39,6 +65,7 @@ namespace Vanrise.Security.Business
                 EntityId = module.ModuleId,
                 Name = module.Name,
                 EntType = EntityType.MODULE,
+                BreakInheritance = module.BreakInheritance,
                 PermissionOptions = module.PermissionOptions,
                 Parent = parent
             };
@@ -57,6 +84,7 @@ namespace Vanrise.Security.Business
                         EntityId = entityItem.EntityId,
                         Name = entityItem.Name,
                         EntType = EntityType.ENTITY,
+                        BreakInheritance = entityItem.BreakInheritance,
                         PermissionOptions = entityItem.PermissionOptions,
                         Parent = node
                     };
@@ -78,5 +106,7 @@ namespace Vanrise.Security.Business
 
             return node;
         }
+
+
     }
 }

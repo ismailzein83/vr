@@ -57,6 +57,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Login",
                     class: "glyphicon  glyphicon-log-in"
                 };
+            case "BreakInheritance":
+                return {
+                    text: "Break Inheritance",
+                    class: "glyphicon  glyphicon-stop"
+                };
+            case "AllowInheritance":
+                return {
+                    text: "Allow Inheritance",
+                    class: "glyphicon  glyphicon-play"
+                };
         }
     }
 }]);

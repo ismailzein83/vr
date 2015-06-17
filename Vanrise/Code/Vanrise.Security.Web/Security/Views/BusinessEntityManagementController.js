@@ -1,9 +1,10 @@
-﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'VRModalService'];
+﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'HolderTypeEnum', 'VRModalService'];
 
-function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, VRModalService) {
+function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, HolderTypeEnum, VRModalService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
+    var selectedNode;
 
     defineScope();
     load();
@@ -28,6 +29,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         }
 
         $scope.AddNewPermission = addPermission;
+        $scope.ToggleInheritance = toggleInheritance;
+        $scope.showBreakInheritance = true;
     }
 
     function load() {
@@ -38,6 +41,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
 
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
             if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
+                $scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
+                selectedNode = $scope.beTree.currentNode;
                 refreshGrid();
             }
         }, false);
@@ -55,7 +60,9 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         
         return PermissionAPIService.GetPermissionsByEntity($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId).then(function (response) {
             angular.forEach(response, function (item) {
+                item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Role.description;
                 item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
+                item.PermissionType = (item.EntityType == $scope.beTree.currentNode.EntType && item.EntityId == $scope.beTree.currentNode.EntityId) ? 'Direct' : 'Inherited';
                 $scope.permissions.push(item);
             });
         });
@@ -160,6 +167,17 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
     function refreshGrid() {
         mainGridAPI.clearDataAndContinuePaging();
         getData();
+    }
+
+    function toggleInheritance()
+    {
+        return BusinessEntityAPIService.ToggleBreakInheritance($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId)
+           .then(function (response) {
+               $scope.showBreakInheritance = !$scope.showBreakInheritance;
+               loadTree();
+               $scope.beTree.currentNode = selectedNode;
+               refreshGrid();
+           });
     }
 }
 appControllers.controller('Security_BusinessEntityManagementController', BusinessEntityManagementController);

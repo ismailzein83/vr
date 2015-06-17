@@ -16,5 +16,12 @@ namespace Vanrise.Security.Web.Controllers
             BusinessEntityManager manager = new BusinessEntityManager();
             return manager.GetEntityNodes();
         }
+
+        [HttpGet]
+        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(int entityType, string entityId)
+        {
+            BusinessEntityManager manager = new BusinessEntityManager();
+            return manager.ToggleBreakInheritance(entityType, entityId);
+        }
     }
 }

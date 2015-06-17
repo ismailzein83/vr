@@ -15,6 +15,12 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_BusinessEntityModule_GetAll", ModuleMapper);
         }
 
+        public bool ToggleBreakInheritance(string entityId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_ToggleBreakInheritance", entityId);
+            return (recordesEffected > 0);
+        }
+
         Entities.BusinessEntityModule ModuleMapper(IDataReader reader)
         {
             Entities.BusinessEntityModule module = new Entities.BusinessEntityModule
@@ -22,6 +28,7 @@ namespace Vanrise.Security.Data.SQL
                 ModuleId = (int)reader["Id"],
                 Name = reader["Name"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
+                BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader["PermissionOptions"] as string)
             };
             return module;

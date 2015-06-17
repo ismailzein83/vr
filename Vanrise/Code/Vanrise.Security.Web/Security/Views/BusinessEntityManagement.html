@@ -4,7 +4,9 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true">
                 <div transclude-to="buttons">
-                    <vr-button type="Add" formname="formBusinessEntity" permissions="TOne/Administration Module/Users: View" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
+                    <vr-button type="BreakInheritance" formname="formBusinessEntity" ng-show="showBreakInheritance" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
+                    <vr-button type="AllowInheritance" formname="formBusinessEntity" ng-show="!showBreakInheritance" data-onclick="ToggleInheritance" isasynchronous=" true"></vr-button>
+                    <vr-button type="Add" formname="formBusinessEntity" permissions="TOne/Administration Module/Groups: View" data-onclick="AddNewPermission" isasynchronous=" true"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -17,21 +19,23 @@
                      data-node-label="Name"
                      data-node-children="Children">
                 </div>
+                
             </vr-columns>
             <vr-columns colnum="6">
                 <div>
                     <vr-row>
                         <vr-columns colnum="12">
                             <vr-datagrid datasource="permissions" menuactions="gridMenuActions" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                                <vr-datagridcolumn headertext="'Holder Name'" field="'HolderName'"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Holder Type'" widthfactor="5">{{dataItem.HolderType == "0"? 'User': 'Role' }}</vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Holder Name'" field="'HolderName'" widthfactor="5"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Holder Type'" field="'HolderTypeEnum'" widthfactor="5"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Permission Type'" field="'PermissionType'" widthfactor="5"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Permissions'" field="'PermissionFlagsDescription'"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
                 </div>
             </vr-columns>
-
+            
 </vr-form>
 
 

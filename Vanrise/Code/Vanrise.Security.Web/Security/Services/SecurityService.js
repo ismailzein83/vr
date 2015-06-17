@@ -33,11 +33,12 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
         var result = true;
 
         //TODO: no need for this check and should be removed when the problem of synchronization is solved
-        if ($rootScope.effectivePermissions != undefined)
+        if ($rootScope.effectivePermissionsWrapper != undefined)
         {
             for (var i = 0; i < requiredPermissions.length; i++) {
                 var allowedFlags = [];
-                result = checkPermissions(requiredPermissions[i].requiredPath, requiredPermissions[i].requiredFlags, $rootScope.effectivePermissions, allowedFlags);
+                result = checkPermissions(requiredPermissions[i].requiredPath, requiredPermissions[i].requiredFlags,
+                    $rootScope.effectivePermissionsWrapper.PermissionResults, $rootScope.effectivePermissionsWrapper.BreakInheritanceEntities, allowedFlags);
                 if (result === false)
                     break;
             }
@@ -46,7 +47,7 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
         return result;
     }
 
-    function checkPermissions(requiredPath, requiredFlags, effectivePermissions, allowedFlags) {
+    function checkPermissions(requiredPath, requiredFlags, effectivePermissions, breakInheritanceEntities, allowedFlags) {
         var result = true;
 
         var effectivePermissionFlag = UtilsService.getItemByVal(effectivePermissions, requiredPath, 'PermissionPath');
@@ -81,9 +82,9 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'PermissionFlagEnu
         }
 
         var index = requiredPath.lastIndexOf('/');
-        if (index > 0) {
+        if (index > 0 && !UtilsService.contains(breakInheritanceEntities, requiredPath)) {
             var oneLevelUp = requiredPath.slice(0, index);
-            result = checkPermissions(oneLevelUp, requiredFlags, effectivePermissions, allowedFlags);
+            result = checkPermissions(oneLevelUp, requiredFlags, effectivePermissions, breakInheritanceEntities, allowedFlags);
         }
         else {
             for(var j=0; j < requiredFlags.length; j++)

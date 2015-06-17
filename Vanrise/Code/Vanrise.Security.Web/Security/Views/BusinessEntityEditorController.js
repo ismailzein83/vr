@@ -124,7 +124,8 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
             UsersAPIService.GetUsers().then(function (response) {
                 //Remove existing users
                 angular.forEach(permissions, function (perm) {
-                    if (perm.HolderType == HolderTypeEnum.User.value)
+                    if (perm.EntityType == $scope.entityType && perm.EntityId == $scope.entityId
+                        && perm.HolderType == HolderTypeEnum.User.value)
                     {
                         var index = UtilsService.getItemIndexByVal(response, perm.HolderId, "UserId");
                         response.splice(index, 1);
@@ -137,7 +138,8 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
             RoleAPIService.GetRoles().then(function (response) {
                 //Remove existing roles
                 angular.forEach(permissions, function (perm) {
-                    if (perm.HolderType == HolderTypeEnum.Role.value) {
+                    if (perm.EntityType == $scope.entityType && perm.EntityId == $scope.entityId
+                        && perm.HolderType == HolderTypeEnum.Role.value) {
                         var index = UtilsService.getItemIndexByVal(response, perm.HolderId, "RoleId");
                         response.splice(index, 1);
                     }

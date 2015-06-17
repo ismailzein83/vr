@@ -18,21 +18,21 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<BEPermission> GetPermissionsByEntity(int entityType, string entityId)
+        public IEnumerable<Permission> GetPermissionsByEntity(int entityType, string entityId)
         {
             PermissionManager manager = new PermissionManager();
             return manager.GetPermissionsByEntity(entityType, entityId);
         }
 
         [HttpGet]
-        public List<PermissionResult> GetEffectivePermissions(string token)
+        public PermissionResultWrapper GetEffectivePermissions(string token)
         {
             PermissionManager manager = new PermissionManager();
-            Dictionary<string, Dictionary<string, Flag>> effectivePermissions = manager.GetEffectivePermissions(token);
+            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(token);
 
-            List<PermissionResult> result = new List<PermissionResult>();
+            List<PermissionResult> permissionResults = new List<PermissionResult>();
 
-            foreach (KeyValuePair<string, Dictionary<string, Flag>> permKvp in effectivePermissions)
+            foreach (KeyValuePair<string, Dictionary<string, Flag>> permKvp in effectivePermissionsWrapper.EffectivePermissions)
             {
                 PermissionResult permission = new PermissionResult() { PermissionPath = permKvp.Key };
                 permission.PermissionFlags = new List<PermissionFlag>();
@@ -42,10 +42,14 @@ namespace Vanrise.Security.Web.Controllers
                     permission.PermissionFlags.Add(new PermissionFlag() { FlagName = flagKvp.Key, FlagValue = flagKvp.Value });
                 }
 
-                result.Add(permission);
+                permissionResults.Add(permission);
             }
 
-            return result;
+            PermissionResultWrapper wrapperResult = new PermissionResultWrapper();
+            wrapperResult.PermissionResults = permissionResults;
+            wrapperResult.BreakInheritanceEntities = effectivePermissionsWrapper.BreakInheritanceEntities;
+
+            return wrapperResult;
         }
 
         [HttpGet]
@@ -76,6 +80,12 @@ namespace Vanrise.Security.Web.Controllers
             public Flag FlagValue { get; set; }
         }
 
+        public class PermissionResultWrapper
+        {
+            public List<PermissionResult> PermissionResults { get; set; }
+
+            public HashSet<string> BreakInheritanceEntities { get; set; }
+        }
 
     }
 }
