@@ -9,7 +9,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
 
         Func<CDR, bool> _condition;
-        MethodInfo _propertyGetMethod;
+        //MethodInfo _propertyGetMethod;
         Func<CDR, Object> _cdrExpressionToCountDistinct;
         HashSet<Object> _distinctItems = new HashSet<Object>();
 
