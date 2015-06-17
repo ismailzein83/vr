@@ -250,6 +250,20 @@ namespace TOne.Analytics.Data.SQL
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
               );
         }
+
+        public List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_DetailedCarrierSummary", CarrierDetailedSummaryMapper,
+              fromDate,
+              toDate,
+              (customerId == null || customerId == "") ? null : customerId,
+              (supplierId == null || supplierId == "") ? null : supplierId,
+              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+              );
+        }
+
+
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
         {
@@ -271,8 +285,7 @@ namespace TOne.Analytics.Data.SQL
 
             }
             return instance;
-        }
-
+        }        
         private CarrierProfile CarrierProfileMapper(IDataReader reader, bool IsAmount)
         {
             CarrierProfile instance = new CarrierProfile
@@ -537,6 +550,32 @@ namespace TOne.Analytics.Data.SQL
 	        };
 	
 	
+        }
+
+        private DetailedCarrierSummary CarrierDetailedSummaryMapper(IDataReader reader)
+        {
+            return new DetailedCarrierSummary
+            {
+                CustomerID = reader["CustomerID"] as string,
+                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
+                SaleZoneName = reader["SaleZoneName"] as string ,
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                SaleRate = GetReaderValue<double>(reader,"SaleRate"),
+                SaleRateChange = GetReaderValue<int>(reader,"SaleRateChange"),
+                SaleRateEffectiveDate = GetReaderValue<DateTime>(reader,"SaleRateEffectiveDate"),
+                SaleAmount = GetReaderValue<double>(reader, "SaleAmount"),
+                SupplierID = reader["SupplierID"] as string,
+                CostZoneID = GetReaderValue<int>(reader,"CostZoneID"),
+                CostZoneName = reader["CostZoneName"] as string ,
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+                CostRate = GetReaderValue<double>(reader, "CostRate"),
+                CostRateChange = GetReaderValue<int>(reader, "CostRateChange"),
+                CostRateEffectiveDate = GetReaderValue<DateTime>(reader, "CostRateEffectiveDate"),
+                CostAmount = GetReaderValue<double>(reader, "CostAmount"),
+                Profit = GetReaderValue<double>(reader, "Profit")               
+
+            };
+            
         }
         #endregion
 

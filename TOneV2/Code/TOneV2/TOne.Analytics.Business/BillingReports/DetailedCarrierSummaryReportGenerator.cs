@@ -13,11 +13,10 @@ namespace TOne.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(TOne.Entities.ReportParameters parameters)
         {
             BillingStatisticManager manager = new BillingStatisticManager();
-            List<DetailedCarrierSummaryFormatted> detailedCarrierSummary = new List<DetailedCarrierSummaryFormatted>();
-                //manager.GetDailySummary(parameters.FromTime, parameters.ToTime, parameters.SupplierAMUId, parameters.CustomerAMUId);
+            List<DetailedCarrierSummaryFormatted> detailedCarrierSummary = manager.GetDetailedCarrierSummary(parameters.FromTime, parameters.ToTime,parameters.CustomerId,parameters.SupplierId, parameters.SupplierAMUId, parameters.CustomerAMUId);
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
-            dataSources.Add("DetailedCarrierSummary", detailedCarrierSummary);
+            dataSources.Add("DetailedCarrier", detailedCarrierSummary);
             return dataSources;
         }
 

@@ -159,6 +159,13 @@ namespace TOne.Analytics.Business
 
             return FormatCarrierSummaries(_datamanager.GetCarrierSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
         }
+
+        public List<DetailedCarrierSummaryFormatted> GetDetailedCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
+        {
+
+            return FormatDetailedCarrierSummaries(_datamanager.GetCarrierDetailedSummary(fromDate, toDate, customerId, supplierId, supplierAMUId, customerAMUId));
+        }
+        
         public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId,  int? customerAMUId, int? supplierAMUId)
         {
 
@@ -240,6 +247,8 @@ namespace TOne.Analytics.Business
             }
             return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
+
+
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
         {
@@ -379,10 +388,8 @@ namespace TOne.Analytics.Business
 
                 ProfitFormatted = FormatNumber(dailySummary.SaleNet - dailySummary.CostNet, 2),
 
-                //=IIf(IsNothing(Fields!SaleNet.Value) ,"-100%",FormatPercent(1- Fields!CostNet.Value/Fields!SaleNet.Value,2))
 
                 ProfitPercentageFormatted = (dailySummary.SaleNet.HasValue) ? String.Format("{0:#,##0.00%}", (1 - dailySummary.CostNet / dailySummary.SaleNet)) : "-100%",
-                //ProfitPercentageFormatted = dailySummary.SaleNet == null ? "-100%" : FormatNumber(1 - dailySummary.CostNet / dailySummary.SaleNet, 2)
             };
         }
 
@@ -568,6 +575,16 @@ namespace TOne.Analytics.Business
                 }
             return models;
         }
+        private List<DetailedCarrierSummaryFormatted> FormatDetailedCarrierSummaries(List<DetailedCarrierSummary> detailedcarrierSummaries)
+        {
+            List<DetailedCarrierSummaryFormatted> models = new List<DetailedCarrierSummaryFormatted>();
+            if (detailedcarrierSummaries != null)
+                foreach (var c in detailedcarrierSummaries)
+                {
+                    models.Add(FormatDetailedCarrierSummary(c));
+                }
+            return models.OrderBy(cs => cs.Customer).ToList();
+        }
 
         private CarrierSummaryFormatted FormatCarrierSummary(CarrierSummary carrierSummary)
         {
@@ -599,7 +616,44 @@ namespace TOne.Analytics.Business
 
 
             };
-        }       
+        }
+
+        private DetailedCarrierSummaryFormatted FormatDetailedCarrierSummary(DetailedCarrierSummary detailedCarrier)
+        {
+            return new DetailedCarrierSummaryFormatted
+            {
+
+                 CustomerID = detailedCarrier.CustomerID,
+                 Customer = (detailedCarrier.CustomerID!=null)?_bemanager.GetCarrirAccountName(detailedCarrier.CustomerID):null,
+                 SaleZoneID  = detailedCarrier.SaleZoneID,
+                 SaleZoneName = detailedCarrier.SaleZoneName,
+                 SaleDuration = detailedCarrier.SaleDuration,
+                 SaleDurationFormatted= FormatNumber(detailedCarrier.SaleDuration),
+                 SaleRate = detailedCarrier.SaleRate,
+                 SaleRateFormatted = FormatNumber( detailedCarrier.SaleRate,5),
+                 SaleRateChange =detailedCarrier.SaleRateChange,  
+                 SaleRateChangeFormatted = ((Change)detailedCarrier.SaleRateChange).ToString(),
+                 SaleRateEffectiveDate  = detailedCarrier.SaleRateEffectiveDate,
+                 SaleAmount = detailedCarrier.SaleAmount,
+                 SaleAmountFormatted = FormatNumber(detailedCarrier.SaleAmount,5),
+                 SupplierID  = detailedCarrier.SupplierID,
+                 Supplier = (detailedCarrier.SupplierID!=null)?_bemanager.GetCarrirAccountName(detailedCarrier.SupplierID):null,
+                 CostZoneID = detailedCarrier.CostZoneID,
+                 CostZoneName = detailedCarrier.CostZoneName ,
+                 CostDuration = detailedCarrier.CostDuration,
+                 CostDurationFormatted = FormatNumber(detailedCarrier.CostDuration),
+                 CostRate = detailedCarrier.CostRate,
+                 CostRateFormatted =FormatNumber(detailedCarrier.CostRate,5),
+                 CostRateChange =detailedCarrier.CostRateChange,
+                 CostRateChangeFormatted =((Change)detailedCarrier.CostRateChange).ToString(),
+                 CostRateEffectiveDate = detailedCarrier.CostRateEffectiveDate,
+                 CostAmount = detailedCarrier.CostAmount,
+                 CostAmountFormatted = FormatNumber(detailedCarrier.CostAmount,5),
+                 Profit  = detailedCarrier.Profit,
+                 ProfitFormatted = FormatNumber(detailedCarrier.Profit,5),
+                 ProfitPercentage =(detailedCarrier.SaleAmount>0)? String.Format("{0:#,##0.00%}", (1 - detailedCarrier.CostAmount / detailedCarrier.SaleAmount)) : "-100%"
+            };
+        }  
         #endregion
     }
 }

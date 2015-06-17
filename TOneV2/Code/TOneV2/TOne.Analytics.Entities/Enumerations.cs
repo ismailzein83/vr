@@ -83,4 +83,11 @@ namespace TOne.Analytics.Entities
         OffPeak = 1,
         Weekend = 2
     }
+    public enum Change : short
+    {
+        None = 0,
+        Increase = 1,
+        Decrease = -1,
+        New = 2
+    }
 }
