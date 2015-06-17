@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class Result
+    public class FraudResult
     {
 
         public DateTime DateDay { get; set; }

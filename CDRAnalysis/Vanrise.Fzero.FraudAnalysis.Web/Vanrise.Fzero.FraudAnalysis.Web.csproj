@@ -117,7 +117,7 @@
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ResultsController.cs" />
+    <Compile Include="Controllers\FraudResultController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -148,11 +148,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FraudAnalysis\Services\APIServices\ResultsAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\FraudResultAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
-    <Content Include="FraudAnalysis\Views\ResultsManagement.html" />
+    <Content Include="FraudAnalysis\Views\FraudResultManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
-    <Content Include="FraudAnalysis\Views\ResultsManagementController.js" />
+    <Content Include="FraudAnalysis\Views\FraudResultManagementController.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\StrategyEditor.html" />
     <Content Include="FraudAnalysis\Views\StrategyEditorController.js" />

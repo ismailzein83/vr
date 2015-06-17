@@ -9,10 +9,10 @@ using System;
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
 
-    public class ResultController : BaseAPIController
+    public class FraudResultController : BaseAPIController
     {
         [HttpGet]
-        public IEnumerable<Result> GetFilteredSuspiciousNumbers(int fromRow, int toRow,DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow,DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
         {
             StrategyManager manager = new StrategyManager();
 

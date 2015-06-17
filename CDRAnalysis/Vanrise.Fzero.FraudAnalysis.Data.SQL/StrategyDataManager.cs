@@ -29,9 +29,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
-        public List<Result> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
         {
-            return GetItemsSP("FraudAnalysis.sp_Results_GetFilteredSuspiciousNumbers", ResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionList);
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionList);
         }
 
         
@@ -85,13 +85,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         
         #region Private Methods
 
-        private Result ResultMapper(IDataReader reader)
+        private FraudResult FraudResultMapper(IDataReader reader)
         {
-            var result = new Result();
-            result.DateDay = (DateTime)reader["DateDay"];
-            result.SubscriberNumber = reader["SubscriberNumber"] as string;
-            result.SuspicionLevelName = reader["SuspicionLevelName"] as string;
-            return result;
+            var fraudResult = new FraudResult();
+            fraudResult.DateDay = (DateTime)reader["DateDay"];
+            fraudResult.SubscriberNumber = reader["SubscriberNumber"] as string;
+            fraudResult.SuspicionLevelName = reader["SuspicionLevelName"] as string;
+            return fraudResult;
         }
 
         private Strategy StrategyMapper(IDataReader reader)
