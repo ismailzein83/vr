@@ -27,4 +27,4 @@ var serviceObj = function (BaseAPIService) {
 }
 
 serviceObj.$inject = ['BaseAPIService'];
-appControllers.service('BusinessEntityAPIService', serviceObj);
+appControllers.service('BusinessEntityAPIService_temp', serviceObj);

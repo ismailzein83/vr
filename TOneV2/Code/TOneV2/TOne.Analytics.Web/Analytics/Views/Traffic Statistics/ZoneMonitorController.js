@@ -1,7 +1,7 @@
-﻿ZoneMonitorController.$inject = ['$scope','UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
+﻿ZoneMonitorController.$inject = ['$scope', 'UtilsService', 'AnalyticsAPIService', 'uiGridConstants', '$q', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'TrafficStatisticGroupKeysEnum', 'TrafficStatisticsMeasureEnum',
         'CarrierTypeEnum', 'VRModalService', 'VRNotificationService'];
 
-function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
+function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGridConstants, $q, BusinessEntityAPIService, CarrierAPIService, TrafficStatisticGroupKeysEnum, TrafficStatisticsMeasureEnum,
         CarrierTypeEnum, VRModalService, VRNotificationService) {
 
         var chartSelectedMeasureAPI;
@@ -515,7 +515,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
 
         function loadCustomers() {
-            return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+            return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.customers.push(itm);
                 });
@@ -523,7 +523,7 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
         }
 
         function loadSuppliers() {
-            return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+            return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
                 angular.forEach(response, function (itm) {
                     $scope.suppliers.push(itm);
                 });

@@ -1,5 +1,5 @@
-﻿RoutingRulesManagementController.$inject = ['$scope', 'RoutingRulesAPIService', 'BusinessEntityAPIService', 'VRModalService', 'CarrierTypeEnum', 'RoutingRulesTemplatesEnum'];
-function RoutingRulesManagementController($scope, RoutingRulesAPIService, BusinessEntityAPIService, VRModalService, CarrierTypeEnum, RoutingRulesTemplatesEnum) {
+﻿RoutingRulesManagementController.$inject = ['$scope', 'RoutingRulesAPIService', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'VRModalService', 'CarrierTypeEnum', 'RoutingRulesTemplatesEnum'];
+function RoutingRulesManagementController($scope, RoutingRulesAPIService, BusinessEntityAPIService, CarrierAPIService, VRModalService, CarrierTypeEnum, RoutingRulesTemplatesEnum) {
     var mainGridAPI;
     var sortColumn;
     var resultKey;
@@ -57,7 +57,7 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
     }
 
     function loadCustomers() {
-        return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
             });

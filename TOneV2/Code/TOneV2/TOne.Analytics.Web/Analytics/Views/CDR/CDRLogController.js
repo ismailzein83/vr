@@ -1,6 +1,6 @@
-﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
+﻿CDRLogController.$inject = ['$scope', 'CDRAPIService', 'UtilsService', 'uiGridConstants', 'VRNavigationService', '$q', 'BusinessEntityAPIService_temp', 'CarrierAPIService', 'BillingCDRMeasureEnum', 'TrafficStatisticsMeasureEnum', 'CarrierTypeEnum', 'VRModalService', 'VRNotificationService', 'ZonesService', 'BillingCDROptionMeasureEnum'];
 
-function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,VRNavigationService, $q, BusinessEntityAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
+function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, VRNavigationService, $q, BusinessEntityAPIService, CarrierAPIService, BillingCDRMeasureEnum, TrafficStatisticsMeasureEnum, CarrierTypeEnum, VRModalService, VRNotificationService, ZonesService, BillingCDROptionMeasureEnum) {
 
     $scope.name = "test";
     $scope.isInitializing = false;
@@ -162,7 +162,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         });
     }
     function loadCustomers() {
-        return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.customers.push(itm);
                 if (receivedCustomerIds != undefined && receivedCustomerIds.indexOf(itm.CarrierAccountID)>-1)
@@ -171,7 +171,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
         });
     }
     function loadSuppliers() {
-        return BusinessEntityAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+        return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.suppliers.push(itm);
                 if(receivedSupplierIds !=undefined && receivedSupplierIds.indexOf(itm.CarrierAccountID)>-1)

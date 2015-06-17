@@ -1,6 +1,6 @@
 ﻿/// <reference path="TestNew.html" />
 appControllers.controller('TestNewController',
-    function TestNewController($scope, BusinessEntityAPIService, CarrierTypeEnum) {
+    function TestNewController($scope, CarrierAPIService, CarrierTypeEnum) {
         $scope.CarrierAccountID = { text: "" };
         $scope.Name = { text: "" };
         $scope.ProfileName = { text: "" };
@@ -17,7 +17,7 @@ appControllers.controller('TestNewController',
         getData(0);
         getCarrierAccounts("", "");
         function getData(carrierTypeValue) {
-            BusinessEntityAPIService.GetCarriers(carrierTypeValue).then(function (responce) {
+            CarrierAPIService.GetCarriers(carrierTypeValue).then(function (responce) {
                 $scope.currentData = responce;
             })
             .finally(function () {
@@ -25,7 +25,7 @@ appControllers.controller('TestNewController',
             });
         }
         function getCarrierAccounts(name, companyName) {
-            BusinessEntityAPIService.GetCarrierAccounts(name, companyName).then(function (responce) {
+            CarrierAPIService.GetCarrierAccounts(name, companyName).then(function (responce) {
                 $scope.CarrierAccounts = responce;
             })
             .finally(function () {
@@ -35,7 +35,7 @@ appControllers.controller('TestNewController',
         $scope.saveCarrier = function () {
             var CarrierAccountID = $scope.CarrierAccountID;
             var Name = $scope.Name;
-            BusinessEntityAPIService.insertCarrierTest(CarrierAccountID, Name).then(function (responce) {
+            CarrierAPIService.insertCarrierTest(CarrierAccountID, Name).then(function (responce) {
                 $scope.InsertedData = responce;
             })
             .finally(function () {
