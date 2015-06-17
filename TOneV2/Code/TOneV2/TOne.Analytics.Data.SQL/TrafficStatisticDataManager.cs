@@ -388,8 +388,8 @@ namespace TOne.Analytics.Data.SQL
         const string CustomerNameColumnName = "CustomerName";
         const string SupplierIDColumnName = "SupplierID";
         const string SupplierNameColumnName = "SupplierName";
-        const string Port_INColumnName = "PortIn";
-        const string Port_OutColumnName = "PortOut";
+        const string Port_INColumnName = "Port_IN";
+        const string Port_OutColumnName = "Port_OUT";
         const string CodeGroupIDColumnName = "CodeGroupID";
         const string CodeGroupNameColumnName = "CodeGroupName";
         const string SupplierZoneIDColumnName = "SupplierZoneID";
