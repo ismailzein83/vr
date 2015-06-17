@@ -1,13 +1,19 @@
-﻿<vr-panel ng-controller="FraudAnalysis_StrategyManagementController">
+﻿<vr-panel ng-controller="FraudAnalysis_FraudResultManagementController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-textbox value="name" label="Name"></vr-textbox>
+                    <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" ></vr-select>
                 </vr-columns>
-                <vr-columns colnum="4">
-                    <vr-textbox value="description" label="Description"></vr-textbox>
+                <vr-columns colnum="2">
+                    <vr-select datasource="suspicionLevels" datatextfield="name" datavaluefield="id" label="Suspicion Levels" selectedvalues="selectedSuspicionLevels" ismultipleselection></vr-select>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker value="fromDate" label="From Date"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker value="toDate" label="To Date"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
             <vr-row></vr-row>
@@ -17,22 +23,17 @@
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
                     <vr-button type="Reset" formname="formFilter" data-onclick="resetClicked"></vr-button>
-                    <button type="button" class="btn btn-default btncustom  action-bar-btn-icon no-float" aria-label="Left Align" ng-click="addNewStrategy()">
-                        Add
-                        <span style="padding-left:4px" class="glyphicon glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                    </button>
                 </div>
             </vr-actionbar>
         </vr-row>
     </vr-form>
-
     <div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="strategies" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Is Default'" field="'IsDefaultText'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+                <vr-datagrid datasource="fraudResults" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'Date'" field="'DateDay'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Suspicion Level Name'" field="'SuspicionLevelName'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

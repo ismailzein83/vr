@@ -1,6 +1,6 @@
-﻿StrategyManagementController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿FraudResultManagementController.$inject = ['$scope', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function StrategyManagementController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function FraudResultManagementController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -15,7 +15,7 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
         $scope.gridMenuActions = [];
 
-        $scope.strategies = [];
+        $scope.fraudResults = [];
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -32,13 +32,13 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
         };
 
         $scope.resetClicked = function () {            
-            $scope.name = '';
-            $scope.description = '';
+            $scope.fromDate = '';
+            $scope.toDate = '';
+            $scope.selectedStrategies = [];
+            $scope.selectedSuspicionLevels = [];
             mainGridAPI.clearDataAndContinuePaging();
             return getData();
         };
-
-        $scope.addNewStrategy = addNewStrategy;
 
         defineMenuActions();
     }
@@ -49,55 +49,35 @@ function StrategyManagementController($scope, StrategyAPIService, $routeParams, 
 
     function defineMenuActions() {
         $scope.gridMenuActions = [{
-            name: "Edit",
-            clicked: editStrategy
+            name: "Details",
+            clicked: detailFraudResult
         }];
     }
 
     function getData() {
-        var name = $scope.name != undefined ? $scope.name : '';
-        var description = $scope.description != undefined ? $scope.description : '';
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+        
+
+        ////// to be updateddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+        //var strategyId = $scope.selectedStrategies[0];
+        //var selectedSuspicionLevels = $scope.selectedSuspicionLevels;
+        ///////////////////////////////////////////////////////////////////////////////////////
+
+        var strategyId = 3;
+        var selectedSuspicionLevels = '3';
+
         var pageInfo = mainGridAPI.getPageInfo();
 
-        return StrategyAPIService.GetFilteredStrategies(pageInfo.fromRow, pageInfo.toRow, name, description).then(function (response) {
+        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionList).then(function (response) {
             angular.forEach(response, function (itm) {
                
-                itm.IsDefaultText = itm.IsDefault ? "Default" : "Not Default";
-                $scope.strategies.push(itm);
+                $scope.fraudResults.push(itm);
             });
         });
     }
 
-    function addNewStrategy() {
-        var settings = {};
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "New Strategy";
-            modalScope.onStrategyAdded = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                mainGridAPI.itemAdded(strategy);
-            };
-        };
-        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/StrategyEditor.html', null, settings);
-    }
-
-    function editStrategy(strategy) {
-        var params = {
-            strategyId: strategy.Id
-        };
-
-        var settings = {
-           
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Edit Strategy";
-            modalScope.onStrategyUpdated = function (strategy) {
-                strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-                mainGridAPI.itemUpdated(strategy);
-            };
-        };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
-    }
+   
 }
-appControllers.controller('FraudAnalysis_StrategyManagementController', StrategyManagementController);
+appControllers.controller('FraudAnalysis_FraudResultManagementController', FraudResultManagementController);
