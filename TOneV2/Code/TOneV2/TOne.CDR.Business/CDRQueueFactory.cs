@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.CDR.Entities;
+using TOne.CDRProcess.Arguments;
 using TOne.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
@@ -80,7 +81,7 @@ namespace TOne.CDR.Business
                 CreateSwitchQueueIfNotExists<CDRBillingBatch>(switchId, QueueName.CDRBillingForStatsDaily, QueueName.CDRBilling);
                 CreateSwitchQueueIfNotExists<CDRMainBatch>(switchId, QueueName.CDRMain);
                 CreateSwitchQueueIfNotExists<CDRInvalidBatch>(switchId, QueueName.CDRInvalid);
-                CreateSwitchQueueIfNotExists<TrafficStatisticBatch>(switchId, QueueName.TrafficStats, null, new QueueSettings { SingleConcurrentReader = true });
+                CreateSwitchQueueIfNotExists<TrafficStatisticBatch>(switchId, QueueName.TrafficStats, null, new QueueSettings { SingleConcurrentReader = true, QueueActivator = new Vanrise.Queueing.Extensions.CreateProcessQueueActivator { ProcessName = "SaveStatisticsToDBProcess", ProcessInputArguments = new SaveStatisticsToDBProcessInput { SwitchID = switchId } } });
                 CreateSwitchQueueIfNotExists<TrafficStatisticDailyBatch>(switchId, QueueName.TrafficStatsDaily, null, new QueueSettings { SingleConcurrentReader = true });
                 s_CreatedSwitchesQueues.Add(switchId);
             }

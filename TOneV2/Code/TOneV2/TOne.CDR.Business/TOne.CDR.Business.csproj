@@ -67,6 +67,9 @@
     <Reference Include="Vanrise.Queueing.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing.Extensions">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRGenerator.cs" />
@@ -96,6 +99,10 @@
     <ProjectReference Include="..\TOne.CDR.Entities\TOne.CDR.Entities.csproj">
       <Project>{33bba8af-e925-4354-b05c-39e623a21da9}</Project>
       <Name>TOne.CDR.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.CDRProcess.Arguments\TOne.CDRProcess.Arguments.csproj">
+      <Project>{34c38ef3-c2d1-41d7-ab7c-e375f030b5f3}</Project>
+      <Name>TOne.CDRProcess.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
       <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
