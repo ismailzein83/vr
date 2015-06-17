@@ -14,17 +14,17 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
-            return GetItemsSP("sec.sp_Roles_GetFilteredRoles", RoleMapper, fromRow, toRow, name);
+            return GetItemsSP("sec.sp_Roles_GetFiltered", RoleMapper, fromRow, toRow, name);
         }
 
         public Entities.Role GetRole(int roleId)
         {
-            return GetItemSP("sec.sp_Roles_GetRole", RoleMapper, roleId);
+            return GetItemSP("sec.sp_Roles_Get", RoleMapper, roleId);
         }
 
         public List<Entities.Role> GetRoles()
         {
-            return GetItemsSP("sec.sp_Roles_GetRoles", RoleMapper);
+            return GetItemsSP("sec.sp_Roles_GetAll", RoleMapper);
         }
 
         public List<int> GetUserRoles(int userId)

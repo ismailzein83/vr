@@ -13,12 +13,12 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
         {
-            return GetItemsSP("sec.sp_User_GetFilteredUsers", UserMapper, fromRow, toRow, name, email);
+            return GetItemsSP("sec.sp_User_GetFiltered", UserMapper, fromRow, toRow, name, email);
         }
 
         public List<User> GetUsers()
         {
-            return GetItemsSP("sec.sp_User_GetUsers", UserMapper);
+            return GetItemsSP("sec.sp_User_GetAll", UserMapper);
         }
 
         public List<User> GetMembers(int roleId)
@@ -28,12 +28,12 @@ namespace Vanrise.Security.Data.SQL
 
         public User GetUserbyId(int userId)
         {
-            return GetItemSP("sec.sp_User_GetUserbyId", UserMapper, userId);
+            return GetItemSP("sec.sp_User_GetbyId", UserMapper, userId);
         }
 
         public User GetUserbyEmail(string email)
         {
-            return GetItemSP("sec.sp_User_GetUserbyEmail", UserMapper, email);
+            return GetItemSP("sec.sp_User_GetbyEmail", UserMapper, email);
         }
 
         public bool AddUser(User userObject, out int insertedId)

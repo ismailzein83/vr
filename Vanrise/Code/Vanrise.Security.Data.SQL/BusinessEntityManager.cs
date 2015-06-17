@@ -12,7 +12,7 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.BusinessEntity> GetEntities()
         {
-            return GetItemsSP("sec.sp_BusinessEntity_GetEntities", EntityMapper);
+            return GetItemsSP("sec.sp_BusinessEntity_GetAll", EntityMapper);
         }
 
         Entities.BusinessEntity EntityMapper(IDataReader reader)

@@ -1,4 +1,4 @@
-﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntityAPIService2', 'PermissionAPIService', 'PermissionFlagEnum', 'VRModalService'];
+﻿BusinessEntityManagementController.$inject = ['$scope', 'BusinessEntitiesAPIService', 'PermissionAPIService', 'PermissionFlagEnum', 'VRModalService'];
 
 function BusinessEntityManagementController($scope, BusinessEntityAPIService, PermissionAPIService, PermissionFlagEnum, VRModalService) {
 

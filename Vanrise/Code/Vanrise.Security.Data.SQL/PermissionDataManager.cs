@@ -13,17 +13,17 @@ namespace Vanrise.Security.Data.SQL
     {
         public List<Entities.Permission> GetPermissions()
         {
-            return GetItemsSP("sec.sp_Permissions_GetPermissions", PermissionMapper);
+            return GetItemsSP("sec.sp_Permission_GetAll", PermissionMapper);
         }
 
         public List<Entities.Permission> GetPermissionsByHolder(Entities.HolderType holderType, string holderId)
         {
-            return GetItemsSP("sec.sp_Permissions_GetPermissionsbyHolder", PermissionMapper, holderType, holderId);
+            return GetItemsSP("sec.sp_Permission_GetbyHolder", PermissionMapper, holderType, holderId);
         }
 
         public List<Entities.BEPermission> GetPermissionsByEntity(Entities.EntityType entityType, string entityId)
         {
-            return GetItemsSP("sec.sp_Permissions_GetPermissionsbyEntity", BEPermissionMapper, entityType, entityId);
+            return GetItemsSP("sec.sp_Permission_GetbyEntity", BEPermissionMapper, entityType, entityId);
         }
 
         public bool UpdatePermission(Permission permission)

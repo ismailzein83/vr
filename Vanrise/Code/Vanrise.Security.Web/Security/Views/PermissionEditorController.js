@@ -1,4 +1,4 @@
-﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'BusinessEntityAPIService2', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿PermissionEditorController.$inject = ['$scope', 'PermissionAPIService', 'BusinessEntitiesAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function PermissionEditorController($scope, PermissionAPIService, BusinessEntityAPIService, VRModalService, VRNotificationService, VRNavigationService) {
 
