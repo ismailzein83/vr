@@ -8,7 +8,7 @@ using Vanrise.Web.Base;
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
 
-    public class ResultsController : BaseAPIController
+    public class StrategyController : BaseAPIController
     {
         [HttpGet]
         public IEnumerable<Strategy> GetFilteredStrategies(int fromRow, int toRow,string name, string description)

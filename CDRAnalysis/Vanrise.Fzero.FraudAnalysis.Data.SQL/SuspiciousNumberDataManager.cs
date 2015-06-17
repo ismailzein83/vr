@@ -35,11 +35,32 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     }
                 }
 
+                string record=  string.Format("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21}",
+                             new[] { 
+                                 suspiciousNumber.DateDay.Value.ToString(),
+                                 suspiciousNumber.Number.ToString(),
+                                 sValues[0],
+                                 sValues[1],
+                                 sValues[2],
+                                 sValues[3],
+                                 sValues[4],
+                                 sValues[5], 
+                                 sValues[6],
+                                 sValues[7],
+                                 sValues[8],
+                                 sValues[9], 
+                                 sValues[10], 
+                                 sValues[11],
+                                 sValues[12],
+                                 sValues[13],
+                                 sValues[14],
+                                 sValues[15],
+                                 sValues[16],
+                                 sValues[17], 
+                                 suspiciousNumber.SuspectionLevel.ToString(),
+                                 suspiciousNumber.StrategyId.ToString() });
 
-
-                stream.WriteRecord("0,{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20}",
-                             new[] { suspiciousNumber.DateDay.Value.ToString(), suspiciousNumber.Number.ToString(), sValues[0], sValues[1], sValues[2], sValues[3], sValues[4], sValues[5], sValues[6], sValues[7], sValues[8], sValues[9], sValues[10], sValues[11], sValues[12], sValues[13], sValues[14], sValues[15], sValues[16], sValues[17], suspiciousNumber.SuspectionLevel.ToString(), suspiciousNumber.StrategyId.ToString() }
-               );
+                stream.WriteRecord(record);
 
             }
 
