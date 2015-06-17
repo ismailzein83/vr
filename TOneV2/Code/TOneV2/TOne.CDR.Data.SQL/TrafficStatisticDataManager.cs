@@ -67,7 +67,7 @@ namespace TOne.CDR.Data.SQL
 
         private void AddTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatistic trafficStatistic)
         {
-            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^",
+            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}",
                 trafficStatistic.SwitchId,
                 trafficStatistic.Port_IN,
                 trafficStatistic.Port_OUT,
@@ -76,20 +76,21 @@ namespace TOne.CDR.Data.SQL
                 trafficStatistic.OriginatingZoneId,
                 trafficStatistic.SupplierId,
                 trafficStatistic.SupplierZoneId,
-                trafficStatistic.FirstCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                trafficStatistic.LastCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                trafficStatistic.FirstCDRAttempt,
+                trafficStatistic.LastCDRAttempt,
                 trafficStatistic.Attempts,
                 trafficStatistic.DeliveredAttempts,
                 trafficStatistic.SuccessfulAttempts,
                 trafficStatistic.DurationsInSeconds,
-                trafficStatistic.PDDInSeconds.HasValue ? trafficStatistic.PDDInSeconds.Value.ToString():"",
+                trafficStatistic.PDDInSeconds,
                 trafficStatistic.MaxDurationInSeconds,
                 trafficStatistic.UtilizationInSeconds,
                 trafficStatistic.NumberOfCalls,
                 trafficStatistic.DeliveredNumberOfCalls,
                 trafficStatistic.PGAD,
                 trafficStatistic.CeiledDuration,
-                trafficStatistic.ReleaseSourceAParty);
+                trafficStatistic.ReleaseSourceAParty,
+                trafficStatistic.ReleaseSourceS);
         }
 
         void FillStatisticRow(DataRow dr, TrafficStatistic trafficStatistic)
@@ -103,7 +104,7 @@ namespace TOne.CDR.Data.SQL
             dr["DurationsInSeconds"] = trafficStatistic.DurationsInSeconds;
 
             if (trafficStatistic.PDDInSeconds.HasValue)
-                dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds.Value.ToString();
+                dr["PDDInSeconds"] = trafficStatistic.PDDInSeconds.Value;
             else
                 dr["PDDInSeconds"] = DBNull.Value;
 
@@ -114,6 +115,7 @@ namespace TOne.CDR.Data.SQL
             dr["PGAD"] = trafficStatistic.PGAD;
             dr["CeiledDuration"] = trafficStatistic.CeiledDuration;
             dr["ReleaseSourceAParty"] = trafficStatistic.ReleaseSourceAParty;
+            dr["ReleaseSourceS"] = trafficStatistic.ReleaseSourceS;
         }
 
         DataTable GetTrafficStatsTable()
@@ -134,6 +136,7 @@ namespace TOne.CDR.Data.SQL
             dt.Columns.Add("PGAD", typeof(decimal));
             dt.Columns.Add("CeiledDuration", typeof(int));
             dt.Columns.Add("ReleaseSourceAParty", typeof(int));
+            dt.Columns.Add("ReleaseSourceS", typeof(int));
             return dt;
         }
 
