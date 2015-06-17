@@ -16,7 +16,8 @@ namespace TOne.Web
                 "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Routing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessEntity", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Security", "*.js", true));
+                "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/BusinessProcess", "*.js", true));
         }
     }
 }
