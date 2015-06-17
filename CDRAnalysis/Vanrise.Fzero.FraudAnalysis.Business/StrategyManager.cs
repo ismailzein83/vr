@@ -26,12 +26,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
         {
 
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<FraudResult>)(manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionList)));
+            return ((IEnumerable<FraudResult>)(manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList)));
 
         }
 

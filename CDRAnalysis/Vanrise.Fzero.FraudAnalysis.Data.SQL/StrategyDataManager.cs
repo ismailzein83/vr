@@ -29,9 +29,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
-        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
         {
-            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionList);
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
         }
 
         

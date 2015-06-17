@@ -101,7 +101,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
         }
 
 
-        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
         {
             throw new NotImplementedException();
         }

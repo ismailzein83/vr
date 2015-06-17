@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         List<Strategy> GetAllStrategies();
 
-        List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList);
+        List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList);
 
         List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description);
 

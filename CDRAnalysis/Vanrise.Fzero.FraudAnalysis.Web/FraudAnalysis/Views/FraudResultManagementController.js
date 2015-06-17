@@ -1,6 +1,6 @@
 ﻿FraudResultManagementController.$inject = ['$scope', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function FraudResultManagementController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function FraudResultManagementController($scope, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -54,6 +54,29 @@ function FraudResultManagementController($scope, StrategyAPIService, $routeParam
         }];
     }
 
+
+
+    function detailFraudResult(fruadResult) {
+        //var params = {
+        //    //strategyId: strategy.Id
+        //};
+
+        //var settings = {
+
+        //};
+
+        //settings.onScopeReady = function (modalScope) {
+        //    modalScope.title = "Edit Strategy";
+        //    modalScope.onStrategyUpdated = function (strategy) {
+        //        strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
+        //        mainGridAPI.itemUpdated(strategy);
+        //    };
+        //};
+        //VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
+    }
+
+
+
     function getData() {
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
@@ -66,11 +89,11 @@ function FraudResultManagementController($scope, StrategyAPIService, $routeParam
         ///////////////////////////////////////////////////////////////////////////////////////
 
         var strategyId = 3;
-        var selectedSuspicionLevels = '3';
+        var suspicionLevelsList = '3';
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionList).then(function (response) {
+        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList).then(function (response) {
             angular.forEach(response, function (itm) {
                
                 $scope.fraudResults.push(itm);
