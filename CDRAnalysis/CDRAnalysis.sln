@@ -69,6 +69,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.MobileCDRAnal
 		SccProvider = "SAK"
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{c42ea41e-45f6-49fa-bcec-d13f8cc03e27}|Vanrise.Fzero.MobileCDRAnalysis.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_45816"
 		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.MobileCDRAnalysis.Website\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_45816\"
