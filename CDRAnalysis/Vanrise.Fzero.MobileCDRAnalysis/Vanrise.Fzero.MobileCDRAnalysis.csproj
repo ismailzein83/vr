@@ -67,14 +67,72 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CallClass.cs">
+    <Compile Include="CellProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="CallType.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Classes\CallsStatistics.cs" />
+    <Compile Include="Classes\EmailReceiverType.cs" />
+    <Compile Include="Classes\Import.cs" />
+    <Compile Include="Classes\PredefinedColumn.cs" />
+    <Compile Include="Classes\prGetEmails_Result.cs" />
+    <Compile Include="Classes\EmailReceiver.cs" />
+    <Compile Include="Classes\EmailManager.cs" />
+    <Compile Include="Classes\EmailTemplate.cs" />
+    <Compile Include="Classes\EmailToken.cs" />
+    <Compile Include="Classes\ReportingStatus.cs" />
+    <Compile Include="Classes\Enums.cs" />
+    <Compile Include="Classes\Permission.cs" />
+    <Compile Include="Classes\SourceMapping.cs" />
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\UserPermission.cs" />
     <Compile Include="Classes\Constants.cs" />
+    <Compile Include="Classes\vwReportedNumberNormalCDR.cs" />
+    <Compile Include="Classes\vwReportedNumber.cs" />
+    <Compile Include="Classes\Criteria_profile.cs" />
+    <Compile Include="Classes\DataStatistics.cs" />
+    <Compile Include="Classes\NormalCDR.cs" />
+    <Compile Include="Classes\NumberProfile.cs" />
+    <Compile Include="Classes\Period.cs" />
+    <Compile Include="Classes\Related_Criteria.cs" />
+    <Compile Include="Classes\Report.cs" />
+    <Compile Include="Classes\ReportDetail.cs" />
+    <Compile Include="Classes\Strategy.cs" />
+    <Compile Include="Classes\StrategyPeriod.cs" />
+    <Compile Include="Classes\StrategyThreshold.cs" />
+    <Compile Include="Classes\Strategy_Min_Values.cs" />
+    <Compile Include="Classes\Strategy_Suspection_level.cs" />
+    <Compile Include="Classes\SubscriberThreshold.cs" />
+    <Compile Include="Classes\Subscriber_Values.cs" />
     <Compile Include="Classes\SuspectionOccurance.cs" />
+    <Compile Include="Classes\Suspection_Level.cs" />
+    <Compile Include="Classes\Switch_DatabaseConnection.cs" />
+    <Compile Include="Classes\NormalizationCall.cs" />
+    <Compile Include="Classes\SwitchProfile.cs" />
+    <Compile Include="Classes\StrategyProperty.cs" />
+    <Compile Include="ControlTable.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Criteria_Profile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailReceiver.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailReceiverType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailTemplate.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailToken.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Import.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ImportType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -93,26 +151,62 @@
     <Compile Include="NormalCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="NormalizationRule.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="NumberProfile.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Ol_NumberProfile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperationType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Peak_Time.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Period.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Permission.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PredefinedColumn.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="prGetReportVariables_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="sp_CallClass_GetAll_Result.cs">
+    <Compile Include="Related_Criteria.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportDetail.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportingStatu.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_CallClass.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_CallType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Set_SubType.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SourceMapping.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sp_NormalCDR_Load_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_Strategy_GetAll_Result.cs">
@@ -127,16 +221,55 @@
     <Compile Include="Strategy.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="StrategyPeriod.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StrategyThreshold.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Strategy_Min_Values.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Strategy_Suspicion_Level.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="SubscriberThreshold.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SubType.cs">
+    <Compile Include="Subscriber_Values.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Suspicion_Level.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="SwitchProfile.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Switch_DatabaseConnections.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="sysdiagram.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserPermission.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwDashboard.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwReportedNumber.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwReportedNumberNormalCDR.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwReportVariable.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwSuspectionAnalysi.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -176,9 +309,7 @@
     <Content Include="Dependencies\MySql.Fabric.Plugin.dll" />
     <Content Include="Dependencies\MySql.Web.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
