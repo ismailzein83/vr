@@ -156,7 +156,9 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         };
 
         $scope.checkExpandablerow = function () {
-            if ($scope.groupKeys.length > 1)
+            if($scope.groupKeys.length > 1 && $scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && $scope.groupKeys[1].value==TrafficStatisticGroupKeysEnum.CodeGroup.value)   
+                return false;
+        else if ($scope.groupKeys.length > 1)
                 return true;
             else if ($scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.SupplierId.value)
                 return true;

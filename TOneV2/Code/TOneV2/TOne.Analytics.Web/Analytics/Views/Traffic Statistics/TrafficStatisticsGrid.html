@@ -1,11 +1,11 @@
 ﻿<div ng-controller="TrafficStatisticsGridController" vr-loader="isGettingData">
     <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged()">
-        <vr-choice ng-repeat="groupKey in groupKeys">{{groupKey.title}}</vr-choice>
+        <vr-choice ng-repeat="groupKey in groupKeys">{{groupKey.gridHeader}}</vr-choice>
     </vr-choices>
     <div ng-repeat="groupKey in groupKeys">
         <vr-datagrid datasource="groupKey.data" ng-show="groupKey == selectedGroupKey" menuactions="menuActions" issubgrid>
             <vr-datagridcolumn headertext="groupKey.gridHeader" field="'GroupKeyValues[0].Name'" widthfactor="20" isclickable="'true'" onclicked="onEntityClicked"></vr-datagridcolumn>
-            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.description" field="measure.propertyName" tag="measure" type="'Number'" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
+            <vr-datagridcolumn ng-repeat="measure in measures" headertext="measure.gridHeader" field="measure.propertyName" tag="measure" type="'Number'" onsortchanged="onMainGridSortChanged"></vr-datagridcolumn>
             <vr-datagridexpandablerow ng-if="checkExpandablerow()">
                 <div ng-include="'/Client/Modules/Analytics/Views/Traffic Statistics/TrafficStatisticsGrid.html'"></div>
             </vr-datagridexpandablerow>

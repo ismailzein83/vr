@@ -37,7 +37,7 @@ namespace TOne.Analytics.Web.Controllers
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public int Size { get; set; }
-        public string CDROption { get; set; }
+        public BillingCDROptionMeasures CDROption { get; set; }
     }
     #endregion
 }

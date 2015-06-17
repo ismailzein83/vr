@@ -13,7 +13,7 @@ namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
     {
-        public CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, string CDROption,BillingCDRMeasures orderBy, bool isDescending)
+        public CDRBigResult GetCDRData(string tempTableKey, CDRFilter filter, DateTime fromDate, DateTime toDate, int fromRow, int toRow, int nRecords, BillingCDROptionMeasures CDROption, BillingCDRMeasures orderBy, bool isDescending)
         {   
             TempTableName tempTableName = null;
             if (tempTableKey != null)
@@ -34,14 +34,15 @@ namespace TOne.Analytics.Data.SQL
             
         }
         #region Methods
-        private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, string CDROption)
+        private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, BillingCDROptionMeasures CDROption)
         {
             string queryData = "";
-            if (CDROption .Equals( "Successful"))
+            string CDROptionValue = getCDROptionValue(CDROption);
+            if (CDROptionValue.Equals("Successful"))
             {
                 queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR");
             }
-            else if (CDROption .Equals( "Failed"))
+            else if (CDROptionValue.Equals("Failed"))
             {
                 queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid");
             }
@@ -80,7 +81,16 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@nRecords", nRecords));
             });
         }
-
+        private string getCDROptionValue(BillingCDROptionMeasures CDROption)
+        {
+            switch(CDROption)
+            {
+                case BillingCDROptionMeasures.All: return "All";
+                case BillingCDROptionMeasures.Invalid: return "Failed";
+                case BillingCDROptionMeasures.Successful: return "Successful";
+                default: return "All";
+            }
+        }
         private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, BillingCDRMeasures orderBy, bool isDescending, out int totalCount)
         {
             string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER(ORDER BY {1} {2})  AS rowNumber FROM {0})
