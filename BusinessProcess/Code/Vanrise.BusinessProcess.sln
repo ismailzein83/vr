@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL Database Projects", "SQ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access Layer", "Data Access Layer", "{AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Web", "Vanrise.BusinessProcess.Web\Vanrise.BusinessProcess.Web.csproj", "{601CDC2A-F409-446B-9E51-71FBCA868E6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.OldWeb", "Vanrise.BusinessProcess.OldWeb\Vanrise.BusinessProcess.OldWeb.csproj", "{601CDC2A-F409-446B-9E51-71FBCA868E6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.WFActivities.Test", "Vanrise.Business.WFActivities.Test\Vanrise.BusinessProcess.WFActivities.Test.csproj", "{5FCBDC4A-D94E-4883-A41D-C2579D21602D}"
 EndProject
@@ -47,11 +47,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.Extensions
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Client", "Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj", "{F5064A23-6E52-43DA-AFFA-71425942EBF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.Web", "Vanrise.BusinessProcess.Web\Vanrise.BusinessProcess.Web.csproj", "{4F827753-4A32-457D-AFD8-C6FDA156825F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Vanrise.BusinessProcess.Data\\Vanrise.BusinessProcess.Data.csproj
 		SccProjectTopLevelParentUniqueName1 = Vanrise.BusinessProcess.sln
@@ -81,46 +83,50 @@ Global
 		SccProjectTopLevelParentUniqueName7 = Vanrise.BusinessProcess.sln
 		SccProjectName7 = Vanrise.BusinessProcess.SQLTrackingDatabase
 		SccLocalPath7 = Vanrise.BusinessProcess.SQLTrackingDatabase
-		SccProjectUniqueName8 = Vanrise.BusinessProcess.Web\\Vanrise.BusinessProcess.Web.csproj
+		SccProjectUniqueName8 = Vanrise.Business.WFActivities.Test\\Vanrise.BusinessProcess.WFActivities.Test.csproj
 		SccProjectTopLevelParentUniqueName8 = Vanrise.BusinessProcess.sln
-		SccProjectName8 = Vanrise.BusinessProcess.Web
-		SccLocalPath8 = Vanrise.BusinessProcess.Web
-		SccProjectUniqueName9 = Vanrise.Business.WFActivities.Test\\Vanrise.BusinessProcess.WFActivities.Test.csproj
+		SccProjectName8 = Vanrise.Business.WFActivities.Test
+		SccLocalPath8 = Vanrise.Business.WFActivities.Test
+		SccProjectUniqueName9 = Vanrise.Queueing\\Vanrise.Queueing.csproj
 		SccProjectTopLevelParentUniqueName9 = Vanrise.BusinessProcess.sln
-		SccProjectName9 = Vanrise.Business.WFActivities.Test
-		SccLocalPath9 = Vanrise.Business.WFActivities.Test
-		SccProjectUniqueName10 = Vanrise.Queueing\\Vanrise.Queueing.csproj
+		SccProjectName9 = Vanrise.Queueing
+		SccLocalPath9 = Vanrise.Queueing
+		SccProjectUniqueName10 = Vanrise.Queueing.Data\\Vanrise.Queueing.Data.csproj
 		SccProjectTopLevelParentUniqueName10 = Vanrise.BusinessProcess.sln
-		SccProjectName10 = Vanrise.Queueing
-		SccLocalPath10 = Vanrise.Queueing
-		SccProjectUniqueName11 = Vanrise.Queueing.Data\\Vanrise.Queueing.Data.csproj
+		SccProjectName10 = Vanrise.Queueing.Data
+		SccLocalPath10 = Vanrise.Queueing.Data
+		SccProjectUniqueName11 = Vanrise.Queueing.Entities\\Vanrise.Queueing.Entities.csproj
 		SccProjectTopLevelParentUniqueName11 = Vanrise.BusinessProcess.sln
-		SccProjectName11 = Vanrise.Queueing.Data
-		SccLocalPath11 = Vanrise.Queueing.Data
-		SccProjectUniqueName12 = Vanrise.Queueing.Entities\\Vanrise.Queueing.Entities.csproj
+		SccProjectName11 = Vanrise.Queueing.Entities
+		SccLocalPath11 = Vanrise.Queueing.Entities
+		SccProjectUniqueName12 = Vanrise.Queueing.Data.SQL\\Vanrise.Queueing.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName12 = Vanrise.BusinessProcess.sln
-		SccProjectName12 = Vanrise.Queueing.Entities
-		SccLocalPath12 = Vanrise.Queueing.Entities
-		SccProjectUniqueName13 = Vanrise.Queueing.Data.SQL\\Vanrise.Queueing.Data.SQL.csproj
+		SccProjectName12 = Vanrise.Queueing.Data.SQL
+		SccLocalPath12 = Vanrise.Queueing.Data.SQL
+		SccProjectUniqueName13 = Vanrise.Queueing.SQLQueueDatabase\\Vanrise.Queueing.SQLQueueDatabase.sqlproj
 		SccProjectTopLevelParentUniqueName13 = Vanrise.BusinessProcess.sln
-		SccProjectName13 = Vanrise.Queueing.Data.SQL
-		SccLocalPath13 = Vanrise.Queueing.Data.SQL
-		SccProjectUniqueName14 = Vanrise.Queueing.SQLQueueDatabase\\Vanrise.Queueing.SQLQueueDatabase.sqlproj
+		SccProjectName13 = Vanrise.Queueing.SQLQueueDatabase
+		SccLocalPath13 = Vanrise.Queueing.SQLQueueDatabase
+		SccProjectUniqueName14 = Vanrise.Queueing.SQLQueueItemDatabase\\Vanrise.Queueing.SQLQueueItemDatabase.sqlproj
 		SccProjectTopLevelParentUniqueName14 = Vanrise.BusinessProcess.sln
-		SccProjectName14 = Vanrise.Queueing.SQLQueueDatabase
-		SccLocalPath14 = Vanrise.Queueing.SQLQueueDatabase
-		SccProjectUniqueName15 = Vanrise.Queueing.SQLQueueItemDatabase\\Vanrise.Queueing.SQLQueueItemDatabase.sqlproj
+		SccProjectName14 = Vanrise.Queueing.SQLQueueItemDatabase
+		SccLocalPath14 = Vanrise.Queueing.SQLQueueItemDatabase
+		SccProjectUniqueName15 = Vanrise.Queueing.Extensions\\Vanrise.Queueing.Extensions.csproj
 		SccProjectTopLevelParentUniqueName15 = Vanrise.BusinessProcess.sln
-		SccProjectName15 = Vanrise.Queueing.SQLQueueItemDatabase
-		SccLocalPath15 = Vanrise.Queueing.SQLQueueItemDatabase
-		SccProjectUniqueName16 = Vanrise.Queueing.Extensions\\Vanrise.Queueing.Extensions.csproj
+		SccProjectName15 = Vanrise.Queueing.Extensions
+		SccLocalPath15 = Vanrise.Queueing.Extensions
+		SccProjectUniqueName16 = Vanrise.BusinessProcess.Client\\Vanrise.BusinessProcess.Client.csproj
 		SccProjectTopLevelParentUniqueName16 = Vanrise.BusinessProcess.sln
-		SccProjectName16 = Vanrise.Queueing.Extensions
-		SccLocalPath16 = Vanrise.Queueing.Extensions
-		SccProjectUniqueName17 = Vanrise.BusinessProcess.Client\\Vanrise.BusinessProcess.Client.csproj
+		SccProjectName16 = Vanrise.BusinessProcess.Client
+		SccLocalPath16 = Vanrise.BusinessProcess.Client
+		SccProjectUniqueName17 = Vanrise.BusinessProcess.OldWeb\\Vanrise.BusinessProcess.OldWeb.csproj
 		SccProjectTopLevelParentUniqueName17 = Vanrise.BusinessProcess.sln
-		SccProjectName17 = Vanrise.BusinessProcess.Client
-		SccLocalPath17 = Vanrise.BusinessProcess.Client
+		SccProjectName17 = Vanrise.BusinessProcess.OldWeb
+		SccLocalPath17 = Vanrise.BusinessProcess.OldWeb
+		SccProjectUniqueName18 = Vanrise.BusinessProcess.Web\\Vanrise.BusinessProcess.Web.csproj
+		SccProjectTopLevelParentUniqueName18 = Vanrise.BusinessProcess.sln
+		SccProjectName18 = Vanrise.BusinessProcess.Web
+		SccLocalPath18 = Vanrise.BusinessProcess.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +209,10 @@ Global
 		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5064A23-6E52-43DA-AFFA-71425942EBF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F827753-4A32-457D-AFD8-C6FDA156825F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F827753-4A32-457D-AFD8-C6FDA156825F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F827753-4A32-457D-AFD8-C6FDA156825F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F827753-4A32-457D-AFD8-C6FDA156825F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +226,7 @@ Global
 		{601CDC2A-F409-446B-9E51-71FBCA868E6F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{5FCBDC4A-D94E-4883-A41D-C2579D21602D} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{F5064A23-6E52-43DA-AFFA-71425942EBF8} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
+		{4F827753-4A32-457D-AFD8-C6FDA156825F} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 		{3F8405F6-45C3-4EEF-9E59-A8B206DE0AA2} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{E7B7BE23-5ABB-4327-B716-127A19E7B6E6} = {AA9582C1-FDE5-49F8-B2DB-3A461D31F7FD}
 		{D34EC1AA-9B14-4000-A6E4-0A4CD23EE87A} = {519AC3E3-8FFA-4AF6-90E9-123BB54837F5}
