@@ -219,7 +219,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants,V
             Size: $scope.filter.nRecords,
             CDROption: $scope.filter.selectedCDROption,
             OrderBy: sortColumn.value,
-            IsDescending: true
+            IsDescending: sortDescending
             
         }
         $scope.showResult = true;

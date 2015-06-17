@@ -145,18 +145,20 @@ function TrafficStatisticsGridController($scope, AnalyticsAPIService, TrafficSta
         };
 
         $scope.groupKeySelectionChanged = function () {
+           
             if ($scope.selectedGroupKeyIndex != undefined) {
                 $scope.selectedGroupKey = $scope.groupKeys[$scope.selectedGroupKeyIndex];
                 if (!$scope.selectedGroupKey.isDataLoaded) {
                    // $scope.parentGroupKeys = [];
                     getData();
                 }
+              
                     
             }
         };
 
-        $scope.checkExpandablerow = function () {
-            if($scope.groupKeys.length > 1 && $scope.selectedGroupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && $scope.groupKeys[1].value==TrafficStatisticGroupKeysEnum.CodeGroup.value)   
+        $scope.checkExpandablerow = function (groupKey) {
+            if ($scope.groupKeys.length == 2 && groupKey.value == TrafficStatisticGroupKeysEnum.OurZone.value && ($scope.groupKeys[0].value == TrafficStatisticGroupKeysEnum.CodeGroup.value || $scope.groupKeys[1].value == TrafficStatisticGroupKeysEnum.CodeGroup.value))//only if zone and codegroup remains in groupkeys
                 return false;
         else if ($scope.groupKeys.length > 1)
                 return true;
