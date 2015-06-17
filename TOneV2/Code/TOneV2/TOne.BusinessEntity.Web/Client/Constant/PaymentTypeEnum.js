@@ -1,6 +1,6 @@
 ﻿app.constant('PaymentTypeEnum', {
-    Succeeded: { value: 0, description: "PostPaid" },
-    Failed: { value: 1, description: "PrePaid" },
-    SameExists: { value: 100, description: "Undefined" },
-    SameExists: { value: 200, description: "Defined By Profile" }
+    PostPaid: { value: 0, description: "PostPaid" },
+    PrePaid: { value: 1, description: "PrePaid" },
+    Undefined: { value: 100, description: "Undefined" },
+    DefinedByProfile: { value: 200, description: "Defined By Profile" }
 });
