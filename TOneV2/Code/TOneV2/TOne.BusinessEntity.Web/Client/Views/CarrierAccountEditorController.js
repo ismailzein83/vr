@@ -1,6 +1,6 @@
-﻿CarrierAccountEditorController.$inject = ['$scope', 'BusinessEntityAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿CarrierAccountEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function CarrierAccountEditorController($scope, BusinessEntityAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function CarrierAccountEditorController($scope, CarrierAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     loadParameters();
     defineScope();
@@ -87,7 +87,7 @@ function CarrierAccountEditorController($scope, BusinessEntityAPIService, VRModa
         ];
     }
     function getCarrierAccount() {
-        return BusinessEntityAPIService.GetCarrierAccount($scope.CarrierAccountId)
+        return CarrierAPIService.GetCarrierAccount($scope.CarrierAccountId)
            .then(function (response) {
                fillScopeFromCarrierAccountObj(response);
            })
@@ -97,7 +97,7 @@ function CarrierAccountEditorController($scope, BusinessEntityAPIService, VRModa
     }
     function updateCarrierAccount() {
         var carrierAccountObject = buildCarrierAccountObjFromScope();
-        BusinessEntityAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
+        CarrierAPIService.UpdateCarrierAccount(buildCarrierAccountObjFromScope())
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("CarrierAccount", response)) {
                 if ($scope.onCarrierAccountUpdated != undefined)
@@ -142,4 +142,4 @@ function CarrierAccountEditorController($scope, BusinessEntityAPIService, VRModa
     }
 
 }
-appControllers.controller('BusinessEntity_CarrierAccountEditorController', CarrierAccountEditorController);
+appControllers.controller('Carrier_CarrierAccountEditorController', CarrierAccountEditorController);
