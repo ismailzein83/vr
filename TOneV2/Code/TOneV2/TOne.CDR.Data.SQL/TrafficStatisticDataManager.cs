@@ -301,56 +301,5 @@ namespace TOne.CDR.Data.SQL
 
         #endregion
 
-        private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
-        {
-            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^",
-                        0,
-                        trafficStatistic.SwitchId,
-                        trafficStatistic.Port_IN,
-                        trafficStatistic.Port_OUT,
-                        trafficStatistic.CustomerId,
-                        trafficStatistic.OurZoneId,
-                        trafficStatistic.OriginatingZoneId,
-                        trafficStatistic.SupplierId,
-                        trafficStatistic.SupplierZoneId,
-                        trafficStatistic.FirstCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                        trafficStatistic.LastCDRAttempt.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                        trafficStatistic.Attempts,
-                        trafficStatistic.DeliveredAttempts,
-                        trafficStatistic.SuccessfulAttempts,
-                        trafficStatistic.DurationsInSeconds,
-                        trafficStatistic.PDDInSeconds,
-                        trafficStatistic.MaxDurationInSeconds,
-                        trafficStatistic.UtilizationInSeconds,
-                        trafficStatistic.NumberOfCalls,
-                        trafficStatistic.DeliveredNumberOfCalls,
-                        Math.Round(trafficStatistic.PGAD, 5),
-                        trafficStatistic.CeiledDuration,
-                        trafficStatistic.ReleaseSourceAParty
-                        ));
-        }
-
-        public Object PrepareTrafficStatsForDBApply(List<TOne.CDR.Entities.TrafficStatistic> trafficStatistics)
-        {
-            string filePath = GetFilePathForBulkInsert();
-
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
-            {
-                foreach (TOne.CDR.Entities.TrafficStatistic trafficStatistic in trafficStatistics)
-                {
-                    PrepareTrafficStatsBaseForDBApply(trafficStatistic, wr);
-                }
-                wr.Close();
-            }
-
-            return new BulkInsertInfo
-            {
-                TableName = "[dbo].[TrafficStats]",
-                DataFilePath = filePath,
-                TabLock = false,
-                FieldSeparator = '^'
-            };
-        }
-
     }
 }
