@@ -1,6 +1,6 @@
-﻿CarrierAccountEditorController.$inject = ['$scope', 'CarrierAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿CarrierAccountEditorController.$inject = ['$scope', 'CarrierAPIService', 'RoutingStatusEnum', 'AccountTypeEnum', 'ActivationStatusEnum', 'PaymentTypeEnum', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function CarrierAccountEditorController($scope, CarrierAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatusEnum, AccountTypeEnum, ActivationStatusEnum, PaymentTypeEnum, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var editMode;
     loadParameters();
     defineScope();

@@ -133,10 +133,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Constant\AccountType.js" />
+    <Content Include="Client\Constant\AccountTypeEnum.js" />
     <Content Include="Client\Constant\ActivationStatusEnum.js" />
     <Content Include="Client\Constant\PaymentTypeEnum.js" />
-    <Content Include="Client\Constant\RoutingStatus.js" />
+    <Content Include="Client\Constant\RoutingStatusEnum.js" />
     <Content Include="Client\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Client\Services\APIServices\CarrierAPIService.js" />
     <Content Include="Client\Services\APIServices\SwitchManagmentAPIService.js" />
