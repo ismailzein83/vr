@@ -9,7 +9,6 @@ using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using SIPVoipSDK;
 using System.Diagnostics;
-using System.Configuration;
 
 namespace CallGeneratorServiceCLI
 {
@@ -20,7 +19,6 @@ namespace CallGeneratorServiceCLI
         public void Start()
         {
             locked = false;
-            //GetCalls.f = f;
             Thread thread = new Thread(new ThreadStart(GetCall));
             thread.IsBackground = true;
             thread.Start();
@@ -33,28 +31,31 @@ namespace CallGeneratorServiceCLI
                 while (locked != true)
                 {
                     locked = true;
-                    List<User> LstUsers = UserRepository.GetUsers();
-                    foreach (User user in LstUsers)
+                    //End any generated call having duration more then 150 seconds
+                    GeneratedCallRepository.EndExpiredGeneratedCall();
+
+                    List<User> lstUsers = UserRepository.GetUsers();
+                    foreach (User user in lstUsers)
                     {
                         if (user.IsChangedCallerId == true)
                         {
                             WriteToEventLogEx("IsChangedCallerId: ");
                             bool finish = false;
-                            bool ExistCall = false;
+                            bool existCall = false;
                             //Search for idle client
                             while (finish == false)
                             {
                                 for (int i = 0; i < 64; i++)
                                 {
-                                    ChannelAllocation c = NewCallGenCLI.LstChanels[i];
-                                    if (c.idle == false)
+                                    ChannelAllocation channel = NewCallGenCLI.LstChanels[i];
+                                    if (channel.idle == false)
                                     {
-                                        ExistCall = true;
+                                        existCall = true;
                                         break;
                                     }
                                 }
 
-                                if (ExistCall == false)
+                                if (existCall == false)
                                 {
                                     // apply configuration, no call exists
                                     CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = user.CallerId;
@@ -69,40 +70,33 @@ namespace CallGeneratorServiceCLI
                                     WriteToEventLogEx("finish: ");
                                 }
                             }
-
-
-                            //CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = user.CallerId;
-                            //CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.ApplyConfig();
-                            //CallGeneratorServiceCLI.NewCallGenCLI c = new CallGeneratorServiceCLI.NewCallGenCLI();
-                            //c.AddnewSIP(user);
                             user.IsChangedCallerId = false;
                             UserRepository.Save(user);
                         }
                     }
-                    string SipAccId = ConfigurationManager.AppSettings["SipAccId"];
-                    int SipAccountId = 0;
-                    int.TryParse(SipAccId, out SipAccountId);
-                    GeneratedCall GenCall = GeneratedCallRepository.GetTopGeneratedCall(SipAccountId);
-                    if (GenCall != null)
+                    string sipAccId = ConfigurationManager.AppSettings["SipAccId"];
+                    int sipAccountId = 0;
+                    int.TryParse(sipAccId, out sipAccountId);
+                    GeneratedCall generatedCall = GeneratedCallRepository.GetTopGeneratedCall(sipAccountId);
+                    if (generatedCall != null)
                     {
-                        WriteToEventLogEx("GenIDD: " + GenCall.Id);
-                        bool ClientFound = false;
-                        int ClientId = -1;
+                        WriteToEventLogEx("generatedCallID: " + generatedCall.Id);
+                        bool clientFound = false;
+                        int clientId = -1;
                         //Search for idle client
                         for (int i = 0; i < 64; i++)
                         {
                             ChannelAllocation c = NewCallGenCLI.LstChanels[i];
                             if (c.idle == true)
                             {
-                                ClientFound = true;
-                                ClientId = i;
+                                clientFound = true;
+                                clientId = i;
                                 String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
-                                //f.AppendTextBox("threadId: " + threadId + " Using Idle Channel: " + ClientId.ToString());
                                 break;
                             }
                         }
 
-                        if (ClientFound == true)
+                        if (clientFound == true)
                         {
                             //foreach (SIP sip in NewCallGenCLI.LstSip)
                             //{
@@ -116,24 +110,22 @@ namespace CallGeneratorServiceCLI
                             //    }
                             //}
 
-                            NewCallGenCLI.LstChanels[ClientId].GeneratedCallid = GenCall.Id;
-                            NewCallGenCLI.LstChanels[ClientId].generatedCallid = GenCall.Id;
-                            NewCallGenCLI.LstChanels[ClientId].destinationNumber = GenCall.Number;
-                            NewCallGenCLI.LstChanels[ClientId].idle = false;
+                            NewCallGenCLI.LstChanels[clientId].GeneratedCallid = generatedCall.Id;
+                            NewCallGenCLI.LstChanels[clientId].generatedCallid = generatedCall.Id;
+                            NewCallGenCLI.LstChanels[clientId].destinationNumber = generatedCall.Number;
+                            NewCallGenCLI.LstChanels[clientId].idle = false;
                             String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
-
-                            //NewCallGenCLI.displayList(f, "threadId: " + threadId + " ClientFound and added to channel " + ClientId);
                         }
                         else
                         {
                             //reset the call to status null in database; because we don't find any Channel free,
                             //so we reset the database to re get the call
-                            GenCall.StartDate = null;
-                            GenCall.EndDate = null;
-                            GenCall.StartCall = null;
-                            GenCall.Status = null;
-                            GenCall.ResponseCode = null;
-                            GeneratedCallRepository.Save(GenCall);
+                            generatedCall.StartDate = null;
+                            generatedCall.EndDate = null;
+                            generatedCall.StartCall = null;
+                            generatedCall.Status = null;
+                            generatedCall.ResponseCode = null;
+                            GeneratedCallRepository.Save(generatedCall);
                         }
                     }
                     locked = false;

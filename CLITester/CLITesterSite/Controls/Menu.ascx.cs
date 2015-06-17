@@ -14,12 +14,16 @@ public partial class Controls_Menu : System.Web.UI.UserControl
             liSettings.Visible = true;
             liBalances.Visible = true;
             licalls.Visible = true;
+            liPhoneNumbers.Visible = true;
+            liOperators.Visible = true;
             liLstTstOp.Visible = true;
             liUsers.Visible = false;
         }
         else
         {
             licalls.Visible = false;
+            liPhoneNumbers.Visible = false;
+            liOperators.Visible = false;
             liLstTstOp.Visible = false;
             liSettings.Visible = false;
             liBalances.Visible = false;

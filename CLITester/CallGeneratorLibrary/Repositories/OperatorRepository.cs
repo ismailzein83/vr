@@ -29,6 +29,26 @@ namespace CallGeneratorLibrary.Repositories
             return log;
         }
 
+        public static Operator Load(string mcc, string mnc)
+        {
+            Operator log = new Operator();
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    log = context.Operators.Where(l => l.mcc == mcc && l.mnc == mnc).FirstOrDefault<Operator>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+
+            return log;
+        }
+
         public static List<Operator> GetOperators()
         {
             List<Operator> LstOperators = new List<Operator>();
@@ -82,6 +102,27 @@ namespace CallGeneratorLibrary.Repositories
                 Logger.LogException(ex);
             }
             return LstOperators;
+        }
+
+        public static bool Delete(int operatorId)
+        {
+            bool success = false;
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    Operator ooperator = context.Operators.Where(u => u.Id == operatorId).Single<Operator>();
+                    context.Operators.DeleteOnSubmit(ooperator);
+                    context.SubmitChanges();
+                    success = true;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+            return success;
         }
 
         public static bool Save(Operator oper)

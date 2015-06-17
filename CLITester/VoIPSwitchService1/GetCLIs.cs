@@ -14,9 +14,9 @@ namespace VoIPSwitchService
 {
     public class GetCLIs
     {
-        public static bool locked = false;
-        public static int operatorId = 0;
-        private static readonly object _syncRoot = new object();
+        public bool locked = false;
+        public int operatorId = 0;
+        private readonly object _syncRoot = new object();
 
         public void Start()
         {
@@ -43,7 +43,6 @@ namespace VoIPSwitchService
                 lock (_syncRoot)
                     while (locked != true)
                     {
-
                         locked = true;
                         //Expiry minutes
                         int expTime = 0;
@@ -104,7 +103,6 @@ namespace VoIPSwitchService
                                             {
                                                 new DataManager().GetData(lstTestOperators[i].CarrierPrefix.Length, generatedCall, (reader) =>
                                                 {
-
                                                     if (reader.HasRows)
                                                     {
                                                         /// Result done (Delivered or Not delivered) => decrease the balance
@@ -115,6 +113,8 @@ namespace VoIPSwitchService
                                                         {
                                                             lstTestOperators[i].EndDate = DateTime.Now;
                                                             string testcli = generatedCall.SipAccount.User.CallerId;
+
+                                                            ///Remove the character '+' from the Cli received, if exist
                                                             if (testcli.Substring(0, 1) == "+")
                                                             {
                                                                 int len2 = generatedCall.SipAccount.User.CallerId.Length;
@@ -125,6 +125,7 @@ namespace VoIPSwitchService
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
                                                             string RecCLi = reader[3].ToString();
 
+                                                            ///Remove the 4 zeroes from the Cli received, if exist
                                                             if (reader[3].ToString().Length > 4)
                                                             {
                                                                 if (RecCLi.Substring(0, 4) == "0000")
@@ -192,12 +193,10 @@ namespace VoIPSwitchService
                                                                 }
                                                             }
 
-
                                                             TestOperatorRepository.Save(lstTestOperators[i]);
                                                             PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                             //h = true;
                                                         }
-
                                                     }
                                                     else
                                                     {
@@ -240,11 +239,8 @@ namespace VoIPSwitchService
                                                         PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                         //h = true;
                                                     }
-
                                                 });
-                                            }
-                                                
-                                                
+                                            }  
                                         }
                                     }
                                 }
@@ -263,6 +259,9 @@ namespace VoIPSwitchService
                                     }
                                 }
                             }
+
+                            lstTestOperators.TrimExcess();
+                            lstTestOperators.Clear();
                         }
                         catch (System.Exception ex)
                         {
@@ -279,8 +278,7 @@ namespace VoIPSwitchService
                         }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////
                         locked = false;
-
-                        System.Threading.Thread.Sleep(1000);
+                        System.Threading.Thread.Sleep(5000);
                     }
             }
             catch (System.Exception ex)

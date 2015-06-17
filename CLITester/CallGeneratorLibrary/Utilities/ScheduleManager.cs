@@ -152,10 +152,11 @@ namespace CallGeneratorLibrary.Utilities
                             DateTime dt = new DateTime(
                                 schedule.SpecificTime.Value.Date.Year, schedule.SpecificTime.Value.Date.Month, schedule.SpecificTime.Value.Date.Day,
                                 NewLog.StartDate.Value.Hour, NewLog.StartDate.Value.Minute, NewLog.StartDate.Value.Second);
-
-                            DateTime dt1 = new DateTime(
-                                schedule.SpecificTime1.Value.Date.Year, schedule.SpecificTime1.Value.Date.Month, schedule.SpecificTime1.Value.Date.Day,
-                                NewLog.StartDate.Value.Hour, NewLog.StartDate.Value.Minute, NewLog.StartDate.Value.Second);
+                            DateTime dt1 = new DateTime();
+                            if (schedule.SpecificTime1 != null)
+                                dt1 = new DateTime(
+                                    schedule.SpecificTime1.Value.Date.Year, schedule.SpecificTime1.Value.Date.Month, schedule.SpecificTime1.Value.Date.Day,
+                                    NewLog.StartDate.Value.Hour, NewLog.StartDate.Value.Minute, NewLog.StartDate.Value.Second);
 
                             TimeSpan span = new TimeSpan();
                             TimeSpan span1 = new TimeSpan();

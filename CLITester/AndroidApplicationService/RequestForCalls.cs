@@ -26,10 +26,10 @@ namespace AndroidApplicationService
 
     public class RequestForCalls
     {
-        public static bool locked = false;
-        public static int OperatorId = 0;
-        private static readonly object _syncRoot = new object();
-        public static List<MontyOperator> lstOperators = new List<MontyOperator>();
+        public bool locked = false;
+        public int OperatorId = 0;
+        private readonly object _syncRoot = new object();
+        //public static List<MontyOperator> lstOperators = new List<MontyOperator>();
 
         public void Start()
         {
@@ -151,6 +151,7 @@ namespace AndroidApplicationService
                         //    GetNumber(op);
                         //}
                     }
+                    testoperators.Clear();
                 }
                 catch (System.Exception ex)
                 {

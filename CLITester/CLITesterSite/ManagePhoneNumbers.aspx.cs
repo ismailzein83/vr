@@ -11,12 +11,17 @@ using CallGeneratorLibrary.Repositories;
 using CallGeneratorLibrary.Utilities;
 using System.Configuration;
 
-public partial class ManageOperators : BasePage
+public partial class ManagePhoneNumbers : BasePage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Current.User.IsAuthenticated)
             Response.Redirect("Login.aspx");
+
+        List<Operator> lstOperators = new List<Operator>();
+        lstOperators = OperatorRepository.GetOperators();
+        rptOperators.DataSource = lstOperators;
+        rptOperators.DataBind();
 
         divSuccess.Visible = false;
         divError.Visible = false;
@@ -30,10 +35,11 @@ public partial class ManageOperators : BasePage
     #region Methods
     private void GetData()
     {
-        List<Operator> lstOperators = new List<Operator>();
-        lstOperators = OperatorRepository.GetOperators();
-        rptOperators.DataSource = lstOperators;
-        rptOperators.DataBind();
+        List<PhoneNumber> lstPhoneNumbers = PhoneNumberRepository.GetPhoneNumbers().OrderByDescending(l => l.Id).ToList();
+        Session["PhoneNumbers"] = lstPhoneNumbers;
+
+        rptPhones.DataSource = lstPhoneNumbers;
+        rptPhones.DataBind();
     }
     public string GetURL()
     {
@@ -44,17 +50,18 @@ public partial class ManageOperators : BasePage
         LinkButton lk = (LinkButton)sender;
         int id = 0;
         int.TryParse(lk.CommandArgument.ToString(), out id);
-        if (OperatorRepository.Delete(id))
+        if (PhoneNumberRepository.Delete(id))
         {
             ActionLog action = new ActionLog();
             action.ObjectId = id;
-            action.ObjectType = "Operator";
+            action.ObjectType = "PhoneNumber";
             action.ActionType = (int)Enums.ActionType.Delete;
             AuditRepository.Save(action);
             GetData();
         }
         else
         {
+            JavaScriptAlert("We can't delete a record with child rows");
             GetData();
             return;
         }
@@ -75,20 +82,22 @@ public partial class ManageOperators : BasePage
 
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        if (String.IsNullOrEmpty(txtName.Text))
+        if (String.IsNullOrEmpty(txtNumber.Text))
         {
             return;
         }
-        if(OperatorRepository.Load(txtMCC.Text,txtMNC.Text) != null)
+        string phoneNumber = txtNumber.Text;
+        if(txtNumber.Text.Length > 2)
         {
-            SetError("Combination of MCC and MNC exist");
-            return;
+            string prefixNumber = txtNumber.Text.Substring(0, 2);
+        
+            if(prefixNumber == "00")
+                phoneNumber = txtNumber.Text.Substring(2);
         }
-
-        Operator newOperator = new Operator();
+        PhoneNumber newPhoneNumber = new PhoneNumber();
 
         ActionLog action = new ActionLog();
-        action.ObjectType = "Operator";
+        action.ObjectType = "PhoneNumber";
 
         if (String.IsNullOrEmpty(HdnId.Value))
         {
@@ -99,8 +108,8 @@ public partial class ManageOperators : BasePage
             int id = 0;
             if (Int32.TryParse(HdnId.Value, out id))
             {
-                newOperator = OperatorRepository.Load(id);
-                if (newOperator == null) return;
+                newPhoneNumber = PhoneNumberRepository.Load(id);
+                if (newPhoneNumber == null) return;
                 action.ActionType = (int)Enums.ActionType.Modify;
             }
             else
@@ -109,20 +118,22 @@ public partial class ManageOperators : BasePage
             }
         }
 
-        newOperator.Name = txtName.Text;
-        newOperator.mcc = txtMCC.Text;
-        newOperator.mnc = txtMNC.Text;
-        newOperator.ServiceAndroid = true;
-        newOperator.ServiceMonty = null;
-        newOperator.CountryPicture = hdnOperatorId.Value;
-        newOperator.Country = hdnCountry.Value;
-        OperatorRepository.Save(newOperator);
+        int operatorId = 0;
+        if (Int32.TryParse(hdnOperatorId.Value, out operatorId))
+        {
+            newPhoneNumber.Number = phoneNumber;
+            newPhoneNumber.OperatorId = operatorId;
+            newPhoneNumber.Prefix = txtPrefix.Text;
+            newPhoneNumber.CreationDate = DateTime.Now;
+            newPhoneNumber.LastCallDate = DateTime.Now;
+            newPhoneNumber.Status = 0;
+            PhoneNumberRepository.Save(newPhoneNumber);
 
-        action.ObjectId = newOperator.Id;
-        action.Description = Utilities.SerializeLINQtoXML<Operator>(newOperator);
-        action.UserId = Current.User.User.Id;
-        AuditRepository.Save(action);
-
+            action.ObjectId = newPhoneNumber.Id;
+            action.Description = Utilities.SerializeLINQtoXML<PhoneNumber>(newPhoneNumber);
+            action.UserId = Current.User.User.Id;
+            AuditRepository.Save(action);
+        }
         GetData();
     }
 }

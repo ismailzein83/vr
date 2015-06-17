@@ -96,6 +96,7 @@
                             <tr>
                                 <th class="span3">Name</th>
                                 <th class="span1">Route</th>
+                                <th class="span1">Prefix</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
                                 <th class="span2">Caller ID</th>
@@ -202,7 +203,6 @@
         }
 
         var addTable = function (msg) {
-
             var Progress0 = { Id: "0", Message: " => Number placed to Generator ", flag: true };
             var Progress1 = { Id: "1", Message: "SecMessage", flag: true };
 
@@ -253,6 +253,7 @@
                                  '<td class="hideTd">' + msg.idOp + '</td>' +
                               '<td>' + msg.OperatorId + '</td>' +
                               '<td>' + msg.Prefix + '</td>' +
+                              '<td>' + msg.phonePrefix + '</td>' +
                               '<td>' + msg.CreationDate + '</td>' +
                               '<td>' + msg.EndDate + '</td>' +
                               '<td>' + msg.TestCli + '</td>' +
@@ -261,7 +262,7 @@
                               '<td>' + msg.ErrorMessage + '</td>' +
                               '<td>' + progressImg + '</td>' +
                               '<td class="hideTd">' + msg.Id + '</td>' +
-                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
+                              '<td><a class="btn blue icn-only testCall"><i class="icon-repeat icon-white"></i></a></td>' +
                               '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
         }
 
@@ -319,6 +320,7 @@
 
                 }
                 else {
+                    
                     msg.idOp = idOperator;
                     arrayRow.push(msg.Id);
                     addTable(msg);
@@ -346,7 +348,6 @@
                                 //$('#divError').css('visibility', 'visible');
                                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                                 $('#<%=lblSuccess.ClientID %>').html('');
-                                console.log('failll');
                                 resetTimer();
 
                             });
@@ -363,7 +364,7 @@
                                 var IsFinished = "true";
 
                                 $.each(msg, function (i, val) {
-                                    val.idOp = idOperator;
+                                    val.idOp = val.Operator;
                                     addTable(val);
 
                                     if (val.EndDate == null || val.EndDate == "") {
@@ -407,7 +408,6 @@
             var dl1 = $('select[name=selectOperator]').val();
             var dl2 = $('select[name=selectPrefix]').val();
             var res = dl1.split("~");
-            console.log(res[1], dl2);
             testCall(res[1], dl2);
         }
 
@@ -416,7 +416,6 @@
 
             var opId = $('td:first-child', $(this).parents('tr')).html();
             var prefix = $('td:nth-child(3)', $(this).parents('tr')).html();
-
             testCall(opId, prefix);
         });
 

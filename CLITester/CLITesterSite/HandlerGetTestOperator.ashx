@@ -36,6 +36,7 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
         public string progressNbr { get; set; }
         public string Redirect { get; set; }
         public bool needRedirect { get; set; }
+        public string phonePrefix { get; set; }
     }
     
     public void ProcessRequest (HttpContext context) {
@@ -92,11 +93,13 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                     responseTestOp.CreationDate = testOp.CreationDate.ToString();
                     responseTestOp.EndDate = "";
                     responseTestOp.OperatorId = OperatorRepository.Load(testOp.OperatorId.Value).FullName;
+                    responseTestOp.Operator = testOp.OperatorId.ToString();
                     responseTestOp.Prefix = testOp.CarrierPrefix;
                     responseTestOp.ReceivedCli = "";
                     responseTestOp.Status = "";
                     responseTestOp.TestCli = "";
                     responseTestOp.ErrorMessage = "";
+                    responseTestOp.phonePrefix = testOp.PhonePrefix == null ? "" : testOp.PhonePrefix;
                     //Expiry seconds
                     int exptime = 0;
                     int.TryParse(System.Configuration.ConfigurationManager.AppSettings["ExpiryTimeRequestCall"], out exptime);

@@ -13,9 +13,9 @@ namespace AndroidApplicationService
 {
     public class GetCLIs
     {
-        public static bool locked = false;
-        public static int OperatorId = 0;
-        private static readonly object _syncRoot = new object();
+        public bool locked = false;
+        public int OperatorId = 0;
+        private readonly object _syncRoot = new object();
 
         public void Start()
         {
@@ -247,6 +247,9 @@ namespace AndroidApplicationService
                             }
                         }
                     }
+
+                    testoperators.TrimExcess();
+                    testoperators.Clear();
                 }
                 catch (System.Exception ex)
                 {

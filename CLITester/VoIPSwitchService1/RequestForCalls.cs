@@ -15,13 +15,13 @@ namespace VoIPSwitchService
 {
     public class RequestForCalls
     {
-        public static bool locked = false;
-        public static int OperatorId = 0;
-        private static readonly object _syncRoot = new object();
+        public bool locked = false;
+        public int OperatorId = 0;
+        private readonly object _syncRoot = new object();
 
         public void Start()
         {
-            locked = false;
+            //locked = false;
             Thread thread = new Thread(new ThreadStart(RequestForCall));
             thread.IsBackground = true;
             thread.Start();
@@ -32,13 +32,12 @@ namespace VoIPSwitchService
             lock (_syncRoot)
                 while (locked != true)
                 {
-                    
                     locked = true;
-
                     try
                     {
                         CallGeneratorLibrary.Utilities.ScheduleManager.CLISchedule();
                         PhoneNumberRepository.FreeAllLockedPhone();
+
 
                         List<TestOperator> lstTestOperators = TestOperatorRepository.GetMontyTestOperators();
                         foreach (TestOperator testOperator in lstTestOperators)
@@ -59,7 +58,6 @@ namespace VoIPSwitchService
                                 }
                                 else
                                 {
-
                                     User userParent = UserRepository.Load(testOperator.UserId.Value);
                                     SipAccount sipAccount = new SipAccount();
                                     if (userParent.ParentId == null)
@@ -67,15 +65,15 @@ namespace VoIPSwitchService
                                     else
                                         sipAccount = SipAccountRepository.LoadbyUser(userParent.ParentId.Value);
 
-
-                                    GeneratedCall generatedCall = new GeneratedCall() {
+                                    GeneratedCall generatedCall = new GeneratedCall()
+                                    {
                                         Number = String.Format("{0}{1}@{2}", testOperator.CarrierPrefix, phoneNumber.Number, testOperator.User.IpSwitch),
                                         SipAccountId = sipAccount.Id
                                     };
                                     GeneratedCallRepository.Save(generatedCall);
 
                                     GeneratedCall newGeneratedCall = GeneratedCallRepository.Load(generatedCall.Id);
-                                    
+
                                     //Save The MSISDN and the Request ID into MontyCall table
                                     MontyCall montyCall = new MontyCall()
                                     {
@@ -87,9 +85,14 @@ namespace VoIPSwitchService
                                         ServiceId = (int)CallGeneratorLibrary.Utilities.Enums.Service.AndroidDevice
                                     };
                                     MontyCallRepository.Save(montyCall);
+
+                                    TestOperator tOperator = TestOperatorRepository.Load(testOperator.Id);
+                                    tOperator.PhonePrefix = phoneNumber.Prefix;
+                                    TestOperatorRepository.Save(tOperator);
                                 }
                             }
                         }
+                        lstTestOperators.Clear();
                     }
                     catch (System.Exception ex)
                     {
@@ -105,8 +108,7 @@ namespace VoIPSwitchService
                     }
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////
                     locked = false;
-                    
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(5000);
                 }
         }
 

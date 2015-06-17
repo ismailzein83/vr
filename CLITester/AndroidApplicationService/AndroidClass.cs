@@ -15,12 +15,12 @@ namespace AndroidApplicationService
     {
         #region Definitions
         
-        private static readonly object _syncRoot = new object();
+        //private static readonly object _syncRoot = new object();
    
         //public bool finishCall = false;
-        public static int OperatorId = 0;
+        //public static int OperatorId = 0;
         // Create a timer with a five seconds interval.
-        System.Timers.Timer aTimer = new System.Timers.Timer(1000);
+        //System.Timers.Timer aTimer = new System.Timers.Timer(1000);
 
         public RequestForCalls thRequestForCalls = new RequestForCalls();
         public GetCLIs thGetCLIs = new GetCLIs();
@@ -29,27 +29,29 @@ namespace AndroidApplicationService
 
         public void Start()
         {
-            WriteToEventLog("Start Android Service: " +DateTime.Now);
+            WriteToEventLog("Start Android Service: " + DateTime.Now);
+            thRequestForCalls.Start();
+            thGetCLIs.Start();
 
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.Enabled = true;
-            aTimer.Interval = 1000;
-            aTimer.Start();
+            //aTimer.Elapsed += OnTimedEvent;
+            //aTimer.Enabled = true;
+            //aTimer.Interval = 1000;
+            //aTimer.Start();
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            try
-            {
-                thRequestForCalls.Start();
-                thGetCLIs.Start();
-            }
-            catch (System.Exception ex)
-            {
-                WriteToEventLog(ex.ToString());
-                Logger.LogException(ex);
-            }
-        }
+        //private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        thRequestForCalls.Start();
+        //        thGetCLIs.Start();
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        WriteToEventLog(ex.ToString());
+        //        Logger.LogException(ex);
+        //    }
+        //}
 
         private void WriteToEventLog(string message)
         {

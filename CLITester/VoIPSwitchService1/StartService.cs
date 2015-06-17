@@ -15,12 +15,12 @@ namespace VoIPSwitchService
     {
         #region Definitions
 
-        private static readonly object _syncRoot = new object();
+        //private static readonly object _syncRoot = new object();
+        //public bool locked = false;
 
-        //public bool finishCall = false;
-        public static int OperatorId = 0;
+        //public int OperatorId = 0;
         // Create a timer with a one second interval.
-        System.Timers.Timer aTimer = new System.Timers.Timer(1000);
+        //System.Timers.Timer aTimer = new System.Timers.Timer(5000);
 
         public RequestForCalls thRequestForCalls = new RequestForCalls();
         public GetCLIs thGetCLIs = new GetCLIs();
@@ -29,25 +29,31 @@ namespace VoIPSwitchService
 
         public void Start()
         {
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.Enabled = true;
-            aTimer.Interval = 1000;
-            aTimer.Start();
+            thRequestForCalls.Start();
+            thGetCLIs.Start();
+            //aTimer.Elapsed += OnTimedEvent;
+            //aTimer.Enabled = true;
+            //aTimer.Interval = 5000;
+            //aTimer.Start();
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
-            try
-            {
-                thRequestForCalls.Start();
-                thGetCLIs.Start();
-            }
-            catch (System.Exception ex)
-            {
-                WriteToEventLog(ex.ToString());
-                Logger.LogException(ex);
-            }
-        }
+        //private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        //locked = true;
+        //        //WriteToEventLog("1");
+        //        //thRequestForCalls.Start();
+        //        //WriteToEventLog("2");
+        //        //locked = false;
+        //        //thGetCLIs.Start();
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        WriteToEventLog(ex.ToString());
+        //        Logger.LogException(ex);
+        //    }
+        //}
 
         private void WriteToEventLog(string message)
         {

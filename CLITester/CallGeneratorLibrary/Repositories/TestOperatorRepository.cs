@@ -489,6 +489,7 @@ namespace CallGeneratorLibrary.Repositories
                     look.ErrorMessage = testOperator.ErrorMessage;
                     look.Requested = testOperator.Requested;
                     look.ParentUserId = testOperator.ParentUserId;
+                    look.PhonePrefix = testOperator.PhonePrefix;
                     context.SubmitChanges();
                     success = true;
                 }

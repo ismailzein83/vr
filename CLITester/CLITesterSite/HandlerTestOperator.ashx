@@ -34,6 +34,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
         public bool needRedirect { get; set; }
         public string ErrorMessage { get; set; }
         public bool isDone { get; set; }
+        public string phonePrefix { get; set; }
     }
     
     public void ProcessRequest(HttpContext context)
@@ -111,6 +112,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
                 responseTestOp.ReceivedCli = "";
                 responseTestOp.Status = "";
                 responseTestOp.TestCli = "";
+                responseTestOp.phonePrefix = "";
                 responseTestOp.ErrorMessage = "";
 
                 context.Response.ContentType = "application/json";

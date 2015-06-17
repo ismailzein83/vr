@@ -97,7 +97,6 @@
                                     <div class="input-prepend bootstrap-timepicker-component">
                                         <span class="add-on"><i class="icon-time"></i></span>
                                         <input class="m-wrap m-ctrl-small timepicker-24 span12 valTime" type="text" data-required="1" id="txtTime1" runat="server" />
-                                        
                                     </div>
                                     <span class="help-block">Difference between times should be at least 2 hours</span>
                                 </div>

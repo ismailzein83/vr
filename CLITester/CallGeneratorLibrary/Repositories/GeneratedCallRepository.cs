@@ -32,6 +32,29 @@ namespace CallGeneratorLibrary.Repositories
             return log;
         }
 
+        public static void EndExpiredGeneratedCall()
+        {
+            List<GeneratedCall> LstGeneratedCalls = new List<GeneratedCall>();
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    LstGeneratedCalls = context.GeneratedCalls.Where(x => (x.EndDate == null) && ((DateTime.Now - x.StartDate.Value).TotalSeconds > 150)).ToList<GeneratedCall>();
+                    for (int i = 0; i < LstGeneratedCalls.Count(); i++)
+                    {
+                        LstGeneratedCalls[i].EndDate = DateTime.Now;
+                        LstGeneratedCalls[i].Status = "99";
+                        GeneratedCallRepository.Save(LstGeneratedCalls[i]);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+                Logger.LogException(ex);
+            }
+        }
+
         public static GeneratedCall GetTopGeneratedCall(int SipAccountId)
         {
             GeneratedCall GenCall = new GeneratedCall();
