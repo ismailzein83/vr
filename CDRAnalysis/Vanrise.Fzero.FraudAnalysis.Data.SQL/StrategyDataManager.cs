@@ -29,6 +29,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
+        public List<Result> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionList)
+        {
+            return GetItemsSP("FraudAnalysis.sp_Results_GetFilteredSuspiciousNumbers", ResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionList);
+        }
+
         
         public List<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
@@ -79,6 +84,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
         
         #region Private Methods
+
+        private Result ResultMapper(IDataReader reader)
+        {
+            var result = new Result();
+            result.DateDay = (DateTime)reader["DateDay"];
+            result.SubscriberNumber = reader["SubscriberNumber"] as string;
+            result.SuspicionLevelName = reader["SuspicionLevelName"] as string;
+            return result;
+        }
 
         private Strategy StrategyMapper(IDataReader reader)
         {
