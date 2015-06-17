@@ -2,22 +2,27 @@
 var RoutingRulesAPIService = function (BaseAPIService) {
     return ({
         getRouteRuleDetails: getRouteRuleDetails,
-        saveRouteRule: saveRouteRule,
-        GetFilteredRouteRules: GetFilteredRouteRules
+        SaveRouteRule: SaveRouteRule,
+        GetFilteredRouteRules: GetFilteredRouteRules,
+        UpdateRouteRule: UpdateRouteRule
     });
     function getRouteRuleDetails(RouteRuleId) {
-        return BaseAPIService.get("/api/routing/GetRouteRuleDetails",
+        return BaseAPIService.get("/api/RouteRules/GetRouteRuleDetails",
             {
                 RouteRuleId: RouteRuleId
             });
     }
-    function saveRouteRule(routeRule) {
+    function SaveRouteRule(routeRule) {
 
-        return BaseAPIService.post("/api/routing/SaveRouteRule", routeRule);
+        return BaseAPIService.post("/api/RouteRules/SaveRouteRule", routeRule);
     }
-    function GetFilteredRouteRules(filter) {
-        return BaseAPIService.post("/api/routing/GetFilteredRouteRules", filter);
+    function UpdateRouteRule(routeRule) {
+        return BaseAPIService.post("/api/RouteRules/UpdateRouteRule", routeRule);
     }
+    function GetFilteredRouteRules(input) {
+        return BaseAPIService.post("/api/RouteRules/GetFilteredRouteRules", input);
+    }
+
 }
 RoutingRulesAPIService.$inject = ['BaseAPIService'];
 appControllers.service('RoutingRulesAPIService', RoutingRulesAPIService);

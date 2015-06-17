@@ -9,16 +9,22 @@ namespace TOne.LCR.Data
 {
     public interface IRouteRulesDataManager : IDataManager
     {
-        List<RouteRule> GetRouteRules(DateTime effectiveDate, bool isFuture, string codePrefix, IEnumerable<Int32> lstCustomerZoneIds, IEnumerable<Int32> lstSupplierZoneIds);
 
         RouteRule SaveRouteRule(RouteRule rule);
+
+        RouteRule UpdateRouteRule(RouteRule rule);
 
         List<RouteRule> GetAllRouteRule();
 
         RouteRule GetRouteRuleDetails(int RouteRuleId);
 
+        #region Tone Old Route Rules Integration
         List<RouteRule> GetDifferentialRouteRules(DateTime lastRun);
 
+        List<RouteRule> GetRouteRules(DateTime effectiveDate, bool isFuture, string codePrefix, IEnumerable<Int32> lstCustomerZoneIds, IEnumerable<Int32> lstSupplierZoneIds);
+
         CodeCustomers GetRulesRouteCodes(DateTime lastRun);
+
+        #endregion
     }
 }

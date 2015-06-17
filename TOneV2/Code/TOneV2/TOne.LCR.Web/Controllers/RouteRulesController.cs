@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using TOne.LCR.Business;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using TOne.LCR.Entities;
-using TOne.LCR.Web.ModelMappers;
+using TOne.LCR.Business;
 using TOne.LCR.Web.Models;
+using TOne.LCR.Web.ModelMappers;
+using System.Web.Http.Controllers;
 
 namespace TOne.LCR.Web.Controllers
 {
-    [TOne.Entities.SecureController("/Routing/RouteRuleManagement")]
     [CustomJSONTypeHandlingAttribure]
     public class RouteRulesController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         public RouteRuleSummaryModel SaveRouteRule(RouteRule rule)
         {
-            System.Threading.Thread.Sleep(1000);
             RouteRuleManager manager = new RouteRuleManager();
             return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
         }
 
         [HttpPost]
-        [TOne.Entities.SecureAction("View")]
-        public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRouteRulesInput filter)
+        public RouteRuleSummaryModel UpdateRouteRule(RouteRule rule)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            var rules = manager.GetFilteredRouteRules(filter.RuleTypes, filter.ZoneIds, filter.Code, filter.CustomerIds, filter.PageNumber, filter.PageSize);
+            return Mappers.MapRouteRule(manager.UpdateRouteRule(rule));
+        }
+
+        [HttpPost]
+        public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRoutingRulesInput input)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            var rules = manager.GetFilteredRouteRules(input.Filter.RuleTypes, input.Filter.ZoneIds, input.Filter.Code, input.Filter.CustomerIds, input.FromRow, input.ToRow);
             if (rules != null)
                 return Mappers.MapRouteRules(rules);
             else
@@ -35,7 +41,6 @@ namespace TOne.LCR.Web.Controllers
         }
 
         [HttpGet]
-        [TOne.Entities.SecureAction("View")]
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
             RouteRuleManager manager = new RouteRuleManager();
@@ -43,4 +48,16 @@ namespace TOne.LCR.Web.Controllers
         }
 
     }
+
+    #region Argument Classes
+    public class GetFilteredRoutingRulesInput
+    {
+        public RoutingRulesFilter Filter { get; set; }
+        public int FromRow { get; set; }
+        public int ToRow { get; set; }
+        public bool IsDescending { get; set; }
+    }
+
+    #endregion
+
 }

@@ -50,6 +50,7 @@
     <Compile Include="ActionExecutionStep.cs" />
     <Compile Include="CloneHelper.cs" />
     <Compile Include="CodeCustomers.cs" />
+    <Compile Include="RoutingRulesFilter.cs" />
     <Compile Include="SaleZoneMatches.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="RoutingRuleActionType.cs" />

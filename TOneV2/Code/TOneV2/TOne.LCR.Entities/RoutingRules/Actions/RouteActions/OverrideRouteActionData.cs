@@ -25,6 +25,8 @@ namespace TOne.LCR.Entities
         public string SupplierId { get; set; }
 
         public short? Percentage { get; set; }
+
+        public bool AllowLoss { get; set; }
     }
 
     public enum OverrideRouteNoOptionAction { None = 0, SwitchToLCR = 1, BackupRoute = 2}    

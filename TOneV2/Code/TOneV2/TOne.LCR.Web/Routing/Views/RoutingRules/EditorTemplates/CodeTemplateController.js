@@ -73,6 +73,7 @@ var CodeController = function ($scope, $http) {
         };
 
     }
+
     function load() {
         $('#CodeListddl').on('show.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
@@ -98,6 +99,6 @@ var CodeController = function ($scope, $http) {
 }
 
 CodeController.$inject = ['$scope', '$http'];
-appControllers.controller('CodeController', CodeController)
+appControllers.controller('RoutingRules_CodeTemplateController', CodeController)
 
 

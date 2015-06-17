@@ -48,16 +48,22 @@ namespace TOne.LCR.Business
             return dataManager.SaveRouteRule(rule);
         }
 
+        public RouteRule UpdateRouteRule(RouteRule rule)
+        {
+            IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
+            return dataManager.UpdateRouteRule(rule);
+        }
+
         public List<RouteRule> GetAllRouteRule()
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
             return dataManager.GetAllRouteRule();
         }
 
-        public IEnumerable<RouteRule> GetFilteredRouteRules(List<string> ruleTypes, List<int> zoneIds, string code, List<string> customerIds, int pageNumber, int pageSize)
+        public IEnumerable<RouteRule> GetFilteredRouteRules(List<string> ruleTypes, List<int> zoneIds, string code, List<string> customerIds, int fromRow, int toRow)
         {
             IEnumerable<RouteRule> rules = GetAllRouteRule();
-            if(rules != null)
+            if (rules != null)
             {
                 Func<RouteRule, bool> filter = (rule) =>
                     {
@@ -118,7 +124,7 @@ namespace TOne.LCR.Business
 
                         return true;
                     };
-                rules = rules.Where(filter).Skip(pageNumber * pageSize).Take(pageSize);
+                rules = rules.Where(filter).Take(10);
             }
             return rules;
         }

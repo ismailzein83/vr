@@ -1,4 +1,4 @@
-﻿appControllers.controller('ZoneController',
+﻿appControllers.controller('RoutingRules_ZoneTemplateController',
     function ZoneController($scope, $http, ZonesService) {
         $scope.optionsZones = {
             selectedvalues: [],

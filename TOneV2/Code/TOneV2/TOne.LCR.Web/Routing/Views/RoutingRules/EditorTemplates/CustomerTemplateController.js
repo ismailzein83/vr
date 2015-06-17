@@ -1,5 +1,5 @@
 ﻿
-var CustomerController = function ($scope, $http, CarriersService) {
+var CustomerController = function ($scope, $http, CarriersService, UtilsService) {
 
     defineScopeObjects();
     defineScopeMethods();
@@ -78,7 +78,7 @@ var CustomerController = function ($scope, $http, CarriersService) {
             if ($scope.routeRule != null) {
                 var tab = [];
                 $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-                    var existobj = $scope.findExsiteObj($scope.optionsCustomers.datasource, value, 'CarrierAccountID')
+                    var existobj = UtilsService.getItemByVal($scope.optionsCustomers.datasource, value, 'CarrierAccountID')
                     if (existobj != null)
                         tab[i] = existobj;
 
@@ -95,5 +95,5 @@ var CustomerController = function ($scope, $http, CarriersService) {
 
 }
 CustomerController.$inject = ['$scope', '$http', 'CarriersService'];
-appControllers.controller('CustomerController', CustomerController)
+appControllers.controller('RoutingRules_CustomerTemplateController', CustomerController)
 

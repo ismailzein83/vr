@@ -116,7 +116,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Routing\Views\Management\EditorTemplates\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\RouteRulesController.cs" />
     <Compile Include="Controllers\RoutingController.cs" />
@@ -126,23 +128,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Routing\Constants\CodeSetTypeEnum.js" />
+    <Content Include="Routing\Constants\CustomerSetsEnum.js" />
     <Content Include="Routing\Constants\RoutingRulesEnum.js" />
+    <Content Include="Routing\Constants\RoutingRulesTemplatesEnum.js" />
     <Content Include="Routing\Services\RoutingAPIService.js" />
     <Content Include="Routing\Services\RoutingRulesAPIService.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\CodeController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\CodeTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\CustomerController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\CustomerTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\PoolTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\PriorityController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\PriorityTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\ProductTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\RouteBlockController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\RouteBlockTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\RouteOverrideController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\RouteOverrideTemplate.html" />
-    <Content Include="Routing\Views\Management\EditorTemplates\ZoneController.js" />
-    <Content Include="Routing\Views\Management\EditorTemplates\ZoneTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PoolTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PriorityTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\PriorityTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ProductTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteBlockTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteBlockTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplateController.js" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplate.html" />
     <Content Include="Routing\Views\Management\RatePlanning.html" />
     <Content Include="Routing\Views\Management\RatePlanningController.js" />
     <Content Include="Routing\Views\Management\RouteDetailGrid.html" />
@@ -153,6 +158,8 @@
     <Content Include="Routing\Views\Management\RouteRuleManager.html" />
     <Content Include="Routing\Views\Management\RouteManagerController.js" />
     <Content Include="Routing\Views\Management\RouteRuleManagerController.js" />
+    <Content Include="Routing\Views\RoutingRules\RouteRuleEditor.html" />
+    <Content Include="Routing\Views\RoutingRules\RouteRuleEditorController.js" />
     <Content Include="Routing\Views\RoutingRules\RoutingRulesManagement.html" />
     <Content Include="Routing\Views\RoutingRules\RoutingRulesManagementController.js" />
   </ItemGroup>

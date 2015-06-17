@@ -22,38 +22,7 @@ namespace TOne.LCR.Web.Controllers
             return prm + " returned";
         }
 
-        [HttpPost]
-        public RouteRuleSummaryModel SaveRouteRule(RouteRule rule)
-        {
-            System.Threading.Thread.Sleep(1000);
-            RouteRuleManager manager = new RouteRuleManager();
-            return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
-
-
-        }
-
-        [HttpPost]
-        [TOne.Entities.SecureAction("View")]
-        public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRouteRulesInput filter)
-        {
-            RouteRuleManager manager = new RouteRuleManager();
-            var rules = manager.GetFilteredRouteRules(filter.RuleTypes, filter.ZoneIds, filter.Code, filter.CustomerIds, filter.PageNumber, filter.PageSize);
-            if (rules != null)
-                return Mappers.MapRouteRules(rules);
-            else
-                return null;
-        }
-
-        [HttpGet]
-        [TOne.Entities.SecureAction("View")]
-        public RouteRule GetRouteRuleDetails(int RouteRuleId)
-        {
-
-            RouteRuleManager manager = new RouteRuleManager();
-            return manager.GetRouteRuleDetails(RouteRuleId);
-
-        }
-
+  
         //[HttpGet]
         //[TOne.Entities.SecureAction("View")]
         //public IEnumerable<RouteDetail> GetRoutes(int pageNumber, int pageSize, string customerId, string code, int ourZoneId)
