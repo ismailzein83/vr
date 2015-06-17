@@ -219,8 +219,8 @@ namespace TOne.CDR.Data.SQL
 
         private void AddDailyTrafficStatisticToStream(StreamForBulkInsert stream, TrafficStatisticDaily trafficStatistic)
         {
-            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
-                trafficStatistic.CallDate.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+            stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}",
+                trafficStatistic.CallDate,
                 trafficStatistic.SwitchId,
                 trafficStatistic.CustomerId,
                 trafficStatistic.OurZoneId,
@@ -238,7 +238,8 @@ namespace TOne.CDR.Data.SQL
                 trafficStatistic.PGAD,
                 trafficStatistic.CeiledDuration,
                 trafficStatistic.MaxDurationInSeconds,
-                trafficStatistic.ReleaseSourceAParty);
+                trafficStatistic.ReleaseSourceAParty,
+                trafficStatistic.ReleaseSourceS);
         }
 
         void FillDailyStatisticRow(DataRow dr, TrafficStatisticDaily trafficStatistic)
@@ -261,6 +262,7 @@ namespace TOne.CDR.Data.SQL
             dr["PGAD"] = trafficStatistic.PGAD;
             dr["CeiledDuration"] = trafficStatistic.CeiledDuration;
             dr["ReleaseSourceAParty"] = trafficStatistic.ReleaseSourceAParty;
+            dr["ReleaseSourceS"] = trafficStatistic.ReleaseSourceS;
         }
 
         DataTable GetDailyTrafficStatsTable()
@@ -279,6 +281,7 @@ namespace TOne.CDR.Data.SQL
             dt.Columns.Add("CeiledDuration", typeof(int));
             dt.Columns.Add("MaxDurationInSeconds", typeof(decimal));
             dt.Columns.Add("ReleaseSourceAParty", typeof(int));
+            dt.Columns.Add("ReleaseSourceS", typeof(int));
             return dt;
         }
 

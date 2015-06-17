@@ -38,6 +38,8 @@ namespace TOne.CDR.Entities
 
         public int ReleaseSourceAParty { get; set; }
 
+        public int ReleaseSourceS { get; set; }
+
         public abstract string GetGroupKey();
     }
 }

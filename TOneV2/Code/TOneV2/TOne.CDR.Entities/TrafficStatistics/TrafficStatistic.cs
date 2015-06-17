@@ -34,7 +34,7 @@ namespace TOne.CDR.Entities
 
         public DateTime LastCDRAttempt { get; set; }
 
-        public int ReleaseSourceS { get; set; }
+        
 
         public override string GetGroupKey()
         {

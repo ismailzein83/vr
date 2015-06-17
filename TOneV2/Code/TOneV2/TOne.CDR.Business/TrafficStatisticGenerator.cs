@@ -86,6 +86,7 @@ namespace TOne.CDR.Business
             // Update Min/Max Date/ID of CDRs
             if (cdr.DurationInSeconds >= trafficStatistic.MaxDurationInSeconds) trafficStatistic.MaxDurationInSeconds = cdr.DurationInSeconds;
             if (cdr.ReleaseSource != null && cdr.ReleaseSource.ToUpper().Equals("A")) trafficStatistic.ReleaseSourceAParty += 1;
+            if (cdr.ReleaseSource != null && cdr.ReleaseSource.ToUpper().Equals("S")) trafficStatistic.ReleaseSourceS += 1;
         }
 
     }
