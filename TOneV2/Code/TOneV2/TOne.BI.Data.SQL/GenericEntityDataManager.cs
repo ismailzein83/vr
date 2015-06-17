@@ -9,6 +9,12 @@ namespace TOne.BI.Data.SQL
 {
     public class GenericEntityDataManager : BaseDataManager, IGenericEntityDataManager
     {
+        object _measureDefinitions;
+        public object MeasureDefinitions
+        {
+            set { _measureDefinitions = value; }
+        }
+
         public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes)
         {
             return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypes);
@@ -175,5 +181,6 @@ namespace TOne.BI.Data.SQL
         }
 
         #endregion
+
     }
 }

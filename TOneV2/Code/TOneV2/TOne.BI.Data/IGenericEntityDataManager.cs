@@ -9,7 +9,9 @@ using TOne.BI.Entities;
 namespace TOne.BI.Data
 {
     public interface IGenericEntityDataManager : IDataManager
-    {        
+    {
+        Object MeasureDefinitions { set; }
+
         IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes);
 
         IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityType entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes);
