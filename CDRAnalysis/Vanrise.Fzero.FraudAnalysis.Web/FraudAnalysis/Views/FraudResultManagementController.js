@@ -95,22 +95,18 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
 
 
     function detailFraudResult(fruadResult) {
-        //var params = {
-        //    //strategyId: strategy.Id
-        //};
+        var params = {
+            subscriberNumber: fruadResult.SubscriberNumber
+        };
 
-        //var settings = {
+        var settings = {
 
-        //};
+        };
 
-        //settings.onScopeReady = function (modalScope) {
-        //    modalScope.title = "Edit Strategy";
-        //    modalScope.onStrategyUpdated = function (strategy) {
-        //        strategy.IsDefaultText = strategy.IsDefault ? "Default" : "Not Default";
-        //        mainGridAPI.itemUpdated(strategy);
-        //    };
-        //};
-        //VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Details & Related Numbers";
+        };
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
     }
 
 
@@ -129,7 +125,6 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        console.log(suspicionLevelsList.slice(0, -1))
 
         return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
