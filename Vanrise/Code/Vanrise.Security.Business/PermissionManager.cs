@@ -117,47 +117,51 @@ namespace Vanrise.Security.Business
             BusinessEntityManager businessEntityManager = new BusinessEntityManager();
             List<BusinessEntityNode> businessEntityHierarchy = businessEntityManager.GetEntityNodes();
 
-            List<Permission> listOfRawPermissions = new List<Permission>();
-            listOfRawPermissions.AddRange(permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == secToken.UserId.ToString()));
+            List<Dictionary<string, Dictionary<string, Flag>>> listOfAllPermissions = new List<Dictionary<string, Dictionary<string, Flag>>>();
+
+            List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == secToken.UserId.ToString());
+            listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(userPermissions, businessEntityHierarchy));
             
             RoleManager roleManager = new RoleManager();
             List<int> roles = roleManager.GetUserRoles(secToken.UserId);
 
             foreach (int roleId in roles)
             {
-                listOfRawPermissions.AddRange(permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == roleId.ToString()));
+                List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == roleId.ToString());
+                if (rolePermissions.Count > 0)
+                    listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(rolePermissions, businessEntityHierarchy));
             }
-
-            Dictionary<string, Dictionary<string, Flag>> convertedPermissions = this.ConvertPermissionsToPathDictionary(listOfRawPermissions, businessEntityHierarchy);
 
             Dictionary<string, List<string>> allowPermissions = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> denyPermissions = new Dictionary<string, List<string>>();
 
-
-            foreach (KeyValuePair<string, Dictionary<string, Flag>> permkvp in convertedPermissions)
+            foreach (Dictionary<string, Dictionary<string, Flag>> singlePermission in listOfAllPermissions)
             {
-                List<string> allowValues = new List<string>();
-                List<string> denyValues = new List<string>();
-
-                foreach (KeyValuePair<string, Flag> flagKVP in permkvp.Value)
+                foreach (KeyValuePair<string, Dictionary<string, Flag>> permkvp in singlePermission)
                 {
-                    if (flagKVP.Value == Flag.ALLOW)
+                    List<string> allowValues = new List<string>();
+                    List<string> denyValues = new List<string>();
+
+                    foreach (KeyValuePair<string, Flag> flagKVP in permkvp.Value)
                     {
-                        allowValues.Add(flagKVP.Key);
+                        if (flagKVP.Value == Flag.ALLOW)
+                        {
+                            allowValues.Add(flagKVP.Key);
+                        }
+                        else
+                        {
+                            denyValues.Add(flagKVP.Key);
+                        }
                     }
-                    else
-                    {
-                        denyValues.Add(flagKVP.Key);
-                    }
+
+                    //Add distinct allow and deny permissions from the list of all permissions
+
+                    if (!allowPermissions.ContainsKey(permkvp.Key) && allowValues.Count > 0)
+                        allowPermissions.Add(permkvp.Key, allowValues);
+
+                    if (!denyPermissions.ContainsKey(permkvp.Key) && denyValues.Count > 0)
+                        denyPermissions.Add(permkvp.Key, denyValues);
                 }
-
-                //Add distinct allow and deny permissions from the list of all permissions
-
-                if (!allowPermissions.ContainsKey(permkvp.Key) && allowValues.Count > 0)
-                    allowPermissions.Add(permkvp.Key, allowValues);
-
-                if (!denyPermissions.ContainsKey(permkvp.Key) && denyValues.Count > 0)
-                    denyPermissions.Add(permkvp.Key, denyValues);
             }
             
 
