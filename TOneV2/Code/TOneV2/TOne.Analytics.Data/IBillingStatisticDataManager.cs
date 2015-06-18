@@ -24,5 +24,8 @@ namespace TOne.Analytics.Data
         List<CustomerSummary> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId);
         List<CustomerServices> GetCustomerServices(DateTime fromDate, DateTime toDate);
         List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId);
+
+        string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions);
+
     }
 }
