@@ -30,10 +30,10 @@ namespace TOne.Analytics.Data.SQL
             );
         }
 
-        public string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod TimePeriodEnum, VariationReportOptions VariationReportOptionsEnum)
+        public string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
-         StringBuilder query = new StringBuilder(query_Common);
-         query.Append(@" SELECT  #NameColumn# , 
+            StringBuilder query = new StringBuilder(query_Common);
+            query.Append(@" SELECT  #NameColumn# , 
             0.0 as [AVG],
             0.0 as [%], 
             0.0 as [Prev %],
@@ -46,25 +46,71 @@ namespace TOne.Analytics.Data.SQL
             #JoinStatement#
             #WhereStatement#  
             GROUP BY #NameColumn# ,#IDColumn#, CallDate");
-           // foreach(var variationReportOptions in Enum.GetValues(VariationReportOptionsEnum.GetType()))
-            switch (VariationReportOptionsEnum.ToString())
-                {
-                case "0":
+            switch (variationReportOptions)
+            {
+                case VariationReportOptions.InBoundMinutes:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#"," SUM(SaleDuration) ");
-                    query.Replace("#IDColumn#", " cac.CarrierAccountID as ID " );
+                    query.Replace("#ValueColumn#", " SUM(SaleDuration) ");
+                    query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#"," WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate ");
+                    query.Replace("#WhereStatement#", " WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate ");
                     break;
-                case "1": break;
-                case "2": break;
-                case "3": break;
-                case "4": break;
-                case "5": break;
-                case "6": break;
-                case "7": break;
+
+                case VariationReportOptions.OutBoundMinutes:
+                    query.Replace("#NameColumn#", " cps.Name ");
+                    query.Replace("#ValueColumn#", " SUM(CostDuration) ");
+                    query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
+                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
+                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
+                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    break;
+
+                case VariationReportOptions.InOutBoundMinutes:
+
+                    break;
+
+                case VariationReportOptions.TopDestinationMinutes:
+                    query.Replace("#NameColumn#", " Z.Name ");
+                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration) ");
+                    query.Replace("#IDColumn#", " Z.ZoneID ");
+                    query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
+
+                    query.Replace("#WhereStatement#", @" WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate ");
+                    break;
+
+                case VariationReportOptions.InBoundAmount:
+                    query.Replace("#NameColumn#", " cpc.Name ");
+                    query.Replace("#ValueColumn#", " SUM(Sale_Nets) ");
+                    query.Replace("#IDColumn#", " cac.CarrierAccountID ");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
+                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    break;
+                case VariationReportOptions.OutBoundAmount:
+                    query.Replace("#NameColumn#", " cps.Name ");
+                    query.Replace("#ValueColumn#", " SUM(Cost_Nets) ");
+                    query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
+                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
+                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
+                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    break;
+
+                case VariationReportOptions.InOutBoundAmount:
+                    break;
             }
+
+            if (query.ToString().Contains("@TimePeriod"))
+                switch (timePeriod)
+                {
+                    case TimePeriod.Days:  query.Replace("@TimePeriod", " DAY ");    break;
+                    case TimePeriod.Weeks: query.Replace("@TimePeriod", " WEEK ");    break;
+                    case TimePeriod.Months:query.Replace("@TimePeriod", " MONTH ");   break;
+
+                }
             return query.ToString();
         }
 
@@ -86,7 +132,7 @@ namespace TOne.Analytics.Data.SQL
         {
             CustomerServices instance = new CustomerServices
             {
-                AccountId = reader["AccountID"] as string ,
+                AccountId = reader["AccountID"] as string,
                 Services = GetReaderValue<double>(reader, "Services")
             };
             return instance;
