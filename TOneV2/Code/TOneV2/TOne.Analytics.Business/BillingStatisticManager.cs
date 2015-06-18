@@ -250,8 +250,7 @@ namespace TOne.Analytics.Business
 
         public List<DailyForcastingFormatted> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-
-            return new List<DailyForcastingFormatted>();
+            return FormatDailyForcastingSummaries(_datamanager.GetDailyForcasting(fromDate, toDate, supplierAMUId, customerAMUId)); 
         }
 
         #region Private Methods
@@ -544,7 +543,18 @@ namespace TOne.Analytics.Business
             return models;
 
         }
+        private List<DailyForcastingFormatted> FormatDailyForcastingSummaries(List<DailyForcasting> carrierDaily)
+        {
 
+            List<DailyForcastingFormatted> models = new List<DailyForcastingFormatted>();
+            if (carrierDaily != null)
+                foreach (var d in carrierDaily)
+                {
+                    models.Add(FormatDailyForcasting(d));
+                }
+            return models;
+
+        }
 
         private CarrierSummaryDailyFormatted FormatCarrierSummaryDaily(CarrierSummaryDaily carrierSummaryDaily, bool isGroupeByday)
         {
@@ -591,6 +601,20 @@ namespace TOne.Analytics.Business
             return models.OrderBy(cs => cs.Customer).ToList();
         }
 
+        private DailyForcastingFormatted FormatDailyForcasting(DailyForcasting daily)
+        {
+            return new DailyForcastingFormatted
+            {
+                Day = daily.Day,
+                SaleNet = daily.SaleNet,
+                SaleNetFormatted = FormatNumber(daily.SaleNet,5),
+                CostNet = daily.CostNet,
+                CostNetFormatted = FormatNumber(daily.CostNet, 5),
+                ProfitFormatted = FormatNumber(daily.SaleNet - daily.CostNet, 2),
+                ProfitPercentageFormatted = (daily.SaleNet > 0) ? String.Format("{0:#,##0.00%}",((daily.SaleNet - daily.CostNet)/daily.SaleNet)):"0.00%"
+
+            };
+        }
         private CarrierSummaryFormatted FormatCarrierSummary(CarrierSummary carrierSummary)
         {
             return new CarrierSummaryFormatted
