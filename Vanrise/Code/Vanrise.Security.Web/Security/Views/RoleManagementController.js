@@ -50,11 +50,13 @@ function RoleManagementController($scope, RoleAPIService, VRModalService) {
     {
         $scope.gridMenuActions = [{
             name: "Edit",
-            clicked: editRole
+            clicked: editRole,
+            permissions: "TOne/Administration Module/Groups:Edit"
         },
         {
             name: "Assign Permissions",
-            clicked: assignPermissions
+            clicked: assignPermissions,
+            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
         }
         ];
     }

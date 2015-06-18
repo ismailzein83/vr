@@ -52,15 +52,18 @@ function UserManagementController($scope, UsersAPIService, VRModalService) {
     function defineMenuActions() {
         $scope.gridMenuActions = [{
             name: "Edit",
-            clicked: editUser
+            clicked: editUser,
+            permissions: "TOne/Administration Module/Users:Edit"
         },
         {
             name: "Reset Password",
-            clicked: resetPassword
+            clicked: resetPassword,
+            permissions: "TOne/Administration Module/Users:Reset Password"
         },
         {
             name: "Assign Permissions",
-            clicked: assignPermissions
+            clicked: assignPermissions,
+            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
         }
         ];
     }

@@ -4,7 +4,6 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
 
     var mainGridAPI;
     var arrMenuAction = [];
-    var selectedNode;
 
     defineScope();
     load();
@@ -42,7 +41,6 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
             if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
                 $scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
-                selectedNode = $scope.beTree.currentNode;
                 refreshGrid();
             }
         }, false);
@@ -62,7 +60,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
             angular.forEach(response, function (item) {
                 item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Role.description;
                 item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
-                item.PermissionType = (item.EntityType == $scope.beTree.currentNode.EntType && item.EntityId == $scope.beTree.currentNode.EntityId) ? 'Direct' : 'Inherited';
+                item.isInherited = !(item.EntityType == $scope.beTree.currentNode.EntType && item.EntityId == $scope.beTree.currentNode.EntityId);
+                item.PermissionType = item.isInherited ? 'Inherited' : 'Direct';
                 $scope.permissions.push(item);
             });
         });
@@ -98,15 +97,24 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
     }
 
     function defineMenuActions() {
-        $scope.gridMenuActions = [{
+        var menuActions = [{
             name: "Edit",
-            clicked: editPermission
+            clicked: editPermission,
+            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
         },
         {
             name: "Delete",
-            clicked: deletePermission
+            clicked: deletePermission,
+            permissions: "TOne/Administration Module/System Entities:Assign Permissions"
         }
         ];
+
+        $scope.gridMenuActions = function (dataItem) {
+            if (dataItem.isInherited)
+                return null;
+            else
+                return menuActions;
+        };
     }
 
     function addPermission() {
@@ -174,8 +182,6 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
         return BusinessEntityAPIService.ToggleBreakInheritance($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId)
            .then(function (response) {
                $scope.showBreakInheritance = !$scope.showBreakInheritance;
-               loadTree();
-               $scope.beTree.currentNode = selectedNode;
                refreshGrid();
            });
     }

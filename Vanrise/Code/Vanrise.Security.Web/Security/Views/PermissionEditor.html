@@ -1,5 +1,5 @@
-﻿<div vr-modalcontent ng-controller="Security_PermissionEditorController">
-    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+﻿<div vr-modalcontent ng-controller="Security_PermissionEditorController" width="'50%'">
+    <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formPermissionEditor">
             <vr-row>
                 <vr-columns colnum="6">
@@ -11,19 +11,20 @@
                          data-node-children="Children">
                     </div>
                 </vr-columns>
-                <vr-columns colnum="6">
-                    <div>
-                        <ul ng-repeat="permission in entityPermissions">
-                            <li>
+                <vr-columns colnum="6" ng-show="beTree.currentNode != undefined">
+                    <vr-section title="Assigned Permissions">
+                        <vr-row ng-repeat="permission in entityPermissions">
+                            <vr-columns colnum="6">
                                 {{permission.name}}
+                            </vr-columns>
+                            <vr-columns colnum="6">
                                 <vr-choices onselectionchanged="permissionsSelected(permission)" selectedindex="permission.selectedFlagOptionIndex">
                                     <vr-choice ng-repeat="permissionFlagOption in permissionFlagOptions">{{permissionFlagOption}}</vr-choice>
                                 </vr-choices>
-                            </li>
-                        </ul>
-                    </div>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
                 </vr-columns>
-
             </vr-row>
         </vr-form>
     </vr-modalbody>
