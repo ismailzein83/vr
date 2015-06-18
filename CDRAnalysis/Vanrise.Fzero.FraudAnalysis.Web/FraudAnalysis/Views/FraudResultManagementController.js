@@ -96,7 +96,9 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
 
     function detailFraudResult(fruadResult) {
         var params = {
-            subscriberNumber: fruadResult.SubscriberNumber
+            dateDay: fruadResult.DateDay,
+            subscriberNumber: fruadResult.SubscriberNumber,
+            suspicionLevelName: fruadResult.SuspicionLevelName
         };
 
         var settings = {
@@ -104,9 +106,9 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
         };
 
         settings.onScopeReady = function (modalScope) {
-            modalScope.title = "Details & Related Numbers";
+            modalScope.title = "Suspicious Number Details & Related Numbers";
         };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyEditor.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetailsEditor.html", params, settings);
     }
 
 

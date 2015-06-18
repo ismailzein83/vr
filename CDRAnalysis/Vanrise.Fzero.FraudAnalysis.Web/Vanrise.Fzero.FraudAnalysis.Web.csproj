@@ -151,6 +151,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\FraudResultManagement.html" />
     <Content Include="FraudAnalysis\Views\FraudResultManagementController.js" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsEditor.html" />
+    <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsEditorController.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
     <Content Include="FraudAnalysis\Views\StrategyEditor.html" />

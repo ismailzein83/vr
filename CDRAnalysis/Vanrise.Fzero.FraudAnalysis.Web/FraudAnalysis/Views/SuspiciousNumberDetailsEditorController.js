@@ -1,8 +1,7 @@
-﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StrategyEditorController($scope, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
-    var editMode;
     loadParameters();
     defineScope();
     load();
@@ -17,16 +16,14 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
     function loadParameters() {
+
         var parameters = VRNavigationService.getParameters($scope);
-        $scope.strategyId = undefined;
+
+        $scope.subscriberNumber = undefined;
 
         if (parameters != undefined && parameters != null)
-            $scope.strategyId = parameters.strategyId;
-
-        if ($scope.strategyId != undefined)
-            editMode = true;
-        else
-            editMode = false;
+            $scope.subscriberNumber = parameters.subscriberNumber;
+      
     }
 
 
@@ -81,18 +78,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
             $scope.strategyLevels.push(strategyLevelItem);
         };
 
-
-
-
-        $scope.SaveStrategy = function () {
-            if (editMode) {
-
-                return UpdateStrategy();
-            }
-            else {
-                return AddStrategy();
-            }
-        };
+      
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -104,16 +90,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadFilters, loadPeriods])
         .then(function () {
-            if (editMode) {
-                getStrategy().finally(function () {
-                    $scope.isGettingData = false;
-                });
-            }
-            else {
-                loadFiltersForAddMode();
-                $scope.isGettingData = false;
-            }
-
+            $scope.isGettingData = false;
         })
         .catch(function (error) {
             $scope.isGettingData = false;
