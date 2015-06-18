@@ -5,9 +5,9 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         GetTest: GetTest,
         GetZoneProfit: GetZoneProfit,
         GetBillingStatistics: GetBillingStatistics,
-       // GetVariationReportsData: GetVariationReportsData,
         GetVariationReportsFinalData: GetVariationReportsFinalData,
-        GetVariationReportsData : GetVariationReportsData
+        GetVariationReportsData: GetVariationReportsData,
+        GetVariationReportQuery: getVariationReportQuery
     });
 
     function GetTest(name){
@@ -35,15 +35,6 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
             );
         }
 
-        //function GetVariationReportsData(selectedDate, periodCount, periodTypeValue) {
-        //    return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
-        //        {
-        //            selectedDate: selectedDate,
-        //            periodCount: periodCount,
-        //            periodTypeValue: periodTypeValue
-        //        }
-        //        );
-        //}
         function GetVariationReportsData(selectedDate, periodCount, periodTypeValue, variationReportOptionValue) {
                 return BaseAPIService.get("/api/BillingStatistics/GetVariationReportsData",
                     {
@@ -66,9 +57,14 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
                 );
         }
 
-      
-        
-
-    
+        function getVariationReportQuery(selectedDate, periodCount, periodTypeValue, selectedReportOption) {
+            return BaseAPIService.get("/api/BillingStatistics/GetVariationReportQuery",
+                {   selectedDate: selectedDate,
+                    periodCount: periodCount,
+                    periodTypeValue: periodTypeValue, 
+                    variationReportOptionValue: selectedReportOption
+                }
+                );
+        }
 
 });
