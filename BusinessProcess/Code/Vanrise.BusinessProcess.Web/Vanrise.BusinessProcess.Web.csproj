@@ -116,15 +116,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessProcess\Services\" />
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj">
+      <Project>{f5064a23-6e52-43da-affa-71425942ebf8}</Project>
+      <Name>Vanrise.BusinessProcess.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
+      <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
+      <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessProcessController.cs" />
+    <Compile Include="ModelMappers\BPMappers.cs" />
+    <Compile Include="Models\BPInstanceModel.cs" />
+    <Compile Include="Models\BPTrackingMessageModel.cs" />
+    <Compile Include="Models\EnumModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BusinessProcess\Views\TestView.html" />
-    <Content Include="BusinessProcess\Views\TestViewController.js" />
+    <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
+    <Content Include="BusinessProcess\Views\BPManagement.html" />
+    <Content Include="BusinessProcess\Views\BPManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
