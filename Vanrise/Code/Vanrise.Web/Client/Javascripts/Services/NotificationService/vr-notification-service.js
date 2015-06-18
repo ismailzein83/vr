@@ -58,11 +58,15 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }, 3000);
     }
 
-    function notifyException(error) {
+    function notifyException(error, scope) {
         showError("Error has been occured");
     }
 
-    function notifyExceptionWithClose(error) {
+    function notifyExceptionWithClose(error, scope) {
+        if (scope != undefined && scope.modalContext != undefined) {
+            scope.modalContext.closeModal();
+            notifyException(error, scope);
+        }
         var parameters = {
             error: error,
             previousUrl: $location.url()

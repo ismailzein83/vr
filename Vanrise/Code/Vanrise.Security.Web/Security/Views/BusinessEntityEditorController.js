@@ -175,7 +175,7 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error);
+                VRNotificationService.notifyException(error, $scope);
             });
     }
 
@@ -221,7 +221,7 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
-                VRNotificationService.notifyException(error);
+                VRNotificationService.notifyException(error, $scope);
             });
     }
 

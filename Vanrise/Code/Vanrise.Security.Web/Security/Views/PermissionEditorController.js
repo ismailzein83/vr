@@ -41,7 +41,7 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
                            $scope.modalContext.closeModal();
                        }
                    }).catch(function (error) {
-                       VRNotificationService.notifyException(error);
+                       VRNotificationService.notifyException(error, $scope);
                    });
                 }
             }
@@ -175,7 +175,7 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
                $scope.beList = response;
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -185,7 +185,7 @@ function PermissionEditorController($scope, PermissionAPIService, BusinessEntity
                $scope.permissions = response;
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 }

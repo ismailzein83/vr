@@ -48,7 +48,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
                fillScopeFromUserObj(response);
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -83,7 +83,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
 
     }
@@ -98,7 +98,7 @@ function UserEditorController($scope, UsersAPIService, VRModalService, VRNotific
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
     }
 
