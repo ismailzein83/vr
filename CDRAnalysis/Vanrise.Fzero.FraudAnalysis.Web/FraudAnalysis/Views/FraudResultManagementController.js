@@ -66,7 +66,6 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
             $scope.selectedStrategies = [];
             $scope.selectedSuspicionLevels = [];
             mainGridAPI.clearDataAndContinuePaging();
-            return getData();
         };
 
         defineMenuActions();
@@ -130,7 +129,9 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
 
         return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
-               
+                //var date = $filter('date')(new Date(), 'MMM dd, yyyy');
+                //itm.FormattedDate = date;
+
                 $scope.fraudResults.push(itm);
             });
         });
