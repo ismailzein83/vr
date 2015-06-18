@@ -155,12 +155,33 @@ namespace Vanrise.Security.Business
                     }
 
                     //Add distinct allow and deny permissions from the list of all permissions
-
-                    if (!allowPermissions.ContainsKey(permkvp.Key) && allowValues.Count > 0)
+                    if (allowPermissions.ContainsKey(permkvp.Key))
+                    {
+                        foreach (string item in allowValues)
+                        {
+                            List<string> allowPermissionsValues = allowPermissions[permkvp.Key];
+                            if (!allowPermissionsValues.Contains(item))
+                                allowPermissionsValues.Add(item);
+                        }
+                    }
+                    else if(allowValues.Count > 0)
+                    {
                         allowPermissions.Add(permkvp.Key, allowValues);
+                    }
 
-                    if (!denyPermissions.ContainsKey(permkvp.Key) && denyValues.Count > 0)
+                    if (denyPermissions.ContainsKey(permkvp.Key))
+                    {
+                        foreach (string item in denyValues)
+                        {
+                            List<string> denyPermissionsValues = denyPermissions[permkvp.Key];
+                            if (!denyPermissionsValues.Contains(item))
+                                denyPermissionsValues.Add(item);
+                        }
+                    }
+                    else if(denyValues.Count > 0)
+                    {
                         denyPermissions.Add(permkvp.Key, denyValues);
+                    }
                 }
             }
             
@@ -279,6 +300,7 @@ namespace Vanrise.Security.Business
 
             return effectivePermissions;
         }
+
     }
 
     public class EffectivePermissionsWrapper
