@@ -15,11 +15,23 @@ namespace Vanrise.Common
             TypeNameHandling = TypeNameHandling.All
         };
 
+        static JsonSerializerSettings s_SettingsWithoutType = new JsonSerializerSettings
+        {
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.None
+        };
+
        
         
         public static string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.None, s_Settings);
+        }
+
+        public static string Serialize(object obj, bool withoutType)
+        {
+            return JsonConvert.SerializeObject(obj, Formatting.None, s_SettingsWithoutType);
         }
 
         public static T Deserialize<T>(string serialized)
