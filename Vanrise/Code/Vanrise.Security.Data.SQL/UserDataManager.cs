@@ -40,7 +40,8 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
             
-            string password = RandomPasswordHelper.Generate(8, 10);
+            //string password = RandomPasswordHelper.Generate(8, 10);
+            string password = "1";
             //TODO: implement an encryption module
             //string encPassword = manager.EncodePassword(password);
 
@@ -87,7 +88,7 @@ namespace Vanrise.Security.Data.SQL
                 Password = reader["Password"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
-                Status = (int.Parse(reader["Status"].ToString()) == 0) ? Entities.UserStatus.Active : Entities.UserStatus.Inactive,
+                Status = (int.Parse(reader["Status"].ToString()) == 0) ? Entities.UserStatus.Inactive : Entities.UserStatus.Active,
                 Description = reader["Description"] as string
             };
         }
