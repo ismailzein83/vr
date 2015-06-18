@@ -62,7 +62,7 @@ BEGIN
 					CONVERT(DECIMAL(10,2),SUM(DurationsInSeconds) / 60.0) as DurationsInMinutes,
 					CASE WHEN ''' + ISNULL(@SupplierID,'') + ' '' = '''' then (case when Sum(NumberOfCalls) > 0 then CONVERT(DECIMAL(10,2),Sum(SuccessfulAttempts)*100.0 / Sum(NumberOfCalls)) ELSE 0 end ) else (case when Sum(S.Attempts) > 0 then CONVERT(DECIMAL(10,2),Sum(SuccessfulAttempts)*100.0 / Sum(S.Attempts)) ELSE 0 end ) end as ASR,
 					Sum(SuccessfulAttempts)as SuccessfulAttempt,
-					case when Sum(SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(DurationsInSeconds/60.)/Sum(SuccessfulAttempts)) else NULL end as ACD,
+					case when Sum(SuccessfulAttempts) > 0 then CONVERT(DECIMAL(10,2),Sum(DurationsInSeconds/60.)/Sum(SuccessfulAttempts)) else 0 end as ACD,
 					CASE WHEN ''' + ISNULL(@SupplierID,'') + ' '' = '''' then ( case when Sum(NumberOfCalls) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(NumberOfCalls)) ELSE 0 end ) else ( case when Sum(S.Attempts) > 0 then CONVERT(DECIMAL(10,2),Sum(deliveredAttempts) * 100.0 / SUM(S.Attempts)) else 0 end ) end as DeliveredASR,
 				    CONVERT(DECIMAL(10,2),Avg(PDDinSeconds)) as AveragePDD
 				    INTO #RESULT 

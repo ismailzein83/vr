@@ -8,9 +8,10 @@
     [CreatedTime]   DATETIME       CONSTRAINT [DF_RoutingDatabase_CreatedTime] DEFAULT (getdate()) NULL,
     [ReadyTime]     DATETIME       NULL,
     [DeletedTime]   DATETIME       NULL,
-    [IsLcrOnly]     BIT            NULL,
     CONSTRAINT [PK_RoutingDatabase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

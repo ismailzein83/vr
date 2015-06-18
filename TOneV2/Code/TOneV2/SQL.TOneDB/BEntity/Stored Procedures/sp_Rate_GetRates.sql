@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [BEntity].[sp_Rate_GetRates]
+﻿
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [BEntity].[sp_Rate_GetRates]
 	@zoneId int,
 	@customerId varchar(10),
 	@when datetime

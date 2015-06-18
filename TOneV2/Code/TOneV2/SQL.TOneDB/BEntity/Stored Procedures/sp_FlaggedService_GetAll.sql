@@ -6,5 +6,5 @@
 CREATE PROCEDURE [BEntity].[sp_FlaggedService_GetAll]
 AS
 BEGIN
-	SELECT [FlaggedServiceID], [Symbol] FROM [FlaggedService]
+	SELECT [FlaggedServiceID], [Symbol], [ServiceColor] FROM [FlaggedService]
 END

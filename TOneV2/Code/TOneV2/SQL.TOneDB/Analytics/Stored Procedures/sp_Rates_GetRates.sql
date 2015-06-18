@@ -115,8 +115,10 @@ BEGIN
                SELECT r.*,ROW_NUMBER() OVER ( ORDER BY ZoneNAme ) AS RowNumber INTO #result21  FROM #result11 r WHERE 1=1    
                  AND (@CodeGroup IS NULL OR CodeGroup IN (SELECT ParsedString FROM dbo.ParseStringList(@CodeGroup)))  AND  RN=1  
                --SELECT COUNT(1) FROM #result21 WHERE 1=1   
-               SELECT * from #result21 WHERE RowNumber between @FROM and @TO ORDER BY RowNumber
-	
-	
+               
+               SELECT	t.*
+               from		#result21 t
+               WHERE RowNumber between @FROM and @TO ORDER BY RowNumber
+               
 	END
 END
