@@ -13,7 +13,7 @@ namespace TOne.Analytics.Entities
         public string SaleZoneName { get; set; }
         public decimal SaleDuration { get; set; }
         public double SaleRate { get; set; }
-        public int SaleRateChange { get; set; }
+        public Int16 SaleRateChange { get; set; }
         public DateTime SaleRateEffectiveDate { get; set; }
         public double SaleAmount { get; set; }
         public string SupplierID { get; set; }
@@ -21,7 +21,7 @@ namespace TOne.Analytics.Entities
         public string CostZoneName { get; set; }
         public decimal CostDuration { get; set; }
         public double CostRate { get; set; }
-        public int CostRateChange { get; set; }
+        public Int16 CostRateChange { get; set; }
         public DateTime CostRateEffectiveDate { get; set; }
         public double CostAmount { get; set; }
         public double Profit { get; set; }
