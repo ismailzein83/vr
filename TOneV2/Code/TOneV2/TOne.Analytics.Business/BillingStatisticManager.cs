@@ -248,6 +248,11 @@ namespace TOne.Analytics.Business
             return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
 
+        public List<DailyForcastingFormatted> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+
+            return new List<DailyForcastingFormatted>();
+        }
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)

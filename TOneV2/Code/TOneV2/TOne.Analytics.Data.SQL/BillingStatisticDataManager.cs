@@ -263,6 +263,15 @@ namespace TOne.Analytics.Data.SQL
               );
         }
 
+        public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
+
+            return GetItemsSP("Analytics.SP_Billing_DailySummaryForcasting", DailyForcastingMapper ,
+              fromDate,
+              toDate,
+              (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId );
+        }
 
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
@@ -576,6 +585,16 @@ namespace TOne.Analytics.Data.SQL
 
             };
             
+        }
+
+        private DailyForcasting DailyForcastingMapper(IDataReader reader)
+        {
+            return new DailyForcasting
+            {
+               
+
+            };
+
         }
         #endregion
 
