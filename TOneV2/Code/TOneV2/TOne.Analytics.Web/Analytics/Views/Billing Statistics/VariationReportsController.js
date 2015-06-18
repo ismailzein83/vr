@@ -25,6 +25,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         //$scope.getVariationReportsFinalData = getVariationReportsFinalData;
         $scope.timePeriod = timePeriod;
         $scope.variationReportOptions = variationReportOptions;
+        $scope.getVariationReportQuery = getVariationReportQuery;
         
     }
     function getData(withSummary) {
@@ -57,12 +58,12 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     }
     function loadTimePeriods() {
         for (var prop in TimePeriodEnum) {
-            timePeriod.push(TimePeriodEnum[prop].propertyName);
+            timePeriod.push(TimePeriodEnum[prop].description);
         }
     }
     function loadVariationReportOptions() {
         for (var prop in VariationReportOptionsEnum) {
-        variationReportOptions.push(VariationReportOptionsEnum[prop].propertyName);
+        variationReportOptions.push(VariationReportOptionsEnum[prop].description);
         }
     }
     function getVariationReportsData() {
@@ -70,6 +71,13 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.data = [];
         BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].value, VariationReportOptionsEnum[$scope.selectedReportOption].value).then(function (response) {
             $scope.isInitializing = false;
+            angular.forEach(response, function (itm) { $scope.data.push(itm); });
+        });
+    }
+
+    function getVariationReportQuery() {
+        BillingStatisticsAPIService.GetVariationReportQuery($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
+            console.log(response);
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
         });
     }
