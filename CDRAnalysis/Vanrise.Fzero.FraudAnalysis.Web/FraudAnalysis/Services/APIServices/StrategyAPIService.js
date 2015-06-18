@@ -3,12 +3,43 @@
     return ({
         GetAllStrategies: GetAllStrategies,
         GetFilteredStrategies: GetFilteredStrategies,
+        GetNormalCDRs: GetNormalCDRs,
+        GetNumberProfiles:GetNumberProfiles,
         AddStrategy: AddStrategy,
         UpdateStrategy: UpdateStrategy,
         GetStrategy: GetStrategy,
         GetFilters: GetFilters,
         GetPeriods: GetPeriods
     });
+
+
+    function GetNormalCDRs( fromRow,  toRow,  fromDate,  toDate,  msisdn) {
+        return BaseAPIService.get("/api/Strategy/GetNormalCDRs",
+            {
+                fromRow: fromRow,
+                toRow: toRow,
+                fromDate: fromDate,
+                toRow: toRow,
+                msisdn: msisdn
+            }
+           );
+    }
+
+
+
+        function GetNumberProfiles( fromRow,  toRow,  fromDate,  toDate,  subscriberNumber) {
+            return BaseAPIService.get("/api/Strategy/GetNumberProfiles",
+            {
+                fromRow: fromRow,
+                toRow: toRow,
+                fromDate: fromDate,
+                toRow: toRow,
+                subscriberNumber: subscriberNumber
+            }
+           );
+    }
+
+
 
     function GetFilteredStrategies(fromRow, toRow, name, description) {
         return BaseAPIService.get("/api/Strategy/GetFilteredStrategies",

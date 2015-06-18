@@ -21,6 +21,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
         List<CallClass> GetAllCallClasses();
 
         List<Period> GetPeriods();
+
+        List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn);
+
+        List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber);
         
     }
 }

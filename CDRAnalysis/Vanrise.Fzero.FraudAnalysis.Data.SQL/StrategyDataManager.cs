@@ -29,6 +29,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemsSP("FraudAnalysis.sp_Strategy_GetAll", StrategyMapper);
         }
 
+
+        public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNormalCDR", CDRMapper, fromRow, toRow, fromDate, toDate, msisdn);
+        }
+
+
+        public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        {
+            return GetItemsSP("FraudAnalysis.sp_FraudResult_GetNumberProfile", NumberProfileMapper, fromRow, toRow, fromDate, toDate, subscriberNumber);
+        }
+
+
+
         public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
         {
             return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
@@ -84,6 +98,58 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
         
         #region Private Methods
+
+        private CDR CDRMapper(IDataReader reader)
+        {
+            var normalCDR = new CDR();
+            normalCDR.CallType = (Enums.CallType)Enum.ToObject(typeof(Enums.CallType), GetReaderValue<int>(reader, "Call_Type"));
+            normalCDR.ConnectDateTime = GetReaderValue<DateTime?>(reader, "ConnectDateTime");
+            normalCDR.IMSI = reader["IMSI"] as string;
+            normalCDR.DurationInSeconds = GetReaderValue<Decimal?>(reader, "DurationInSeconds");
+            normalCDR.CallClass = reader["Call_Class"] as string;
+            normalCDR.SubType = reader["Sub_Type"] as string;
+            normalCDR.IMEI = reader["IMEI"] as string;
+            normalCDR.CellId = reader["Cell_Id"] as string;
+            normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "Up_Volume");
+            normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "Down_Volume");
+            normalCDR.ServiceType = GetReaderValue<int>(reader, "Service_Type");
+            normalCDR.ServiceVASName = reader["Service_VAS_Name"] as string;
+            normalCDR.Destination = reader["Destination"] as string;
+            normalCDR.MSISDN = reader["MSISDN"] as string;
+            return normalCDR;
+        }
+
+        private NumberProfile NumberProfileMapper(IDataReader reader)
+        {
+            var numberProfile = new NumberProfile();
+            numberProfile.FromDate = (DateTime)reader["FromDate"];
+            numberProfile.ToDate = (DateTime)reader["ToDate"];
+            numberProfile.CountOutCalls = GetReaderValue<decimal?>(reader, "Count_Out_Calls");
+            numberProfile.DiffOutputNumb = GetReaderValue<decimal?>(reader, "Diff_Output_Numb");
+            numberProfile.CountOutInter = GetReaderValue<decimal?>(reader, "Count_Out_Inter");
+            numberProfile.CountInInter = GetReaderValue<decimal?>(reader, "Count_In_Inter");
+            numberProfile.CallOutDurAvg = GetReaderValue<decimal?>(reader, "Call_Out_Dur_Avg");
+            numberProfile.CountOutFail = GetReaderValue<decimal?>(reader, "Count_Out_Fail");
+            numberProfile.CountInFail = GetReaderValue<decimal?>(reader, "Count_In_Fail");
+            numberProfile.TotalOutVolume = GetReaderValue<decimal?>(reader, "Total_Out_Volume");
+            numberProfile.TotalInVolume = GetReaderValue<decimal?>(reader, "Total_In_Volume");
+            numberProfile.DiffInputNumbers = GetReaderValue<decimal?>(reader, "Diff_Input_Numbers");
+            numberProfile.CountOutSMS = GetReaderValue<decimal?>(reader, "Count_Out_SMS");
+            numberProfile.TotalIMEI = GetReaderValue<decimal?>(reader, "Total_IMEI");
+            numberProfile.TotalBTS = GetReaderValue<decimal?>(reader, "Total_BTS");
+            numberProfile.TotalDataVolume = GetReaderValue<decimal?>(reader, "Total_Data_Volume");
+            numberProfile.CountInCalls = GetReaderValue<decimal?>(reader, "Count_In_Calls");
+            numberProfile.CallInDurAvg = GetReaderValue<decimal?>(reader, "Call_In_Dur_Avg");
+            numberProfile.CountOutOnNet = GetReaderValue<decimal?>(reader, "Count_Out_OnNet");
+            numberProfile.CountInOnNet = GetReaderValue<decimal?>(reader, "Count_In_OnNet");
+            numberProfile.CountOutOffNet = GetReaderValue<decimal?>(reader, "Count_Out_OffNet");
+            numberProfile.CountInOffNet = GetReaderValue<decimal?>(reader, "Count_In_OffNet");
+            numberProfile.CountFailConsecutiveCalls = GetReaderValue<decimal?>(reader, "CountFailConsecutiveCalls");
+            numberProfile.CountConsecutiveCalls = GetReaderValue<decimal?>(reader, "CountConsecutiveCalls");
+            numberProfile.CountInLowDurationCalls = GetReaderValue<decimal?>(reader, "CountInLowDurationCalls");
+            return numberProfile;
+        }
+
 
         private FraudResult FraudResultMapper(IDataReader reader)
         {

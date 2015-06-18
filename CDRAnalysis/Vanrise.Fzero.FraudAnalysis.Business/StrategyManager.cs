@@ -25,6 +25,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         }
 
+        public IEnumerable<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
+        {
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            return ((IEnumerable<CDR>)(manager.GetNormalCDRs(fromRow, toRow, fromDate, toDate, msisdn)));
+
+        }
+
+
+        public IEnumerable<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        {
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            return ((IEnumerable<NumberProfile>)(manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber)));
+
+        }
+
+
+
+
+
 
         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
         {
