@@ -591,7 +591,9 @@ namespace TOne.Analytics.Data.SQL
         {
             return new DailyForcasting
             {
-               
+               Day = reader["Day"] as string ,
+               CostNet = GetReaderValue<double>(reader, "CostNet"),
+               SaleNet = GetReaderValue<double>(reader, "SaleNet")
 
             };
 
