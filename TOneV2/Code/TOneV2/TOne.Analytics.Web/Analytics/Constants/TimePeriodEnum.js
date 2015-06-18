@@ -1,5 +1,5 @@
 ﻿app.constant('TimePeriodEnum', {
-    Days:   { value:"D", propertyName: "Days", description: "Days" },
-    Weeks:  { value:"W", propertyName: "Weeks", description: "Weeks" },
-    Months: { value:"M", propertyName: "Months", description: "Months" }
+    Days: { value: 0, description: "Days" },
+    Weeks: { value: 1, description: "Weeks" },
+    Months: { value: 2, description: "Months" }
 });
