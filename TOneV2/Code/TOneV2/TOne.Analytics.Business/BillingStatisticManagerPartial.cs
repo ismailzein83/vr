@@ -98,5 +98,10 @@ namespace TOne.Analytics.Business
             };
         }
 
+        public string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        {
+            return _datamanager.GetVariationReportQuery(selectedDate, periodCount, timePeriod, variationReportOptions);
+        }
+
     }
 }
