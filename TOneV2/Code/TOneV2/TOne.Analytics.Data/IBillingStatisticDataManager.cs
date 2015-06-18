@@ -26,6 +26,6 @@ namespace TOne.Analytics.Data
         List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId);
 
         string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions);
-
+        List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId);
     }
 }
