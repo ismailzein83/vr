@@ -69,45 +69,13 @@ namespace TOne.Analytics.Business
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        public List<VariationReportsData> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReportsData> GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(selectedDate, periodCount, periodTypeValue, variationReportOptionValue);
-            if (variationReportOptionValue == 3) GetTopDestinationsDataMapper(variationReports,selectedDate, periodCount, periodTypeValue, variationReportOptionValue);
-            List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
-            VariationReportsData current = null;
-            foreach (var item in variationReports.OrderBy(v => v.ID))
-            {
-                if (current == null || current.ID != item.ID)
-                {
-                    current = new VariationReportsData
-                    {
-                        ID = item.ID,
-                        Name = item.Name,
-                        TotalDurationsPerDate = new List<TotalDurationPerDate>()
-                    };
-                    variationReportsData.Add(current);
-                }
-                current.TotalDurationsPerDate.Add(new TotalDurationPerDate(item.CallDate, item.TotalDuration));
-            }
-
-            variationReportsData.OrderBy(v => v.TotalDurationsPerDate.OrderBy(d => d.CallDate));
-
-            foreach (var item in variationReportsData)
-            {
-                decimal average = 0;
-                double CurrentDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault().CallDate.ToString()) : 0;
-                double PrevDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault().CallDate.ToString()) : 0;
-                foreach (var totalDurations in item.TotalDurationsPerDate)
-                    average += totalDurations.TotalDuration;
-                average = average / periodCount;
-                item.PeriodTypeValueAverage = average;
-                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
-
-            }
-            return variationReportsData;
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOptions);
+            return GetVariationReportsData(variationReports,selectedDate,periodCount);
+          
         }
-        public List<VariationReportsData> GetTopDestinationsDataMapper(List<VariationReports>  variationReports, DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReportsData> GetVariationReportsData(List<VariationReports> variationReports,DateTime selectedDate, int periodCount)
         {
 
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
@@ -143,10 +111,6 @@ namespace TOne.Analytics.Business
 
             }
             return variationReportsData;
-
-        
-        
-        
         }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {

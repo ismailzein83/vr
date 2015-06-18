@@ -76,7 +76,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     }
 
     function getVariationReportQuery() {
-        BillingStatisticsAPIService.GetVariationReportQuery($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
+        BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
             console.log(response);
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
         });

@@ -23,7 +23,7 @@ namespace TOne.Analytics.Data.SQL
                 (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
                 (customerAMUId == 0) ? (object)DBNull.Value : customerAMUId);
         }
-      
+
         public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
             return GetItemsSP("Analytics.SP_Billing_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
@@ -167,41 +167,15 @@ namespace TOne.Analytics.Data.SQL
              );
         }
 
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, string periodTypeValue, int variationReportOptionValue)
+        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
-            string selectedReportQuery = query_Common;
-            if (selectedReportQuery.Contains("@TimePeriod")) selectedReportQuery = selectedReportQuery.Replace("@TimePeriod", periodTypeValue);
-            switch (variationReportOptionValue)
-            {
-                case 0:
-                    if (query_GetInBoundMinutesData.Contains("@TimePeriod")) query_GetInBoundMinutesData=query_GetInBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
-                    selectedReportQuery += query_GetInBoundMinutesData;
-                    break;
-                case 1:
-                    if (query_GetOutBoundMinutesData.Contains("@TimePeriod")) query_GetOutBoundMinutesData=query_GetOutBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
-                    selectedReportQuery += query_GetOutBoundMinutesData;
-                    break;
-                case 2:
-                    if (query_GetInBoundMinutesData.Contains("@TimePeriod")) query_GetInBoundMinutesData=query_GetInBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
-                    if (query_GetOutBoundMinutesData.Contains("@TimePeriod")) query_GetOutBoundMinutesData = query_GetOutBoundMinutesData.Replace("@TimePeriod", periodTypeValue);
-                    selectedReportQuery = selectedReportQuery + query_GetInBoundMinutesData + " UNION " + query_GetOutBoundMinutesData;
-                    break;
-                case 3 :
-                    if (query_GetTopDestinationMinutesData.Contains("@TimePeriod")) query_GetTopDestinationMinutesData = query_GetTopDestinationMinutesData.Replace("@TimePeriod", periodTypeValue);
-                    selectedReportQuery += query_GetTopDestinationMinutesData;
-                    break;
-                case 4:
-                    if (query_GetInBoundAmountData.Contains("@TimePeriod")) query_GetInBoundAmountData=query_GetInBoundAmountData.Replace("@TimePeriod", periodTypeValue);
-                    selectedReportQuery += query_GetInBoundAmountData;
-                    break;
-            }
+            string selectedReportQuery = GetVariationReportQuery(selectedDate, periodCount, timePeriod, variationReportOptions);
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 return GetItemsText(selectedReportQuery, VariationReportsMapper,
              (cmd) =>
              {
                  cmd.Parameters.Add(new SqlParameter("@FromDate", selectedDate));
                  cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
-                 //cmd.Parameters.Add(new SqlParameter("@PeriodTypeValue", periodTypeValue));
              });
             else return new List<VariationReports>();
         }
@@ -219,7 +193,7 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper ,
+            return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper,
               fromDate,
               toDate,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
@@ -228,13 +202,13 @@ namespace TOne.Analytics.Data.SQL
         }
         public List<RateLoss> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
-            
+
             return GetItemsSP("Analytics.SP_Billing_RateLoss", RateLossMapper,
               fromDate,
               toDate,
               (customerId == null || customerId == "") ? null : customerId,
               (supplierId == null || supplierId == "") ? null : supplierId,
-              (zoneId == null || zoneId == 0)? (object)DBNull.Value : zoneId,
+              (zoneId == null || zoneId == 0) ? (object)DBNull.Value : zoneId,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId,
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
               );
@@ -266,11 +240,11 @@ namespace TOne.Analytics.Data.SQL
         public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
 
-            return GetItemsSP("Analytics.SP_Billing_DailySummaryForcasting", DailyForcastingMapper ,
+            return GetItemsSP("Analytics.SP_Billing_DailySummaryForcasting", DailyForcastingMapper,
               fromDate,
               toDate,
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
-              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId );
+              (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
         }
 
         #region PrivatMethods
@@ -294,7 +268,7 @@ namespace TOne.Analytics.Data.SQL
 
             }
             return instance;
-        }        
+        }
         private CarrierProfile CarrierProfileMapper(IDataReader reader, bool IsAmount)
         {
             CarrierProfile instance = new CarrierProfile
@@ -451,7 +425,7 @@ namespace TOne.Analytics.Data.SQL
                     models.Add(MapZoneProfit(z));
                 }
             return models;
-        }       
+        }
 
         private BillingStatistic BillingStatisticsMapper(IDataReader reader)
         {
@@ -501,18 +475,18 @@ namespace TOne.Analytics.Data.SQL
                 CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
                 TotalDuration = GetReaderValue<decimal>(reader, "Total"),
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
-                ID = reader["ID"]!=null? reader["ID"].ToString(): string.Empty
+                ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty
             };
 
             return instance;
         }
 
-        private CarrierSummaryDaily CarrierSummaryDailyMapper(IDataReader reader )
+        private CarrierSummaryDaily CarrierSummaryDailyMapper(IDataReader reader)
         {
 
             CarrierSummaryDaily instance = new CarrierSummaryDaily
             {
-                Day = reader["Day"] as string ,
+                Day = reader["Day"] as string,
                 CarrierID = reader["CarrierID"] as string,
                 Attempts = GetReaderValue<int>(reader, "Attempts"),
                 DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
@@ -542,23 +516,23 @@ namespace TOne.Analytics.Data.SQL
         }
         private CarrierSummary CarrierSummaryMapper(IDataReader reader)
         {
-	        return new CarrierSummary
-	        {
-	
-		        SupplierID = reader["SupplierID"] as string,
-		        CustomerID = reader["CustomerID"] as string,
-		        SaleDuration =GetReaderValue<decimal>(reader, "SaleDuration"),
-		        CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
-		        CostNet = GetReaderValue<double>(reader, "CostNet"),
-		        SaleNet = GetReaderValue<double>(reader, "SaleNet"),		
-		        CostCommissionValue = GetReaderValue<double>(reader, "CostCommissionValue"),
-		        SaleCommissionValue = GetReaderValue<double>(reader, "SaleCommissionValue"),
-		        CostExtraChargeValue = GetReaderValue<double>(reader, "CostExtraChargeValue"),
-		        SaleExtraChargeValue = GetReaderValue<double>(reader, "SaleExtraChargeValue")
-		
-	        };
-	
-	
+            return new CarrierSummary
+            {
+
+                SupplierID = reader["SupplierID"] as string,
+                CustomerID = reader["CustomerID"] as string,
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostCommissionValue = GetReaderValue<double>(reader, "CostCommissionValue"),
+                SaleCommissionValue = GetReaderValue<double>(reader, "SaleCommissionValue"),
+                CostExtraChargeValue = GetReaderValue<double>(reader, "CostExtraChargeValue"),
+                SaleExtraChargeValue = GetReaderValue<double>(reader, "SaleExtraChargeValue")
+
+            };
+
+
         }
 
         private DetailedCarrierSummary CarrierDetailedSummaryMapper(IDataReader reader)
@@ -567,33 +541,33 @@ namespace TOne.Analytics.Data.SQL
             {
                 CustomerID = reader["CustomerID"] as string,
                 SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
-                SaleZoneName = reader["SaleZoneName"] as string ,
+                SaleZoneName = reader["SaleZoneName"] as string,
                 SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
-                SaleRate = GetReaderValue<double>(reader,"SaleRate"),
+                SaleRate = GetReaderValue<double>(reader, "SaleRate"),
                 SaleRateChange = GetReaderValue<Int16>(reader, "SaleRateChange"),
-                SaleRateEffectiveDate = GetReaderValue<DateTime>(reader,"SaleRateEffectiveDate"),
+                SaleRateEffectiveDate = GetReaderValue<DateTime>(reader, "SaleRateEffectiveDate"),
                 SaleAmount = GetReaderValue<double>(reader, "SaleAmount"),
                 SupplierID = reader["SupplierID"] as string,
-                CostZoneID = GetReaderValue<int>(reader,"CostZoneID"),
-                CostZoneName = reader["CostZoneName"] as string ,
+                CostZoneID = GetReaderValue<int>(reader, "CostZoneID"),
+                CostZoneName = reader["CostZoneName"] as string,
                 CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
                 CostRate = GetReaderValue<double>(reader, "CostRate"),
                 CostRateChange = GetReaderValue<Int16>(reader, "CostRateChange"),
                 CostRateEffectiveDate = GetReaderValue<DateTime>(reader, "CostRateEffectiveDate"),
                 CostAmount = GetReaderValue<double>(reader, "CostAmount"),
-                Profit = GetReaderValue<double>(reader, "Profit")               
+                Profit = GetReaderValue<double>(reader, "Profit")
 
             };
-            
+
         }
 
         private DailyForcasting DailyForcastingMapper(IDataReader reader)
         {
             return new DailyForcasting
             {
-               Day = reader["Day"] as string ,
-               CostNet = GetReaderValue<double>(reader, "CostNet"),
-               SaleNet = GetReaderValue<double>(reader, "SaleNet")
+                Day = reader["Day"] as string,
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet")
 
             };
 
@@ -608,85 +582,6 @@ namespace TOne.Analytics.Data.SQL
 		                                             PRIMARY KEY(Currency, Date))
                                             INSERT INTO @ExchangeRates 
                                             SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate), @FromDate)  ";
-
-        string query_GetInBoundMinutesData = @"SELECT  cpc.Name , 
-        0.0 as [AVG],
-        0.0 as [%], 
-        0.0 as [Prev %],
-        CallDate,
-        sum(SaleDuration/60) as Total,
-        cac.CarrierAccountID as ID
-        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
-        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
-        JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
-        GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
-
-        string query_GetOutBoundMinutesData = @"SELECT  cps.Name , 
-        0.0 as [AVG], 
-        0.0 as [%],
-        0.0 as [Prev %],
-        CallDate ,
-        sum(CostDuration/60) as Total,
-        cas.CarrierAccountID as ID
-        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date)) 
-        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
-        JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
-        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID
-        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
-        AND  cas.RepresentsASwitch <> 'Y'
-        GROUP BY cps.Name,cas.CarrierAccountID,CallDate ";
-
-        string query_GetInBoundAmountData = @"SELECT  cpc.Name , 
-        0.0 as [AVG],
-        0.0 as [%], 
-        0.0 as [Prev %],
-        CallDate,
-        sum(Sale_Nets/60) as Total,
-        cac.CarrierAccountID as ID
-        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
-        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
-        JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
-        GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
-       
-        string query_GetOutBoundAmountData = @"SELECT  cpc.Name , 
-        0.0 as [AVG],
-        0.0 as [%], 
-        0.0 as [Prev %],
-        CallDate,
-        sum(Cost_Nets/60) as Total,
-        cac.CarrierAccountID as ID
-        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
-        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
-        JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
-        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID 
-        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate  
-        AND  cas.RepresentsASwitch <> 'Y'
-        GROUP BY cpc.Name,cac.CarrierAccountID, CallDate ";
-
-        string query_GetTopDestinationMinutesData = @" SET ROWCount 5
-        SELECT  SZ.Name ,
-        0.0 as [AVG],
-        0.0 as [%],
-        0.0 as [Prev %],
-        CallDate,
-        SUM(BS.SaleDuration/60) AS Total,
-        SZ.ZoneID as ID
-        From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
-        LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-        LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate 
-        JOIN Zone SZ With(Nolock) ON SZ.ZoneID=BS.SaleZoneID 
-        WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
-        GROUP BY SZ.Name,SZ.ZoneID,CallDate
-        ORDER BY  CallDate desc,SUM(BS.SaleDuration / 60) DESC";
-
 
         #endregion
     }
