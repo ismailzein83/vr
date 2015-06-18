@@ -25,12 +25,32 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="getVariationReportQuery"></vr-button> <!--"getVariationReportsData"-->
+                <vr-button type="Search" formname="formFilter" data-onclick="getVariationReportsData"></vr-button> <!--""-->
                 <vr-button type="Reset"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
     <!--<input type="text" ng-model="name" />-->
+
+
+    <div>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-datagrid datasource="data">
+
+                    <vr-datagridcolumn headertext= "'Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext= "'_AVG'" field="'PeriodTypeValueAverage'"></vr-datagridcolumn><!--periodTypeValue+-->
+                    <vr-datagridcolumn headertext= "'_%'" field="'PeriodTypeValuePercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext= "'Previous_%'" field="'PreviousPeriodTypeValuePercentage'"></vr-datagridcolumn>
+              
+                          <!--<vr-datagridcolumn ng-repeat="item in data.TotalDurationsPerDate"></vr-datagridcolumn>-->
+
+                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'"></vr-datagridcolumn>
+
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
 
 
     <!--<div>
@@ -66,7 +86,6 @@
             </vr-columns>
         </vr-row>
     </div>-->
-
     <!--<div>
         <vr-row>
             <vr-columns colnum="12" simplecol>
@@ -108,18 +127,7 @@
         </tr>
 
     </table>
-   
-     <!--<div>
-       <vr-row>
-            <vr-columns colnum="12" simplecol>
-                <vr-datagrid data-on-ready="onMainGridReady" datasource="data" pagersettings="mainGridPagerSettings" >
-                    <vr-datagridcolumn ng-repeat="item in data"  ></vr-datagridcolumn>
-                    
-                  
-                </vr-datagrid>
-            </vr-columns>
-        </vr-row>
-    </div>-->
+
 
     <!--<div>
         <vr-row>

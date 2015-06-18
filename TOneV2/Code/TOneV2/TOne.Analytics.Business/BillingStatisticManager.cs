@@ -77,7 +77,6 @@ namespace TOne.Analytics.Business
         }
         public List<VariationReportsData> GetVariationReportsData(List<VariationReports> variationReports,DateTime selectedDate, int periodCount)
         {
-
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             VariationReportsData current = null;
             foreach (var item in variationReports.OrderBy(v => v.ID))

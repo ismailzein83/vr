@@ -24,9 +24,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.getVariationReportsData = getVariationReportsData;
         //$scope.getVariationReportsFinalData = getVariationReportsFinalData;
         $scope.timePeriod = timePeriod;
-        $scope.variationReportOptions = variationReportOptions;
-        $scope.getVariationReportQuery = getVariationReportQuery;
-        
+        $scope.variationReportOptions = variationReportOptions;        
     }
     function getData(withSummary) {
          alert($scope.name);
@@ -69,18 +67,19 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     function getVariationReportsData() {
         $scope.isInitializing = true;
         $scope.data = [];
-        BillingStatisticsAPIService.GetVariationReportsData($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].value, VariationReportOptionsEnum[$scope.selectedReportOption].value).then(function (response) {
-            $scope.isInitializing = false;
-            angular.forEach(response, function (itm) { $scope.data.push(itm); });
-        });
-    }
-
-    function getVariationReportQuery() {
         BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
+            $scope.isInitializing = false;
             console.log(response);
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
         });
     }
+
+    //function getVariationReportQuery() {
+    //    BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
+    //        console.log(response);
+    //        angular.forEach(response, function (itm) { $scope.data.push(itm); });
+    //    });
+    //}
 
 };
 
