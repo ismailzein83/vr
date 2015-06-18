@@ -4,12 +4,31 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
+using System;
 
 namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
 
     public class StrategyController : BaseAPIController
     {
+
+        [HttpGet]
+        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
+        {
+            StrategyManager manager = new StrategyManager();
+
+            return manager.GetFilteredSuspiciousNumbers( fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
+        }
+
+        [HttpGet]
+
+        public IEnumerable<Strategy> GetAllStrategies()
+        {
+            StrategyManager manager = new StrategyManager();
+
+            return manager.GetAllStrategies();
+        }
+
         [HttpGet]
         public IEnumerable<Strategy> GetFilteredStrategies(int fromRow, int toRow,string name, string description)
         {

@@ -1,6 +1,6 @@
-﻿FraudResultManagementController.$inject = ['$scope', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿FraudResultManagementController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function FraudResultManagementController($scope, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function FraudResultManagementController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -13,13 +13,42 @@ function FraudResultManagementController($scope, FraudResultAPIService, $routePa
 
     function defineScope() {
 
+        $scope.customvalidateTestFrom = function (fromDate) {
+            return validateDates(fromDate, $scope.toDate);
+        };
+        $scope.customvalidateTestTo = function (toDate) {
+            return validateDates($scope.fromDate, toDate);
+        };
+        function validateDates(fromDate, toDate) {
+            if (fromDate == undefined || toDate == undefined)
+                return null;
+            var from = new Date(fromDate);
+            var to = new Date(toDate);
+            if (from.getTime() > to.getTime())
+                return "Start should be before end";
+            else
+                return null;
+        }
+
+        $scope.suspicionLevels = [
+                        { id: 2, name: 'Suspicious' }, { id: 3, name: 'Highly Suspicious' }, { id: 4, name: 'Fraud' }
+
+        ];
+
+        $scope.strategies = [];
+
+        loadStrategies();
+
+        $scope.selectedSuspicionLevels = [];
+        $scope.selectedStrategies = [];
+
         $scope.gridMenuActions = [];
 
         $scope.fraudResults = [];
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-            getData();
+            //getData();
         };
 
         $scope.loadMoreData = function () {
@@ -45,6 +74,15 @@ function FraudResultManagementController($scope, FraudResultAPIService, $routePa
 
     function load() {
         
+    }
+
+
+    function loadStrategies() {
+        return StrategyAPIService.GetAllStrategies().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.strategies.push({ id: itm.Id, name: itm.Name });
+            });
+        });
     }
 
     function defineMenuActions() {
@@ -81,19 +119,19 @@ function FraudResultManagementController($scope, FraudResultAPIService, $routePa
         var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
         var toDate = $scope.toDate != undefined ? $scope.toDate : '';
 
+        var strategyId = $scope.selectedStrategies.id;
+        var suspicionLevelsList = '';
         
-
-        ////// to be updateddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-        //var strategyId = $scope.selectedStrategies[0];
-        //var selectedSuspicionLevels = $scope.selectedSuspicionLevels;
-        ///////////////////////////////////////////////////////////////////////////////////////
-
-        var strategyId = 3;
-        var suspicionLevelsList = '3';
+        angular.forEach($scope.selectedSuspicionLevels, function (itm) {
+            suspicionLevelsList = suspicionLevelsList + itm.id + ','
+        });
+        
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList).then(function (response) {
+        console.log(suspicionLevelsList.slice(0, -1))
+
+        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                
                 $scope.fraudResults.push(itm);

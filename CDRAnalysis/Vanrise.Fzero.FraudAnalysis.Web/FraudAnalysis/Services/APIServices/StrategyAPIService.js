@@ -1,6 +1,7 @@
 ﻿app.service('StrategyAPIService', function (BaseAPIService) {
 
     return ({
+        GetAllStrategies: GetAllStrategies,
         GetFilteredStrategies: GetFilteredStrategies,
         AddStrategy: AddStrategy,
         UpdateStrategy: UpdateStrategy,
@@ -18,6 +19,10 @@
                 description: description
             }
            );
+    }
+
+    function GetAllStrategies() {
+        return BaseAPIService.get("/api/Strategy/GetAllStrategies");
     }
 
 

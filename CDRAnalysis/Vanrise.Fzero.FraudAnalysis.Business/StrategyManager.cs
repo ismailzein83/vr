@@ -36,6 +36,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
+        public IEnumerable<Strategy> GetAllStrategies()
+        {
+
+            IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
+
+            return ((IEnumerable<Strategy>)(manager.GetAllStrategies()));
+
+        }
+
+
         public IEnumerable<Strategy> GetFilteredStrategies(int fromRow, int toRow, string name, string description)
         {
 
