@@ -181,7 +181,8 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
     {
         return BusinessEntityAPIService.ToggleBreakInheritance($scope.beTree.currentNode.EntType, $scope.beTree.currentNode.EntityId)
            .then(function (response) {
-               $scope.showBreakInheritance = !$scope.showBreakInheritance;
+               $scope.beTree.currentNode.BreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
+               $scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
                refreshGrid();
            });
     }
