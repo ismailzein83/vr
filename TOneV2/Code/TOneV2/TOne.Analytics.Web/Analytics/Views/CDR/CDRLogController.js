@@ -124,7 +124,7 @@ function CDRLogController($scope, CDRAPIService, UtilsService, uiGridConstants, 
             .finally(function () {
             $scope.isInitializing = false;
         }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error);
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
     }
     function buildFilter() {

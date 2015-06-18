@@ -48,7 +48,7 @@ function RoleEditorController($scope, RolesAPIService, $routeParams, notify, VRM
                fillScopeFromRoleObj(response);
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -79,7 +79,7 @@ function RoleEditorController($scope, RolesAPIService, $routeParams, notify, VRM
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
 
     }
@@ -94,7 +94,7 @@ function RoleEditorController($scope, RolesAPIService, $routeParams, notify, VRM
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
     }
 }

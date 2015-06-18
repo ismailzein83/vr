@@ -108,7 +108,7 @@
             return UtilsService.waitMultipleAsyncOperations([updateTopDestinationsChart, updateTopCustomersChart, updateTopSuppliersChart]).finally(function () {
                 $scope.isGettingData = false;
             }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
 

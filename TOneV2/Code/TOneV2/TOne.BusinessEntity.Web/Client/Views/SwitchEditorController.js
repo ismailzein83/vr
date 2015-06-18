@@ -48,7 +48,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
                fillScopeFromSwitchObj(response);
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -89,7 +89,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
 
     }
@@ -104,7 +104,7 @@ function SwitchEditorController($scope, SwitchManagmentAPIService, $routeParams,
                 $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
-            VRNotificationService.notifyException(error);
+            VRNotificationService.notifyException(error, $scope);
         });
     }
 

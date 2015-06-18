@@ -226,7 +226,7 @@
                 //    gridMainAPI.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
                 //}
             }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
 
