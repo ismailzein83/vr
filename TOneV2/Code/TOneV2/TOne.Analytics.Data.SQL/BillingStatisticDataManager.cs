@@ -561,7 +561,7 @@ namespace TOne.Analytics.Data.SQL
                 SaleZoneName = reader["SaleZoneName"] as string ,
                 SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
                 SaleRate = GetReaderValue<double>(reader,"SaleRate"),
-                SaleRateChange = GetReaderValue<int>(reader,"SaleRateChange"),
+                SaleRateChange = GetReaderValue<Int16>(reader, "SaleRateChange"),
                 SaleRateEffectiveDate = GetReaderValue<DateTime>(reader,"SaleRateEffectiveDate"),
                 SaleAmount = GetReaderValue<double>(reader, "SaleAmount"),
                 SupplierID = reader["SupplierID"] as string,
@@ -569,7 +569,7 @@ namespace TOne.Analytics.Data.SQL
                 CostZoneName = reader["CostZoneName"] as string ,
                 CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
                 CostRate = GetReaderValue<double>(reader, "CostRate"),
-                CostRateChange = GetReaderValue<int>(reader, "CostRateChange"),
+                CostRateChange = GetReaderValue<Int16>(reader, "CostRateChange"),
                 CostRateEffectiveDate = GetReaderValue<DateTime>(reader, "CostRateEffectiveDate"),
                 CostAmount = GetReaderValue<double>(reader, "CostAmount"),
                 Profit = GetReaderValue<double>(reader, "Profit")               
