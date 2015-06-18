@@ -54,6 +54,10 @@ function BusinessEntityEditorController($scope, PermissionAPIService, UtilsServi
         //The saved permissions in the data base for a single holder type and id
         $scope.permissions = [];
 
+        $scope.isPermissionsFlagSelected = function () {
+            return permissionFlags != undefined && permissionFlags.length > 0;
+        };
+
         $scope.permissionsSelected = function (selectedPermission) {
             
             if (permissionFlags == undefined)

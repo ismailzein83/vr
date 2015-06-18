@@ -37,7 +37,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formPermissionEditor" data-onclick="SavePermissions"></vr-button>
+                <vr-button type="Save" formname="formBusinessEntityEditor" vr-disabled="!isPermissionsFlagSelected()" data-onclick="SavePermissions"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
