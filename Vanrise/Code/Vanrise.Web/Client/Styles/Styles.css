@@ -1048,6 +1048,11 @@ input.ui-grid-filter-input[type="text"] {
         opacity: 0.5;
     }
 
+.divDisabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
 /**************START Pagination*********/
 
     .pagination {

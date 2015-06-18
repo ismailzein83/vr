@@ -167,6 +167,7 @@
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridrows-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-htmlcompiler-directive.js" />
     <Content Include="Client\Javascripts\Directives\DirectiveWrapper\vr-directivewrapper-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Disabled\vr-disabled-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choice-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Choices\vr-choices-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\DatePicker\vr-datetimepicker-directive.js" />
