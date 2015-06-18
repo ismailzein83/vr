@@ -51,5 +51,21 @@ namespace TOne.Entities
         public int Margin { get; set; }
 
         public int ZoneId { get; set; }
+
+        public string AverageSaleNet { get; set; }
+        public string AverageCostNet { get; set; }
+        public string AverageProfit { get; set; }
+        public string AveragePercProfit { get; set; }
+        public string MTDSaleNet { get; set; }
+        public string MTDCostNet { get; set; }
+        public string MTDProfit { get; set; }
+        public string ForcastSaleNet { get; set; }
+        public string ForcastCostNet { get; set; }
+        public string ForcastProfit { get; set; }
+        public string InterpolatedDay { get; set; }
+        public string InterpolatedSaleNet { get; set; }
+        public string InterpolatedCostNet { get; set; }
+        public string InterpolatedProfit { get; set; }
+        public string InterpolatedPercProfit { get; set; } 
     }
 }
