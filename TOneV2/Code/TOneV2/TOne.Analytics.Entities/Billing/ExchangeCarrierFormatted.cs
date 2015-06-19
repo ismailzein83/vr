@@ -10,9 +10,9 @@ namespace TOne.Analytics.Entities
     {
         public string Customer { get; set; }
         public double CustomerProfit { get; set; }
-        public string CustomerProfitFormatted { get; set; }
+        public string FormattedCustomerProfit { get; set; }
         public double SupplierProfit { get; set; }
-        public string SupplierProfitFormatted { get; set; }
+        public string FormattedSupplierProfit { get; set; }
         public string Total { get; set; }
 
     }
