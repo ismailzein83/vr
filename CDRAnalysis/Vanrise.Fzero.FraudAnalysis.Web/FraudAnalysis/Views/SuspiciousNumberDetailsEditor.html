@@ -35,23 +35,22 @@
                             <vr-columns colnum="12">
                                 <div ng-show="ctrl.isNormalCDRTabShown">
                                     <vr-datagrid datasource="normalCDRs" maxheight="300px" loadmoredata="loadMoreDataNormalCDRs" on-ready="onNormalCDRsGridReady">
-                                        <vr-datagridcolumn headertext="'MSISDN'" field="'MSISDN'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'ConnectDateTime'" field="'ConnectDateTime'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DurationInSeconds'" field="'DurationInSeconds'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallClass'" field="'CallClass'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallType'" field="'CallType'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Class'" field="'CallClass'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Type'" field="'CallType'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'SubType'" field="'SubType'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CellId'" field="'CellId'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'UpVolume'" field="'UpVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DownVolume'" field="'DownVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'ServiceType'" field="'ServiceType'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'ServiceVASName'" field="'ServiceVASName'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Cell Id'" field="'CellId'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Service VAS'" field="'ServiceVASName'">  </vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="ctrl.isNumberProfileTabShow" >
+                                <div ng-show="ctrl.isNumberProfileTabShown">
                                     <vr-datagrid datasource="numberProfiles" maxheight="300px" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
                                         <vr-datagridcolumn headertext="'FromDate'" field="'FromDate'">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'ToDate'" field="'ToDate'">  </vr-datagridcolumn>

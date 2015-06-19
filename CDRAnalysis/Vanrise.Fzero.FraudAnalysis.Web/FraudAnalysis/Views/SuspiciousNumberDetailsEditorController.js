@@ -37,6 +37,22 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
     }
 
 
+    function getNumberProfiles() {
+        var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+        var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+
+        var pageInfo = normalCDRGridAPI.getPageInfo();
+
+
+        return FraudResultAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.numberProfiles.push(itm);
+            });
+        });
+    }
+
+
 
 
     function defineScope() {
@@ -55,6 +71,16 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
         $scope.loadMoreDataNormalCDRs = function () {
             return getNormalCDRs();
+        }
+
+
+        $scope.onNumberProfilesGridReady = function (api) {
+            normalCDRGridAPI = api;
+            getNumberProfiles();
+        };
+
+        $scope.loadMoreDataNumberProfiles = function () {
+            return getNumberProfiles();
         }
       
 
