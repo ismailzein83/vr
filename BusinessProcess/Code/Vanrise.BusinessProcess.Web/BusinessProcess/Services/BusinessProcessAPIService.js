@@ -9,9 +9,7 @@
     }
 
     function GetFilteredBProcess(param) {
-        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", {
-            param: param
-        });
+        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param );
     }
 
     return ({

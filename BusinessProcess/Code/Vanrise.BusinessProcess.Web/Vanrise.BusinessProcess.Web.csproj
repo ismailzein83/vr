@@ -137,6 +137,8 @@
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Views\BPManagement.html" />
     <Content Include="BusinessProcess\Views\BPManagementController.js" />
+    <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
+    <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

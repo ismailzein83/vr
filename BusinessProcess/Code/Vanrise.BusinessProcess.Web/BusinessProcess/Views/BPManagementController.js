@@ -1,6 +1,6 @@
-﻿BPManagementController.$inject = ['BusinessProcessAPIService'];
+﻿BPManagementController.$inject = ['BusinessProcessAPIService', 'VRModalService'];
 
-function BPManagementController(BusinessProcessAPIService) {
+function BPManagementController(BusinessProcessAPIService, VRModalService) {
 
     var mainGridAPI;
     var ctrl = this;
@@ -10,6 +10,10 @@ function BPManagementController(BusinessProcessAPIService) {
     ctrl.selectedInstanceStatus = [];
     ctrl.BPInstances = [];
 
+    ctrl.loadMoreData = function () {
+        return getData();
+    }
+
     ctrl.searchClicked = function () {
         mainGridAPI.clearDataAndContinuePaging();
         return getData();
@@ -18,6 +22,19 @@ function BPManagementController(BusinessProcessAPIService) {
     ctrl.onGridReady = function (api) {
         mainGridAPI = api;
     }
+
+    ctrl.showBPTrackingModal = function (BPInstanceID) {
+
+        var settings = {
+            onScopeReady : function (modalScope) {
+                modalScope.title = "Tracking";
+                modalScope.BPInstanceID = BPInstanceID;
+            }
+        };
+
+        VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', null, settings);
+    }
+
 
     function getData() {
         

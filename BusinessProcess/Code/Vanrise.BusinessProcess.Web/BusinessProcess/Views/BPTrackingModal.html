@@ -1,0 +1,20 @@
+﻿<div vr-modalcontent ng-controller="BPTrakingModalController as ctrl">
+    <vr-modalbody width="'50%'" vr-loader="::ctrl.isGettingData">
+        <vr-form name="formBPTrackingModal">
+            <vr-row>
+                <vr-columns colnum="12">
+
+
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="ctrl.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

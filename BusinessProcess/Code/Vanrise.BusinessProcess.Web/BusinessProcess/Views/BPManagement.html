@@ -28,7 +28,6 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="ctrl.searchClicked"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="ctrl.addClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -37,13 +36,13 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="::ctrl.BPInstances" menuactions="gridMenuActions"  on-ready="ctrl.onGridReady">
-                        <vr-datagridcolumn headertext="'Title'" field="'Title'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Definition'" field="'Definition'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'LastMessage'" field="'LastMessage'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'RetryCount'" field="'RetryCount'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CreatedTime'">{{dataItem.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'StatusDescription'" field="'StatusDescription'"></vr-datagridcolumn>
+                    <vr-datagrid datasource="::ctrl.BPInstances" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady">
+                        <vr-datagridcolumn headertext="''" widthfactor="2" isclickable onclicked="ctrl.showBPTrackingModal">{{dataItem.ProcessInstanceID}}</vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="3"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Created Time'" widthfactor="10">{{dataItem.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>

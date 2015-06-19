@@ -44,6 +44,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPClient manager = new BPClient();
             IEnumerable<BPInstanceModel> rows = BPMappers.MapTMapInstances(manager.GetFilteredInstances(param.DefinitionsId,param.InstanceStatus, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
+            rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
             return rows;
         }
 
