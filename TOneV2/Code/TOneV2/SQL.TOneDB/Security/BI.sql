@@ -1,3 +1,2 @@
-﻿CREATE SCHEMA [BI]
-    AUTHORIZATION [development];
+﻿CREATE SCHEMA [BI];
 

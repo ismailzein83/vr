@@ -126,19 +126,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Services\APIServices\ReportAPIService.js" />
-    <Content Include="Client\Services\APIServices\RolesAPIService.js" />
-    <Content Include="Client\Services\APIServices\UsersAPIService.js" />
-    <Content Include="Client\Views\ResetPasswordEditorController.js" />
-    <Content Include="Client\Views\ResetPasswordEditor.html" />
-    <Content Include="Client\Views\RoleEditor.html" />
-    <Content Include="Client\Views\RoleEditorController.js" />
-    <Content Include="Client\Views\RoleManagement.html" />
-    <Content Include="Client\Views\RoleManagementController.js" />
-    <Content Include="Client\Views\UserEditor.html" />
-    <Content Include="Client\Views\UserManagement.html" />
-    <Content Include="Client\Views\UserManagementController.js" />
-    <Content Include="Client\Views\UserEditorController.js" />
+    <Content Include="Main\Services\APIServices\ReportAPIService.js" />
+    <Content Include="Main\Services\APIServices\RolesAPIService.js" />
+    <Content Include="Main\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Main\Views\ResetPasswordEditorController.js" />
+    <Content Include="Main\Views\ResetPasswordEditor.html" />
+    <Content Include="Main\Views\RoleEditor.html" />
+    <Content Include="Main\Views\RoleEditorController.js" />
+    <Content Include="Main\Views\RoleManagement.html" />
+    <Content Include="Main\Views\RoleManagementController.js" />
+    <Content Include="Main\Views\UserEditor.html" />
+    <Content Include="Main\Views\UserManagement.html" />
+    <Content Include="Main\Views\UserManagementController.js" />
+    <Content Include="Main\Views\UserEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
