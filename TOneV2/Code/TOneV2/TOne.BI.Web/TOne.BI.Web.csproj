@@ -127,8 +127,10 @@
     <Content Include="Client\Directives\vr-bi-chart-directive.js" />
     <Content Include="Client\Directives\vr-bi-datagrid-directive.js" />
     <Content Include="Client\Directives\bi-visualelement-service.js" />
+    <Content Include="Client\Services\APIServices\bi-visualelement-service1.js" />
     <Content Include="Client\Services\APIServices\BIAPIService.js" />
     <Content Include="Client\Services\APIServices\BIConfigurationAPIService.js" />
+    <Content Include="Client\Services\APIServices\vr-chart-bi-directive.js" />
     <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditorController.js" />
     <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditor.html" />
     <Content Include="Client\Views\Dashboards\DynamicDashboard.html" />

@@ -1,6 +1,6 @@
-﻿BIConfigurationController.$inject = ['$scope', 'BIUtilitiesService', 'BIConfigurationAPIService', 'UtilsService', 'VRNavigationService', '$q', 'VRNotificationService', 'BITimeDimensionTypeEnum'];
+﻿BIConfigurationController.$inject = ['$scope', 'BIVisualElementService1', 'BIUtilitiesService', 'BIConfigurationAPIService', 'UtilsService', 'VRNavigationService', '$q', 'VRNotificationService', 'BITimeDimensionTypeEnum'];
 
-function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPIService, UtilsService, VRNavigationService, $q, VRNotificationService, BITimeDimensionTypeEnum) {
+function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesService, BIConfigurationAPIService, UtilsService, VRNavigationService, $q, VRNotificationService, BITimeDimensionTypeEnum) {
 
     $scope.isInitializing = false;
     var mainGridAPI;
@@ -17,18 +17,24 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
         $scope.toDate = "2015-04-30";
         defineTimeDimensionTypes();
         $scope.profit = [];
-       
+        $scope.visualElements = [];
         $scope.Measures = [];
         $scope.Entities = [];
         $scope.selectedMeasures = [];
         //$scope.selectedEntities =
         $scope.selectedEntity;
+        defineDirectives();
+        defineOperationTypes();
         $scope.data = [];
-        $scope.getData = function () {
-            return getData();
+        $scope.selectedDirective;
+        var element = {};
+        var elementSettings = {};
+        $scope.removeVisualElement = function (visualElement) {
+            $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
         };
-
-
+        
+       
+        defineNumberOfColumns();
         $scope.chartReady = function (api) {
             $scope.chartAPI = api;
            
@@ -36,7 +42,7 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
 
         $scope.chartTopReady = function (api) {
             chartTopAPI = api;
-            updateChart();
+           // updateChart();
         };
 
 
@@ -47,6 +53,33 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
             }
             return title;
         }
+        $scope.add = function () {
+            var measures = [];
+            if ($scope.selectedMeasures != undefined)
+                for (var i = 0; i < $scope.selectedMeasures.length; i++) {
+                    measures.push($scope.selectedMeasures[i].Id);
+                }
+            elementSettings = {
+                operationType: $scope.selectedOperationType,
+                entityType: $scope.selectedEntity,
+                measureTypes: $scope.selectedMeasures
+            };
+            element = {
+                //   timedimensiontype: $scope.selectedTimeDimensionType.value,
+                //  fromdate:$scope.fromdate,
+                //    todate:$scope.todate,
+                directive: $scope.selectedDirective.value,
+                settings: elementSettings,
+                numberOfColumns: $scope.selectedNumberOfColumns.value
+            };
+
+            addVisualElement(element.directive, element.settings, element.numberOfColumns);
+        };
+        $scope.getData = function () {
+            
+            return getData();
+        };
+
     }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
@@ -95,6 +128,20 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
             return;
         if (chartTopAPI == undefined)
             return;
+
+
+     
+        
+        var refreshDataOperations = [];
+        angular.forEach($scope.visualElements, function (visualElement) {
+            refreshDataOperations.push(visualElement.API.retrieveData);
+        });
+        //BIVisualElementService1.retrieveData($scope.visualElements[0], $scope.visualElements[0].settings);
+        $scope.isGettingData = true;
+        UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
+            .finally(function () {
+                $scope.isGettingData = false;
+            });
 
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([updateTopChartValues]).finally(function () {
@@ -174,7 +221,17 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
             seriesTitle: $scope.selectedEntity.Name
         });
     }
-
+    function defineOperationTypes() {
+        $scope.operationTypes = [{
+            value: "TopEntities",
+            description: "Top X"
+        }, {
+            value: "MeasuresGroupedByTime",
+            description: "Time Variation Data"
+        }
+        ];
+        $scope.selectedOperationType = $scope.operationTypes[0];
+    }
 
     function updateTopChart(chartAPI, entityType, chartSettings) {
         if (!chartAPI)
@@ -221,6 +278,46 @@ function BIConfigurationController($scope,BIUtilitiesService, BIConfigurationAPI
             })
         }
     }
+    function defineNumberOfColumns() {
+        $scope.numberOfColumns = [
+            {
+                value: "6",
+                description: "Half Row"
+            },
+            {
+                value: "12",
+                description: "Full Row"
+            }
+        ];
 
+        $scope.selectedNumberOfColumns = $scope.numberOfColumns[0];
+    }
+
+    function addVisualElement(directive, settings, numberOfColumns) {
+        var visualElement = {
+            directive: directive,
+            settings: settings,
+            numberOfColumns: numberOfColumns
+        };
+        visualElement.onElementReady = function (api) {
+            visualElement.API = api;
+        };
+       // console.log(visualElement);
+        $scope.visualElements.push(visualElement);
+    }
+
+    function defineDirectives() {
+        $scope.directives = [
+            {
+                value: "vr-chart-bi",
+                description: "Chart"
+            },
+            {
+                value: "vr-bi-datagrid",
+                description: "Report"
+            }
+        ];
+        $scope.selectedDirective = $scope.directives[0];
+    }
 }
 appControllers.controller('BI_BIConfigurationController', BIConfigurationController);
