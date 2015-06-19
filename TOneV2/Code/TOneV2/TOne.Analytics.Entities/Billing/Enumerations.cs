@@ -26,5 +26,12 @@ namespace TOne.Analytics.Entities
         Profit = 8
     }
 
+    public enum AccountType : byte
+    {
+        Client = 0,     // Client only
+        Exchange = 1,   // Client and Supply
+        Termination = 2 // Supply Only
+    }
+
 }
 
