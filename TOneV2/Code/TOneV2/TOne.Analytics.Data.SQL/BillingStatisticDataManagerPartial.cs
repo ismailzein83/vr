@@ -30,30 +30,43 @@ namespace TOne.Analytics.Data.SQL
             );
         }
 
-        private string GetVariationReportQuery(DataTable timeRange, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        private string GetVariationReportQuery(List<TimeRange> timeRange,  VariationReportOptions variationReportOptions)
         {
-            StringBuilder query = new StringBuilder(query_Common);
+         
+          //  DateTime BeginTime = Convert.ToDateTime((timeRange.Compute("max(FromDate)", string.Empty)));
+          //  DateTime EndTime = Convert.ToDateTime((timeRange.Compute("min(FromDate)", string.Empty)));
+
+            DateTime BeginTime = (from d in timeRange select d.FromDate).Max();
+            DateTime EndTime = (from d in timeRange select d.FromDate).Min();
+
+            StringBuilder query = new StringBuilder(@"DECLARE @ExchangeRates TABLE(
+		                                             Currency VARCHAR(3),
+		                                             Date SMALLDATETIME,
+		                                             Rate FLOAT
+		                                             PRIMARY KEY(Currency, Date))
+                                            INSERT INTO @ExchangeRates 
+                                            SELECT * FROM dbo.GetDailyExchangeRates('@EndTime','@BeginTime')");
             query.Append(@" SELECT  #NameColumn# , 
             0.0 as [AVG],
             0.0 as [%], 
             0.0 as [Prev %],
             tr.FromDate,
             tr.ToDate,
-            (#ValueColumn#)/60 as Total,
+            (#ValueColumn#) as Total,
             #IDColumn# as ID
-            From @TimeRanges tr, Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+            From @timeRange tr
+            LEFT JOIN Billing_Stats BS ON BS.CallDate >= tr.FromDate AND BS.CallDate < tr.ToDate
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
-            LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
-            LEFT JOIN [dbo].[Billing_Stats] bs ON bs.CallDate >= tr.FromDate AND bs.CallDate < tr.ToDate
+            LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             #JoinStatement#
             #WhereStatement#  
             GROUP BY #NameColumn# ,#IDColumn#,tr.FromDate, tr.ToDate
-            ORDER BY Dates.ToDate ");
+            ORDER BY tr.FromDate, tr.ToDate ");
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#", " SUM(SaleDuration) ");
+                    query.Replace("#ValueColumn#", " SUM(SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
@@ -62,7 +75,7 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.OutBoundMinutes:
                     query.Replace("#NameColumn#", " cps.Name ");
-                    query.Replace("#ValueColumn#", " SUM(CostDuration) ");
+                    query.Replace("#ValueColumn#", " SUM(CostDuration)/60 ");
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
@@ -75,7 +88,7 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.TopDestinationMinutes:
                     query.Replace("#NameColumn#", " Z.Name ");
-                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration) ");
+                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
 
@@ -107,15 +120,13 @@ namespace TOne.Analytics.Data.SQL
                     break;
 
             }
+                     
 
-            if (query.ToString().Contains("@TimePeriod"))
-                switch (timePeriod)
-                {
-                    case TimePeriod.Days:  query.Replace("@TimePeriod", " DAY ");     break;
-                    case TimePeriod.Weeks: query.Replace("@TimePeriod", " WEEK ");    break;
-                    case TimePeriod.Months:query.Replace("@TimePeriod", " MONTH ");   break;
-
-                }
+            if (query.ToString().Contains("@BeginTime") && query.ToString().Contains("@EndTime"))
+            {
+                query.Replace("@BeginTime", BeginTime.ToString());
+                query.Replace("@EndTime", EndTime.ToString());
+            }
             return query.ToString();
         }
 

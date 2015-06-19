@@ -19,8 +19,6 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.getData = function () {
             return getData(true);
         };
-        $scope.getZoneProfit = getZoneProfit;
-        $scope.getBillingStats = getBillingStats;
         $scope.getVariationReportsData = getVariationReportsData;
         $scope.timePeriod = timePeriod;
         $scope.variationReportOptions = variationReportOptions;

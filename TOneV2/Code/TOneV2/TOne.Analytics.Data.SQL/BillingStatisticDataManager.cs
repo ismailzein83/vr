@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Analytics.Entities;
@@ -160,20 +161,23 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(DataTable timeRange, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange,  VariationReportOptions variationReportOptions)
         {
-            string selectedReportQuery = GetVariationReportQuery( timeRange, timePeriod, variationReportOptions);
+          
+            string selectedReportQuery = GetVariationReportQuery(timeRange,variationReportOptions);
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 return GetItemsText(selectedReportQuery, VariationReportsMapper,
-             (cmd) =>
-             {
-                  var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
-                   dtPrm.TypeName = "TimeRangeType";
-                   dtPrm.Value = timeRange;
-                   cmd.Parameters.Add(dtPrm);
-                 
-             });
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
+                    dtPrm.TypeName = "Analytics.TimeRangeType";
+                    dtPrm.Value = timeRange;
+                    cmd.Parameters.Add(dtPrm);
+
+                });
             else return new List<VariationReports>();
+          
+
         }
     
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
@@ -562,18 +566,32 @@ namespace TOne.Analytics.Data.SQL
 
             };
         }
+        private static DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
 
         #endregion
-
-        #region ConstantVariableRegion
-        string query_Common = @"DECLARE @ExchangeRates TABLE(
-		                                             Currency VARCHAR(3),
-		                                             Date SMALLDATETIME,
-		                                             Rate FLOAT
-		                                             PRIMARY KEY(Currency, Date))
-                                            INSERT INTO @ExchangeRates 
-                                            SELECT * FROM dbo.GetDailyExchangeRates(DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate), @FromDate)  ";
-
-        #endregion
+     
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="Billing\RateLossFormatted.cs" />
     <Compile Include="Billing\TimeRange.cs" />
     <Compile Include="Billing\TotalDurationPerDate.cs" />
+    <Compile Include="Billing\VariationReportResult.cs" />
     <Compile Include="Billing\VariationReports.cs" />
     <Compile Include="Billing\VariationReportsData.cs" />
     <Compile Include="Billing\ZoneProfit.cs" />

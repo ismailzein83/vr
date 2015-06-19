@@ -16,7 +16,7 @@ namespace TOne.Analytics.Entities
 
         public decimal PreviousPeriodTypeValuePercentage { get; set; }
 
-        public List<TotalDurationPerDate> TotalDurationsPerDate { get; set; }
+        public List<decimal> TotalDurationsPerDate { get; set; }
         public string ID { get; set; }
 
     }

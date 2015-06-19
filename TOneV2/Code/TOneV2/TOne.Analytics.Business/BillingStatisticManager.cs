@@ -69,7 +69,7 @@ namespace TOne.Analytics.Business
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        public List<VariationReportsData> GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)//return Object VRResult(Listof Result, List of timeanges)
         {
             List<TimeRange> timeRangeList = new List<TimeRange>();
             DateTime currentDate = new DateTime();
@@ -99,13 +99,12 @@ namespace TOne.Analytics.Business
                 periodCount = periodCount - 1;
 
             }
-            DataTable timeRangeDataTable = ToDataTable(timeRangeList);
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRangeDataTable, timePeriod, variationReportOptions);
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRangeList, variationReportOptions);
             return GetVariationReportsData(variationReports, selectedDate, periodCount);
 
         }
 
-        public List<VariationReportsData> GetVariationReportsData(List<VariationReports> variationReports, DateTime selectedDate, int periodCount)
+        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, DateTime selectedDate, int periodCount)
         {
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             VariationReportsData current = null;
@@ -117,29 +116,30 @@ namespace TOne.Analytics.Business
                     {
                         ID = item.ID,
                         Name = item.Name,
-                        TotalDurationsPerDate = new List<TotalDurationPerDate>()
+                        TotalDurationsPerDate = new List<decimal>()
                     };
                     variationReportsData.Add(current);
                 }
-                current.TotalDurationsPerDate.Add(new TotalDurationPerDate(item.FromDate, item.TotalDuration));
+                current.TotalDurationsPerDate.Add(item.TotalDuration);
             }
 
-            variationReportsData.OrderBy(v => v.TotalDurationsPerDate.OrderBy(d => d.CallDate));
+            //variationReportsData.OrderBy(v => v.TotalDurationsPerDate);
 
-            foreach (var item in variationReportsData)
-            {
-                decimal average = 0;
-                double CurrentDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault().CallDate.ToString()) : 0;
-                double PrevDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault().CallDate.ToString()) : 0;
-                foreach (var totalDurations in item.TotalDurationsPerDate)
-                    average += totalDurations.TotalDuration;
-                average = average / periodCount;
-                item.PeriodTypeValueAverage = average;
-                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
-                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
+            //foreach (var item in variationReportsData)
+            //{
+            //    decimal average = 0;
+            //    double CurrentDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == selectedDate).SingleOrDefault().CallDate.ToString()) : 0;
+            //    double PrevDayValue = item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault() != null ? double.Parse(item.TotalDurationsPerDate.Where(t => t.CallDate == (selectedDate.AddDays(-1))).SingleOrDefault().CallDate.ToString()) : 0;
+            //    foreach (var totalDurations in item.TotalDurationsPerDate)
+            //        average += totalDurations.TotalDuration;
+            //    average = average / periodCount;
+            //    item.PeriodTypeValueAverage = average;
+            //    item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+            //    item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
 
-            }
-            return variationReportsData;
+            //}
+            //return variationReportsData;
+            return new VariationReportResult();
         }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)
         {
@@ -735,30 +735,7 @@ namespace TOne.Analytics.Business
             };
         }
 
-        private static DataTable ToDataTable<T>(List<T> items)
-        {
-            DataTable dataTable = new DataTable(typeof(T).Name);
-
-            //Get all the properties
-            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo prop in Props)
-            {
-                //Setting column names as Property names
-                dataTable.Columns.Add(prop.Name);
-            }
-            foreach (T item in items)
-            {
-                var values = new object[Props.Length];
-                for (int i = 0; i < Props.Length; i++)
-                {
-                    //inserting property values to datatable rows
-                    values[i] = Props[i].GetValue(item, null);
-                }
-                dataTable.Rows.Add(values);
-            }
-            //put a breakpoint here and check datatable
-            return dataTable;
-        }
+      
         #endregion
     }
 }
