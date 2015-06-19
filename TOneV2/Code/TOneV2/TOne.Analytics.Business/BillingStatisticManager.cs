@@ -259,14 +259,14 @@ namespace TOne.Analytics.Business
 
                 ExchangeCarrierProfit ecp = new ExchangeCarrierProfit()
                 {
-                    CarrierAccount = list.Where(s => s.CarrierAccountId == row.CustomerID).FirstOrDefault(),
+                    CarrierAccount =ca.GetCarrierAccount(row.CustomerID),// list.Where(s => s.CarrierAccountId == row.CustomerID ).FirstOrDefault(),
                     CustomerProfit = row.CustomerProfit != null ? (double)row.CustomerProfit : 0,
                     SupplierProfit = row.SupplierProfit != null ? (double)row.SupplierProfit : 0
 
                 };
                 ecpList.Add(ecp);
             }
-
+            var test = ecpList;
             if (IsExchange == true)
             {
                 result = ecpList.Where(c => (AccountType)c.CarrierAccount.AccountType == AccountType.Exchange)
