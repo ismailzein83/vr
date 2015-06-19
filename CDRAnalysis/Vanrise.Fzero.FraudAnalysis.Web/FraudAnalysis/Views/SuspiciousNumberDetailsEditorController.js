@@ -23,8 +23,34 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
         if (parameters != undefined && parameters != null)
             $scope.subscriberNumber = parameters.subscriberNumber;
+            $scope.suspicionLevelName = parameters.suspicionLevelName;
       
     }
+
+    //function getData() {
+    //    var fromDate = $scope.fromDate != undefined ? $scope.fromDate : '';
+    //    var toDate = $scope.toDate != undefined ? $scope.toDate : '';
+
+    //    var strategyId = $scope.selectedStrategies.id;
+    //    var suspicionLevelsList = '';
+
+    //    angular.forEach($scope.selectedSuspicionLevels, function (itm) {
+    //        suspicionLevelsList = suspicionLevelsList + itm.id + ','
+    //    });
+
+
+    //    var pageInfo = mainGridAPI.getPageInfo();
+
+
+    //    return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
+    //        angular.forEach(response, function (itm) {
+    //            //var date = $filter('date')(new Date(), 'MMM dd, yyyy');
+    //            //itm.FormattedDate = date;
+
+    //            $scope.fraudResults.push(itm);
+    //        });
+    //    });
+    //}
 
 
 
@@ -57,6 +83,8 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
        
 
         $scope.strategyLevels = [];
+        $scope.normalCDRs = [];
+        $scope.numberProfiles = [];
 
 
         $scope.AddSuspicionLevel = function () {
@@ -353,8 +381,8 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
     StrategyEditorController.viewVisibilityChanged = function () {
       
-        isFilterTabShown = !isFilterTabShown;
-        isLevelsTabShow = !isLevelsTabShow;
+        isNormalCDRTabShown = !isNormalCDRTabShown;
+        isNumberProfileTabShown = !isNumberProfileTabShown;
     };
 
 
