@@ -58,7 +58,9 @@ namespace Vanrise.Security.Business
                 targetNode = targetNode.Parent;
 
             } while (targetNode != null);
-         
+
+            permissionsResultList = this.FillPermissionsListwithPathes(permissionsResultList, businessEntityHierarchy);
+
             return permissionsResultList;
         }
 
@@ -304,6 +306,29 @@ namespace Vanrise.Security.Business
             }
 
             return effectivePermissions;
+        }
+
+        private List<Permission> FillPermissionsListwithPathes(List<Permission> permissions, List<BusinessEntityNode> businessEntityHierarchy)
+        {
+            foreach (Permission item in permissions)
+            {
+                BusinessEntityNode result = null;
+
+                //Get the node that matches the permission item in the business entity hierarchy tree
+                foreach (BusinessEntityNode node in businessEntityHierarchy)
+                {
+                    result = node.Descendants().Where(x => x.EntType == item.EntityType && x.EntityId.ToString() == item.EntityId).FirstOrDefault();
+                    if (result != null)
+                    {
+                        break;
+                    }
+                }
+                
+                item.PermissionPath = result.GetRelativePath();
+
+            }
+
+            return permissions;
         }
 
     }

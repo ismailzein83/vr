@@ -8,6 +8,8 @@ namespace Vanrise.Security.Entities
 {
     public class Permission
     {
+        public string PermissionPath { get; set; }
+
         public HolderType HolderType { get; set; }
 
         public string HolderName { get; set; }

@@ -61,7 +61,7 @@ function BusinessEntityManagementController($scope, BusinessEntityAPIService, Pe
                 item.HolderTypeEnum = (item.HolderType == HolderTypeEnum.User.value) ? HolderTypeEnum.User.description : HolderTypeEnum.Role.description;
                 item.PermissionFlagsDescription = buildPermissionFlagDescription(item.PermissionFlags);
                 item.isInherited = !(item.EntityType == $scope.beTree.currentNode.EntType && item.EntityId == $scope.beTree.currentNode.EntityId);
-                item.PermissionType = item.isInherited ? 'Inherited' : 'Direct';
+                item.PermissionType = item.isInherited ? 'Inherited (' + item.PermissionPath + ')' : 'Direct';
                 $scope.permissions.push(item);
             });
         });
