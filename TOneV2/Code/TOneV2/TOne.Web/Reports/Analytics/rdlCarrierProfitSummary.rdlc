@@ -69,7 +69,10 @@
                       <rd:DefaultName>textbox53</rd:DefaultName>
                       <ZIndex>73</ZIndex>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -101,7 +104,10 @@
                       <rd:DefaultName>Supplier</rd:DefaultName>
                       <ZIndex>72</ZIndex>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -143,7 +149,10 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -178,7 +187,10 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -213,7 +225,10 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -248,13 +263,17 @@
                       </Visibility>
                       <DataElementOutput>NoOutput</DataElementOutput>
                       <Style>
-                        <BackgroundColor>SlateGray</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>MidnightBlue</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1053,7 +1072,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>

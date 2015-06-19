@@ -40,5 +40,6 @@ namespace TOne.Entities
 
         public bool RequiresMargin { get; set; }
         public bool RequiresZoneId { get; set; }
+        public bool RequiresIsExchange { get; set; }
     }
 }

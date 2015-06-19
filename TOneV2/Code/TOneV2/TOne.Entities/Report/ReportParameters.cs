@@ -66,6 +66,8 @@ namespace TOne.Entities
         public string InterpolatedSaleNet { get; set; }
         public string InterpolatedCostNet { get; set; }
         public string InterpolatedProfit { get; set; }
-        public string InterpolatedPercProfit { get; set; } 
+        public string InterpolatedPercProfit { get; set; }
+
+        public bool IsExchange { get; set; }
     }
 }

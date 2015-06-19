@@ -63,6 +63,11 @@
                     <vr-switch value="params.bySupplier"></vr-switch>
                 </vr-columns>
 
+                <vr-columns colnum="3" ng-if="reporttype.ParameterSettings.RequiresIsExchange">
+                    <vr-label>Exchange accounts</vr-label>
+                    <vr-switch value="params.isExchange"></vr-switch>
+                </vr-columns>
+
             </vr-row>
         </div>
     </vr-form>
