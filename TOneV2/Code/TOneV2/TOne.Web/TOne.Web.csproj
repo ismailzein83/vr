@@ -380,6 +380,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Analytics\rdlCarrierDailyTraffic.rdlc" />
+    <EmbeddedResource Include="Reports\Analytics\rdlCarrierExchangeSummary.rdlc" />
     <EmbeddedResource Include="Reports\Analytics\rdlCarrierLostSummary.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
