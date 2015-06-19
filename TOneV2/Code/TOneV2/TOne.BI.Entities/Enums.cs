@@ -32,4 +32,9 @@ namespace TOne.BI.Entities
         Customer = 1,
         Supplier = 2
     }
+    public enum ConfigurationType
+    {
+        Entity=0,
+        Measure=1
+    }
 }

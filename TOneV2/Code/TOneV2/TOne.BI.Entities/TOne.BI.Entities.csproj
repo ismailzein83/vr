@@ -44,6 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTimeDimensionRecord.cs" />
+    <Compile Include="BIConfiguration.cs" />
+    <Compile Include="BIConfigurationEntity.cs" />
+    <Compile Include="BIConfigurationMeasure.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="EntityRecord.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GenericEntityRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

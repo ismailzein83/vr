@@ -114,7 +114,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Controllers\BIConfigurationController.cs" />
     <Compile Include="Controllers\BIController.cs" />
+    <Compile Include="Models\BIConfigurationModel.cs" />
     <Compile Include="Models\BIMeasureTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -126,6 +128,7 @@
     <Content Include="Client\Directives\vr-bi-datagrid-directive.js" />
     <Content Include="Client\Directives\bi-visualelement-service.js" />
     <Content Include="Client\Services\APIServices\BIAPIService.js" />
+    <Content Include="Client\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditorController.js" />
     <Content Include="Client\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditor.html" />
     <Content Include="Client\Views\Dashboards\DynamicDashboard.html" />
@@ -145,6 +148,8 @@
     <Content Include="Client\Views\Dashboards\ZoneDashboard.html" />
     <Content Include="Client\Views\Reports\ZoneDetails.html" />
     <Content Include="Client\Views\Reports\ZoneSummary.html" />
+    <Content Include="Client\Views\Test.html" />
+    <Content Include="Client\Views\Test.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

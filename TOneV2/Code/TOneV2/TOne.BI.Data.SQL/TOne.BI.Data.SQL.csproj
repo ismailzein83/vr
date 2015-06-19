@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -46,9 +50,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDataManager.cs" />
+    <Compile Include="BIConfigurationDataManager.cs" />
     <Compile Include="Columns.cs" />
     <Compile Include="GenericEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +76,10 @@
     <ProjectReference Include="..\TOne.BI.Entities\TOne.BI.Entities.csproj">
       <Project>{91757f60-1a2b-4413-8d27-26b637a03cb4}</Project>
       <Name>TOne.BI.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
+      <Project>{f0bcbe72-f000-46ae-85a4-79155751c767}</Project>
+      <Name>TOne.Data.SQL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,10 +9,16 @@ namespace TOne.BI.Data.SQL
 {
     public class GenericEntityDataManager : BaseDataManager, IGenericEntityDataManager
     {
-        object _measureDefinitions;
-        public object MeasureDefinitions
+
+        List<BIConfiguration<BIConfigurationMeasure>> _measureDefinitions;
+        List<BIConfiguration<BIConfigurationEntity>> _entityDefinitions;
+        public List<BIConfiguration<BIConfigurationMeasure>> MeasureDefinitions
         {
             set { _measureDefinitions = value; }
+        }
+        public List<BIConfiguration<BIConfigurationEntity>> EntityDefinitions
+        {
+            set { _entityDefinitions = value; }
         }
 
         public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes)
@@ -85,6 +91,9 @@ namespace TOne.BI.Data.SQL
             List<TimeValuesRecord> rslt = new List<TimeValuesRecord>();
             string[] measureColumns;
             string expressionsPart;
+
+           // GetMeasuresColumns1(measureTypes, _measureDefinitions, out expressionsPart);
+
             GetMeasuresColumns(measureTypes, out measureColumns, out expressionsPart);
             string columnsPart = BuildQueryColumnsPart(measureColumns);
             string rowsPart = BuildQueryDateRowColumns(timeDimensionType);
@@ -180,7 +189,189 @@ namespace TOne.BI.Data.SQL
             expressionsPart = expressionPartsBuilder != null ? expressionPartsBuilder.ToString() : null;
         }
 
+        // Test Page Methods Use below
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+
+        public IEnumerable<TimeValuesRecord> GetMeasureValues1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes)
+        {
+            return GetTimeValuesRecord1(timeDimensionType, fromDate, toDate, null, measureTypes);
+        }
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues1(int entityTypeID, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypesIDs)
+        {
+            string entityIdColumn;
+            string entityNameColumn;
+            GetEntityColumns1(entityTypeID, out entityIdColumn, out entityNameColumn);
+           string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
+           return GetTimeValuesRecord1(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesIDs);
+        }
+        public IEnumerable<EntityRecord> GetTopEntities1(int entityTypeID, int topByMeasureTypeID, DateTime fromDate, DateTime toDate, int topCount, params int[] measureTypesIDs)
+        {
+            List<EntityRecord> rslt = new List<EntityRecord>();
+            string topMeasureColExp;
+            string topMeasureColumn = GetMeasureColumn1(topByMeasureTypeID, out topMeasureColExp);
+
+            string entityIdColumn;
+            string entityNameColumn;
+            GetEntityColumns1(entityTypeID, out entityIdColumn, out entityNameColumn);
+
+            string[] measureColumns;
+            string expressionsPart;
+            GetMeasuresColumns1(measureTypesIDs, out measureColumns, out expressionsPart);
+
+            if (!measureTypesIDs.Contains(topByMeasureTypeID))
+            {
+                if (expressionsPart == null)
+                    expressionsPart = topMeasureColExp;
+                else
+                    expressionsPart = string.Format(@"{0} 
+                                                                {1}", expressionsPart, topMeasureColExp);
+            }
+
+            string columnsPart = BuildQueryColumnsPart(measureColumns);
+            string rowsPart = BuildQueryTopRowsPart(topMeasureColumn, topCount, entityIdColumn, entityNameColumn);
+            string filtersPart = GetDateFilter(fromDate, toDate);
+            string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
+            string entityName=GetEntityName(entityTypeID, out entityName);
+            ExecuteReaderMDX(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    EntityRecord entityValue = new EntityRecord
+                    {
+                        EntityId = reader[GetRowColumnToRead(entityIdColumn)] as string,
+                        EntityName = reader[GetRowColumnToRead(entityNameColumn)] as string,
+                        EntityType = entityName,
+                        Values = new Decimal[measureColumns.Length]
+                    };
+                    for (int i = 0; i < measureColumns.Length; i++)
+                    {
+                        entityValue.Values[i] = Convert.ToDecimal(reader[measureColumns[i]]);
+                    }
+                    rslt.Add(entityValue);
+                }
+            });
+            return rslt;
+        }
+
+       private string GetEntityName(int entityTypeId,out string entityName){
+           entityName = null;
+           foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
+            {
+                if (entityTypeId == obj.Id)
+                {
+                 return  obj.Name;
+                }
+            }
+           return null;
+       }
+
+        void GetEntityColumns1(int entityTypeID, out string idColumn, out string nameColumn)
+        {
+            idColumn = null;
+            nameColumn = null;
+
+            foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
+            {
+                if (entityTypeID == obj.Id)
+                {
+                    idColumn = obj.Configuration.ColumnID;
+                    nameColumn = obj.Configuration.ColumnName;
+                }
+            }
+
+        }
+
+        private IEnumerable<TimeValuesRecord> GetTimeValuesRecord1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string[] additionalFilters, int[] measureTypesIDs)
+        {
+            List<TimeValuesRecord> rslt = new List<TimeValuesRecord>();
+            string[] measureColumns;
+            string expressionsPart;
+
+            // GetMeasuresColumns1(measureTypes, _measureDefinitions, out expressionsPart);
+
+            GetMeasuresColumns1(measureTypesIDs, out measureColumns, out expressionsPart);
+
+            string columnsPart = BuildQueryColumnsPart(measureColumns);
+            string rowsPart = BuildQueryDateRowColumns(timeDimensionType);
+            string[] filters = new string[additionalFilters != null ? additionalFilters.Length + 1 : 1];
+            filters[0] = GetDateFilter(fromDate, toDate);
+            if (additionalFilters != null)
+            {
+                for (int i = 0; i < additionalFilters.Length; i++)
+                {
+                    filters[i + 1] = additionalFilters[i];
+                }
+            }
+            string filtersPart = BuildQueryFiltersPart(filters);
+            string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
+
+            ExecuteReaderMDX(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    TimeValuesRecord valuesRecord = new TimeValuesRecord
+                    {
+                        Values = new Decimal[measureColumns.Length]
+                    };
+                    for (int i = 0; i < measureColumns.Length; i++)
+                    {
+                        valuesRecord.Values[i] = Convert.ToDecimal(reader[measureColumns[i]]);
+                    }
+                    FillTimeCaptions(valuesRecord, reader, timeDimensionType);
+                    rslt.Add(valuesRecord);
+                }
+            });
+            return rslt.OrderBy(itm => itm.Time);
+        }
+        private void GetMeasuresColumns1(int[] measureTypesIDs, out string[] measureColumns, out string expressionsPart)
+        {
+            measureColumns = new string[measureTypesIDs.Length];
+            StringBuilder expressionPartsBuilder = null;
+            for (int i = 0; i < measureTypesIDs.Length; i++)
+            {
+                int measureTypeID = measureTypesIDs[i];
+
+                string expr;
+                measureColumns[i] = GetMeasureColumn1(measureTypeID, out expr);
+                if (!String.IsNullOrEmpty(expr))
+                {
+                    if (expressionPartsBuilder == null)
+                        expressionPartsBuilder = new StringBuilder();
+                    expressionPartsBuilder.AppendLine(expr);
+                }
+            }
+            expressionsPart = expressionPartsBuilder != null ? expressionPartsBuilder.ToString() : null;
+        }
+        string GetMeasureColumn1(int measureTypeID, out string queryExpression)
+        {
+            queryExpression = null;
+
+            foreach (BIConfiguration<BIConfigurationMeasure> obj in _measureDefinitions)
+            {
+                if (measureTypeID == obj.Id)
+                {
+                    if (obj.Configuration.Exepression != null && obj.Configuration.Exepression!="")
+                    {
+                        queryExpression = obj.Configuration.Exepression;
+                      return  obj.Configuration.ColumnName;}
+                    else
+                        return obj.Configuration.ColumnName;
+                }
+            }
+            return null;
+        }
+
+        
         #endregion
 
     }
 }
+
