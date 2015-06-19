@@ -35,47 +35,47 @@
                             <vr-columns colnum="12">
                                 <div ng-show="ctrl.isNormalCDRTabShown">
                                     <vr-datagrid datasource="normalCDRs" maxheight="300px" loadmoredata="loadMoreDataNormalCDRs" on-ready="onNormalCDRsGridReady">
-                                        <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Class'" field="'CallClass'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Type'" field="'CallType'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'SubType'" field="'SubType'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Cell Id'" field="'CellId'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'IMSI'" field="'IMSI'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Connect'" field="'ConnectDateTime'" widthfactor="17">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Duration'" field="'DurationInSeconds'" widthfactor="5">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Class'" field="'CallClass'" widthfactor="10">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Type'" field="'CallType'" widthfactor="10" >  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'SubType'" field="'SubType'" widthfactor="10" >  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'IMEI'" field="'IMEI'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Cell Id'" field="'CellId'" widthfactor="10">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Up Volume'" field="'UpVolume'" widthfactor="10">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Down Volume'" field="'DownVolume'" widthfactor="10">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Service Type'" field="'ServiceType'" widthfactor="10">  </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Service VAS'" field="'ServiceVASName'">  </vr-datagridcolumn>
                                     </vr-datagrid>
 
                                 </div>
-                                <div ng-show="ctrl.isNumberProfileTabShown">
+                                <div ng-show="ctrl.isNumberProfileTabShown" style="width:200%"   >
                                     <vr-datagrid datasource="numberProfiles" maxheight="300px" loadmoredata="loadMoreDataNumberProfiles" on-ready="onNumberProfilesGridReady">
-                                        <vr-datagridcolumn headertext="'FromDate'" field="'FromDate'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'ToDate'" field="'ToDate'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutCalls'" field="'CountOutCalls'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DiffOutputNumb'" field="'DiffOutputNumb'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutInter'" field="'CountOutInter'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInInter'" field="'CountInInter'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallOutDurAvg'" field="'CallOutDurAvg'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutFail'" field="'CountOutFail'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInFail'" field="'CountInFail'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalOutVolume'" field="'TotalOutVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalInVolume'" field="'TotalInVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'DiffInputNumbers'" field="'DiffInputNumbers'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutSMS'" field="'CountOutSMS'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalIMEI'" field="'TotalIMEI'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalBTS'" field="'TotalBTS'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'TotalDataVolume'" field="'TotalDataVolume'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInCalls'" field="'CountInCalls'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CallInDurAvg'" field="'CallInDurAvg'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutOnNet'" field="'CountOutOnNet'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInOnNet'" field="'description'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountOutOffNet'" field="'description'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInOffNet'" field="'description'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountConsecutiveCalls'" field="'description'">  </vr-datagridcolumn>
-                                        <vr-datagridcolumn headertext="'CountInLowDurationCalls'" field="'description'">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutCalls'" field="'CountOutCalls'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'DiffOutputNumb'" field="'DiffOutputNumb'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutInter'" field="'CountOutInter'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInInter'" field="'CountInInter'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CallOutDurAvg'" field="'CallOutDurAvg'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutFail'" field="'CountOutFail'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInFail'" field="'CountInFail'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'TotalOutVolume'" field="'TotalOutVolume'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'TotalInVolume'" field="'TotalInVolume'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'DiffInputNumbers'" field="'DiffInputNumbers'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutSMS'" field="'CountOutSMS'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'TotalIMEI'" field="'TotalIMEI'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'TotalBTS'" field="'TotalBTS'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'TotalDataVolume'" field="'TotalDataVolume'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInCalls'" field="'CountInCalls'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CallInDurAvg'" field="'CallInDurAvg'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutOnNet'" field="'CountOutOnNet'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInOnNet'" field="'CountInOnNet'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountOutOffNet'" field="'CountOutOffNet'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInOffNet'" field="'CountInOffNet'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountConsecutiveCalls'" field="'CountConsecutiveCalls'" widthfactor="13">  </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'CountInLowDurationCalls'" field="'CountInLowDurationCalls'" widthfactor="13">  </vr-datagridcolumn>
                                     </vr-datagrid>
                                 </div>
                             </vr-columns>
