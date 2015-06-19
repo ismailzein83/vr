@@ -237,7 +237,7 @@ namespace TOne.Analytics.Business
                 ecpList.Add(ecp);
             }
 
-            if (IsExchange == true) 
+            if (IsExchange == true)
             {
                 result = ecpList.Where(c => (AccountType)c.CarrierAccount.AccountType == AccountType.Exchange)
                 .Select(c =>
@@ -246,8 +246,8 @@ namespace TOne.Analytics.Business
                     Customer = c.CarrierAccount.NameSuffix,
                     CustomerProfit = c.CustomerProfit,
                     SupplierProfit = c.SupplierProfit,
-                    CustomerProfitFormatted = FormatNumber(c.CustomerProfit),     
-                    SupplierProfitFormatted = FormatNumber(c.SupplierProfit),
+                    FormattedCustomerProfit = FormatNumber(c.CustomerProfit),
+                    FormattedSupplierProfit = FormatNumber(c.SupplierProfit),
                     Total = FormatNumber(c.CustomerProfit + c.SupplierProfit)
 
                 }).OrderByDescending(r => r.CustomerProfit + r.SupplierProfit).ToList();
@@ -261,8 +261,8 @@ namespace TOne.Analytics.Business
                     Customer = obj.Key.ProfileName,
                     CustomerProfit = obj.Sum(d => d.CustomerProfit),
                     SupplierProfit = obj.Sum(d => d.SupplierProfit),
-                    CustomerProfitFormatted = FormatNumber(obj.Sum(d => d.CustomerProfit)),
-                    SupplierProfitFormatted = FormatNumber(obj.Sum(d => d.SupplierProfit)),
+                    FormattedCustomerProfit = FormatNumber(obj.Sum(d => d.CustomerProfit)),
+                    FormattedSupplierProfit = FormatNumber(obj.Sum(d => d.SupplierProfit)),
                     Total = FormatNumber(obj.Sum(d => d.CustomerProfit) + obj.Sum(d => d.SupplierProfit))
 
                 }).OrderByDescending(r => r.CustomerProfit + r.SupplierProfit).ToList();
