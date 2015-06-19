@@ -97,7 +97,9 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
         var params = {
             dateDay: fruadResult.DateDay,
             subscriberNumber: fruadResult.SubscriberNumber,
-            suspicionLevelName: fruadResult.SuspicionLevelName
+            suspicionLevelName: fruadResult.SuspicionLevelName,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
         };
 
         var settings = {
