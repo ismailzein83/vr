@@ -27,6 +27,25 @@ namespace TOne.BusinessEntity.Data.SQL
                 };
             }, carrierType.ToString());
         }
+        public List<CarrierAccount> GetAllCarriers()
+        {
+            return GetItemsSP("BEntity.SP_Carriers_GetAllCarriers", (reader) =>
+            {
+                return new CarrierAccount
+                {
+                    CarrierAccountId = reader["CarrierAccountId"] as string,
+                    ProfileId = (Int16)reader["ProfileId"],
+                    ProfileName = reader["ProfileName"] as string,
+                    ProfileCompanyName = reader["ProfileCompanyName"] as string,
+                    ActivationStatus = (byte)reader["ActivationStatus"],
+                    RoutingStatus = (byte)reader["RoutingStatus"],
+                    AccountType = (byte)reader["AccountType"],
+                    CustomerPaymentType = (byte)reader["CustomerPaymentType"],
+                    SupplierPaymentType = (byte)reader["SupplierPaymentType"],
+                    NameSuffix = reader["NameSuffix"] as string
+                };
+            });
+        }
 
         public string GetCarrierAccountName(string carrierAccountId)
         {

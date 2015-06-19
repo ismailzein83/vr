@@ -19,5 +19,6 @@ namespace TOne.BusinessEntity.Data
 
         string GetCarrierAccountName(string carrierAccountId);
         int UpdateCarrierAccount(CarrierAccount carrierAccount);
+        List<CarrierAccount> GetAllCarriers();
     }
 }

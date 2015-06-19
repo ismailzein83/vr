@@ -37,5 +37,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.UpdateCarrierAccount(carrierAccount);
         }
+
+        public List<CarrierAccount> GetAllCarriers()
+        {
+            return _dataManager.GetAllCarriers();
+        }
     }
 }
