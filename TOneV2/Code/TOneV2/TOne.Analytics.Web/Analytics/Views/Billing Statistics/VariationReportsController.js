@@ -24,7 +24,8 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.getVariationReportsData = getVariationReportsData;
         //$scope.getVariationReportsFinalData = getVariationReportsFinalData;
         $scope.timePeriod = timePeriod;
-        $scope.variationReportOptions = variationReportOptions;        
+        $scope.variationReportOptions = variationReportOptions;
+        $scope.periodValuesArray = [];
     }
     function getData(withSummary) {
          alert($scope.name);
@@ -70,6 +71,12 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
             $scope.isInitializing = false;
             console.log(response);
+            if (response.length > 0) {
+                $scope.periodValuesArray.length = 0;
+                angular.forEach(response[0].TotalDurationsPerDate, function (item) {
+                    $scope.periodValuesArray.push(item.CallDate);
+                });
+            }
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
         });
     }
