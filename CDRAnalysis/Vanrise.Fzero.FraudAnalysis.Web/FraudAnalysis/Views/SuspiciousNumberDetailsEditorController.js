@@ -1,6 +1,6 @@
 ﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var normalCDRGridAPI;
 
     loadParameters();
@@ -15,7 +15,7 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
         $scope.subscriberNumber = undefined;
 
         if (parameters != undefined && parameters != null)
-        $scope.subscriberNumber = parameters.subscriberNumber;
+            $scope.subscriberNumber = parameters.subscriberNumber;
         $scope.suspicionLevelName = parameters.suspicionLevelName;
         $scope.fromDate = parameters.fromDate;
         $scope.toDate = parameters.toDate;
@@ -27,7 +27,7 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
 
         var pageInfo = normalCDRGridAPI.getPageInfo();
-       
+
 
         return FraudResultAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
@@ -56,10 +56,11 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
 
     function defineScope() {
-       
+
         $scope.normalCDRs = [];
         $scope.numberProfiles = [];
         $scope.relatedNumbers = [];
+
 
         StrategyEditorController.isNormalCDRTabShown = true;
         StrategyEditorController.isNumberProfileTabShown = false;
@@ -82,7 +83,7 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
         $scope.loadMoreDataNumberProfiles = function () {
             return getNumberProfiles();
         }
-      
+
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
@@ -91,15 +92,19 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
     function load() {
 
-        $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadRelatedNumbers])
-        .then(function () {
-            $scope.isGettingData = false;
-        })
-        .catch(function (error) {
-            $scope.isGettingData = false;
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        var number = parseInt($scope.subscriberNumber);
+
+        var relatedNumbers = [];
+        for (var i = 5; i >= 1; i--) {
+            relatedNumbers.push(number - i);
+        }
+        relatedNumbers.push(number);
+        for (var i = 1; i <= 5; i++) {
+            relatedNumbers.push(number + i);
+        }
+
+        
+        $scope.relatedNumbers = relatedNumbers;
     }
 
     function getStrategy() {
@@ -115,18 +120,11 @@ function StrategyEditorController($scope, StrategyAPIService,FraudResultAPIServi
 
 
 
-    function loadRelatedNumbers() {
-        return StrategyAPIService.GetFilters().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.relatedNumbers.push({ filterId: itm.FilterId, description: itm.Description });
-            });
-        });
-    }
 
 
 
     StrategyEditorController.viewVisibilityChanged = function () {
-      
+
         isNormalCDRTabShown = !isNormalCDRTabShown;
         isNumberProfileTabShown = !isNumberProfileTabShown;
     };
