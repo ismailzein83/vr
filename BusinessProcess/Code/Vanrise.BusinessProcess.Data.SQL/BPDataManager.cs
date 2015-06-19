@@ -52,8 +52,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPInstance> GetInstancesByCriteria(List<int> definitionID,List<int> instanceStatus, DateTime datefrom, DateTime dateto)
         {
-            return GetItemsSP("", BPInstanceMapper, string.Join(",", definitionID.Select(n => n.ToString()).ToArray()),
-                string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()), datefrom, dateto);
+
+            return GetItemsSP("bp.sp_BPInstance_GetByCriterias", BPInstanceMapper, definitionID == null ? null : string.Join(",", definitionID.Select(n => n.ToString()).ToArray()),
+                instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()), datefrom, dateto);
         }
        
         public BPInstance GetInstance(long instanceId)
