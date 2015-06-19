@@ -160,29 +160,22 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        public List<VariationReports> GetVariationReportsData(DataTable timeRange, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
-            string selectedReportQuery = GetVariationReportQuery(selectedDate, periodCount, timePeriod, variationReportOptions);
+            string selectedReportQuery = GetVariationReportQuery( timeRange, timePeriod, variationReportOptions);
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 return GetItemsText(selectedReportQuery, VariationReportsMapper,
              (cmd) =>
              {
-                 cmd.Parameters.Add(new SqlParameter("@FromDate", selectedDate));
-                 cmd.Parameters.Add(new SqlParameter("@PeriodCount", periodCount));
+                  var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
+                   dtPrm.TypeName = "TimeRangeType";
+                   dtPrm.Value = timeRange;
+                   cmd.Parameters.Add(dtPrm);
+                 
              });
             else return new List<VariationReports>();
         }
-        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
-        {
-            string query = String.Format(@"SELECT TOP 100 * FROM Billing_Stats Where CallDate Between @FromDate AND @ToDate");
-
-            return GetItemsText(query, BillingStatisticsMapper,
-            (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
-            });
-        }
+    
         public List<DailySummary> GetDailySummary(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_Billing_GetDailySummary", DailySummaryMapper,
@@ -461,7 +454,8 @@ namespace TOne.Analytics.Data.SQL
                 Name = reader["Name"] as string,
                 PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
                 PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
-                CallDate = GetReaderValue<DateTime>(reader, "CallDate"),
+                FromDate  = GetReaderValue<DateTime>(reader, "FromDate"),
+                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
                 TotalDuration = GetReaderValue<decimal>(reader, "Total"),
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
                 ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty

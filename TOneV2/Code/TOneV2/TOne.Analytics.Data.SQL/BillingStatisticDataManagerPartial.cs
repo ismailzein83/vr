@@ -30,22 +30,25 @@ namespace TOne.Analytics.Data.SQL
             );
         }
 
-        public string GetVariationReportQuery(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        private string GetVariationReportQuery(DataTable timeRange, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
             StringBuilder query = new StringBuilder(query_Common);
             query.Append(@" SELECT  #NameColumn# , 
             0.0 as [AVG],
             0.0 as [%], 
             0.0 as [Prev %],
-            CallDate,
+            tr.FromDate,
+            tr.ToDate,
             (#ValueColumn#)/60 as Total,
             #IDColumn# as ID
-            From Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
+            From @TimeRanges tr, Billing_Stats BS With(Nolock,INDEX(IX_Billing_Stats_Date))
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate
+            LEFT JOIN [dbo].[Billing_Stats] bs ON bs.CallDate >= tr.FromDate AND bs.CallDate < tr.ToDate
             #JoinStatement#
             #WhereStatement#  
-            GROUP BY #NameColumn# ,#IDColumn#, CallDate");
+            GROUP BY #NameColumn# ,#IDColumn#,tr.FromDate, tr.ToDate
+            ORDER BY Dates.ToDate ");
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
@@ -54,7 +57,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#", " WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate ");
+                    query.Replace("#WhereStatement#", " ");
                     break;
 
                 case VariationReportOptions.OutBoundMinutes:
@@ -63,8 +66,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
-                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
                     break;
 
                 case VariationReportOptions.InOutBoundMinutes:
@@ -77,7 +79,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
 
-                    query.Replace("#WhereStatement#", @" WHERE CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate ");
+                    query.Replace("#WhereStatement#", @" ");
                     break;
 
                 case VariationReportOptions.InBoundAmount:
@@ -86,8 +88,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
-                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
                     break;
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
@@ -95,18 +96,22 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    query.Replace("#WhereStatement#", @" CallDate BETWEEN DATEADD(@TimePeriod, -@PeriodCount+1, @FromDate) AND @FromDate
-                                                        AND  cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
                     break;
 
                 case VariationReportOptions.InOutBoundAmount:
                     break;
+                case VariationReportOptions.TopDestinationAmount:
+                    break;
+                case VariationReportOptions.Profit:
+                    break;
+
             }
 
             if (query.ToString().Contains("@TimePeriod"))
                 switch (timePeriod)
                 {
-                    case TimePeriod.Days:  query.Replace("@TimePeriod", " DAY ");    break;
+                    case TimePeriod.Days:  query.Replace("@TimePeriod", " DAY ");     break;
                     case TimePeriod.Weeks: query.Replace("@TimePeriod", " WEEK ");    break;
                     case TimePeriod.Months:query.Replace("@TimePeriod", " MONTH ");   break;
 

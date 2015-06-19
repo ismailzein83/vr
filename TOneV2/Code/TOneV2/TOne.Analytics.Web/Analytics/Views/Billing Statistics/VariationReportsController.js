@@ -22,39 +22,11 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.getZoneProfit = getZoneProfit;
         $scope.getBillingStats = getBillingStats;
         $scope.getVariationReportsData = getVariationReportsData;
-        //$scope.getVariationReportsFinalData = getVariationReportsFinalData;
         $scope.timePeriod = timePeriod;
         $scope.variationReportOptions = variationReportOptions;
         $scope.periodValuesArray = [];
     }
-    function getData(withSummary) {
-         alert($scope.name);
-        if ($scope.name == undefined)
-            $scope.name = "test";
-        $scope.isInitializing = true;
-          BillingStatisticsAPIService.GetTest($scope.name).then(function (response) {
-              alert(response);
-              $scope.isInitializing = false;
-          });
-    }
-    function getZoneProfit() {
-        BillingStatisticsAPIService.GetZoneProfit($scope.fromDate,$scope.toDate).then(function (response) {
-            //  alert(response);
-            console.log(response);
-            $scope.isInitializing = false;
-            angular.forEach(response, function (itm) {
-                $scope.data.push(itm);
-            });          
-        });
-    }
-    function getBillingStats() {
-        $scope.isInitializing = true;
-        BillingStatisticsAPIService.GetBillingStatistics($scope.fromDate, $scope.toDate).then(function (response) {
-            console.log(response);
-            $scope.isInitializing = false;
-            angular.forEach(response, function (itm) { $scope.data.push(itm);});
-        });
-    }
+    
     function loadTimePeriods() {
         for (var prop in TimePeriodEnum) {
             timePeriod.push(TimePeriodEnum[prop].description);
@@ -80,14 +52,6 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             angular.forEach(response, function (itm) { $scope.data.push(itm); });
         });
     }
-
-    //function getVariationReportQuery() {
-    //    BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
-    //        console.log(response);
-    //        angular.forEach(response, function (itm) { $scope.data.push(itm); });
-    //    });
-    //}
-
 };
 
 

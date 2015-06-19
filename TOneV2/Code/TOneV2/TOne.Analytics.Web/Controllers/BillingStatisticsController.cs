@@ -21,29 +21,7 @@ namespace TOne.Analytics.Web.Controllers
 
             __billingStatisticsManager = new BillingStatisticManager();
         }
-
-        public List<string> GetTest(string name)
-        {
-            List<string> l = new List<string>();
-            l.Add("TEST 1" + name);
-            l.Add("TEST 2" + name);
-            l.Add("TEST 3" + name);
-            l.Add("TEST 4" + name);
-            return l;
-        }
-
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime date1, DateTime date2)
-        {
-            return __billingStatisticsManager.GetZoneProfit(date1, date2, true);
-        }
-
-        [HttpGet]
-        public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
-        {
-
-            return __billingStatisticsManager.GetBillingStatistics(fromDate, toDate);
-        }
-                 
+          
         [HttpGet]
         public List<VariationReportsData> GetVariationReport(DateTime selectedDate, int periodCount, string periodTypeValue, string variationReportOptionValue)
         {

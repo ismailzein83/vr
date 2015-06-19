@@ -14,7 +14,8 @@ namespace TOne.Analytics.Entities
 
         public decimal PeriodTypeValuePercentage { get; set; }
 
-        public DateTime CallDate { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
 
         public decimal TotalDuration { get; set; }
 

@@ -98,10 +98,6 @@ namespace TOne.Analytics.Business
             };
         }
 
-        public List<VariationReports> GetVariationReport(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
-        {
-            return _datamanager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOptions);
-        }
-        
+     
     }
 }

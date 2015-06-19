@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    class TimeRange
+    public class TimeRange
     {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate   { get; set; }
     }
 }
