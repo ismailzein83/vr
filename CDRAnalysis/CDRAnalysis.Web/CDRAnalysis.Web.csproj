@@ -146,6 +146,21 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Web">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Security.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
