@@ -228,7 +228,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', func
             };
 
             ctrl.isColumnClickable = function (colDef, dataItem) {
-                if (colDef.isClickableAttr == undefined)
+                if (colDef == undefined || colDef.isClickableAttr == undefined)
                     return false;
                 else {
                     if (typeof (colDef.isClickableAttr) == 'function')
