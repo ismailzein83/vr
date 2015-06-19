@@ -54,6 +54,9 @@
     <Compile Include="Billing\DailyForcasting.cs" />
     <Compile Include="Billing\DailyForcastingFormatted.cs" />
     <Compile Include="Billing\Enumerations.cs" />
+    <Compile Include="Billing\ExchangeCarrierFormatted.cs" />
+    <Compile Include="Billing\ExchangeCarrierProfit.cs" />
+    <Compile Include="Billing\ExchangeCarriers.cs" />
     <Compile Include="Billing\MyInterpolation.cs" />
     <Compile Include="Billing\ProfitSummary.cs" />
     <Compile Include="Billing\SaleAmountSummary.cs" />
