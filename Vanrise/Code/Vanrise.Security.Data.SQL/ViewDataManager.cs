@@ -11,6 +11,12 @@ namespace Vanrise.Security.Data.SQL
 {
     public class ViewDataManager : BaseSQLDataManager, IViewDataManager
     {
+        public ViewDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
         public List<Entities.View> GetViews()
         {
             return GetItemsSP("sec.sp_View_GetAll", ViewMapper);

@@ -11,6 +11,12 @@ namespace Vanrise.Security.Data.SQL
 {
     public class PermissionDataManager : BaseSQLDataManager, IPermissionDataManager
     {
+        public PermissionDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
         public List<Entities.Permission> GetPermissions()
         {
             return GetItemsSP("sec.sp_Permission_GetAll", PermissionMapper);

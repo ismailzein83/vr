@@ -11,6 +11,10 @@ namespace Vanrise.Security.Data.SQL
 {
     public class BusinessEntityManager : BaseSQLDataManager, IBusinessEntityDataManager
     {
+        public BusinessEntityManager() : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
         public List<Entities.BusinessEntity> GetEntities()
         {
             return GetItemsSP("sec.sp_BusinessEntity_GetAll", EntityMapper);

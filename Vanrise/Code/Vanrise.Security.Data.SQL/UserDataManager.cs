@@ -11,6 +11,12 @@ namespace Vanrise.Security.Data.SQL
 {
     public class UserDataManager : BaseSQLDataManager, IUserDataManager
     {
+        public UserDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
         public List<Entities.User> GetFilteredUsers(int fromRow, int toRow, string name, string email)
         {
             return GetItemsSP("sec.sp_User_GetFiltered", UserMapper, fromRow, toRow, name, email);

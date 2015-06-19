@@ -12,6 +12,12 @@ namespace Vanrise.Security.Data.SQL
 {
     public class RoleDataManager : BaseSQLDataManager, IRoleDataManager
     {
+        public RoleDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
         public List<Entities.Role> GetFilteredRoles(int fromRow, int toRow, string name)
         {
             return GetItemsSP("sec.sp_Roles_GetFiltered", RoleMapper, fromRow, toRow, name);

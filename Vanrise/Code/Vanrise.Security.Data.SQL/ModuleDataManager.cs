@@ -10,6 +10,12 @@ namespace Vanrise.Security.Data.SQL
 {
     class ModuleDataManager : BaseSQLDataManager, IModuleDataManager
     {
+        public ModuleDataManager()
+            : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
+        {
+
+        }
+
         public List<Entities.Module> GetModules()
         {
             return GetItemsSP("sec.sp_Module_GetAll", ModuleMapper);
