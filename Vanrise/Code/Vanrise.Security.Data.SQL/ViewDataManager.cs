@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data.SQL
 {
@@ -23,7 +24,8 @@ namespace Vanrise.Security.Data.SQL
                 Name = reader["Name"] as string,
                 Url = reader["Url"] as string,
                 ModuleId = (int) reader["Module"],
-                RequiredPermissions = ((reader["RequiredPermissions"] as string) != null) ? Common.Serializer.Deserialize<Dictionary<string, List<string>>>(reader["RequiredPermissions"] as string) : null
+                RequiredPermissions = ((reader["RequiredPermissions"] as string) != null) ? Common.Serializer.Deserialize<Dictionary<string, List<string>>>(reader["RequiredPermissions"] as string) : null,
+                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null
             };
             return view;
         }

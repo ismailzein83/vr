@@ -108,7 +108,14 @@ namespace Vanrise.Security.Business
         public EffectivePermissionsWrapper GetEffectivePermissions(string token)
         {
             SecurityToken secToken = Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
+            RoleManager roleManager = new RoleManager();
+            List<int> groups = roleManager.GetUserRoles(secToken.UserId);
 
+            return this.GetEffectivePermissions(secToken, groups);
+        }
+
+        public EffectivePermissionsWrapper GetEffectivePermissions(SecurityToken secToken, List<int> subscribedGroupIds)
+        {
             //TODO: consider these are read from the cache
             PermissionManager permissionManager = new PermissionManager();
             List<Permission> permissionsRecords = permissionManager.GetPermissions();
@@ -121,13 +128,11 @@ namespace Vanrise.Security.Business
 
             List<Permission> userPermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.USER && x.HolderId == secToken.UserId.ToString());
             listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(userPermissions, businessEntityHierarchy));
-            
-            RoleManager roleManager = new RoleManager();
-            List<int> roles = roleManager.GetUserRoles(secToken.UserId);
 
-            foreach (int roleId in roles)
+
+            foreach (int groupId in subscribedGroupIds)
             {
-                List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == roleId.ToString());
+                List<Permission> rolePermissions = permissionsRecords.FindAll(x => x.HolderType == HolderType.ROLE && x.HolderId == groupId.ToString());
                 if (rolePermissions.Count > 0)
                     listOfAllPermissions.Add(this.ConvertPermissionsToPathDictionary(rolePermissions, businessEntityHierarchy));
             }

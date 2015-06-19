@@ -17,5 +17,14 @@ namespace Vanrise.Security.Entities
         public int ModuleId { get; set; }
 
         public Dictionary<string, List<string>> RequiredPermissions { get; set; }
+
+        public AudienceWrapper Audience { get; set; }
+    }
+
+    public class AudienceWrapper
+    {
+        public List<int> Users { get; set; }
+        
+        public List<int> Groups { get; set; }
     }
 }

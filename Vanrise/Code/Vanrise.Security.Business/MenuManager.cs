@@ -12,14 +12,20 @@ namespace Vanrise.Security.Business
     {
         public List<MenuItem> GetMenuItems(string token)
         {
+            SecurityToken secToken = Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
+            RoleManager roleManager = new RoleManager();
+            List<int> groups = roleManager.GetUserRoles(secToken.UserId);
+
             PermissionManager permmissionManager = new PermissionManager();
-            EffectivePermissionsWrapper effectivePermissionsWrapper = permmissionManager.GetEffectivePermissions(token);
+            EffectivePermissionsWrapper effectivePermissionsWrapper = permmissionManager.GetEffectivePermissions(secToken, groups);
 
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
             
             IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             List<View> views = viewDataManager.GetViews();
+
+            views = this.FilterViewsPerAudience(views, secToken, groups);
 
             List<MenuItem> retVal = new List<MenuItem>();
 
@@ -141,6 +147,44 @@ namespace Vanrise.Security.Business
             }
 
             return result;
+        }
+
+        private List<View> FilterViewsPerAudience(List<View> views, SecurityToken secToken, List<int> subscribedGroups)
+        {
+            List<View> filteredResults = new List<View>();
+            
+            foreach (View item in views)
+            {
+                if(item.Audience != null)
+                {
+                    //Check if the user is an audience then add the view; otherwise the view will not be in the filtered results
+                   if((item.Audience.Users != null && item.Audience.Users.Find(x => x == secToken.UserId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
+                       filteredResults.Add(item);
+                }
+                else
+                {
+                    //No audience rule then add the view direclty
+                    filteredResults.Add(item);
+                }
+            }
+
+            return filteredResults;
+        }
+
+        private bool isAudienceInSubscribedGroups(View view, List<int> subscribedGroups)
+        {
+            if (view.Audience.Groups != null)
+            {
+                foreach (int groupId in subscribedGroups)
+                {
+                    if (view.Audience.Groups.Find(x => x == groupId) != 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
         
     }
