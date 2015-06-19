@@ -23,7 +23,6 @@ namespace TOne.Analytics.Data.SQL
                 (supplierAMUId == 0) ? (object)DBNull.Value : supplierAMUId,
                 (customerAMUId == 0) ? (object)DBNull.Value : customerAMUId);
         }
-
         public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
             return GetItemsSP("Analytics.SP_Billing_GetZoneSummary", (reader) => ZoneSummaryMapper(reader, groupBySupplier),
@@ -40,7 +39,6 @@ namespace TOne.Analytics.Data.SQL
                groupBySupplier
                );
         }
-
         public List<ZoneSummaryDetailed> GetZoneSummaryDetailed(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, string currencyId, string supplierGroup, string customerGroup, int? customerAMUId, int? supplierAMUId, bool groupBySupplier)
         {
             return GetItemsSP("Analytics.SP_Billing_GetZoneSummaryDetailed", (reader) => ZoneSummaryDetailedMapper(reader, groupBySupplier),
@@ -57,7 +55,6 @@ namespace TOne.Analytics.Data.SQL
                groupBySupplier
                );
         }
-
         public List<MonthTraffic> GetMonthTraffic(DateTime fromDate, DateTime toDate, string carrierAccountID, bool isSale)
         {
             string query = String.Format(@"SELECT
@@ -90,7 +87,6 @@ namespace TOne.Analytics.Data.SQL
             });
 
         }
-
         public List<CarrierProfile> GetCarrierProfile(DateTime fromDate, DateTime toDate, string carrierAccountID, int TopDestinations, bool isSale, bool IsAmount)
         {
             int DaysInTillDays = DateTime.DaysInMonth(toDate.Year, toDate.Month);
@@ -138,7 +134,6 @@ namespace TOne.Analytics.Data.SQL
             });
 
         }
-
         public List<CarrierLost> GetCarrierLost(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int margin, int? supplierAMUId, int? customerAMUId)
         {
             return GetItemsSP("Analytics.SP_Billing_CarrierLostReport", CarrierLostMapper,
@@ -152,7 +147,6 @@ namespace TOne.Analytics.Data.SQL
             );
 
         }
-
         public List<CarrierSummaryDaily> GetDailyCarrierSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, bool isGroupedByDay, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_billing_DailyCarrierSummary", CarrierSummaryDailyMapper,
@@ -166,7 +160,6 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-
         public List<VariationReports> GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
         {
             string selectedReportQuery = GetVariationReportQuery(selectedDate, periodCount, timePeriod, variationReportOptions);
@@ -179,7 +172,6 @@ namespace TOne.Analytics.Data.SQL
              });
             else return new List<VariationReports>();
         }
-
         public List<BillingStatistic> GetBillingStatistics(DateTime fromDate, DateTime toDate)
         {
             string query = String.Format(@"SELECT TOP 100 * FROM Billing_Stats Where CallDate Between @FromDate AND @ToDate");
@@ -224,7 +216,6 @@ namespace TOne.Analytics.Data.SQL
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
               );
         }
-
         public List<DetailedCarrierSummary> GetCarrierDetailedSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
             return GetItemsSP("Analytics.SP_Billing_DetailedCarrierSummary", CarrierDetailedSummaryMapper,
@@ -236,7 +227,6 @@ namespace TOne.Analytics.Data.SQL
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
               );
         }
-
         public List<DailyForcasting> GetDailyForcasting(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
         {
 
@@ -245,6 +235,14 @@ namespace TOne.Analytics.Data.SQL
               toDate,
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
+        }
+        public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId) {
+
+            return GetItemsSP("Analytics.SP_Billing_ExchangeCarriersSummary", ExchangeCarriersMapper,
+           fromDate,
+           toDate,
+           (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+           (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
         }
 
         #region PrivatMethods
@@ -290,7 +288,6 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
-
         private ZoneSummary ZoneSummaryMapper(IDataReader reader, bool groupBySupplier)
         {
             ZoneSummary instance = new ZoneSummary
@@ -311,7 +308,6 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
-
         private ZoneSummaryDetailed ZoneSummaryDetailedMapper(IDataReader reader, bool groupBySupplier)
         {
             ZoneSummaryDetailed instance = new ZoneSummaryDetailed
@@ -339,7 +335,6 @@ namespace TOne.Analytics.Data.SQL
             }
             return instance;
         }
-
         private DailySummary DailySummaryMapper(IDataReader reader)
         {
             DailySummary instance = new DailySummary
@@ -353,7 +348,6 @@ namespace TOne.Analytics.Data.SQL
             };
             return instance;
         }
-
         private CarrierLost CarrierLostMapper(IDataReader reader)
         {
             CarrierLost instance = new CarrierLost
@@ -370,7 +364,6 @@ namespace TOne.Analytics.Data.SQL
 
             return instance;
         }
-
         private MonthTraffic MonthMapper(IDataReader reader)
         {
             MonthTraffic instance = new MonthTraffic
@@ -382,7 +375,6 @@ namespace TOne.Analytics.Data.SQL
 
             return instance;
         }
-
         private ZoneProfitFormatted MapZoneProfit(ZoneProfit zoneProfit)
         {
             return new ZoneProfitFormatted
@@ -415,7 +407,6 @@ namespace TOne.Analytics.Data.SQL
 
             };
         }
-
         private List<ZoneProfitFormatted> MapZoneProfits(List<ZoneProfit> zoneProfits)
         {
             List<ZoneProfitFormatted> models = new List<ZoneProfitFormatted>();
@@ -426,7 +417,6 @@ namespace TOne.Analytics.Data.SQL
                 }
             return models;
         }
-
         private BillingStatistic BillingStatisticsMapper(IDataReader reader)
         {
 
@@ -463,7 +453,6 @@ namespace TOne.Analytics.Data.SQL
 
             return instance;
         }
-
         private VariationReports VariationReportsMapper(IDataReader reader)
         {
 
@@ -480,7 +469,6 @@ namespace TOne.Analytics.Data.SQL
 
             return instance;
         }
-
         private CarrierSummaryDaily CarrierSummaryDailyMapper(IDataReader reader)
         {
 
@@ -534,7 +522,6 @@ namespace TOne.Analytics.Data.SQL
 
 
         }
-
         private DetailedCarrierSummary CarrierDetailedSummaryMapper(IDataReader reader)
         {
             return new DetailedCarrierSummary
@@ -560,7 +547,6 @@ namespace TOne.Analytics.Data.SQL
             };
 
         }
-
         private DailyForcasting DailyForcastingMapper(IDataReader reader)
         {
             return new DailyForcasting
@@ -572,6 +558,17 @@ namespace TOne.Analytics.Data.SQL
             };
 
         }
+        private ExchangeCarriers ExchangeCarriersMapper(IDataReader reader)
+        {
+            return new ExchangeCarriers
+            {
+                CustomerID = reader["CustomerID"] as string,
+                CustomerProfit = GetReaderValue<double>(reader, "CustomerProfit"),
+                SupplierProfit = GetReaderValue<double>(reader, "SupplierProfit")
+
+            };
+        }
+
         #endregion
 
         #region ConstantVariableRegion
