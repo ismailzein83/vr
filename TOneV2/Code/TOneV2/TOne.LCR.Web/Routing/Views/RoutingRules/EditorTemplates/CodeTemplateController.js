@@ -10,7 +10,15 @@ var CodeController = function ($scope, $http) {
         $scope.codeInpute = '';
     }
     function defineScopeMethods() {
+        var numberReg = /^\d+$/;
+        $scope.isNumber = function (s) {
+            return String(s).search(numberReg) != -1
+        };
 
+        $scope.muteAction =  function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         $scope.getCodes = function () {
             var label = '';
             if ($scope.codeList.length == 0)
@@ -37,8 +45,6 @@ var CodeController = function ($scope, $http) {
             }
         }
         $scope.addCode = function (e) {
-            e.preventDefault();
-            e.stopPropagation();
             var valid = $scope.isNumber($scope.codeInpute);
             if (valid) {
                 var index = null;
@@ -83,7 +89,27 @@ var CodeController = function ($scope, $http) {
         $('#CodeListddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
+        $('div[id="CodeListddl"]').on('click', '.dropdown-toggle', function (event) {
 
+            var self = $(this);
+            var selfHeight = $(this).parent().height();
+            var selfWidth = $(this).parent().width();
+            var selfOffset = $(self).offset();
+            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+            var dropDown = self.parent().find('ul');
+            $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+        });
+
+        var fixDropdownPosition = function () {
+            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+            $('.drop-down-inside-modal').removeClass("open");
+
+        };
+
+        $(".modal-body").unbind("scroll");
+        $(".modal-body").scroll(function () {
+            fixDropdownPosition();
+        });
         if ($scope.routeRule != null && $scope.routeRule.CodeSet.Code != null && $scope.routeRule.CodeSet.$type == 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities') {
             $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
             $scope.code = $scope.routeRule.CodeSet.Code;

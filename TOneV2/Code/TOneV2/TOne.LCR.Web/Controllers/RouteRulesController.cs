@@ -16,17 +16,25 @@ namespace TOne.LCR.Web.Controllers
     public class RouteRulesController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public RouteRuleSummaryModel SaveRouteRule(RouteRule rule)
+        public TOne.Entities.InsertOperationOutput<RouteRuleSummaryModel> InsertRouteRule(RouteRule rule)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            return Mappers.MapRouteRule(manager.SaveRouteRule(rule));
+            TOne.Entities.InsertOperationOutput<RouteRule> insertedRule = manager.InsertRouteRule(rule);
+            TOne.Entities.InsertOperationOutput<RouteRuleSummaryModel> routeRuleSummaryModel = new TOne.Entities.InsertOperationOutput<RouteRuleSummaryModel>();
+            routeRuleSummaryModel.InsertedObject = Mappers.MapRouteRule(insertedRule.InsertedObject);
+            routeRuleSummaryModel.Result = insertedRule.Result;
+            return routeRuleSummaryModel;
         }
 
         [HttpPost]
-        public RouteRuleSummaryModel UpdateRouteRule(RouteRule rule)
+        public TOne.Entities.UpdateOperationOutput<RouteRuleSummaryModel> UpdateRouteRule(RouteRule rule)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            return Mappers.MapRouteRule(manager.UpdateRouteRule(rule));
+            TOne.Entities.UpdateOperationOutput<RouteRule> updatedRule = manager.UpdateRouteRule(rule);
+            TOne.Entities.UpdateOperationOutput<RouteRuleSummaryModel> routeRuleSummaryModel = new TOne.Entities.UpdateOperationOutput<RouteRuleSummaryModel>();
+            routeRuleSummaryModel.UpdatedObject = Mappers.MapRouteRule(updatedRule.UpdatedObject);
+            routeRuleSummaryModel.Result = updatedRule.Result;
+            return routeRuleSummaryModel;
         }
 
         [HttpPost]

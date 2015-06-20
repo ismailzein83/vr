@@ -8,8 +8,8 @@ namespace TOne.LCR.Entities.Routing
 {
     public class RouteDetailFilter
     {
-        public List<string> CustomerIds { get; set; }
-        public List<int> ZoneIds { get; set; }
-        public List<string> Code { get; set; }
+        public IEnumerable<string> CustomerIds { get; set; }
+        public IEnumerable<int> ZoneIds { get; set; }
+        public string Code { get; set; }
     }
 }

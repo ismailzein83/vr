@@ -25,11 +25,10 @@ namespace TOne.LCR.Data.SQL
             StringBuilder filterQuery = new StringBuilder();
             RouteDetailFilter filter = new RouteDetailFilter()
             {
-                Code = new List<string>(),
-                CustomerIds = customerIds.ToList(),
-                ZoneIds = zoneIds.ToList()
+                Code = code,
+                CustomerIds = customerIds,
+                ZoneIds = zoneIds
             };
-            filter.Code.Add(code);
             AddFilterToQuery(filter, filterQuery);
             return GetPagedItemsText<RouteDetail>(string.Format(query_GetRoutes, filterQuery.ToString()), RouteDetailMapper, null, fromRow, toRow, isDescending, orderBy);
         }
@@ -45,11 +44,19 @@ namespace TOne.LCR.Data.SQL
             }
         }
 
+        void AddCodeFilter(StringBuilder whereBuilder, string code, string column)
+        {
+
+            if (!string.IsNullOrEmpty(code))
+                whereBuilder.AppendFormat("AND {0} like ('{1}')", column, code);
+
+        }
+
         private void AddFilterToQuery(RouteDetailFilter filter, StringBuilder whereBuilder)
         {
 
             AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
-            AddFilter(whereBuilder, filter.Code, "Code");
+            AddCodeFilter(whereBuilder, filter.Code, "Code");
             AddFilter(whereBuilder, filter.ZoneIds, "OurZoneID");
         }
 
@@ -76,6 +83,37 @@ namespace TOne.LCR.Data.SQL
                 }
             }
             return str.ToString();
+        }
+
+        RouteOptions DeSerialize2(string routeOptions)
+        {
+            RouteOptions options = null;
+            List<string> arrayOptions = routeOptions.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
+            if (arrayOptions.Count > 0)
+            {
+                options = new RouteOptions();
+                options.SupplierOptions = new List<RouteSupplierOption>();
+                foreach (var option in arrayOptions)
+                {
+                    string[] optionParts = option.Split('~');
+                    string supplierId = optionParts[0];
+                    int zoneId = string.IsNullOrEmpty(optionParts[1]) ? 0 : Convert.ToInt32(optionParts[1]);
+                    decimal rate = string.IsNullOrEmpty(optionParts[2]) ? 0 : Convert.ToDecimal(optionParts[2]);
+                    short percentage = string.IsNullOrEmpty(optionParts[3]) ? (short)0 : Convert.ToInt16(optionParts[3]);
+                    int priority = string.IsNullOrEmpty(optionParts[4]) ? 0 : Convert.ToInt16(optionParts[4]);
+                    bool isBlocked = string.IsNullOrEmpty(optionParts[5]) ? false : Convert.ToBoolean(optionParts[5]);
+                    short serviceFlag = string.IsNullOrEmpty(optionParts[6]) ? (short)0 : Convert.ToInt16(optionParts[6]);
+                    RouteSupplierOption supplierOption = new RouteSupplierOption(supplierId, zoneId, rate, serviceFlag);
+
+                    supplierOption.Setting = new OptionSetting();
+                    supplierOption.Setting.Percentage = percentage;
+                    supplierOption.Setting.Priority = priority;
+                    supplierOption.Setting.IsBlocked = isBlocked;
+                    options.SupplierOptions.Add(supplierOption);
+
+                }
+            }
+            return options;
         }
 
         public object InitialiazeStreamForDBApply()
@@ -120,8 +158,8 @@ namespace TOne.LCR.Data.SQL
                    CustomerID = reader["CustomerID"] as string,
                    Rate = GetReaderValue<decimal>(reader, "OurActiveRate"),
                    SaleZoneId = GetReaderValue<int>(reader, "OurZoneId"),
-                   ServicesFlag = GetReaderValue<short>(reader, "OurServicesFlag")//,
-                   //Options = reader["Options"] != null ? (RouteOptions)Serializer.Deserialize<RouteOptions>(reader["Options"] as string) : null
+                   ServicesFlag = GetReaderValue<short>(reader, "OurServicesFlag"),
+                   Options = reader["Options"] != null ? DeSerialize2(reader["Options"] as string) : null
                };
 
         }
@@ -176,11 +214,11 @@ namespace TOne.LCR.Data.SQL
 
         const string query_GetRoutes = @"Select r.CustomerId,
                                                 r.Code,
-                                                r.SaleZoneId,
+                                                r.OurZoneID,
                                                 r.OurActiveRate,
-                                                r.ServicesFlag,
+                                                r.OurServicesFlag,
                                                 r.Options
-                                                From Route where 1 = 1  {0}";
+                                                From [Route] r where 1 = 1  {0}";
 
         const string query_UpdateRoutes = @"
                                             UPDATE r

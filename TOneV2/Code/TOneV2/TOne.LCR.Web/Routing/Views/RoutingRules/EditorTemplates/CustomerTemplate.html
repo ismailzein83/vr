@@ -1,25 +1,29 @@
 ﻿<div ng-controller="RoutingRules_CustomerTemplateController">
-    <vr-columns colnum="2">
-        <div class="dropdown dropdown-custom " id="dropdownMenuddl">
-            <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" ng-style="carrierAccountSelectionOption==2?{'color':'#D44A47'}:''" type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption'>
-                {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
-                <span class="caret-rigth-sm indicator"></span>
-            </label>
-            <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-label" role="menu" aria-labelledby="dropdownMenuCu">
-                <li role="presentation" ng-show="carrierAccountSelectionOption != 1">
-                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 1">Customers</label>
-                </li>
-                <li role="presentation" ng-show="carrierAccountSelectionOption != 2">
-                    <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 2 ;s={'color':'red'} ">All Customers Except</label>
-                </li>
-            </ul>
-        </div>
-    </vr-columns>
+    <vr-row>
+        <vr-columns colnum="4">
+            <div class="dropdown dropdown-custom " id="dropdownMenuddl">
 
-    <vr-columns colnum="2">
+                <label class="dropdown-toggle hand-cursor" style="padding-top: 6px" ng-style="carrierAccountSelectionOption==2?{'color':'#D44A47'}:''" type="button" id="dropdownMenuCu" data-toggle="dropdown" aria-expanded="true" ng-model='carrierAccountSelectionOption'>
+                    {{carrierAccountSelectionOption == 1 ? "  Customers: " : "  All Customers Except:"}}
+                    <span class="caret-rigth-sm indicator"></span>
+                </label>
 
-        <vr-select ismultipleselection isrequired datasource="optionsCustomers.datasource" selectedvalues="optionsCustomers.selectedvalues" datatextfield="Name" datavaluefield="CarrierAccountID"
-                   entityname="Customers"></vr-select>
+                <ul class="dropdown-menu dropdown-menu-custom dropdown-menu-label" role="menu" aria-labelledby="dropdownMenuCu">
+                    <li role="presentation" ng-show="carrierAccountSelectionOption != 1">
+                        <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 1">Customers</label>
+                    </li>
+                    <li role="presentation" ng-show="carrierAccountSelectionOption != 2">
+                        <label class="item-menu hand-cursor" ng-click="carrierAccountSelectionOption = 2 ;s={'color':'red'} ">All Customers Except</label>
+                    </li>
+                </ul>
+            </div>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns colnum="4">
 
-    </vr-columns>
+            <vr-select ismultipleselection isrequired datasource="customers" selectedvalues="selectedCustomers" datatextfield="Name" datavaluefield="CarrierAccountID"
+                       entityname="Customers"></vr-select>
+        </vr-columns>
+    </vr-row>
 </div>

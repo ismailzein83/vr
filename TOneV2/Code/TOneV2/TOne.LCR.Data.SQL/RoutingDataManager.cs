@@ -140,7 +140,8 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [OurZoneID] [int] NULL,
 	                                                    [OurActiveRate] [decimal](18,5) NULL,
 	                                                    [OurServicesFlag] [smallint] NULL,
-	                                                    [Options] varchar(500)
+	                                                    [Options] varchar(1000),
+                                                        [timestamp] timestamp
                                                     )
 
                                                     CREATE TYPE [dbo].[SuppliersCodeInfoType] AS TABLE(

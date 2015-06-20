@@ -2,7 +2,7 @@
 var RoutingRulesAPIService = function (BaseAPIService) {
     return ({
         getRouteRuleDetails: getRouteRuleDetails,
-        SaveRouteRule: SaveRouteRule,
+        InsertRouteRule: InsertRouteRule,
         GetFilteredRouteRules: GetFilteredRouteRules,
         UpdateRouteRule: UpdateRouteRule
     });
@@ -12,9 +12,9 @@ var RoutingRulesAPIService = function (BaseAPIService) {
                 RouteRuleId: RouteRuleId
             });
     }
-    function SaveRouteRule(routeRule) {
+    function InsertRouteRule(routeRule) {
 
-        return BaseAPIService.post("/api/RouteRules/SaveRouteRule", routeRule);
+        return BaseAPIService.post("/api/RouteRules/InsertRouteRule", routeRule);
     }
     function UpdateRouteRule(routeRule) {
         return BaseAPIService.post("/api/RouteRules/UpdateRouteRule", routeRule);

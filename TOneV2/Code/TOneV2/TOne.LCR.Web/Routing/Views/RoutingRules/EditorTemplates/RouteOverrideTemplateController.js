@@ -1,5 +1,5 @@
 ﻿appControllers.controller('RoutingRules_RouteOverrideTemplateController',
-    function RouteOverrideController($scope, $http, CarriersService, RoutingRulesTemplatesEnum, UtilsService) {
+    function RouteOverrideController($scope, $http, CarrierAPIService, RoutingRulesTemplatesEnum, UtilsService, CarrierTypeEnum) {
 
         defineScope();
         load();
@@ -19,7 +19,7 @@
                 $event.stopPropagation();
                 var index = null;
                 try {
-                    var index = UtilsService.getItemByVal($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
+                    var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
                 }
                 catch (e) {
 
@@ -34,7 +34,7 @@
         }
 
         function load() {
-            CarriersService.getSuppliers()
+            CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value)
            .then(function (response) {
                $scope.suppliers = response;
                var tab = [];

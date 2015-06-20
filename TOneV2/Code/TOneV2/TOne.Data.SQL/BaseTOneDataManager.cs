@@ -48,14 +48,14 @@ namespace TOne.Data.SQL
 	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", cmdText, orderBy, isDescending ? "DESC" : "ASC");
             List<T> lst = new List<T>();
 
-            GetItemsText<T>(query, objectBuilder,
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
-                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                    if (prepareCommand != null)
-                        prepareCommand(cmd);
-                });
+            lst = GetItemsText<T>(query, objectBuilder,
+                  (cmd) =>
+                  {
+                      cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
+                      cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
+                      if (prepareCommand != null)
+                          prepareCommand(cmd);
+                  });
             return lst;
         }
     }

@@ -80,7 +80,27 @@
         $('#CodeListddl').on('hide.bs.dropdown', function (e) {
             $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         });
-       
+        $('div[id="CodeListddl"]').on('click', '.dropdown-toggle', function (event) {
+
+            var self = $(this);
+            var selfHeight = $(this).parent().height();
+            var selfWidth = $(this).parent().width();
+            var selfOffset = $(self).offset();
+            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+            var dropDown = self.parent().find('ul');
+            $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
+        });
+
+        var fixDropdownPosition = function () {
+            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+            $('.drop-down-inside-modal').removeClass("open");
+
+        };
+
+        $(".modal-body").unbind("scroll");
+        $(".modal-body").scroll(function () {
+            fixDropdownPosition();
+        });
         $scope.getCodes = function () {
             var label = '';
             if ($scope.codeList.length == 0)
@@ -134,6 +154,16 @@
             e.stopPropagation();
             var index = $scope.codeList.indexOf(s);
             $scope.codeList.splice(index, 1);
+        }
+
+        var numberReg = /^\d+$/;
+        $scope.isNumber = function (s) {
+            return String(s).search(numberReg) != -1
+        };
+
+        $scope.muteAction = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
         }
        
     });

@@ -10,9 +10,9 @@ namespace TOne.LCR.Data
     public interface IRouteRulesDataManager : IDataManager
     {
 
-        RouteRule SaveRouteRule(RouteRule rule);
+        bool InsertRouteRule(RouteRule rule, out int insertedId);
 
-        RouteRule UpdateRouteRule(RouteRule rule);
+        bool UpdateRouteRule(RouteRule rule);
 
         List<RouteRule> GetAllRouteRule();
 

@@ -42,16 +42,41 @@ namespace TOne.LCR.Business
             return _routeOptionActionExecutionPath;
         }
 
-        public RouteRule SaveRouteRule(RouteRule rule)
+        public TOne.Entities.InsertOperationOutput<RouteRule> InsertRouteRule(RouteRule rule)
         {
+
+            TOne.Entities.InsertOperationOutput<RouteRule> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RouteRule>();
+
+            int ruleId = -1;
+
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
-            return dataManager.SaveRouteRule(rule);
+            bool insertActionSucc = dataManager.InsertRouteRule(rule, out ruleId);
+
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                rule.RouteRuleId = ruleId;
+                insertOperationOutput.InsertedObject = rule;
+            }
+            else
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            return insertOperationOutput;
         }
 
-        public RouteRule UpdateRouteRule(RouteRule rule)
+        public TOne.Entities.UpdateOperationOutput<RouteRule> UpdateRouteRule(RouteRule rule)
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
-            return dataManager.UpdateRouteRule(rule);
+            TOne.Entities.UpdateOperationOutput<RouteRule> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RouteRule>();
+            bool updateActionSucc = dataManager.UpdateRouteRule(rule);
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = rule;
+            }
+            else
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            return updateOperationOutput;
         }
 
         public List<RouteRule> GetAllRouteRule()
@@ -124,7 +149,8 @@ namespace TOne.LCR.Business
 
                         return true;
                     };
-                rules = rules.Where(filter).Take(10);
+
+                rules = fromRow == 1 ? rules.Where(filter).Take(toRow) : rules.Where(filter).Skip(fromRow - 1).Take(toRow - fromRow + 1);
             }
             return rules;
         }

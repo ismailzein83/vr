@@ -4,10 +4,7 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
     var sortColumn;
     var resultKey;
     var sortDescending = true;
-    var sortDescending = true;
     defineScope();
-
-
     load();
 
     function load() {
@@ -86,7 +83,6 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         };
         VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', null, modalSettings);
     }
-
 
     function editRule(ruleObj) {
         var modalSettings = {

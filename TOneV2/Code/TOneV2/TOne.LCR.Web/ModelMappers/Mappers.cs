@@ -13,6 +13,7 @@ namespace TOne.LCR.Web.ModelMappers
         public static RouteRuleSummaryModel MapRouteRule(RouteRule route)
         {
             BusinessEntity.Business.BusinessEntityInfoManager beManager = new BusinessEntity.Business.BusinessEntityInfoManager();
+
             return new RouteRuleSummaryModel
             {
                 RouteRuleId = route.RouteRuleId,
@@ -49,8 +50,29 @@ namespace TOne.LCR.Web.ModelMappers
                 SaleZoneId = routeDetail.SaleZoneId,
                 ZoneName = infoManager.GetZoneName(routeDetail.SaleZoneId),
                 ServicesFlag = routeDetail.ServicesFlag,
-                CustomerName = infoManager.GetCarrirAccountName(routeDetail.CustomerID)
+                CustomerName = infoManager.GetCarrirAccountName(routeDetail.CustomerID),
+                Options = routeDetail.Options == null ? null : MapOptions(routeDetail.Options)
             };
+        }
+
+        private static List<OptionsModel> MapOptions(RouteOptions routeOptions)
+        {
+            BusinessEntityInfoManager infoManager = new BusinessEntityInfoManager();
+            List<OptionsModel> optionsModel = new List<OptionsModel>();
+            foreach (RouteSupplierOption option in routeOptions.SupplierOptions)
+            {
+                optionsModel.Add(
+                    new OptionsModel()
+                    {
+                        Supplier = infoManager.GetCarrirAccountName(option.Info.SupplierId),
+                        Rate = option.Info.Rate,
+                        ServicesFlag = option.Info.ServicesFlag,
+                        IsBlocked = option.Setting.IsBlocked,
+                        Percentage = option.Setting.Percentage.HasValue ? option.Setting.Percentage.Value : (short)0,
+                        Priority = option.Setting.Priority
+                    });
+            }
+            return optionsModel;
         }
 
         public static IEnumerable<RouteDetailModel> MapRouteDetails(IEnumerable<RouteDetail> routes)

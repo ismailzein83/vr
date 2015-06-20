@@ -14,5 +14,7 @@ namespace TOne.LCR.Web.Models
         public short ServicesFlag { get; set; }
         public string Code { get; set; }
         public string ZoneName { get; set; }
+        public List<OptionsModel> Options { get; set; }
+
     }
 }

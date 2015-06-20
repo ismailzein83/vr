@@ -1,19 +1,17 @@
 ﻿
-var CustomerController = function ($scope, $http, CarriersService, UtilsService) {
+var CustomerController = function ($scope, $http, CarrierAPIService, UtilsService, CarrierTypeEnum) {
 
     defineScopeObjects();
     defineScopeMethods();
     load();
     function defineScopeObjects() {
-        $scope.optionsCustomers = {
-            selectedvalues: [],
-            datasource: []
-        };
+        $scope.customers = [];
+        $scope.selectedCustomers = [];
     }
     function defineScopeMethods() {
 
         $scope.isvalidCompCus = function () {
-            return ($scope.optionsCustomers.selectedvalues.length > 0) ? "" : "required-inpute";
+            return ($scope.selectedCustomers.length > 0) ? "" : "required-inpute";
         }
 
         $scope.initErrortooltip = function () {
@@ -37,7 +35,7 @@ var CustomerController = function ($scope, $http, CarriersService, UtilsService)
         }
         $scope.getSelectedValues = function () {
             var tab = [];
-            $.each($scope.optionsCustomers.selectedvalues, function (i, value) {
+            $.each($scope.selectedCustomers, function (i, value) {
                 tab[i] = value.CarrierAccountID;
 
             });
@@ -73,17 +71,17 @@ var CustomerController = function ($scope, $http, CarriersService, UtilsService)
             }, 150);
         });
 
-        CarriersService.getCustomers().then(function (response) {
-            $scope.optionsCustomers.datasource = response;
+        CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
+            $scope.customers = response;
             if ($scope.routeRule != null) {
                 var tab = [];
                 $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-                    var existobj = UtilsService.getItemByVal($scope.optionsCustomers.datasource, value, 'CarrierAccountID')
+                    var existobj = UtilsService.getItemByVal($scope.customers, value, 'CarrierAccountID');
                     if (existobj != null)
                         tab[i] = existobj;
 
                 });
-                $scope.optionsCustomers.selectedvalues = tab;
+                $scope.selectedCustomers = tab;
                 $scope.carrierAccountSelectionOption = $scope.routeRule.CarrierAccountSet.Customers.SelectionOption;
             }
             else {
@@ -94,6 +92,6 @@ var CustomerController = function ($scope, $http, CarriersService, UtilsService)
     }
 
 }
-CustomerController.$inject = ['$scope', '$http', 'CarriersService'];
+CustomerController.$inject = ['$scope', '$http', 'CarrierAPIService', 'UtilsService', 'CarrierTypeEnum'];
 appControllers.controller('RoutingRules_CustomerTemplateController', CustomerController)
 

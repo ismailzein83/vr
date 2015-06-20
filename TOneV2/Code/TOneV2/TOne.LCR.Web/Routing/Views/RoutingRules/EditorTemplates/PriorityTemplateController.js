@@ -1,5 +1,5 @@
 ﻿appControllers.controller('RoutingRules_PriorityTemplateController',
-    function PriorityController($scope, $http, CarriersService, RoutingRulesTemplatesEnum, UtilsService) {
+    function PriorityController($scope, $http, CarrierAPIService, RoutingRulesTemplatesEnum, UtilsService, CarrierTypeEnum) {
 
         defineScope();
         load();
@@ -31,7 +31,7 @@
 
         function load() {
 
-            CarriersService.getSuppliers()
+            CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value)
                 .then(function (response) {
                     $scope.suppliers = response;
                     $scope.selectedSuppliers.length = 0;
@@ -60,7 +60,7 @@
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                var index = UtilsService.getItemByVal($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
+                var index = UtilsService.getItemIndexByVal($scope.selectedSuppliers, s.CarrierAccountID, 'CarrierAccountID');
 
                 if (index >= 0) {
                     $scope.selectedSuppliers.splice(index, 1);

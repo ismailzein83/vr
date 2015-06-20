@@ -3,59 +3,86 @@
 
         <vr-form name="formRouteRuleEditor">
             <vr-row>
-                <vr-columns colnum="2">
-                    <vr-select label="Rule Type:" datatextfield="name" datavaluefield="objectType" isrequired
-                               onselectionchanged="onchangeRouteRule" datasource="ruleTypes" selectedvalues="selectedRuleType"></vr-select>
-
-                </vr-columns>
-
-            </vr-row>
-            <vr-row>
-                <vr-select type="menu" datatextfield="name" datavaluefield="name"
-                           onselectionchanged="update2" datasource="customerSets" selectedvalues="selectedCustomerSet"></vr-select>
-                <div ng-include src="selectedCustomerSet.url">
-                </div>
-            </vr-row>
-            <vr-row>
-                <vr-select type="menu" datatextfield="name" datavaluefield="name"
-                           datasource="codeSets" selectedvalues="selectedCodeSet" onselectionchanged="onchangeEditorType"></vr-select>
-
-                <div ng-include src=" selectedCodeSet.url">
-                </div>
-            </vr-row>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <vr-row removeline>
-                        <vr-columns colnum="6" colnumsm="4">
-                            <vr-datetimepicker label="Begin Effective Date:" type="date" value="BEDDate" isrequired></vr-datetimepicker>
-                        </vr-columns>
-                    </vr-row>
-                </vr-columns>
-                <vr-columns colnum="4">
-                    <vr-row removeline>
-                        <vr-columns colnum="6" colnumsm="4">
-                            <vr-datetimepicker label="End Effective Date:" type="date" value="EEDDate"></vr-datetimepicker>
-                        </vr-columns>
-                    </vr-row>
+                <vr-columns colnum="6">
+                    <vr-choices on-ready="choicesRuleTypeReady">
+                        <vr-choice isselected="choiceRuleDefinitionSelected">Rule Definition</vr-choice>
+                        <vr-choice isselected="choiceCarrierSetSelected">Carrier Set</vr-choice>
+                        <vr-choice isselected="choiceDestinationSelected">Destination</vr-choice>
+                        <vr-choice isselected="choiceScheduleSelected">Schedule Setting</vr-choice>
+                    </vr-choices>
                 </vr-columns>
             </vr-row>
+            <div ng-show="choiceRuleDefinitionSelected">
+                <vr-row>
+                    <vr-columns colnum="2">
+                        <vr-select label="Rule Type:" datatextfield="name" datavaluefield="objectType" isrequired
+                                   onselectionchanged="onchangeRouteRule" datasource="ruleTypes" selectedvalues="selectedRuleType"></vr-select>
 
-            <vr-row ng-show="selectedRuleType  && selectedRuleType.name != 'Block Route' && selectedRuleType.url!='' ">
-                <div class="col-lg-12 ">
-                    <h4>{{selectedRuleType.name}} Details:</h4>
-                </div>
-                <div style="min-height:70px" ng-include src="selectedRuleType.url">
+                    </vr-columns>
+                </vr-row>
+                <vr-row ng-show="selectedRuleType  && selectedRuleType.name != 'Block Route' && selectedRuleType.url!='' ">
+                    <div class="col-lg-12 ">
+                        <h4>{{selectedRuleType.name}} Details:</h4>
+                    </div>
+                    <div style="min-height:70px" ng-include src="selectedRuleType.url">
 
-                </div>
-            </vr-row>
-            <vr-row removeline>
-                <vr-columns colnum="12">
-                    <vr-label>Reason:</vr-label>
-                    <textarea class="form-control" ng-model="Reason" />
-                </vr-columns>
-            </vr-row>
+                    </div>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns colnum="12">
+                        <vr-label>Reason:</vr-label>
+                        <textarea class="form-control" ng-model="Reason" />
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <div ng-show="choiceCarrierSetSelected">
+                <vr-row>
+                    <vr-columns column="6">
+                        <vr-select datatextfield="name" datavaluefield="name"
+                                   onselectionchanged="update2" datasource="customerSets" selectedvalues="selectedCustomerSet"></vr-select>
+                    </vr-columns>
+
+                </vr-row>
+                <vr-row>
+                    <div ng-include src="selectedCustomerSet.url">
+                    </div>
+                </vr-row>
+            </div>
+            <div ng-show="choiceDestinationSelected">
+                <vr-row>
+                    <vr-columns column="6">
+                        <vr-select datatextfield="name" datavaluefield="name"
+                                   datasource="codeSets" selectedvalues="selectedCodeSet" onselectionchanged="onchangeEditorType"></vr-select>
+                    </vr-columns>
+
+                </vr-row>
+
+                <vr-row>
+                    <div ng-include src=" selectedCodeSet.url">
+                    </div>
+
+                </vr-row>
+            </div>
+
+            <div ng-show="choiceScheduleSelected">
+                <vr-row>
+                    <vr-columns colnum="4">
+                        <vr-row removeline>
+                            <vr-columns colnum="6" colnumsm="4">
+                                <vr-datetimepicker label="Begin Effective Date:" type="date" value="BEDDate" isrequired></vr-datetimepicker>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-columns>
+                    <vr-columns colnum="4">
+                        <vr-row removeline>
+                            <vr-columns colnum="6" colnumsm="4">
+                                <vr-datetimepicker label="End Effective Date:" type="date" value="EEDDate"></vr-datetimepicker>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-columns>
+                </vr-row>
+            </div>
         </vr-form>
-
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
@@ -65,4 +92,5 @@
             </div>
         </vr-actionbar>
     </div>
+
 </vr-modalcontent>

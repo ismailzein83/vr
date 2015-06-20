@@ -25,29 +25,28 @@ namespace TOne.LCR.Data.SQL
             return GetItemSP("[LCR].[sp_RouteRuleDefinition_GetByRouteRuleId]", RouteRuleMapper, RouteRuleId);
         }
 
-        public RouteRule SaveRouteRule(RouteRule rule)
+        public bool InsertRouteRule(RouteRule rule, out int insertedId)
         {
-            int id;
-
             object RouteRuleId;
-            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
-              rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
-              rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
-              (int)rule.Type,
-              rule.BeginEffectiveDate,
-              rule.EndEffectiveDate,
-              rule.Reason,
-              rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
-              );
-            id = (int)RouteRuleId;
-
-            return GetRouteRuleDetails(id);
+            int recordesEffected = ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
+                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+                (int)rule.Type,
+                rule.BeginEffectiveDate,
+                rule.EndEffectiveDate,
+                rule.Reason,
+                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
+                );
+            insertedId = (int)RouteRuleId;
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
 
-        public RouteRule UpdateRouteRule(RouteRule rule)
+        public bool UpdateRouteRule(RouteRule rule)
         {
-            int id;
-            ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Update]",
+
+            int recordesEffected = ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Update]",
                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
                (int)rule.Type,
@@ -57,8 +56,9 @@ namespace TOne.LCR.Data.SQL
                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null,
                rule.RouteRuleId
            );
-            id = rule.RouteRuleId;
-            return GetRouteRuleDetails(id);
+            if (recordesEffected > 0)
+                return true;
+            return false;
         }
 
         #region Private Methods

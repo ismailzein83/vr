@@ -2,11 +2,11 @@
 var RoutingAPIService = function (BaseAPIService) {
 
     return ({
-        GetRoutes: GetFilteredRoutes
+        GetRoutes: GetRoutes
     });
 
-    function GetFilteredRoutes(filter) {
-        return BaseAPIService.post("/api/routing/GetRoutes", filter);
+    function GetRoutes(input) {
+        return BaseAPIService.post("/api/Routing/GetRoutes", input);
     }
 
 }
