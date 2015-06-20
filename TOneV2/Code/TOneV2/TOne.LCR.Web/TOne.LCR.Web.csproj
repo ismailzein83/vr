@@ -120,9 +120,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Routing\Views\Management\EditorTemplates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Controllers\RouteRulesController.cs" />
     <Compile Include="Controllers\RoutingController.cs" />
@@ -156,16 +154,6 @@
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplate.html" />
-    <Content Include="Routing\Views\Management\RatePlanning.html" />
-    <Content Include="Routing\Views\Management\RatePlanningController.js" />
-    <Content Include="Routing\Views\Management\RouteDetailGrid.html" />
-    <Content Include="Routing\Views\Management\RouteDetailGridController.js" />
-    <Content Include="Routing\Views\Management\RouteRuleEditor.html" />
-    <Content Include="Routing\Views\Management\RouteRuleEditorController.js" />
-    <Content Include="Routing\Views\Management\RouteManager.html" />
-    <Content Include="Routing\Views\Management\RouteRuleManager.html" />
-    <Content Include="Routing\Views\Management\RouteManagerController.js" />
-    <Content Include="Routing\Views\Management\RouteRuleManagerController.js" />
     <Content Include="Routing\Views\RoutingRules\RouteRuleEditor.html" />
     <Content Include="Routing\Views\RoutingRules\RouteRuleEditorController.js" />
     <Content Include="Routing\Views\RoutingRules\RoutingRulesManagement.html" />
