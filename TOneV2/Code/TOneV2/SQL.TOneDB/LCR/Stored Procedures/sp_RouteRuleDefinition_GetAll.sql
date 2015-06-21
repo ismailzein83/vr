@@ -10,5 +10,6 @@ SELECT [RouteRuleId]
       ,[BeginEffectiveDate]
       ,[EndEffectiveDate]
       ,[Reason]
+	  ,[TimeExecutionSetting]
   FROM [LCR].[RouteRuleDefinition]
 END

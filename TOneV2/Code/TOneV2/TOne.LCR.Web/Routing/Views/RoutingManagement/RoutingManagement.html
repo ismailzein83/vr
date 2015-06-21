@@ -48,13 +48,20 @@
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'">
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Options'" field="'Options'">
+                    <vr-datagridcolumn headertext="'Rate'">
+                        <div ng-repeat="supplierOption in routingDataSource">
+                            <div ng-repeat="option in supplierOption.Options">{{option.Rate | number:4}}</div>
+                        </div>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
         <div>
+            <div ng-repeat="supplierOption in routingDataSource">
+                <div ng-repeat="option in supplierOption.Options">{{option.Rate | number:4}}</div>
+            </div>
         </div>
+        <div ng-include="'/Client/Modules/Routing/Views/RoutingManagement/Test.html'"></div>
     </div>
 
 </vr-panel>

@@ -133,6 +133,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Javascripts\Constants\DaysOfWeekEnum.js" />
     <Content Include="Client\Javascripts\Constants\InsertOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\UpdateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ValidationMessagesEnum.js" />

@@ -22,6 +22,7 @@ namespace TOne.LCR.Entities
 
         public DateTime? EndEffectiveDate { get; set; }
 
+        public RouteRuleTimeExecutionSetting TimeExecutionSetting { get; set; }
         public string Reason { get; set; }
 
         public BaseRouteRuleActionData ActionData { get; set; }

@@ -52,6 +52,7 @@
     <Compile Include="CodeCustomers.cs" />
     <Compile Include="RoutingFilter.cs" />
     <Compile Include="RoutingRulesFilter.cs" />
+    <Compile Include="RoutingRules\RouteRuleTimeExecutionSetting.cs" />
     <Compile Include="SaleZoneMatches.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="RoutingRuleActionType.cs" />

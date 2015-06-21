@@ -64,23 +64,8 @@
                 </vr-row>
             </div>
 
-            <div ng-show="choiceScheduleSelected">
-                <vr-row>
-                    <vr-columns colnum="4">
-                        <vr-row removeline>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-datetimepicker label="Begin Effective Date:" type="date" value="BEDDate" isrequired></vr-datetimepicker>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-columns>
-                    <vr-columns colnum="4">
-                        <vr-row removeline>
-                            <vr-columns colnum="6" colnumsm="4">
-                                <vr-datetimepicker label="End Effective Date:" type="date" value="EEDDate"></vr-datetimepicker>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-columns>
-                </vr-row>
+            <div ng-show="choiceScheduleSelected" ng-include src="'/Client/Modules/Routing/Views/RoutingRules/EditorTemplates/TimeSettingTemplate.html'">
+
             </div>
         </vr-form>
     </vr-modalbody>

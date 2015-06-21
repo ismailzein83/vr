@@ -1,5 +1,5 @@
-﻿RouteRuleEditorController.$inject = ['$scope', 'RoutingRulesAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'RoutingRulesTemplatesEnum', 'CodeSetTypeEnum', 'CustomerSetsEnum', 'UtilsService'];
-function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalService, VRNotificationService, VRNavigationService, RoutingRulesTemplatesEnum, CodeSetTypeEnum, CustomerSetsEnum, UtilsService) {
+﻿RouteRuleEditorController.$inject = ['$scope', 'RoutingRulesAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'RoutingRulesTemplatesEnum', 'CodeSetTypeEnum', 'CustomerSetsEnum', 'UtilsService', 'DaysOfWeekEnum'];
+function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalService, VRNotificationService, VRNavigationService, RoutingRulesTemplatesEnum, CodeSetTypeEnum, CustomerSetsEnum, UtilsService, DaysOfWeekEnum) {
     var editMode;
     $scope.RouteRuleId;
     loadParameters();
@@ -28,8 +28,9 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
 
         $scope.routeRule;
         $scope.subViewConnector = {};
-        $scope.BEDDate = "";
-        $scope.EEDDate = "";
+
+        //$scope.BEDDate = "";
+        //$scope.EEDDate = "";
 
         $scope.ruleTypes = [];
         $scope.customerSets = [];
@@ -38,8 +39,6 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
         $scope.selectedRuleType = '';
         $scope.selectedCustomerSet = '';
         $scope.selectedCodeSet = '';
-
-
 
         $scope.saveRouteRule = function () {
             if (editMode) {
@@ -54,7 +53,7 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
             $scope.modalContext.closeModal()
         };
     }
-    
+
     function load() {
         if (editMode) {
             $scope.isGettingData = true;
@@ -83,10 +82,11 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
             CarrierAccountSet: $scope.subViewConnector.getCarrierAccountSet(),
             ActionData: $scope.subViewConnector.getActionData(),
             Type: "RouteRule",
-            BeginEffectiveDate: $scope.BEDDate,
-            EndEffectiveDate: ($scope.EEDDate),
+            BeginEffectiveDate: $scope.BED,
+            EndEffectiveDate: $scope.EED,
             Reason: $scope.Reason,
-            RouteRuleId: ($scope.RouteRuleId != null) ? $scope.RouteRuleId : 0
+            RouteRuleId: ($scope.RouteRuleId != null) ? $scope.RouteRuleId : 0,
+            TimeExecutionSetting: $scope.subViewConnector.getTimeSettings()
         };
 
         return routeRuleObject;
@@ -96,12 +96,13 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
         $scope.RouteRuleId = routeRuleObject.RouteRuleId;
         $scope.routeRule = routeRuleObject;
         $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, routeRuleObject.ActionData.$type, 'objectType');
-        $scope.BEDDate = new Date(routeRuleObject.BeginEffectiveDate);
-        $scope.EEDDate = routeRuleObject.EndEffectiveDate;
+        //$scope.BEDDate = new Date(routeRuleObject.TimeExecutionSetting.BeginEffectiveDate);
+        //$scope.EEDDate = routeRuleObject.EndEffectiveDate;
         $scope.Reason = routeRuleObject.Reason;
         $scope.selectedCustomerSet = $scope.customerSets[0]; //UtilsService.getItemByVal($scope.customerSets, routeRuleObject.CarrierAccountSet.$type, 'objectType');
         $scope.selectedCodeSet = null;
         $scope.selectedCodeSet = UtilsService.getItemByVal($scope.codeSets, routeRuleObject.CodeSet.$type, 'objectType');
+        $scope.currentTimeSetting = routeRuleObject.TimeExecutionSetting;
 
     }
 
@@ -152,5 +153,7 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService,  VRModalServi
             $scope.customerSets.push(CustomerSetsEnum[prop]);
         }
     }
+
+
 }
 appControllers.controller('RoutingRules_RouteRuleEditorController', RouteRuleEditorController);

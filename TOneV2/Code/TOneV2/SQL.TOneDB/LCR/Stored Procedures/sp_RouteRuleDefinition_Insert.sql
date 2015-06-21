@@ -11,8 +11,10 @@ CREATE PROCEDURE [LCR].[sp_RouteRuleDefinition_Insert]
    @BeginEffectiveDate datetime,
    @EndEffectiveDate datetime,
    @Reason nvarchar(max),
-   @ActionData nvarchar(max),
+   @ActionData nvarchar(max),   
+   @TimeExecutionSetting nvarchar(max),
    @RouteRuleId int out
+
    
 AS
 BEGIN
@@ -24,6 +26,7 @@ BEGIN
            ,[EndEffectiveDate]
            ,[Reason]
            ,[ActionData]
+		   ,[TimeExecutionSetting]
            )
      VALUES
            (@CarrierAccountSet,
@@ -32,7 +35,8 @@ BEGIN
            @BeginEffectiveDate,
            @EndEffectiveDate,
            @Reason,
-           @ActionData)
+           @ActionData,
+		   @TimeExecutionSetting)
            
      SET @RouteRuleId = @@IDENTITY
 END

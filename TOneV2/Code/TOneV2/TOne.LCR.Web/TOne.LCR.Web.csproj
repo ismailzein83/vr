@@ -140,6 +140,7 @@
     <Content Include="Routing\Services\RoutingRulesAPIService.js" />
     <Content Include="Routing\Views\RoutingManagement\RoutingManagementController.js" />
     <Content Include="Routing\Views\RoutingManagement\RoutingManagement.html" />
+    <Content Include="Routing\Views\RoutingManagement\Test.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplateController.js" />
@@ -152,6 +153,8 @@
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteBlockTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\RouteOverrideTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\TimeSettingTemplate.html" />
+    <Content Include="Routing\Views\RoutingRules\EditorTemplates\TimeSettingTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\ZoneTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\RouteRuleEditor.html" />

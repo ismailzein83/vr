@@ -27,19 +27,29 @@ namespace TOne.LCR.Data.SQL
 
         public bool InsertRouteRule(RouteRule rule, out int insertedId)
         {
-            object RouteRuleId;
-            int recordesEffected = ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
-                rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
-                rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
-                (int)rule.Type,
-                rule.BeginEffectiveDate,
-                rule.EndEffectiveDate,
-                rule.Reason,
-                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null
-                );
-            insertedId = (int)RouteRuleId;
-            if (recordesEffected > 0)
-                return true;
+            try
+            {
+                object RouteRuleId;
+                int recordesEffected = ExecuteNonQuerySP("[LCR].[sp_RouteRuleDefinition_Insert]", out RouteRuleId,
+                    rule.CarrierAccountSet != null ? Serializer.Serialize(rule.CarrierAccountSet) : null,
+                    rule.CodeSet != null ? Serializer.Serialize(rule.CodeSet) : null,
+                    (int)rule.Type,
+                    rule.BeginEffectiveDate,
+                    rule.EndEffectiveDate,
+                    rule.Reason,
+                    rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null,
+                    rule.TimeExecutionSetting != null ? Serializer.Serialize(rule.TimeExecutionSetting) : null
+                    );
+                insertedId = (int)RouteRuleId;
+                if (recordesEffected > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
             return false;
         }
 
@@ -54,7 +64,8 @@ namespace TOne.LCR.Data.SQL
                rule.EndEffectiveDate,
                rule.Reason,
                rule.ActionData != null ? Serializer.Serialize(rule.ActionData) : null,
-               rule.RouteRuleId
+               rule.RouteRuleId,
+               rule.TimeExecutionSetting != null ? Serializer.Serialize(rule.TimeExecutionSetting) : null
            );
             if (recordesEffected > 0)
                 return true;
@@ -88,7 +99,8 @@ namespace TOne.LCR.Data.SQL
                 Type = (RouteRuleType)((int)reader["Type"]),
                 BeginEffectiveDate = (DateTime)reader["BeginEffectiveDate"],
                 EndEffectiveDate = (reader["EndEffectiveDate"] == System.DBNull.Value) ? (DateTime?)null : (DateTime)reader["EndEffectiveDate"],
-                Reason = reader["Reason"] as string
+                Reason = reader["Reason"] as string,
+                TimeExecutionSetting = (reader["TimeExecutionSetting"] == System.DBNull.Value) ? null : Serializer.Deserialize<RouteRuleTimeExecutionSetting>(reader["TimeExecutionSetting"] as string)
             };
 
             return routeRule;

@@ -13,7 +13,8 @@ CREATE PROCEDURE [LCR].[sp_RouteRuleDefinition_Update]
    @EndEffectiveDate datetime,
    @Reason nvarchar(max),
    @ActionData nvarchar(max),
-   @RouteRuleId int 
+   @RouteRuleId int,
+   @TimeExecutionSetting nvarchar(max) 
    
 AS
 BEGIN
@@ -25,5 +26,6 @@ BEGIN
            ,[EndEffectiveDate] = @EndEffectiveDate
            ,[Reason] = @Reason 
            ,[ActionData] = @ActionData
+		   ,[TimeExecutionSetting] = @TimeExecutionSetting
      WHERE [RouteRuleId]  = @RouteRuleId 
 END
