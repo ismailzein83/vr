@@ -13,10 +13,10 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
     function defineScope() {
 
-        $scope.customvalidateTestFrom = function (fromDate) {
+        $scope.customvalidateFrom = function (fromDate) {
             return validateDates(fromDate, $scope.toDate);
         };
-        $scope.customvalidateTestTo = function (toDate) {
+        $scope.customvalidateTo = function (toDate) {
             return validateDates($scope.fromDate, toDate);
         };
         function validateDates(fromDate, toDate) {
