@@ -61,6 +61,8 @@
     <Compile Include="Billing\ExchangeCarriers.cs" />
     <Compile Include="Billing\MyInterpolation.cs" />
     <Compile Include="Billing\ProfitSummary.cs" />
+    <Compile Include="Billing\RoutingAnalysis.cs" />
+    <Compile Include="Billing\RoutingAnalysisFormatted.cs" />
     <Compile Include="Billing\SaleAmountSummary.cs" />
     <Compile Include="Billing\CustomerSummary.cs" />
     <Compile Include="Billing\CustomerSummaryFormatted.cs" />

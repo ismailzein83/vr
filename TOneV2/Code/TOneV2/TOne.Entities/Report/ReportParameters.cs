@@ -52,6 +52,8 @@ namespace TOne.Entities
 
         public int ZoneId { get; set; }
 
+        public int Top { get; set; }
+
         public string AverageSaleNet { get; set; }
         public string AverageCostNet { get; set; }
         public string AverageProfit { get; set; }
@@ -67,7 +69,13 @@ namespace TOne.Entities
         public string InterpolatedCostNet { get; set; }
         public string InterpolatedProfit { get; set; }
         public string InterpolatedPercProfit { get; set; }
-
         public bool IsExchange { get; set; }
+
+
+        public decimal TotalDuration { get; set; }
+        public double TotalSale { get; set; }
+        public double TotalCost { get; set; }
+        public double TotalProfit { get; set; }
+
     }
 }

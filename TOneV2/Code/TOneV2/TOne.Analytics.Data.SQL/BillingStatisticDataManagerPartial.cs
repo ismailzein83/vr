@@ -32,7 +32,7 @@ namespace TOne.Analytics.Data.SQL
 
         public List<CustomerRouting> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-            return GetItemsSP("Analytics.SP_Billing_CustomerSummary", CustomerRoutingMapper,               
+            return GetItemsSP("Analytics.SP_Billing_CustomerRouting", CustomerRoutingMapper,               
                fromDate,
                toDate,
                (customerId == null || customerId == "") ? null : customerId,
@@ -42,7 +42,19 @@ namespace TOne.Analytics.Data.SQL
                );
         }
 
-       
+        public List<RoutingAnalysis> GetRoutingAnalysis(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? top, int? customerAMUId, int? supplierAMUId)
+        {
+            return GetItemsSP("Analytics.SP_Billing_RoutingAnalysis", RoutingAnalysisMapper,
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               (top == null || top == 0) ? null : top,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+               );
+        }
+
 
         #region privateMethods
 
@@ -188,7 +200,21 @@ namespace TOne.Analytics.Data.SQL
             return instance;
         }
 
-
+        private RoutingAnalysis RoutingAnalysisMapper(IDataReader reader)
+        {
+            RoutingAnalysis instance = new RoutingAnalysis
+            {
+                
+                SupplierID = reader["SupplierID"] as string,
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),               
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                Duration = GetReaderValue<decimal>(reader, "Duration"),
+                SaleZoneID = GetReaderValue<int>(reader, "SaleZoneID"),
+                ACD = GetReaderValue<decimal>(reader, "ACD"),
+                ASR = GetReaderValue<decimal>(reader, "ASR")
+            };
+            return instance;
+        }
         #endregion
     }
 }

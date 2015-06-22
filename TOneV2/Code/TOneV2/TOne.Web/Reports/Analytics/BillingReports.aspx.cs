@@ -34,6 +34,7 @@ namespace TOne.Web.Reports.Analytics
                 bool isExchange = (Request.QueryString["isExchange"] != null) ? (Request.QueryString["isExchange"] == "true") : false;                
                 
                 int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
+                int top = (Request.QueryString["top"] != null) ? Convert.ToInt32(Request.QueryString["top"]) : 10;
                 int zoneId = (Request.QueryString["zone"] != null) ? Convert.ToInt32(Request.QueryString["zone"]) : 0;
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
@@ -57,6 +58,7 @@ namespace TOne.Web.Reports.Analytics
                 parameters.Margin = margin;
                 parameters.ZoneId = zoneId;
                 parameters.IsExchange = isExchange;
+                parameters.Top = top;
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 

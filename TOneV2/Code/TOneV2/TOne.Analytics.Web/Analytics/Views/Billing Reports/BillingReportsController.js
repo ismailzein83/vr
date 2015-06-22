@@ -21,7 +21,8 @@ function BillingReportsController($scope, ReportAPIService, CarriersService, Zon
         commission: false,
         bySupplier: false,
         margin: 10,
-        isExchange:false
+        isExchange: false,
+        top:10
     }
     function defineScope() {
        
@@ -37,6 +38,7 @@ function BillingReportsController($scope, ReportAPIService, CarriersService, Zon
             paramsurl += "&bySupplier=" + $scope.params.bySupplier;
             paramsurl += "&isExchange=" + $scope.params.isExchange;
             paramsurl += "&margin=" + $scope.params.margin;
+            paramsurl += "&top=" + $scope.params.top;
             paramsurl += "&zone=" + (($scope.params.zone == null) ? 0 : $scope.params.zone.ZoneId);
             paramsurl += "&customer=" + (($scope.params.customer == null) ? "" : $scope.params.customer.CarrierAccountID);
             paramsurl += "&supplier=" + (($scope.params.supplier == null) ? "" : $scope.params.supplier.CarrierAccountID);
@@ -56,7 +58,9 @@ function BillingReportsController($scope, ReportAPIService, CarriersService, Zon
                 service: false,
                 commission: false,
                 bySupplier: false,
-                margin: 10
+                margin: 10,
+                isExchange: false,
+                top: 10
             }
         }
     }

@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingReports\CarrierSummaryProfitReportGenerator.cs" />
+    <Compile Include="BillingReports\RoutingAnalysisReportGenerator.cs" />
+    <Compile Include="BillingReports\CustomerRoutingReportGenerator.cs" />
     <Compile Include="BillingReports\CustomerSummaryReportGenerator.cs" />
     <Compile Include="BillingReports\DailyCarrierSummaryByDayReportGenerator.cs" />
     <Compile Include="BillingReports\DailyCarrierSummaryReportGenerator.cs" />
