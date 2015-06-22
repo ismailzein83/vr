@@ -67,11 +67,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             scope.modalContext.closeModal();
             notifyException(error, scope);
         }
-        var parameters = {
-            error: error,
-            previousUrl: $location.url()
+        else {
+            var parameters = {
+                error: error,
+                previousUrl: $location.url()
+            }
+            VRNavigationService.goto("/Error", parameters);
         }
-        VRNavigationService.goto("/Error", parameters);
     }
 
     function notifyOnItemAdded(itemType, insertOperationOutput) {//insertOperationOutput is of type InsertOperationOutput

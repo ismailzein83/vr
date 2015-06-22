@@ -74,7 +74,7 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
                fillScopeFromRouteRuleObj(response);
            })
             .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
     }
 
@@ -128,7 +128,7 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
 
     function updateRouteRule() {
         var routeRuleObject = buildRouteRuleObjFromScope();
-        RoutingRulesAPIService.UpdateRouteRule(routeRuleObject)
+        return RoutingRulesAPIService.UpdateRouteRule(routeRuleObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("RouteRule", response)) {
                 if ($scope.onRouteRuleUpdated != undefined)
