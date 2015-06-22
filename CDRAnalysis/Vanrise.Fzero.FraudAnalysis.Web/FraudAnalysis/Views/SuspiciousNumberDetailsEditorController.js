@@ -73,7 +73,6 @@ function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIServ
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
-            getNormalCDRs();
         };
 
         $scope.loadMoreDataNormalCDRs = function () {
@@ -83,7 +82,6 @@ function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIServ
 
         $scope.onNumberProfilesGridReady = function (api) {
             numberProfileGridAPI = api;
-            getNumberProfiles();
         };
 
         $scope.loadMoreDataNumberProfiles = function () {
