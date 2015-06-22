@@ -1,6 +1,6 @@
-﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function SuspiciousNumberDetailsController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var normalCDRGridAPI;
     var numberProfileGridAPI;
 
@@ -33,7 +33,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, FraudResu
         var pageInfo = normalCDRGridAPI.getPageInfo();
 
 
-        return FraudResultAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+        return SuspicionAnalysisAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.normalCDRs.push(itm);
                 console.log(itm)
@@ -51,7 +51,7 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, FraudResu
         var pageInfo = numberProfileGridAPI.getPageInfo();
 
 
-        return FraudResultAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
+        return SuspicionAnalysisAPIService.GetNumberProfiles(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.numberProfiles.push(itm);
             });

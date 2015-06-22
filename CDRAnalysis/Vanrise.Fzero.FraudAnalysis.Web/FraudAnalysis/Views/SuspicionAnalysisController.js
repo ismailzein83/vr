@@ -1,6 +1,6 @@
-﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'SuspicionAnalysisAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalysisAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -129,7 +129,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, FraudResultAPIS
         var pageInfo = mainGridAPI.getPageInfo();
 
 
-        return FraudResultAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
+        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
                 //var date = $filter('date')(new Date(), 'MMM dd, yyyy');
                 //itm.FormattedDate = date;

@@ -1,4 +1,4 @@
-﻿app.service('FraudResultAPIService', function (BaseAPIService) {
+﻿app.service('SuspicionAnalysisAPIService', function (BaseAPIService) {
 
     return ({
         GetFilteredSuspiciousNumbers: GetFilteredSuspiciousNumbers,
