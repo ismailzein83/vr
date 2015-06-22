@@ -2083,6 +2083,7 @@ Custom tables
 .table-advance div.important, 
 .table-advance div.warning, 
 .table-advance div.none1, 
+.table-advance div.inverse, 
 .table-advance div.danger {
   position: absolute;
   margin-top:-5px;
@@ -2125,6 +2126,10 @@ Custom tables
 
 .table-advance td.highlight div.none1 {  
   border-left: 2px solid  #999;
+}
+
+.table-advance td.highlight div.inverse {  
+  border-left: 2px solid  #000000;
 }
 /***
 Star rating

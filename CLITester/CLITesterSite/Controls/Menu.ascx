@@ -26,7 +26,7 @@
                 <li runat="server" id="liBalances"><a href="ManageBalances.aspx">Balances</a> </li>
                 <li runat="server" id="licalls" ><a href="ManageTestCalls.aspx">Data Calls</a> </li>
                 <li runat="server" id="liLstTstOp" ><a href="ListOperators.aspx">List Operators</a> </li>
-                <li runat="server" id="liLstOnline" ><a href="ListOnlineOperators.aspx">List Online Operators</a> </li>
+                <%--<li runat="server" id="liLstOnline" ><a href="ListOnlineOperators.aspx">List Online Operators</a> </li>--%>
                 <li runat="server" id="liPhoneNumbers" ><a href="ManagePhoneNumbers.aspx">Phone Numbers</a> </li>
                 <li runat="server" id="liOperators" ><a href="ManageOperators.aspx">Operators</a> </li>
             </ul>

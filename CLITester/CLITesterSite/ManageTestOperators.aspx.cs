@@ -31,6 +31,5 @@ public partial class ManageTestOperators : BasePage
         rptOperators.DataSource = lstOperators;
         rptOperators.DataBind();
     }
-   
     #endregion
 }

@@ -22,7 +22,7 @@ namespace CallGeneratorLibrary
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FraudTest")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FraudTest3")]
 	public partial class CallGeneratorModelDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -99,9 +99,6 @@ namespace CallGeneratorLibrary
     partial void InsertCDR(CDR instance);
     partial void UpdateCDR(CDR instance);
     partial void DeleteCDR(CDR instance);
-    partial void InsertGeneratedCall(GeneratedCall instance);
-    partial void UpdateGeneratedCall(GeneratedCall instance);
-    partial void DeleteGeneratedCall(GeneratedCall instance);
     partial void InsertSipAccount(SipAccount instance);
     partial void UpdateSipAccount(SipAccount instance);
     partial void DeleteSipAccount(SipAccount instance);
@@ -135,6 +132,9 @@ namespace CallGeneratorLibrary
     partial void InsertPhoneNumber(PhoneNumber instance);
     partial void UpdatePhoneNumber(PhoneNumber instance);
     partial void DeletePhoneNumber(PhoneNumber instance);
+    partial void InsertGeneratedCall(GeneratedCall instance);
+    partial void UpdateGeneratedCall(GeneratedCall instance);
+    partial void DeleteGeneratedCall(GeneratedCall instance);
     partial void InsertTestOperator(TestOperator instance);
     partial void UpdateTestOperator(TestOperator instance);
     partial void DeleteTestOperator(TestOperator instance);
@@ -362,14 +362,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<GeneratedCall> GeneratedCalls
-		{
-			get
-			{
-				return this.GetTable<GeneratedCall>();
-			}
-		}
-		
 		public System.Data.Linq.Table<SipAccount> SipAccounts
 		{
 			get
@@ -487,6 +479,14 @@ namespace CallGeneratorLibrary
 			get
 			{
 				return this.GetTable<PhoneNumber>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GeneratedCall> GeneratedCalls
+		{
+			get
+			{
+				return this.GetTable<GeneratedCall>();
 			}
 		}
 		
@@ -6346,329 +6346,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GeneratedCalls")]
-	public partial class GeneratedCall : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Number;
-		
-		private System.Nullable<System.DateTime> _StartDate;
-		
-		private System.Nullable<System.DateTime> _StartCall;
-		
-		private System.Nullable<System.DateTime> _EndDate;
-		
-		private string _Status;
-		
-		private string _ResponseCode;
-		
-		private System.Nullable<int> _SipAccountId;
-		
-		private System.Nullable<int> _ScheduleId;
-		
-		private EntitySet<MontyCall> _MontyCalls;
-		
-		private EntityRef<SipAccount> _SipAccount;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNumberChanging(string value);
-    partial void OnNumberChanged();
-    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnStartDateChanged();
-    partial void OnStartCallChanging(System.Nullable<System.DateTime> value);
-    partial void OnStartCallChanged();
-    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnEndDateChanged();
-    partial void OnStatusChanging(string value);
-    partial void OnStatusChanged();
-    partial void OnResponseCodeChanging(string value);
-    partial void OnResponseCodeChanged();
-    partial void OnSipAccountIdChanging(System.Nullable<int> value);
-    partial void OnSipAccountIdChanged();
-    partial void OnScheduleIdChanging(System.Nullable<int> value);
-    partial void OnScheduleIdChanged();
-    #endregion
-		
-		public GeneratedCall()
-		{
-			this._MontyCalls = new EntitySet<MontyCall>(new Action<MontyCall>(this.attach_MontyCalls), new Action<MontyCall>(this.detach_MontyCalls));
-			this._SipAccount = default(EntityRef<SipAccount>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Number", DbType="NVarChar(50)")]
-		public string Number
-		{
-			get
-			{
-				return this._Number;
-			}
-			set
-			{
-				if ((this._Number != value))
-				{
-					this.OnNumberChanging(value);
-					this.SendPropertyChanging();
-					this._Number = value;
-					this.SendPropertyChanged("Number");
-					this.OnNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartCall", DbType="DateTime")]
-		public System.Nullable<System.DateTime> StartCall
-		{
-			get
-			{
-				return this._StartCall;
-			}
-			set
-			{
-				if ((this._StartCall != value))
-				{
-					this.OnStartCallChanging(value);
-					this.SendPropertyChanging();
-					this._StartCall = value;
-					this.SendPropertyChanged("StartCall");
-					this.OnStartCallChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(50)")]
-		public string Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResponseCode", DbType="NVarChar(50)")]
-		public string ResponseCode
-		{
-			get
-			{
-				return this._ResponseCode;
-			}
-			set
-			{
-				if ((this._ResponseCode != value))
-				{
-					this.OnResponseCodeChanging(value);
-					this.SendPropertyChanging();
-					this._ResponseCode = value;
-					this.SendPropertyChanged("ResponseCode");
-					this.OnResponseCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SipAccountId", DbType="Int")]
-		public System.Nullable<int> SipAccountId
-		{
-			get
-			{
-				return this._SipAccountId;
-			}
-			set
-			{
-				if ((this._SipAccountId != value))
-				{
-					if (this._SipAccount.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnSipAccountIdChanging(value);
-					this.SendPropertyChanging();
-					this._SipAccountId = value;
-					this.SendPropertyChanged("SipAccountId");
-					this.OnSipAccountIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScheduleId", DbType="Int")]
-		public System.Nullable<int> ScheduleId
-		{
-			get
-			{
-				return this._ScheduleId;
-			}
-			set
-			{
-				if ((this._ScheduleId != value))
-				{
-					this.OnScheduleIdChanging(value);
-					this.SendPropertyChanging();
-					this._ScheduleId = value;
-					this.SendPropertyChanged("ScheduleId");
-					this.OnScheduleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GeneratedCall_MontyCall", Storage="_MontyCalls", ThisKey="Id", OtherKey="CallEntryId")]
-		public EntitySet<MontyCall> MontyCalls
-		{
-			get
-			{
-				return this._MontyCalls;
-			}
-			set
-			{
-				this._MontyCalls.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_GeneratedCall", Storage="_SipAccount", ThisKey="SipAccountId", OtherKey="Id", IsForeignKey=true)]
-		public SipAccount SipAccount
-		{
-			get
-			{
-				return this._SipAccount.Entity;
-			}
-			set
-			{
-				SipAccount previousValue = this._SipAccount.Entity;
-				if (((previousValue != value) 
-							|| (this._SipAccount.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._SipAccount.Entity = null;
-						previousValue.GeneratedCalls.Remove(this);
-					}
-					this._SipAccount.Entity = value;
-					if ((value != null))
-					{
-						value.GeneratedCalls.Add(this);
-						this._SipAccountId = value.Id;
-					}
-					else
-					{
-						this._SipAccountId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("SipAccount");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_MontyCalls(MontyCall entity)
-		{
-			this.SendPropertyChanging();
-			entity.GeneratedCall = this;
-		}
-		
-		private void detach_MontyCalls(MontyCall entity)
-		{
-			this.SendPropertyChanging();
-			entity.GeneratedCall = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SipAccounts")]
 	public partial class SipAccount : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -6717,9 +6394,9 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<CallSession> _CallSessions;
 		
-		private EntitySet<GeneratedCall> _GeneratedCalls;
-		
 		private EntitySet<Schedule> _Schedules;
+		
+		private EntitySet<GeneratedCall> _GeneratedCalls;
 		
 		private EntityRef<User> _User;
 		
@@ -6772,8 +6449,8 @@ namespace CallGeneratorLibrary
 		public SipAccount()
 		{
 			this._CallSessions = new EntitySet<CallSession>(new Action<CallSession>(this.attach_CallSessions), new Action<CallSession>(this.detach_CallSessions));
-			this._GeneratedCalls = new EntitySet<GeneratedCall>(new Action<GeneratedCall>(this.attach_GeneratedCalls), new Action<GeneratedCall>(this.detach_GeneratedCalls));
 			this._Schedules = new EntitySet<Schedule>(new Action<Schedule>(this.attach_Schedules), new Action<Schedule>(this.detach_Schedules));
+			this._GeneratedCalls = new EntitySet<GeneratedCall>(new Action<GeneratedCall>(this.attach_GeneratedCalls), new Action<GeneratedCall>(this.detach_GeneratedCalls));
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -7195,19 +6872,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_GeneratedCall", Storage="_GeneratedCalls", ThisKey="Id", OtherKey="SipAccountId")]
-		public EntitySet<GeneratedCall> GeneratedCalls
-		{
-			get
-			{
-				return this._GeneratedCalls;
-			}
-			set
-			{
-				this._GeneratedCalls.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_Schedule", Storage="_Schedules", ThisKey="Id", OtherKey="SipAccountId")]
 		public EntitySet<Schedule> Schedules
 		{
@@ -7218,6 +6882,19 @@ namespace CallGeneratorLibrary
 			set
 			{
 				this._Schedules.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_GeneratedCall", Storage="_GeneratedCalls", ThisKey="Id", OtherKey="SipAccountId")]
+		public EntitySet<GeneratedCall> GeneratedCalls
+		{
+			get
+			{
+				return this._GeneratedCalls;
+			}
+			set
+			{
+				this._GeneratedCalls.Assign(value);
 			}
 		}
 		
@@ -7287,18 +6964,6 @@ namespace CallGeneratorLibrary
 			entity.SipAccount = null;
 		}
 		
-		private void attach_GeneratedCalls(GeneratedCall entity)
-		{
-			this.SendPropertyChanging();
-			entity.SipAccount = this;
-		}
-		
-		private void detach_GeneratedCalls(GeneratedCall entity)
-		{
-			this.SendPropertyChanging();
-			entity.SipAccount = null;
-		}
-		
 		private void attach_Schedules(Schedule entity)
 		{
 			this.SendPropertyChanging();
@@ -7306,6 +6971,18 @@ namespace CallGeneratorLibrary
 		}
 		
 		private void detach_Schedules(Schedule entity)
+		{
+			this.SendPropertyChanging();
+			entity.SipAccount = null;
+		}
+		
+		private void attach_GeneratedCalls(GeneratedCall entity)
+		{
+			this.SendPropertyChanging();
+			entity.SipAccount = this;
+		}
+		
+		private void detach_GeneratedCalls(GeneratedCall entity)
 		{
 			this.SendPropertyChanging();
 			entity.SipAccount = null;
@@ -8653,6 +8330,12 @@ namespace CallGeneratorLibrary
 		
 		private string _Route;
 		
+		private string _ErrorMessage;
+		
+		private string _PDD;
+		
+		private string _Duration;
+		
 		public TestOperatorHistory()
 		{
 		}
@@ -8797,6 +8480,54 @@ namespace CallGeneratorLibrary
 				if ((this._Route != value))
 				{
 					this._Route = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ErrorMessage", CanBeNull=false)]
+		public string ErrorMessage
+		{
+			get
+			{
+				return this._ErrorMessage;
+			}
+			set
+			{
+				if ((this._ErrorMessage != value))
+				{
+					this._ErrorMessage = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PDD", CanBeNull=false)]
+		public string PDD
+		{
+			get
+			{
+				return this._PDD;
+			}
+			set
+			{
+				if ((this._PDD != value))
+				{
+					this._PDD = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Duration", CanBeNull=false)]
+		public string Duration
+		{
+			get
+			{
+				return this._Duration;
+			}
+			set
+			{
+				if ((this._Duration != value))
+				{
+					this._Duration = value;
 				}
 			}
 		}
@@ -11581,6 +11312,401 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GeneratedCalls")]
+	public partial class GeneratedCall : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Number;
+		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _StartCall;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private string _Status;
+		
+		private string _ResponseCode;
+		
+		private System.Nullable<int> _SipAccountId;
+		
+		private System.Nullable<int> _ScheduleId;
+		
+		private System.Nullable<System.DateTime> _AlertDate;
+		
+		private System.Nullable<System.DateTime> _ConnectDate;
+		
+		private System.Nullable<System.DateTime> _DisconnectDate;
+		
+		private EntitySet<MontyCall> _MontyCalls;
+		
+		private EntityRef<SipAccount> _SipAccount;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNumberChanging(string value);
+    partial void OnNumberChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnStartCallChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartCallChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnStatusChanging(string value);
+    partial void OnStatusChanged();
+    partial void OnResponseCodeChanging(string value);
+    partial void OnResponseCodeChanged();
+    partial void OnSipAccountIdChanging(System.Nullable<int> value);
+    partial void OnSipAccountIdChanged();
+    partial void OnScheduleIdChanging(System.Nullable<int> value);
+    partial void OnScheduleIdChanged();
+    partial void OnAlertDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnAlertDateChanged();
+    partial void OnConnectDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnConnectDateChanged();
+    partial void OnDisconnectDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnDisconnectDateChanged();
+    #endregion
+		
+		public GeneratedCall()
+		{
+			this._MontyCalls = new EntitySet<MontyCall>(new Action<MontyCall>(this.attach_MontyCalls), new Action<MontyCall>(this.detach_MontyCalls));
+			this._SipAccount = default(EntityRef<SipAccount>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Number", DbType="NVarChar(50)")]
+		public string Number
+		{
+			get
+			{
+				return this._Number;
+			}
+			set
+			{
+				if ((this._Number != value))
+				{
+					this.OnNumberChanging(value);
+					this.SendPropertyChanging();
+					this._Number = value;
+					this.SendPropertyChanged("Number");
+					this.OnNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartCall", DbType="DateTime")]
+		public System.Nullable<System.DateTime> StartCall
+		{
+			get
+			{
+				return this._StartCall;
+			}
+			set
+			{
+				if ((this._StartCall != value))
+				{
+					this.OnStartCallChanging(value);
+					this.SendPropertyChanging();
+					this._StartCall = value;
+					this.SendPropertyChanged("StartCall");
+					this.OnStartCallChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(50)")]
+		public string Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResponseCode", DbType="NVarChar(50)")]
+		public string ResponseCode
+		{
+			get
+			{
+				return this._ResponseCode;
+			}
+			set
+			{
+				if ((this._ResponseCode != value))
+				{
+					this.OnResponseCodeChanging(value);
+					this.SendPropertyChanging();
+					this._ResponseCode = value;
+					this.SendPropertyChanged("ResponseCode");
+					this.OnResponseCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SipAccountId", DbType="Int")]
+		public System.Nullable<int> SipAccountId
+		{
+			get
+			{
+				return this._SipAccountId;
+			}
+			set
+			{
+				if ((this._SipAccountId != value))
+				{
+					if (this._SipAccount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSipAccountIdChanging(value);
+					this.SendPropertyChanging();
+					this._SipAccountId = value;
+					this.SendPropertyChanged("SipAccountId");
+					this.OnSipAccountIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ScheduleId", DbType="Int")]
+		public System.Nullable<int> ScheduleId
+		{
+			get
+			{
+				return this._ScheduleId;
+			}
+			set
+			{
+				if ((this._ScheduleId != value))
+				{
+					this.OnScheduleIdChanging(value);
+					this.SendPropertyChanging();
+					this._ScheduleId = value;
+					this.SendPropertyChanged("ScheduleId");
+					this.OnScheduleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AlertDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> AlertDate
+		{
+			get
+			{
+				return this._AlertDate;
+			}
+			set
+			{
+				if ((this._AlertDate != value))
+				{
+					this.OnAlertDateChanging(value);
+					this.SendPropertyChanging();
+					this._AlertDate = value;
+					this.SendPropertyChanged("AlertDate");
+					this.OnAlertDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConnectDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ConnectDate
+		{
+			get
+			{
+				return this._ConnectDate;
+			}
+			set
+			{
+				if ((this._ConnectDate != value))
+				{
+					this.OnConnectDateChanging(value);
+					this.SendPropertyChanging();
+					this._ConnectDate = value;
+					this.SendPropertyChanged("ConnectDate");
+					this.OnConnectDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DisconnectDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DisconnectDate
+		{
+			get
+			{
+				return this._DisconnectDate;
+			}
+			set
+			{
+				if ((this._DisconnectDate != value))
+				{
+					this.OnDisconnectDateChanging(value);
+					this.SendPropertyChanging();
+					this._DisconnectDate = value;
+					this.SendPropertyChanged("DisconnectDate");
+					this.OnDisconnectDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GeneratedCall_MontyCall", Storage="_MontyCalls", ThisKey="Id", OtherKey="CallEntryId")]
+		public EntitySet<MontyCall> MontyCalls
+		{
+			get
+			{
+				return this._MontyCalls;
+			}
+			set
+			{
+				this._MontyCalls.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SipAccount_GeneratedCall", Storage="_SipAccount", ThisKey="SipAccountId", OtherKey="Id", IsForeignKey=true)]
+		public SipAccount SipAccount
+		{
+			get
+			{
+				return this._SipAccount.Entity;
+			}
+			set
+			{
+				SipAccount previousValue = this._SipAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._SipAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._SipAccount.Entity = null;
+						previousValue.GeneratedCalls.Remove(this);
+					}
+					this._SipAccount.Entity = value;
+					if ((value != null))
+					{
+						value.GeneratedCalls.Add(this);
+						this._SipAccountId = value.Id;
+					}
+					else
+					{
+						this._SipAccountId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("SipAccount");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MontyCalls(MontyCall entity)
+		{
+			this.SendPropertyChanging();
+			entity.GeneratedCall = this;
+		}
+		
+		private void detach_MontyCalls(MontyCall entity)
+		{
+			this.SendPropertyChanging();
+			entity.GeneratedCall = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TestOperators")]
 	public partial class TestOperator : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -11618,6 +11744,10 @@ namespace CallGeneratorLibrary
 		private System.Nullable<int> _ParentUserId;
 		
 		private string _PhonePrefix;
+		
+		private string _PDD;
+		
+		private string _Duration;
 		
 		private EntitySet<MontyCall> _MontyCalls;
 		
@@ -11663,6 +11793,10 @@ namespace CallGeneratorLibrary
     partial void OnParentUserIdChanged();
     partial void OnPhonePrefixChanging(string value);
     partial void OnPhonePrefixChanged();
+    partial void OnPDDChanging(string value);
+    partial void OnPDDChanged();
+    partial void OnDurationChanging(string value);
+    partial void OnDurationChanged();
     #endregion
 		
 		public TestOperator()
@@ -12002,6 +12136,46 @@ namespace CallGeneratorLibrary
 					this._PhonePrefix = value;
 					this.SendPropertyChanged("PhonePrefix");
 					this.OnPhonePrefixChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PDD", DbType="VarChar(50)")]
+		public string PDD
+		{
+			get
+			{
+				return this._PDD;
+			}
+			set
+			{
+				if ((this._PDD != value))
+				{
+					this.OnPDDChanging(value);
+					this.SendPropertyChanging();
+					this._PDD = value;
+					this.SendPropertyChanged("PDD");
+					this.OnPDDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Duration", DbType="VarChar(50)")]
+		public string Duration
+		{
+			get
+			{
+				return this._Duration;
+			}
+			set
+			{
+				if ((this._Duration != value))
+				{
+					this.OnDurationChanging(value);
+					this.SendPropertyChanging();
+					this._Duration = value;
+					this.SendPropertyChanged("Duration");
+					this.OnDurationChanged();
 				}
 			}
 		}

@@ -29,6 +29,7 @@ public partial class Default : BasePage
         {
             DateTime d = new DateTime();
             DateTime maxd = new DateTime();
+            maxd = DateTime.MinValue;
             int i = 0;
             List<Schedule> LstShc = new List<Schedule>();
             if(Current.User.User.ParentId == null)
@@ -40,10 +41,12 @@ public partial class Default : BasePage
                 ScheduleLog sl = ScheduleLogRepository.GetLastLog(s.Id);
                 if (sl != null)
                     if (sl.StartDate.HasValue)
+                    {
                         d = sl.StartDate.Value;
+                        if (maxd == DateTime.MinValue)
+                            maxd = d;
+                    }
 
-                if (i == 0)
-                    maxd = d;
                 if (d <= maxd)
                     maxd = d;
                 i++;
@@ -90,49 +93,45 @@ public partial class Default : BasePage
             
             foreach (Carrier c in LstCarriers)
             {
-                CarrierStat cstat = new CarrierStat();
-                cstat.Prefix = c.Prefix;
+                try
+                {
+                    CarrierStat cstat = new CarrierStat();
+                    cstat.Prefix = c.Prefix;
 
-                cstat.Delivered = TestOperatorRepository.GetPercentage(c.Prefix, 1, Current.User.User.Id);
-                cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
+                    cstat.Delivered = TestOperatorRepository.GetPercentage(c.Prefix, 1, Current.User.User.Id);
+                    cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
 
-                cstat.Total = TestOperatorRepository.GetPercentage(c.Prefix, null, Current.User.User.Id);
-                if (cstat.Delivered != 0 && cstat.Delivered != null)
-                    cstat.percentage = decimal.Round((((decimal)(cstat.Delivered) / (decimal)(cstat.Total)) * 100), 2);
-                else
-                    cstat.percentage = 0;
+                    cstat.Total = TestOperatorRepository.GetPercentage(c.Prefix, null, Current.User.User.Id);
+                    if (cstat.Delivered != 0 && cstat.Delivered != null)
+                        cstat.percentage = decimal.Round((((decimal)(cstat.Delivered) / (decimal)(cstat.Total)) * 100), 2);
+                    else
+                        cstat.percentage = 0;
 
-                if (cstat.NotDelivered != 0 && cstat.NotDelivered != null)
-                    cstat.percentageW = decimal.Round((((decimal)(cstat.NotDelivered) / (decimal)(cstat.Total)) * 100), 2);
-                else
-                    cstat.percentageW = 0;
+                    if (cstat.NotDelivered != 0 && cstat.NotDelivered != null)
+                        cstat.percentageW = decimal.Round((((decimal)(cstat.NotDelivered) / (decimal)(cstat.Total)) * 100), 2);
+                    else
+                        cstat.percentageW = 0;
 
-                LstStat.Add(cstat);
-            }
-            LstStat.OrderBy(l => l.percentage);
-            if (LstStat.Count >= 1)
-            {
-                lblBest1.Text = "[" + LstStat[0].Prefix  + "]" + " " + LstStat[0].percentage.ToString("#00.00");
-                //lblWorst1.Text = LstStat[0].Prefix + " " + LstStat[0].percentageW.ToString();
-            }
-            if (LstStat.Count > 1)
-            {
-                lblBest2.Text = "[" + LstStat[1].Prefix + "]" + " " + LstStat[1].percentage.ToString("#00.00");
-                //lblWorst2.Text = LstStat[1].Prefix + " " + LstStat[1].percentageW.ToString();
+                    if(cstat.Total > 10)
+                        LstStat.Add(cstat);
+                }
+                catch(System.Exception ex)
+                {
+                }
             }
 
-            LstStat.OrderBy(l => l.percentageW);
-            if (LstStat.Count >= 1)
-            {
-                //lblBest1.Text = LstStat[0].Prefix + " " + LstStat[0].percentage.ToString();
-                lblWorst1.Text = "[" + LstStat[0].Prefix + "]" + " " + LstStat[0].percentageW.ToString("#00.00");
-            }
-            if (LstStat.Count > 1)
-            {
-                //lblBest2.Text = LstStat[1].Prefix + " " + LstStat[1].percentage.ToString();
-                lblWorst2.Text = "[" + LstStat[1].Prefix + "]" + " " + LstStat[1].percentageW.ToString("#00.00");
-            }
-
+            List<CarrierStat> SortedList = LstStat.OrderByDescending(o => o.percentage).ToList();
+            if (SortedList.Count >= 1)
+                lblBest1.Text = "[" + SortedList[0].Prefix + "]" + " " + SortedList[0].percentage.ToString("#00.00");
+            if (SortedList.Count > 1)
+                lblBest2.Text = "[" + SortedList[1].Prefix + "]" + " " + SortedList[1].percentage.ToString("#00.00");
+            
+            List<CarrierStat> SortedList2 = LstStat.OrderByDescending(o => o.percentageW).ToList();
+            if (SortedList2.Count >= 1)
+                lblWorst1.Text = "[" + SortedList2[0].Prefix + "]" + " " + SortedList2[0].percentageW.ToString("#00.00");
+            if (SortedList2.Count > 1)
+                lblWorst2.Text = "[" + SortedList2[1].Prefix + "]" + " " + SortedList2[1].percentageW.ToString("#00.00");
+            
             /////////////////////////////////////////////////////////////////////////////////////////////////
         }
     }

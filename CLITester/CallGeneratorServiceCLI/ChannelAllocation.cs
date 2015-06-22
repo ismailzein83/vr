@@ -168,12 +168,6 @@ namespace CallGeneratorServiceCLI
                     ChannelAllocation c = NewCallGenCLI.LstChanels[i];
                     if ((c.idle == false) && (c.startDate == DateTime.MinValue))
                     {
-                        GeneratedCall GenCall = GeneratedCallRepository.Load(NewCallGenCLI.LstChanels[i].GeneratedCallid);
-                        //WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
-                        //GenCall.Status = "2";
-                        //GenCall.StartCall = DateTime.Now;
-                        //GeneratedCallRepository.Save(GenCall);
-
                         NewCallGenCLI.LstChanels[i].startDate = DateTime.Now;
                         NewCallGenCLI.LstChanels[i].startLastCall = DateTime.Now;
 
@@ -203,6 +197,11 @@ namespace CallGeneratorServiceCLI
                             //System.Threading.Thread.Sleep(1000);
                             int ConnectionId = NewCallGenCLI.LstChanels[i].sip.phone.StartCall2(NewCallGenCLI.LstChanels[i].destinationNumber);
                             NewCallGenCLI.LstChanels[i].ConnectionId = ConnectionId;
+
+                            GeneratedCall GenCall = GeneratedCallRepository.Load(NewCallGenCLI.LstChanels[i].GeneratedCallid);
+                            WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
+                            GenCall.StartCall = DateTime.Now;
+                            GeneratedCallRepository.Save(GenCall);
 
                             //WriteToEventLogEx("ConnectionId: " + ConnectionId);
                             //String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();

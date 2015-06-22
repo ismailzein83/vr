@@ -65,6 +65,16 @@ namespace VoIPSwitchService
                                         {
                                             if (expTime != 0 && (DateTime.Now.Second - generatedCall.StartDate.Value.Second) > expTime)
                                             {
+                                                if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                                {
+                                                    lstTestOperators[i].PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                                }
+
+                                                if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                                {
+                                                    lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                                }
+
                                                 Err = "Expired - No Line Availables";
                                                 generatedCall.EndDate = DateTime.Now;
 
@@ -84,6 +94,16 @@ namespace VoIPSwitchService
                                                 (generatedCall.ResponseCode == "503" && generatedCall.Status != "4" && generatedCall.Status != "6"))
                                             //(generatedCall.ResponseCode == "487" && generatedCall.Status != "4" && generatedCall.Status != "6"))
                                             {
+                                                if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                                {
+                                                    lstTestOperators[i].PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                                }
+
+                                                if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                                {
+                                                    lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                                }
+
                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
                                                 if (generatedCall.ResponseCode == "408")
                                                     lstTestOperators[i].ErrorMessage = "408 - Request Timeout";
@@ -193,6 +213,18 @@ namespace VoIPSwitchService
                                                                 }
                                                             }
 
+
+                                                            if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                                            {
+                                                                lstTestOperators[i].PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                                            }
+
+                                                            if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                                            {
+                                                                lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                                            }
+
+
                                                             TestOperatorRepository.Save(lstTestOperators[i]);
                                                             PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                             //h = true;
@@ -235,6 +267,17 @@ namespace VoIPSwitchService
                                                         lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
                                                         lstTestOperators[i].EndDate = DateTime.Now;
 
+
+                                                        if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                                        {
+                                                            lstTestOperators[i].PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                                        }
+
+                                                        if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                                        {
+                                                            lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                                        }
+
                                                         TestOperatorRepository.Save(lstTestOperators[i]);
                                                         PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                         //h = true;
@@ -249,6 +292,25 @@ namespace VoIPSwitchService
                                 {
                                     if (expTime != 0 && (DateTime.Now.Second - lstTestOperators[i].CreationDate.Value.Second) > expTime)
                                     {
+                                        MontyCall montyCall2 = MontyCallRepository.LoadbyTestOperatorId(lstTestOperators[i].Id);
+                                        if (montyCall2 != null)
+                                        {
+                                            GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall2.CallEntryId.Value);
+                                            if (generatedCall != null)
+                                            {
+                                                if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                                {
+                                                    lstTestOperators[i].PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                                }
+
+                                                if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                                {
+                                                    lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                                }
+                                            }
+                                        }
+
+                                        
                                         Err = "Expired Call";
                                         lstTestOperators[i].EndDate = DateTime.Now;
 
@@ -270,6 +332,24 @@ namespace VoIPSwitchService
                             TestOperator testOperator = TestOperatorRepository.Load(operatorId);
                             if (testOperator.EndDate == null)
                             {
+                                MontyCall montyCall3 = MontyCallRepository.LoadbyTestOperatorId(testOperator.Id);
+                                if (montyCall3 != null)
+                                {
+                                    GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall3.CallEntryId.Value);
+                                    if (generatedCall != null)
+                                    {
+                                        if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                        {
+                                            testOperator.PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                        }
+
+                                        if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                        {
+                                            testOperator.Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                        }
+                                    }
+                                }
+
                                 testOperator.ErrorMessage = "Failed while Processing";
                                 testOperator.EndDate = DateTime.Now;
                                 TestOperatorRepository.Save(testOperator);

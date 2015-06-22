@@ -29,6 +29,22 @@ public class Current
         return (OfficeUser)context.Session["OfficeUser"];
     }
 
+
+    public static List<CallGeneratorLibrary.TestOperatorHistory> TestOperatorHistoryReportData
+    {
+        get
+        {
+            if ((List<CallGeneratorLibrary.TestOperatorHistory>)HttpContext.Current.Session["TestOperatorsHistory"] == null)
+                HttpContext.Current.Session["TestOperatorsHistory"] = new List<CallGeneratorLibrary.TestOperatorHistory>();
+            return (List<CallGeneratorLibrary.TestOperatorHistory>)HttpContext.Current.Session["TestOperatorsHistory"];
+        }
+        set
+        {
+            HttpContext.Current.Session["TestOperatorsHistory"] = value;
+        }
+    }
+
+
     //public static List<ProjectsLibrary.ProjectTask> ProjectTasksReportData
     //{
     //    get

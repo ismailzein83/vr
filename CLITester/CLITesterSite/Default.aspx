@@ -19,9 +19,8 @@
                     <i class="icon-home"></i>
                     <a href="default.aspx">Home</a>
                 </li>
-                
-                    <label class="pull-right" >Next schedule: <asp:Label ID="lblNxtSch" runat="server" /> &nbsp;</label>
-                
+                 <a href="ManageSchedules.aspx"><label class="pull-right">Next schedule: <asp:Label ID="lblNxtSch" runat="server" /> &nbsp;</label>
+                </a>
             </ul>
             <!-- END PAGE TITLE & BREADCRUMB-->
         </div>

@@ -274,7 +274,7 @@ namespace CallGeneratorServiceCLI
                         if (generatedCall != null)
                         {
                             generatedCall.Status = "4";
-                            //GenCall.EndDate = DateTime.Now;
+                            generatedCall.AlertDate = DateTime.Now;
                             generatedCall.ResponseCode = responseCode.ToString();
                             GeneratedCallRepository.Save(generatedCall);
                         }
@@ -335,6 +335,7 @@ namespace CallGeneratorServiceCLI
                     {
                         //generatedCall.Status = "6";
                         generatedCall.EndDate = DateTime.Now;
+                        generatedCall.DisconnectDate = DateTime.Now;
                         //generatedCall.ResponseCode = Status.ToString();
                         GeneratedCallRepository.Save(generatedCall);
                     }
@@ -365,7 +366,7 @@ namespace CallGeneratorServiceCLI
                     {
                         generatedCall.Status = "6";
                         generatedCall.EndDate = DateTime.Now;
-                        //GenCall.ResponseCode = Status.ToString();
+                        generatedCall.ConnectDate = DateTime.Now;
                         GeneratedCallRepository.Save(generatedCall);
                     }
                 }

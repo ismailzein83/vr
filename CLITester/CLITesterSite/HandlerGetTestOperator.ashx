@@ -27,6 +27,8 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
         public string Prefix { get; set; }
         public string CreationDate { get; set; }
         public string EndDate { get; set; }
+        public string PDD { get; set; }
+        public string Duration { get; set; }
         public string ReceivedCli { get; set; }
         public string Status { get; set; }
         public string TestCli { get; set; }
@@ -92,6 +94,8 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                     responseTestOp.Id = testOp.Id.ToString();
                     responseTestOp.CreationDate = testOp.CreationDate.ToString();
                     responseTestOp.EndDate = "";
+                    responseTestOp.PDD = "";
+                    responseTestOp.Duration = "";
                     responseTestOp.OperatorId = OperatorRepository.Load(testOp.OperatorId.Value).FullName;
                     responseTestOp.Operator = testOp.OperatorId.ToString();
                     responseTestOp.Prefix = testOp.CarrierPrefix;
@@ -123,6 +127,23 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
 
                     if (testOp.EndDate != null)
                     {
+                        if (m != null)
+                        {
+                            GeneratedCall generatedCall = GeneratedCallRepository.Load(m.CallEntryId.Value);
+                            if(generatedCall != null)
+                            {
+                                if(generatedCall.AlertDate != null && generatedCall.StartCall != null)
+                                {
+                                    responseTestOp.PDD = ((generatedCall.AlertDate.Value - generatedCall.StartCall.Value).TotalSeconds).ToString();
+                                }
+
+                                if (generatedCall.ConnectDate != null && generatedCall.DisconnectDate != null)
+                                {
+                                    responseTestOp.Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
+                                }
+                            }
+                        }
+                        
                         responseTestOp.EndDate = testOp.EndDate.ToString();
 
                         if (testOp.TestCli != null)
@@ -140,6 +161,8 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.CLINotValid).ToString())
                             responseTestOp.Status = "CLI NOT DELIVERED";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired).ToString())
+                            responseTestOp.Status = "EXPIRED";
+                        else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Failed).ToString())
                             responseTestOp.Status = "FAILED";
                         else if (testOp.Status.ToString() == ((int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Waiting).ToString())
                             responseTestOp.Status = "WAITING";
@@ -153,9 +176,6 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                         if (testOp.ErrorMessage != null)
                             responseTestOp.ErrorMessage = testOp.ErrorMessage;
                         responseTestOp.progressNbr = "1";
-
-                        // responseTestOp.DisplayMessage = " testt";
-                        // responseTestOp.DisplayMessageStatus = "0";
                     }
                     LstresponseTestOp.Add(responseTestOp);
                 }

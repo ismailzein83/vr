@@ -17,7 +17,6 @@ namespace CallGeneratorLibrary.Repositories
 
     public class TestOperatorRepository
     {
-
         public static String GetLabel(int status)
         {
             if (status == 1) return "Delivered"; else return "Not Delivered";
@@ -252,6 +251,7 @@ namespace CallGeneratorLibrary.Repositories
             }
             return LstScheduleNumbers;
         }
+
 
         public static TestOperator Load(int TestOperatorId)
         {
@@ -490,6 +490,8 @@ namespace CallGeneratorLibrary.Repositories
                     look.Requested = testOperator.Requested;
                     look.ParentUserId = testOperator.ParentUserId;
                     look.PhonePrefix = testOperator.PhonePrefix;
+                    look.PDD = testOperator.PDD;
+                    look.Duration = testOperator.Duration;
                     context.SubmitChanges();
                     success = true;
                 }

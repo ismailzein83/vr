@@ -86,6 +86,21 @@
                 Search &nbsp; 
 				<i class="m-icon-swapright m-icon-white"></i>
             </button>
+
+            <button id="btnPrint" type="button" class="btn blue">
+                Print &nbsp; 
+				<i class="icon-print"></i>
+            </button>
+
+                <button id="btnClear" type="button" class="btn red">
+                Clear &nbsp; 
+				<i class="icon-remove"></i>
+            </button>
+
+<%--            <a onclick="btnSave_Click" target="_blank">
+            <img src="./images/print.png" style="border: 0;" alt="Print" /></a>
+
+            <asp:Button ID="btnPrint" class="btn blue btn-large" runat="server" Text="Print" OnClick="btnSave_Click"  />--%>
         </div>
     </div>
 
@@ -108,13 +123,19 @@
                                 <label>
                                     <input type="checkbox" checked data-column="2">End Date</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="3">Schedule</label>
+                                    <input type="checkbox" checked data-column="3">PDD</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="4">Caller ID</label>
+                                    <input type="checkbox" checked data-column="4">Duration</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="5">Received Cli</label>
+                                    <input type="checkbox" checked data-column="5">Schedule</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="6">Status</label>
+                                    <input type="checkbox" checked data-column="6">Caller ID</label>
+                                <label>
+                                    <input type="checkbox" checked data-column="7">Received Cli</label>
+                                <label>
+                                    <input type="checkbox" checked data-column="8">Status</label>
+                                <label>
+                                    <input type="checkbox" checked data-column="9">Error Message</label>
                             </div>
                         </div>
                     </div>
@@ -123,14 +144,17 @@
                     <table class="table table-striped table-bordered table-hover table-full-width" id="sample_2">
                         <thead>
                             <tr>
-                                <th class="span3">Name</th>
+                                <th class="span2">Name</th>
                                 <th class="span2">Route</th>
-                                <th class="span3">Creation Date</th>
-                                <th class="span3">End Date</th>
+                                <th class="span2">Creation Date</th>
+                                <th class="span2">End Date</th>
+                                <th class="span1">PDD</th>
+                                <th class="span1">Duration</th>
                                 <th class="span2">Schedule</th>
                                 <th class="span2">Caller ID</th>
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
+                                <th class="span2">Error Message</th>
                             </tr>
                         </thead>
                         <tbody class="table table-striped table-bordered table-advance table-hover">
@@ -186,7 +210,7 @@
                 "processing": true,
                 'bServerSide': true,
                 "bSort": false,
-                'aoColumns': [null, null, null, null, null, null, null, null],
+                'aoColumns': [null, null, null, null, null, null, null, null, null, null, null],
                 'bStateSave': false,
                 'sAjaxSource': 'SearchTestOpHandler.ashx?operatorId=0&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val(),
             });
@@ -212,6 +236,25 @@
                 }, 500);
             });
 
+            $("#btnPrint").click(function () {
+                var dl1 = $('select[name=selectOperator]').val();
+                var res = dl1.split("~");
+                var opId = 0
+                if (typeof res[1] === 'undefined')
+                    opId = 0;
+                else
+                    opId = res[1];
+
+                window.open('TestOperatorHistoryPrint.aspx?operatorId=' + opId + '&startDate=' + $('#txtStartDate').val() + '&endDate=' + $('#txtEndDate').val());
+            });
+
+            $("#btnClear").click(function () {
+                $("#selectOperator").select2('val', 'aa');
+                $('#txtStartDate').val("");
+                $('#txtEndDate').val("");
+
+                $("#btnSearch").click();
+            });
         }
 
         var handleDatePickers = function () {

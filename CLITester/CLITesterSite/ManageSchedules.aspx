@@ -197,8 +197,6 @@
                                 </th>
                                 <th>Name
                                 </th>
-                                <%--<th>Ratio
-                                </th>--%>
                                 <th>Start Date
                                 </th>
                                 <th>End Date
@@ -227,9 +225,6 @@
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("DisplayName") %>'></asp:Label>
                                         </td>
-                                      <%--  <td>
-                                            <asp:Label ID="Label6" runat="server" Text='<%# Eval("OccursEvery") %>'></asp:Label>
-                                        </td>--%>
                                         <td>
                                             <asp:Label ID="Label1" runat="server" Text='<%# Eval("StartDate", "{0:dd/MM/yyyy}") %>'></asp:Label>
                                         </td>
@@ -277,7 +272,7 @@
 
         <div class="portlet box purple">
             <div class="portlet-title">
-                <div class="caption"><i class="icon-reorder"></i>Schedule History </div>
+                <div class="caption"><i class="icon-reorder"></i>Schedule History &nbsp;-&nbsp; <asp:Label ID="lblScheduleHist" runat="server"></asp:Label> </div>
                 <div class="actions">
                     <small class="pull-left"> <i class="icon-warning-sign"></i> Last 100 records </small>&nbsp;
                     <button class="btn black" id="btnClose" onclick="CloseLst(); return false;"><i class="icon-remove"></i>Close</button>
@@ -297,11 +292,17 @@
                             </th>
                             <th class="span3">End Date
                             </th>
+                            <th class="span1">PDD
+                            </th>
+                            <th class="span1">Duration
+                            </th>
                             <th class="span2">Test Cli
                             </th>
                             <th class="span2">Received Cli
                             </th>
                             <th class="span2">Status
+                            </th>
+                            <th class="span2">Error Message
                             </th>
                         </tr>
                     </thead>
@@ -313,9 +314,11 @@
                                         <asp:Label ID="Label0" runat="server" Text='<%# Eval("Id") %>'></asp:Label>
                                     </td>
                                     <td class="highlight">
-                                        <div class='<%# Eval("Status") == null ? "none1" : (int)Eval("Status") == 1 ? "success" : "danger" %>'></div>
-                                        &nbsp;
-                                            <asp:Label ID="Label6" runat="server" Text='<%# Eval("Operator.FullName") %>'></asp:Label>
+                                        <div class='<%# Eval("Status") == null ? "none1" : (int)Eval("Status") == 1 ? "success" :  (int)Eval("Status") == 2 ? "danger" : 
+                                            (int)Eval("Status") == 4 ? "warning" : (int)Eval("Status") == 5 ? "warning" : (int)Eval("Status") == 3 ? "warning" : (int)Eval("Status") == 0 ? "inverse" : 
+                                            (int)Eval("Status") == 6 ? "inverse" : "none1" %>'>
+                                        </div> &nbsp;
+                                        <asp:Label ID="Label6" runat="server" Text='<%# Eval("Operator.FullName") %>'></asp:Label>
                                     </td>
                                     <td>
                                         <asp:Label ID="Label7" runat="server" Text='<%#  Eval("Schedule") == null ? " " : Eval("Schedule.DisplayName") %>'></asp:Label>
@@ -326,7 +329,12 @@
                                     <td>
                                         <asp:Label ID="Label2" runat="server" Text='<%#  Eval("EndDate") == null ? " " : ((DateTime)Eval("EndDate")).ToString("yyyy-MM-dd HH:mm:ss") %>'></asp:Label>
                                     </td>
-
+                                    <td>
+                                        <asp:Label ID="Label10" runat="server" Text='<%# Eval("PDD") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label11" runat="server" Text='<%# Eval("Duration") %>'></asp:Label>
+                                    </td>
                                     <td>
                                         <asp:Label ID="Label3" runat="server" Text='<%# Eval("TestCli") %>'></asp:Label>
                                     </td>
@@ -335,7 +343,11 @@
                                         <asp:Label ID="Label4" runat="server" Text='<%# Eval("ReceivedCli") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="Label5" class='<%# Eval("Status") == null ? "label label-danger" : (int)Eval("Status") == 1 ? "label label-success" : "label label-important" %>' runat="server" Text='<%# Eval("Status") == null ? "No status" : (int)Eval("Status") == 1 ? "CLI Delivered" : "CLI not delivered" %>'></asp:Label>
+                                        <asp:Label ID="Label5" class='<%# Eval("Status") == null ? "label label-default" : (int)Eval("Status") == 1 ? "label label-success" :  (int)Eval("Status") == 2 ? "label label-important" : (int)Eval("Status") == 4 ? "label label-warning" : (int)Eval("Status") == 5 ? "label label-warning" : (int)Eval("Status") == 3 ? "label label-warning" : (int)Eval("Status") == 0 ? "label label-ERROR" : (int)Eval("Status") == 6 ? "label label-inverse" : "label label-default" %>' runat="server" 
+                                            Text='<%# Eval("Status") == null ? "label label-default" : (int)Eval("Status") == 1 ? "CLI DELIVERED" :  (int)Eval("Status") == 2 ? "CLI NOT DELIVERED" : (int)Eval("Status") == 4 ? "EXPIRED" : (int)Eval("Status") == 5 ? "FAILED" : (int)Eval("Status") == 3 ? "WAITING" : (int)Eval("Status") == 0 ? "ERROR" : (int)Eval("Status") == 6 ? "FAS" : "NO STATUS" %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label9" runat="server" Text='<%# Eval("ErrorMessage") %>'></asp:Label>
                                     </td>
                                 </tr>
                             </ItemTemplate>
@@ -470,7 +482,7 @@
                 "aoColumnDefs": [
                     { "bSortable": false, "aTargets": [0] }
                 ],
-                "aaSorting": [[2, 'asc']],
+                "aaSorting": [[2, 'desc']],
                 "aLengthMenu": [
                    [10, 15, 20, -1],
                    [10, 15, 20, "All"] // change per page values here

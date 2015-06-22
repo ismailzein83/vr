@@ -22,6 +22,7 @@ public partial class ManageSchedules : BasePage
         divSuccess.Visible = false;
         divError.Visible = false;
         viewDiv.Visible = false;
+        lblScheduleHist.Text = "";
 
         if (!IsPostBack)
         {
@@ -67,10 +68,11 @@ public partial class ManageSchedules : BasePage
 
     private void GetDataHistory(int ScheduleId)
     {
-        List<TestOperator> SchedulesHist = TestOperatorRepository.GetTestOperatorsByScheduleId(ScheduleId).OrderByDescending(l => l.Id).ToList();
+        List<TestOperator> SchedulesHist = TestOperatorRepository.GetTestOperatorsByScheduleId(ScheduleId).ToList();
         Session["TestOperatorsHistory"] = SchedulesHist;
         rptHistory.DataSource = SchedulesHist;
         rptHistory.DataBind();
+        lblScheduleHist.Text = ScheduleRepository.Load(ScheduleId).DisplayName;
     }
 
     private string getCode(string jsCodetoRun)
@@ -144,6 +146,7 @@ public partial class ManageSchedules : BasePage
     }
     protected void btnView_Click(object sender, EventArgs e)
     {
+        lblScheduleHist.Text = "";
         LinkButton lk = (LinkButton)sender;
         int id = 0;
         int.TryParse(lk.CommandArgument.ToString(), out id);

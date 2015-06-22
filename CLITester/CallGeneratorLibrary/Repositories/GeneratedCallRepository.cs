@@ -132,7 +132,9 @@ namespace CallGeneratorLibrary.Repositories
                     look.ResponseCode = GenCall.ResponseCode;
                     look.SipAccountId = GenCall.SipAccountId;
                     look.ScheduleId = GenCall.ScheduleId;
-                  
+                    look.AlertDate = GenCall.AlertDate;
+                    look.ConnectDate = GenCall.ConnectDate;
+                    look.DisconnectDate = GenCall.DisconnectDate;
                     context.SubmitChanges();
                     success = true;
                 }

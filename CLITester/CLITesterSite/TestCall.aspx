@@ -95,10 +95,12 @@
                         <thead>
                             <tr>
                                 <th class="span3">Name</th>
-                                <th class="span1">Route</th>
                                 <th class="span1">Prefix</th>
+                                <th class="span1">Route</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
+                                <th class="span1">PDD</th>
+                                <th class="span1">Duration</th>
                                 <th class="span2">Caller ID</th>
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
@@ -216,6 +218,9 @@
                     if (msg.Status == "FAILED")
                         statusClass = "label-warning"
                     else
+                        if (msg.Status == "EXPIRED")
+                            statusClass = "label-warning"
+                    else
                         if (msg.Status == "WAITING")
                             statusClass = "label-warning"
                         else
@@ -252,10 +257,12 @@
             $('#myTable > tbody').append('<tr>' +
                                  '<td class="hideTd">' + msg.idOp + '</td>' +
                               '<td>' + msg.OperatorId + '</td>' +
-                              '<td>' + msg.Prefix + '</td>' +
                               '<td>' + msg.phonePrefix + '</td>' +
+                              '<td>' + msg.Prefix + '</td>' +
                               '<td>' + msg.CreationDate + '</td>' +
                               '<td>' + msg.EndDate + '</td>' +
+                              '<td>' + msg.PDD + '</td>' +
+                              '<td>' + msg.Duration + '</td>' +
                               '<td>' + msg.TestCli + '</td>' +
                               '<td>' + msg.ReceivedCli + '</td>' +
                               '<td><span class="label ' + statusClass + '  " >' + msg.Status + '</span></td>' +
