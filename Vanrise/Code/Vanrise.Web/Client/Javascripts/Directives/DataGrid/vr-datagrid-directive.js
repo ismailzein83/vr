@@ -224,7 +224,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', func
             ctrl.showColumn = showColumn;
 
             ctrl.getColumnValue = function (colDef, dataItem) {
-                return eval('dataItem.' + colDef.field);
+                if (colDef == undefined)
+                    return null;
+                else
+                    return eval('dataItem.' + colDef.field);
             };
 
             ctrl.isColumnClickable = function (colDef, dataItem) {
