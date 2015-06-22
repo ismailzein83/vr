@@ -9,7 +9,7 @@ namespace TOne.Analytics.Entities
 {
     public class VariationReportResult
     {
-        public List<VariationReports> VariationReportsData { get; set; }
-        public DataTable TimeRange;
+        public List<VariationReportsData> VariationReportsData { get; set; }
+        public List<TimeRange> TimeRange;
     }
 }
