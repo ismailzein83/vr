@@ -221,7 +221,6 @@
     <Build Include="mainmodule\Stored Procedures\sp_ReportDefinition_GetById.sql" />
     <Build Include="mainmodule\Stored Procedures\sp_Role_Search.sql" />
     <Build Include="mainmodule\Stored Procedures\sp_Role_Update.sql" />
-    <Build Include="BI\Stored Procedures\SP_SchemaConfiguration_GetData.sql" />
     <Build Include="Analytics\User Defined Types\TrafficStatsType.sql" />
     <Build Include="Analytics\User Defined Types\TrafficStatsDailyType.sql" />
     <Build Include="sec\User Defined Types\IntIDType.sql" />
@@ -229,5 +228,9 @@
     <Build Include="Security\sec.sql" />
     <Build Include="Security\mainmodule.sql" />
     <Build Include="Security\BI.sql" />
+    <Build Include="BI\Stored Procedures\SP_SchemaConfiguration_GetDataByType.sql" />
+    <Build Include="BEntity\Stored Procedures\SP_Carriers_GetAllCarriers.sql" />
+    <Build Include="Analytics\Stored Procedures\SP_Billing_ExchangeCarriersSummary.sql" />
+    <Build Include="Analytics\User Defined Types\TimeRangeType.sql" />
   </ItemGroup>
 </Project>
