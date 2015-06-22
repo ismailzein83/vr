@@ -51,6 +51,8 @@
     <Compile Include="Billing\CarrierSummaryDaily.cs" />
     <Compile Include="Billing\CarrierSummaryDailyFormatted.cs" />
     <Compile Include="Billing\CarrierSummaryFormatted.cs" />
+    <Compile Include="Billing\CustomerRouting.cs" />
+    <Compile Include="Billing\CustomerRoutingFormatted.cs" />
     <Compile Include="Billing\DailyForcasting.cs" />
     <Compile Include="Billing\DailyForcastingFormatted.cs" />
     <Compile Include="Billing\Enumerations.cs" />

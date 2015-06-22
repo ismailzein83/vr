@@ -30,11 +30,27 @@ namespace TOne.Analytics.Data.SQL
             );
         }
 
-        private string GetVariationReportQuery(List<TimeRange> timeRange,  VariationReportOptions variationReportOptions)
+        public List<CustomerRouting> GetCustomerRouting(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? customerAMUId, int? supplierAMUId)
         {
-         
-          //  DateTime BeginTime = Convert.ToDateTime((timeRange.Compute("max(FromDate)", string.Empty)));
-          //  DateTime EndTime = Convert.ToDateTime((timeRange.Compute("min(FromDate)", string.Empty)));
+            return GetItemsSP("Analytics.SP_Billing_CustomerSummary", CustomerRoutingMapper,               
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
+               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId
+               );
+        }
+
+       
+
+        #region privateMethods
+
+        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
+        {
+
+            //  DateTime BeginTime = Convert.ToDateTime((timeRange.Compute("max(FromDate)", string.Empty)));
+            //  DateTime EndTime = Convert.ToDateTime((timeRange.Compute("min(FromDate)", string.Empty)));
 
             DateTime BeginTime = (from d in timeRange select d.FromDate).Max();
             DateTime EndTime = (from d in timeRange select d.FromDate).Min();
@@ -120,7 +136,7 @@ namespace TOne.Analytics.Data.SQL
                     break;
 
             }
-                     
+
 
             if (query.ToString().Contains("@BeginTime") && query.ToString().Contains("@EndTime"))
             {
@@ -130,7 +146,6 @@ namespace TOne.Analytics.Data.SQL
             return query.ToString();
         }
 
-        #region privateMethods
         private CustomerSummary CustomerSummaryMapper(IDataReader reader)
         {
             CustomerSummary instance = new CustomerSummary
@@ -153,6 +168,27 @@ namespace TOne.Analytics.Data.SQL
             };
             return instance;
         }
+
+        private CustomerRouting CustomerRoutingMapper(IDataReader reader)
+        {
+            CustomerRouting instance = new CustomerRouting
+            {
+                CallDate = GetReaderValue<DateTime>(reader,"CallDate"),
+                SupplierID = reader["SupplierID"] as string,
+                CustomerID =reader["CustomerID"] as string ,
+                SaleZone = GetReaderValue<int>(reader, "SaleZone"),
+                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
+                SaleRate = GetReaderValue<double>(reader, "SaleRate"),
+                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
+                CostZone = GetReaderValue<int>(reader, "CostZone"),
+                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
+                CostNet = GetReaderValue<double>(reader, "CostNet"),
+                CostRate = GetReaderValue<double>(reader, "CostRate")
+            };
+            return instance;
+        }
+
+
         #endregion
     }
 }

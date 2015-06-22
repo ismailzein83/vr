@@ -11,10 +11,14 @@ namespace TOne.Analytics.Business
 {
     public partial class BillingStatisticManager
     {
-        //public List<CustomerSummaryFormatted> GetCustomerSummary(DateTime fromDate, DateTime toDate, string customerId, int? customerAMUId, int? supplierAMUId)
-        //{
-        //    return FormatCustomerSummaries(_datamanager.GetCustomerSummary(fromDate, toDate, customerId, customerAMUId, supplierAMUId));
-        //}
+
+        public List<CustomerRoutingFormatted> GetCustomerRouting()
+        {
+            return new List<CustomerRoutingFormatted>();
+        }
+
+
+        #region PrivateMethode
         private List<CustomerSummaryFormatted> FormatCustomerSummaries(List<CustomerSummary> zoneSummariesDetailed)
         {
             List<CustomerSummaryFormatted> models = new List<CustomerSummaryFormatted>();
@@ -39,64 +43,11 @@ namespace TOne.Analytics.Business
                 CostDurationFormatted = FormatNumber(customerSummary.CostDuration, 2),
                 CostNetFormatted = FormatNumber(customerSummary.CostNet, 2),
                 ProfitFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet), 2),
-                ProfitPercentageFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet) / customerSummary.SaleNet, 2),
-                
-                
-                
-                //=FormatPercent((Fields!SaleNet.Value-Fields!CostNet.Value)/Fields!SaleNet.Value,2)
-                
-                
-                
-                //=FormatNumber(Fields!Services.Value,2) services
-                //=FormatNumber(Fields!SaleNet.Value-Fields!CostNet.Value,2)
-                //=IIf(IsNothing(Fields!CostNet.Value),"0.00",FormatNumber(Fields!CostNet.Value,Parameters!DigitRate.Value))
-
-
-                //                SupplierID = (zoneSummaryDetailed.SupplierID != null) ? _bemanager.GetCarrirAccountName(zoneSummaryDetailed.SupplierID) : null,
-
-                //Calls = zoneSummaryDetailed.Calls,
-
-                //Rate = zoneSummaryDetailed.Rate,
-                //RateFormatted = FormatNumber(zoneSummaryDetailed.Rate, 5),
-
-                //DurationNet = zoneSummaryDetailed.DurationNet,
-                //DurationNetFormatted = FormatNumber(zoneSummaryDetailed.DurationNet),
-
-                //OffPeakDurationInSeconds = zoneSummaryDetailed.OffPeakDurationInSeconds,
-                //OffPeakDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.OffPeakDurationInSeconds, 2),
-
-                //OffPeakRate = zoneSummaryDetailed.OffPeakRate,
-                //OffPeakRateFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 5),
-
-                //OffPeakNet = zoneSummaryDetailed.OffPeakNet,
-                //OffPeakNetFormatted = FormatNumber(zoneSummaryDetailed.OffPeakRate, 2),
-
-                //WeekEndDurationInSeconds = zoneSummaryDetailed.WeekEndDurationInSeconds,
-                //WeekEndDurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.WeekEndDurationInSeconds, 2),
-
-                //WeekEndRate = zoneSummaryDetailed.WeekEndRate,
-                //WeekEndRateFormatted = FormatNumber(zoneSummaryDetailed.WeekEndRate, 2),
-
-                //WeekEndNet = zoneSummaryDetailed.WeekEndNet,
-                //WeekEndNetFormatted = FormatNumber(zoneSummaryDetailed.WeekEndNet, 2),
-
-                //DurationInSeconds = zoneSummaryDetailed.DurationInSeconds,
-                //DurationInSecondsFormatted = FormatNumber(zoneSummaryDetailed.DurationInSeconds),
-
-                //Net = zoneSummaryDetailed.Net,
-                //NetFormatted = FormatNumber(zoneSummaryDetailed.Net, 5),
-
-                //TotalDurationFormatted = FormatNumber((zoneSummaryDetailed.DurationInSeconds + zoneSummaryDetailed.OffPeakDurationInSeconds + zoneSummaryDetailed.WeekEndDurationInSeconds), 2),
-
-                //TotalAmountFormatted = FormatNumber(zoneSummaryDetailed.Net + zoneSummaryDetailed.OffPeakNet + zoneSummaryDetailed.WeekEndNet, 2),
-
-                //CommissionValue = zoneSummaryDetailed.CommissionValue,
-                //CommissionValueFormatted = FormatNumber(zoneSummaryDetailed.CommissionValue, 2),
-
-                //ExtraChargeValue = zoneSummaryDetailed.ExtraChargeValue,
-                //ExtraChargeValueFormatted = FormatNumber(zoneSummaryDetailed.ExtraChargeValue),
+                ProfitPercentageFormatted = FormatNumber((customerSummary.SaleNet - customerSummary.CostNet) / customerSummary.SaleNet, 2)
             };
         }
+        #endregion 
+        
 
      
     }
