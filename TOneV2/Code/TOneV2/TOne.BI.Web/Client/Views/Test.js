@@ -122,105 +122,105 @@ function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesSe
         });
     }
 
-    function getData() {
-        updateChart();
-        if ($scope.selectedMeasures.length == 0)
-            return;
-        if (chartTopAPI == undefined)
-            return;
+    //function getData() {
+    //    updateChart();
+    //    if ($scope.selectedMeasures.length == 0)
+    //        return;
+    //    if (chartTopAPI == undefined)
+    //        return;
 
 
      
         
-        var refreshDataOperations = [];
-        angular.forEach($scope.visualElements, function (visualElement) {
-            refreshDataOperations.push(visualElement.API.retrieveData);
-        });
-        //BIVisualElementService1.retrieveData($scope.visualElements[0], $scope.visualElements[0].settings);
-        $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
+    //    var refreshDataOperations = [];
+    //    angular.forEach($scope.visualElements, function (visualElement) {
+    //        refreshDataOperations.push(visualElement.API.retrieveData);
+    //    });
+    //    //BIVisualElementService1.retrieveData($scope.visualElements[0], $scope.visualElements[0].settings);
+    //    $scope.isGettingData = true;
+    //    UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
+    //        .finally(function () {
+    //            $scope.isGettingData = false;
+    //        });
 
-        $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([updateTopChartValues]).finally(function () {
-            $scope.isGettingData = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+    //    $scope.isGettingData = true;
+    //    UtilsService.waitMultipleAsyncOperations([updateTopChartValues]).finally(function () {
+    //        $scope.isGettingData = false;
+    //    }).catch(function (error) {
+    //        VRNotificationService.notifyExceptionWithClose(error, $scope);
+    //    });
 
-        var isSucceeded;
-        $scope.showResult = true;
-        $scope.isGettingData = true;
-        var measures = [];
-        for (var i = 0; i < $scope.selectedMeasures.length; i++)
-        {
-            measures.push($scope.selectedMeasures[i].Id);
-        }
-        //console.log(measures);
-        return BIConfigurationAPIService.GetMeasureValues($scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, measures).then(function (response) {
-            $scope.data = [];
-            BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
-            angular.forEach(response, function (itm) {
-             //   console.log(itm);
-                $scope.data.push(itm);
-            });
-          //  console.log(currentData[0].Values);
-            //mainGridAPI.addItemsToSource(response.Data);
-            //isSucceeded = true;
-        })
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
-    }
+    //    var isSucceeded;
+    //    $scope.showResult = true;
+    //    $scope.isGettingData = true;
+    //    var measures = [];
+    //    for (var i = 0; i < $scope.selectedMeasures.length; i++)
+    //    {
+    //        measures.push($scope.selectedMeasures[i].Id);
+    //    }
+    //    //console.log(measures);
+    //    return BIConfigurationAPIService.GetMeasureValues($scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, measures).then(function (response) {
+    //        $scope.data = [];
+    //        BIUtilitiesService.fillDateTimeProperties(response, $scope.selectedTimeDimensionType.value, $scope.fromDate, $scope.toDate, true);
+    //        angular.forEach(response, function (itm) {
+    //         //   console.log(itm);
+    //            $scope.data.push(itm);
+    //        });
+    //      //  console.log(currentData[0].Values);
+    //        //mainGridAPI.addItemsToSource(response.Data);
+    //        //isSucceeded = true;
+    //    })
+    //        .finally(function () {
+    //            $scope.isGettingData = false;
+    //        });
+    //}
 
-    function updateChart() {
-        if ($scope.chartAPI == undefined)
-            return;
-        $scope.profit.length = 0;
-        $scope.isGettingData = true;
-        var selectedTimeDimension = $scope.selectedTimeDimensionType.value;
-        var measuresID = [];
-        console.log($scope.selectedMeasures.length);
-        for (var j = 0; j < $scope.selectedMeasures.length; j++) {
-            measuresID.push($scope.selectedMeasures[j].Id);
-        }
+    //function updateChart() {
+    //    if ($scope.chartAPI == undefined)
+    //        return;
+    //    $scope.profit.length = 0;
+    //    $scope.isGettingData = true;
+    //    var selectedTimeDimension = $scope.selectedTimeDimensionType.value;
+    //    var measuresID = [];
+    //    console.log($scope.selectedMeasures.length);
+    //    for (var j = 0; j < $scope.selectedMeasures.length; j++) {
+    //        measuresID.push($scope.selectedMeasures[j].Id);
+    //    }
 
-        return BIConfigurationAPIService.GetMeasureValues(selectedTimeDimension, $scope.fromDate, $scope.toDate, measuresID)
-            .then(function (response) {
-                BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension, $scope.fromDate, $scope.toDate);
-                angular.forEach(response, function (item) {
-                    $scope.profit.push(item);
-                });
+    //    return BIConfigurationAPIService.GetMeasureValues(selectedTimeDimension, $scope.fromDate, $scope.toDate, measuresID)
+    //        .then(function (response) {
+    //            BIUtilitiesService.fillDateTimeProperties(response, selectedTimeDimension, $scope.fromDate, $scope.toDate);
+    //            angular.forEach(response, function (item) {
+    //                $scope.profit.push(item);
+    //            });
 
-                var chartData = $scope.profit;
-                var chartDefinition = {
-                    type: "column",
-                  //  title: getTitle(),
-                    yAxisTitle: "Value"
-                };
+    //            var chartData = $scope.profit;
+    //            var chartDefinition = {
+    //                type: "column",
+    //              //  title: getTitle(),
+    //                yAxisTitle: "Value"
+    //            };
 
-                var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
-                var seriesDefinitions = [];
-                addSeriesDefinitions(seriesDefinitions);
-                $scope.chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
-            })
-            .finally(function () {
-                $scope.isGettingData = false;
-            });
+    //            var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
+    //            var seriesDefinitions = [];
+    //            addSeriesDefinitions(seriesDefinitions);
+    //            $scope.chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+    //        })
+    //        .finally(function () {
+    //            $scope.isGettingData = false;
+    //        });
 
        
-    }
-    function updateTopChartValues() {
-        if ($scope.selectedEntity == undefined) {
-            return;
-        }
-        return updateTopChart(chartTopAPI, $scope.selectedEntity.Id, {
-            chartTitle: $scope.selectedEntity.Name,
-            seriesTitle: $scope.selectedEntity.Name
-        });
-    }
+    //}
+    //function updateTopChartValues() {
+    //    if ($scope.selectedEntity == undefined) {
+    //        return;
+    //    }
+    //    return updateTopChart(chartTopAPI, $scope.selectedEntity.Id, {
+    //        chartTitle: $scope.selectedEntity.Name,
+    //        seriesTitle: $scope.selectedEntity.Name
+    //    });
+    //}
     function defineOperationTypes() {
         $scope.operationTypes = [{
             value: "TopEntities",
@@ -233,40 +233,40 @@ function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesSe
         $scope.selectedOperationType = $scope.operationTypes[0];
     }
 
-    function updateTopChart(chartAPI, entityType, chartSettings) {
-        if (!chartAPI)
-            return;
-        var measureType = $scope.selectedMeasures[0];
-        if (measureType == undefined || measureType == null || measureType.length == 0)
-            return;
-        var measuresID = [];
-        console.log($scope.selectedMeasures.length);
-        for (var j = 0; j < $scope.selectedMeasures.length; j++) {
-            measuresID.push($scope.selectedMeasures[j].Id);
-            console.log($scope.selectedMeasures[j].Id);
-        }
-        return BIConfigurationAPIService.GetTopEntities(entityType, measureType.Id, $scope.fromDate, $scope.toDate, 10, measuresID)
-            .then(function (response) {
-                var chartData = [];
-                angular.forEach(response, function (item) {
-                    chartData.push(item);
-                });
+    //function updateTopChart(chartAPI, entityType, chartSettings) {
+    //    if (!chartAPI)
+    //        return;
+    //    var measureType = $scope.selectedMeasures[0];
+    //    if (measureType == undefined || measureType == null || measureType.length == 0)
+    //        return;
+    //    var measuresID = [];
+    //    console.log($scope.selectedMeasures.length);
+    //    for (var j = 0; j < $scope.selectedMeasures.length; j++) {
+    //        measuresID.push($scope.selectedMeasures[j].Id);
+    //        console.log($scope.selectedMeasures[j].Id);
+    //    }
+    //    return BIConfigurationAPIService.GetTopEntities(entityType, measureType.Id, $scope.fromDate, $scope.toDate, 10, measuresID)
+    //        .then(function (response) {
+    //            var chartData = [];
+    //            angular.forEach(response, function (item) {
+    //                chartData.push(item);
+    //            });
 
-                var chartDefinition = {
-                    type: "pie",
-                    //   title: chartSettings.chartTitle,
-                    yAxisTitle: "Value"
-                };
+    //            var chartDefinition = {
+    //                type: "pie",
+    //                //   title: chartSettings.chartTitle,
+    //                yAxisTitle: "Value"
+    //            };
 
-                var seriesDefinitions = [{
-                    title: measureType.Name,//chartSettings.seriesTitle,
-                    titlePath: "EntityName",
-                    valuePath: "Values[0]"
-                }];
+    //            var seriesDefinitions = [{
+    //                title: measureType.Name,//chartSettings.seriesTitle,
+    //                titlePath: "EntityName",
+    //                valuePath: "Values[0]"
+    //            }];
 
-                chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
-            });
-    }
+    //            chartAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
+    //        });
+    //}
 
 
     function addSeriesDefinitions(seriesDefinitions) {
@@ -313,7 +313,7 @@ function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesSe
                 description: "Chart"
             },
             {
-                value: "vr-bi-datagrid",
+                value: "vr-datagrid-bi",
                 description: "Report"
             }
         ];

@@ -13,14 +13,6 @@ app.service('BIVisualElementService1', function (BIConfigurationAPIService) {
         angular.forEach(visualElementSettings.measureTypes, function (measureType) {
             measureTypeValues.push(measureType.Id);
         });
-
-        console.log(visualElementSettings.entityType.Id);
-        console.log(visualElementSettings.measureTypes[0]);
-        console.log(visualElementController.fromdate);
-        console.log(visualElementController.todate);
-        console.log(visualElementSettings.measureTypes);
-       // console.log(visualElementSettings.entityType.Id);
-        console.log(visualElementSettings.operationType.value);
         switch (visualElementSettings.operationType.value) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;

@@ -60,8 +60,6 @@ app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', '
         }
 
         function retrieveData() {
-            //console.log(ctrl);
-            //console.log(settings);
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                 .then(function (response) {
                             console.log(response);
@@ -114,10 +112,6 @@ app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', '
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }
-
-
-
-
     return directiveDefinitionObject;
 }]);
 
