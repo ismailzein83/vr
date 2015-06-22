@@ -164,7 +164,7 @@ namespace NewCallGenService
                 //--------------------------------------
                 ScheduleLog sl = new ScheduleLog();
                 //sl = ScheduleManager.CurrentActiveSchedule;
-                sl = ScheduleManager.CurrentSchedule;
+                //sl = ScheduleManager.CurrentSchedule;
                 if (sl != null)
                     WriteToEventLog("CD=> sl " + sl.ScheduleId);
 
