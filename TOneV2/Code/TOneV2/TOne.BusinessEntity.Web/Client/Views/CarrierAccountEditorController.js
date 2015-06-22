@@ -41,50 +41,29 @@ function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatus
         })
     }
     function defineActivationStatusChoicesGroup() {
-        $scope.choicesActivationStatusGroup = [
-            { title: "InActive", value: 0 },
-            { title: "Test", value: 1 },
-            { title: "Active", value: 2 }
-        ];
-
-        $scope.choicesActivationStatusReady = function (api) {
-            $scope.choicesActivationStatusAPI = api;
-        }
+        $scope.ActivationStatus = [];
+        for (var td in ActivationStatusEnum)
+            $scope.ActivationStatus.push(ActivationStatusEnum[td]);
     }
     function defineAccountTypeChoicesGroup() {
-        $scope.choicesAccountTypeGroup = [
-            { title: "Client", value: 0 },
-            { title: "Exchange", value: 1 },
-            { title: "Termination", value: 2 }
-        ];
-
-        $scope.choicesAccountTypeReady = function (api) {
-            $scope.choicesAccountTypeAPI = api;
-        }
+        $scope.AccountType = [];
+        for (var td in AccountTypeEnum)
+            $scope.AccountType.push(AccountTypeEnum[td]);
     }
     function defineRoutingStatusSelectGroup() {
-        $scope.routingStatus = [
-            { title: "Blocked", value: 0 },
-            { title: "Blocked In Bound", value: 1 },
-            { title: "Blocked Out Bound", value: 2 },
-            { title: "Enabled", value: 3 }
-        ];
+        $scope.routingStatus = [];
+        for (var td in RoutingStatusEnum)
+            $scope.routingStatus.push(RoutingStatusEnum[td]);
     }
     function defineCustomerPaymentTypeSelectGroup() {
-        $scope.customerPaymentType = [
-            { title: "PostPaid", value: 0 },
-            { title: "PrePaid", value: 1 },
-            { title: "Undefined", value: 100 },
-            { title: "Defined By Profile", value: 200 }
-        ];
+        $scope.customerPaymentType = [];
+        for (var td in PaymentTypeEnum)
+            $scope.customerPaymentType.push(PaymentTypeEnum[td]);
     }
     function defineSupplierPaymentTypeSelectGroup() {
-        $scope.supplierPaymentType = [
-            { title: "PostPaid", value: 0 },
-            { title: "PrePaid", value: 1 },
-            { title: "Undefined", value: 100 },
-            { title: "Defined By Profile", value: 200 }
-        ];
+        $scope.supplierPaymentType = [];
+        for (var td in PaymentTypeEnum)
+            $scope.supplierPaymentType.push(PaymentTypeEnum[td]);
     }
     function getCarrierAccount() {
         return CarrierAPIService.GetCarrierAccount($scope.CarrierAccountId)
@@ -114,9 +93,9 @@ function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatus
             ProfileId: $scope.ProfileId,
             ProfileName: $scope.ProfileName,
             ProfileCompanyName: $scope.ProfileCompanyName,
-            ActivationStatus: $scope.choicesActivationStatusGroup[$scope.selectedActivationStatusChoiceIndex].value,
+            ActivationStatus: $scope.selectedActivationStatus.value,
             RoutingStatus: $scope.selectedRoutingStatus.value,
-            AccountType: $scope.choicesAccountTypeGroup[$scope.selectedAccountTypeChoiceIndex].value,
+            AccountType: $scope.SelectedAccountType.value,
             CustomerPaymentType: $scope.selectedCustomerPaymentType.value,
             SupplierPaymentType: $scope.selectedSupplierPaymentType.value,
             NameSuffix: $scope.NameSuffix
@@ -129,17 +108,13 @@ function CarrierAccountEditorController($scope, CarrierAPIService, RoutingStatus
         $scope.ProfileId = CarrierAccountObject.ProfileId;
         $scope.ProfileName = CarrierAccountObject.ProfileName;
         $scope.ProfileCompanyName = CarrierAccountObject.ProfileCompanyName;
-        $scope.ActivationStatus = CarrierAccountObject.ActivationStatus;
-        $scope.choicesActivationStatusAPI.selectChoice(UtilsService.getItemIndexByVal($scope.choicesActivationStatusGroup, $scope.ActivationStatus, 'value'));
+        $scope.selectedActivationStatus = $scope.ActivationStatus[UtilsService.getItemIndexByVal($scope.ActivationStatus, CarrierAccountObject.ActivationStatus, 'value')];
         $scope.selectedRoutingStatus = $scope.routingStatus[UtilsService.getItemIndexByVal($scope.routingStatus, CarrierAccountObject.RoutingStatus, 'value')];
-        $scope.AccountType = CarrierAccountObject.AccountType;
-        $scope.choicesAccountTypeAPI.selectChoice(UtilsService.getItemIndexByVal($scope.choicesAccountTypeGroup, $scope.AccountType, 'value'));
-        $scope.CustomerPaymentType = CarrierAccountObject.CustomerPaymentType;
+        $scope.selectedAccountType = $scope.AccountType[UtilsService.getItemIndexByVal($scope.AccountType, CarrierAccountObject.AccountType, 'value')];
         $scope.selectedCustomerPaymentType = $scope.customerPaymentType[UtilsService.getItemIndexByVal($scope.customerPaymentType, CarrierAccountObject.CustomerPaymentType, 'value')];
-        $scope.SupplierPaymentType = CarrierAccountObject.SupplierPaymentType;
         $scope.selectedSupplierPaymentType = $scope.supplierPaymentType[UtilsService.getItemIndexByVal($scope.supplierPaymentType, CarrierAccountObject.SupplierPaymentType, 'value')];
         $scope.NameSuffix = CarrierAccountObject.NameSuffix;
     }
-
 }
+
 appControllers.controller('Carrier_CarrierAccountEditorController', CarrierAccountEditorController);
