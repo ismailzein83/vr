@@ -80,7 +80,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
-
+        [HttpGet]
         public Dictionary<int, CriteriaDefinition> GetFilters()
         {
             CriteriaManager manager = new CriteriaManager();
@@ -89,14 +89,13 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
         }
 
 
+        [HttpGet]
         public List<Period> GetPeriods()
         {
             StrategyManager manager = new StrategyManager();
 
             return manager.GetPeriods();
         }
-
-
 
 
     }

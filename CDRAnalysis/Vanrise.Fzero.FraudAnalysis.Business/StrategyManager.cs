@@ -1,7 +1,7 @@
-﻿using Vanrise.Fzero.FraudAnalysis.Data;
-using Vanrise.Fzero.FraudAnalysis.Entities;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using Vanrise.Fzero.FraudAnalysis.Data;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -43,10 +43,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return ((IEnumerable<NumberProfile>)(manager.GetNumberProfiles(fromRow, toRow, fromDate, toDate, subscriberNumber)));
 
         }
-
-
-
-
 
 
         public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
@@ -115,6 +111,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 insertOperationOutput.Result = Vanrise.Fzero.FraudAnalysis.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
+
 
 
 

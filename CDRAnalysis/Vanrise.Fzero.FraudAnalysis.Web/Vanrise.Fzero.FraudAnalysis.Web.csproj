@@ -150,14 +150,12 @@
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\StrategyEditor.html" />
-    <Content Include="FraudAnalysis\Views\WorkflowManagementController.js" />
     <Content Include="FraudAnalysis\Views\SuspicionAnalysis.html" />
     <Content Include="FraudAnalysis\Views\SuspicionAnalysisController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsController.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyManagementController.js" />
-    <Content Include="FraudAnalysis\Views\WorkflowManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
