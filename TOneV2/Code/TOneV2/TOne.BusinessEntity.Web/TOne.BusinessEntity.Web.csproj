@@ -133,27 +133,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Constant\AccountTypeEnum.js" />
-    <Content Include="Client\Constant\ActivationStatusEnum.js" />
-    <Content Include="Client\Constant\PaymentTypeEnum.js" />
-    <Content Include="Client\Constant\RoutingStatusEnum.js" />
-    <Content Include="Client\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Client\Services\APIServices\CarrierAPIService.js" />
-    <Content Include="Client\Services\APIServices\SwitchManagmentAPIService.js" />
-    <Content Include="Client\Views\CarrierAccountEditor.html" />
-    <Content Include="Client\Views\CarrierAccountEditorController.js" />
-    <Content Include="Client\Views\CarrierAccountManagement.html" />
-    <Content Include="Client\Views\CarrierAccountManagementController.js" />
-    <Content Include="Client\Views\Rates.html" />
-    <Content Include="Client\Views\RatesController.js" />
-    <Content Include="Client\Views\SwitchEditor.html" />
-    <Content Include="Client\Views\SwitchEditorController.js" />
-    <Content Include="Client\Views\SwitchManagment.html" />
-    <Content Include="Client\Views\SwitchManagmentController.js" />
-    <Content Include="Client\Views\SwitchsController.js" />
-    <Content Include="Client\Views\Switchs.html" />
-    <Content Include="Client\Views\TestNew.html" />
-    <Content Include="Client\Views\TestNewController.js" />
+    <Content Include="BusinessEntity\Constant\AccountTypeEnum.js" />
+    <Content Include="BusinessEntity\Constant\ActivationStatusEnum.js" />
+    <Content Include="BusinessEntity\Constant\PaymentTypeEnum.js" />
+    <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
+    <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\CarrierAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
+    <Content Include="BusinessEntity\Views\CarrierAccountEditor.html" />
+    <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
+    <Content Include="BusinessEntity\Views\CarrierAccountManagement.html" />
+    <Content Include="BusinessEntity\Views\CarrierAccountManagementController.js" />
+    <Content Include="BusinessEntity\Views\Rates.html" />
+    <Content Include="BusinessEntity\Views\RatesController.js" />
+    <Content Include="BusinessEntity\Views\SwitchEditor.html" />
+    <Content Include="BusinessEntity\Views\SwitchEditorController.js" />
+    <Content Include="BusinessEntity\Views\SwitchManagment.html" />
+    <Content Include="BusinessEntity\Views\SwitchManagmentController.js" />
+    <Content Include="BusinessEntity\Views\SwitchsController.js" />
+    <Content Include="BusinessEntity\Views\Switchs.html" />
+    <Content Include="BusinessEntity\Views\TestNew.html" />
+    <Content Include="BusinessEntity\Views\TestNewController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
