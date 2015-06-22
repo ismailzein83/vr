@@ -24,7 +24,8 @@ var CustomerController = function ($scope, $http, CarrierAPIService, UtilsServic
             }
             return showmsg;
         }
-        $scope.subViewConnector.getCarrierAccountSet = function () {
+
+        $scope.subViewCustomerSetConnector.getData = function () {
             return {
                 $type: "TOne.LCR.Entities.CustomerSelectionSet, TOne.LCR.Entities",
                 Customers: {
@@ -33,6 +34,14 @@ var CustomerController = function ($scope, $http, CarrierAPIService, UtilsServic
                 }
             }
         }
+
+        $scope.subViewCustomerSetConnector.setData = function (data) {
+
+            $scope.subViewCustomerSetConnector.data = data;
+            loadForm();
+        }
+
+
         $scope.getSelectedValues = function () {
             var tab = [];
             $.each($scope.selectedCustomers, function (i, value) {
@@ -73,22 +82,26 @@ var CustomerController = function ($scope, $http, CarrierAPIService, UtilsServic
 
         CarrierAPIService.GetCarriers(CarrierTypeEnum.Customer.value).then(function (response) {
             $scope.customers = response;
-            if ($scope.routeRule != null) {
-                var tab = [];
-                $.each($scope.routeRule.CarrierAccountSet.Customers.SelectedValues, function (i, value) {
-                    var existobj = UtilsService.getItemByVal($scope.customers, value, 'CarrierAccountID');
-                    if (existobj != null)
-                        tab[i] = existobj;
-
-                });
-                $scope.selectedCustomers = tab;
-                $scope.carrierAccountSelectionOption = $scope.routeRule.CarrierAccountSet.Customers.SelectionOption;
-            }
-            else {
-                $scope.carrierAccountSelectionOption = 1;
-            }
+            loadForm();
         })
 
+    }
+
+    function loadForm() {
+        if ($scope.subViewCustomerSetConnector.data == undefined)
+            return;
+
+        if ($scope.customers == undefined || $scope.customers.length == 0)
+            return;
+        var data = $scope.subViewCustomerSetConnector.data;
+
+        $.each(data.Customers.SelectedValues, function (i, value) {
+            var existobj = UtilsService.getItemByVal($scope.customers, value, 'CarrierAccountID');
+            if (existobj != null)
+                $scope.selectedCustomers.push(existobj);
+
+        });
+        $scope.carrierAccountSelectionOption = data.Customers.SelectionOption;
     }
 
 }

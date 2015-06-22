@@ -1,5 +1,6 @@
-﻿'use strict'
+﻿
 var RoutingRulesAPIService = function (BaseAPIService) {
+    'use strict';
     return ({
         getRouteRuleDetails: getRouteRuleDetails,
         InsertRouteRule: InsertRouteRule,

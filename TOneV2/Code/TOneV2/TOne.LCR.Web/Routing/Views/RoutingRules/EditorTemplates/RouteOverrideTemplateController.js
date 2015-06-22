@@ -3,17 +3,23 @@
 
         defineScope();
         load();
-
         function defineScope() {
+      
             $scope.suppliers = [];
             $scope.selectedSuppliers = [];
 
             $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
 
-            $scope.subViewConnector.getActionData = function () {
+            $scope.subViewActionDataConnector.getData = function () {
                 return getActionData()
 
+            };
+
+            $scope.subViewActionDataConnector.setData = function (data) {
+                $scope.subViewActionDataConnector.data = data;
+                loadForm();
             }
+
             $scope.selectSupplier = function ($event, s) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -30,33 +36,36 @@
                 else
                     $scope.selectedSuppliers.push(s);
             };
-
         }
 
         function load() {
-            CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value)
-           .then(function (response) {
-               $scope.suppliers = response;
-               var tab = [];
-               if ($scope.routeRule && $scope.routeRule.ActionData.$type == RoutingRulesTemplatesEnum.OverrideTemplate.objectType) {
-                   $.each($scope.routeRule.ActionData.Options, function (i, value) {
-                       $scope.selectedSuppliers.length = 0;
-                       var existobj = UtilsService.getItemByVal($scope.suppliers, value.SupplierId, 'CarrierAccountID')
-                       if (existobj != null) {
-                           tab[i] = {
-                               CarrierAccountID: value.SupplierId,
-                               Name: existobj.Name,
-                               AllowLoss: $scope.routeRule.ActionData.Options[i].AllowLoss,
-                               Percentage: $scope.routeRule.ActionData.Options[i].Percentage
-                           }
-                       }
+            CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
+                $scope.suppliers = response;
+                if ($scope.subViewActionDataConnector.data != undefined) {                    
+                    loadForm();
+                }
+            })
+        }
 
-                   });
-                   $scope.selectedSuppliers = tab;
-               }
+        function loadForm() {
+            if ($scope.subViewActionDataConnector.data == undefined)
+                return;
 
-           })
-
+            if ($scope.suppliers == undefined || $scope.suppliers.length == 0)
+                return;
+            var data = $scope.subViewActionDataConnector.data;
+            $.each(data.Options, function (i, value) {
+                $scope.selectedSuppliers.length = 0;
+                var existobj = UtilsService.getItemByVal($scope.suppliers, value.SupplierId, 'CarrierAccountID')
+                if (existobj != null) {
+                    $scope.selectedSuppliers.push({
+                        CarrierAccountID: value.SupplierId,
+                        Name: existobj.Name,
+                        AllowLoss: data.Options[i].AllowLoss,
+                        Percentage: data.Options[i].Percentage
+                    });
+                }
+            });
         }
 
         function getActionData() {

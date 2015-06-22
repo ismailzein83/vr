@@ -1,21 +1,19 @@
 ﻿
 var CodeController = function ($scope, $http) {
-    defineScopeObjects();
-    defineScopeMethods();
+    defineScope();
     load();
-
-    function defineScopeObjects() {
+    loadForm();
+    function defineScope() {
         $scope.code = "";
         $scope.codeList = [];
         $scope.codeInpute = '';
-    }
-    function defineScopeMethods() {
+
         var numberReg = /^\d+$/;
         $scope.isNumber = function (s) {
             return String(s).search(numberReg) != -1
         };
 
-        $scope.muteAction =  function (e) {
+        $scope.muteAction = function (e) {
             e.preventDefault();
             e.stopPropagation();
         }
@@ -69,7 +67,9 @@ var CodeController = function ($scope, $http) {
             var index = $scope.codeList.indexOf(s);
             $scope.codeList.splice(index, 1);
         }
-        $scope.subViewConnector.getCodeSet = function () {
+
+
+        $scope.subViewCodeSetConnector.getData = function () {
             return {
                 $type: "TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities",
                 Code: $scope.code,
@@ -78,6 +78,28 @@ var CodeController = function ($scope, $http) {
             };
         };
 
+        $scope.subViewCodeSetConnector.setData = function (data) {
+            $scope.subViewCodeSetConnector.data = data;
+            loadForm();
+        }
+
+    }
+
+    function loadForm() {
+        if ($scope.subViewCodeSetConnector.data == undefined)
+            return;
+        var data = $scope.subViewCodeSetConnector.data;
+        if (data != null) {
+            $scope.codeList = data.ExcludedCodes;
+            $scope.code = data.Code;
+            $scope.subCodes = data.WithSubCodes;
+        }
+        else {
+            $scope.zoneSelectionOption = 1;
+            $scope.codeList = [];
+            $scope.code = '';
+            $scope.subCodes = false;
+        }
     }
 
     function load() {
@@ -110,18 +132,8 @@ var CodeController = function ($scope, $http) {
         $(".modal-body").scroll(function () {
             fixDropdownPosition();
         });
-        if ($scope.routeRule != null && $scope.routeRule.CodeSet.Code != null && $scope.routeRule.CodeSet.$type == 'TOne.LCR.Entities.CodeSelectionSet, TOne.LCR.Entities') {
-            $scope.codeList = $scope.routeRule.CodeSet.ExcludedCodes;
-            $scope.code = $scope.routeRule.CodeSet.Code;
-            $scope.subCodes = $scope.routeRule.CodeSet.WithSubCodes;
-        }
-        else {
-            $scope.zoneSelectionOption = 1;
-            $scope.codeList = [];
-            $scope.code = '';
-            $scope.subCodes = false;
-        }
     }
+
 }
 
 CodeController.$inject = ['$scope', '$http'];
