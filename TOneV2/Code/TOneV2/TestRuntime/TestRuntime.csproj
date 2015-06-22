@@ -298,6 +298,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RabihTask.cs" />
+    <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\MustaphaTask.cs" />
     <Compile Include="Tasks\ZeinabTask.cs" />
   </ItemGroup>
