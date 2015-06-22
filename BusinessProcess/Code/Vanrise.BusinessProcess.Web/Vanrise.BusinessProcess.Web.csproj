@@ -135,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
+    <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
+    <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPManagement.html" />
     <Content Include="BusinessProcess\Views\BPManagementController.js" />
     <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
