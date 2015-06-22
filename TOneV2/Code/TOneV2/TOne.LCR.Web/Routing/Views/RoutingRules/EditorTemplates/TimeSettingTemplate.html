@@ -1,40 +1,30 @@
 ﻿<div ng-controller="RoutingRules_TimeSettingTemplateController">
-    <vr-row>
-        <vr-columns colnum="4">
-            <vr-row removeline>
-                <vr-columns colnum="6" colnumsm="4">
-                    <vr-datetimepicker label="Begin Effective Date:" type="date" value="BED" isrequired></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
-        </vr-columns>
-        <vr-columns colnum="4">
-            <vr-row removeline>
-                <vr-columns colnum="6" colnumsm="4">
-                    <vr-datetimepicker label="End Effective Date:" type="date" value="EED"></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
-        </vr-columns>
-    </vr-row>
     <vr-row removeline>
         <vr-columns colnum="4">
-            <vr-row removeline>
-                <vr-columns colnum="6" colnumsm="4">
-                    <vr-datetimepicker label="From Time:" type="date" value="FromTime" isrequired></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
+            <vr-datetimepicker label="Begin Effective Date:" type="date" value="BED" isrequired></vr-datetimepicker>
         </vr-columns>
         <vr-columns colnum="4">
-            <vr-row removeline>
-                <vr-columns colnum="6" colnumsm="4">
-                    <vr-datetimepicker label="To Time:" type="date" value="ToTime"></vr-datetimepicker>
-                </vr-columns>
-            </vr-row>
+            <vr-datetimepicker label="End Effective Date:" type="date" value="EED"></vr-datetimepicker>
         </vr-columns>
     </vr-row>
-    <vr-row removeline>
-        <vr-columns colnum="2">
-            <vr-select label="Days" ismultipleselection hideselectedvaluessection="true" datatextfield="name" datavaluefield="value"
-                       datasource="daysOfWeek" selectedvalues="selectedDaysOfWeek"></vr-select>
-        </vr-columns>
-    </vr-row>
+
+    <vr-section title="Execution Time Settings" colnum="6">
+        <vr-row removeline>
+            <vr-columns colnum="4">
+                <vr-datetimepicker label="From Time:" type="date" value="FromTime" isrequired></vr-datetimepicker>
+
+            </vr-columns>
+            <vr-columns colnum="4">
+                <vr-datetimepicker label="To Time:" type="date" value="ToTime"></vr-datetimepicker>
+
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns colnum="2">
+                <vr-select label="Days" ismultipleselection hideselectedvaluessection="true" datatextfield="name" datavaluefield="value"
+                           datasource="daysOfWeek" selectedvalues="selectedDaysOfWeek"></vr-select>
+            </vr-columns>
+        </vr-row>
+
+    </vr-section>
 </div>

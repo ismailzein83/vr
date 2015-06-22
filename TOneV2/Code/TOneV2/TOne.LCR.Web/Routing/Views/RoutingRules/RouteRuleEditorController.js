@@ -1,9 +1,10 @@
 ﻿RouteRuleEditorController.$inject = ['$scope', 'RoutingRulesAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'RoutingRulesTemplatesEnum', 'CodeSetTypeEnum', 'CustomerSetsEnum', 'UtilsService', 'DaysOfWeekEnum'];
 function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalService, VRNotificationService, VRNavigationService, RoutingRulesTemplatesEnum, CodeSetTypeEnum, CustomerSetsEnum, UtilsService, DaysOfWeekEnum) {
     var editMode;
+    defineScope();
     $scope.RouteRuleId;
     loadParameters();
-    defineScope();
+
     load();
 
     function loadParameters() {
@@ -20,7 +21,8 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
     }
 
     function defineScope() {
-
+        $scope.BED = "";
+        $scope.EED = "";
         $scope.step = 1;
         $scope.setStep = function (step) {
             $scope.step = step;
@@ -95,9 +97,11 @@ function RouteRuleEditorController($scope, RoutingRulesAPIService, VRModalServic
     function fillScopeFromRouteRuleObj(routeRuleObject) {
         $scope.RouteRuleId = routeRuleObject.RouteRuleId;
         $scope.routeRule = routeRuleObject;
+        
         $scope.selectedRuleType = UtilsService.getItemByVal($scope.ruleTypes, routeRuleObject.ActionData.$type, 'objectType');
-        //$scope.BEDDate = new Date(routeRuleObject.TimeExecutionSetting.BeginEffectiveDate);
-        //$scope.EEDDate = routeRuleObject.EndEffectiveDate;
+        $scope.BED = routeRuleObject.TimeExecutionSetting != null && routeRuleObject.TimeExecutionSetting != undefined ? routeRuleObject.TimeExecutionSetting.BeginEffectiveDate : routeRuleObject.BeginEffectiveDate;
+        $scope.EED = routeRuleObject.TimeExecutionSetting != null && routeRuleObject.TimeExecutionSetting != undefined ? routeRuleObject.TimeExecutionSetting.EndEffectiveDate : routeRuleObject.EndEffectiveDate;
+        $scope.subViewConnector.load();
         $scope.Reason = routeRuleObject.Reason;
         $scope.selectedCustomerSet = $scope.customerSets[0]; //UtilsService.getItemByVal($scope.customerSets, routeRuleObject.CarrierAccountSet.$type, 'objectType');
         $scope.selectedCodeSet = null;

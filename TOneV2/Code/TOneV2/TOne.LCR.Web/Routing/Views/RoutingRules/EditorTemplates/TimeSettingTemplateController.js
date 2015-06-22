@@ -1,19 +1,15 @@
 ﻿var TimeSettingController = function ($scope, UtilsService, DaysOfWeekEnum) {
 
     defineScope();
-    load();
 
     function defineScope() {
-
-        $scope.BED = "";
-        $scope.EED = "";
         $scope.FromTime = "";
         $scope.ToTime = "";
 
         $scope.daysOfWeek = [];
         $scope.selectedDaysOfWeek = [];
 
-  
+
         $scope.subViewConnector.getTimeSettings = function () {
             return {
                 Days: $scope.getSelectedDays(),
@@ -30,21 +26,22 @@
             });
             return selectedDays;
         }
-    }
 
-    function load() {
-        loadDaysOfWeek();
+        $scope.subViewConnector.load = function () {
+            loadDaysOfWeek();
+            if ($scope.routeRule != null && $scope.routeRule != undefined && $scope.routeRule.TimeExecutionSetting != null) {
+                //TODO Fill Time Settings
+                $scope.BED = $scope.routeRule.TimeExecutionSetting.BeginEffectiveDate;
+                $scope.EED = $scope.routeRule.TimeExecutionSetting.EndEffectiveDate;
+                $scope.FromTime = $scope.routeRule.TimeExecutionSetting.FromTime;
+                $scope.ToTime = $scope.routeRule.TimeExecutionSetting.ToTime;
+                loadSelectedDays($scope.routeRule.TimeExecutionSetting.Days);
+            }
 
-        if ($scope.routeRule != null && $scope.routeRule.TimeExecutionSetting != undefined) {
-            //TODO Fill Time Settings
-            $scope.BED = $scope.routeRule.TimeExecutionSetting.BeginEffectiveDate;
-            $scope.EED = $scope.routeRule.TimeExecutionSetting.EndEffectiveDate;
-            $scope.FromTime = $scope.routeRule.TimeExecutionSetting.FromTime;
-            $scope.ToTime = $scope.routeRule.TimeExecutionSetting.ToTime;
-            loadSelectedDays($scope.routeRule.TimeExecutionSetting.Days);
         }
 
     }
+
 
     function loadDaysOfWeek() {
         for (var prop in DaysOfWeekEnum) {

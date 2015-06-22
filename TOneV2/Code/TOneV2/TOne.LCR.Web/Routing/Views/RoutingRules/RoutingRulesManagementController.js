@@ -105,7 +105,6 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
 
     function getData() {
         var filter = buildFilter();
-        console.log(mainGridAPI);
         var pageInfo = mainGridAPI.getPageInfo();
 
 

@@ -140,7 +140,6 @@
     <Content Include="Routing\Services\RoutingRulesAPIService.js" />
     <Content Include="Routing\Views\RoutingManagement\RoutingManagementController.js" />
     <Content Include="Routing\Views\RoutingManagement\RoutingManagement.html" />
-    <Content Include="Routing\Views\RoutingManagement\Test.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplateController.js" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CodeTemplate.html" />
     <Content Include="Routing\Views\RoutingRules\EditorTemplates\CustomerTemplateController.js" />
