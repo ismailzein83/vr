@@ -109,7 +109,7 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Suspicious Number Details & Related Numbers";
         };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetailsEditor.html", params, settings);
+        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousNumberDetails.html", params, settings);
     }
 
 

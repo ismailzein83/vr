@@ -1,6 +1,6 @@
-﻿StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+﻿SuspiciousNumberDetailsController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function SuspiciousNumberDetailsController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     var normalCDRGridAPI;
     var numberProfileGridAPI;
 
@@ -68,8 +68,8 @@ function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIServ
         $scope.relatedNumbers = [];
 
 
-        StrategyEditorController.isNormalCDRTabShown = true;
-        StrategyEditorController.isNumberProfileTabShown = false;
+        SuspiciousNumberDetailsController.isNormalCDRTabShown = true;
+        SuspiciousNumberDetailsController.isNumberProfileTabShown = false;
 
         $scope.onNormalCDRsGridReady = function (api) {
             normalCDRGridAPI = api;
@@ -142,7 +142,7 @@ function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIServ
 
 
 
-    StrategyEditorController.viewVisibilityChanged = function () {
+    SuspiciousNumberDetailsController.viewVisibilityChanged = function () {
 
         isNormalCDRTabShown = !isNormalCDRTabShown;
         isNumberProfileTabShown = !isNumberProfileTabShown;
@@ -155,4 +155,4 @@ function StrategyEditorController($scope, StrategyAPIService, FraudResultAPIServ
 
 
 }
-appControllers.controller('StrategyEditorController', StrategyEditorController);
+appControllers.controller('SuspiciousNumberDetailsController', SuspiciousNumberDetailsController);
