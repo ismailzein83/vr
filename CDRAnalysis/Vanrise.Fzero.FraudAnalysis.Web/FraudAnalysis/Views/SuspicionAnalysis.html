@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="FraudAnalysis_FraudResultManagementController">
+﻿<vr-panel ng-controller="FraudAnalysis_SuspicionAnalysisController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
@@ -22,7 +22,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
-                    <vr-button type="Reset"  data-onclick="resetClicked"></vr-button>
+                    <vr-button type="Reset" data-onclick="resetClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -32,7 +32,7 @@
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="fraudResults" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
                     <vr-datagridcolumn headertext="'Date'" field="'DateDay'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"         ></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

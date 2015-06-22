@@ -149,8 +149,8 @@
   <ItemGroup>
     <Content Include="FraudAnalysis\Services\APIServices\FraudResultAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
-    <Content Include="FraudAnalysis\Views\FraudResultManagement.html" />
-    <Content Include="FraudAnalysis\Views\FraudResultManagementController.js" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysis.html" />
+    <Content Include="FraudAnalysis\Views\SuspicionAnalysisController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetails.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousNumberDetailsController.js" />
     <Content Include="FraudAnalysis\Views\StrategyManagement.html" />

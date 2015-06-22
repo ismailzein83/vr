@@ -1,6 +1,6 @@
-﻿FraudResultManagementController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿SuspicionAnalysisController.$inject = ['$scope', 'StrategyAPIService', 'FraudResultAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function FraudResultManagementController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function SuspicionAnalysisController($scope, StrategyAPIService, FraudResultAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
 
     var mainGridAPI;
     var arrMenuAction = [];
@@ -141,4 +141,4 @@ function FraudResultManagementController($scope, StrategyAPIService, FraudResult
 
    
 }
-appControllers.controller('FraudAnalysis_FraudResultManagementController', FraudResultManagementController);
+appControllers.controller('FraudAnalysis_SuspicionAnalysisController', SuspicionAnalysisController);
