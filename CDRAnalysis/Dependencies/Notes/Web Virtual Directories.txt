@@ -5,3 +5,4 @@ Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
  - Add the following virtual directories under Client > Modules folder:
 FraudAnalysis			C:\TFS\CDRAnalysis\Vanrise.Fzero.FraudAnalysis.Web\FraudAnalysis
 Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
