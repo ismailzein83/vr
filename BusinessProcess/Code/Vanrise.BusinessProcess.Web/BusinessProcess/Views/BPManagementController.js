@@ -1,57 +1,22 @@
-﻿BPManagementController.$inject = ['BusinessProcessAPIService', 'VRModalService'];
-
+﻿
 function BPManagementController(BusinessProcessAPIService, VRModalService) {
 
     "use strict";
 
-    var mainGridAPI;
-    var ctrl = this;
+    var mainGridAPI, ctrl = this;
     ctrl.definitions = [];
     ctrl.selectedDefinition = [];
     ctrl.instanceStatus = [];
     ctrl.selectedInstanceStatus = [];
-    ctrl.BPInstances = [];
 
-    ctrl.loadMoreData = function () {
-        return getData();
-    }
+    function showBPTrackingModal(BPInstanceObj) {
 
-    ctrl.searchClicked = function () {
-        mainGridAPI.clearDataAndContinuePaging();
-        return getData();
-    }
-
-    ctrl.onGridReady = function (api) {
-        mainGridAPI = api;
-    }
-
-    ctrl.showBPTrackingModal = function (BPInstanceID) {
-
-        var settings = {
-            onScopeReady : function (modalScope) {
+        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
+            BPInstanceID: BPInstanceObj.ProcessInstanceID
+        }, {
+            onScopeReady: function (modalScope) {
                 modalScope.title = "Tracking";
-                modalScope.BPInstanceID = BPInstanceID;
             }
-        };
-
-        VRModalService.showModal('/Client/Modules/Main/Views/UserEditor.html', null, settings);
-    }
-
-
-    function getData() {
-        
-        var pageInfo = mainGridAPI.getPageInfo();
-        var param = {
-            DefinitionsId : getFilterIds(ctrl.selectedDefinition, "BPDefinitionID"),
-            InstanceStatus: getFilterIds(ctrl.selectedInstanceStatus, "Value"),
-            FromRow : pageInfo.fromRow,
-            ToRow : pageInfo.toRow,
-            DateFrom : ctrl.fromDate,
-            DateTo : ctrl.toDate
-        };
-        
-        return BusinessProcessAPIService.GetFilteredBProcess(param).then(function (response) {
-             mainGridAPI.addItemsToSource(response);
         });
     }
 
@@ -66,9 +31,41 @@ function BPManagementController(BusinessProcessAPIService, VRModalService) {
         return filterIds;
     }
 
-    function load() {
-        loadFilters();
+    function getData() {
+
+        var pageInfo = mainGridAPI.getPageInfo();
+
+        return BusinessProcessAPIService.GetFilteredBProcess({
+            DefinitionsId: getFilterIds(ctrl.selectedDefinition, "BPDefinitionID"),
+            InstanceStatus: getFilterIds(ctrl.selectedInstanceStatus, "Value"),
+            FromRow: pageInfo.fromRow,
+            ToRow: pageInfo.toRow,
+            DateFrom: ctrl.fromDate,
+            DateTo: ctrl.toDate
+        }).then(function (response) {
+            mainGridAPI.addItemsToSource(response);
+        });
     }
+
+    function defineGrid() {
+        ctrl.datasource = [];
+        ctrl.gridMenuActions = [];
+        ctrl.loadMoreData = function () {
+            return getData();
+        };
+        ctrl.onGridReady = function (api) {
+            mainGridAPI = api;
+        };
+        ctrl.gridMenuActions = [{
+            name: "Tracking",
+            clicked: showBPTrackingModal
+        }];
+    }
+
+    ctrl.searchClicked = function () {
+        mainGridAPI.clearDataAndContinuePaging();
+        return getData();
+    };
 
     function loadFilters() {
 
@@ -85,6 +82,13 @@ function BPManagementController(BusinessProcessAPIService, VRModalService) {
         });
     }
 
+    function load() {
+        loadFilters();
+    }
+
     load();
+    defineGrid();
 }
+
+BPManagementController.$inject = ['BusinessProcessAPIService', 'VRModalService'];
 appControllers.controller('BusinessProcess_BPManagementController', BPManagementController);

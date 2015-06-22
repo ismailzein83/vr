@@ -11,15 +11,22 @@
     }
 
     function GetFilteredBProcess(param) {
-        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param );
+        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param);
+    }
+
+    function GetTrackingsByInstanceId(processInstanceID) {
+        return BaseAPIService.get("/api/BusinessProcess/GetTrackingsByInstanceId", {
+            processInstanceID: processInstanceID
+        });
     }
 
     return ({
         GetDefinitions: GetDefinitions,
         GetStatusList: GetStatusList,
-        GetFilteredBProcess: GetFilteredBProcess
+        GetFilteredBProcess: GetFilteredBProcess,
+        GetTrackingsByInstanceId: GetTrackingsByInstanceId
     });
 
-}
+};
 BusinessProcessAPIService.$inject = ['BaseAPIService'];
 appControllers.service('BusinessProcessAPIService', BusinessProcessAPIService);

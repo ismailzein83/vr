@@ -35,12 +35,11 @@
 
         <div>
             <vr-row>
-                <vr-columns colnum="12" simplecol>
-                    <vr-datagrid datasource="::ctrl.BPInstances" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady">
-                        <vr-datagridcolumn headertext="''" widthfactor="2" isclickable onclicked="ctrl.showBPTrackingModal">{{dataItem.ProcessInstanceID}}</vr-datagridcolumn>
+                <vr-columns colnum="12">
+                    <vr-datagrid datasource="::ctrl.datasource" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady" menuactions="ctrl.gridMenuActions">
                         <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="3"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Created Time'" widthfactor="10">{{dataItem.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5"></vr-datagridcolumn>
                     </vr-datagrid>

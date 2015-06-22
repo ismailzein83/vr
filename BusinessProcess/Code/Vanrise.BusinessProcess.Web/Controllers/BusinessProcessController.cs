@@ -48,6 +48,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return rows;
         }
 
+
+        [HttpGet]
+        public List<BPTrackingMessageModel> GetTrackingsByInstanceId(long processInstanceID)
+        {
+            BPClient manager = new BPClient();
+            return BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(processInstanceID));
+        }
+
     }
 
     #region Argument Classes
