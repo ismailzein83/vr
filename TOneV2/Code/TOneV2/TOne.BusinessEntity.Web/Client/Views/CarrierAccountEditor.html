@@ -5,16 +5,20 @@
 
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-textbox label="CarrierAccount Id" value="CarrierAccountId"></vr-textbox>
+                    <vr-label>
+                        {{CarrierAccountId}}
+                    </vr-label>
+                    </a>
                 </vr-columns>
                 <vr-columns colnum="6">
-                    <vr-textbox label="Profile Id" value="ProfileId"></vr-textbox>
+                    <a href="">
+                        <vr-label>
+                            {{ProfileName}}
+                        </vr-label>
+                    </a>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns colnum="6">
-                    <vr-textbox label="Profile Name" value="ProfileName"></vr-textbox>
-                </vr-columns>
                 <vr-columns colnum="6">
                     <vr-textbox label="Profile Company Name" value="ProfileCompanyName"></vr-textbox>
                 </vr-columns>
@@ -23,33 +27,28 @@
                 <vr-columns colnum="6">
                     <vr-textbox label="Name Suffix" value="NameSuffix"></vr-textbox>
                 </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-select datasource="ActivationStatus" datatextfield="description" datavaluefield="value" label="Activation Status"
+                               selectedvalues="selectedActivationStatus"></vr-select>
+                </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-choices selectedindex="selectedActivationStatusChoiceIndex" on-ready="choicesActivationStatusReady">
-                        <vr-choice ng-repeat="choice in choicesActivationStatusGroup">{{choice.title}}</vr-choice>
-                    </vr-choices>
+                    <vr-select datasource="AccountType" datatextfield="description" datavaluefield="value" label="Account Type"
+                               selectedvalues="selectedAccountType"></vr-select>
                 </vr-columns>
                 <vr-columns colnum="6">
-                    <vr-choices selectedindex="selectedAccountTypeChoiceIndex" on-ready="choicesAccountTypeReady">
-                        <vr-choice ng-repeat="choice in choicesAccountTypeGroup">{{choice.title}}</vr-choice>
-                    </vr-choices>
-                </vr-columns>
-
-            </vr-row>
-            <vr-row>
-            </vr-row>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <vr-select datasource="routingStatus" datatextfield="title" datavaluefield="value" label="Routing Status"
+                    <vr-select datasource="routingStatus" datatextfield="description" datavaluefield="value" label="Routing Status"
                                selectedvalues="selectedRoutingStatus"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="4">
-                    <vr-select datasource="customerPaymentType" datatextfield="title" datavaluefield="value" label="Customer Payment Type"
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-select datasource="customerPaymentType" datatextfield="description" datavaluefield="value" label="Customer Payment Type"
                                selectedvalues="selectedCustomerPaymentType"></vr-select>
                 </vr-columns>
-                <vr-columns colnum="4">
-                    <vr-select datasource="supplierPaymentType" datatextfield="title" datavaluefield="value" label="Supplier Payment Type"
+                <vr-columns colnum="6">
+                    <vr-select datasource="supplierPaymentType" datatextfield="description" datavaluefield="value" label="Supplier Payment Type"
                                selectedvalues="selectedSupplierPaymentType"></vr-select>
                 </vr-columns>
             </vr-row>
