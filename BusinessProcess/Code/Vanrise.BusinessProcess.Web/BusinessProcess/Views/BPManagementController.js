@@ -2,6 +2,8 @@
 
 function BPManagementController(BusinessProcessAPIService, VRModalService) {
 
+    "use strict";
+
     var mainGridAPI;
     var ctrl = this;
     ctrl.definitions = [];

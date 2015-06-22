@@ -1,6 +1,8 @@
 ﻿BPTrackingModalController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService'];
 function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService) {
 
+    "use strict";
+
     var ctrl = this;
     ctrl.close =  function () {
         $scope.modalContext.closeModal();

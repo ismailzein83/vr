@@ -1,5 +1,7 @@
 ﻿var BusinessProcessAPIService = function (BaseAPIService) {
 
+    "use strict";
+
     function GetDefinitions() {
         return BaseAPIService.get("/api/BusinessProcess/GetDefinitions");
     }
