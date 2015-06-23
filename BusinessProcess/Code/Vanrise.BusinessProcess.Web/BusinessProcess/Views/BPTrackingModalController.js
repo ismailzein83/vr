@@ -1,5 +1,4 @@
-﻿
-function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService) {
+﻿function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService) {
 
     "use strict";
 
@@ -18,7 +17,16 @@ function BPTrackingModalController($scope, VRNotificationService, VRNavigationSe
     }
 
     function getData() {
-        return BusinessProcessAPIService.GetTrackingsByInstanceId(ctrl.BPInstanceID).then(function (response) {
+        var pageInfo = {
+            fromRow: 0,
+            toRow: 10
+        };
+
+        if (mainGridAPI !== undefined) {
+            pageInfo = mainGridAPI.getPageInfo();
+        }
+
+        return BusinessProcessAPIService.GetTrackingsByInstanceId(ctrl.BPInstanceID, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
 
             mainGridAPI.addItemsToSource(response);
 
@@ -37,9 +45,14 @@ function BPTrackingModalController($scope, VRNotificationService, VRNavigationSe
     function defineGrid() {
         ctrl.datasource = [];
         ctrl.gridMenuActions = [];
-        ctrl.loadMoreData = function () {
-            return getData();
+        ctrl.mainGridPagerSettings = {
+            currentPage: 1,
+            totalDataCount: 0,
+            pageChanged: function () {
+                return getData();
+            }
         };
+
         ctrl.onGridReady = function (api) {
             mainGridAPI = api;
         };
