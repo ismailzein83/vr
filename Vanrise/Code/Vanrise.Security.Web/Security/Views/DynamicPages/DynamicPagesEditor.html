@@ -1,0 +1,96 @@
+﻿<div vr-modalcontent ng-controller="Security_DynamicPagesEditorController" width="'80%'">
+    <vr-modalbody vr-loader="isGettingData">
+        <vr-form name="formDynamicPagesEditor">
+            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
+                <vr-choice isselected="settingSelected">Setting</vr-choice>
+                <vr-choice isselected="designingSelected">Designing</vr-choice>
+                <vr-choice isselected="previewSelected">Preview</vr-choice>
+            </vr-choices>
+            <div ng-show="settingSelected">
+                <vr-row>
+                    <vr-columns colnum="6">
+                        <vr-section title="Page Name">
+                            <vr-textbox value="name" label="Page Name" isrequired></vr-textbox>
+                        </vr-section>
+                    </vr-columns>
+                    <vr-columns colnum="6">
+                        <vr-section title="Permission Holders">
+                            <vr-columns colnum="12">
+
+                                <vr-select ismultipleselection label="Users:" datasource="Users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
+                                           entityname="Users">
+                                </vr-select>
+                            </vr-columns>
+                            <vr-columns colnum="12">
+                                <vr-select ismultipleselection label="Groups:" datasource="Roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
+                                           entityname="Roles">
+                                </vr-select>
+                            </vr-columns>
+                        </vr-section>
+                    </vr-columns>
+                </vr-row>
+
+            </div>
+            <div ng-show="designingSelected">
+                <vr-form name="formDesigningSelectionModel">
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
+                                       datasource="widgets" selectedvalues="selectedWidget" isrequired></vr-select>
+                        </vr-columns>
+                        <vr-columns colnum="3">
+                            <vr-select datasource="numberOfColumns" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedNumberOfColumns" isrequired hidefilterbox></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+
+                        <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
+
+                    </vr-row>
+                </vr-form>
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addVisualElement"></vr-button>
+                    </div>
+                </vr-actionbar>
+                <div>
+                    <vr-row>
+                        <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
+                            <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
+                            <!--<vr-textbox value="visualElement.Name" label="{visualElement.Name}"></vr-textbox>-->
+                        </vr-columns>
+                    </vr-row>
+                </div>
+
+            </div>
+            <div ng-show="previewSelected">
+                <div vr-loader="isGettingData">
+                    <vr-row>
+                        <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                            <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
+                                <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                                <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
+                                <vr-directivewrapper directive="visualElement.directive" on-ready="visualElement.onElementReady" settings="visualElement.settings"
+                                                     retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-directivewrapper>
+                            </vr-columns>
+                        </div>
+
+                    </vr-row>
+
+
+                </div>
+
+            </div>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

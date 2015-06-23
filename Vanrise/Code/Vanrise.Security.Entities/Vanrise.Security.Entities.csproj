@@ -50,6 +50,7 @@
     <Compile Include="BusinessEntity.cs" />
     <Compile Include="BusinessEntityNode.cs" />
     <Compile Include="BusinessEntityModule.cs" />
+    <Compile Include="DynamicPage.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Permission.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="Role.cs" />
     <Compile Include="User.cs" />
     <Compile Include="View.cs" />
+    <Compile Include="Widget.cs" />
+    <Compile Include="WidgetSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -57,7 +57,7 @@ function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesSe
             var measures = [];
             if ($scope.selectedMeasures != undefined)
                 for (var i = 0; i < $scope.selectedMeasures.length; i++) {
-                    measures.push($scope.selectedMeasures[i].Id);
+                    measures.push($scope.selectedMeasures[i].Name);
                 }
             elementSettings = {
                 operationType: $scope.selectedOperationType,
@@ -117,7 +117,7 @@ function BIConfigurationController($scope, BIVisualElementService1,BIUtilitiesSe
         return BIConfigurationAPIService.GetEntities().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
-                console.log($scope.Entities[0].Id);
+               // console.log($scope.Entities[0].Id);
             });
         });
     }

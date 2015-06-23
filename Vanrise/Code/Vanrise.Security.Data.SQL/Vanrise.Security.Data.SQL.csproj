@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
+    <Compile Include="DynamicPagesDataManager.cs" />
     <Compile Include="ModuleDataManager.cs" />
     <Compile Include="PermissionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

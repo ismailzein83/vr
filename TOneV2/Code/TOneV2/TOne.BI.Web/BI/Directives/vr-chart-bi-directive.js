@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIConfigurationAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
+app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -16,7 +16,7 @@ app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', '
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIConfigurationAPIService, BIVisualElementService1, VRModalService);
+            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, VRModalService);
             biChart.initializeController();
 
             biChart.defineAPI();
@@ -37,7 +37,7 @@ app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', '
 
     };
 
-    function BIChart(ctrl, settings, retrieveDataOnLoad, BIConfigurationAPIService, BIVisualElementService1, VRModalService) {
+    function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, VRModalService) {
 
         var chartAPI;
 
@@ -64,7 +64,7 @@ app.directive('vrChartBi', ['BIConfigurationAPIService', 'BIUtilitiesService', '
                 .then(function (response) {
                             console.log(response);
                             if (ctrl.isDateTimeGroupedData) {
-                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.timedimensiontype.value, ctrl.fromdate, ctrl.todate, false);
+                                BIUtilitiesService.fillDateTimeProperties(response, settings.timedimensiontype.value, settings.fromdate, settings.todate, false);
                                 refreshChart(response);
                             }
                             else

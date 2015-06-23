@@ -20,10 +20,10 @@ namespace TOne.BI.Data
         IEnumerable<GenericEntityRecord> GetTopEntities(EntityType entityType, MeasureType topByMeasureType, DateTime fromDate, DateTime toDate, int topCount, params MeasureType[] moreMeasures);
 
 
-        IEnumerable<TimeValuesRecord> GetMeasureValues1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes);
+        IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
 
-        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues1(int entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes);
+        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
 
-        IEnumerable<EntityRecord> GetTopEntities1(int entityTypeID, int topByMeasureTypeID, DateTime fromDate, DateTime toDate, int topCount, params int[] measureTypesIDs);
+        IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames);
     }
 }

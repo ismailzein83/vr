@@ -116,6 +116,8 @@
   <ItemGroup>
     <Compile Include="Controllers\BIConfigurationController.cs" />
     <Compile Include="Controllers\BIController.cs" />
+    <Compile Include="Controllers\BIDataController.cs" />
+    <Compile Include="ModelMappers\Mappers.cs" />
     <Compile Include="Models\BIConfigurationModel.cs" />
     <Compile Include="Models\BIMeasureTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -124,6 +126,10 @@
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
     <Content Include="BI\Constants\BITimeDimensionTypeEnum.js" />
+    <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.js" />
+    <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.js" />
     <Content Include="BI\Directives\vr-bi-chart-directive.js" />
     <Content Include="BI\Directives\vr-bi-datagrid-directive.js" />
     <Content Include="BI\Directives\bi-visualelement-service.js" />
@@ -132,6 +138,7 @@
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Directives\vr-chart-bi-directive.js" />
+    <Content Include="BI\Services\APIServices\BIDataAPIService.js" />
     <Content Include="BI\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditorController.js" />
     <Content Include="BI\Views\Dashboards\DynamicDashboadTemplates\VisualElementEditor.html" />
     <Content Include="BI\Views\Dashboards\DynamicDashboard.html" />

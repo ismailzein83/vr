@@ -9,10 +9,7 @@ using TOne.BI.Entities;
 namespace TOne.BI.Business
 {
     public class GenericEntityManager
-    {
-        
-
-
+    {   
         public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params MeasureType[] measureTypes)
         {
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();  
@@ -32,31 +29,31 @@ namespace TOne.BI.Business
 
 
 
-        public IEnumerable<TimeValuesRecord> GetMeasureValues1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
         {
 
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = configurations.GetMeasures();
             dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetMeasureValues1(timeDimensionType, fromDate, toDate, measureTypes);
+            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, measureTypeNames);
         }
 
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues1(int entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypes)
         {
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = configurations.GetMeasures();
             dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetEntityMeasuresValues1(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
+            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, measureTypes);
         }
-        public IEnumerable<EntityRecord> GetTopEntities1(int entityTypeID, int topByMeasureTypeID, DateTime fromDate, DateTime toDate, int topCount, params int[] measureTypesIDs)
+        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = configurations.GetMeasures();
             dataManager.EntityDefinitions = configurations.GetEntities();
-            return dataManager.GetTopEntities1(entityTypeID, topByMeasureTypeID, fromDate, toDate, topCount, measureTypesIDs);
+            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
         }
     }
 }

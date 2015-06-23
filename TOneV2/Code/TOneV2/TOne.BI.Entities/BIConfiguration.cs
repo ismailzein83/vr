@@ -10,7 +10,8 @@ namespace TOne.BI.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public string DisplayName { get; set; }
+        public ConfigurationType Type { get; set; }
         public T Configuration { get; set; }
     }
 }

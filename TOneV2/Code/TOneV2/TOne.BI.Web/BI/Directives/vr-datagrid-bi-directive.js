@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagridBi', ['BIConfigurationAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIConfigurationAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
+app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -16,7 +16,7 @@ app.directive('vrDatagridBi', ['BIConfigurationAPIService', 'BIUtilitiesService'
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIConfigurationAPIService, BIVisualElementService1);
+            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1);
             biDataGrid.initializeController();
 
             biDataGrid.defineAPI();
@@ -45,7 +45,7 @@ app.directive('vrDatagridBi', ['BIConfigurationAPIService', 'BIUtilitiesService'
 
     };
 
-    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIConfigurationAPIService, BIVisualElementService1) {
+    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1) {
 
         var gridAPI;
 
@@ -73,7 +73,7 @@ app.directive('vrDatagridBi', ['BIConfigurationAPIService', 'BIUtilitiesService'
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
-                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.timedimensiontype.value, ctrl.fromdate, ctrl.todate, true);
+                                BIUtilitiesService.fillDateTimeProperties(response, settings.timedimensiontype.value, settings.fromdate, settings.todate, true);
                             refreshDataGrid(response);
                         });
         }

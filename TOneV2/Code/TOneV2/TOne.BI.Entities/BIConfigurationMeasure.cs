@@ -9,6 +9,6 @@ namespace TOne.BI.Entities
     public class BIConfigurationMeasure
     {
         public string ColumnName { get; set; }
-        public string Exepression { get; set; }
+        public string Expression { get; set; }
     }
 }

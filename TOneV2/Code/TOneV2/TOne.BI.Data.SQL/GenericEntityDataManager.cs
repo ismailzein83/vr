@@ -200,33 +200,33 @@ namespace TOne.BI.Data.SQL
         //
         //
 
-        public IEnumerable<TimeValuesRecord> GetMeasureValues1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypes)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
         {
-            return GetTimeValuesRecord1(timeDimensionType, fromDate, toDate, null, measureTypes);
+            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues1(int entityTypeID, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params int[] measureTypesIDs)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypesNames)
         {
             string entityIdColumn;
             string entityNameColumn;
-            GetEntityColumns1(entityTypeID, out entityIdColumn, out entityNameColumn);
+            GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
            string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
-           return GetTimeValuesRecord1(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesIDs);
+           return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames);
         }
-        public IEnumerable<EntityRecord> GetTopEntities1(int entityTypeID, int topByMeasureTypeID, DateTime fromDate, DateTime toDate, int topCount, params int[] measureTypesIDs)
+        public IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames)
         {
             List<EntityRecord> rslt = new List<EntityRecord>();
             string topMeasureColExp;
-            string topMeasureColumn = GetMeasureColumn1(topByMeasureTypeID, out topMeasureColExp);
+            string topMeasureColumn = GetMeasureColumn(topByMeasureTypeName, out topMeasureColExp);
 
             string entityIdColumn;
             string entityNameColumn;
-            GetEntityColumns1(entityTypeID, out entityIdColumn, out entityNameColumn);
+            GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
 
             string[] measureColumns;
             string expressionsPart;
-            GetMeasuresColumns1(measureTypesIDs, out measureColumns, out expressionsPart);
+            GetMeasuresColumns(measureTypesNames, out measureColumns, out expressionsPart);
 
-            if (!measureTypesIDs.Contains(topByMeasureTypeID))
+            if (!measureTypesNames.Contains(topByMeasureTypeName))
             {
                 if (expressionsPart == null)
                     expressionsPart = topMeasureColExp;
@@ -239,7 +239,7 @@ namespace TOne.BI.Data.SQL
             string rowsPart = BuildQueryTopRowsPart(topMeasureColumn, topCount, entityIdColumn, entityNameColumn);
             string filtersPart = GetDateFilter(fromDate, toDate);
             string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
-            string entityName=GetEntityName(entityTypeID, out entityName);
+            string entityName=GetEntityName(entityTypeName, out entityName);
             ExecuteReaderMDX(query, (reader) =>
             {
                 while (reader.Read())
@@ -261,11 +261,11 @@ namespace TOne.BI.Data.SQL
             return rslt;
         }
 
-       private string GetEntityName(int entityTypeId,out string entityName){
+       private string GetEntityName(string entityTypeName,out string entityName){
            entityName = null;
            foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
             {
-                if (entityTypeId == obj.Id)
+                if (entityTypeName == obj.Name)
                 {
                  return  obj.Name;
                 }
@@ -273,14 +273,14 @@ namespace TOne.BI.Data.SQL
            return null;
        }
 
-        void GetEntityColumns1(int entityTypeID, out string idColumn, out string nameColumn)
+        void GetEntityColumns(string entityTypeName, out string idColumn, out string nameColumn)
         {
             idColumn = null;
             nameColumn = null;
 
             foreach (BIConfiguration<BIConfigurationEntity> obj in _entityDefinitions)
             {
-                if (entityTypeID == obj.Id)
+                if (entityTypeName == obj.Name)
                 {
                     idColumn = obj.Configuration.ColumnID;
                     nameColumn = obj.Configuration.ColumnName;
@@ -289,7 +289,7 @@ namespace TOne.BI.Data.SQL
 
         }
 
-        private IEnumerable<TimeValuesRecord> GetTimeValuesRecord1(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string[] additionalFilters, int[] measureTypesIDs)
+        private IEnumerable<TimeValuesRecord> GetTimeValuesRecord(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
         {
             List<TimeValuesRecord> rslt = new List<TimeValuesRecord>();
             string[] measureColumns;
@@ -297,7 +297,7 @@ namespace TOne.BI.Data.SQL
 
             // GetMeasuresColumns1(measureTypes, _measureDefinitions, out expressionsPart);
 
-            GetMeasuresColumns1(measureTypesIDs, out measureColumns, out expressionsPart);
+            GetMeasuresColumns(measureTypesNames, out measureColumns, out expressionsPart);
 
             string columnsPart = BuildQueryColumnsPart(measureColumns);
             string rowsPart = BuildQueryDateRowColumns(timeDimensionType);
@@ -331,16 +331,16 @@ namespace TOne.BI.Data.SQL
             });
             return rslt.OrderBy(itm => itm.Time);
         }
-        private void GetMeasuresColumns1(int[] measureTypesIDs, out string[] measureColumns, out string expressionsPart)
+        private void GetMeasuresColumns(string[] measureTypesNames, out string[] measureColumns, out string expressionsPart)
         {
-            measureColumns = new string[measureTypesIDs.Length];
+            measureColumns = new string[measureTypesNames.Length];
             StringBuilder expressionPartsBuilder = null;
-            for (int i = 0; i < measureTypesIDs.Length; i++)
+            for (int i = 0; i < measureTypesNames.Length; i++)
             {
-                int measureTypeID = measureTypesIDs[i];
+                string measureTypeID = measureTypesNames[i];
 
                 string expr;
-                measureColumns[i] = GetMeasureColumn1(measureTypeID, out expr);
+                measureColumns[i] = GetMeasureColumn(measureTypeID, out expr);
                 if (!String.IsNullOrEmpty(expr))
                 {
                     if (expressionPartsBuilder == null)
@@ -350,17 +350,17 @@ namespace TOne.BI.Data.SQL
             }
             expressionsPart = expressionPartsBuilder != null ? expressionPartsBuilder.ToString() : null;
         }
-        string GetMeasureColumn1(int measureTypeID, out string queryExpression)
+        string GetMeasureColumn(string measureTypeName, out string queryExpression)
         {
             queryExpression = null;
 
             foreach (BIConfiguration<BIConfigurationMeasure> obj in _measureDefinitions)
             {
-                if (measureTypeID == obj.Id)
+                if (measureTypeName == obj.Name)
                 {
-                    if (obj.Configuration.Exepression != null && obj.Configuration.Exepression!="")
+                    if (obj.Configuration.Expression != null && obj.Configuration.Expression!="")
                     {
-                        queryExpression = obj.Configuration.Exepression;
+                        queryExpression = obj.Configuration.Expression;
                       return  obj.Configuration.ColumnName;}
                     else
                         return obj.Configuration.ColumnName;

@@ -14,35 +14,24 @@ namespace TOne.BI.Data.SQL
         public List<BIConfiguration<BIConfigurationMeasure>> GetMeasures()
         {
 
-            return GetItemsSP("BI.SP_SchemaConfiguration_GetDataByType", MeasuresMapper, ConfigurationType.Measure);
+            return GetItemsSP("BI.SP_SchemaConfiguration_GetByType", SchemaConfigurationMapper<BIConfigurationMeasure>, ConfigurationType.Measure);
         }
-        private BIConfiguration<BIConfigurationMeasure> MeasuresMapper(IDataReader reader)
-        {
-          
-            BIConfiguration<BIConfigurationMeasure> instance = new BIConfiguration<BIConfigurationMeasure>
-            {
-                Id = GetReaderValue<Int32>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Type=reader["Type"] as string,
-               Configuration =Vanrise.Common.Serializer.Deserialize<BIConfigurationMeasure>(reader["Configuration"]  as string),
-                //Configuration=reader["Configuration"] as string,
-            };
-            return instance;
-        }
+        
 
         public List<BIConfiguration<BIConfigurationEntity>> GetEntities()
         {
 
-            return GetItemsSP("BI.SP_SchemaConfiguration_GetDataByType", EntitiesMapper, ConfigurationType.Entity);
+            return GetItemsSP("BI.SP_SchemaConfiguration_GetByType", SchemaConfigurationMapper<BIConfigurationEntity>, ConfigurationType.Entity);
         }
-        private BIConfiguration<BIConfigurationEntity> EntitiesMapper(IDataReader reader)
+        private BIConfiguration<T> SchemaConfigurationMapper<T>(IDataReader reader)
         {
-            BIConfiguration<BIConfigurationEntity> instance = new BIConfiguration<BIConfigurationEntity>
+            BIConfiguration<T> instance = new BIConfiguration<T>
             {
-                Id = GetReaderValue<Int32>(reader, "ID"),
+                Id = (int)reader["ID"],
+                DisplayName = reader["DisplayName"] as string,
                 Name = reader["Name"] as string,
-                Type = reader["Type"] as string,
-               Configuration = Vanrise.Common.Serializer.Deserialize<BIConfigurationEntity>(reader["Configuration"] as string),
+                Type = (ConfigurationType)reader["Type"],
+                Configuration = Vanrise.Common.Serializer.Deserialize<T>(reader["Configuration"] as string),
             };
             return instance;
         }
