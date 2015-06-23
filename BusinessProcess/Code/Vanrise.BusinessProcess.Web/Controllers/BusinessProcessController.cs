@@ -15,6 +15,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     
     public class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
+
+        [HttpGet]
+        public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string name, string title)
+        {
+            BPClient manager = new BPClient();
+            return manager.GetFilteredDefinitions(fromRow, toRow, name, title);
+        }
+
         [HttpGet]
         public List<BPDefinition> GetDefinitions()
         {

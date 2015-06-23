@@ -18,6 +18,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
         }
 
+        public List<BPDefinition> GetFilteredDefinitions(int fromRow,int toRow, string name, string title)
+        {
+            return GetItemsSP("bp.sp_BPDefinition_GetFiltered", BPDefinitionMapper, fromRow, toRow, name, title);
+        }
+
         public List<BPDefinition> GetDefinitions()
         {
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);

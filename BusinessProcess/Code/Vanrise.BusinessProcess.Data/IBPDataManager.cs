@@ -6,6 +6,9 @@ namespace Vanrise.BusinessProcess.Data
     public interface IBPDataManager : IDataManager
     {
         int DeleteEvent(long eventId);
+
+        List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string name, string title);
+
         System.Collections.Generic.List<BPDefinition> GetDefinitions();
 
         T GetDefinitionObjectState<T>(int definitionId, string objectKey);
