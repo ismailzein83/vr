@@ -37,7 +37,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public List<BPTrackingMessageModel> GetTrackingsByInstanceId(long ProcessInstanceID)
         {
             BPClient manager = new BPClient();
-            return   BPMappers.MapTrackingMessages( manager.GetTrackingsByInstanceId(ProcessInstanceID) );
+            return   BPMappers.MapTrackingMessages( manager.GetTrackingsByInstanceId(ProcessInstanceID,null,null) );
         }
         public List<EnumModel> GetStatusList()
         {
