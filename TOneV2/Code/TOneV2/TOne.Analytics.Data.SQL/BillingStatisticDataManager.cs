@@ -278,16 +278,16 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#NameColumn#", " cpc.Name ");
                     query.Replace("#ValueColumn#", " SUM(Sale_Nets) ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
-                    query.Replace("#BSIDColumn#", "BS.CustomerID");
+                    query.Replace("#BSIDColumn#", "BS.CustomerID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" ");
                     break;
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(Cost_Nets) ");
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
-                    query.Replace("#BSIDColumn#", "BS.CustomerID");
+                    query.Replace("#BSIDColumn#", "BS.CustomerID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
                     query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
@@ -296,8 +296,22 @@ namespace TOne.Analytics.Data.SQL
                 case VariationReportOptions.InOutBoundAmount:
                     break;
                 case VariationReportOptions.TopDestinationAmount:
+                    query.Replace("#NameColumn#", " Z.Name ");
+                    query.Replace("#ValueColumn#", "(BS.Sale_Nets) ");
+                    query.Replace("#IDColumn#", " Z.ZoneID ");
+                    query.Replace("#BSIDColumn#", "BS.SaleZoneID");
+                    query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
+                    query.Replace("#WhereStatement#", @" ");
+
                     break;
                 case VariationReportOptions.Profit:
+                    query.Replace("#NameColumn#", " cpc.Name ");
+                    query.Replace("#ValueColumn#", " SUM(Sale_Nets - Cost_Nets) ");
+                    query.Replace("#IDColumn#", " cac.CarrierAccountID ");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
+                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                    query.Replace("#WhereStatement#", @" ");
+
                     break;
 
             }

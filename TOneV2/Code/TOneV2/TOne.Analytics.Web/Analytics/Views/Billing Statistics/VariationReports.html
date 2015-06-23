@@ -1,7 +1,4 @@
-﻿
-
-
-<vr-panel ng-controller="Analytics_VariationReportsController">
+﻿<vr-panel ng-controller="Analytics_VariationReportsController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
@@ -24,9 +21,8 @@
 
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formFilter" data-onclick="onSearch"></vr-button> <!--""-->
+                <vr-button type="Search" formname="formFilter" data-onclick="onSearch"></vr-button> 
             </div>
         </vr-actionbar>
     </vr-row>
@@ -45,6 +41,15 @@
                     <vr-datagridcolumn ng-repeat="item in timeRanges" field="'TotalDurationsPerDate[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'"></vr-datagridcolumn>
                 </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </div>
+    <div vr-loader="isGettingData">
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-section title="Chart">
+                    <vr-chart data-on-ready="chartReady"></vr-chart>
+                </vr-section>
             </vr-columns>
         </vr-row>
     </div>

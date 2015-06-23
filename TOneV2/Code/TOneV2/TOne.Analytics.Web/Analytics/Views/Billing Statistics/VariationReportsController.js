@@ -1,19 +1,21 @@
 ﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'TimePeriodEnum', 'VariationReportOptionsEnum'];
 
 function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum) {
-   
+
+    var chartAPI;
     defineScope();
-    load();
+
 
     function defineScope() {
         $scope.fromDate = '2013/07/31';
         $scope.periodCount = 7;
         $scope.data = [];
         $scope.timeRanges = [];
+        $scope.chartData = [];
 
         loadTimePeriods();
         loadVariationReportOptions();
-        
+
         $scope.periodValuesArray = [];
         $scope.mainGridPagerSettings = {
             currentPage: 1,
@@ -22,17 +24,15 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                 return getVariationReportsData();
             }
         };
-     
         $scope.onSearch = function () {
             $scope.mainGridPagerSettings.currentPage = 1;
             return getVariationReportsData();
         }
+        $scope.chartReady = function (api) {
+            chartAPI = api;
+        };
     }
 
-    function load() {
-        
-    }
-   
     function loadTimePeriods() {
         $scope.timePeriods = [];
         for (var prop in TimePeriodEnum) {
@@ -53,34 +53,60 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.isLoading = true;
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
         return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
-           
-            //console.log(response);
-            //if (response.length > 0) {
-            //    $scope.periodValuesArray.length = 0;
-            //    angular.forEach(response[0].TotalDurationsPerDate, function (item) {
-            //        $scope.periodValuesArray.push(item.CallDate);
-            //    });
-            //}   $scope.periodValuesArray.length = 0;          
-            // $scope.periodValuesArray.push(itm.VariationReportsData.TotalDurationsPerDate);
-
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
-            angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.TotalDurationsPerDate); });
+           
             angular.forEach(response.TimeRange, function (item) {
+                var fromDate = new Date(item.FromDate);
+                var toDate = new Date(item.ToDate);
                 if ($scope.selectedTimePeriod == TimePeriodEnum.Days)
-                    $scope.timeRanges.push(new Date(item.FromDate).toDateString());
-                else {
-                    var toDate = new Date(item.ToDate);
-                    toDate.setDate(toDate.getDate() - 1);
-                    $scope.timeRanges.push(new Date(item.FromDate).toDateString() + "/" + toDate.toDateString());
-                }
+                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1));
+                else
+                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1) + "/" + (toDate.getDate() + "-" + (toDate.getMonth() + 1)));
             });
+            setTimeout(function () {
+                $scope.$apply(function () {
+                    angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.TotalDurationsPerDate); });
+                });
+            }, 1);
+            updateChart($scope.timeRanges, response.VariationReportsData);
 
         }).finally(function () {
             $scope.isLoading = false;
+            
         });
     }
+
+    function updateChart(times, data) {
+        
+        var chartDefinition = {
+            type: "column",
+            yAxisTitle: "Value"
+        };
+        var xAxisDefinition = { titlePath: "xValue" };
+        var chartData = [];
+        var seriesDefinitions = [];
+        angular.forEach(times, function (itm) {
+            chartData.push({
+                xValue: itm,
+                Values: []
+            });
+        });
+        for (var i = 0; i < data.length; i++) {
+            var dataItem = data[i];
+            seriesDefinitions.push({
+                title: dataItem.Name,
+                valuePath: "Values[" + i + "]",
+                type: "column"
+            });
+            for (var j = 0; j < times.length; j++) {
+                chartData[j].Values[i] = dataItem.TotalDurationsPerDate[j];
+            }
+        }
+        chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+    }
+
 };
 
 
