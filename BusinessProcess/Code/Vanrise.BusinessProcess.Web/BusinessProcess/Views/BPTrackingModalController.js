@@ -2,12 +2,13 @@
 
     "use strict";
 
-    var mainGridAPI, ctrl = this, isRunning = false, lockGetData = false;
+    var mainGridAPI, ctrl = this, lockGetData = false;
     ctrl.lastTrackingId = 0;
     ctrl.message = '';
     ctrl.trackingSeverity = [];
     ctrl.selectedTrackingSeverity = [];
-    ctrl.close =  function () {
+    ctrl.close = function () {
+        stopGetData();
         $scope.modalContext.closeModal();
     };
 
@@ -70,8 +71,9 @@
 
                 ctrl.lastTrackingId = getMaxValue(response.Tracking, "TrackingId");
                 mainGridAPI.addItemsToSource(response.Tracking);
-                isRunning = (response.InstanceStatus === BPInstanceStatusEnum.Running.value);
                 
+                if (response.InstanceStatus === BPInstanceStatusEnum.Running.value) startGetData();
+
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -119,9 +121,26 @@
     defineGrid();
     loadFilters();
 
-    $interval(function callAtInterval() {
-        getData();
-    }, 5000);
+    var interval = undefined;
+    function startGetData() {
+        if (angular.isDefined(interval)) return;
+        interval =  $interval(function callAtInterval() {
+            getData();
+        }, 5000);
+    }
+
+    function stopGetData() {
+        if (angular.isDefined(interval)) {
+            $interval.cancel(interval);
+            interval = undefined;
+        }
+    }
+
+    $scope.$on('$destroy', function () {
+        stopGetData();
+    });
+
+    
 
 }
 
