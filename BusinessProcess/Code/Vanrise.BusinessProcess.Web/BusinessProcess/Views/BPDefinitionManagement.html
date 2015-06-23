@@ -26,11 +26,10 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="definitions" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
+                    <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'FQTN'" field="'RetryCount'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Config'" field="'Config'" widthfactor="20"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'FQTN'" field="'FQTN'" widthfactor="20"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
