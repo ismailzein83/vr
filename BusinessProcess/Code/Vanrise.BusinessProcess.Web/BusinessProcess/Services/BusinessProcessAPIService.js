@@ -14,7 +14,6 @@
         return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param);
     }
 
-   
     function GetFilteredDefinitions(fromRow, toRow, name, title) {
         return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
             {
@@ -22,15 +21,14 @@
                 toRow: toRow,
                 name: name,
                 title: title
-            }
-           );
+            });
     }
 
-
-
-    function GetTrackingsByInstanceId(processInstanceID) {
+    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow) {
         return BaseAPIService.get("/api/BusinessProcess/GetTrackingsByInstanceId", {
-            processInstanceID: processInstanceID
+            processInstanceID: processInstanceID,
+            fromRow: fromRow,
+            toRow: toRow
         });
     }
 
