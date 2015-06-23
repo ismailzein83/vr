@@ -17,10 +17,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     {
 
         [HttpGet]
-        public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string name, string title)
+        public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title)
         {
             BPClient manager = new BPClient();
-            return manager.GetFilteredDefinitions(fromRow, toRow, name, title);
+            return manager.GetFilteredDefinitions(fromRow, toRow, title);
         }
 
         [HttpGet]
@@ -58,10 +58,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpGet]
-        public List<BPTrackingMessageModel> GetTrackingsByInstanceId(long processInstanceID)
+        public IEnumerable<BPTrackingMessageModel> GetTrackingsByInstanceId(long processInstanceID, int fromRow, int toRow)
         {
             BPClient manager = new BPClient();
-            return BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(processInstanceID));
+            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(processInstanceID));
+            rows = rows.Skip(fromRow).Take(toRow - fromRow);
+            return rows;
         }
 
     }
