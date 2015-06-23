@@ -3,7 +3,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                
+
                 <vr-columns colnum="2">
                     <vr-textbox label="Title:" value="title"></vr-textbox>
                 </vr-columns>
@@ -23,10 +23,24 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady" >
+                    <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Process'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Running Instances'" field="'RunningInstances'" widthfactor="20"></vr-datagridcolumn>
-                        
+                        <vr-datagridexpandablerow>
+
+                            <vr-datagrid datasource="dataItem.OpenedInstances">
+                                <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'ParentID'" field="'ParentID'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'DefinitionID'" field="'DefinitionID'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'WorkflowInstanceID'" field="'WorkflowInstanceID'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'ExecutionStatus'" field="'ExecutionStatus'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'RetryCount'" field="'RetryCount'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'LastMessage'" field="'LastMessage'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'CreatedTime'" field="'CreatedTime'" widthfactor="20"></vr-datagridcolumn>
+                            </vr-datagrid>
+
+                        </vr-datagridexpandablerow>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>

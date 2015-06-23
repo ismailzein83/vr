@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     
             }
 
-            return GetItemsSP("bp.sp_BPInstance_GetByCriterias", BPInstanceMapper, instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()));
+            return GetItemsSP("bp.sp_BPInstance_GetOpened", BPInstanceMapper, instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()));
         }
 
 

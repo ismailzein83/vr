@@ -28,12 +28,30 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
         
         var title = $scope.title != undefined ? $scope.title : '';
       
+        $scope.openedInstances = [];
 
-        return BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
+        BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
             angular.forEach(response, function (itm) {
-                $scope.filteredDefinitions.push(itm);
+                $scope.openedInstances.push(itm);
+            });
+            BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
+                angular.forEach(response, function (def) {
+                    def.OpenedInstances = [];
+                    var countRunningInstances = 0;
+                    angular.forEach($scope.openedInstances, function (inst) {
+                        if (inst.DefinitionID == def.BPDefinitionID)
+                        {
+                            countRunningInstances++;
+                            def.OpenedInstances.push(inst);
+                        }
+                            
+                    });
+                    def.RunningInstances = countRunningInstances;
+                    $scope.filteredDefinitions.push(def);
+                });
             });
         });
+        
     }
 
     function defineGrid() {
