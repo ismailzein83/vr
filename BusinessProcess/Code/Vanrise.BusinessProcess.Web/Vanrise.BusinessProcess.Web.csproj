@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessProcessController.cs" />
+    <Compile Include="Controllers\BusinessProcessControllerPartial.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\BPInstanceModel.cs" />
     <Compile Include="Models\BPTrackingMessageModel.cs" />

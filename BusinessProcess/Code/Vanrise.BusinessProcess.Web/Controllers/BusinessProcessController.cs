@@ -12,8 +12,8 @@ using Vanrise.BusinessProcess.Web.Models;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
-    
-    public class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
+
+    public partial  class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
 
         [HttpGet]
