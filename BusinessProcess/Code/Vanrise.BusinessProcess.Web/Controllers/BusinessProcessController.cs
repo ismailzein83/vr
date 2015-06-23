@@ -47,6 +47,24 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return lst;
         }
 
+        [HttpGet]
+        public List<EnumModel> GetTrackingSeverity()
+        {
+            var lst = new List<EnumModel>();
+            foreach (var val in Enum.GetValues(typeof(BPTrackingSeverity)))
+            {
+                EnumModel item = new EnumModel
+                {
+                    Value = (int)val,
+                    Description = ((BPTrackingSeverity)val).ToString()
+                };
+                lst.Add(item);
+            }
+            return lst;
+        }
+
+        
+        
         [HttpPost]
         public IEnumerable<BPInstanceModel> GetFilteredBProcess(GetFilteredBProcessInput param)
         {
@@ -57,12 +75,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
 
-        [HttpGet]
-        public IEnumerable<BPTrackingMessageModel> GetTrackingsByInstanceId(long processInstanceID, int fromRow, int toRow)
+        [HttpPost]
+        public IEnumerable<BPTrackingMessageModel> GetTrackingsByInstanceId(GetTrackingsByInstanceIdInput param)
         {
             BPClient manager = new BPClient();
-            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(processInstanceID));
-            rows = rows.Skip(fromRow).Take(toRow - fromRow);
+            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(param.ProcessInstanceID,param.TrackingSeverity,param.Message));
+            rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
             return rows;
         }
 
@@ -81,6 +99,18 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public DateTime? DateFrom { get; set; }
 
         public DateTime? DateTo { get; set; }
+    }
+
+    public class GetTrackingsByInstanceIdInput
+    {
+        public long ProcessInstanceID { get; set; }
+        public int FromRow { get; set; }
+        public int ToRow { get; set; }
+        
+        public List<int> TrackingSeverity { get; set; }
+
+        public String Message { get; set; }
+
     }
 
     #endregion

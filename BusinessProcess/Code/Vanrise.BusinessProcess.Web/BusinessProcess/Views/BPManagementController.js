@@ -35,16 +35,14 @@ function BPManagementController(BusinessProcessAPIService, VRModalService) {
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        return BusinessProcessAPIService.GetFilteredBProcess({
-            DefinitionsId: getFilterIds(ctrl.selectedDefinition, "BPDefinitionID"),
-            InstanceStatus: getFilterIds(ctrl.selectedInstanceStatus, "Value"),
-            FromRow: pageInfo.fromRow,
-            ToRow: pageInfo.toRow,
-            DateFrom: ctrl.fromDate,
-            DateTo: ctrl.toDate
-        }).then(function (response) {
-            mainGridAPI.addItemsToSource(response);
-        });
+        return BusinessProcessAPIService.GetFilteredBProcess(getFilterIds(ctrl.selectedDefinition, "BPDefinitionID"),
+            getFilterIds(ctrl.selectedInstanceStatus, "Value"),
+            pageInfo.fromRow,
+            pageInfo.toRow,
+            ctrl.fromDate,
+            ctrl.toDate).then(function (response) {
+                mainGridAPI.addItemsToSource(response);
+            });
     }
 
     function defineGrid() {

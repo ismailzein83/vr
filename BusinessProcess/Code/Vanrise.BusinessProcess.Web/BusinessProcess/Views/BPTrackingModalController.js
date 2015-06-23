@@ -4,6 +4,9 @@
 
     var mainGridAPI, ctrl = this;
 
+    ctrl.message = '';
+    ctrl.trackingSeverity = [];
+    ctrl.selectedTrackingSeverity = [];
     ctrl.close =  function () {
         $scope.modalContext.closeModal();
     };
@@ -16,6 +19,17 @@
         }
     }
 
+    function getFilterIds(values, idProp) {
+        var filterIds;
+        if (values.length > 0) {
+            filterIds = [];
+            angular.forEach(values, function (val) {
+                filterIds.push(val[idProp]);
+            });
+        }
+        return filterIds;
+    }
+
     function getData() {
         var pageInfo = {
             fromRow: 0,
@@ -26,12 +40,28 @@
             pageInfo = mainGridAPI.getPageInfo();
         }
 
-        return BusinessProcessAPIService.GetTrackingsByInstanceId(ctrl.BPInstanceID, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
+        return BusinessProcessAPIService.GetTrackingsByInstanceId(ctrl.BPInstanceID,pageInfo.fromRow,
+            pageInfo.toRow, getFilterIds(ctrl.selectedTrackingSeverity, "Value"), ctrl.message
+        ).then(function (response) {
 
             mainGridAPI.addItemsToSource(response);
 
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
+    }
+
+    ctrl.searchClicked = function () {
+        mainGridAPI.clearDataAndContinuePaging();
+        return getData();
+    };
+
+    function loadFilters() {
+
+        BusinessProcessAPIService.GetTrackingSeverity().then(function (response) {
+            angular.forEach(response, function (item) {
+                ctrl.trackingSeverity.push(item);
+            });
         });
     }
 
@@ -45,12 +75,8 @@
     function defineGrid() {
         ctrl.datasource = [];
         ctrl.gridMenuActions = [];
-        ctrl.mainGridPagerSettings = {
-            currentPage: 1,
-            totalDataCount: 0,
-            pageChanged: function () {
-                return getData();
-            }
+        ctrl.loadMoreData = function () {
+            return getData();
         };
 
         ctrl.onGridReady = function (api) {
@@ -61,6 +87,7 @@
     loadParameters();
     load();
     defineGrid();
+    loadFilters();
 }
 
 BPTrackingModalController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService'];

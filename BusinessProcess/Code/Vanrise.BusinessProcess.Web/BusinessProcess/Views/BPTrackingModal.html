@@ -1,9 +1,30 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_BPTrackingModalController as ctrl">
     <vr-modalbody width="'50%'" vr-loader="ctrl.isGettingData">
         <vr-form name="formBPTrackingModal">
+            <div ng-hide="filterSectionCollapsed">
+                <vr-row removeline>
+                    <vr-columns colnum="6">
+                        <vr-textbox label="Message:" value="ctrl.message"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns colnum="6">
+                        <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
+                                   datasource="::ctrl.trackingSeverity" selectedvalues="ctrl.selectedTrackingSeverity"></vr-select>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                </vr-row>
+            </div>
+            <vr-row removeline>
+                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                    <div transclude-to="buttons">
+                        <vr-button type="Search" formname="formBPTrackingModal" data-onclick="ctrl.searchClicked"></vr-button>
+                    </div>
+                </vr-actionbar>
+            </vr-row>
+
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::ctrl.datasource" pagersettings="ctrl.mainGridPagerSettings" on-ready="ctrl.onGridReady">
+                    <vr-datagrid datasource="::ctrl.datasource" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady">
                         <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Event Time'" widthfactor="30">{{dataItem.EventTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>

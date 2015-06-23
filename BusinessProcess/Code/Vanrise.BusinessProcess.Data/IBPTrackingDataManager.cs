@@ -7,6 +7,6 @@ namespace Vanrise.BusinessProcess.Data
     {
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 
-        System.Collections.Generic.List<BPTrackingMessage> GetTrackingsByInstanceId(long ProcessInstanceID);
+        System.Collections.Generic.List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, List<int> trackingSeverity, String message);
     }
 }

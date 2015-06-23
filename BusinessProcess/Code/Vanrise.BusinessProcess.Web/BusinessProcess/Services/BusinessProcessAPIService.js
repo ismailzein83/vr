@@ -10,8 +10,15 @@
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
-    function GetFilteredBProcess(param) {
-        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param);
+    function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {
+        return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", {
+            DefinitionsId: DefinitionsId,
+            InstanceStatus: InstanceStatus,
+            FromRow: FromRow,
+            ToRow: ToRow,
+            DateFrom: DateFrom,
+            DateTo: DateTo
+        });
     }
 
     function GetFilteredDefinitions(fromRow, toRow, title) {
@@ -23,12 +30,18 @@
             });
     }
 
-    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow) {
-        return BaseAPIService.get("/api/BusinessProcess/GetTrackingsByInstanceId", {
-            processInstanceID: processInstanceID,
-            fromRow: fromRow,
-            toRow: toRow
+    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, trackingSeverity,message) {
+        return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId", {
+            ProcessInstanceID: processInstanceID,
+            FromRow: fromRow,
+            ToRow: toRow,
+            TrackingSeverity: trackingSeverity,
+            Message: message
         });
+    }
+
+    function GetTrackingSeverity() {
+        return BaseAPIService.get("/api/BusinessProcess/GetTrackingSeverity");
     }
 
     return ({
@@ -36,7 +49,8 @@
         GetFilteredDefinitions: GetFilteredDefinitions,
         GetStatusList: GetStatusList,
         GetFilteredBProcess: GetFilteredBProcess,
-        GetTrackingsByInstanceId: GetTrackingsByInstanceId
+        GetTrackingsByInstanceId: GetTrackingsByInstanceId,
+        GetTrackingSeverity: GetTrackingSeverity
     });
 
 };
