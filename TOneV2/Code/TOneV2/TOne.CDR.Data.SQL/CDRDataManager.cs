@@ -269,7 +269,7 @@ namespace TOne.CDR.Data.SQL
 
         private void PrepareTrafficStatsBaseForDBApply(TOne.CDR.Entities.TrafficStatistic trafficStatistic, System.IO.StreamWriter wr)
         {
-            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}",
+            wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}^{20}^{21}^{22}^{23}",
                         0,
                         trafficStatistic.SwitchId,
                         trafficStatistic.Port_IN,
@@ -292,7 +292,8 @@ namespace TOne.CDR.Data.SQL
                         trafficStatistic.DeliveredNumberOfCalls,
                         Math.Round(trafficStatistic.PGAD, 5),
                         trafficStatistic.CeiledDuration,
-                        trafficStatistic.ReleaseSourceAParty
+                        trafficStatistic.ReleaseSourceAParty,
+                        trafficStatistic.ReleaseSourceS
                         ));
         }
 
