@@ -8,6 +8,7 @@ namespace Vanrise.BusinessProcess.Web.Models
 {
     public class BPTrackingMessageModel
     {
+        public long TrackingId { get; set; }
         public long ProcessInstanceId { get; set; }
         public long? ParentProcessId { get; set; }
         public BPTrackingSeverity Severity { get; set; }

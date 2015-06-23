@@ -135,6 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />

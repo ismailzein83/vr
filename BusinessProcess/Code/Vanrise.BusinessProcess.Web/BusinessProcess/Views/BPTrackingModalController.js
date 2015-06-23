@@ -1,9 +1,9 @@
-﻿function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService) {
+﻿function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval) {
 
     "use strict";
 
-    var mainGridAPI, ctrl = this;
-
+    var mainGridAPI, ctrl = this, isRunning = false, lockGetData = false;
+    ctrl.lastTrackingId = 0;
     ctrl.message = '';
     ctrl.trackingSeverity = [];
     ctrl.selectedTrackingSeverity = [];
@@ -30,25 +30,54 @@
         return filterIds;
     }
 
-    function getData() {
-        var pageInfo = {
-            fromRow: 0,
-            toRow: 10
-        };
+    function getMaxValue(values, idProp) {
+        var max = undefined;
+        if (values.length > 0) {
 
-        if (mainGridAPI !== undefined) {
-            pageInfo = mainGridAPI.getPageInfo();
+            angular.forEach(values, function (val) {
+                if(val === undefined)
+                    max = val[idProp];
+                if (val[idProp] > max)
+                    max = val[idProp];
+            });
         }
+        return max;
+    }
 
-        return BusinessProcessAPIService.GetTrackingsByInstanceId(ctrl.BPInstanceID,pageInfo.fromRow,
-            pageInfo.toRow, getFilterIds(ctrl.selectedTrackingSeverity, "Value"), ctrl.message
-        ).then(function (response) {
+    function getData() {
 
-            mainGridAPI.addItemsToSource(response);
+        if (! lockGetData)
+        {
+            lockGetData = true;
 
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+            var pageInfo = {
+                fromRow: 1,
+                toRow: 10
+            };
+
+            if (mainGridAPI !== undefined) {
+                pageInfo = mainGridAPI.getPageInfo();
+            }
+
+            return BusinessProcessAPIService.GetTrackingsByInstanceId(
+                ctrl.BPInstanceID,
+                pageInfo.fromRow,
+                pageInfo.toRow,
+                getFilterIds(ctrl.selectedTrackingSeverity, "Value"),
+                ctrl.message,
+                ctrl.lastTrackingId)
+            .then(function (response) {
+
+                ctrl.lastTrackingId = getMaxValue(response.Tracking, "TrackingId");
+                mainGridAPI.addItemsToSource(response.Tracking);
+                isRunning = (response.InstanceStatus === BPInstanceStatusEnum.Running.value);
+                
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                lockGetData = false;
+            });
+        }
     }
 
     ctrl.searchClicked = function () {
@@ -69,6 +98,7 @@
         ctrl.isGettingData = true;
         getData().finally(function () {
             ctrl.isGettingData = false;
+            lockGetData = false;
         });
     }
 
@@ -88,8 +118,13 @@
     load();
     defineGrid();
     loadFilters();
+
+    $interval(function callAtInterval() {
+        getData();
+    }, 5000);
+
 }
 
-BPTrackingModalController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService'];
+BPTrackingModalController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval'];
 
 appControllers.controller('BusinessProcess_BPTrackingModalController', BPTrackingModalController);

@@ -13,7 +13,7 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
         {
             return new BPTrackingMessageModel
             {
-
+                TrackingId = msg.Id,
                 ProcessInstanceId = msg.ProcessInstanceId,
                 ParentProcessId = msg.ParentProcessId,
                 Severity = msg.Severity,

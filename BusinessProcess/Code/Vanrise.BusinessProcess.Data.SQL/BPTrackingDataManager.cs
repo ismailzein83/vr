@@ -71,6 +71,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             var bpTrackingMessage = new BPTrackingMessage
             {
+                Id = (long)reader["ID"],
                 ProcessInstanceId = (long)reader["ProcessInstanceID"],
                 ParentProcessId = GetReaderValue<long?>(reader, "ParentProcessId"),
                 Message = reader["TrackingMessage"] as string,

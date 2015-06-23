@@ -34,13 +34,14 @@
             });
     }
 
-    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, trackingSeverity,message) {
+    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, trackingSeverity, message, lastTrackingId) {
         return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId", {
             ProcessInstanceID: processInstanceID,
             FromRow: fromRow,
             ToRow: toRow,
             TrackingSeverity: trackingSeverity,
-            Message: message
+            Message: message,
+            LastTrackingId: lastTrackingId
         });
     }
 

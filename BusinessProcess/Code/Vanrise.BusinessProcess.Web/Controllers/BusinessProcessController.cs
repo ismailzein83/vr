@@ -76,20 +76,25 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         [HttpPost]
         public IEnumerable<BPInstanceModel> GetFilteredBProcess(GetFilteredBProcessInput param)
         {
+            param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
             IEnumerable<BPInstanceModel> rows = BPMappers.MapTMapInstances(manager.GetFilteredInstances(param.DefinitionsId,param.InstanceStatus, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
-            rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
+            rows = rows.Skip(param.FromRow ).Take(param.ToRow - param.FromRow);
             return rows;
         }
 
 
         [HttpPost]
-        public IEnumerable<BPTrackingMessageModel> GetTrackingsByInstanceId(GetTrackingsByInstanceIdInput param)
+        public GetTrackingsByInstanceIdOutput GetTrackingsByInstanceId(GetTrackingsByInstanceIdInput param)
         {
+            param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
             IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(param.ProcessInstanceID,param.TrackingSeverity,param.Message));
             rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
-            return rows;
+            return new GetTrackingsByInstanceIdOutput(){
+                Tracking = rows,
+                InstanceStatus =  (int)BPInstanceStatus.Running
+            };
         }
 
     }
@@ -119,6 +124,16 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         public String Message { get; set; }
 
+        public int LastTrackingId { get; set; }
+
+    }
+
+    public class GetTrackingsByInstanceIdOutput
+    {
+        public IEnumerable<BPTrackingMessageModel> Tracking { get; set; }
+        
+        public int InstanceStatus { get; set; }
+        
     }
 
     #endregion
