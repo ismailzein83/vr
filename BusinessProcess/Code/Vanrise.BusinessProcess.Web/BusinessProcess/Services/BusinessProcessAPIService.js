@@ -14,12 +14,11 @@
         return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", param);
     }
 
-    function GetFilteredDefinitions(fromRow, toRow, name, title) {
+    function GetFilteredDefinitions(fromRow, toRow, title) {
         return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
             {
                 fromRow: fromRow,
                 toRow: toRow,
-                name: name,
                 title: title
             });
     }

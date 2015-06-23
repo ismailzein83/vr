@@ -25,31 +25,27 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        var name = $scope.name != undefined ? $scope.name : '';
+        
         var title = $scope.title != undefined ? $scope.title : '';
       
 
-        return BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, name, title).then(function (response) {
+        return BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.filteredDefinitions.push(itm);
-                console.log($scope.filteredDefinitions)
             });
         });
     }
 
     function defineGrid() {
         $scope.filteredDefinitions = [];
-        $scope.gridMenuActions = [];
         $scope.loadMoreData = function () {
             return getData();
         };
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
+            return getData();
         };
-        $scope.gridMenuActions = [{
-            name: "Start",
-            clicked: showStartBPModal
-        }];
+       
     }
 
     $scope.searchClicked = function () {

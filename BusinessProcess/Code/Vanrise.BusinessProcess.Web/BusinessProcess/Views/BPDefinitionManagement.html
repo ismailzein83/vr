@@ -3,10 +3,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
-                    <vr-textbox label="Name:" value="name"></vr-textbox>
-                </vr-columns>
-
+                
                 <vr-columns colnum="2">
                     <vr-textbox label="Title:" value="title"></vr-textbox>
                 </vr-columns>
@@ -26,10 +23,10 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
+                    <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady" >
+                        <vr-datagridcolumn headertext="'Process'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Name'" field="'Name'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'FQTN'" field="'FQTN'" widthfactor="20"></vr-datagridcolumn>
+                        
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
