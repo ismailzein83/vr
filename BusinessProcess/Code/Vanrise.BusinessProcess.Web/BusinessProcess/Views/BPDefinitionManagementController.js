@@ -9,13 +9,13 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
     
 
 
-    function showStartBPModal(BPDefinition) {
+    function showStartInstanceModal(BPDefinition) {
 
-        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/StartBP.html', {
+        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/StartInstance.html', {
             BPDefinitionID: BPDefinition.ID
         }, {
             onScopeReady: function (modalScope) {
-                modalScope.title = "Start Bussiness Process";
+                modalScope.title = "Start Instance";
             }
         });
     }
@@ -56,6 +56,7 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
 
     function defineGrid() {
         $scope.filteredDefinitions = [];
+        $scope.gridMenuActions = [];
         $scope.loadMoreData = function () {
             return getData();
         };
@@ -63,6 +64,10 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
             mainGridAPI = api;
             return getData();
         };
+        $scope.gridMenuActions = [{
+            name: "Start New Instance",
+            clicked: showStartInstanceModal
+        }];
        
     }
 

@@ -13,10 +13,6 @@ namespace Vanrise.BusinessProcess.Client
 {
     public partial class BPClient
     {
-        public List<BPInstance> GetOpenedInstances()
-        {
-            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            return dataManager.GetOpenedInstances();
-        }
+       
     }
 }

@@ -41,6 +41,11 @@ namespace Vanrise.BusinessProcess.Client
 
         #region BP Transaction Methods
 
+        public List<BPInstance> GetOpenedInstances()
+        {
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            return dataManager.GetOpenedInstances();
+        }
         public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
