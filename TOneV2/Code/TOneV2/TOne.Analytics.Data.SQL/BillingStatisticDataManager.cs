@@ -168,7 +168,7 @@ namespace TOne.Analytics.Data.SQL
             timeRangeDataTable = ToDataTable(timeRange);
             DateTime beginTime = (from d in timeRange select d.FromDate).Min();
             DateTime endTime = (from d in timeRange select d.ToDate).Max();
-            string selectedReportQuery = GetVariationReportQuery2(timeRange,variationReportOptions);
+            string selectedReportQuery = GetVariationReportQuery(timeRange,variationReportOptions);
             int totalCount_Internal = 0;
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 ExecuteReaderText(selectedReportQuery,
@@ -197,7 +197,7 @@ namespace TOne.Analytics.Data.SQL
 
         }
 
-        private string GetVariationReportQuery2(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
+        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
         {          
 
             StringBuilder query = new StringBuilder(@"DECLARE @ExchangeRates TABLE(
