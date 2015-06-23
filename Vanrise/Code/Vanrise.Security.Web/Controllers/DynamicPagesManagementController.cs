@@ -20,8 +20,14 @@ namespace Vanrise.Security.Web.Controllers
         public List<Widget> GetWidgets()
         {
             DynamicPagesManager manager = new DynamicPagesManager();
-            return manager.GetWidgets();
+            return manager.GetWidgets(); 
         }
+        [HttpPost]
+        public Boolean SavePage(PageSettings PageSettings)
+        {
+             DynamicPagesManager manager = new DynamicPagesManager();
+             return manager.SavePage(PageSettings);
+          }
 
     }
 }

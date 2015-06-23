@@ -25,9 +25,6 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
             operationType: $scope.selectedOperationType,
             entityType: $scope.selectedEntityType,
             measureTypes: $scope.selectedMeasureTypes,
-            timedimensiontype: $scope.selectedTimeDimensionType,
-        fromdate:   $scope.fromDate ,
-        todate:$scope.toDate 
         };
     }
     function defineTimeDimensionTypes() {

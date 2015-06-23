@@ -27,10 +27,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         return {
             operationType: $scope.selectedOperationType,
             entityType: $scope.selectedEntityType,
-            measureTypes: $scope.selectedMeasureTypes,
-            timedimensiontype: $scope.selectedTimeDimensionType,
-            fromdate:   $scope.fromDate ,
-            todate:$scope.toDate 
+            measureTypes: $scope.selectedMeasureTypes, 
         };
     }
     function defineTimeDimensionTypes() {

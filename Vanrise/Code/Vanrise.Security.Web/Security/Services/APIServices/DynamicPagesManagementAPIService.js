@@ -2,7 +2,8 @@
 
     return ({
         GetDynamicPages: GetDynamicPages,
-        GetWidgets:GetWidgets
+        GetWidgets: GetWidgets,
+        SavePage:SavePage
     });
 
     function GetDynamicPages() {
@@ -10,5 +11,8 @@
     }
     function GetWidgets() {
         return BaseAPIService.get("/api/DynamicPagesManagement/GetWidgets");
+    }
+    function SavePage(PageSettings) {
+        return BaseAPIService.post("/api/DynamicPagesManagement/SavePage", PageSettings);
     }
 });

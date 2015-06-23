@@ -10,11 +10,11 @@
                 <vr-row>
                     <vr-columns colnum="6">
                         <vr-section title="Page Name">
-                            <vr-textbox value="name" label="Page Name" isrequired></vr-textbox>
+                            <vr-textbox value="PageName" label="Page Name" isrequired></vr-textbox>
                         </vr-section>
                     </vr-columns>
                     <vr-columns colnum="6">
-                        <vr-section title="Permission Holders">
+                        <vr-section title="Audiences">
                             <vr-columns colnum="12">
 
                                 <vr-select ismultipleselection label="Users:" datasource="Users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
@@ -36,7 +36,7 @@
                     <vr-row>
                         <vr-columns colnum="3">
                             <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
-                                       datasource="widgets" selectedvalues="selectedWidget" isrequired></vr-select>
+                                       datasource="widgets" selectedvalues="selectedWidget" ></vr-select>
                         </vr-columns>
                         <vr-columns colnum="3">
                             <vr-select datasource="numberOfColumns" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedNumberOfColumns" isrequired hidefilterbox></vr-select>
@@ -64,22 +64,24 @@
                 </div>
 
             </div>
-            <div ng-show="previewSelected">
-                <div vr-loader="isGettingData">
-                    <vr-row>
-                        <div class="list-group dragbelzone" ng-sortable="itemsSortable">
-                            <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
-                                <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                                <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
-                                <vr-directivewrapper directive="visualElement.directive" on-ready="visualElement.onElementReady" settings="visualElement.settings"
-                                                     retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-directivewrapper>
-                            </vr-columns>
-                        </div>
+            <div ng-show="previewSelected" ng-if="visualElements.length>0">
+                <div ng-include="'Client/Modules/Security/Views/DynamicPages/DynamicPagePreview.html'"></div>
 
-                    </vr-row>
-
-
+                <!--<div vr-loader="isGettingData">
+            <vr-row>
+                <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                    <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
+                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
+                        <vr-directivewrapper directive="visualElement.directive" on-ready="visualElement.onElementReady" settings="visualElement.settings"
+                                             retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-directivewrapper>
+                    </vr-columns>
                 </div>
+
+            </vr-row>
+
+
+        </div>-->
 
             </div>
 

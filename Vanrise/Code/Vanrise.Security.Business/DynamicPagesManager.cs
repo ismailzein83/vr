@@ -20,5 +20,10 @@ namespace Vanrise.Security.Business
             IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
             return dataManager.GetWidgets();
         }
+        public Boolean SavePage(PageSettings PageSettings)
+        {
+            IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
+            return dataManager.SavePage(PageSettings);
+        }
     }
 }                               

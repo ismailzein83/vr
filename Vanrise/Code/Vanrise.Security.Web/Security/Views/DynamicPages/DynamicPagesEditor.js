@@ -16,6 +16,7 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
         $scope.Users = [];
         $scope.selectedUsers = [];
         $scope.Roles = [];
+        $scope.PageName;
         $scope.selectedRoles = [];
         $scope.selectedEntityType;
         $scope.selectedMeasureTypes=[];
@@ -25,7 +26,36 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
             $scope.modalContext.closeModal()
         };
         $scope.selectedNumberOfColumns=3;
-        $scope.save = function () {   
+        $scope.save = function () {
+            console.log($scope.selectedUsers);
+            console.log($scope.selectedRoles);
+            var selectedUsersIDs = [];
+            for (var i = 0; i < $scope.selectedUsers.length; i++)
+                selectedUsersIDs.push($scope.selectedUsers[i].UserId);
+            var selectedRolesIDs = [];
+            for (var i = 0; i < $scope.selectedRoles.length; i++)
+                selectedRolesIDs.push($scope.selectedRoles[i].RoleId);
+            var AudianceIds={
+                Users: selectedUsersIDs,
+                Groups: selectedRolesIDs
+            };
+
+            $scope.PageSettings = {
+                PageName: $scope.PageName,
+                AudianceIds: AudianceIds,
+                visualElements: $scope.visualElements
+            };
+            console.log("samer");
+            console.log($scope.PageSettings);
+            return DynamicPagesManagementAPIService.SavePage($scope.PageSettings).then(function (response) {
+                console.log(response);
+                angular.forEach(response, function (itm) {
+                    $scope.Measures.push(itm);
+                    console.log(itm);
+                });
+            });
+            
+
 
         };
         $scope.chartReady = function (api) {

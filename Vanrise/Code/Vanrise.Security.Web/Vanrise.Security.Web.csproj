@@ -128,6 +128,8 @@
     <Content Include="Security\Views\BusinessEntityEditorController.js" />
     <Content Include="Security\Views\BusinessEntityManagement.html" />
     <Content Include="Security\Views\BusinessEntityManagementController.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPagePreview.html" />
+    <Content Include="Security\Views\DynamicPages\DynamicPagePreview.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.js" />
     <Content Include="Security\Views\DynamicPagesManagement.html" />

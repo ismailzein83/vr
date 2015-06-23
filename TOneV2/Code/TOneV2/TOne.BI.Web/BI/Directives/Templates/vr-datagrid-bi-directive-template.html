@@ -2,20 +2,6 @@
     <vr-columns colnum="3">
         <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType"  hidefilterbox></vr-select>
     </vr-columns>
-    <!--<vr-columns colnum="3" ng-show=" selectedOperationType.value == 'MeasuresGroupedByTime'">
-        <vr-select datasource="chartSeriesTypes" datatextfield="title" datavaluefield="value" label="Series Type" selectedvalues="selectedChartSeriesType"  hidefilterbox></vr-select>
-    </vr-columns>-->
-    <vr-columns colnum="2">
-        <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
-    </vr-columns>
-
-    <vr-columns colnum="2">
-        <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
-    </vr-columns>
-    <vr-columns colnum="2">
-        <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                   selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
-    </vr-columns>
     <vr-columns colnum="3" ng-show=" selectedOperationType.value == 'TopEntities'">
         <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType"  hidefilterbox></vr-select>
     </vr-columns>

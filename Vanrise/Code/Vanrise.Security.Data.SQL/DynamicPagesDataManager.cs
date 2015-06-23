@@ -42,5 +42,14 @@ namespace Vanrise.Security.Data.SQL
         };
             return instance;
         }
+        public Boolean SavePage(PageSettings PageSettings)
+        {
+            string serialziedContent = Common.Serializer.Serialize(PageSettings.visualElements);
+            string serialziedAudience = Common.Serializer.Serialize(PageSettings.AudianceIds);
+
+            int InsertPage = ExecuteNonQuerySP("", PageSettings.PageName,
+                serialziedContent, serialziedAudience);
+            return (InsertPage>0);
+        }
     }
 }

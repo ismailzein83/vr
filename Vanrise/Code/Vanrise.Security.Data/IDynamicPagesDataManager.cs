@@ -11,5 +11,7 @@ namespace Vanrise.Security.Data
     {
         List<DynamicPage> GetDynamicPages();
         List<Widget> GetWidgets();
+        Boolean SavePage(PageSettings PageSettings);
+      
     }
 }
