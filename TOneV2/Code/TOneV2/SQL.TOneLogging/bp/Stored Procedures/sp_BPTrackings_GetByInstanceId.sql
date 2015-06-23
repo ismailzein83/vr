@@ -12,7 +12,7 @@ BEGIN
       ,[TrackingMessage]
       ,[Severity]
       ,[EventTime]
-	FROM [TOneWFTracking].[bp].[BPTracking] as bpt WITH(NOLOCK)
+	FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
 	WHERE
 		bpt.ProcessInstanceID = @ProcessInstanceID
 END
