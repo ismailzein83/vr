@@ -55,6 +55,23 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, datefrom , dateto);
         }
 
+
+        public List<BPInstance> GetOpenedInstances()
+        {
+            List<int> instanceStatus = new List<int>();
+            foreach (BPInstanceStatus bpInstanceStatus in Enum.GetValues(typeof(BPInstanceStatus)))
+            {
+                if (!BPInstanceStatusAttribute.GetAttribute(bpInstanceStatus).IsClosed)
+                {
+                    instanceStatus.Add(((int)bpInstanceStatus));
+                }
+                    
+            }
+
+            return GetItemsSP("bp.sp_BPInstance_GetByCriterias", BPInstanceMapper, instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()));
+        }
+
+
         public List<BPInstance> GetInstancesByCriteria(List<int> definitionID,List<int> instanceStatus, DateTime datefrom, DateTime dateto)
         {
 

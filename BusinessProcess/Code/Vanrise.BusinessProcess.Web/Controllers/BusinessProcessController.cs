@@ -17,6 +17,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     {
 
         [HttpGet]
+        public List<BPInstance> GetOpenedInstances()
+        {
+            BPClient manager = new BPClient();
+            return manager.GetOpenedInstances();
+        }
+
+
+        [HttpGet]
         public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title)
         {
             BPClient manager = new BPClient();

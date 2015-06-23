@@ -45,5 +45,6 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return _cachedAttributes[status];
         }
+
     }
 }

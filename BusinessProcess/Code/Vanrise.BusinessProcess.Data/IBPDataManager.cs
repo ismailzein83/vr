@@ -19,6 +19,8 @@ namespace Vanrise.BusinessProcess.Data
 
         List<BPInstance> GetInstancesByCriteria(List<int> definitionID, List<int> instanceStatus, DateTime datefrom, DateTime dateto);
 
+        List<BPInstance> GetOpenedInstances();
+
         List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto);
         
         BPInstance GetInstance(long instanceId);

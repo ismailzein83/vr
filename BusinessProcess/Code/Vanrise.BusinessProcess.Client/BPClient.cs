@@ -11,7 +11,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.Client
 {
-    public class BPClient
+    public  partial class  BPClient
     {
         #region Process Workflow Methods
 

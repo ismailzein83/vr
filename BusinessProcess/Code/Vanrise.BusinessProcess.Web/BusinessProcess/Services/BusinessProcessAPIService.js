@@ -2,6 +2,10 @@
 
     "use strict";
 
+    function GetOpenedInstances() {
+        return BaseAPIService.get("/api/BusinessProcess/GetOpenedInstances");
+    }
+
     function GetDefinitions() {
         return BaseAPIService.get("/api/BusinessProcess/GetDefinitions");
     }
@@ -50,7 +54,8 @@
         GetStatusList: GetStatusList,
         GetFilteredBProcess: GetFilteredBProcess,
         GetTrackingsByInstanceId: GetTrackingsByInstanceId,
-        GetTrackingSeverity: GetTrackingSeverity
+        GetTrackingSeverity: GetTrackingSeverity,
+        GetOpenedInstances: GetOpenedInstances
     });
 
 };
