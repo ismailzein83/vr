@@ -66,12 +66,14 @@
     <Folder Include="bp\Tables\" />
     <Folder Include="bp\Views\" />
     <Folder Include="Security\" />
+    <Folder Include="bp\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\LKUP_TrackingSeverity.sql" />
     <Build Include="bp\Tables\BPTracking.sql" />
     <Build Include="bp\Views\vw_BPTracking.sql" />
     <Build Include="Security\bp.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetByInstanceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
