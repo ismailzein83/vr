@@ -23,9 +23,9 @@ namespace TOne.Analytics.Web.Controllers
         }
           
         [HttpGet]
-        public VariationReportResult GetVariationReport(DateTime selectedDate, int periodCount, string periodTypeValue, string variationReportOptionValue)
+        public VariationReportResult GetVariationReport(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOption, int fromRow, int toRow)
         {
-            return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, (TimePeriod)Enum.Parse(typeof(TimePeriod), periodTypeValue), (VariationReportOptions)Enum.Parse(typeof(VariationReportOptions), variationReportOptionValue));
+            return __billingStatisticsManager.GetVariationReportsData(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow);
             
         }
     }

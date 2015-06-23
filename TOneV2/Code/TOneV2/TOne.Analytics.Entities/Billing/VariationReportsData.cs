@@ -19,5 +19,6 @@ namespace TOne.Analytics.Entities
         public List<decimal> TotalDurationsPerDate { get; set; }
         public string ID { get; set; }
 
+        public long RowNumber { get; set; }
     }
 }

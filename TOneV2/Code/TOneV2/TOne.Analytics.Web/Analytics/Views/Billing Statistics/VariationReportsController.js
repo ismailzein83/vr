@@ -1,42 +1,60 @@
 ﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'TimePeriodEnum', 'VariationReportOptionsEnum'];
 
 function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum) {
-    var timePeriod = [];
-    var variationReportOptions = [];
-    $scope.isInitializing = false;
-    $scope.fromDate = '2013/07/31';
-    $scope.periodTypeValue = 'Days';
-    $scope.selectedReportOption = 'InBoundMinutes';
-    $scope.periodCount = 7;
-    $scope.data = [];
-    $scope.timeRanges = [];
+   
     defineScope();
-    loadTimePeriods();
-    loadVariationReportOptions();
+    load();
 
     function defineScope() {
-        $scope.getVariationReportsData = getVariationReportsData;
-        $scope.timePeriod = timePeriod;
-        $scope.variationReportOptions = variationReportOptions;
+        $scope.fromDate = '2013/07/31';
+        $scope.periodCount = 7;
+        $scope.data = [];
+        $scope.timeRanges = [];
+
+        loadTimePeriods();
+        loadVariationReportOptions();
+        
         $scope.periodValuesArray = [];
+        $scope.mainGridPagerSettings = {
+            currentPage: 1,
+            totalDataCount: 0,
+            pageChanged: function () {
+                return getVariationReportsData();
+            }
+        };
      
+        $scope.onSearch = function () {
+            $scope.mainGridPagerSettings.currentPage = 1;
+            return getVariationReportsData();
+        }
+    }
+
+    function load() {
+        
     }
    
     function loadTimePeriods() {
+        $scope.timePeriods = [];
         for (var prop in TimePeriodEnum) {
-            timePeriod.push(TimePeriodEnum[prop].description);
+            $scope.timePeriods.push(TimePeriodEnum[prop]);
         }
+        $scope.selectedTimePeriod = $scope.timePeriods[0];
     }
+
     function loadVariationReportOptions() {
+        $scope.variationReportOptions = [];
         for (var prop in VariationReportOptionsEnum) {
-        variationReportOptions.push(VariationReportOptionsEnum[prop].description);
+            $scope.variationReportOptions.push(VariationReportOptionsEnum[prop]);
         }
+        $scope.selectedReportOption = $scope.variationReportOptions[0];
     }
+
     function getVariationReportsData() {
-        $scope.isInitializing = true;
-        BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, TimePeriodEnum[$scope.periodTypeValue].description, VariationReportOptionsEnum[$scope.selectedReportOption].description).then(function (response) {
+        $scope.isLoading = true;
+        var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
+        return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
            
-            console.log(response);
+            //console.log(response);
             //if (response.length > 0) {
             //    $scope.periodValuesArray.length = 0;
             //    angular.forEach(response[0].TotalDurationsPerDate, function (item) {
@@ -47,9 +65,10 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
 
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
+            $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
             angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.TotalDurationsPerDate); });
             angular.forEach(response.TimeRange, function (item) {
-                if (TimePeriodEnum[$scope.periodTypeValue].description == "Days")
+                if ($scope.selectedTimePeriod == TimePeriodEnum.Days)
                     $scope.timeRanges.push(new Date(item.FromDate).toDateString());
                 else {
                     var toDate = new Date(item.ToDate);
@@ -59,7 +78,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             });
 
         }).finally(function () {
-             $scope.isInitializing = false;
+            $scope.isLoading = false;
         });
     }
 };

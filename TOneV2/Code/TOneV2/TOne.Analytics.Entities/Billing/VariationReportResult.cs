@@ -9,7 +9,8 @@ namespace TOne.Analytics.Entities
 {
     public class VariationReportResult
     {
-        public List<VariationReportsData> VariationReportsData { get; set; }
-        public List<TimeRange> TimeRange;
+        public IEnumerable<VariationReportsData> VariationReportsData { get; set; }
+        public List<TimeRange> TimeRange { get; set; }
+        public int TotalCount { get; set; }
     }
 }

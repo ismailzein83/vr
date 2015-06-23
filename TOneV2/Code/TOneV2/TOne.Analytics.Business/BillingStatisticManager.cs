@@ -69,7 +69,7 @@ namespace TOne.Analytics.Business
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions)
+        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow)
         {
             List<TimeRange> timeRanges = new List<TimeRange>();
             DateTime currentDate = new DateTime();
@@ -100,16 +100,18 @@ namespace TOne.Analytics.Business
                 counter = counter - 1;
 
             }
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions);
-            return GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount);
-
+            int totalCount;
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow, out totalCount);
+            var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount);
+            result.TotalCount = totalCount;
+            return result;
         }
 
         public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount)
         {
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             VariationReportsData current = null;
-            foreach (var item in variationReports.OrderBy(v => v.ID))
+            foreach (var item in variationReports)
             {
                 if (current == null || current.ID != item.ID)
                 {
@@ -117,6 +119,7 @@ namespace TOne.Analytics.Business
                     {
                         ID = item.ID,
                         Name = item.Name,
+                        RowNumber = item.RowNumber,
                         TotalDurationsPerDate = new List<decimal>()
                     };
                     variationReportsData.Add(current);
@@ -136,7 +139,7 @@ namespace TOne.Analytics.Business
                 }
             }
 
-            variationReportsData.OrderByDescending(v => v.TotalDurationsPerDate.Sum());
+            //variationReportsData.OrderByDescending(v => v.TotalDurationsPerDate.Sum());
 
             foreach (var item in variationReportsData)
             {
@@ -152,7 +155,7 @@ namespace TOne.Analytics.Business
 
             }
 
-            return new VariationReportResult() { VariationReportsData = variationReportsData, TimeRange = timeRanges };
+            return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
 
         }
         public List<RateLossFormatted> GetRateLoss(DateTime fromDate, DateTime toDate, string customerId, string supplierId, int? zoneId, int? customerAMUId, int? supplierAMUId)

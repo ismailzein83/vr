@@ -23,7 +23,7 @@ namespace TOne.Analytics.Entities
 
         public string ID { get; set; }
 
-
+        public long RowNumber { get; set; }
 
 
     }

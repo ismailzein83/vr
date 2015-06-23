@@ -161,37 +161,44 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, out int totalCount)
         {
             List<VariationReports> variationReportList = new List<VariationReports>();
             DataTable timeRangeDataTable = new DataTable();
             timeRangeDataTable = ToDataTable(timeRange);
-       
+            DateTime beginTime = (from d in timeRange select d.FromDate).Min();
+            DateTime endTime = (from d in timeRange select d.ToDate).Max();
             string selectedReportQuery = GetVariationReportQuery2(timeRange,variationReportOptions);
+            int totalCount_Internal = 0;
             if (!string.IsNullOrEmpty(selectedReportQuery))
-                variationReportList =  GetItemsText(selectedReportQuery, VariationReportsMapper,
+                ExecuteReaderText(selectedReportQuery,
+                (reader) =>
+                {
+                    while (reader.Read())
+                        variationReportList.Add(VariationReportsMapper(reader));
+                    reader.NextResult();
+                    reader.Read();
+                    totalCount_Internal = (int)reader["TotalCount"];
+                },
                 (cmd) =>
                 {
                     var dtPrm = new SqlParameter("@timeRange", SqlDbType.Structured);
                     dtPrm.TypeName = "Analytics.TimeRangeType";
                     dtPrm.Value = timeRangeDataTable;
                     cmd.Parameters.Add(dtPrm);
-
+                    cmd.Parameters.Add(new SqlParameter("@BeginTime", beginTime));
+                    cmd.Parameters.Add(new SqlParameter("@EndTime", endTime));
+                    cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
+                    cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
-
+            totalCount = totalCount_Internal;
             return variationReportList ;
 
 
         }
 
         private string GetVariationReportQuery2(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
-        {
-
-            //  DateTime BeginTime = Convert.ToDateTime((timeRange.Compute("max(FromDate)", string.Empty)));
-            //  DateTime EndTime = Convert.ToDateTime((timeRange.Compute("min(FromDate)", string.Empty)));
-
-            DateTime BeginTime = (from d in timeRange select d.FromDate).Max();
-            DateTime EndTime = (from d in timeRange select d.FromDate).Min();
+        {          
 
             StringBuilder query = new StringBuilder(@"DECLARE @ExchangeRates TABLE(
 		                                             Currency VARCHAR(3),
@@ -199,29 +206,45 @@ namespace TOne.Analytics.Data.SQL
 		                                             Rate FLOAT
 		                                             PRIMARY KEY(Currency, Date))
                                             INSERT INTO @ExchangeRates 
-                                            SELECT * FROM dbo.GetDailyExchangeRates('@EndTime','@BeginTime')");
-            query.Append(@" SELECT  #NameColumn# , 
+                                            SELECT * FROM dbo.GetDailyExchangeRates(@BeginTime,@EndTime)");
+            query.Append(@" ;
+            SELECT #IDColumn# AS ID, #NameColumn# AS Name, ROW_NUMBER()  OVER ( ORDER BY #ValueColumn# DESC) AS RowNumber
+            INTO #OrderedEntities
+            FROM 
+            Billing_Stats BS
+            LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
+            LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
+            #JoinStatement#           
+            WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# 
+            GROUP BY #IDColumn#, #NameColumn#;
+            
+            WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
+
+            SELECT  Ent.Name , Ent.RowNumber,
             0.0 as [AVG],
             0.0 as [%], 
             0.0 as [Prev %],
             tr.FromDate,
             tr.ToDate,
             (#ValueColumn#) as Total,
-            #IDColumn# as ID
+            Ent.ID as ID
             From @timeRange tr
             LEFT JOIN Billing_Stats BS ON BS.CallDate >= tr.FromDate AND BS.CallDate < tr.ToDate
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
-            #JoinStatement#
-            #WhereStatement#  
-            GROUP BY #NameColumn# ,#IDColumn#,tr.FromDate, tr.ToDate
-            ORDER BY tr.FromDate, tr.ToDate ");
+            JOIN FilteredEntities Ent ON Ent.ID = #BSIDColumn#
+            GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate            
+            ORDER BY Ent.RowNumber, tr.FromDate, tr.ToDate;
+            
+            SELECT COUNT(*) as TotalCount FROM #OrderedEntities
+            ");
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
                     query.Replace("#NameColumn#", " cpc.Name ");
                     query.Replace("#ValueColumn#", " SUM(SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                     query.Replace("#WhereStatement#", " ");
@@ -231,9 +254,10 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(CostDuration)/60 ");
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", "BS.SupplierID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
 
                 case VariationReportOptions.InOutBoundMinutes:
@@ -244,6 +268,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#NameColumn#", " Z.Name ");
                     query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " Z.ZoneID ");
+                    query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
 
                     query.Replace("#WhereStatement#", @" ");
@@ -253,17 +278,19 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#NameColumn#", " cpc.Name ");
                     query.Replace("#ValueColumn#", " SUM(Sale_Nets) ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(Cost_Nets) ");
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    query.Replace("#WhereStatement#", @" WHERE cas.RepresentsASwitch <> 'Y' ");
+                    query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
 
                 case VariationReportOptions.InOutBoundAmount:
@@ -273,13 +300,6 @@ namespace TOne.Analytics.Data.SQL
                 case VariationReportOptions.Profit:
                     break;
 
-            }
-
-
-            if (query.ToString().Contains("@BeginTime") && query.ToString().Contains("@EndTime"))
-            {
-                query.Replace("@BeginTime", BeginTime.ToString());
-                query.Replace("@EndTime", EndTime.ToString());
             }
             return query.ToString();
         }
@@ -590,7 +610,8 @@ namespace TOne.Analytics.Data.SQL
                 ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
                 TotalDuration = GetReaderValue<decimal>(reader, "Total"),
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
-                ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty
+                ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty,
+                RowNumber = (long)reader["RowNumber"]
             };
 
             return instance;
