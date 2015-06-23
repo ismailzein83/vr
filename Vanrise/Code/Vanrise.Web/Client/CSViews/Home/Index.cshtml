@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div class="panel-heading hand-cursor dll-menu boxes float-box waves-effect waves-float waves-block" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
+                    <div class="panel-heading hand-cursor   boxes float-box waves-effect waves-float waves-block dll-menu-theme" ng-style="{'background-color':'#{{item.color}}; !important'}" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 4px;"></span>
                             <span>{{::item.Name}} </span>
@@ -90,8 +90,8 @@
                     </div>
                 </div>
 
-                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                    <div class="dropdown-toggle hand-cursor glyphicon " ng-class="item.Icon" style="font-size:20px;margin:0px 4px" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
+                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-style="{'background-color':'#{{item.color}}; !important'}" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                    <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme " ng-class="item.Icon" style="font-size:20px;margin:0px 4px" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
 
                     </div>
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">

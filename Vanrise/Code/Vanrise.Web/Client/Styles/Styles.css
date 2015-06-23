@@ -719,18 +719,18 @@ input.ui-grid-filter-input[type="text"] {
     position: relative;
 
 }
-.leftdiv {   
+/*.leftdiv {   
     color: #666 !important;
     border-bottom: 1px #CBC8C8 solid;
-}
-.leftdiv:hover{
+}*/
+/*.leftdiv:hover{
     background-color:#f0f0f0 !important;
     color: #666 !important;
 }
 .leftdiv:focus {
     background-color:#f0f0f0 !important;
     color: #666 !important;
-}
+}*/
 .dropdown-menu-custom-serf li > a:hover {
     background-color:#f0f0f0 !important;
     color: #666 !important;

@@ -7,6 +7,25 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
     });
 
     function getTemplate(type) {
+        if (type == "Login") {
+            var buttonAttributes = getButtonAttributes(type);
+            return '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
+            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + '<span style="padding-left:4px"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
+                + '</button>';
+
+        }
+        else {
+            var buttonAttributes = getButtonAttributes(type);
+            return '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
+            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + '<span style="padding-left:4px" class="' + buttonAttributes.class + ' aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
+                + '</button>';
+
+        }
+
         var buttonAttributes = getButtonAttributes(type);
         return '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
         + 'aria-label="Left Align" ng-click="ctrl.onInternalClick()" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text

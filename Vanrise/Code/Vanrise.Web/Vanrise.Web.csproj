@@ -507,6 +507,7 @@
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\Styles\simple-sidebar.css" />
     <Content Include="Client\Styles\Styles.css" />
+    <Content Include="Client\Styles\TOnv2theme.css" />
     <Content Include="Client\Styles\ui-grid-custom.css" />
     <Content Include="Client\Styles\ui-grid.css" />
     <Content Include="Client\Styles\ui-grid.svg" />

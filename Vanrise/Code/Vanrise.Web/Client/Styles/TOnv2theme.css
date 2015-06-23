@@ -1,0 +1,24 @@
+﻿
+.main{
+   padding-left:37%;
+}
+.login-container{
+    background:url("../../Client/Images/login.png") center no-repeat;
+    background-size: cover;
+    width: 330px;
+    height: 310px;
+    min-width: 200px;
+}
+.login-spacer{
+    padding-bottom:3px;
+}
+.login-btn{
+    background-color:#e22337!important;
+    color:#FFF;
+    text-transform:uppercase;
+    font-weight:700;
+}
+
+.dll-menu-theme {   
+    color: #FFF !important;
+}

@@ -1,26 +1,29 @@
-﻿<vr-panel ng-controller="Security_LoginController">
-
-    <vr-form name="formLogin">
-        <div>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <vr-textbox value="email" label="Email"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns colnum="4">
-                    <vr-textbox value="password" label="Password"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-
-            <div>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                    <div transclude-to="buttons">
+﻿
+<div class="login-container">
+    <div ng-controller="Security_LoginController">
+        <div style="margin-top: 50%; padding-top: 55%">
+            <vr-form name="formLogin">
+                <div class="row login-spacer" >
+                    <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
+                        <vr-textbox value="email" placeholder="Username"></vr-textbox>
+                    </div>
+                </div>
+                <div class="row login-spacer" >
+                    <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
+                        <vr-textbox value="password" placeholder="Password"></vr-textbox>
+                    </div>
+                </div>
+                <div class="row login-spacer">
+                    <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
                         <vr-button type="Login" formname="formLogin" data-onclick="Login"></vr-button>
                     </div>
-                </vr-actionbar>
-
-            </div>
-            
+                </div>
+                <!--<div class="row login-spacer">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button value="Login" class="btn btn-danger login-btn" style="width:100%" ng-click="Login()">LOGIN</button>
+                    </div>
+                </div>-->
+            </vr-form>
         </div>
-</vr-panel>
+    </div>
+</div>

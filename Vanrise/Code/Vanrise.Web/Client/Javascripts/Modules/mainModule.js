@@ -71,7 +71,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else {
             $scope.menuItemsCurrent = i;
             var $this = angular.element(e.currentTarget);
-            $this.addClass('active-menu-parent');
+            //$this.addClass('active-menu-parent');
         }
 
     }
@@ -123,8 +123,28 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else return false;
 
     }
-
+    $scope.colors= [
+        "e22337",
+        "20407d",
+        "01a082",
+        "f79624",
+        "9e1f63",
+        "01a4b5",
+        "ef4136",        
+        "ef4136",
+        "3ab44b",
+        "7e3f98",
+        "00adef",
+        "c3162a",
+        "4f7ac8",
+        "8cc540",
+        "272264",
+        "0074d9"
+    ]
     MenuAPIService.GetMenuItems().then(function (response) {
+        angular.forEach(response, function (value, key) {
+            value.color = $scope.colors[key % $scope.colors.length]
+        });
         $scope.menuItems = response;
     });
 
