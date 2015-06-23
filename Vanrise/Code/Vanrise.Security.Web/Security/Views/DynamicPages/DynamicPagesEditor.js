@@ -78,7 +78,7 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
             });
         });
 
-    }
+    } 
 
     function defineNumberOfColumns() {
         $scope.numberOfColumns = [

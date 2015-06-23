@@ -11,7 +11,7 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesMana
     defineScopeObjects();
     load();
   //  defineScopeMethods();
-   
+    
     function defineScopeObjects() {
         $scope.data = [];
         $scope.menuActions = [{
