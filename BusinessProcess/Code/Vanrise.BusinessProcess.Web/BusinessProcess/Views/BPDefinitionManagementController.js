@@ -9,14 +9,12 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
     
 
     function showStartNewInstance(BPDefinitionObj) {
-        console.log("BPDefinitionObj.Configuration.Url")
-        console.log(BPDefinitionObj.Configuration.Url)
-        VRModalService.showModal(BPDefinitionObj.Configuration.Url, {
-            BPDefinitionID: BPDefinitionObj.BPDefinitionID
+        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/InstanceEditor.html', {
+            BPDefinitionObj: BPDefinitionObj
         },
         {
             onScopeReady: function (modalScope) {
-                modalScope.title = "Start";
+                modalScope.title = "Start New Instance";
             }
         });
     }
