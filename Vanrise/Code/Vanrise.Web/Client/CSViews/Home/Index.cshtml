@@ -20,9 +20,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
         <div class="container">
             <div class="navbar-header">
-                
+
                 Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
-                                                 
+                <img src="Client/Images/logoonheader.png" />
+
             </div>
             <div id="navbar">
 
@@ -42,8 +43,8 @@
 
                     </div>
                 </div>
-                <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div class="panel-heading hand-cursor   boxes float-box waves-effect waves-float waves-block dll-menu-theme" ng-style="{'background-color':'#{{item.color}}; !important'}" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
+                <div ng-repeat="item in menuItems track by $index" class="panel panel-default menu-item-list">
+                    <div ng-class="getParentItemClass(item) ? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 4px;"></span>
                             <span>{{::item.Name}} </span>
@@ -70,10 +71,11 @@
                                 <li ng-if="c.Childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.Childs">
                                     <a class=" menulink" ng-click="setIndexSub($index,$event)" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
                                 </li>
-                                <li ng-if="c.Childs != undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-repeat="c in item.Childs">
-                                    <a class=" menulink " ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{::c.Name}}</a>
+
+                                <li ng-if="c.Childs != undefined" ng-repeat="c in item.Childs" class="dll-menu menu-item-list-ligth ">
+                                    <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{::c.Name}}</div>
                                     <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
-                                        <li ng-repeat="a in c.Childs">
+                                        <li ng-repeat="a in c.Childs" class="waves-effect waves-classic ">
                                             <a class=" menulink" style="color:#333;" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                         </li>
                                     </ul>
@@ -125,13 +127,14 @@
         <div id="page-content-wrapper">
             <div class="container-fluid vr-container">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <ol class="breadcrumb breadcrumb-vr">
+                    <div class="col-lg-12 sub-header">
+                        @*<ol class="breadcrumb breadcrumb-vr">
                             <li><a href="#/default">Home</a></li>
                             <li ng-show="parent!=null"><a href="">{{parent.Name}}</a></li>
                             <li class="active" ng-show="child!=null">{{child.Name}}</li>
-                        </ol>
-
+                        </ol>*@
+                        <img src="Client/Images/01.png" class="img1" />
+                        <img src="Client/Images/02.png" class="img2" />
                     </div>
 
                     <div class="panel-primary panel-vr his-nav" ng-if="hisnav.length > 0 ">

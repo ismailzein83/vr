@@ -71,6 +71,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else {
             $scope.menuItemsCurrent = i;
             var $this = angular.element(e.currentTarget);
+            $scope.menuItems[i].itemstyle = " ";
+            $scope.menuItems[i].color = "#f0f0f0";
+         //   value.itemstyle = "'background-color':'#f0f0f0; !important'";
+          //  $scope.menuItems[i].itemstyle = "{'background-image':'-webkit-gradient(linear, left bottom, right bottom, color-stop(0%," + $scope.menuItems[i].color + "), color-stop(100%,blue))'}";
+            
+            //-webkit - linear - gradient(bottom, value.color, );
+         //   value.itemstyle = "{'background-color':'#" + value.color + "; !important'}";
             //$this.addClass('active-menu-parent');
         }
 
@@ -124,30 +131,36 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
     }
     $scope.colors= [
-        "e22337",
-        "20407d",
-        "01a082",
-        "f79624",
-        "9e1f63",
-        "01a4b5",
-        "ef4136",        
-        "ef4136",
-        "3ab44b",
-        "7e3f98",
-        "00adef",
-        "c3162a",
-        "4f7ac8",
-        "8cc540",
-        "272264",
-        "0074d9"
+        "#e22337",
+        "#20407d",
+        "#01a082",
+        "#f79624",
+        "#9e1f63",
+        "#01a4b5",
+        "#ef4136",        
+        "#ef4136",
+        "#3ab44b",
+        "#7e3f98",
+        "#00adef",
+        "#c3162a",
+        "#4f7ac8",
+        "#8cc540",
+        "#272264",
+        "#0074d9"
     ]
     MenuAPIService.GetMenuItems().then(function (response) {
         angular.forEach(response, function (value, key) {
-            value.color = $scope.colors[key % $scope.colors.length]
+            value.color = $scope.colors[key % $scope.colors.length];
+            value.keyclass = key % 16;
         });
         $scope.menuItems = response;
-    });
-
+    })
+    $scope.getParentItemClass = function (item) {
+        var match = (item.Name == "NOC") ? "Analytics" : item.Name.replace(/\s/g, '');
+        if (location.href.indexOf(match) != -1)
+          return true;
+    };
+   
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
     var host = pathArray[2];

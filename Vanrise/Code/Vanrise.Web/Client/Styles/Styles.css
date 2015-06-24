@@ -4,10 +4,41 @@
     border:0px !important;
 }
 .vr-nav-custom{
-    min-height:40px !important;
+    /*min-height:40px !important;
     border-color:transparent !important;
-    background-color:#666 !important;
+    background-color:#666 !important;*/
+
+     min-height: 25px !important;
+     margin-bottom:0px !important;
+     border-color: transparent !important;
+     background: -webkit-linear-gradient(bottom,#F0F0F0, #C5C5C5); /*Safari 5.1-6*/
+     background: -o-linear-gradient(bottom,#F0F0F0, #C5C5C5); /*Opera 11.1-12*/
+     background: -moz-linear-gradient(bottom,#F0F0F0,#C5C5C5); /*Fx 3.6-15*/
+     background: linear-gradient(to bottom, #F0F0F0,  #C5C5C5); /*Standard*/
+
 }
+.vr-nav-custom img{
+    position: absolute;
+    top: -24px;
+    right: 5%;
+}
+.sub-header {
+    height: 43px;
+    background-color: #fff;
+    border-bottom: 2px #f0f0f0 solid;
+}
+.sub-header .img1 {
+   position: absolute;
+   top: 15px;
+   right:24%;
+}
+
+.sub-header .img2 {
+    position: absolute;
+    top: 15px;
+    right: 28%;
+}
+ 
 /*bootstrap overide */
 .form-control {   
     height: 29px ;
@@ -232,7 +263,6 @@ Use this for keyframe animations
     top: 7px;
     right: 5px;
 }
-}
 .item-menu{
     padding: 2px 5px;
     margin:0px;
@@ -333,7 +363,7 @@ body{
 .list-inpute-float{
    
     position: relative;
-    top: -3px;
+    top: -6px;
 }
 .inline-inpute{
     width:150px !important;
@@ -636,9 +666,8 @@ input.ui-grid-filter-input[type="text"] {
     margin: 0px;
     border-bottom: 1px solid #d0d0d0;
 }
-.menu-item-list{
-           
-    border-bottom: 1px solid #d0d0d0 !important;
+.menu-item-list{    
+   border: 0px solid transparent !important;
 }
 .menu-item-list .panel-body > li{
     font-size:12px;
@@ -654,7 +683,9 @@ input.ui-grid-filter-input[type="text"] {
     background-color: #dddddd !important;
     color: #666 !important;
 }
-
+.panel-heading-vr{
+     border-radius : 0px !important ;
+}
 .dll-menu:hover {
     background-color: #f0f0f0 !important;
     color: #666 !important;
@@ -692,7 +723,7 @@ input.ui-grid-filter-input[type="text"] {
     text-align:left !important;
 
 }
-.dll-menu a:before{
+/*.dll-menu a:before{
     content: "";
     border-color: transparent #111;
     border-style: solid;
@@ -704,6 +735,19 @@ input.ui-grid-filter-input[type="text"] {
     top: -1px;
     position: relative;
 
+}*/
+
+.dll-menu a:before {
+    content: "";
+    border-style: solid;
+    display: inline-block;
+    height: 0px;
+    width: 0px;
+    left: -5px;
+    top: -3px;
+    position: relative;
+    border-width: 0.2em;
+    border-color:  #111;
 }
 .dll-menu a.down:before{
     content: "";
@@ -719,6 +763,34 @@ input.ui-grid-filter-input[type="text"] {
     position: relative;
 
 }
+.dll-menu div:before{
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+
+}
+.dll-menu div.down:before{
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid ;
+    border-bottom: 0px solid transparent;
+    border-left:0.35em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+
+}
+
 /*.leftdiv {   
     color: #666 !important;
     border-bottom: 1px #CBC8C8 solid;
@@ -1065,3 +1137,5 @@ input.ui-grid-filter-input[type="text"] {
     }
 
 /**************END Pagination*********/
+
+
