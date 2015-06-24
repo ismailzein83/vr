@@ -76,10 +76,10 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstance(instanceId);
         }
 
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, List<int> trackingSeverity, String message)
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, List<int> trackingSeverity, String message, long lastTrackingId)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            return dataManager.GetTrackingsByInstanceId(processInstanceID, trackingSeverity, message);
+            return dataManager.GetTrackingsByInstanceId(processInstanceID, trackingSeverity, message, lastTrackingId);
         }
 
 

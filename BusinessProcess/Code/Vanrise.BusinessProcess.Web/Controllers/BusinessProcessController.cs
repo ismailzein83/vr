@@ -92,7 +92,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
-            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(param.ProcessInstanceID,param.TrackingSeverity,param.Message));
+            IEnumerable<BPTrackingMessageModel> rows = BPMappers.MapTrackingMessages(manager.GetTrackingsByInstanceId(param.ProcessInstanceID,param.TrackingSeverity,param.Message,param.LastTrackingId));
             rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
             return new GetTrackingsByInstanceIdOutput(){
                 Tracking = rows,
@@ -127,7 +127,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         public String Message { get; set; }
 
-        public int LastTrackingId { get; set; }
+        public long LastTrackingId { get; set; }
 
     }
 
