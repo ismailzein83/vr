@@ -56,30 +56,30 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
-           
+
             angular.forEach(response.TimeRange, function (item) {
                 var fromDate = new Date(item.FromDate);
                 var toDate = new Date(item.ToDate);
                 if ($scope.selectedTimePeriod == TimePeriodEnum.Days)
-                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1));
+                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1) + "-" + (fromDate.getFullYear() ));
                 else
-                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1) + "/" + (toDate.getDate() + "-" + (toDate.getMonth() + 1)));
+                    $scope.timeRanges.push(fromDate.getDate() + "-" + (fromDate.getMonth() + 1) + "-" + (fromDate.getFullYear()) + "/" + (toDate.getDate() + "-" + (toDate.getMonth() + 1) + "-" + (fromDate.getFullYear() )));
             });
             setTimeout(function () {
                 $scope.$apply(function () {
-                    angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.TotalDurationsPerDate); });
+                    angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
                 });
             }, 1);
             updateChart($scope.timeRanges, response.VariationReportsData);
 
         }).finally(function () {
             $scope.isLoading = false;
-            
+
         });
     }
 
     function updateChart(times, data) {
-        
+
         var chartDefinition = {
             type: "column",
             yAxisTitle: "Value"
@@ -87,12 +87,19 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         var xAxisDefinition = { titlePath: "xValue" };
         var chartData = [];
         var seriesDefinitions = [];
+       
+        chartData.push({ xValue: "AVG", Values: [] });
+        for (var j = 0; j < data.length ; j++) {
+            chartData[0].Values[j] = data[j].PeriodTypeValueAverage;
+        }
+       
         angular.forEach(times, function (itm) {
             chartData.push({
                 xValue: itm,
                 Values: []
             });
         });
+       
         for (var i = 0; i < data.length; i++) {
             var dataItem = data[i];
             seriesDefinitions.push({
@@ -100,8 +107,9 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                 valuePath: "Values[" + i + "]",
                 type: "column"
             });
-            for (var j = 0; j < times.length; j++) {
-                chartData[j].Values[i] = dataItem.TotalDurationsPerDate[j];
+          
+            for (var j = 1; j < times.length+1; j++) {
+               chartData[j].Values[i] = dataItem.Values[j-1];
             }
         }
         chartAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);

@@ -120,7 +120,7 @@ namespace TOne.Analytics.Business
                         ID = item.ID,
                         Name = item.Name,
                         RowNumber = item.RowNumber,
-                        TotalDurationsPerDate = new List<decimal>()
+                        Values = new List<decimal>()
                     };
                     variationReportsData.Add(current);
 
@@ -133,20 +133,18 @@ namespace TOne.Analytics.Business
                 {
                     var value = variationReports.FirstOrDefault(itm => itm.ID == rep.ID && itm.FromDate == timeRange.FromDate && itm.ToDate == timeRange.ToDate);
                     if (value != null)
-                        rep.TotalDurationsPerDate.Add(value.TotalDuration);
+                        rep.Values.Add(value.TotalDuration);
                     else
-                        rep.TotalDurationsPerDate.Add(0);
+                        rep.Values.Add(0);
                 }
             }
-
-            //variationReportsData.OrderByDescending(v => v.TotalDurationsPerDate.Sum());
 
             foreach (var item in variationReportsData)
             {
                 decimal average = 0;
-                double CurrentDayValue = double.Parse(item.TotalDurationsPerDate.First().ToString());
-                double PrevDayValue = double.Parse(item.TotalDurationsPerDate[1].ToString());
-                foreach (var totalDurations in item.TotalDurationsPerDate)
+                double CurrentDayValue = double.Parse(item.Values.First().ToString());
+                double PrevDayValue = double.Parse(item.Values[1].ToString());
+                foreach (var totalDurations in item.Values)
                     average += totalDurations;
                 average = average / periodCount;
                 item.PeriodTypeValueAverage = average;

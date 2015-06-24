@@ -38,16 +38,16 @@
                     <vr-datagridcolumn headertext="'_AVG'" field="'PeriodTypeValueAverage'" type="'Number'"></vr-datagridcolumn><!--periodTypeValue+-->
                     <vr-datagridcolumn headertext="'_%'" field="'PeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Previous_%'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="item in timeRanges" field="'TotalDurationsPerDate[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
     </div>
-    <div vr-loader="isGettingData">
+    <div vr-loader="isLoading">
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-section title="Chart">
+                <vr-section title={{selectedReportOption.description}}>
                     <vr-chart data-on-ready="chartReady"></vr-chart>
                 </vr-section>
             </vr-columns>
