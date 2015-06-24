@@ -1,7 +1,7 @@
-﻿SchedulerTaskManagementController.$inject = ['$scope', 'SchedulerAPIService', 'VRModalService'];
+﻿SchedulerTaskManagementController.$inject = ['$scope', 'SchedulerTaskAPIService', 'VRModalService'];
 
 
-function SchedulerTaskManagementController($scope, SchedulerAPIService, VRModalService) {
+function SchedulerTaskManagementController($scope, SchedulerTaskAPIService, VRModalService) {
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -38,7 +38,7 @@ function SchedulerTaskManagementController($scope, SchedulerAPIService, VRModalS
         var pageInfo = mainGridAPI.getPageInfo();
 
         var name = $scope.name != undefined ? $scope.name : '';
-        return SchedulerAPIService.GetFilteredTasks(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
+        return SchedulerTaskAPIService.GetFilteredTasks(pageInfo.fromRow, pageInfo.toRow, name).then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.schedulerTasks.push(item);
             });
@@ -66,7 +66,7 @@ function SchedulerTaskManagementController($scope, SchedulerAPIService, VRModalS
                 mainGridAPI.itemAdded(task);
             };
         };
-        //VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', null, settings);
+        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', null, settings);
     }
 
     function editTask(taskObj) {
@@ -82,7 +82,7 @@ function SchedulerTaskManagementController($scope, SchedulerAPIService, VRModalS
                 mainGridAPI.itemUpdated(task);
             };
         };
-        //VRModalService.showModal('/Client/Modules/Security/Views/RoleEditor.html', parameters, modalSettings);
+        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, modalSettings);
     }
 
     function deleteTask(taskObj) {

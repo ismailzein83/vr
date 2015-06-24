@@ -98,12 +98,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Runtime\Services\APIServices\SchedulerAPIService.js" />
+    <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Views\SchedulerTaskEditor.html" />
+    <Content Include="Runtime\Views\SchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskManagement.html" />
     <Content Include="Runtime\Views\SchedulerTaskManagementController.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Business\Vanrise.Runtime.Business.csproj">
       <Project>{7b928ba5-c19b-4d8c-912f-8d2d8a679718}</Project>
       <Name>Vanrise.Runtime.Business</Name>

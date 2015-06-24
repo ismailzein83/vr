@@ -16,5 +16,27 @@ namespace Vanrise.Runtime.Web.Controllers
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.GetFilteredTasks(fromRow, toRow, name);
         }
+
+        [HttpGet]
+        public SchedulerTask GetTask(int taskId)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.GetTask(taskId);
+        }
+
+        [HttpPost]
+        public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.AddTask(taskObject);
+        }
+
+        [HttpPost]
+        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> UpdateTask(SchedulerTask taskObject)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.UpdateTask(taskObject);
+        }
+
     }
 }

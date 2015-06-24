@@ -47,6 +47,10 @@
     <Compile Include="SchedulerTaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj">
       <Project>{2b79fccf-afbe-43f2-9ddc-3a91f5ff2489}</Project>
       <Name>Vanrise.Runtime.Data</Name>

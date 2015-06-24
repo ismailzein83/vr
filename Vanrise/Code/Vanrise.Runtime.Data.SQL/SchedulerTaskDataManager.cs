@@ -22,6 +22,26 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_SchedulerTask_GetFiltered", TaskMapper, fromRow, toRow, name);
         }
 
+        public Entities.SchedulerTask GetTask(int taskId)
+        {
+            return GetItemSP("runtime.sp_SchedulerTask_Get", TaskMapper, taskId);
+        }
+
+        public bool AddTask(Entities.SchedulerTask taskObject, out int insertedId)
+        {
+            object taskId;
+
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Insert", out taskId, taskObject.Name, taskObject.IsEnabled);
+            insertedId = (int)taskId;
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateTask(Entities.SchedulerTask taskObject)
+        {
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Update", taskObject.TaskId, taskObject.Name, taskObject.IsEnabled);
+            return (recordesEffected > 0);
+        }
+        
 
         SchedulerTask TaskMapper(IDataReader reader)
         {
