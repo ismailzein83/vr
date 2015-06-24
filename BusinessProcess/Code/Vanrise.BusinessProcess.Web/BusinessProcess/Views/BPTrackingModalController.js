@@ -96,6 +96,23 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         $scope.$on('$destroy', function () {
             stopGetData();
         });
+
+        $scope.onMessageChange = function () {
+            search();
+        };
+
+        $scope.onSelectionChange = function (selectedvalues, datasource) {
+            console.log("change");
+            search();
+        };
+    }
+
+    function search() {
+        $scope.searchGrid = {
+            Message: $scope.message,
+            Severity: UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value"),
+        };
+        console.log($scope.searchGrid);
     }
 
     function startGetData() {
