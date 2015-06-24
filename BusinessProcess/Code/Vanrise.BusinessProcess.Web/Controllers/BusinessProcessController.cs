@@ -17,11 +17,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     {
 
         [HttpGet]
-        public List<BPInstance> GetOpenedInstances()
+        public IEnumerable<BPInstanceModel> GetOpenedInstances()
         {
             BPClient manager = new BPClient();
-            return manager.GetOpenedInstances();
+            return BPMappers.MapTMapInstances(manager.GetOpenedInstances());
         }
+
+
+
 
 
         [HttpGet]
@@ -78,7 +81,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             param.FromRow = param.FromRow - 1;
             BPClient manager = new BPClient();
-            IEnumerable<BPInstanceModel> rows = BPMappers.MapTMapInstances(manager.GetFilteredInstances(param.DefinitionsId,param.InstanceStatus, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
+            IEnumerable<BPInstanceModel> rows = BPMappers. MapTMapInstances(manager.GetFilteredInstances(param.DefinitionsId,param.InstanceStatus, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
             rows = rows.Skip(param.FromRow ).Take(param.ToRow - param.FromRow);
             return rows;
         }

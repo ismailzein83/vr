@@ -29,13 +29,14 @@
                         <vr-datagridexpandablerow>
 
                             <vr-datagrid datasource="dataItem.OpenedInstances">
-                                <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Parent ID'" field="'ParentID'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Process Instance ID'" field="'ProcessInstanceID'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Title'" field="'Title'" ></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Parent ID'" field="'ParentID'" ></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Workflow Instance ID'" field="'WorkflowInstanceID'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Execution Status'" field="'ExecutionStatus'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Retry Count'" field="'RetryCount'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Started On'" field="'CreatedTime'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Execution Status'" field="'StatusDescription'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Retry Count'" field="'RetryCount'" ></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" ></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Created Time'" widthfactor="10">{{dataItem.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
                             </vr-datagrid>
 
                         </vr-datagridexpandablerow>
@@ -46,7 +47,7 @@
 
     </vr-form>
 
-
+    {{filteredDefinitions}}
 
 
 </vr-panel>

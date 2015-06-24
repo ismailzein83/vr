@@ -51,7 +51,7 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
                 });
             });
         });
-        
+        //console.log($scope.filteredDefinitions)
     }
 
     function defineGrid() {
