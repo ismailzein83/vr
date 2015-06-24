@@ -7,7 +7,9 @@ app.service('UtilsService', ['$q', function ($q) {
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
         getItemIndexByVal: getItemIndexByVal,
         getItemByVal: getItemByVal,
-        contains: contains
+        contains: contains,
+        getPropValuesFromArray: getPropValuesFromArray,
+        getPropMaxValueFromArray: getPropMaxValueFromArray
     });
 
     function replaceAll(string, find, replace) {
@@ -76,5 +78,30 @@ app.service('UtilsService', ['$q', function ($q) {
             }
         }
         return false;
+    }
+
+    function getPropValuesFromArray(array, propName) {
+        var propValues;
+        if (array.length > 0) {
+            propValues = [];
+            angular.forEach(array, function (val) {
+                propValues.push(val[propName]);
+            });
+        }
+        return propValues;
+    }
+
+    function getPropMaxValueFromArray(array, propName) {
+        var max = undefined;
+        if (array.length > 0) {
+
+            angular.forEach(array, function (val) {
+                if (val === undefined)
+                    max = val[propName];
+                if (val[propName] > max)
+                    max = val[propName];
+            });
+        }
+        return max;
     }
 }]);
