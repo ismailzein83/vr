@@ -46,5 +46,16 @@ namespace Vanrise.BusinessProcess.Entities
             return _cachedAttributes[status];
         }
 
+        public static IEnumerable<BPInstanceStatus> GetNonClosedStatuses()
+        {
+            List<BPInstanceStatus> rslt = new List<BPInstanceStatus>();
+            foreach (var statusEnum in Enum.GetValues(typeof(BPInstanceStatus)))
+            {
+                BPInstanceStatus status = (BPInstanceStatus)statusEnum;
+                if (!GetAttribute(status).IsClosed)
+                    rslt.Add(status);
+            }
+            return rslt;
+        }
     }
 }
