@@ -1,6 +1,14 @@
 ﻿<div vr-modalcontent width="'75%'" ng-controller="FraudAnalysis_InstanceEditorController">
-    <div ng-include src="/Client/Modules/FraudAnalysis/Views/test.html">
-    </div>
+    <vr-modalbody vr-loader="isGettingData">
+
+        <!--<div ng-include src="/Client/Modules/FraudAnalysis/Views/test.html">
+        </div>-->
+        <!--{{BPDefinitionObj.Configuration.Url}}-->
+        <vr-row>
+            <div ng-include src="'/Client/Modules/FraudAnalysis/Views/StrategyManagement.html'">
+            </div>
+        </vr-row>
+    </vr-modalbody>
 </div>
 
 

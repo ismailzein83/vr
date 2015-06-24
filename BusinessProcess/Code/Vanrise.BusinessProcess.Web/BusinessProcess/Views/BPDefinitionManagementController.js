@@ -9,7 +9,7 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
     
 
     function showStartNewInstance(BPDefinitionObj) {
-        VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/InstanceEditor.html', {
+        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/InstanceEditor.html', {
             BPDefinitionObj: BPDefinitionObj
         },
         {
