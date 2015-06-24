@@ -28,12 +28,24 @@
                         <vr-datagridcolumn headertext="'Running Instances'" field="'RunningInstances'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
-                            <vr-datagrid datasource="dataItem.OpenedInstances">
-                                <vr-datagridcolumn headertext="'Title'" field="'Title'" isclickable="true" onclicked="viewScope.processInstanceClicked"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Execution Status'" field="'StatusDescription'"></vr-datagridcolumn>
-                            </vr-datagrid>
+                            <vr-choices >
+                                <vr-choice isselected="ctrl.isRunningTabShown">Running Instances</vr-choice>
+                                <vr-choice isselected="ctrl.isScheduledTabShow">Scheduled Instances</vr-choice>
+                            </vr-choices>
 
-                        </vr-datagridexpandablerow>
+                            <div ng-show="ctrl.isRunningTabShown">
+                                <vr-datagrid datasource="dataItem.OpenedInstances">
+                                    <vr-datagridcolumn headertext="'Title'" field="'Title'" isclickable="true" onclicked="viewScope.processInstanceClicked"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Execution Status'" field="'StatusDescription'"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </div>
+                            <div ng-show="ctrl.isScheduledTabShow">
+                                Schedule will be here
+                            </div>
+
+                               
+
+</vr-datagridexpandablerow>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
