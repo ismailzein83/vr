@@ -50,9 +50,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("bp.sp_BPDefinitionState_Update", definitionId, objectKey, objectKey != null ? Serializer.Serialize(objectValue) : null);
         }
 
-        public List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto)
-        {            
-            return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, datefrom , dateto);
+        public List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime dateFrom, DateTime dateTo)
+        {
+            return GetItemsSP("bp.sp_BPInstance_GetByCriteria", BPInstanceMapper, definitionID, dateFrom, dateTo);
         }
 
 
@@ -72,11 +72,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
 
-        public List<BPInstance> GetInstancesByCriteria(List<int> definitionID,List<int> instanceStatus, DateTime datefrom, DateTime dateto)
+        public List<BPInstance> GetInstancesByCriteria(List<int> definitionID,List<int> instanceStatus, DateTime dateFrom, DateTime dateTo)
         {
 
             return GetItemsSP("bp.sp_BPInstance_GetByCriterias", BPInstanceMapper, definitionID == null ? null : string.Join(",", definitionID.Select(n => n.ToString()).ToArray()),
-                instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()), datefrom, dateto);
+                instanceStatus == null ? null : string.Join(",", instanceStatus.Select(n => n.ToString()).ToArray()), dateFrom, dateTo);
         }
        
         public BPInstance GetInstance(long instanceId)
@@ -84,10 +84,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, instanceId);
         }
 
-        public long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus)
+        public long InsertInstance(string processTitle, long? parentId, int definitionId, object inputArguments, BPInstanceStatus executionStatus)
         {
             object processInstanceId;
-            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionID, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus) > 0)
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus) > 0)
                 return (long)processInstanceId;
             else
                 return 0;

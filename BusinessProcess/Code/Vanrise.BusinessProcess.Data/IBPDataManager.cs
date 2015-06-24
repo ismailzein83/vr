@@ -17,11 +17,11 @@ namespace Vanrise.BusinessProcess.Data
 
         int UpdateDefinitionObjectState(int definitionId, string objectKey, object objectValue);
 
-        List<BPInstance> GetInstancesByCriteria(List<int> definitionID, List<int> instanceStatus, DateTime datefrom, DateTime dateto);
+        List<BPInstance> GetInstancesByCriteria(List<int> definitionID, List<int> instanceStatus, DateTime dateFrom, DateTime dateTo);
 
         List<BPInstance> GetOpenedInstances();
 
-        List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime datefrom, DateTime dateto);
+        List<BPInstance> GetInstancesByCriteria(int definitionID, DateTime dateFrom, DateTime dateTo);
         
         BPInstance GetInstance(long instanceId);
 

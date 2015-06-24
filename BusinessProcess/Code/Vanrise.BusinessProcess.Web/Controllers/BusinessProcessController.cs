@@ -96,7 +96,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             rows = rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
             return new GetTrackingsByInstanceIdOutput(){
                 Tracking = rows,
-                InstanceStatus =  (int)BPInstanceStatus.Running
+                InstanceStatus = (int) manager.GetInstance(param.ProcessInstanceID).Status
             };
         }
 
