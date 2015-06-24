@@ -18,17 +18,20 @@
                     </div>
                 </li>
             </ul>
-            <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="selectedSuppliers.length > 0">
-                <li ng-repeat="item in selectedSuppliers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px">
-                    <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                    <div style="display:inline-block;max-width:200px;">{{item.Name}}</div>
-                    <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor:default" ng-click="selectSupplier($event,item)"></i>
-                    <div style="float: right">
-                        <switch ng-model="item.AllowLoss" ng-init="item.AllowLoss = (item.AllowLoss)?item.AllowLoss:false " class="green"></switch>
-                        <input type="text" class="form-control list-inpute" ng-model="item.Percentage" style="" size="3">
-                    </div>
-                </li>
-            </ul>
+            <div style="height:300px;overflow-x:auto;">
+                <ul class="list-group dragbelzone" ng-sortable="itemsSortable" ng-show="selectedSuppliers.length > 0">
+                    <li ng-repeat="item in selectedSuppliers" class="list-group-item list-custom" style="margin: 1px; font-size: 12px">
+                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                        <div style="display:inline-block;max-width:200px;">{{item.Name}}</div>
+                        <i class="glyphicon glyphicon-remove hand-cursor" style="float: right; padding: 5px; cursor:default" ng-click="selectSupplier($event,item)"></i>
+                        <div style="float: right">
+                            <switch ng-model="item.AllowLoss" ng-init="item.AllowLoss = (item.AllowLoss)?item.AllowLoss:false " class="green"></switch>
+                            <input type="text" class="form-control list-inpute" ng-model="item.Percentage" style="" size="3">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
         </vr-columns>
     </vr-row>
 

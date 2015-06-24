@@ -124,7 +124,7 @@ namespace TOne.LCR.Data.SQL
         public void WriteRouteToStream(RouteDetail routeDetail, object stream)
         {
             StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}^", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
                            routeDetail.Options != null ? Serialize2(routeDetail.Options) : null);
         }
 

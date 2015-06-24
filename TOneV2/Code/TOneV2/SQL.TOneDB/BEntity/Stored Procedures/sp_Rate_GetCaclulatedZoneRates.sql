@@ -1,9 +1,12 @@
-﻿-- =============================================
+﻿
+
+-- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [BEntity].[sp_Rate_GetCaclulatedZoneRates]
+	@ZoneIds LCR.IntIDType READONLY,
 	@EffectiveTime datetime,
 	@IsFuture bit
 AS
@@ -11,8 +14,9 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
-     DECLARE @Account_Inactive tinyint
+	DECLARE @IsZoneFiltered BIT
+	Select @IsZoneFiltered = CAST(COUNT(*) AS BIT) From @ZoneIds 
+    DECLARE @Account_Inactive tinyint
     DECLARE @Account_Blocked tinyint
     DECLARE @Account_BlockedInbound tinyint
     DECLARE @Account_BlockedOutbound tinyint
@@ -55,6 +59,7 @@ BEGIN
                           Case When Co.SupplierID is null Then 0 Else isnull(CASE WHEN P.SupplierID <> 'SYS' THEN 1 ELSE -1 END * (CASE WHEN isnull(Co.Amount,0)  <> 0 THEN Amount / C.LastRate ELSE (r.Rate/ C.LastRate) * Percentage / 100.0  END),0) End  , 
              r.ServicesFlag
     FROM Rate r WITH (NOLOCK)
+    LEFT JOIN @ZoneIds zf on zf.ID = r.ZoneID
     JOIN PriceList p WITH (NOLOCK) ON r.PriceListID = p.PriceListID
     LEFT JOIN Currency C WITH(NOLOCK) ON P.CurrencyID = C.CurrencyID
     JOIN CusCarriers CS WITH(NOLOCK) ON P.CustomerID = CS.CarrierAccountID
@@ -67,7 +72,8 @@ BEGIN
 												OR
 												(@IsFuture = 1 AND (co.BeginEffectiveDate > GETDATE() OR co.EndEffectiveDate IS NULL))
 											)
-    WHERE (
+    WHERE  (zf.ID IS NOT NULL OR @IsZoneFiltered = 0)
+			AND (
 			(@IsFuture = 0 AND r.BeginEffectiveDate <= @EffectiveTime AND (r.EndEffectiveDate > @EffectiveTime OR r.EndEffectiveDate IS NULL))
 			OR
 			(@IsFuture = 1 AND (r.BeginEffectiveDate > GETDATE() OR r.EndEffectiveDate IS NULL))
