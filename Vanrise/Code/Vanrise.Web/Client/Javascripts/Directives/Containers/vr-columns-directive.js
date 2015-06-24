@@ -13,9 +13,9 @@ app.directive('vrColumns', ['$compile', function ($compile) {
             if (tAttrs.width != undefined) {
                 switch(tAttrs.width)
                 {
-                    case "normal": numberOfColumns = 3; break;
-                    case "small": numberOfColumns = 2; break;
-                    case "large": numberOfColumns = 4; break;
+                    case "normal": numberOfColumns = 2; break;
+                    case "small": numberOfColumns = 1; break;
+                    case "large": numberOfColumns = 3; break;
                     case "fullrow": numberOfColumns = 12; break;
                     case "1/2row": numberOfColumns = 6; break;
                     case "1/4row": numberOfColumns = 3; break;
