@@ -54,6 +54,10 @@ namespace Vanrise.Security.Business
                 roleObject.RoleId = roleId;
                 insertOperationOutput.InsertedObject = roleObject;
             }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
             
             return insertOperationOutput;
         }

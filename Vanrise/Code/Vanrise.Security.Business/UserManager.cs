@@ -58,9 +58,12 @@ namespace Vanrise.Security.Business
                 userObject.UserId = userId;
                 insertOperationOutput.InsertedObject = userObject;
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
             return insertOperationOutput;
-
-
         }
 
         public Vanrise.Entities.UpdateOperationOutput<User> UpdateUser(User userObject)

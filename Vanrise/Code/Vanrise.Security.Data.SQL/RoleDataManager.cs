@@ -53,7 +53,8 @@ namespace Vanrise.Security.Data.SQL
             object roleID;
 
             int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Insert", out roleID, roleObject.Name, roleObject.Description);
-            insertedId = (int)roleID;
+
+            insertedId = (recordesEffected > 0) ? (int)roleID : -1;
             return (recordesEffected > 0);
         }
 

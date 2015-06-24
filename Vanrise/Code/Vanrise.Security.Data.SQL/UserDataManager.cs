@@ -52,8 +52,8 @@ namespace Vanrise.Security.Data.SQL
             //string encPassword = manager.EncodePassword(password);
 
             int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description);
+            insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
-            insertedId = (int)userID;
             return (recordesEffected > 0);
         }
 
