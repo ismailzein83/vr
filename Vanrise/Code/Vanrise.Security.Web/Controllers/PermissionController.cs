@@ -11,14 +11,14 @@ namespace Vanrise.Security.Web.Controllers
     public class PermissionController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public IEnumerable<Permission> GetPermissionsByHolder(int holderType, string holderId)
+        public IEnumerable<Permission> GetPermissionsByHolder(HolderType holderType, string holderId)
         {
             PermissionManager manager = new PermissionManager();
             return manager.GetPermissionsByHolder(holderType, holderId);
         }
 
         [HttpGet]
-        public IEnumerable<Permission> GetPermissionsByEntity(int entityType, string entityId)
+        public IEnumerable<Permission> GetPermissionsByEntity(EntityType entityType, string entityId)
         {
             PermissionManager manager = new PermissionManager();
             return manager.GetPermissionsByEntity(entityType, entityId);
@@ -53,7 +53,7 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(int holderType, string holderId, int entityType, string entityId)
+        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
             PermissionManager manager = new PermissionManager();
             return manager.DeletePermission(holderType, holderId, entityType, entityId);

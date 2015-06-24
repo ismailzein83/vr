@@ -33,16 +33,14 @@ namespace Vanrise.Security.Business
             return retVal;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(int entityType, string entityId)
+        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
             updateOperationOutput.UpdatedObject = null;
 
-            EntityType paramEntityType = (entityType == 0) ? EntityType.MODULE : EntityType.ENTITY;
-
             bool result = false;
 
-            if (paramEntityType == EntityType.MODULE)
+            if (entityType == EntityType.MODULE)
             {
                 IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
                 result = manager.ToggleBreakInheritance(entityId);

@@ -52,16 +52,14 @@ namespace Vanrise.Security.Data.SQL
         {
             object roleID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Insert", out roleID, roleObject.Name,
-                !string.IsNullOrEmpty(roleObject.Description) ? roleObject.Description : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Insert", out roleID, roleObject.Name, roleObject.Description);
             insertedId = (int)roleID;
             return (recordesEffected > 0);
         }
 
         public bool UpdateRole(Entities.Role roleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Update", roleObject.RoleId, roleObject.Name,
-                !string.IsNullOrEmpty(roleObject.Description) ? roleObject.Description : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Roles_Update", roleObject.RoleId, roleObject.Name, roleObject.Description);
             return (recordesEffected > 0);
         }
 

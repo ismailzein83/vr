@@ -17,18 +17,14 @@ namespace Vanrise.Security.Business
             return dataManager.GetPermissions();
         }
 
-        public List<Permission> GetPermissionsByHolder(int holderType, string holderId)
+        public List<Permission> GetPermissionsByHolder(HolderType holderType, string holderId)
         {
-            HolderType paramHolderType = (holderType == 0) ? HolderType.USER : HolderType.ROLE;
-
             IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
-            return dataManager.GetPermissionsByHolder(paramHolderType, holderId);
+            return dataManager.GetPermissionsByHolder(holderType, holderId);
         }
 
-        public List<Permission> GetPermissionsByEntity(int entityType, string entityId)
+        public List<Permission> GetPermissionsByEntity(EntityType entityType, string entityId)
         {
-            EntityType paramEntityType = (entityType == 0) ? EntityType.MODULE : EntityType.ENTITY;
-
             List<Permission> allPermissions = this.GetPermissions();
 
             BusinessEntityManager businessEntityManager = new BusinessEntityManager();
@@ -38,7 +34,7 @@ namespace Vanrise.Security.Business
 
             foreach (BusinessEntityNode item in businessEntityHierarchy)
             {
-                targetNode = item.Descendants().Where(x => x.EntType == paramEntityType && x.EntityId.ToString() == entityId).FirstOrDefault();
+                targetNode = item.Descendants().Where(x => x.EntType == entityType && x.EntityId.ToString() == entityId).FirstOrDefault();
                 if (targetNode != null)
                 {
                     break;
@@ -64,7 +60,7 @@ namespace Vanrise.Security.Business
             return permissionsResultList;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(int holderType, string holderId, int entityType, string entityId)
+        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
 

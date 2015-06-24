@@ -17,6 +17,6 @@ namespace Vanrise.Security.Data
 
         bool DeletePermission(Permission permission);
 
-        bool DeletePermission(int holderType, string holderId, int entityType, string entityId);
+        bool DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId);
     }
 }

@@ -45,7 +45,7 @@ namespace Vanrise.Security.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public bool DeletePermission(int holderType, string holderId, int entityType, string entityId)
+        public bool DeletePermission(HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
             int recordsEffected = ExecuteNonQuerySP("sec.sp_Permission_Delete", holderType, holderId, entityType, entityId);
             return (recordsEffected > 0);
@@ -55,9 +55,9 @@ namespace Vanrise.Security.Data.SQL
         {
             Permission permission = new Permission
             {
-                HolderType =  ((int)reader["HolderType"]) == 0 ? HolderType.USER : HolderType.ROLE,
+                HolderType = (HolderType)reader["HolderType"],
                 HolderId = reader["HolderId"] as string,
-                EntityType = ((int)reader["EntityType"]) == 0 ? EntityType.MODULE : EntityType.ENTITY,
+                EntityType = (EntityType)reader["EntityType"],
                 EntityId = reader["EntityId"] as string,
                 PermissionFlags = Common.Serializer.Deserialize<List<PermissionFlag>>(reader["PermissionFlags"] as string),
                 HolderName = reader["HolderName"] as string

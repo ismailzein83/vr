@@ -51,11 +51,7 @@ namespace Vanrise.Security.Data.SQL
             //TODO: implement an encryption module
             //string encPassword = manager.EncodePassword(password);
 
-            //string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
-
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name,
-                password, !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, userObject.Status,
-                !string.IsNullOrEmpty(userObject.Description) ? userObject.Description : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description);
 
             insertedId = (int)userID;
             return (recordesEffected > 0);
@@ -63,12 +59,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            //string isActive = (userObject.Status == Entities.UserStatus.Active) ? "Y" : "N";
-
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name,
-               !string.IsNullOrEmpty(userObject.Email) ? userObject.Email : null, userObject.Status,
-               !string.IsNullOrEmpty(userObject.Description) ? userObject.Description : null);
-            
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Status, userObject.Description);
             return (recordesEffected > 0);
         }
 
@@ -94,7 +85,7 @@ namespace Vanrise.Security.Data.SQL
                 Password = reader["Password"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime>(reader, "LastLogin"),
-                Status = (int.Parse(reader["Status"].ToString()) == 0) ? Entities.UserStatus.Inactive : Entities.UserStatus.Active,
+                Status = (Entities.UserStatus) reader["Status"],
                 Description = reader["Description"] as string
             };
         }
