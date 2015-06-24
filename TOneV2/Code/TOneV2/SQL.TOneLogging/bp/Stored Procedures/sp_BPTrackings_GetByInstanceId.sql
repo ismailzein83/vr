@@ -1,8 +1,6 @@
 ﻿CREATE PROCEDURE [bp].[sp_BPTrackings_GetByInstanceId]	
 	@ProcessInstanceID bigint,
-	@lastTrackingId bigint,
-	@Message nvarchar(MAX),
-	@TrackingSeverity nvarchar(MAX)
+	@lastTrackingId bigint
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -17,8 +15,5 @@ BEGIN
       ,[EventTime]
 	FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
 	WHERE
-		(@TrackingSeverity is NULL or bpt.Severity in (SELECT ParsedString FROM [bp].[ParseStringList](@TrackingSeverity) ) ) and 
-		bpt.ProcessInstanceID = @ProcessInstanceID AND
-		(@Message is NULL or bpt.TrackingMessage LIKE '%'+ @Message + '%')AND
-		bpt.ID > @lastTrackingId
+		bpt.ProcessInstanceID = @ProcessInstanceID AND bpt.ID > @lastTrackingId
 END
