@@ -141,24 +141,21 @@ namespace TOne.LCRProcess.Activities
                                 if (inputArgument.SupplierZoneRates.RatesByZoneId.TryGetValue(supplierMatch.ZoneId, out rate))
                                 {
                                     codeMatch.SupplierRate = rate;
-                                    if (!inputArgument.IsLcrOnly)
+                                    singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
+                                    decimal rateValue = rate.Rate;
+                                    bool isAddedToOrderedList = false;
+                                    for (int i = 0; i < singleDestinationCodeMatches.OrderedCodeMatches.Count; i++)
                                     {
-                                        singleDestinationCodeMatches.CodeMatchesBySupplierId.Add(suppCodes.Key, codeMatch);
-                                        decimal rateValue = rate.Rate;
-                                        bool isAddedToOrderedList = false;
-                                        for (int i = 0; i < singleDestinationCodeMatches.OrderedCodeMatches.Count; i++)
+                                        decimal currentRate = singleDestinationCodeMatches.OrderedCodeMatches[i].SupplierRate.Rate;
+                                        if (currentRate >= rateValue)
                                         {
-                                            decimal currentRate = singleDestinationCodeMatches.OrderedCodeMatches[i].SupplierRate.Rate;
-                                            if (currentRate >= rateValue)
-                                            {
-                                                singleDestinationCodeMatches.OrderedCodeMatches.Insert(i, codeMatch);
-                                                isAddedToOrderedList = true;
-                                                break;
-                                            }
+                                            singleDestinationCodeMatches.OrderedCodeMatches.Insert(i, codeMatch);
+                                            isAddedToOrderedList = true;
+                                            break;
                                         }
-                                        if (!isAddedToOrderedList)
-                                            singleDestinationCodeMatches.OrderedCodeMatches.Add(codeMatch);
                                     }
+                                    if (!isAddedToOrderedList)
+                                        singleDestinationCodeMatches.OrderedCodeMatches.Add(codeMatch);
                                 }
                             }
                             codeMatches.Add(codeMatch);

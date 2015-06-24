@@ -20,7 +20,7 @@ namespace TOne.LCR.Data.SQL
             {
                 foreach (var zr in zoneRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}", zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}^{4}^{5}", zr.RateId, zr.PriceListId, zr.ZoneId, zr.CarrierAccountId, zr.Rate, zr.ServicesFlag));
                 }
                 wr.Close();
             }
@@ -38,6 +38,7 @@ namespace TOne.LCR.Data.SQL
         {
             return new ZoneRate()
             {
+                RateId = (int)reader["RateID"],
                 PriceListId = GetReaderValue<int>(reader, "PriceListID"),
                 ZoneId = GetReaderValue<int>(reader, "ZoneID"),
                 CarrierAccountId = reader[string.Format("{0}ID", isSupplierZoneRates ? "Supplier" : "Customer")] as string,

@@ -104,6 +104,7 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                      )
                                                     ) 
                                                     CREATE TABLE [dbo].[SupplierZoneRate](
+                                                          [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
 	                                                    [SupplierID] [varchar](5) NOT NULL,
@@ -111,6 +112,7 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [ServicesFlag] [smallint] NULL
                                                     ) 
                                                     CREATE TABLE [dbo].[CustomerZoneRate](
+                                                        [RateID] [bigint] NOT NULL,
 	                                                    [PriceListID] [int] NOT NULL,
 	                                                    [ZoneID] [int] NULL,
 	                                                    [CustomerID] [varchar](5) NOT NULL,
@@ -145,6 +147,7 @@ CREATE TABLE [dbo].[ZoneInfo](
                                                     )
 
                                                     CREATE TYPE [dbo].[SuppliersCodeInfoType] AS TABLE(
+                                                      
 	                                                    [SupplierID] [varchar](5) NOT NULL,
 	                                                    [HasUpdatedCodes] [bit] NOT NULL,
 	                                                    PRIMARY KEY CLUSTERED 
