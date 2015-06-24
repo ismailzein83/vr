@@ -21,5 +21,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public int? MaxConcurrentWorkflows { get; set; }
         public bool RetryOnProcessFailed { get; set; }
+        public string Url { get; set; }
     }
 }
