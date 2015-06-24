@@ -29,16 +29,64 @@ namespace TestRuntime.Tasks
             host.Start();
 
             int switchID = 8;
-
-            //TriggerProcessImportCDRProcess(switchID);
+            Console.ReadKey();
+            TriggerProcessImportCDRProcess(switchID);
+            
+            
             //TriggerProcessStoreCDRsInDB(switchID);
 
             //TriggerProcessRawCDRsProcess(switchID);
-            // TriggerBillingCDRsProcess(switchID);
+             //TriggerBillingCDRsProcess(switchID);
             //TriggerStoreInvalidCDRsInDBProcess(switchID);
             //TriggerStoreMainCDRsInDBProcess(switchID);
 
-            GenerateStatisticsProcess(switchID);
+          //  GenerateStatisticsProcess(switchID);
+            
+           // SaveStatisticsToDBProcess(switchID);
+            
+            
+          //  GenerateDailyStatisticsProcess(switchID);
+           // SaveDailyStatisticsToDBProcess(switchID);
+        }
+
+        private static void SaveDailyStatisticsToDBProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "SaveDailyStatisticsToDBProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.SaveDailyStatisticsToDBProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+
+        private static void GenerateDailyStatisticsProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "GenerateDailyStatisticsProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.GenerateDailyStatisticsProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
+        }
+
+        private static void SaveStatisticsToDBProcess(int switchID)
+        {
+            BPClient bpClient = new BPClient();
+            bpClient.CreateNewProcess(new CreateProcessInput
+            {
+                ProcessName = "SaveStatisticsToDBProcess",
+                InputArguments = new TOne.CDRProcess.Arguments.SaveStatisticsToDBProcessInput
+                {
+                    SwitchID = switchID
+                }
+            });
         }
 
         private static void TriggerProcessImportCDRProcess(int switchID)
