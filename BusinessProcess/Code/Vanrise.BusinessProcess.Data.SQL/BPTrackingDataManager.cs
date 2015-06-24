@@ -60,11 +60,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, List<int> trackingSeverity, String message, long lastTrackingId)
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, long lastTrackingId)
         {
 
-            return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, processInstanceID, lastTrackingId,message,
-                trackingSeverity == null ? null : string.Join(",", trackingSeverity.Select(n => n.ToString()).ToArray()));
+            return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, processInstanceID, lastTrackingId);
 
         }
         BPTrackingMessage BPTrackingMapper(IDataReader reader)

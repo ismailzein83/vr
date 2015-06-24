@@ -39,8 +39,6 @@
             ProcessInstanceID: processInstanceID,
             FromRow: fromRow,
             ToRow: toRow,
-            TrackingSeverity: trackingSeverity,
-            Message: message,
             LastTrackingId: lastTrackingId
         });
     }

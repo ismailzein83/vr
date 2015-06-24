@@ -64,7 +64,7 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstancesByCriteria(definitionID, dateFrom, dateTo);
         }
 
-        public List<BPInstance> GetFilteredInstances(List<int> definitionID, List<int> instanceStatus, DateTime dateFrom, DateTime dateTo)
+        public List<BPInstance> GetFilteredInstances(List<int> definitionID, List<BPInstanceStatus> instanceStatus, DateTime dateFrom, DateTime dateTo)
         {
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             return dataManager.GetInstancesByCriteria(definitionID, instanceStatus, dateFrom, dateTo);
@@ -76,10 +76,10 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstance(instanceId);
         }
 
-        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, List<int> trackingSeverity, String message, long lastTrackingId)
+        public List<BPTrackingMessage> GetTrackingsByInstanceId(long processInstanceID, long lastTrackingId)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            return dataManager.GetTrackingsByInstanceId(processInstanceID, trackingSeverity, message, lastTrackingId);
+            return dataManager.GetTrackingsByInstanceId(processInstanceID,  lastTrackingId);
         }
 
 

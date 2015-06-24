@@ -36,8 +36,8 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
-                        <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
+                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
+                        <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20" isclickable="'true'" onclicked="onTitleClicked"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="5"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Created Time'" widthfactor="10">{{dataItem.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>

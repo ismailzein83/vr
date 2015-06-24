@@ -6,10 +6,10 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
 
     var mainGridAPI;
 
-    function showBPTrackingModal(BPInstanceObj) {
+    function showBPTrackingModal(bpInstanceObj) {
 
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
-            BPInstanceID: BPInstanceObj.ProcessInstanceID
+            BPInstanceID: bpInstanceObj.ProcessInstanceID
         }, {
             onScopeReady: function (modalScope) {
                 modalScope.title = "Tracking";
@@ -20,7 +20,6 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
     function getData() {
 
         var pageInfo = mainGridAPI.getPageInfo();
-
         return BusinessProcessAPIService.GetFilteredBProcess(UtilsService.getPropValuesFromArray($scope.selectedDefinition, "BPDefinitionID"),
             UtilsService.getPropValuesFromArray($scope.selectedInstanceStatus, "Value"),
             pageInfo.fromRow,
@@ -33,21 +32,25 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
 
     function defineGrid() {
         $scope.datasource = [];
-        $scope.gridMenuActions = [];
         $scope.loadMoreData = function () {
             return getData();
         };
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
         };
-        $scope.gridMenuActions = [{
-            name: "Tracking",
-            clicked: showBPTrackingModal
-        }];
+    }
+
+    function getCurrentDate(days) {
+        var d = new Date();
+        var curr_date = d.getDate() + days;
+        var curr_month = d.getMonth();
+        var curr_year = d.getFullYear();
+        return new Date(curr_year, curr_month, curr_date);
     }
 
     function defineScope() {
-
+        $scope.toDate = getCurrentDate(0);
+        $scope.fromDate = getCurrentDate(-1);
         $scope.definitions = [];
         $scope.selectedDefinition = [];
         $scope.instanceStatus = [];
@@ -55,6 +58,9 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
         $scope.searchClicked = function () {
             mainGridAPI.clearDataAndContinuePaging();
             return getData();
+        };
+        $scope.onTitleClicked = function (dataItem) {
+            showBPTrackingModal(dataItem);
         };
     }
 
