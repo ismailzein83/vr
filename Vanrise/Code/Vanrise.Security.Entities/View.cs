@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
+    public enum ViewType  {  System = 0, Dynamic = 1 }
+
     public class View
     {
         public int ViewId { get; set; }
@@ -19,6 +21,7 @@ namespace Vanrise.Security.Entities
         public Dictionary<string, List<string>> RequiredPermissions { get; set; }
 
         public AudienceWrapper Audience { get; set; }
+        public ViewType Type { get; set; }
     }
 
     public class AudienceWrapper

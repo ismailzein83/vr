@@ -51,6 +51,7 @@
     <Compile Include="BusinessEntityNode.cs" />
     <Compile Include="BusinessEntityModule.cs" />
     <Compile Include="DynamicPage.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="PageSettings.cs" />

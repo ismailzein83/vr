@@ -35,32 +35,35 @@ function DynamicPagePreviewController($scope, BIVisualElementService1,BITimeDime
                 $scope.visualElements[i].settings.fromdate = $scope.fromDate;
                 $scope.visualElements[i].settings.todate = $scope.toDate;
                 $scope.visualElements[i].settings.timedimensiontype = $scope.selectedTimeDimensionType;
+              
             }
+
+            
             
         };
         $scope.chartTopReady = function (api) {
             chartTopAPI = api;
             // updateChart();
         };
-        $scope.addVisualElement = function () {
-            $scope.subViewValue = $scope.subViewValue.getValue();
-            var visualElement = {
-                settings: $scope.subViewValue,
-                directive: $scope.selectedWidget.directiveName,
-                numberOfColumns: $scope.selectedNumberOfColumns.value
-            };
+        //$scope.addVisualElement = function () {
+        //    $scope.subViewValue = $scope.subViewValue.getValue();
+        //    var visualElement = {
+        //        settings: $scope.subViewValue,
+        //        directive: $scope.selectedWidget.directiveName,
+        //        numberOfColumns: $scope.selectedNumberOfColumns.value
+        //    };
 
-            visualElement.onElementReady = function (api) {
-                visualElement.API = api;
-            };
-            $scope.visualElements.push(visualElement);
-            console.log(visualElement.settings.timedimensiontype);
-            $scope.selectedWidget = null;
+        //    visualElement.onElementReady = function (api) {
+        //        visualElement.API = api;
+        //    };
+        //    $scope.visualElements.push(visualElement);
+        //    console.log(visualElement.settings.timedimensiontype);
+        //    $scope.selectedWidget = null;
 
-        };
-        $scope.removeVisualElement = function (visualElement) {
-            $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
-        };
+        //};
+        //$scope.removeVisualElement = function (visualElement) {
+        //    $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
+        //};
 
     }
     function defineTimeDimensionTypes() {

@@ -24,5 +24,15 @@ namespace Vanrise.Security.Web.Controllers
             
             return result;
         }
+        [HttpGet]
+        public IEnumerable<MenuItem> GetAllMenuItems()
+        {
+            MenuManager manager = new MenuManager();
+            List<MenuItem> result = new List<MenuItem>();
+            result = manager.GetMenuItems();
+
+
+            return result;
+        }
     }
 }

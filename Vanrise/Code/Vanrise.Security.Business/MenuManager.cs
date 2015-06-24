@@ -37,7 +37,7 @@ namespace Vanrise.Security.Business
                     if(rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
-            }
+            } 
 
             return retVal;
         }
@@ -57,7 +57,7 @@ namespace Vanrise.Security.Business
                 {
                     if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions, breakInheritanceEntities))
                     {
-                        MenuItem viewMenu = new MenuItem() { Name = viewItem.Name, Location = viewItem.Url };
+                        MenuItem viewMenu = new MenuItem() { Name = viewItem.Name, Location = viewItem.Url, Type = viewItem.Type };
                         menu.Childs.Add(viewMenu);
                     }
                 }
@@ -185,6 +185,41 @@ namespace Vanrise.Security.Business
             }
 
             return false;
+        }
+        public List<MenuItem> GetMenuItems()
+        {
+
+            IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
+            List<Module> modules = moduleDataManager.GetModules();
+            List<MenuItem> retVal = new List<MenuItem>();
+          
+            foreach (Module item in modules)
+            {
+                if (item.ParentId == 0)
+                {
+                    MenuItem rootItem = GetModuleMenu(item, modules);
+                    retVal.Add(rootItem);
+                }
+            }
+
+            return retVal;
+        }
+        private MenuItem GetModuleMenu(Module module, List<Module> modules)
+        {
+            MenuItem menu = new MenuItem() { Id=module.ModuleId,Name = module.Name, Location = module.Url, Icon = module.Icon };
+
+            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
+
+            if (subModules.Count > 0)
+            {
+                menu.Childs = new List<MenuItem>();
+                foreach (Module item in subModules)
+                {
+                    menu.Childs.Add(GetModuleMenu(item, modules));
+                }
+            }
+
+            return menu;
         }
         
     }

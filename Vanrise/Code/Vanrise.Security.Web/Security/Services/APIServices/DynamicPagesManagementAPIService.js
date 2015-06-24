@@ -15,4 +15,11 @@
     function SavePage(PageSettings) {
         return BaseAPIService.post("/api/DynamicPagesManagement/SavePage", PageSettings);
     }
+    function GetPage(PageId) {
+        return BaseAPIService.get("/api/DynamicPagesManagement/GetPage",
+            {
+                PageId: PageId
+            });
+       
+    }
 });

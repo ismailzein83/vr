@@ -1,6 +1,6 @@
-﻿DynamicPagesEditorController.$inject = ['$scope','RoleAPIService','UsersAPIService','BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesManagementAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagesEditorController.$inject = ['$scope', 'MenuAPIService', 'RoleAPIService', 'UsersAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesManagementAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesManagementAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function DynamicPagesEditorController($scope, MenuAPIService, RoleAPIService, UsersAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesManagementAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();
@@ -14,6 +14,7 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
         $scope.Measures = [];
         $scope.Entities = [];
         $scope.Users = [];
+        $scope.menuList = [];
         $scope.selectedUsers = [];
         $scope.Roles = [];
         $scope.PageName;
@@ -22,6 +23,7 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
         $scope.selectedMeasureTypes=[];
         $scope.visualElements = [];
         $scope.subViewValue = {};
+        $scope.ModuleId;
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
@@ -42,31 +44,33 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
 
             $scope.PageSettings = {
                 PageName: $scope.PageName,
+                ModuleId:$scope.ModuleId,
                 AudianceIds: AudianceIds,
                 visualElements: $scope.visualElements
             };
-            console.log("samer");
-            console.log($scope.PageSettings);
+
+
+
             return DynamicPagesManagementAPIService.SavePage($scope.PageSettings).then(function (response) {
-                console.log(response);
-                angular.forEach(response, function (itm) {
-                    $scope.Measures.push(itm);
-                    console.log(itm);
-                });
+                if (VRNotificationService.notifyOnItemAdded("Page", response)) {
+                    if ($scope.onPageAdded != undefined)
+                        $scope.onPageAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
             });
-            
-
 
         };
-        $scope.chartReady = function (api) {
-            $scope.chartAPI = api;
+        //$scope.chartReady = function (api) {
+        //    $scope.chartAPI = api;
 
-        };
+        //};
 
-        $scope.chartTopReady = function (api) {
-            chartTopAPI = api;
-            // updateChart();
-        };
+        //$scope.chartTopReady = function (api) {
+        //    chartTopAPI = api;
+        //    // updateChart();
+        //};
         $scope.addVisualElement = function () {
             $scope.subViewValue = $scope.subViewValue.getValue();
             var visualElement = {
@@ -79,28 +83,46 @@ function DynamicPagesEditorController($scope, RoleAPIService,UsersAPIService, BI
                 visualElement.API = api;
             };
             $scope.visualElements.push(visualElement);
-            console.log(visualElement.settings.timedimensiontype);
+           // console.log(visualElement.settings.timedimensiontype);
             $scope.selectedWidget = null;
            
         };
         $scope.removeVisualElement = function (visualElement) {
             $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
         };
-  
+        $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
+            if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
+                $scope.ModuleId = $scope.beTree.currentNode.Id;
+                //$scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
+                //refreshGrid();
+            }
+        }, false);
         }
 
     function load() {
         defineNumberOfColumns();
+     
         defineChartSeriesTypes();
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadMeasures, loadEntities,loadUsers,loadRoles]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadMeasures, loadEntities, loadUsers, loadRoles, loadTree]).finally(function () {
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
-
+        
     }
+
+    function loadTree() {
+        console.log("test");
+        return MenuAPIService.GetAllMenuItems()
+           .then(function (response) {
+               console.log(response);
+               $scope.menuList = response;
+              
+           });
+    }
+
     function loadWidgets() {
         return DynamicPagesManagementAPIService.GetWidgets().then(function (response) {
             angular.forEach(response, function (itm) {

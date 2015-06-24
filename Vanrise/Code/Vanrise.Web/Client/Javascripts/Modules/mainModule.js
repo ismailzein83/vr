@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, MenuItemTypeEnum) {
     
     var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
 
@@ -149,12 +149,19 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         "#0074d9"
     ]
     MenuAPIService.GetMenuItems().then(function (response) {
-        angular.forEach(response, function (value, key) {
+        angular.forEach(response, function (value, key,itm) {
             value.color = $scope.colors[key % $scope.colors.length];
             value.keyclass = key % 16;
+           
         });
+        for (var i = 0; i < response.length; i++) {
+            if (response[i].Type == MenuItemTypeEnum.Dynamic)
+                response[i].Location += "/{viewId=" + response[i].Id + "}";
+           // console.log(response[i]);
+        }
         $scope.menuItems = response;
     })
+
     $scope.getParentItemClass = function (item) {
         var match = (item.Name == "NOC") ? "Analytics" : item.Name.replace(/\s/g, '');
         if (location.href.indexOf(match) != -1)

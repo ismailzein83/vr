@@ -17,12 +17,13 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesMana
         $scope.menuActions = [{
             name: "Edit",
             clicked: function (dataItem) {
-                var modalSettings = {
-                    useModalTemplate: false,
-                    width: "80%",
-                    maxHeight: "800px"
-                };
-                VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
+                AddPage();
+                //var modalSettings = {
+                //    useModalTemplate: false,
+                //    width: "80%",
+                //    maxHeight: "800px"
+                //};
+                //VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
             }
         }];
 
@@ -35,14 +36,30 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesMana
         };
 
         $scope.Add = function () {
-            var modalSettings = {
-                useModalTemplate: false,
-                width: "80%",
-                maxHeight: "800px"
-            };
-            VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
+
+            AddPage()
+
+            //var modalSettings = {
+            //    useModalTemplate: false,
+            //    width: "80%",
+            //    maxHeight: "800px"
+            //};
+            //VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
         };
 
+
+    }
+    function AddPage() {
+
+        var settings = {};
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Dynamic Page";
+            modalScope.onPageAdded = function (page) {
+                mainGridAPI.itemAdded(page);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, settings);
 
     }
 

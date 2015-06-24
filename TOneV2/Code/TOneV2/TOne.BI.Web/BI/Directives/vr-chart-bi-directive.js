@@ -76,12 +76,12 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
             var chartDefinition = {
                 type: "pie",
-                title: settings.entityType.Name,
+                title: settings.EntityType,
                 yAxisTitle: "Value"
             };
 
             var seriesDefinitions = [{
-                title: settings.measureTypes[0].Name,
+                title: settings.MeasureTypes[0],
                 titlePath: "EntityName",
                 valuePath: "Values[0]"
             }];
@@ -98,10 +98,10 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
 
             var seriesDefinitions = [];
-            for (var i = 0; i < settings.measureTypes.length; i++) {
-                var measureType = settings.measureTypes[i];
+            for (var i = 0; i < settings.MeasureTypes.length; i++) {
+                var measureType = settings.MeasureTypes[i];
                 seriesDefinitions.push({
-                    title: measureType.Name,
+                    title: measureType,
                     valuePath: "Values[" + i + "]"
                 });
             }

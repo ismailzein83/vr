@@ -39,7 +39,7 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
             return '<vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
                                         + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
-                                        + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType.Name" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
+                                        + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
                                     + '</vr-datagrid>';
         }
 
@@ -57,8 +57,8 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
                     retrieveData();
             }
 
-            ctrl.entityType = settings.entityType;
-            ctrl.measureTypes = settings.measureTypes;
+            ctrl.entityType = settings.EntityType;
+            ctrl.measureTypes = settings.MeasureTypes;
             ctrl.data = [];
         }
 

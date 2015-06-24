@@ -1,19 +1,30 @@
 ﻿<div vr-modalcontent ng-controller="Security_DynamicPagesEditorController" width="'80%'">
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="groupKeySelectionChanged();">
+            <vr-choices selectedindex="selectedGroupKeyIndex" >
                 <vr-choice isselected="settingSelected">Setting</vr-choice>
                 <vr-choice isselected="designingSelected">Designing</vr-choice>
                 <vr-choice isselected="previewSelected">Preview</vr-choice>
             </vr-choices>
             <div ng-show="settingSelected">
                 <vr-row>
-                    <vr-columns colnum="6">
+                    <vr-columns colnum="4">
                         <vr-section title="Page Name">
                             <vr-textbox value="PageName" label="Page Name" isrequired></vr-textbox>
                         </vr-section>
                     </vr-columns>
-                    <vr-columns colnum="6">
+                    <vr-columns colnum="3">
+                        <vr-section title="Module">
+                            <div data-tree-id="beTree"
+                                 data-angular-treeview="true"
+                                 data-tree-model="menuList"
+                                 data-node-id="Id"
+                                 data-node-label="Name"
+                                 data-node-children="Childs">
+                            </div>
+                        </vr-section>
+                    </vr-columns>
+                    <vr-columns colnum="4">
                         <vr-section title="Audiences">
                             <vr-columns colnum="12">
 
@@ -28,6 +39,8 @@
                             </vr-columns>
                         </vr-section>
                     </vr-columns>
+
+                    
                 </vr-row>
                  
             </div>

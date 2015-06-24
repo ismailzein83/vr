@@ -24,10 +24,18 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
 
     }
     function getSubViewValue() {
+        var measureTypes = [];
+        for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
+            measureTypes.push($scope.selectedMeasureTypes[i].Name);
+        }
+        var entityType = null;
+        if ($scope.selectedEntityType != undefined)
+            entityType = $scope.selectedEntityType.Name;
         return {
-            operationType: $scope.selectedOperationType,
-            entityType: $scope.selectedEntityType,
-            measureTypes: $scope.selectedMeasureTypes, 
+            $type: "TOne.BI.Entities.ChartDirectiveObject, TOne.BI.Entities",
+            OperationType: $scope.selectedOperationType.value,
+            EntityType: entityType,
+            MeasureTypes: measureTypes,
         };
     }
     function defineTimeDimensionTypes() {
@@ -90,7 +98,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         return BIConfigurationAPIService.GetMeasures().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Measures.push(itm);
-                console.log(itm);
+               // console.log(itm);
             });
         });
     }
@@ -98,7 +106,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         return BIConfigurationAPIService.GetEntities().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
-                console.log($scope.Entities[0].Id);
+               // console.log($scope.Entities[0].Id);
             });
         });
     }
