@@ -5,22 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Extensions
 {
     public class CreateProcessQueueActivator : QueueActivator
-    {
-        public string ProcessName { get; set; }
-
-        public object ProcessInputArguments { get; set; }
+    {        
+        public BaseProcessInputArgument ProcessInputArguments { get; set; }
 
         public override void Run(QueueInstance queueInstance)
         {
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
                 {
-                    ProcessName = this.ProcessName,
                     InputArguments = this.ProcessInputArguments
                 });
         }

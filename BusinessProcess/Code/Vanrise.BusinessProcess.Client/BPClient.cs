@@ -17,23 +17,50 @@ namespace Vanrise.BusinessProcess.Client
 
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
-            string serializedInput = Vanrise.Common.Serializer.Serialize(createProcessInput);
-            CreateProcessOutput output = null;
-            CreateServiceClient((client) =>
+            if (createProcessInput == null)
+                throw new ArgumentNullException("createProcessInput");
+            if (createProcessInput.InputArguments == null)
+                throw new ArgumentNullException("createProcessInput.InputArguments");
+
+            BPDefinition processDefinition = GetDefinition(createProcessInput.InputArguments.ProcessName);
+            if (processDefinition == null)
+                throw new Exception(String.Format("No Process Definition found match with input argument '{0}'", createProcessInput.InputArguments.GetType()));
+
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            string processTitle = createProcessInput.InputArguments.GetTitle();
+            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New);
+            IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            dataManagerTracking.Insert(new BPTrackingMessage
             {
-                output = client.CreateNewProcess(serializedInput);
+                ProcessInstanceId = processInstanceId,
+                ParentProcessId = createProcessInput.ParentProcessID,
+                Message = String.Format("Process Created: {0}", processTitle),
+                Severity = BPTrackingSeverity.Information,
+                EventTime = DateTime.Now
             });
+            CreateProcessOutput output = new CreateProcessOutput
+            {
+                ProcessInstanceId = processInstanceId,
+                Result = CreateProcessResult.Succeeded
+            };
             return output;
+        }
+
+        public BPDefinition GetDefinition(string processName)
+        {
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            List<BPDefinition> definitions = dataManager.GetDefinitions();
+            return definitions.FirstOrDefault(itm => itm.Name == processName);
         }
 
         public TriggerProcessEventOutput TriggerProcessEvent(TriggerProcessEventInput triggerProcessEventInput)
         {
-            string serializedInput = Vanrise.Common.Serializer.Serialize(triggerProcessEventInput);
-            TriggerProcessEventOutput output = null;
-            CreateServiceClient((client) =>
-            {
-                output = client.TriggerProcessEvent(serializedInput);
-            });
+            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            TriggerProcessEventOutput output = new TriggerProcessEventOutput();
+            if (dataManager.InsertEvent(triggerProcessEventInput.ProcessInstanceId, triggerProcessEventInput.BookmarkName, triggerProcessEventInput.EventData) > 0)
+                output.Result = TriggerProcessEventResult.Succeeded;
+            else
+                output.Result = TriggerProcessEventResult.ProcessInstanceNotExists;
             return output;
         }
 

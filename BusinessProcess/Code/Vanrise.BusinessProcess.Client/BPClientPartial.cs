@@ -13,6 +13,5 @@ namespace Vanrise.BusinessProcess.Client
 {
     public partial class BPClient
     {
-       
     }
 }

@@ -5,18 +5,16 @@ using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.Client;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
 
     public sealed class RunProcess : NativeActivity
     {
-        // Define an activity input argument of type string
+        // Define an activity input argument of type string       
 
-        [RequiredArgument]
-        public InArgument<string> ProcessName { get; set; }
-
-        public InArgument<object> Input { get; set; }
+        public InArgument<BaseProcessInputArgument> Input { get; set; }
         public InArgument<bool> WaitProcessCompleted { get; set; }
         public OutArgument<long> ProcessInstanceId { get; set; }
         public OutArgument<ProcessCompletedEventPayload> ProcessCompletedEventPayload { get; set; }
@@ -35,11 +33,11 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             var input = new CreateProcessInput
             {
-                ProcessName = this.ProcessName.Get(context),
                 InputArguments = this.Input.Get(context),
                 ParentProcessID = sharedData.InstanceInfo.ProcessInstanceID
             };
-            var output = BusinessProcessRuntime.Current.CreateNewProcess(input);
+            BPClient client = new BPClient();
+            var output = client.CreateNewProcess(input);
             this.ProcessInstanceId.Set(context, output.ProcessInstanceId);
 
             if (this.WaitProcessCompleted.Get(context))

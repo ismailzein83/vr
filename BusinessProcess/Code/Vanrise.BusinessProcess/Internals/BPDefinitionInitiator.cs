@@ -26,15 +26,7 @@ namespace Vanrise.BusinessProcess
                 return _definition;
             }
         }
-
-        public IBPWorkflow WorkflowDefinition
-        {
-            get
-            {
-                return _workflowDefinition as IBPWorkflow;
-            }
-        }
-
+        
         IBPDataManager _dataManager;
         IBPTrackingDataManager _trackingDataManager;
         Activity _workflowDefinition;
@@ -56,9 +48,7 @@ namespace Vanrise.BusinessProcess
             _dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             _trackingDataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             _definition = definition;
-            _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
-            if (!(_workflowDefinition is IBPWorkflow))
-                throw new Exception(String.Format("{0} does not implement IBPWorkflow interface", _workflowDefinition.GetType()));
+            _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;            
             _nbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : default(int?);
             //if (_nbOfThreads.HasValue)
             //    _semaphore = new Semaphore(_nbOfThreads.Value, _nbOfThreads.Value);

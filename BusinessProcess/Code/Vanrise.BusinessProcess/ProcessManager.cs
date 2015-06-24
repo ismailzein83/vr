@@ -10,21 +10,6 @@ namespace Vanrise.BusinessProcess
 {
     public class ProcessManager
     {
-        #region Process Workflow Methods
-
-        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
-        {
-            string serializedInput = Vanrise.Common.Serializer.Serialize(createProcessInput);
-            CreateProcessOutput output = null;
-            CreateServiceClient((client) =>
-            {
-                output = client.CreateNewProcess(serializedInput);
-            });
-            return output;
-        }
-
-        #endregion
-
         #region BP Transaction Methods
 
         internal T GetDefinitionObjectState<T>(int definitionId, string objectKey)
@@ -43,29 +28,6 @@ namespace Vanrise.BusinessProcess
         #endregion
 
         #region Private Methods
-
-        private void CreateServiceClient(Action<IBPService> onClientReady)
-        {
-            NetNamedPipeBinding binding = new NetNamedPipeBinding(NetNamedPipeSecurityMode.None);
-            binding.OpenTimeout = TimeSpan.FromMinutes(5);
-            binding.CloseTimeout = TimeSpan.FromMinutes(5);
-            binding.SendTimeout = TimeSpan.FromMinutes(5);
-            binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
-            binding.MaxBufferPoolSize = int.MaxValue;
-            binding.MaxBufferSize = int.MaxValue;
-            binding.MaxReceivedMessageSize = int.MaxValue;
-
-            ChannelFactory<IBPService> channelFactory = new ChannelFactory<IBPService>(binding, new EndpointAddress("net.pipe://localhost/BPService"));
-            IBPService client = channelFactory.CreateChannel();
-            try
-            {
-                onClientReady(client);
-            }
-            finally
-            {
-                (client as IDisposable).Dispose();
-            }
-        }
 
         #endregion
 

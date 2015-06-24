@@ -40,6 +40,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         #region IBPTrackingDataManager Members
 
+        public void Insert(BPTrackingMessage trackingMessage)
+        {
+            WriteTrackingMessagesToDB(new List<BPTrackingMessage> { trackingMessage });
+        }
 
         public void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs)
         {
@@ -66,6 +70,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, processInstanceID, lastTrackingId);
 
         }
+       
+
+        #endregion
+
+        #region Private Methods
+
         BPTrackingMessage BPTrackingMapper(IDataReader reader)
         {
             var bpTrackingMessage = new BPTrackingMessage

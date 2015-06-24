@@ -12,8 +12,8 @@ namespace Vanrise.BusinessProcess
     [ServiceContract(Namespace="http://businessprocess.vanrise.com/IBPService")]
     public interface IBPService
     {
-        [OperationContract]
-        CreateProcessOutput CreateNewProcess(string serializedInput);
+        //[OperationContract]
+        //CreateProcessOutput CreateNewProcess(string serializedInput);
 
         [OperationContract]
         TriggerProcessEventOutput TriggerProcessEvent(string serializedInput);
