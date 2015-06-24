@@ -1,19 +1,19 @@
 ﻿<div ng-controller="FraudAnalysis_ExecuteStrategyProcessInputController">
-    <vr-form name="formFilter">
+    <vr-form name="formExecuteStrategyProcessInput">
         <vr-row removeline>
-            <vr-columns colnum="2">
+            <vr-columns colnum="3">
                 <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" isrequired></vr-select>
             </vr-columns>
-            <vr-columns colnum="2">
-                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired></vr-select> 
+            <vr-columns colnum="3">
+                <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired></vr-select>
             </vr-columns>
-            <vr-columns colnum="2">
+            <vr-columns colnum="3">
                 <vr-datetimepicker type="date" value="fromDate" label="From" isrequired customvalidate="customvalidateFrom"></vr-datetimepicker>
             </vr-columns>
-            <vr-columns colnum="2">
+            <vr-columns colnum="3">
                 <vr-datetimepicker type="date" value="toDate" label="To" isrequired customvalidate="customvalidateTo"></vr-datetimepicker>
             </vr-columns>
         </vr-row>
-      
+
     </vr-form>
 </div>
