@@ -1,14 +1,14 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_BPTrackingModalController as ctrl">
-    <vr-modalbody width="'50%'" vr-loader="ctrl.isGettingData">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BPTrackingModalController">
+    <vr-modalbody width="'80%'" vr-loader="isGettingData">
         <vr-form name="formBPTrackingModal">
             <div ng-hide="filterSectionCollapsed">
                 <vr-row removeline>
                     <vr-columns colnum="6">
-                        <vr-textbox label="Message:" value="ctrl.message"></vr-textbox>
+                        <vr-textbox label="Message:" value="message"></vr-textbox>
                     </vr-columns>
                     <vr-columns colnum="6">
                         <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
-                                   datasource="::ctrl.trackingSeverity" selectedvalues="ctrl.selectedTrackingSeverity"></vr-select>
+                                   datasource="::trackingSeverity" selectedvalues="selectedTrackingSeverity"></vr-select>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -17,14 +17,14 @@
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                     <div transclude-to="buttons">
-                        <vr-button type="Search" formname="formBPTrackingModal" data-onclick="ctrl.searchClicked"></vr-button>
+                        <vr-button type="Search" formname="formBPTrackingModal" data-onclick="searchClicked"></vr-button>
                     </div>
                 </vr-actionbar>
             </vr-row>
 
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::ctrl.datasource" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady">
+                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Event Time'" widthfactor="30">{{dataItem.EventTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
@@ -36,7 +36,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Close" data-onclick="ctrl.close"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
 

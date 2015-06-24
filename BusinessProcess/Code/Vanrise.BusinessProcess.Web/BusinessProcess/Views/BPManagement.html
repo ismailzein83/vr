@@ -1,24 +1,24 @@
-﻿<vr-panel ng-controller="BusinessProcess_BPManagementController as ctrl">
+﻿<vr-panel ng-controller="BusinessProcess_BPManagementController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
                     <vr-select label="Definitions" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="BPDefinitionID"
-                               datasource="::ctrl.definitions" selectedvalues="ctrl.selectedDefinition" entityname="Definitions"></vr-select>
+                               datasource="::definitions" selectedvalues="selectedDefinition" entityname="Definitions"></vr-select>
                 </vr-columns>
 
                 <vr-columns colnum="2">
                     <vr-select label="Status" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
-                               datasource="::ctrl.instanceStatus" selectedvalues="ctrl.selectedInstanceStatus"></vr-select>
+                               datasource="::instanceStatus" selectedvalues="selectedInstanceStatus"></vr-select>
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" value="ctrl.fromDate" label="From:"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="fromDate" label="From:"></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" value="ctrl.toDate" label="To:"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" value="toDate" label="To:"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
             <vr-row>
@@ -27,7 +27,7 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="ctrl.searchClicked"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -36,7 +36,7 @@
         <div>
             <vr-row>
                 <vr-columns colnum="12">
-                    <vr-datagrid datasource="::ctrl.datasource" loadmoredata="ctrl.loadMoreData" on-ready="ctrl.onGridReady" menuactions="ctrl.gridMenuActions">
+                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="5"></vr-datagridcolumn>

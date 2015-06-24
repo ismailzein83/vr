@@ -1,13 +1,10 @@
-﻿
-function BPManagementController(BusinessProcessAPIService, VRModalService) {
+﻿BPManagementController.$inject = ['$scope','UtilsService', 'BusinessProcessAPIService', 'VRModalService'];
+
+function BPManagementController($scope,UtilsService, BusinessProcessAPIService, VRModalService) {
 
     "use strict";
 
-    var mainGridAPI, ctrl = this;
-    ctrl.definitions = [];
-    ctrl.selectedDefinition = [];
-    ctrl.instanceStatus = [];
-    ctrl.selectedInstanceStatus = [];
+    var mainGridAPI;
 
     function showBPTrackingModal(BPInstanceObj) {
 
@@ -20,62 +17,58 @@ function BPManagementController(BusinessProcessAPIService, VRModalService) {
         });
     }
 
-    function getFilterIds(values, idProp) {
-        var filterIds;
-        if (values.length > 0) {
-            filterIds = [];
-            angular.forEach(values, function (val) {
-                filterIds.push(val[idProp]);
-            });
-        }
-        return filterIds;
-    }
-
     function getData() {
 
         var pageInfo = mainGridAPI.getPageInfo();
 
-        return BusinessProcessAPIService.GetFilteredBProcess(getFilterIds(ctrl.selectedDefinition, "BPDefinitionID"),
-            getFilterIds(ctrl.selectedInstanceStatus, "Value"),
+        return BusinessProcessAPIService.GetFilteredBProcess(UtilsService.getPropValuesFromArray($scope.selectedDefinition, "BPDefinitionID"),
+            UtilsService.getPropValuesFromArray($scope.selectedInstanceStatus, "Value"),
             pageInfo.fromRow,
             pageInfo.toRow,
-            ctrl.fromDate,
-            ctrl.toDate).then(function (response) {
+            $scope.fromDate,
+            $scope.toDate).then(function (response) {
                 mainGridAPI.addItemsToSource(response);
             });
     }
 
     function defineGrid() {
-        ctrl.datasource = [];
-        ctrl.gridMenuActions = [];
-        ctrl.loadMoreData = function () {
+        $scope.datasource = [];
+        $scope.gridMenuActions = [];
+        $scope.loadMoreData = function () {
             return getData();
         };
-        ctrl.onGridReady = function (api) {
+        $scope.onGridReady = function (api) {
             mainGridAPI = api;
         };
-        ctrl.gridMenuActions = [{
+        $scope.gridMenuActions = [{
             name: "Tracking",
             clicked: showBPTrackingModal
         }];
     }
 
-    ctrl.searchClicked = function () {
-        mainGridAPI.clearDataAndContinuePaging();
-        return getData();
-    };
+    function defineScope() {
+
+        $scope.definitions = [];
+        $scope.selectedDefinition = [];
+        $scope.instanceStatus = [];
+        $scope.selectedInstanceStatus = [];
+        $scope.searchClicked = function () {
+            mainGridAPI.clearDataAndContinuePaging();
+            return getData();
+        };
+    }
 
     function loadFilters() {
 
         BusinessProcessAPIService.GetDefinitions().then(function (response) {
             angular.forEach(response, function (item) {
-                ctrl.definitions.push(item);
+                $scope.definitions.push(item);
             });
         });
 
         BusinessProcessAPIService.GetStatusList().then(function (response) {
             angular.forEach(response, function (item) {
-                ctrl.instanceStatus.push(item);
+                $scope.instanceStatus.push(item);
             });
         });
     }
@@ -84,9 +77,8 @@ function BPManagementController(BusinessProcessAPIService, VRModalService) {
         loadFilters();
     }
 
+    defineScope();
     load();
     defineGrid();
 }
-
-BPManagementController.$inject = ['BusinessProcessAPIService', 'VRModalService'];
 appControllers.controller('BusinessProcess_BPManagementController', BPManagementController);

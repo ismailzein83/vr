@@ -1,53 +1,22 @@
-﻿function BPTrackingModalController($scope, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval) {
+﻿BPTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval'];
+
+function BPTrackingModalController($scope, UtilsService, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval) {
 
     "use strict";
 
-    var mainGridAPI, ctrl = this, lockGetData = false;
-    ctrl.lastTrackingId = 0;
-    ctrl.message = '';
-    ctrl.trackingSeverity = [];
-    ctrl.selectedTrackingSeverity = [];
-    ctrl.close = function () {
-        stopGetData();
-        $scope.modalContext.closeModal();
-    };
+    var mainGridAPI, interval, lockGetData = false;
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        ctrl.BPInstanceID = undefined;
+        $scope.BPInstanceID = undefined;
         if (parameters !== undefined && parameters !== null) {
-            ctrl.BPInstanceID = parameters.BPInstanceID;
+            $scope.BPInstanceID = parameters.BPInstanceID;
         }
-    }
-
-    function getFilterIds(values, idProp) {
-        var filterIds;
-        if (values.length > 0) {
-            filterIds = [];
-            angular.forEach(values, function (val) {
-                filterIds.push(val[idProp]);
-            });
-        }
-        return filterIds;
-    }
-
-    function getMaxValue(values, idProp) {
-        var max = undefined;
-        if (values.length > 0) {
-
-            angular.forEach(values, function (val) {
-                if(val === undefined)
-                    max = val[idProp];
-                if (val[idProp] > max)
-                    max = val[idProp];
-            });
-        }
-        return max;
     }
 
     function getData() {
 
-        if (! lockGetData)
+        if (!lockGetData)
         {
             lockGetData = true;
 
@@ -61,15 +30,15 @@
             }
 
             return BusinessProcessAPIService.GetTrackingsByInstanceId(
-                ctrl.BPInstanceID,
+                $scope.BPInstanceID,
                 pageInfo.fromRow,
                 pageInfo.toRow,
-                getFilterIds(ctrl.selectedTrackingSeverity, "Value"),
-                ctrl.message,
-                ctrl.lastTrackingId)
+                UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value"),
+                $scope.message,
+                $scope.lastTrackingId)
             .then(function (response) {
 
-                ctrl.lastTrackingId = getMaxValue(response.Tracking, "TrackingId");
+                $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Tracking, "TrackingId");
                 mainGridAPI.addItemsToSource(response.Tracking);
                 
                 if (response.InstanceStatus === BPInstanceStatusEnum.Running.value) startGetData();
@@ -82,46 +51,53 @@
         }
     }
 
-    ctrl.searchClicked = function () {
-        mainGridAPI.clearDataAndContinuePaging();
-        return getData();
-    };
-
     function loadFilters() {
 
         BusinessProcessAPIService.GetTrackingSeverity().then(function (response) {
             angular.forEach(response, function (item) {
-                ctrl.trackingSeverity.push(item);
+                $scope.trackingSeverity.push(item);
             });
         });
     }
 
     function load() {
-        ctrl.isGettingData = true;
+        $scope.isGettingData = true;
         getData().finally(function () {
-            ctrl.isGettingData = false;
+            $scope.isGettingData = false;
             lockGetData = false;
         });
     }
 
     function defineGrid() {
-        ctrl.datasource = [];
-        ctrl.gridMenuActions = [];
-        ctrl.loadMoreData = function () {
+        $scope.datasource = [];
+        $scope.gridMenuActions = [];
+        $scope.loadMoreData = function () {
             return getData();
         };
 
-        ctrl.onGridReady = function (api) {
+        $scope.onGridReady = function (api) {
             mainGridAPI = api;
         };
     }
 
-    loadParameters();
-    load();
-    defineGrid();
-    loadFilters();
+    function defineScope() {
+        $scope.lastTrackingId = 0;
+        $scope.message = '';
+        $scope.trackingSeverity = [];
+        $scope.selectedTrackingSeverity = [];
+        $scope.close = function () {
+            stopGetData();
+            $scope.modalContext.closeModal();
+        };
+        $scope.searchClicked = function () {
+            mainGridAPI.clearDataAndContinuePaging();
+            return getData();
+        };
+        $scope.$on('$destroy', function () {
+            stopGetData();
+        });
+    }
 
-    var interval = undefined;
     function startGetData() {
         if (angular.isDefined(interval)) return;
         interval =  $interval(function callAtInterval() {
@@ -136,14 +112,10 @@
         }
     }
 
-    $scope.$on('$destroy', function () {
-        stopGetData();
-    });
-
-    
-
+    defineScope();
+    loadParameters();
+    load();
+    defineGrid();
+    loadFilters();
 }
-
-BPTrackingModalController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval'];
-
 appControllers.controller('BusinessProcess_BPTrackingModalController', BPTrackingModalController);
