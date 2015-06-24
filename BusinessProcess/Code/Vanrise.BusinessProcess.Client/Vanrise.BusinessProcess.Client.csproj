@@ -46,8 +46,15 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing">
+      <HintPath>..\..\..\CDRAnalysis\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\CDRAnalysis\Dependencies\VanriseFramework\Vanrise.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPClientPartial2.cs" />
     <Compile Include="BPClientPartial.cs" />
     <Compile Include="BPClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +67,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">
+      <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>
+      <Name>Vanrise.BusinessProcess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

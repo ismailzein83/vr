@@ -14,6 +14,17 @@
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
+
+    function StartInstance(processName, inputArguments) {
+        return BaseAPIService.post("/api/BusinessProcess/StartInstance", {
+            processName: processName,
+            inputArguments: inputArguments
+        });
+    }
+
+
+
+
     function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {
         return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", {
             DefinitionsId: DefinitionsId,

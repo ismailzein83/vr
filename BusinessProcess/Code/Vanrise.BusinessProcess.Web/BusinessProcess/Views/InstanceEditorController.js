@@ -11,22 +11,25 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         };
         $scope.startInstance = function () {
 
+            $scope.issaving = true;
+            var instanceObject = buildInstanceObjFromScope();
 
-            //$scope.issaving = true;
-            //var routeRuleObject = buildRouteRuleObjFromScope();
-            //return RoutingRulesAPIService.InsertRouteRule(routeRuleObject).then(function (response) {
-            //    if (VRNotificationService.notifyOnItemAdded("RouteRule", response)) {
-            //        if ($scope.onRouteRuleAdded != undefined)
-            //            $scope.onRouteRuleAdded(response.InsertedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error);
-            //});
+            return BusinessProcessAPIService.StartInstance(BPDefinitionObj.Title, instanceObject).then(function (response) {
+                $scope.modalContext.closeModal();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error);
+            });
 
 
         };
     }
+
+
+    function buildInstanceObjFromScope() {
+        return $scope.subViewExecuteStrategyProcessInput.getData();
+    }
+
+
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
