@@ -16,4 +16,5 @@ BEGIN
 	FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
 	WHERE
 		bpt.ProcessInstanceID = @ProcessInstanceID AND bpt.ID > @lastTrackingId
+	order by ID DESC
 END
