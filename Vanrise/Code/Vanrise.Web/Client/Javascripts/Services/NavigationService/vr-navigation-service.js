@@ -13,8 +13,10 @@ app.service('VRNavigationService', function ($location, $routeParams, UtilsServi
     function goto(url, parameters) {
         if (parameters != undefined) {
             var serializedParameters = UtilsService.replaceAll(JSON.stringify(parameters), "/", replaceText);
-            url += '/' + serializedParameters;
+            url = '/viewwithparams' + url + '/' + serializedParameters;
         }
+        else
+            url = '/view' + url;
         $location.path(url).replace();
     }
 
