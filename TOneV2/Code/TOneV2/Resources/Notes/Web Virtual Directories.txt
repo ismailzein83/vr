@@ -13,3 +13,4 @@
 	BusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
 	Security		C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 	BusinessProcess	C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+	Runtime			C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
