@@ -76,23 +76,29 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Client">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.Client.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.Data.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Caching.dll</HintPath>

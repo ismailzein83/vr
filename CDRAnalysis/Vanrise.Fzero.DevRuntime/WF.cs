@@ -116,7 +116,7 @@ namespace Vanrise.Fzero.DevRuntime
 
                 foreach (var inputArg in inputArgs)
                 {
-                    bpClient3.CreateNewProcess(new CreateProcessInput { ProcessName = "ExecuteStrategyProcess", InputArguments = inputArg });
+                    bpClient3.CreateNewProcess(new CreateProcessInput { InputArguments = inputArg });
                 }
 
 
@@ -170,7 +170,6 @@ namespace Vanrise.Fzero.DevRuntime
                 BPClient bpClient2 = new BPClient();
                 bpClient2.CreateNewProcess(new CreateProcessInput
                 {
-                    ProcessName = "SaveCDRToDBProcess",
                     InputArguments = inputArg
                 });
 
@@ -208,7 +207,6 @@ namespace Vanrise.Fzero.DevRuntime
                 BPClient bpClient2 = new BPClient();
                 bpClient2.CreateNewProcess(new CreateProcessInput
                 {
-                    ProcessName = "CDRImportProcess",
                     InputArguments = inputArg
                 });
 

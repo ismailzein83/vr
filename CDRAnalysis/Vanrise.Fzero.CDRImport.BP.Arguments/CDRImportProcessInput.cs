@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.CDRImport.BP.Arguments
 {
-    public class CDRImportProcessInput
+    public class CDRImportProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public override string GetTitle()
+        {
+            return "CDR Import Process";
+        }
     }
 }

@@ -72,7 +72,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -85,7 +84,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -99,7 +97,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -111,7 +108,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -125,7 +121,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -137,7 +132,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -149,7 +143,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIds,
@@ -176,7 +169,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIdsDaily,
@@ -189,7 +181,6 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             bpClient3.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ExecuteStrategyProcess",
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
                     StrategyIds = StrategyIdsDaily,
