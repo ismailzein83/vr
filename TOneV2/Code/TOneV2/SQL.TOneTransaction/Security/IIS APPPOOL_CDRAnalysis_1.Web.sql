@@ -1,2 +1,0 @@
-﻿CREATE USER [IIS APPPOOL\CDRAnalysis.Web] FOR LOGIN [IIS APPPOOL\CDRAnalysis.Web];
-

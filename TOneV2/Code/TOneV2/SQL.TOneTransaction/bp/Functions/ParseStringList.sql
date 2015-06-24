@@ -1,5 +1,4 @@
-﻿
-CREATE Function [dbo].[ParseStringList]  (@StringArray nvarchar(max) )  
+﻿CREATE Function [bp].[ParseStringList]  (@StringArray nvarchar(max) )  
 Returns @tbl_string Table  (ParsedString nvarchar(max))  As  
 
 BEGIN 

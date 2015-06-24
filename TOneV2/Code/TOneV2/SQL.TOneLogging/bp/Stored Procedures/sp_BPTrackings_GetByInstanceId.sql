@@ -17,7 +17,7 @@ BEGIN
       ,[EventTime]
 	FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
 	WHERE
-		(@TrackingSeverity is NULL or bpt.Severity in (SELECT ParsedString FROM ParseStringList(@TrackingSeverity) ) ) and 
+		(@TrackingSeverity is NULL or bpt.Severity in (SELECT ParsedString FROM [bp].[ParseStringList](@TrackingSeverity) ) ) and 
 		bpt.ProcessInstanceID = @ProcessInstanceID AND
 		(@Message is NULL or bpt.TrackingMessage LIKE '%'+ @Message + '%')AND
 		bpt.ID > @lastTrackingId
