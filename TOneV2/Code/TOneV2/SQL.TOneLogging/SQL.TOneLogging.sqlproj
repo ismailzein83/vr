@@ -70,6 +70,8 @@
     <Folder Include="logging\Tables\" />
     <Folder Include="bp\Stored Procedures\" />
     <Folder Include="logging\Stored Procedures\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
@@ -82,6 +84,7 @@
     <Build Include="logging\Stored Procedures\sp_LogAttribute_InsertIfNeededAndGetID.sql" />
     <Build Include="logging\Stored Procedures\sp_LogAttribute_GetAll.sql" />
     <Build Include="Security\logging.sql" />
+    <Build Include="dbo\Functions\ParseStringList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
