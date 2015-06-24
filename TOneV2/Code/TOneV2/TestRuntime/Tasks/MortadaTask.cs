@@ -31,7 +31,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "DailyRepricingProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
                 {
                     RepricingDay = DateTime.Parse("2013-03-29")

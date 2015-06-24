@@ -13,6 +13,7 @@
  xmlns:tca="clr-namespace:TOne.CDRProcess.Arguments;assembly=TOne.CDRProcess.Arguments"
  xmlns:tca1="clr-namespace:TOne.CDRProcess.Activities;assembly=TOne.CDRProcess.Activities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -62,6 +63,9 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TABS</AssemblyReference>
+      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
+      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
@@ -74,9 +78,6 @@
       <AssemblyReference>TOne.CDRProcess.Activities</AssemblyReference>
       <AssemblyReference>TOne.CDRProcess.Arguments</AssemblyReference>
       <AssemblyReference>TOne.Entities</AssemblyReference>
-      <AssemblyReference>TABS.Addons.Utilities</AssemblyReference>
-      <AssemblyReference>TABS</AssemblyReference>
-      <AssemblyReference>TABS.Plugins.Framework</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.CDRProcess</AssemblyReference>
     </sco:Collection>
@@ -152,10 +153,10 @@
                 <Variable x:TypeArguments="tca:TimeRangeRepricingProcessOutput" Name="timeRangeRepProcessOutput" />
                 <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
               </Sequence.Variables>
-              <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" ProcessName="TimeRangeRepricingProcess" WaitProcessCompleted="True">
+              <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
                 <vbw:RunProcess.Input>
-                  <InArgument x:TypeArguments="x:Object">
-                    <mca:CSharpValue x:TypeArguments="x:Object" xml:space="preserve">new TimeRangeRepricingProcessInput
+                  <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                    <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new TimeRangeRepricingProcessInput
             {
                 Range = timeRange,
                 CacheManagerID = cacheManagerId
@@ -292,7 +293,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwzVAOoAg4CAQFaBWUOAwGlAWYFbCADAZ8BbQVzHgMBmQF0BYQBJAMBiQGFAQX3AQoCASv4AQWDAikCASCEAgWKAiQCARqLAgWRAiYCARSSAgWYAicCAQ6ZAgWfAh4CAQigAgWmAiACAQJiC2JXAwGrAV0LXVgDAaYBaQtpoAEDAaABcAtwXQMBmgF8C3ytAQMBlAGBAQuBAWoDAY8Bdwt3XQMBigGIAQuIAW0CASyMAQnGARsCAVTJAQn1AR8CATGAAguAAl0CASb7AQv7AVUCASGHAguHAl0CARuOAguOAl0CARWVAguVAl0CAQ+cAgucAlUCAQmjAgujAqsBAgEDjwEPjwFtAwGEAZYBDcQBGAIBVdYBD9YBbQIBT9EBD9EBlgECAUrMAQ/MAZYBAgFF3QEN8wEYAgEymwEPqgEgAgFxqwEPwwEUAgFW4QEP6wExAgE77AEP8gEqAgEzngEVogEgAgF8pwEVpwGIAQIBdJsBd5sBkgECAXObAagBmwGuAQIBcq4BFa4BlgECAVeyARO4AScCAWi7ARPBAS4CAV/hAXXhAZIBAgFD5AEV6AEgAgE87wEV7wHDAgIBNLUBGbUB9QECAWm+ARm+AacDAgFg</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuQ0RSUHJvY2Vzc1xSZXByaWNpbmdcRGFpbHlSZXByaWNpbmdQcm9jZXNzLnhhbWwyVQOpAg4CAQFbBWYOAwGkAWcFbSADAZ4BbgV0HgMBmAF1BYUBJAMBiAGGAQX4AQoCASv5AQWEAikCASCFAgWLAiQCARqMAgWSAiYCARSTAgWZAicCAQ6aAgWgAh4CAQihAgWnAiACAQJjC2NXAwGqAV4LXlgDAaUBagtqoAEDAZ8BcQtxXQMBmQF9C32tAQMBkwGCAQuCAWoDAY4BeAt4XQMBiQGJAQuJAW0CASyNAQnHARsCAVTKAQn2AR8CATGBAguBAl0CASb8AQv8AVUCASGIAguIAl0CARuPAguPAl0CARWWAguWAl0CAQ+dAgudAlUCAQmkAgukAqsBAgEDkAEPkAFtAwGDAZcBDcUBGAIBVdcBD9cBbQIBT9IBD9IBlgECAUrNAQ/NAZYBAgFF3gEN9AEYAgEynAEPqwEgAgFxrAEPxAEUAgFW4gEP7AExAgE77QEP8wEqAgEznwEVowEgAgF7qAEVqAGIAQIBc5wBgAGcAYYBAgFyrwEVrwGWAQIBV7MBE7kBJwIBaLwBE8IBLgIBX+IBdeIBkgECAUPlARXpASACATzwARXwAcMCAgE0tgEZtgH1AQIBab8BGb8BpwMCAWA=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

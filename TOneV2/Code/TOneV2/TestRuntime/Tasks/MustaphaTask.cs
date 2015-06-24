@@ -54,7 +54,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "SaveDailyStatisticsToDBProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.SaveDailyStatisticsToDBProcessInput
                 {
                     SwitchID = switchID
@@ -68,7 +67,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "GenerateDailyStatisticsProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.GenerateDailyStatisticsProcessInput
                 {
                     SwitchID = switchID
@@ -81,7 +79,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "SaveStatisticsToDBProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.SaveStatisticsToDBProcessInput
                 {
                     SwitchID = switchID
@@ -94,7 +91,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "ImportCDRProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput
                 {
                     SwitchID = switchID
@@ -107,7 +103,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "StoreCDRsInDBProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.StoreCDRsInDBProcessInput
                 {
                     SwitchID = switchID
@@ -120,7 +115,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "RawCDRsProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.RawCDRsProcessInput
                 {
                     SwitchID = switchID,
@@ -135,7 +129,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "BillingCDRsProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.BillingCDRsProcessInput
                 {
                     SwitchID = switchID,
@@ -149,7 +142,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "StoreInvalidCDRsInDBProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.StoreInvalidCDRsInDBProcessInput
                 {
                     SwitchID = switchID
@@ -162,7 +154,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "StoreMainCDRsInDBProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.StoreMainCDRsInDBProcessInput
                 {
                     SwitchID = switchID
@@ -175,7 +166,6 @@ namespace TestRuntime.Tasks
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "GenerateStatisticsProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.GenerateStatisticsProcessInput
                 {
                     SwitchID = switchID

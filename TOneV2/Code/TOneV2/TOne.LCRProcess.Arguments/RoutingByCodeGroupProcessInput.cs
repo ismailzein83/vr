@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TOne.LCRProcess.Arguments
 {
-    public class RoutingByCodeGroupProcessInput
+    public class RoutingByCodeGroupProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public int RoutingDatabaseId { get; set; }
 
@@ -16,5 +16,10 @@ namespace TOne.LCRProcess.Arguments
         public bool IsFuture { get; set; }
 
         public bool IsLcrOnly { get; set; }
+
+        public override string GetTitle()
+        {
+            return String.Format("Routing Process for Codes starts by {0}", CodePrefix);
+        }
     }
 }

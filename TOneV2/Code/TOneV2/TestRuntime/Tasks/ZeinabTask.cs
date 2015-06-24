@@ -29,7 +29,6 @@ namespace TestRuntime
             BPClient bpClient = new BPClient();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "RoutingProcess",
                 InputArguments = new TOne.LCRProcess.Arguments.RoutingProcessInput
                 {
                     EffectiveTime = DateTime.Now,

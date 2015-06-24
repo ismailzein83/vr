@@ -73,7 +73,6 @@ namespace TestRuntime
 
             bpClient.CreateNewProcess(new CreateProcessInput
             {
-                ProcessName = "DailyRepricingProcess",
                 InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
                 {
                     RepricingDay = DateTime.Parse("2014-07-07")//,
@@ -144,10 +143,9 @@ namespace TestRuntime
             TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "DailyRepricingProcess",
                 InputArguments = inputArguments
             };
-            ProcessManager processManager = new ProcessManager();
+            BPClient processManager = new BPClient();
             processManager.CreateNewProcess(input);
         }
     }

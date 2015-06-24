@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TOne.LCRProcess.Arguments
 {
-    public class RoutingProcessInput
+    public class RoutingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public DateTime EffectiveTime { get; set; }
 
@@ -14,5 +14,10 @@ namespace TOne.LCRProcess.Arguments
         public bool IsLcrOnly { get; set; }
 
         public bool DivideProcessIntoSubProcesses { get; set; }
+
+        public override string GetTitle()
+        {
+            return String.Format("Routing Process for Effective Time {0}", EffectiveTime);
+        }
     }
 }

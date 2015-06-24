@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TestRuntime
@@ -60,10 +61,9 @@ namespace TestRuntime
             TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "DailyRepricingProcess",
                 InputArguments = inputArguments
             };
-            ProcessManager processManager = new ProcessManager();
+            BPClient processManager = new BPClient();
             processManager.CreateNewProcess(input);
         }
 
@@ -73,10 +73,9 @@ namespace TestRuntime
             TOne.CDRProcess.Arguments.ImportCDRProcessInput inputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput { SwitchID = SwitchID };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "ImportCDRProcess",
                 InputArguments = inputArguments
             };
-            ProcessManager processManager = new ProcessManager();
+            BPClient processManager = new BPClient();
             processManager.CreateNewProcess(input);
 
         }
@@ -86,19 +85,17 @@ namespace TestRuntime
             TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
             CreateProcessInput input = new CreateProcessInput
             {
-                ProcessName = "CDRImportProcess",
                 InputArguments = inputArguments
             };
-            ProcessManager processManager = new ProcessManager();
+            BPClient processManager = new BPClient();
             processManager.CreateNewProcess(input);
 
             TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
             CreateProcessInput inputCDRProcess = new CreateProcessInput
             {
-                ProcessName = "CDRGenerationProcess",
                 InputArguments = CDRProcessInputArguments
             };
-            ProcessManager processManager1 = new ProcessManager();
+            BPClient processManager1 = new BPClient();
             processManager1.CreateNewProcess(inputCDRProcess);
         }
 

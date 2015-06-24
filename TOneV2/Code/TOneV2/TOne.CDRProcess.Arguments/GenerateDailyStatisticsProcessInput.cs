@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace TOne.CDRProcess.Arguments
 {
-    public class GenerateDailyStatisticsProcessInput
+    public class GenerateDailyStatisticsProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public int SwitchID { get; set; }
+
+        public override string GetTitle()
+        {
+            return String.Format("Generate Daily Statistics Process for Switch {0}", SwitchID);
+        }
     }
 }

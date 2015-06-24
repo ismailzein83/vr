@@ -82,20 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CDRImport\BillingCDRsProcess.cs" />
-    <Compile Include="CDRGenerationProcess.cs" />
-    <Compile Include="CDRImport\GenerateStatisticsProcess.cs" />
-    <Compile Include="CDRImport\SaveDailyStatisticsToDBProcess.cs" />
-    <Compile Include="CDRImport\SaveStatisticsToDBProcess.cs" />
-    <Compile Include="CDRImport\GenerateDailyStatisticsProcess.cs" />
-    <Compile Include="Repricing\DailyRepricingProcess.cs" />
-    <Compile Include="CDRImport\ImportCDRProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CDRImport\RawCDRsProcess.cs" />
-    <Compile Include="CDRImport\StoreCDRsInDBProcess.cs" />
-    <Compile Include="CDRImport\StoreInvalidCDRsInDBProcess.cs" />
-    <Compile Include="CDRImport\StoreMainCDRsInDBProcess.cs" />
-    <Compile Include="Repricing\TimeRangeRepricingProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Business\TOne.Business.csproj">
