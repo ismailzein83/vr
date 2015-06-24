@@ -1,4 +1,4 @@
-﻿appControllers.controller('ZoneDetailsController',
+﻿appControllers.controller('BI_ZoneDetailsController',
     function ZoneDetailsController($scope, VRNavigationService, VRNotificationService, uiGridConstants, BIAPIService, BIUtilitiesService, BITimeDimensionTypeEnum, BIEntityTypeEnum, BIMeasureTypeEnum, ZonesService) {
 
         var zoneId;

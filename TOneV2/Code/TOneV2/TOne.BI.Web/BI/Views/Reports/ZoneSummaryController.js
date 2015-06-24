@@ -57,7 +57,7 @@ appControllers.controller('ZoneSummaryController',
                     zoneId: $scope.zoneId,
                     zoneName: $scope.zoneName
                 };
-                VRNavigationService.goto("/BI/ZoneDetails", parameters);
+                VRNavigationService.goto("/BI/Views/Reports/ZoneDetails", parameters);
             };
         }
 

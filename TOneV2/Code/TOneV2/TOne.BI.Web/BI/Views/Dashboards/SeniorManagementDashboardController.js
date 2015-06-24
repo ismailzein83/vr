@@ -64,7 +64,7 @@
                             zoneId: zoneItem.EntityId,
                             zoneName: zoneItem.EntityName
                         };
-                        VRNavigationService.goto("/BI/ZoneDetails", parameters);
+                        VRNavigationService.goto("/BI/Views/Reports/ZoneDetails", parameters);
                     }
                 }
             ];
