@@ -144,6 +144,8 @@
     <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
     <Content Include="BusinessEntity\Views\CarrierAccountManagement.html" />
     <Content Include="BusinessEntity\Views\CarrierAccountManagementController.js" />
+    <Content Include="BusinessEntity\Views\CarrierPriceList.html" />
+    <Content Include="BusinessEntity\Views\CarrierPriceListController.js" />
     <Content Include="BusinessEntity\Views\Rates.html" />
     <Content Include="BusinessEntity\Views\RatesController.js" />
     <Content Include="BusinessEntity\Views\SwitchEditor.html" />
