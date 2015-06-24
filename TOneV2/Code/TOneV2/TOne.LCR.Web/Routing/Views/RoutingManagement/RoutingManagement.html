@@ -49,7 +49,7 @@
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'">
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'">
-                        <span ng-repeat="option in dataItem.Options">{{option.Rate | number:4}}</span>
+                        <span ng-repeat="option in dataItem.Options">{{option.Supplier}}   {{option.Percentage}}</span>
                     </vr-datagridcolumn>
                     <vr-datagridexpandablerow>
                         {{dataItem.Options}}

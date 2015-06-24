@@ -1,25 +1,11 @@
 ﻿<div ng-controller="RoutingRules_CodeTemplateController">
-
-    <vr-row removeline>
-        <vr-columns colnum="4">
-            <vr-label standalone>Code</vr-label>
-        </vr-columns>
-    </vr-row>
     <vr-row>
-        <vr-columns colnum="4">
-            <div>
-                <number-filed input-value="code" />
-            </div>
-        </vr-columns>
-    </vr-row>
+        <vr-columns width="normal">
+            <vr-textbox label="Code" value="code" />
 
-    <vr-row removeline>
-        <vr-columns colnum="4">
+        </vr-columns>
+        <vr-columns width="normal">
             <vr-label standalone>Excluded Codes</vr-label>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns colnum="4">
             <div class="dropdown" id="CodeListddl">
                 <button class="btn btn-default dropdown-toggle" style="width:100%;position:relative" type="button" id="dropdownMenucodes" data-toggle="dropdown" aria-expanded="true">
                     <span style="float:left;margin:0px"> {{getCodes()}}</span>
@@ -30,7 +16,7 @@
                         <div style="display: inline-block; width: 220px;" ng-click="muteAction($event)">
                             <div style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; margin: 5px; " ng-click="muteAction($event)">
                                 <div class="inner-addon right-addon form-inline">
-                                    <input type="text" class="form-control input-sm inline-inpute" ng-model="codeInpute"  ng-keyup="addCodeEnter($event)" />
+                                    <input type="text" class="form-control input-sm inline-inpute" ng-model="codeInpute" ng-keyup="addCodeEnter($event)" />
                                     <button class="btn btn-default" style="display:inline-block" ng-click="addCode($event)">Add</button>
                                 </div>
                             </div>
@@ -52,12 +38,8 @@
                 </ul>
             </div>
         </vr-columns>
-    </vr-row>
-
-    <vr-row>
-        <div style="padding-top:5px">
-            <switch ng-model="subCodes" class="green"></switch>
-            <vr-label standalone>With Sub Codes</vr-label>
-        </div>
+        <vr-columns width="normal">
+            <vr-switch value="subCodes" label="With Sub Codes"></vr-switch>
+        </vr-columns>
     </vr-row>
 </div>

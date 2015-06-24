@@ -87,7 +87,7 @@ namespace TestRuntime
                 {
                     EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    IsLcrOnly = true
+                    IsLcrOnly = false
                 }
             });
         }
