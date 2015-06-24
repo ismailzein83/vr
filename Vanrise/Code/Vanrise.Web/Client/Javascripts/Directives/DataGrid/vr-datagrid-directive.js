@@ -1,7 +1,68 @@
-﻿'use strict';
+﻿
+app.filter('filterColumns', function () {
+    return function (items, object) {
 
+        if (object === undefined) return items;
+
+        var filtered = [];
+        angular.forEach(items, function (item) {
+            var match = [];
+            for (var key in object) {
+
+                var value = object[key];
+
+                if (value === undefined)
+                    match.push(true);
+                else {
+                    if (Object.prototype.toString.call(value) === '[object Array]') {
+
+                        var arrayMatch = false;
+
+                        if (value.length == 0) {
+                            arrayMatch = true;
+                        }
+                        else {
+                            for (var i = 0, len = value.length; i < len; i++) {
+                                var re = new RegExp(value[i], 'g');
+                                if (String(item[key]).match(re)) {
+                                    arrayMatch = true;
+                                    break;
+                                }
+                            }
+                        }
+                        match.push(arrayMatch);
+                    }
+                    else {
+                        var re = new RegExp(value, 'g');
+                        if (item[key].match(re)) {
+                            match.push(true);
+                        }
+                        else {
+                            match.push(false);
+                        }
+                    }
+                }
+                
+            }
+
+            var isMatch = true;
+            for (var i = 0; i < match.length; i++) {
+                if (! match[i]){
+                    isMatch = false;
+                    break;
+                }   
+            }
+            if (isMatch) {
+                filtered.push(item);
+            }
+        });
+        return filtered;
+    };
+});
 
 app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', function (UtilsService, SecurityService, $compile) {
+
+    'use strict';
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -10,6 +71,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', '$compile', func
             onReady: '=',
             maxheight: '@',
             hideheader: '=',
+            search:'=',
             noverticallines: '@'
         },
         controller: function ($scope, $element, $attrs) {

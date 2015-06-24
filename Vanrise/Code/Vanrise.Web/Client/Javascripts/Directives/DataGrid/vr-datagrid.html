@@ -17,7 +17,7 @@
 
     <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
         <div id="gridBody">
-            <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
+            <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource | filterColumns:ctrl.search">
 
             </div>
         </div>
