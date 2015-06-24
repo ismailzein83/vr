@@ -15,7 +15,7 @@ BEGIN
       ,[TrackingMessage]
       ,[Severity]
       ,[EventTime]
-	FROM [TOneWFTracking].[bp].[BPTracking] as bpt WITH(NOLOCK)
+	FROM [bp].[BPTracking] as bpt WITH(NOLOCK)
 	WHERE
 		(@TrackingSeverity is NULL or bpt.Severity in (SELECT ParsedString FROM ParseStringList(@TrackingSeverity) ) ) and 
 		bpt.ProcessInstanceID = @ProcessInstanceID AND
