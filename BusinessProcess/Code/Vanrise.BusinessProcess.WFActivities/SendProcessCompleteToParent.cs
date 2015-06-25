@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Client;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -21,8 +22,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         protected override void Execute(CodeActivityContext context)
         {
             BPSharedInstanceData sharedInstanceData = context.GetSharedInstanceData();
-
-            BusinessProcessRuntime.Current.TriggerProcessEvent(new Entities.TriggerProcessEventInput
+            BPClient client = new BPClient();
+            client.TriggerProcessEvent(new Entities.TriggerProcessEventInput
             {
                 ProcessInstanceId = sharedInstanceData.InstanceInfo.ParentProcessID.Value,
                 BookmarkName = this.BookmarkName.Get(context),

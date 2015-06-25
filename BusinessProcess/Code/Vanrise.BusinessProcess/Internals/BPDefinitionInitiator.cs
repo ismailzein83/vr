@@ -199,18 +199,14 @@ namespace Vanrise.BusinessProcess
                 object processOutput = null;
                 if (e.Outputs != null)
                     e.Outputs.TryGetValue("Output", out processOutput);
-                TriggerProcessEventInput triggerProcessEventInput = new TriggerProcessEventInput
+
+                var eventData = new ProcessCompletedEventPayload
                 {
-                    ProcessInstanceId = bpInstance.ParentProcessID.Value,
-                    BookmarkName = bpInstance.ProcessInstanceID.ToString(),
-                    EventData = new ProcessCompletedEventPayload
-                   {
-                       ProcessStatus = bpInstance.Status,
-                       LastProcessMessage = bpInstance.LastMessage,
-                       ProcessOutput = processOutput
-                   }
+                    ProcessStatus = bpInstance.Status,
+                    LastProcessMessage = bpInstance.LastMessage,
+                    ProcessOutput = processOutput
                 };
-                BusinessProcessRuntime.Current.TriggerProcessEvent(triggerProcessEventInput);
+                _dataManager.InsertEvent(bpInstance.ParentProcessID.Value, bpInstance.ProcessInstanceID.ToString(), eventData);
             }
 
             _runtime.SetProcessInstanceNotLoaded(bpInstance);

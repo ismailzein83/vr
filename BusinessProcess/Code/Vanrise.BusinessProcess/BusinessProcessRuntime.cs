@@ -47,46 +47,6 @@ namespace Vanrise.BusinessProcess
 
         #endregion
 
-        #region Internal Methods
-        //internal CreateProcessOutput CreateNewProcess(CreateProcessInput input)
-        //{
-
-        //    InitializeIfNotInitialized();
-
-        //    BPDefinitionInitiator processInitiator;
-        //    if (!_processDefinitionInitiators.TryGetValue(input.ProcessName, out processInitiator))
-        //        throw new ArgumentException(String.Format("'{0}' not found in Process Definitions list", input.ProcessName));
-
-        //    string processTitle = processInitiator.WorkflowDefinition.GetTitle(input);
-        //    long processInstanceId = _dataManager.InsertInstance(processTitle, input.ParentProcessID, processInitiator.Definition.BPDefinitionID, input.InputArguments, BPInstanceStatus.New);
-        //    BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
-        //    {
-        //        ProcessInstanceId = processInstanceId,
-        //        ParentProcessId = input.ParentProcessID,
-        //        Message = String.Format("Process Created: {0}", processTitle),
-        //        Severity = BPTrackingSeverity.Information,
-        //        EventTime = DateTime.Now
-        //    });
-        //    CreateProcessOutput output = new CreateProcessOutput
-        //        {
-        //            ProcessInstanceId = processInstanceId,
-        //            Result = CreateProcessResult.Succeeded
-        //        };
-        //    return output;
-        //}
-
-        internal TriggerProcessEventOutput TriggerProcessEvent(TriggerProcessEventInput input)
-        {
-            TriggerProcessEventOutput output = new TriggerProcessEventOutput();
-            if (_dataManager.InsertEvent(input.ProcessInstanceId, input.BookmarkName, input.EventData) > 0)
-                output.Result = TriggerProcessEventResult.Succeeded;
-            else
-                output.Result = TriggerProcessEventResult.ProcessInstanceNotExists;
-            return output;
-        }
-
-        #endregion
-
         public void TerminatePendingProcesses()
         {
             InitializeIfNotInitialized();
@@ -185,7 +145,6 @@ namespace Vanrise.BusinessProcess
                 }
 
                 _isInitialized = true;
-                //BPService.Start();
             }
         }
 
