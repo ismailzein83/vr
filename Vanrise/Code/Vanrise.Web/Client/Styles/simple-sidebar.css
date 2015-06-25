@@ -12,7 +12,7 @@
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-    padding-top: 25px;
+    padding-top: 20px;
 }
 
 #wrapper.toggled {
@@ -41,7 +41,8 @@
 #page-content-wrapper {
     width: 100%;
     position: absolute;
-    padding: 0px  0px 0px 15px;
+    padding: 43px 0px 0px 30px;
+    background:#fff;
 }
 
 #wrapper.toggled #page-content-wrapper {
@@ -115,8 +116,9 @@
     }
 
     #page-content-wrapper {
-        padding: 0px 0px 0px 15px;
-        position: relative;
+        padding: 43px 0px 0px 30px;
+        position: relative;        
+        background:#fff;
     }
 
     #wrapper.toggled #page-content-wrapper {

@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, MenuItemTypeEnum) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum) {
     
     var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
 
@@ -148,6 +148,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         "#272264",
         "#0074d9"
     ]
+
+    $scope.clock = ""; // initialise the time variable
+    $scope.tickInterval = 1000 //ms
+
+    var tick = function () {
+        $scope.clock = Date.now() // get the current time
+        $timeout(tick, $scope.tickInterval); // reset the timer
+    }
+    $timeout(tick, $scope.tickInterval);
     MenuAPIService.GetMenuItems().then(function (response) {
         angular.forEach(response, function (value, key,itm) {
             value.color = $scope.colors[key % $scope.colors.length];

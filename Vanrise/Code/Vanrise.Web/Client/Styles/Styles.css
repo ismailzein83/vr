@@ -1,4 +1,5 @@
 ﻿body {
+     background: #FFF;
 }
 .datepicker-custom button{
     border:0px !important;
@@ -8,7 +9,7 @@
     border-color:transparent !important;
     background-color:#666 !important;*/
 
-     min-height: 25px !important;
+     min-height: 20px !important;
      margin-bottom:0px !important;
      border-color: transparent !important;
      background: -webkit-linear-gradient(bottom,#F0F0F0, #C5C5C5); /*Safari 5.1-6*/
@@ -17,28 +18,60 @@
      background: linear-gradient(to bottom, #F0F0F0,  #C5C5C5); /*Standard*/
 
 }
-.vr-nav-custom img{
+
+.vr-nav-custom .minilogo{
     position: absolute;
-    top: -24px;
-    right: 5%;
+    top: -28px;
+    right: -35px;
+}
+.vr-nav-custom .img1 {
+   position: absolute;
+   top: 32px;
+   right:140px;
+}
+
+.vr-nav-custom .img2 {
+   position: absolute;
+   top: 32px;
+   right: 175px;
 }
 .sub-header {
     height: 43px;
-    background-color: #fff;
-    border-bottom: 2px #f0f0f0 solid;
+    background-color: #FFF;
+    border-bottom: 2px solid #F0F0F0;
+    position: fixed;
+    z-index: 1001;
+    width: 100%;    
+    margin-top: 20px;
 }
-.sub-header .img1 {
-   position: absolute;
-   top: 15px;
-   right:24%;
+.sub-header-open {
+    margin-left: 250px;
+}
+.sub-header-closed {
+    margin-left: 40px;
 }
 
-.sub-header .img2 {
-    position: absolute;
-    top: 15px;
-    right: 28%;
+.inner-sub{
+   height: 41px;
+   position: relative;
+   padding: 5px;
 }
- 
+
+.fogetten-label{
+    color: #555;
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+}
+.fogetten-label:hover{
+    color: #555;
+   
+}
+.fogetten-label:visited{
+    color: #555;
+   
+}
 /*bootstrap overide */
 .form-control {   
     height: 29px ;
@@ -117,7 +150,12 @@ label{
         margin-bottom:10px !important ;
     }
 }
-
+.dropdown-item{
+    height: 41px;
+    font-size: 20px;
+    margin: 0px 9px;
+    top: 8px;
+}
 .dropdown .dropdown-toggle > span{    
 font-size:12px !important;
 }   
@@ -286,9 +324,10 @@ Use this for keyframe animations
 .panel-over-color{
     border:0px;
     background-color:#fff;
+    box-shadow: 0px 0px 0px 0px;
 }
 .action-bar{
-    background-color: #4C5359;
+    background-color: #e22337;
 }
 .action-bar-left{   
     width:49%;
@@ -307,11 +346,11 @@ Use this for keyframe animations
 }
 .btncustom:hover{ 
     opacity:0.99;
-    background-color:black !important;
+    background-color:#EF4355 !important;
 
 }
 .highlight-btn .glyphicon{ 
-    color:#d6e9c6 !important;
+    color:#EF4355 !important;
 
 }
 .style-col{
@@ -335,9 +374,6 @@ Use this for keyframe animations
 label{
     font-weight:normal;
     color: #635F5F;
-}
-body{
-     background-color:#f0f0f0;
 }
 .pad-top-m{
     padding-top : 10px
@@ -648,7 +684,7 @@ input.ui-grid-filter-input[type="text"] {
 
 .dropdown-menu-custom-serf {
     top: -3px;
-    left: 30px;
+    left: 40px;
     border-radius: 0px;
     background-color:#f0f0f0 !important;
     color: #666 !important;
@@ -922,13 +958,20 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .panel-vr > .panel-heading {
-    background-color: #829EBF;
-    border-color: #829EBF;
+    background-color: #20407d;
+    border-style: solid;
     text-transform:uppercase ;
+    border-color: #20407D;
     font-weight:bold ;
     font-size:12px;
     border-radius:0px ;
     padding: 5px 15px ;
+}
+
+.panel-vr > .panel-body {   
+    border-style: solid;
+    border-color: #f2f2f2;
+    border: 0px 2px 2px 2px;
 }
 .breadcrumb-vr{
     padding: 4px 0px;
@@ -1138,4 +1181,30 @@ input.ui-grid-filter-input[type="text"] {
 
 /**************END Pagination*********/
 
+.clockspace{
+    display:inline-block;
+    width:10px;
+}
+.clock {
+    position: fixed;
+    bottom: 20px;
+    left: 10px;
+    font-size: 16px;
+    color: #959595;
+    padding:5px;
+}
+.collapsed {    
+    bottom: 80px;
+    left: -80px;
 
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+    /* IE */
+    -ms-transform: rotate(-90deg);
+    /* Opera */
+    -o-transform: rotate(-90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
