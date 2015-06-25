@@ -1,5 +1,5 @@
-﻿CarrierPriceListController.$inject = ['$scope', 'CarrierAPIService', 'CarrierTypeEnum'];
-function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum) {
+﻿CarrierPriceListController.$inject = ['$scope', 'CarrierAPIService', 'CarrierTypeEnum','PriceListAPIService'];
+function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum, PriceListAPIService) {
     defineScope();
     load();
 
@@ -10,6 +10,11 @@ function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum) 
     function load() {
         loadSuppliers();
     }
+    function GetPRiceList() {
+        return PriceListAPIService.GetPRiceList().then(function (response) {
+            //gridApi.addItemsToSource(response);
+        });
+    }
     function loadSuppliers() {
         return CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
             angular.forEach(response, function (itm) {
@@ -18,4 +23,4 @@ function CarrierPriceListController($scope, CarrierAPIService, CarrierTypeEnum) 
         });
     }
 }
-appControllers.controller('Carrier_CarrierPriceListController', CarrierPriceListController);
+appControllers.controller('BusinessEntity_CarrierPriceListController', CarrierPriceListController);

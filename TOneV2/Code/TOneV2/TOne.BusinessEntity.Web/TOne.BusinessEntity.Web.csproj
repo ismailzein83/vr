@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\CarrierController.cs" />
+    <Compile Include="Controllers\PriceListController.cs" />
     <Compile Include="Controllers\RateController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,6 +140,7 @@
     <Content Include="BusinessEntity\Constant\RoutingStatusEnum.js" />
     <Content Include="BusinessEntity\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\CarrierAPIService.js" />
+    <Content Include="BusinessEntity\Services\APIServices\PriceListAPIService.js" />
     <Content Include="BusinessEntity\Services\APIServices\SwitchManagmentAPIService.js" />
     <Content Include="BusinessEntity\Views\CarrierAccountEditor.html" />
     <Content Include="BusinessEntity\Views\CarrierAccountEditorController.js" />
