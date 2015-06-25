@@ -12,10 +12,10 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         $scope.startInstance = function () {
 
             $scope.issaving = true;
-            var instanceObject = buildInstanceObjFromScope();
-            console.log('instanceObject')
-            console.log(instanceObject)
-            BusinessProcessAPIService.CreateNewProcess(instanceObject).then(function (response) {
+            var createProcessInput = buildInstanceObjFromScope();
+            console.log('createProcessInput')
+            console.log(createProcessInput)
+            BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
                 $scope.modalContext.closeModal();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error);
@@ -27,7 +27,12 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
 
     function buildInstanceObjFromScope() {
-        return $scope.subViewExecuteStrategyProcessInput.getData();
+        var inputArguments = $scope.subViewExecuteStrategyProcessInput.getData();
+        var createProcessInputObject = {
+            InputArguments: inputArguments
+        };
+
+        return createProcessInputObject;
     }
 
 

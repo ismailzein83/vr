@@ -16,9 +16,9 @@ function BusinessProcessAPIService(BaseAPIService) {
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
-    function StartInstance(processName) {
-        return BaseAPIService.post("/api/BusinessProcess/StartInstance", {
-            processName: processName
+    function CreateNewProcess(createProcessInput) {
+        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", {
+            createProcessInput: createProcessInput
         });
     }
 
@@ -63,7 +63,7 @@ function BusinessProcessAPIService(BaseAPIService) {
         GetTrackingsByInstanceId: GetTrackingsByInstanceId,
         GetTrackingSeverity: GetTrackingSeverity,
         GetOpenedInstances: GetOpenedInstances,
-        StartInstance: StartInstance
+        CreateNewProcess: CreateNewProcess
     });
 
 }
