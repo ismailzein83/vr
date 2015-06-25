@@ -30,8 +30,8 @@ public partial class ManageOperators : BasePage
     #region Methods
     private void GetData()
     {
-        List<Operator> lstOperators = new List<Operator>();
-        lstOperators = OperatorRepository.GetOperators();
+        List<CLINumberLibrary.Operator> lstOperators = new List<CLINumberLibrary.Operator>();
+        lstOperators = CLINumberLibrary.OperatorRepository.GetOperators();
         rptOperators.DataSource = lstOperators;
         rptOperators.DataBind();
     }
@@ -44,11 +44,11 @@ public partial class ManageOperators : BasePage
         LinkButton lk = (LinkButton)sender;
         int id = 0;
         int.TryParse(lk.CommandArgument.ToString(), out id);
-        if (OperatorRepository.Delete(id))
+        if (CLINumberLibrary.OperatorRepository.Delete(id))
         {
             ActionLog action = new ActionLog();
             action.ObjectId = id;
-            action.ObjectType = "Operator";
+            action.ObjectType = "CLINumberLibrary.Operator";
             action.ActionType = (int)Enums.ActionType.Delete;
             AuditRepository.Save(action);
             GetData();
@@ -79,16 +79,16 @@ public partial class ManageOperators : BasePage
         {
             return;
         }
-        if(OperatorRepository.Load(txtMCC.Text,txtMNC.Text) != null)
+        if(CLINumberLibrary.OperatorRepository.Load(txtMCC.Text,txtMNC.Text) != null)
         {
             SetError("Combination of MCC and MNC exist");
             return;
         }
 
-        Operator newOperator = new Operator();
+        CLINumberLibrary.Operator newOperator = new CLINumberLibrary.Operator();
 
         ActionLog action = new ActionLog();
-        action.ObjectType = "Operator";
+        action.ObjectType = "CLINumberLibrary.Operator";
 
         if (String.IsNullOrEmpty(HdnId.Value))
         {
@@ -99,7 +99,7 @@ public partial class ManageOperators : BasePage
             int id = 0;
             if (Int32.TryParse(HdnId.Value, out id))
             {
-                newOperator = OperatorRepository.Load(id);
+                newOperator = CLINumberLibrary.OperatorRepository.Load(id);
                 if (newOperator == null) return;
                 action.ActionType = (int)Enums.ActionType.Modify;
             }
@@ -112,14 +112,14 @@ public partial class ManageOperators : BasePage
         newOperator.Name = txtName.Text;
         newOperator.mcc = txtMCC.Text;
         newOperator.mnc = txtMNC.Text;
-        newOperator.ServiceAndroid = true;
-        newOperator.ServiceMonty = null;
+        //newOperator.ServiceAndroid = true;
+        //newOperator.ServiceMonty = null;
         newOperator.CountryPicture = hdnOperatorId.Value;
         newOperator.Country = hdnCountry.Value;
-        OperatorRepository.Save(newOperator);
+        CLINumberLibrary.OperatorRepository.Save(newOperator);
 
         action.ObjectId = newOperator.Id;
-        action.Description = Utilities.SerializeLINQtoXML<Operator>(newOperator);
+        action.Description = Utilities.SerializeLINQtoXML<CLINumberLibrary.Operator>(newOperator);
         action.UserId = Current.User.User.Id;
         AuditRepository.Save(action);
 

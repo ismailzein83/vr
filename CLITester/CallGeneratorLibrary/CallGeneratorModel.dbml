@@ -1,103 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FraudTest3" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=FraudTest3;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest3ConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.SipStatus" Member="SipStatus">
-    <Type Name="SipStatus">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="StatusId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Association Name="SipStatus_CallEntryDetail" Member="CallEntryDetails" ThisKey="Id" OtherKey="StatusId" Type="CallEntryDetail" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CallEntryStatus" Member="CallEntryStatus">
-    <Type Name="CallEntryStatus">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Association Name="CallEntryStatus_CallEntry" Member="CallEntries" ThisKey="Id" OtherKey="StatusId" Type="CallEntry" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CallSessions" Member="CallSessions">
-    <Type Name="CallSession">
-      <Column Name="SessionId" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SipAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CheckAfter" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="CallerId" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="TransactionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="CallSession_CallEntry" Member="CallEntries" ThisKey="SessionId" OtherKey="SessionId" Type="CallEntry" />
-      <Association Name="SipAccount_CallSession" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" />
-      <Association Name="Schedule_CallSession" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Exceptions" Member="Exceptions">
     <Type Name="Exception">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Subject" Type="System.String" DbType="VarChar(4000)" CanBeNull="true" />
       <Column Name="Details" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="ExceptionDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CallEntryDetails" Member="CallEntryDetails">
-    <Type Name="CallEntryDetail">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="CallEntriesId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="StatusId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="SipStatus_CallEntryDetail" Member="SipStatus" ThisKey="StatusId" OtherKey="Id" Type="SipStatus" IsForeignKey="true" />
-      <Association Name="CallEntry_CallEntryDetail" Member="CallEntry" ThisKey="CallEntriesId" OtherKey="Id" Type="CallEntry" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ScheduleWeekDays" Member="ScheduleWeekDays">
-    <Type Name="ScheduleWeekDay">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="WeekDay" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Schedule_ScheduleWeekDay" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CallGeneratorLogEntries" Member="CallGeneratorLogEntries">
-    <Type Name="CallGeneratorLogEntry">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ScheduleLogId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Message" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Number" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Status" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="ConnectionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LineId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="SessionId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="ScheduleLog_CallGeneratorLogEntry" Member="ScheduleLog" ThisKey="ScheduleLogId" OtherKey="Id" Type="ScheduleLog" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ScheduleNumbers" Member="ScheduleNumbers">
-    <Type Name="ScheduleNumber">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="Schedule_ScheduleNumber" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Lookups" Member="Lookups">
-    <Type Name="Lookup">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Code" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="Lookup_LookupValue" Member="LookupValues" ThisKey="Id" OtherKey="LookupId" Type="LookupValue" />
-    </Type>
-  </Table>
-  <Table Name="dbo.LookupValues" Member="LookupValues">
-    <Type Name="LookupValue">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NameAr" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="NameEn" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="NameFr" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="LookupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LookValue" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="OrderNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Lookup_LookupValue" Member="Lookup" ThisKey="LookupId" OtherKey="Id" Type="Lookup" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Pages" Member="Pages">
@@ -167,32 +75,6 @@
       <Association Name="User_Carrier" Member="User" ThisKey="CustomerId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TestNumbers" Member="TestNumbers">
-    <Type Name="TestNumber">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="DeletedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="DeletionDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Source" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="PrefixId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CounterUsage" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SuccessfulAttempts" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="TestNumberGroup_TestNumber" Member="TestNumberGroup" ThisKey="GroupId" OtherKey="Id" Type="TestNumberGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ScheduleGroups" Member="ScheduleGroups">
-    <Type Name="ScheduleGroup">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="TestNumberGroup_ScheduleGroup" Member="TestNumberGroup" ThisKey="GroupId" OtherKey="Id" Type="TestNumberGroup" IsForeignKey="true" />
-      <Association Name="Schedule_ScheduleGroup" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
-    </Type>
-  </Table>
   <Table Name="dbo.[Log]" Member="Logs">
     <Type Name="Log">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
@@ -203,86 +85,6 @@
       <Column Name="Logger" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="Message" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="Exception" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.TestNumberGroups" Member="TestNumberGroups">
-    <Type Name="TestNumberGroup">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Code" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="TestNumberGroup_TestNumber" Member="TestNumbers" ThisKey="Id" OtherKey="GroupId" Type="TestNumber" />
-      <Association Name="TestNumberGroup_ScheduleGroup" Member="ScheduleGroups" ThisKey="Id" OtherKey="GroupId" Type="ScheduleGroup" />
-      <Association Name="TestNumberGroup_TestNumber1" Member="TestNumber1s" ThisKey="Id" OtherKey="GroupId" Type="TestNumber1" />
-    </Type>
-  </Table>
-  <Table Name="dbo.TestNumbers" Member="TestNumber1s">
-    <Type Name="TestNumber1">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="DeletedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="DeletionDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Source" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="PrefixId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CounterUsage" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SuccessfulAttempts" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="TestNumberGroup_TestNumber1" Member="TestNumberGroup" ThisKey="GroupId" OtherKey="Id" Type="TestNumberGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CallEntries" Member="CallEntries">
-    <Type Name="CallEntry">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Number" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="StatusId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Source" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="IsProcessed" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
-      <Column Name="SessionId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Cgpn" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ResponseCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ClientId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="CallEntry_CallEntryDetail" Member="CallEntryDetails" ThisKey="Id" OtherKey="CallEntriesId" Type="CallEntryDetail" />
-      <Association Name="CallEntryStatus_CallEntry" Member="CallEntryStatus" ThisKey="StatusId" OtherKey="Id" Type="CallEntryStatus" IsForeignKey="true" />
-      <Association Name="CallSession_CallEntry" Member="CallSession" ThisKey="SessionId" OtherKey="SessionId" Type="CallSession" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CDR" Member="CDRs">
-    <Type Name="CDR">
-      <Column Name="CDRID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IDonSwitch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="AttemptDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="AlertDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ConnectDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DisconnectDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DurationInSeconds" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IN_TRUNK" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="IN_CIRCUIT" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="IN_CARRIER" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="IN_IP" Type="System.String" DbType="VarChar(21)" CanBeNull="true" />
-      <Column Name="OUT_TRUNK" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="OUT_CIRCUIT" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="OUT_CARRIER" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="OUT_IP" Type="System.String" DbType="VarChar(21)" CanBeNull="true" />
-      <Column Name="CGPN" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="CDPN" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="CAUSE_FROM_RELEASE_CODE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="CAUSE_FROM" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="CAUSE_TO_RELEASE_CODE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="CAUSE_TO" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="Extra_Fields" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="IsRerouted" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
-      <Column Name="CDPNOut" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
-      <Column Name="SIP" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="UserID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="TransactionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RecievedCLI" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ClientId" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.SipAccounts" Member="SipAccounts">
@@ -307,7 +109,6 @@
       <Column Name="NetworkInterface" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Codecs" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="SipAccount_CallSession" Member="CallSessions" ThisKey="Id" OtherKey="SipAccountId" Type="CallSession" />
       <Association Name="SipAccount_Schedule" Member="Schedules" ThisKey="Id" OtherKey="SipAccountId" Type="Schedule" />
       <Association Name="SipAccount_GeneratedCall" Member="GeneratedCalls" ThisKey="Id" OtherKey="SipAccountId" Type="GeneratedCall" />
       <Association Name="User_SipAccount" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
@@ -322,7 +123,6 @@
       <Column Name="IsSuccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Notes" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="Frequency" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="ScheduleLog_CallGeneratorLogEntry" Member="CallGeneratorLogEntries" ThisKey="Id" OtherKey="ScheduleLogId" Type="CallGeneratorLogEntry" />
       <Association Name="Schedule_ScheduleLog" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
@@ -395,8 +195,8 @@
       <Column Name="Status" Type="System.Int32" CanBeNull="true" />
       <Column Name="Route" Type="System.String" CanBeNull="false" />
       <Column Name="ErrorMessage" Type="System.String" CanBeNull="false" />
-      <Column Member="PDD" Type="System.String" CanBeNull="false" />
-      <Column Member="Duration" Type="System.String" CanBeNull="false" />
+      <Column Name="PDD" Type="System.String" CanBeNull="false" />
+      <Column Name="Duration" Type="System.String" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.Operators" Member="Operators">
@@ -498,10 +298,6 @@
       <Column Name="RatioOfCalls" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SpecificTime1" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Association Name="Schedule_CallSession" Member="CallSessions" ThisKey="Id" OtherKey="ScheduleId" Type="CallSession" />
-      <Association Name="Schedule_ScheduleWeekDay" Member="ScheduleWeekDays" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleWeekDay" />
-      <Association Name="Schedule_ScheduleNumber" Member="ScheduleNumbers" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleNumber" />
-      <Association Name="Schedule_ScheduleGroup" Member="ScheduleGroups" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleGroup" />
       <Association Name="Schedule_ScheduleLog" Member="ScheduleLogs" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleLog" />
       <Association Name="Schedule_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleOperator" />
       <Association Name="Schedule_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="ScheduleId" Type="TestOperator" />

@@ -18,7 +18,6 @@ public partial class ManageUser : BasePage
 
         if (!IsPostBack)
         {
-            FillDropDownList();
             GetUser();
         }
     }
@@ -47,12 +46,6 @@ public partial class ManageUser : BasePage
         user.Guid = Guid.NewGuid().ToString();
         user.CreationDate = user.Id == 0 ? DateTime.Now : user.CreationDate;
         user.ParentId = Current.User.Id;
-        //int UnitId = 0;
-        //int.TryParse(ddlCompany.SelectedValue.Trim(), out UnitId);
-        //if (UnitId == 0)
-        //    user.CompanyId = null;
-        //else
-        //    user.CompanyId = UnitId;
 
         if (txtPassword.Text != "")
             user.Password = CommonWebComponents.SecureTextBox.GetHash(txtPassword.Text);
@@ -107,23 +100,8 @@ public partial class ManageUser : BasePage
                 txtMobile.Text = user.MobileNumber;
                 txtEmail.Text = user.Email;
                 txtUserName.Text = user.UserName;
-                //txtCallerId.Text = user.CallerId;
-                //txtIPSwitch.Text = user.IpSwitch;
-                //chkIsActive.Checked = user.IsActive.HasValue ? user.IsActive.Value : false;
-                //chkIsSuperAdmin.Checked = user.IsSuperAdmin.HasValue ? user.IsSuperAdmin.Value : false;
-                //ddlCompany.SelectedValue = user.CompanyId.ToString();
             }
         }
-    }
-    private void FillDropDownList()
-    {
-        //List<Company> companies = CompanyRepository.GetCompanies().OrderBy(l => l.Name).ToList();
-        //Company company = new Company { Id = 0, Name = "-- Select Company --" };
-        //companies.Insert(0, company);
-        //ddlCompany.DataTextField = "Name";
-        //ddlCompany.DataValueField = "Id";
-        //ddlCompany.DataSource = companies;
-        //ddlCompany.DataBind();
     }
     #endregion
 }

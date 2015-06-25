@@ -35,7 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -88,27 +87,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Repositories\AuditRepository.cs" />
-    <Compile Include="Repositories\CallEntryRepository.cs" />
-    <Compile Include="Repositories\CallGeneratorLogEntryRepository.cs" />
-    <Compile Include="Repositories\CallSessionRepository.cs" />
     <Compile Include="Repositories\CarrierRepository.cs" />
-    <Compile Include="Repositories\CDRRepository.cs" />
     <Compile Include="Repositories\ExceptionRepository.cs" />
     <Compile Include="Repositories\GeneratedCallRepository.cs" />
-    <Compile Include="Repositories\LookupRepository.cs" />
-    <Compile Include="Repositories\LookupValueRepository.cs" />
     <Compile Include="Repositories\MontyCallRepository.cs" />
     <Compile Include="Repositories\OperatorRepository.cs" />
     <Compile Include="Repositories\PhoneNumberRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
-    <Compile Include="Repositories\ScheduleGroupRepository.cs" />
     <Compile Include="Repositories\ScheduleLogRepository.cs" />
-    <Compile Include="Repositories\ScheduleNumberRepository.cs" />
     <Compile Include="Repositories\ScheduleOperatorRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="Repositories\SipAccountRepository.cs" />
-    <Compile Include="Repositories\TestNumberGroupRepository.cs" />
-    <Compile Include="Repositories\TestNumberRepository.cs" />
     <Compile Include="Repositories\TestOperatorRepository.cs" />
     <Compile Include="Repositories\UserBalanceRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
@@ -168,9 +157,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Reports\TestOperatorReport.rdlc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CLINumber" Class="CLINumberModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CLINumber;User ID=sa" SettingsObjectName="CLINumberLibrary.Properties.Settings" SettingsPropertyName="CLINumberConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.PhoneNumbers" Member="PhoneNumbers">
+    <Type Name="PhoneNumber">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LastCallDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Prefix" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="PhoneNumber_RequestCall" Member="RequestCalls" ThisKey="Id" OtherKey="PhoneNumberId" Type="RequestCall" />
+      <Association Name="Operator_PhoneNumber" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Exceptions" Member="Exceptions">
+    <Type Name="Exception">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(4000)" CanBeNull="true" />
+      <Column Name="Details" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExceptionDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Clients" Member="Clients">
+    <Type Name="Client">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Client_RequestCall" Member="RequestCalls" ThisKey="Id" OtherKey="ClientId" Type="RequestCall" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RequestCalls" Member="RequestCalls">
+    <Type Name="RequestCall">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ReleaseDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ClientId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PhoneNumberId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Client_RequestCall" Member="Client" ThisKey="ClientId" OtherKey="Id" Type="Client" IsForeignKey="true" />
+      <Association Name="PhoneNumber_RequestCall" Member="PhoneNumber" ThisKey="PhoneNumberId" OtherKey="Id" Type="PhoneNumber" IsForeignKey="true" />
+      <Association Name="Operator_RequestCall" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Operators" Member="Operators">
+    <Type Name="Operator">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="mcc" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="mnc" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Country" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CountryPicture" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="Operator_PhoneNumber" Member="PhoneNumbers" ThisKey="Id" OtherKey="OperatorId" Type="PhoneNumber" />
+      <Association Name="Operator_RequestCall" Member="RequestCalls" ThisKey="Id" OtherKey="OperatorId" Type="RequestCall" />
+    </Type>
+  </Table>
+  <Table Name="" Member="RequestCallHistories">
+    <Type Name="RequestCallHistory" Id="ID1">
+      <Column Name="RequestId" Type="System.Int32" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="ReleaseDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="Operator" Type="System.String" CanBeNull="true" />
+      <Column Name="Client" Type="System.String" CanBeNull="true" />
+      <Column Name="PhoneNumber" Type="System.String" CanBeNull="true" />
+      <Column Name="RowCount" Type="System.Int32" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.GetRequestCalls" Method="GetRequestCalls">
+    <Parameter Name="StartDate" Parameter="startDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="ReleaseDate" Parameter="releaseDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="OperatorId" Parameter="operatorId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID1" />
+  </Function>
+</Database>

@@ -138,59 +138,6 @@
                         <!--/span-->
                     </div>
                     <!--/row-->
-              <%--      <div class="row-fluid">
-                        <div class="span6 ">
-                            <div class="control-group">
-                                <label class="control-label" for="CallerID">
-                                    Caller ID</label>
-                                <div class="controls">
-                                    <asp:TextBox ID="txtCallerId" runat="server" CssClass="m-wrap span12" placeholder="CallerID"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtCallerId"
-                                          ErrorMessage="Caller Id Required" Display="Dynamic" Font-Bold="true"
-                                        ForeColor="Red">
-                                    </asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                        <div class="span6 ">
-                            <div class="control-group">
-                                <label class="control-label" for="CallerID">
-                                    IP Switch</label>
-                                <div class="controls">
-                                    <asp:TextBox ID="txtIPSwitch" runat="server" CssClass="m-wrap span12" placeholder="IP Switch"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtIPSwitch"
-                                          ErrorMessage="IP Switch Required" Display="Dynamic" Font-Bold="true"
-                                        ForeColor="Red">
-                                    </asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>--%>
-                    <!--/row-->
-<%--                    <div class="row-fluid">
-                        <div class="span6 ">
-                            <div class="control-group">
-                                <label class="control-label" for="firstName">
-                                    Active</label>
-                                <div class="controls">
-                                    <asp:CheckBox ID="chkIsActive" class="span6 m-wrap" runat="server" />
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                       <div class="span6">
-                            <div class="control-group">
-                                <label class="control-label" for="lastName">
-                                    Super Admin</label>
-                                <div class="controls">
-                                    <asp:CheckBox ID="chkIsSuperAdmin" class="span6 m-wrap" runat="server" />
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>--%>
                     <div class="form-actions">
                         <asp:Button runat="server" ID="btnSave" CssClass="btn blue" OnClick="btnSave_Click"
                               CausesValidation="true" Text="Save" />

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.5, 8.5" name="CLINumberModel">
+  <DataContextMoniker Name="/CLINumberModelDataContext" />
+  <nestedChildShapes>
+    <classShape Id="40282ff2-022c-4683-af5a-18dc4cc84b95" absoluteBounds="8, 3.25, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/CLINumberModelDataContext/PhoneNumber" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0ac33960-26e6-48c4-994d-1454ebdc2dba" absoluteBounds="8.015, 3.71, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e5336d63-a30c-4eaa-9c92-f3eb5bf9ffd8" absoluteBounds="5.25, 3.25, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/CLINumberModelDataContext/Exception" />
+      <nestedChildShapes>
+        <elementListCompartment Id="36e62a30-cfc1-423a-82ad-e21687f6e34a" absoluteBounds="5.265, 3.71, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2d4253fc-c7fe-4e50-805d-6caddfe975fc" absoluteBounds="5.375, 0.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/CLINumberModelDataContext/Client" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c822268f-5e2c-4a58-86c2-b9f4a1413619" absoluteBounds="5.3900000000000006, 1.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c76a52d9-750d-4ccb-a724-71cf1f5c79b9" absoluteBounds="9.25, 0.875, 2, 1.9631982421875">
+      <DataClassMoniker Name="/CLINumberModelDataContext/RequestCall" />
+      <nestedChildShapes>
+        <elementListCompartment Id="43597308-9216-4b74-b686-0a2acc29e8da" absoluteBounds="9.265, 1.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.375 : 1.56814697265625); (9.25 : 1.56814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/CLINumberModelDataContext/Client/Client_RequestCall" />
+      <nodes>
+        <classShapeMoniker Id="2d4253fc-c7fe-4e50-805d-6caddfe975fc" />
+        <classShapeMoniker Id="c76a52d9-750d-4ccb-a724-71cf1f5c79b9" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(9.625 : 3.25); (9.625 : 2.8381982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/CLINumberModelDataContext/PhoneNumber/PhoneNumber_RequestCall" />
+      <nodes>
+        <classShapeMoniker Id="40282ff2-022c-4683-af5a-18dc4cc84b95" />
+        <classShapeMoniker Id="c76a52d9-750d-4ccb-a724-71cf1f5c79b9" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="7e844303-c6d5-419f-89ca-f467a82093af" absoluteBounds="12.25, 3.75, 2, 1.9631982421875">
+      <DataClassMoniker Name="/CLINumberModelDataContext/Operator" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d759ce28-0cc3-449a-a1bb-17d2332c42d3" absoluteBounds="12.265, 4.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(12.25 : 4.57774983723958); (10 : 4.57774983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/CLINumberModelDataContext/Operator/Operator_PhoneNumber" />
+      <nodes>
+        <classShapeMoniker Id="7e844303-c6d5-419f-89ca-f467a82093af" />
+        <classShapeMoniker Id="40282ff2-022c-4683-af5a-18dc4cc84b95" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(13.25 : 3.75); (13.25 : 1.85659912109375); (11.25 : 1.85659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/CLINumberModelDataContext/Operator/Operator_RequestCall" />
+      <nodes>
+        <classShapeMoniker Id="7e844303-c6d5-419f-89ca-f467a82093af" />
+        <classShapeMoniker Id="c76a52d9-750d-4ccb-a724-71cf1f5c79b9" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="96280e5a-b2e5-4958-b705-0972f09c3cc2" absoluteBounds="1.25, 2.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/CLINumberModelDataContext/RequestCallHistory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b3a593c7-3092-4f81-b647-d6f0e58bb60b" absoluteBounds="1.265, 3.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

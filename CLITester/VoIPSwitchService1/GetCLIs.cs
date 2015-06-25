@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Configuration;
 using MySql.Data.MySqlClient;
+using VoIPSwitchService.PhoneNumberWebReference;
 
 namespace VoIPSwitchService
 {
@@ -121,15 +122,24 @@ namespace VoIPSwitchService
                                             }
                                             else
                                             {
-                                                new DataManager().GetData(lstTestOperators[i].CarrierPrefix.Length, generatedCall, (reader) =>
-                                                {
-                                                    if (reader.HasRows)
+                                                int ReqCallId = 0;
+                                                int.TryParse(montyCall.RequestId, out ReqCallId);
+
+                                                PhoneNumberService pp = new PhoneNumberService();
+                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                System.Threading.Thread.Sleep(1000);
+
+                                                //new DataManager().GetData(lstTestOperators[i].CarrierPrefix.Length, generatedCall, (reader) =>
+                                                //{
+                                                    
+                                                    if(ret.ErrorStatus != "-1")
+                                                    //if (reader.HasRows)
                                                     {
                                                         /// Result done (Delivered or Not delivered) => decrease the balance
                                                         ///
                                                         UserRepository.DecreaseBalance(lstTestOperators[i].User.Id);
                                                         ///
-                                                        if (reader.Read())
+                                                        //if (reader.Read())
                                                         {
                                                             lstTestOperators[i].EndDate = DateTime.Now;
                                                             string testcli = generatedCall.SipAccount.User.CallerId;
@@ -143,23 +153,24 @@ namespace VoIPSwitchService
                                                             }
                                                             else
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
-                                                            string RecCLi = reader[3].ToString();
+                                                            //string RecCLi = reader[3].ToString();
+                                                            string RecCLi = ret.ReceivedCLI;
 
                                                             ///Remove the 4 zeroes from the Cli received, if exist
-                                                            if (reader[3].ToString().Length > 4)
+                                                            if (ret.ReceivedCLI.ToString().Length > 4)
                                                             {
                                                                 if (RecCLi.Substring(0, 4) == "0000")
                                                                 {
-                                                                    int lenn = reader[3].ToString().Length;
+                                                                    int lenn = ret.ReceivedCLI.ToString().Length;
                                                                     lenn = lenn - 2;
-                                                                    lstTestOperators[i].ReceivedCli = reader[3].ToString().Substring(2, lenn);
+                                                                    lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString().Substring(2, lenn);
                                                                 }
                                                                 else
-                                                                    lstTestOperators[i].ReceivedCli = reader[3].ToString();
+                                                                    lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
                                                             }
                                                             else
                                                             {
-                                                                lstTestOperators[i].ReceivedCli = reader[3].ToString();
+                                                                lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
                                                             }
 
                                                             //Check without zeroes
@@ -282,7 +293,7 @@ namespace VoIPSwitchService
                                                         PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                         //h = true;
                                                     }
-                                                });
+                                                //});
                                             }  
                                         }
                                     }

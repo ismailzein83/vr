@@ -22,7 +22,6 @@ public class SearchTestOpHandler : IHttpHandler, System.Web.SessionState.IRequir
             return;
         }
 
-        //String dateFormat = "dd MMMM yyyy - HH:mm";
         String dateFormat = "dd MMMM yyyy";
         int iDisplayLength = int.Parse(context.Request["iDisplayLength"]);
         int iDisplayStart = int.Parse(context.Request["iDisplayStart"]);
@@ -57,8 +56,6 @@ public class SearchTestOpHandler : IHttpHandler, System.Web.SessionState.IRequir
         }
 
         List<TestOperatorHistory> data = TestOperatorRepository.GetTestOperatorHistory(startDate, endDate, operatorId, iDisplayStart, iDisplayLength);
-        //Current.TestOperatorHistoryReportData = data;
-        //context.Session["TestOperatorsHistory"] = data;
         
         int RowCount = data.Count > 0 ? data[0].RowCount.Value : 0;
 

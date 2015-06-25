@@ -17,7 +17,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CLITesterSite", "http://loc
 		SccProvider = "SAK"
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{ed9e2ece-db3a-41ee-8ebc-efae2175a8c3}|CallGeneratorLibrary.dll;"
+		ProjectReferences = "{ed9e2ece-db3a-41ee-8ebc-efae2175a8c3}|CallGeneratorLibrary.dll;{8bad2cbb-a3bd-4211-9032-327f7c71409a}|CLINumberLibrary.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_5248"
 		Debug.AspNetCompiler.PhysicalPath = "CLITesterSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_5248\"
@@ -54,9 +54,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoIPSwitchService", "VoIPSw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoIPSwitchTestApp", "VoIPSwitchTestApp\VoIPSwitchTestApp.csproj", "{6B206A63-20DC-4ACA-826B-A9E318F37F94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneNumbersService", "PhoneNumbersService\PhoneNumbersService.csproj", "{CF991A15-8D92-4695-BA61-3A02B1D60A40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLINumberLibrary", "CLINumberLibrary\CLINumberLibrary.csproj", "{8BAD2CBB-A3BD-4211-9032-327F7C71409A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneNumberServiceApp", "PhoneNumberServiceApp\PhoneNumberServiceApp.csproj", "{6A48BF67-D983-49BD-BFB4-452BA4E01419}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -101,6 +107,15 @@ Global
 		SccProjectUniqueName13 = VoIPSwitchTestApp\\VoIPSwitchTestApp.csproj
 		SccProjectName13 = VoIPSwitchTestApp
 		SccLocalPath13 = VoIPSwitchTestApp
+		SccProjectUniqueName14 = PhoneNumbersService\\PhoneNumbersService.csproj
+		SccProjectName14 = PhoneNumbersService
+		SccLocalPath14 = PhoneNumbersService
+		SccProjectUniqueName15 = CLINumberLibrary\\CLINumberLibrary.csproj
+		SccProjectName15 = CLINumberLibrary
+		SccLocalPath15 = CLINumberLibrary
+		SccProjectUniqueName16 = PhoneNumberServiceApp\\PhoneNumberServiceApp.csproj
+		SccProjectName16 = PhoneNumberServiceApp
+		SccLocalPath16 = PhoneNumberServiceApp
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +174,18 @@ Global
 		{6B206A63-20DC-4ACA-826B-A9E318F37F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B206A63-20DC-4ACA-826B-A9E318F37F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B206A63-20DC-4ACA-826B-A9E318F37F94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF991A15-8D92-4695-BA61-3A02B1D60A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF991A15-8D92-4695-BA61-3A02B1D60A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF991A15-8D92-4695-BA61-3A02B1D60A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF991A15-8D92-4695-BA61-3A02B1D60A40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BAD2CBB-A3BD-4211-9032-327F7C71409A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BAD2CBB-A3BD-4211-9032-327F7C71409A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BAD2CBB-A3BD-4211-9032-327F7C71409A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BAD2CBB-A3BD-4211-9032-327F7C71409A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A48BF67-D983-49BD-BFB4-452BA4E01419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A48BF67-D983-49BD-BFB4-452BA4E01419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A48BF67-D983-49BD-BFB4-452BA4E01419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A48BF67-D983-49BD-BFB4-452BA4E01419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -70,10 +70,10 @@
 
         </div>
         <div class="span2">
-            <a class="btn blue big" id="LnkAdd">Add <i class=" icon-plus "></i></a>
+            <a class="btn blue big" id="LnkAdd">Add <i class=" icon-plus"></i></a>
         </div>
         <div class="span2">
-            <a class="btn green big" data-toggle="modal" href="#responsive" onclick='editRow()' id="LinkTestCall1" >Start <i class="m-icon-big-swapright m-icon-white"></i></a>            
+            <a class="btn green big" data-toggle="modal" href="#responsive" id="LinkTestCall1" >Start <i class="m-icon-big-swapright m-icon-white"></i></a>            
         </div>
         <div class="span2">
             <a class="btn black big" id="LnkClear">Clear <i class=" icon-remove"></i></a>
@@ -88,8 +88,6 @@
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-weibo"></i>Manual Test Call</div>
                     <div class="tools">
-
-                        <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -101,8 +99,8 @@
                                 <th class="span1">Route</th>
                                 <th class="span3">Creation Date</th>
                                 <th class="span3">End Date</th>
-                                <th class="span3">PDD</th>
-                                <th class="span3">Duration</th>
+                                <th class="span1">PDD</th>
+                                <th class="span1">Duration</th>
                                 <th class="span2">Caller ID</th>
                                 <th class="span2">Received Cli</th>
                                 <th class="span2">Status</th>
@@ -234,21 +232,21 @@
                                  '<td class="hideTd">' + msg.idOp + '</td>' +
                                 '<td class="hideTd">' + msg.Operator + '</td>' +
                                 '<td class="hideTd">' + msg.CountryPic + '</td>' +
-                              '<td><img src=' + imgSrc + ' alt="" /> ' + msg.OperatorId + '</td>' +
-                              '<td>' + msg.phonePrefix + '</td>' +
-                              '<td>' + msg.Prefix + '</td>' +
-                              '<td>' + msg.CreationDate + '</td>' +
-                              '<td>' + msg.EndDate + '</td>' +
-                              '<td>' + msg.PDD + '</td>' +
-                              '<td>' + msg.Duration + '</td>' +
-                              '<td>' + msg.TestCli + '</td>' +
-                              '<td>' + msg.ReceivedCli + '</td>' +
-                              '<td><span class="label ' + statusClass + '  " >' + msg.Status + '</span></td>' +
-                              '<td>' + msg.ErrorMessage + '</td>' +
-                              '<td>' + progressImg + '</td>' +
-                              '<td class="hideTd">' + msg.Id + '</td>' +
-                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
-                              '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
+                                '<td><img src=' + imgSrc + ' alt="" /> ' + msg.OperatorId + '</td>' +
+                                '<td>' + msg.phonePrefix + '</td>' +
+                                '<td>' + msg.Prefix + '</td>' +
+                                '<td>' + msg.CreationDate + '</td>' +
+                                '<td>' + msg.EndDate + '</td>' +
+                                '<td>' + msg.PDD + '</td>' +
+                                '<td>' + msg.Duration + '</td>' +
+                                '<td>' + msg.TestCli + '</td>' +
+                                '<td>' + msg.ReceivedCli + '</td>' +
+                                '<td><span class="label ' + statusClass + '  " >' + msg.Status + '</span></td>' +
+                                '<td>' + msg.ErrorMessage + '</td>' +
+                                '<td>' + progressImg + '</td>' +
+                                '<td class="hideTd">' + msg.Id + '</td>' +
+                                '<td><a class="btn blue icn-only testCall"><i class="icon-repeat icon-white"></i></a></td>' +
+                                '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
         }
 
         var Clicked = false;
@@ -295,7 +293,10 @@
                                  '<td class="hideTd">' + res[1] + '</td>' +
                                   '<td class="hideTd">' + res[0] + '</td>' +
                               '<td><img src=' + imgSrc + ' alt="" /> ' + $('#selectOperator :selected').text() + '</td>' +
+                              '<td></td>' +
                               '<td>' + dl2 + '</td>' +
+                              '<td></td>' +
+                              '<td></td>' +
                               '<td></td>' +
                               '<td></td>' +
                               '<td></td>' +
@@ -440,8 +441,10 @@
 
             $('#myTable > tbody  > tr').each(function () {
 
+                //var op = $('td:first-child', $(this).parents('tr')).html();
+
                 var op = $('td:nth-child(2)', $(this)).html();
-                var prefix = $('td:nth-child(5)', $(this)).html();
+                var prefix = $('td:nth-child(6)', $(this)).html();
                 console.log("OP: " + op + " PRE: " + prefix);
 
                 if (typeof op === "undefined") {
@@ -459,9 +462,10 @@
         $('#myTable').delegate('a.testCall', 'click', function (e) {
 
             var opId = $('td:first-child', $(this).parents('tr')).html();
-            var prefix = $('td:nth-child(5)', $(this).parents('tr')).html();
+            var route = $('td:nth-child(6)', $(this).parents('tr')).html();
+            var opCode = $('td:nth-child(3)', $(this).parents('tr')).html();
             var opName = $('td:nth-child(4)', $(this).parents('tr')).html();
-            var country = $('td:nth-child(3)', $(this).parents('tr')).html();
+            var country = $('td:nth-child(2)', $(this).parents('tr')).html();
 
 
             var dl2 = $('select[name=selectPrefix]').val();
@@ -474,12 +478,14 @@
 
 
             $('#myTable > tbody').append('<tr>' +
-                                 '<td class="hideTd">0</td>' +
-                                  '<td class="hideTd">0</td>' +
-                                  '<td class="hideTd">' + country + '</td>' +
-                                 '<td class="hideTd">' + opId + '</td>' +
+                              '<td class="hideTd">' + opId + '</td>' +
+                              '<td class="hideTd">' + country + '</td>' +
+                              '<td class="hideTd">' + opCode + '</td>' +
                               '<td><img src=' + imgSrc + ' alt="" /> ' + opName + '</td>' +
-                              '<td>' + prefix + '</td>' +
+                              '<td></td>' +
+                              '<td>' + route + '</td>' +
+                              '<td></td>' +
+                              '<td></td>' +
                               '<td></td>' +
                               '<td></td>' +
                               '<td></td>' +
@@ -495,7 +501,7 @@
 
         $('#myTable').delegate('a.clearCall', 'click', function (e) {
 
-            var id = $('td:nth-child(12)', $(this).parents('tr')).html();
+            var id = $('td:nth-child(16)', $(this).parents('tr')).html();
             $(this).parents('tr').remove();
             rmvArrayElement(arrayRow, id);
         });

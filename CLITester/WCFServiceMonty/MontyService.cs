@@ -51,7 +51,7 @@ namespace WCFServiceMonty
 
                 //WriteToEventLog("3 Monty");
 
-                c.Start();
+               // c.Start();
 
                 //WriteToEventLog("4 Monty");
 

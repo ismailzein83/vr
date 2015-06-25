@@ -27,7 +27,6 @@ public partial class TestOperatorHistoryPrint : System.Web.UI.Page
                 return;
             }
 
-            //String dateFormat = "dd MMMM yyyy - HH:mm";
             String dateFormat = "dd MMMM yyyy";
 
             DateTime? startDate = null;

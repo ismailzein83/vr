@@ -448,9 +448,6 @@
            var dl2 = $("#selectOperator option:selected").text();
            
             var dl1 = $('select[name=selectOperator]').val();
-            console.log(dl2);
-            //var dl2 = $('select[name=selectOperator]').text();
-            //var res = dl1.split("~");
             $('#<%=hdnOperatorId.ClientID %>').val(dl1);
             $('#<%=hdnCountry.ClientID %>').val(dl2);
         }

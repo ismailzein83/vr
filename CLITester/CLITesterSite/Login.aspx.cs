@@ -48,16 +48,6 @@ public partial class Login : BasePage
                     action.ObjectId = user.Id;
                     action.ObjectType = "User";
                     action.UserId = user.Id;
-                    //System.Net.IPHostEntry ipHostEntries = System.Net.Dns.GetHostEntry(Environment.MachineName);
-                    //System.Net.IPAddress[] arrIpAddress = ipHostEntries.AddressList;
-                    //action.RemoteAddress = Request.ServerVariables["REMOTE_ADDR"];
-                    //action.IPAddress = arrIpAddress[arrIpAddress.Length - 1].ToString();
-                    //action.ComputerName = System.Net.Dns.GetHostEntry(Request.ServerVariables["remote_addr"]).HostName;
-
-                    //action.IPAddress = ActionClass.GetIPAddress();
-                    //action.RemoteAddress = ActionClass.GetRemoteAddress();
-                    //action.ComputerName = ActionClass.GetComputerName();
-                    //action.Description = Utilities.SerializeLINQtoXML<User>(user);
                     AuditRepository.Save(action);
 
                     if (backto.Value != "")
@@ -66,13 +56,7 @@ public partial class Login : BasePage
                         Response.Redirect(CallGeneratorLibrary.Utilities.Config.SiteUrl + "Default.aspx");
                 }
             }
-           // else
-               // JavaScriptAlert("Please check your entries");
         }
-     //   else
-      //  {
-     //       JavaScriptAlert("Check the username entered.");
-      //  }
     }
 
 

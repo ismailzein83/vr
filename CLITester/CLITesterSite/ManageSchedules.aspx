@@ -41,10 +41,6 @@
                     <div class="tools">
                         <asp:Button ID="btnSave" class="btn blue btn-large" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="return getSchedules();" />
                         <button class="btn " onclick="cancel();">Cancel</button>
-                        <%-- <a href="javascript:;" class="collapse"></a>
-                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                        <a href="javascript:;" class="reload"></a>
-                        <a href="javascript:;" class="remove"></a>--%>
                     </div>
                 </div>   
                 <div class="portlet-body" style="display: block;">
@@ -63,13 +59,6 @@
                                     <asp:TextBox ID="txtName" class="span6 m-wrap valStringR" data-required="1" runat="server"></asp:TextBox>
                                 </div>
                             </div>
-
-<%--                            <div class="control-group">
-                                <label class="control-label span2">Ratio<span class="required">*</span></label>
-                                <div class="controls">
-                                    <asp:TextBox ID="txtOccurs" onkeypress='return isNumber(event)' class="span6 m-wrap valDigits2" data-required="1" runat="server"></asp:TextBox>
-                                </div>
-                            </div>--%>
 
                             <div class="control-group">
                                 <label class="control-label span2">Date<span class="required">*</span></label>
@@ -177,8 +166,6 @@
                     <div class="caption"><i class="icon-reorder"></i>Schedules List</div>
                     <div class="actions">
                         <div class="btn-group span2">
-
-                            <%--<a class="btn green"  onclick="emptyFields()">Add New <i class="icon-plus"></i></a>--%>
                         </div>
                     </div>
                 </div>
@@ -246,11 +233,6 @@
                                         </td>
                                         <td class="center">
                                             <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + (((DateTime)Eval("SpecificTime")).ToString("HH:mm")) + "\""  %> , <%# "\"" + Eval("SpecificTime1") + "\""  %>  , <%#  "\"" + ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("OperatorPrefixId")  + "\""  %>  )'>Edit</a>
-                                            <%--                                            <a href="#" runat="server" onserverclick="btnEdit_Click" onclick="disableAddBtn(); emptyFields();">Edit33</a>
-
-                                            <asp:LinkButton ID="lnkEdit"
-                                                OnClick="btnEdit_Click" CommandArgument='<%# Eval("Id") %>' OnClientClick="disableAddBtn(); emptyFields();" runat="server">Edit</asp:LinkButton>--%>
-                                            
                                         </td>
                                         <td class="center">
                                             <asp:LinkButton class="delete" ID="lnkDelete" OnClientClick="return confirm('Are you sure you want to delete?');"
@@ -550,12 +532,12 @@
         var handleSelect2Modal = function () {
 
             function format(state) {
-                if (!state.id) return state.text; // optgroup
+                if (!state.id) return state.text;
                 return "<img class='flag' src='assets/img/flags/" + state.id.toLowerCase().split('~')[0] + ".png'/>&nbsp;&nbsp;" + state.text;
             }
 
             function format2(state) {
-                if (!state.id) return state.text; // optgroup
+                if (!state.id) return state.text; 
                 return state.text;
             }
 

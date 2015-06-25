@@ -30,20 +30,9 @@
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
     <div class="row-fluid">
-<%--        <div class="span3">
-            <select id="ddClientId" class="span10" tabindex="1">
-                <option value="">Select Operator</option>
-                <asp:Repeater ID="rptCarriers" runat="server">
-                    <ItemTemplate>
-                        <option value='<%# Eval("Id") %>'><%# Eval("Name")  == null ? "" : Eval("Name") %></option>
-                    </ItemTemplate>
-                </asp:Repeater>
-            </select>
-        </div>--%>
 
         <div class="span3">
             <div class="control-group">
-                <%--<label class="control-label">Operators List</label>--%>
                 <div class="controls controls-row">
                     <select class="span10 select2" tabindex="1" id="selectOperator" name="selectOperator">
                         <option value="aa">All</option>
@@ -62,11 +51,6 @@
 			    <input id="txtStartDate" class="m-wrap span8 m-ctrl-medium date-picker" placeholder="From" readonly size="16" type="text" value="" />
                 <span class="add-on"><i class="icon-calendar"></i></span>
 			</div>
-<%--       <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
-                <input id="txtStartDate" type="text" value="" placeholder="From" readonly class="m-wrap span8">
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>--%>
         </div>
 
         <div class="span3">
@@ -74,14 +58,9 @@
 			    <input id="txtEndDate" class="m-wrap span8 m-ctrl-medium date-picker" placeholder="To" readonly size="16" type="text" value="" />
                 <span class="add-on"><i class="icon-calendar"></i></span>
 			</div>
-<%--            <div class="input-append date form_advance_datetime span12" data-date="2012-12-21T15:25:00Z">
-                <input id="txtEndDate" type="text" value="" placeholder="To" readonly class="m-wrap span8">
-                <span class="add-on"><i class="icon-remove"></i></span>
-                <span class="add-on"><i class="icon-calendar"></i></span>
-            </div>--%>
         </div>
 
-        <div class="span2">
+        <div class="span3">
             <button id="btnSearch" type="button" class="btn green">
                 Search &nbsp; 
 				<i class="m-icon-swapright m-icon-white"></i>
@@ -96,11 +75,6 @@
                 Clear &nbsp; 
 				<i class="icon-remove"></i>
             </button>
-
-<%--            <a onclick="btnSave_Click" target="_blank">
-            <img src="./images/print.png" style="border: 0;" alt="Print" /></a>
-
-            <asp:Button ID="btnPrint" class="btn blue btn-large" runat="server" Text="Print" OnClick="btnSave_Click"  />--%>
         </div>
     </div>
 
@@ -113,29 +87,31 @@
                     <div class="actions">
                         <div class="btn-group">
                             <a class="btn" href="#" data-toggle="dropdown">Columns
-										<i class="icon-angle-down"></i>
+								<i class="icon-angle-down"></i>
                             </a>
                             <div id="sample_2_column_toggler" class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
                                 <label>
                                     <input type="checkbox" checked data-column="0">Name</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="1">Creation Date</label>
+                                    <input type="checkbox" checked data-column="1">Route</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="2">End Date</label>
+                                    <input type="checkbox" checked data-column="2">Creation Date</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="3">PDD</label>
+                                    <input type="checkbox" checked data-column="3">End Date</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="4">Duration</label>
+                                    <input type="checkbox" checked data-column="4">PDD</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="5">Schedule</label>
+                                    <input type="checkbox" checked data-column="5">Duration</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="6">Caller ID</label>
+                                    <input type="checkbox" checked data-column="6">Schedule</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="7">Received Cli</label>
+                                    <input type="checkbox" checked data-column="7">Caller ID</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="8">Status</label>
+                                    <input type="checkbox" checked data-column="8">Received Cli</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="9">Error Message</label>
+                                    <input type="checkbox" checked data-column="9">Status</label>
+                                <label>
+                                    <input type="checkbox" checked data-column="10">Error Message</label>
                             </div>
                         </div>
                     </div>

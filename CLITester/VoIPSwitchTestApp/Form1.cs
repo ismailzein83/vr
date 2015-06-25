@@ -37,7 +37,8 @@ namespace VoIPSwitchTestApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m.start();
+            thRequestForCalls.Start();
+            //m.start();
             //aTimer.Elapsed += OnTimedEvent;
             //aTimer.Enabled = true;
             //aTimer.Interval = 1000;

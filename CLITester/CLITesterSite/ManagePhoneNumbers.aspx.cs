@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using CallGeneratorLibrary.Utilities;
+using CLINumberLibrary;
 using System.Configuration;
 
 public partial class ManagePhoneNumbers : BasePage
@@ -17,9 +18,9 @@ public partial class ManagePhoneNumbers : BasePage
     {
         if (!Current.User.IsAuthenticated)
             Response.Redirect("Login.aspx");
-
-        List<Operator> lstOperators = new List<Operator>();
-        lstOperators = OperatorRepository.GetOperators();
+        
+        List<CLINumberLibrary.Operator> lstOperators = new List<CLINumberLibrary.Operator>();
+        lstOperators = CLINumberLibrary.OperatorRepository.GetOperators();
         rptOperators.DataSource = lstOperators;
         rptOperators.DataBind();
 
@@ -35,7 +36,7 @@ public partial class ManagePhoneNumbers : BasePage
     #region Methods
     private void GetData()
     {
-        List<PhoneNumber> lstPhoneNumbers = PhoneNumberRepository.GetPhoneNumbers().OrderByDescending(l => l.Id).ToList();
+        List<CLINumberLibrary.PhoneNumber> lstPhoneNumbers = CLINumberLibrary.PhoneNumberRepository.GetPhoneNumbers().OrderByDescending(l => l.Id).ToList();
         Session["PhoneNumbers"] = lstPhoneNumbers;
 
         rptPhones.DataSource = lstPhoneNumbers;
@@ -50,11 +51,11 @@ public partial class ManagePhoneNumbers : BasePage
         LinkButton lk = (LinkButton)sender;
         int id = 0;
         int.TryParse(lk.CommandArgument.ToString(), out id);
-        if (PhoneNumberRepository.Delete(id))
+        if (CLINumberLibrary.PhoneNumberRepository.Delete(id))
         {
             ActionLog action = new ActionLog();
             action.ObjectId = id;
-            action.ObjectType = "PhoneNumber";
+            action.ObjectType = "CLINumberLibrary.PhoneNumber";
             action.ActionType = (int)Enums.ActionType.Delete;
             AuditRepository.Save(action);
             GetData();
@@ -94,10 +95,10 @@ public partial class ManagePhoneNumbers : BasePage
             if(prefixNumber == "00")
                 phoneNumber = txtNumber.Text.Substring(2);
         }
-        PhoneNumber newPhoneNumber = new PhoneNumber();
+        CLINumberLibrary.PhoneNumber newPhoneNumber = new CLINumberLibrary.PhoneNumber();
 
         ActionLog action = new ActionLog();
-        action.ObjectType = "PhoneNumber";
+        action.ObjectType = "CLINumberLibrary.PhoneNumber";
 
         if (String.IsNullOrEmpty(HdnId.Value))
         {
@@ -108,7 +109,7 @@ public partial class ManagePhoneNumbers : BasePage
             int id = 0;
             if (Int32.TryParse(HdnId.Value, out id))
             {
-                newPhoneNumber = PhoneNumberRepository.Load(id);
+                newPhoneNumber = CLINumberLibrary.PhoneNumberRepository.Load(id);
                 if (newPhoneNumber == null) return;
                 action.ActionType = (int)Enums.ActionType.Modify;
             }
@@ -127,10 +128,10 @@ public partial class ManagePhoneNumbers : BasePage
             newPhoneNumber.CreationDate = DateTime.Now;
             newPhoneNumber.LastCallDate = DateTime.Now;
             newPhoneNumber.Status = 0;
-            PhoneNumberRepository.Save(newPhoneNumber);
+            CLINumberLibrary.PhoneNumberRepository.Save(newPhoneNumber);
 
             action.ObjectId = newPhoneNumber.Id;
-            action.Description = Utilities.SerializeLINQtoXML<PhoneNumber>(newPhoneNumber);
+            action.Description = Utilities.SerializeLINQtoXML<CLINumberLibrary.PhoneNumber>(newPhoneNumber);
             action.UserId = Current.User.User.Id;
             AuditRepository.Save(action);
         }

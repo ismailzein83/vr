@@ -79,9 +79,6 @@
                                 <th>
                                     Active
                                 </th>
-                                <%--<th>
-                                    Roles
-                                </th>--%>
                                 <th>
                                     Edit
                                 </th>
@@ -112,10 +109,6 @@
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("IsActive") %>'></asp:Label>
                                         </td>
-                                        <%--<td class="center">
-                                            <a href="ManageUserRoles.aspx?<%#  QueryStringModule.Encrypt("paId="+ Eval("Id") )%>">
-                                        Roles</a>
-                                        </td>--%>
                                         <td class="center">
                                             <a class="edit" href="ManageUser.aspx?<%#  QueryStringModule.Encrypt("mId="+ Eval("Id") )%>">
                                                 Edit</a>

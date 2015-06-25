@@ -97,30 +97,6 @@ public partial class ManageSchedules : BasePage
         }
     }
 
-    protected void btnEdit_Click(object sender, EventArgs e)
-    {
-       // txtName.Text = "Asdasdsad";
-        //runjQuery("ShowPopUpDialog();");
-
-        //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>disableAddBtn2();</script>", false);
-        //System.Web.UI.ScriptManager.RegisterStartupScript(this, this.GetType(), "disableAddBtn2", "<script type='text/javascript'>$('#addDiv').show();</script>", false);
-        //ClientScript.RegisterStartupScript(this.GetType(), "disableAddBtn2", "disableAddBtn2();", true);
-        //ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "disableAddBtn2", "disableAddBtn2();", true);
-        // Page.ClientScript.RegisterStartupScript(this.GetType(), "disableAddBtn2", "disableAddBtn2();", true);
-
-        //ScriptManager.RegisterStartupScript(this, GetType(), "disableAddBtn2", "disableAddBtn2();", true);
-
-        //ClientScript.RegisterStartupScript(GetType(), "hwa", "disableAddBtn2();", true);
-
-        // Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "disableAddBtn()", true);
-
-        //LinkButton lk = (LinkButton)sender;
-        //int id = 0;
-        //int.TryParse(lk.CommandArgument.ToString(), out id);
-        //Schedule s = ScheduleRepository.Load(id);
-        //txtName.Text = s.DisplayName;
-    }
-
     protected void btnDelete_Click(object sender, EventArgs e)
     {
         LinkButton lk = (LinkButton)sender;
@@ -270,18 +246,6 @@ public partial class ManageSchedules : BasePage
         if (ind1 > 0)
             Int32.TryParse(txtTime1.Value.Substring(ind1 + 1, 2).ToString(), out minutes1);
 
-        //int len = txtTime.Value.Length;
-
-        //string day = txtTime.Value.Substring(len - 2, 2);
-        //if (day == "PM")
-        //    if (hour != 12)
-        //        hour += 12;
-        //    else
-        //        hour = 11;
-        //else
-        //    if (hour == 12)
-        //        hour = 0;
-
         DateTime d = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minutes, 0);
         DateTime d1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour1, minutes1, 0);
 
@@ -422,33 +386,7 @@ public partial class ManageSchedules : BasePage
 
             ss.OccursEvery = maximumRatio;
             ScheduleRepository.Save(ss);
-
-            //SendEmail(Current.User.User);
             GetData();
-        }
-    }
-
-    private void SetActionPermission()
-    {
-        if (!Current.User.IsSuperAdministrator)
-        {
-            string currentPageName = Request.Path.Substring(Request.Path.LastIndexOf("/") + 1);
-            pagePermission = Current.User.GetRolePermissions(currentPageName);
-
-            if (pagePermission != null)
-            {
-                int canAddCount = 0;
-                canAddCount = pagePermission.Where(pp => pp.CanAdd.HasValue && pp.CanAdd.Value).Count();
-
-                int canDeleteCount = 0;
-                canDeleteCount = pagePermission.Where(pp => pp.CanDelete.HasValue && pp.CanDelete.Value).Count();
-
-                //btnNew.Visible = canAddCount > 0;
-                //dgForestCenters.MasterTableView.GetColumn("Delete").Display = canDeleteCount > 0;
-
-                ////btnNew.Visible = pagePermission.CanAdd.HasValue ? pagePermission.CanAdd.Value : false;
-                ////dgForestCenters.MasterTableView.GetColumn("Delete").Display = pagePermission.CanDelete.HasValue ? pagePermission.CanDelete.Value : false;
-            }
         }
     }
 

@@ -71,7 +71,6 @@
         </div>
         <div class="span2">
             <a class="btn green big" data-toggle="modal" href="#responsive" onclick='editRow()'>Test Call <i class="m-icon-big-swapright m-icon-white"></i></a>
-            <%--<a class="btn green" data-toggle="modal" href="#responsive" onclick='editRow()'>Add New <i class="icon-plus"></i></a>--%>
         </div>
         <div class="span3">
             <a class="btn black big" id="LnkClear">Clear <i class=" icon-remove "></i></a>
@@ -86,8 +85,6 @@
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-weibo"></i>Direct Test Call</div>
                     <div class="tools">
-
-                        <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -134,12 +131,6 @@
     </div>
 
     <div id="responsive" class="modal hide fade" tabindex="-1" data-width="160">
-<%--        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>
-                <asp:Label ID="lblTitle" runat="server" Text="Add New Test Call"></asp:Label></h3>
-
-        </div>--%>
         <div class="modal-body fade in">
             <div data-always-visible="1" data-rail-visible1="1">
 
@@ -149,8 +140,6 @@
                         <div class="portlet-title">
                             <div class="caption">Confirm Test Call</div>
                             <div class="tools">
-
-                                <%--<a class="btn mini black" id=""><i class=""></i> Clear</a>--%>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -351,8 +340,6 @@
                             });
 
                             request1.fail(function (xhr, ajaxOptions, thrownError) {
-                                //$('#divSuccess').css('visibility', 'hidden');
-                                //$('#divError').css('visibility', 'visible');
                                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                                 $('#<%=lblSuccess.ClientID %>').html('');
                                 resetTimer();
@@ -422,13 +409,13 @@
         $('#myTable').delegate('a.testCall', 'click', function (e) {
 
             var opId = $('td:first-child', $(this).parents('tr')).html();
-            var prefix = $('td:nth-child(3)', $(this).parents('tr')).html();
+            var prefix = $('td:nth-child(4)', $(this).parents('tr')).html();
             testCall(opId, prefix);
         });
 
         $('#myTable').delegate('a.clearCall', 'click', function (e) {
 
-            var id = $('td:nth-child(11)', $(this).parents('tr')).html();
+            var id = $('td:nth-child(14)', $(this).parents('tr')).html();
             $(this).parents('tr').remove();
             rmvArrayElement(arrayRow, id);
         });
@@ -436,12 +423,12 @@
         var handleSelect2Modal = function () {
 
             function format(state) {
-                if (!state.id) return state.text; // optgroup
+                if (!state.id) return state.text;
                 return "<img class='flag' src='assets/img/flags/" + state.id.toLowerCase().split('~')[0] + ".png'/>&nbsp;&nbsp;" + state.text;
             }
 
             function format2(state) {
-                if (!state.id) return state.text; // optgroup
+                if (!state.id) return state.text;
                 return state.text;
             }
 

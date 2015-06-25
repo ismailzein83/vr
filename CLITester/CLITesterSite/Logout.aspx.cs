@@ -26,9 +26,6 @@ public partial class Logout : System.Web.UI.Page
         u.LastLoginDate = Current.User.User.LastLoginDate;
         u.CreationDate = Current.User.User.CreationDate;
 
-        //string cacheName = "GeographicLookups";
-        //System.Web.HttpContext.Current.Cache[cacheName] = null;
-
         ActionLog action = new ActionLog();
         action.ActionType = (int)Enums.ActionType.Logout;
         action.Username = u.UserName;
@@ -36,16 +33,6 @@ public partial class Logout : System.Web.UI.Page
         action.ObjectId = u.Id;
         action.ObjectType = "User";
         action.UserId = u.Id;
-        //System.Net.IPHostEntry ipHostEntries = System.Net.Dns.GetHostEntry(Environment.MachineName);
-        //System.Net.IPAddress[] arrIpAddress = ipHostEntries.AddressList;
-        //action.RemoteAddress = Request.ServerVariables["REMOTE_ADDR"];
-        //action.IPAddress = arrIpAddress[arrIpAddress.Length - 1].ToString();
-        //action.ComputerName = System.Net.Dns.GetHostEntry(Request.ServerVariables["remote_addr"]).HostName;
-
-        //action.IPAddress = ActionClass.GetIPAddress();
-        //action.RemoteAddress = ActionClass.GetRemoteAddress();
-        //action.ComputerName = ActionClass.GetComputerName();
-        //action.Description = Utilities.SerializeLINQtoXML<User>(u);
         AuditRepository.Save(action);
 
         Current.User.Logout();

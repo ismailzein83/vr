@@ -21,21 +21,21 @@ namespace NewCallGenService
         private DateTime attemptDate = DateTime.MinValue;
         private int connectionId = 0;
         private int frequency = 0;
-        private CDR _cdr = new CDR();
+        //private CDR _cdr = new CDR();
         public delegate void EndingCallDelegate(CallService service);
         public event EndingCallDelegate EndingCall;
 
-        public CDR CDR
-        {
-            get
-            {
-                return _cdr;
-            }
-            set
-            {
-                _cdr = value;
-            }
-        }
+        //public CDR CDR
+        //{
+        //    get
+        //    {
+        //        return _cdr;
+        //    }
+        //    set
+        //    {
+        //        _cdr = value;
+        //    }
+        //}
 
         public int ConnectionId
         {

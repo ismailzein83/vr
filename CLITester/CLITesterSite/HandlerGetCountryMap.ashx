@@ -36,8 +36,6 @@ public class HandlerGetCountryMap : IHttpHandler, System.Web.SessionState.IRequi
     public void ProcessRequest (HttpContext context) {
         var jsonSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
         var jsonString = String.Empty;
-
-        //  System.Threading.Thread.Sleep(1000);
         
         if (!Current.getCurrentUser(context).IsAuthenticated)
         {
@@ -88,10 +86,6 @@ public class HandlerGetCountryMap : IHttpHandler, System.Web.SessionState.IRequi
                 
                 responseTestOpLs.Add(OMap);
             }
-
-            //responseTestOpLs.Add(new ResponseOutput() { Operator = "1" });
-            //responseTestOpLs.Add(new ResponseOutput() { Operator = "2" });
-            //responseTestOpLs.Add(new ResponseOutput() { Operator = "4" });
 
             context.Response.ContentType = "application/json";
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;

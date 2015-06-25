@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="RequestForCall">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mcc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mnc" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RequestForCallResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RequestForCallResult" type="tns:PhoneNumberReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PhoneNumberReturn">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RequestCallId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Number" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Prefix" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ReleaseCall">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReleaseCallResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ReleaseCallResult" type="tns:CallInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CallInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RequestCallId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReceivedCLI" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="PhoneNumberReturn" nillable="true" type="tns:PhoneNumberReturn" />
+      <s:element name="CallInfo" nillable="true" type="tns:CallInfo" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RequestForCallSoapIn">
+    <wsdl:part name="parameters" element="tns:RequestForCall" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallSoapOut">
+    <wsdl:part name="parameters" element="tns:RequestForCallResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallSoapIn">
+    <wsdl:part name="parameters" element="tns:ReleaseCall" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallSoapOut">
+    <wsdl:part name="parameters" element="tns:ReleaseCallResponse" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpGetIn">
+    <wsdl:part name="clientName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mcc" type="s:string" />
+    <wsdl:part name="mnc" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhoneNumberReturn" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallHttpGetIn">
+    <wsdl:part name="clientName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="requestId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallHttpGetOut">
+    <wsdl:part name="Body" element="tns:CallInfo" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpPostIn">
+    <wsdl:part name="clientName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mcc" type="s:string" />
+    <wsdl:part name="mnc" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RequestForCallHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhoneNumberReturn" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallHttpPostIn">
+    <wsdl:part name="clientName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="requestId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReleaseCallHttpPostOut">
+    <wsdl:part name="Body" element="tns:CallInfo" />
+  </wsdl:message>
+  <wsdl:portType name="PhoneNumberServiceSoap">
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallSoapIn" />
+      <wsdl:output message="tns:RequestForCallSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <wsdl:input message="tns:ReleaseCallSoapIn" />
+      <wsdl:output message="tns:ReleaseCallSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PhoneNumberServiceHttpGet">
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallHttpGetIn" />
+      <wsdl:output message="tns:RequestForCallHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <wsdl:input message="tns:ReleaseCallHttpGetIn" />
+      <wsdl:output message="tns:ReleaseCallHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PhoneNumberServiceHttpPost">
+    <wsdl:operation name="RequestForCall">
+      <wsdl:input message="tns:RequestForCallHttpPostIn" />
+      <wsdl:output message="tns:RequestForCallHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <wsdl:input message="tns:ReleaseCallHttpPostIn" />
+      <wsdl:output message="tns:ReleaseCallHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PhoneNumberServiceSoap" type="tns:PhoneNumberServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RequestForCall">
+      <soap:operation soapAction="http://tempuri.org/RequestForCall" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <soap:operation soapAction="http://tempuri.org/ReleaseCall" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PhoneNumberServiceSoap12" type="tns:PhoneNumberServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RequestForCall">
+      <soap12:operation soapAction="http://tempuri.org/RequestForCall" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <soap12:operation soapAction="http://tempuri.org/ReleaseCall" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PhoneNumberServiceHttpGet" type="tns:PhoneNumberServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="RequestForCall">
+      <http:operation location="/RequestForCall" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <http:operation location="/ReleaseCall" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PhoneNumberServiceHttpPost" type="tns:PhoneNumberServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="RequestForCall">
+      <http:operation location="/RequestForCall" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReleaseCall">
+      <http:operation location="/ReleaseCall" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PhoneNumberService">
+    <wsdl:port name="PhoneNumberServiceSoap" binding="tns:PhoneNumberServiceSoap">
+      <soap:address location="http://91.236.236.53/PhoneService/PhoneNumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PhoneNumberServiceSoap12" binding="tns:PhoneNumberServiceSoap12">
+      <soap12:address location="http://91.236.236.53/PhoneService/PhoneNumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PhoneNumberServiceHttpGet" binding="tns:PhoneNumberServiceHttpGet">
+      <http:address location="http://91.236.236.53/PhoneService/PhoneNumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PhoneNumberServiceHttpPost" binding="tns:PhoneNumberServiceHttpPost">
+      <http:address location="http://91.236.236.53/PhoneService/PhoneNumberService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

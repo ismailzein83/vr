@@ -108,7 +108,6 @@ public partial class ManageCarriers : BasePage
             else
             {
                 SetError("File should be saved as csv file");
-                //JavaScriptAlert("File should be saved as csv file");
             }
         }
     }
@@ -134,8 +133,6 @@ public partial class ManageCarriers : BasePage
             string d = "\r\n";
             data = data.Replace(d, ";");
 
-
-            //string[] entities = data.Split(new char[] { delimiter });
             string[] entities = data.Split(';');
 
             foreach (string entity in entities)

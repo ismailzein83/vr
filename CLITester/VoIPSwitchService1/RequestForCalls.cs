@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Net;
 using System.IO;
+using VoIPSwitchService.PhoneNumberWebReference;
 
 namespace VoIPSwitchService
 {
@@ -36,7 +37,7 @@ namespace VoIPSwitchService
                     try
                     {
                         CallGeneratorLibrary.Utilities.ScheduleManager.CLISchedule();
-                        PhoneNumberRepository.FreeAllLockedPhone();
+                        //PhoneNumberRepository.FreeAllLockedPhone();
 
 
                         List<TestOperator> lstTestOperators = TestOperatorRepository.GetMontyTestOperators();
@@ -47,9 +48,13 @@ namespace VoIPSwitchService
                                 OperatorId = testOperator.Id;
                                 //Check if the number is free or busy
 
-                                PhoneNumber phoneNumber = PhoneNumberRepository.GetFreePhoneNumber(testOperator.OperatorId.Value);
+                                PhoneNumberService pp = new PhoneNumberService();
+                                PhoneNumberReturn ret = pp.RequestForCall("sama", "sama", testOperator.Operator.mcc, testOperator.Operator.mnc);
+                                System.Threading.Thread.Sleep(1000);
+                                //PhoneNumber phoneNumber = PhoneNumberRepository.GetFreePhoneNumber(testOperator.OperatorId.Value);
 
-                                if (phoneNumber == null)
+                                if (ret.ErrorStatus == "-1")
+                                //if (phoneNumber == null)
                                 {
                                     TestOperator tOperator = TestOperatorRepository.Load(testOperator.Id);
                                     tOperator.ErrorMessage = "No Line Availables";
@@ -67,7 +72,8 @@ namespace VoIPSwitchService
 
                                     GeneratedCall generatedCall = new GeneratedCall()
                                     {
-                                        Number = String.Format("{0}{1}@{2}", testOperator.CarrierPrefix, phoneNumber.Number, testOperator.User.IpSwitch),
+                                        //Number = String.Format("{0}{1}@{2}", testOperator.CarrierPrefix, phoneNumber.Number, testOperator.User.IpSwitch),
+                                        Number = String.Format("{0}{1}@{2}", testOperator.CarrierPrefix, ret.Number, testOperator.User.IpSwitch),
                                         SipAccountId = sipAccount.Id
                                     };
                                     GeneratedCallRepository.Save(generatedCall);
@@ -78,8 +84,9 @@ namespace VoIPSwitchService
                                     MontyCall montyCall = new MontyCall()
                                     {
                                         TestOperatorId = testOperator.Id,
-                                        MSISDN = testOperator.CarrierPrefix + phoneNumber.Number,
+                                        MSISDN = testOperator.CarrierPrefix + ret.Number,
                                         CreationDate = DateTime.Now,
+                                        RequestId = ret.RequestCallId.ToString(),
                                         ReturnMessage = String.Empty,
                                         CallEntryId = newGeneratedCall.Id,
                                         ServiceId = (int)CallGeneratorLibrary.Utilities.Enums.Service.AndroidDevice
@@ -87,7 +94,7 @@ namespace VoIPSwitchService
                                     MontyCallRepository.Save(montyCall);
 
                                     TestOperator tOperator = TestOperatorRepository.Load(testOperator.Id);
-                                    tOperator.PhonePrefix = phoneNumber.Prefix;
+                                    tOperator.PhonePrefix = ret.Prefix;
                                     TestOperatorRepository.Save(tOperator);
                                 }
                             }

@@ -71,10 +71,6 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
 
             RequestTestCall resp = emplList[0];
 
-
-            String s = resp.id[0];
-
-            // List<RequestTestCall> resp = emplList;
             List<ResponseTestOperator> LstresponseTestOp = new List<ResponseTestOperator>();
 
             List<TestOperator> Lsttest = new List<TestOperator>();

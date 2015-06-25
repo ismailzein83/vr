@@ -33,6 +33,7 @@ namespace VoIPSwitchTestApp
 
                     try
                     {
+
                         CallGeneratorLibrary.Utilities.ScheduleManager.CLISchedule();
 
                         List<TestOperator> testoperators = TestOperatorRepository.GetMontyTestOperators();

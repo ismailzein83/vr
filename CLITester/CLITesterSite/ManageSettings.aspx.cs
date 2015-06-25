@@ -71,30 +71,6 @@ public partial class ManageSettings : BasePage
         txtPassword.Text = user.Password;
         txtCallerId.Text = user.DisplayName;
         txtServer.Text = user.Server;
-
-        //string encryptedquerystring = Request.QueryString["?qs"].Replace(" ", "+");
-        //string decryptedquerystring = QueryStringModule.Decrypt(encryptedquerystring);
-        //string[] QueryStringparameters = decryptedquerystring.Split(new char[] { '&' });
-        //string loanProductId = QueryStringparameters[0].Substring(QueryStringparameters[0].IndexOf("=") + 1);
-
-        //if (!string.IsNullOrEmpty(loanProductId))
-        //{
-        //    int id = 0;
-        //    int.TryParse(loanProductId, out id);
-
-        //    if (id > 0)
-        //    {
-        //        ViewState["SipAccountId"] = id;
-        //        SipAccount user = new SipAccount { Id = id };
-        //        user = SipAccountRepository.Load(user.Id);
-
-        //        txtUserName.Text = user.Username;
-        //        txtLogin.Text = user.Login;
-        //        txtPassword.Text = user.Password;
-        //        txtCallerId.Text = user.DisplayName;
-        //        txtServer.Text = user.Server;
-        //    }
-        //}
     }
     #endregion
 }

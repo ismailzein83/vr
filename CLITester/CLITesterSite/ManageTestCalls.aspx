@@ -88,17 +88,11 @@
                                 <th>End
                                 </th>
                                  <th>-
-                                </th>
-<%--                                 <th>Test Cli
-                                 </th>--%>
-                               
-                              
+                                </th>                             
                                  <th>MSISDN
                                 </th>
                                  <th>Received Cli
                                 </th>
-                                 <%--<th>AndroidDate
-                                </th>--%>
                                  <th>ReqID
                                 </th>
                                  <th>StartC
@@ -131,20 +125,12 @@
                                          <td>
                                             <asp:Label ID="Label3" runat="server" Text='<%# (Eval("CreationDate") != null && Eval("EndDate") != null) ? (((DateTime)Eval("EndDate") - (DateTime)Eval("CreationDate")).TotalSeconds).ToString("0") : "" %>'></asp:Label>
                                         </td>
-                                <%--        <td>
-                                            <asp:Label ID="Label3" runat="server" Text='<%# Eval("TestCli") %>'></asp:Label>
-                                        </td>--%>
-                                             <td>
+                                        <td>
                                             <asp:Label ID="Label7" runat="server" Text='<%# Eval("MSISDN")  == null ? "" : Eval("MSISDN") %>'></asp:Label>
                                         </td>
                                         <td>
                                             <asp:Label ID="Label4" runat="server" Text='<%# Eval("ReceivedCli") == null ? "" : Eval("ReceivedCli")  %>'></asp:Label>
                                         </td>
-                                  
-                                   
-                                       <%-- <td>
-                                            <asp:Label ID="Label8" runat="server" Text='<%# Eval("AndroidDate") %>'></asp:Label>
-                                        </td>--%>
                                         <td>
                                             <asp:Label ID="Label9" runat="server" Text='<%# Eval("RequestId") == null ? "" : Eval("RequestId") %>'></asp:Label>
                                         </td>
@@ -161,10 +147,6 @@
                                             <asp:Label ID="Label5" runat="server" Text='<%# Eval("ErrorMessage") %>'></asp:Label>
                                         </td>
                                     </tr>
-                                <%--    <tr class="odd gradeX">
-                                        <td></td>
-                                        <td colspan="11"><asp:Label ID="Label8" runat="server" Text='<%# Eval("ErrorMessage") %>'></asp:Label></td>
-                                    </tr>--%>
                                 </ItemTemplate>
                             </asp:Repeater>
                         </tbody>

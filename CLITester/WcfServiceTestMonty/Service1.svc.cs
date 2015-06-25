@@ -57,219 +57,219 @@ namespace WcfServiceTestMonty
             elog.WriteEntry(message);
         }
 
-        public void GetData()
-        {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter("D:\\CallDistributor\\CallDistributorMonty" + DateTime.Now.ToString("ddMMyyyyhhmm") + ".txt", true))
-                file.WriteLine("Start the Monty service");
-            WriteToEventLog("start distributor Monty");
+        //public void GetData()
+        //{
+        //    using (System.IO.StreamWriter file = new System.IO.StreamWriter("D:\\CallDistributor\\CallDistributorMonty" + DateTime.Now.ToString("ddMMyyyyhhmm") + ".txt", true))
+        //        file.WriteLine("Start the Monty service");
+        //    WriteToEventLog("start distributor Monty");
 
-            timer.Enabled = true;
-            timer.Interval = 180000;
+        //    timer.Enabled = true;
+        //    timer.Interval = 180000;
 
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.Enabled = true;
+        //    // Hook up the Elapsed event for the timer. 
+        //    aTimer.Elapsed += OnTimedEvent;
+        //    aTimer.Enabled = true;
 
-            int OpId = 0;
+        //    int OpId = 0;
 
-            string url = "http://93.89.95.9/mymonty/restApi/api.php?apiKey=b6c551b5a0673a3ca79dfb196827c739&method=getOperatorListCLI";
-            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(@url);
-            webRequest.Headers.Add(@"SOAP:Action");
-            webRequest.ContentType = "text/xml;charset=\"utf-8\"";
-            webRequest.Accept = "text/xml";
-            webRequest.Method = "POST";
+        //    string url = "http://93.89.95.9/mymonty/restApi/api.php?apiKey=b6c551b5a0673a3ca79dfb196827c739&method=getOperatorListCLI";
+        //    HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(@url);
+        //    webRequest.Headers.Add(@"SOAP:Action");
+        //    webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+        //    webRequest.Accept = "text/xml";
+        //    webRequest.Method = "POST";
 
-            // Get the list of Operators from Monty service => lstOperators /////////////////////////////////////
-            using (WebResponse response = webRequest.GetResponse())
-            {
-                using (StreamReader rd = new StreamReader(response.GetResponseStream()))
-                {
-                    string soapResult = rd.ReadToEnd();
+        //    // Get the list of Operators from Monty service => lstOperators /////////////////////////////////////
+        //    using (WebResponse response = webRequest.GetResponse())
+        //    {
+        //        using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+        //        {
+        //            string soapResult = rd.ReadToEnd();
 
-                    string result = soapResult.Substring(13, 4);
+        //            string result = soapResult.Substring(13, 4);
 
-                    if (result == "TRUE")
-                    {
-                        string message = soapResult.Substring(30);
+        //            if (result == "TRUE")
+        //            {
+        //                string message = soapResult.Substring(30);
 
-                        char[] delimiterChars = { '{', '}' };
-                        string[] words = message.Split(delimiterChars);
-                        foreach (string s in words)
-                        {
-                            if (s != "," && s != "")
-                            {
-                                MontyOperator op = new MontyOperator();
-                                char[] delimiterChars2 = { ',' };
-                                string[] words2 = s.Split(delimiterChars2);
+        //                char[] delimiterChars = { '{', '}' };
+        //                string[] words = message.Split(delimiterChars);
+        //                foreach (string s in words)
+        //                {
+        //                    if (s != "," && s != "")
+        //                    {
+        //                        MontyOperator op = new MontyOperator();
+        //                        char[] delimiterChars2 = { ',' };
+        //                        string[] words2 = s.Split(delimiterChars2);
 
-                                foreach (string s2 in words2)
-                                {
-                                    char[] delimiterChars3 = { ':' };
-                                    string[] words3 = s2.Split(delimiterChars3);
-                                    for (int i = 0; i < words3.Length; i++)
-                                    {
-                                        if (words3[i] == "\"MSISDN\"")
-                                            op.MSISDN = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
+        //                        foreach (string s2 in words2)
+        //                        {
+        //                            char[] delimiterChars3 = { ':' };
+        //                            string[] words3 = s2.Split(delimiterChars3);
+        //                            for (int i = 0; i < words3.Length; i++)
+        //                            {
+        //                                if (words3[i] == "\"MSISDN\"")
+        //                                    op.MSISDN = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
 
-                                        if (words3[i] == "\"mcc\"")
-                                            op.mcc = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
+        //                                if (words3[i] == "\"mcc\"")
+        //                                    op.mcc = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
 
-                                        if (words3[i] == "\"mnc\"")
-                                            op.mnc = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
+        //                                if (words3[i] == "\"mnc\"")
+        //                                    op.mnc = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
 
-                                        if (words3[i] == "\"operator_name\"")
-                                            op.operator_name = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
+        //                                if (words3[i] == "\"operator_name\"")
+        //                                    op.operator_name = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
 
-                                        if (words3[i] == "\"country_name\"")
-                                            op.country_name = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
+        //                                if (words3[i] == "\"country_name\"")
+        //                                    op.country_name = words3[i + 1].Substring(1, words3[i + 1].Length - 2);
 
-                                        i++;
-                                    }
-                                }
-                                if (op.country_name != null)
-                                {
-                                    OpId++;
-                                    op.OperatorId = OpId;
-                                    op.Name = op.operator_name + " - " + op.country_name;
-                                    lstOperators.Add(op);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        int len = soapResult.Length;
-                        string msg = soapResult.Substring(31);
-                        msg = msg.Substring(0, msg.Length - 3);
-                    }
-                }
-            }
-            /////////////////////////////////////////////////////////////////////////////
+        //                                i++;
+        //                            }
+        //                        }
+        //                        if (op.country_name != null)
+        //                        {
+        //                            OpId++;
+        //                            op.OperatorId = OpId;
+        //                            op.Name = op.operator_name + " - " + op.country_name;
+        //                            lstOperators.Add(op);
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                int len = soapResult.Length;
+        //                string msg = soapResult.Substring(31);
+        //                msg = msg.Substring(0, msg.Length - 3);
+        //            }
+        //        }
+        //    }
+        //    /////////////////////////////////////////////////////////////////////////////
 
 
-            List<TestOperator> testoperators = TestOperatorRepository.GetMontyTestOperators();
-            //messages.Add("testoperators Found: " + testoperators.Count);
+        //    List<TestOperator> testoperators = TestOperatorRepository.GetMontyTestOperators();
+        //    //messages.Add("testoperators Found: " + testoperators.Count);
 
-            foreach (TestOperator op in testoperators)
-            {
-                //messages.Add("OperatorId Found: " + op.OperatorId);
-                string MSISDN = "";
-                string RequestID = "";
-                List<CallEntry> LstEntries = new List<CallEntry>();
+        //    foreach (TestOperator op in testoperators)
+        //    {
+        //        //messages.Add("OperatorId Found: " + op.OperatorId);
+        //        string MSISDN = "";
+        //        string RequestID = "";
+        //        List<CallEntry> LstEntries = new List<CallEntry>();
 
-                foreach (MontyOperator MonOperator in lstOperators)
-                {
-                    int mcc = 0;
-                    int.TryParse(MonOperator.mcc, out mcc);
+        //        foreach (MontyOperator MonOperator in lstOperators)
+        //        {
+        //            int mcc = 0;
+        //            int.TryParse(MonOperator.mcc, out mcc);
 
-                    int mnc = 0;
-                    int.TryParse(MonOperator.mnc, out mnc);
+        //            int mnc = 0;
+        //            int.TryParse(MonOperator.mnc, out mnc);
 
-                    if ((op.Operator.mcc == MonOperator.mcc) && (op.Operator.mnc == MonOperator.mnc))
-                    {
-                        MSISDN = MonOperator.MSISDN;
-                        break;
-                    }
-                }
-                MontyCall montycall = new MontyCall();
-                montycall.TestOperatorId = op.Id;
-                montycall.MSISDN = MSISDN;
-                montycall.CreationDate = DateTime.Now;
-                MontyCallRepository.Save(montycall);
+        //            if ((op.Operator.mcc == MonOperator.mcc) && (op.Operator.mnc == MonOperator.mnc))
+        //            {
+        //                MSISDN = MonOperator.MSISDN;
+        //                break;
+        //            }
+        //        }
+        //        MontyCall montycall = new MontyCall();
+        //        montycall.TestOperatorId = op.Id;
+        //        montycall.MSISDN = MSISDN;
+        //        montycall.CreationDate = DateTime.Now;
+        //        MontyCallRepository.Save(montycall);
 
-                WriteToEventLog("montycall1: " + montycall.Id);
-                string msg = "";
-                //Get the request ID from Monty
-                string url2 = "http://93.89.95.9/mymonty/restApi/api.php?apiKey=b6c551b5a0673a3ca79dfb196827c739&method=testCLIRequest&mcc=" + op.Operator.mcc + "&mnc=" + op.Operator.mnc + "&testCLI=0096170713298";
-                HttpWebRequest webRequest2 = (HttpWebRequest)WebRequest.Create(@url2);
-                webRequest2.Headers.Add(@"SOAP:Action");
-                webRequest2.ContentType = "text/xml;charset=\"utf-8\"";
-                webRequest2.Accept = "text/xml";
-                webRequest2.Method = "POST";
-                CallEntry entry = new CallEntry();
-                using (WebResponse response = webRequest2.GetResponse())
-                {
-                    using (StreamReader rd = new StreamReader(response.GetResponseStream()))
-                    {
-                        string soapResult = rd.ReadToEnd();
+        //        WriteToEventLog("montycall1: " + montycall.Id);
+        //        string msg = "";
+        //        //Get the request ID from Monty
+        //        string url2 = "http://93.89.95.9/mymonty/restApi/api.php?apiKey=b6c551b5a0673a3ca79dfb196827c739&method=testCLIRequest&mcc=" + op.Operator.mcc + "&mnc=" + op.Operator.mnc + "&testCLI=0096170713298";
+        //        HttpWebRequest webRequest2 = (HttpWebRequest)WebRequest.Create(@url2);
+        //        webRequest2.Headers.Add(@"SOAP:Action");
+        //        webRequest2.ContentType = "text/xml;charset=\"utf-8\"";
+        //        webRequest2.Accept = "text/xml";
+        //        webRequest2.Method = "POST";
+        //        CallEntry entry = new CallEntry();
+        //        using (WebResponse response = webRequest2.GetResponse())
+        //        {
+        //            using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+        //            {
+        //                string soapResult = rd.ReadToEnd();
 
-                        string result = soapResult.Substring(13, 4);
+        //                string result = soapResult.Substring(13, 4);
                         
                         
-                        if (result == "TRUE")
-                        {
-                            string message = soapResult.Substring(30);
+        //                if (result == "TRUE")
+        //                {
+        //                    string message = soapResult.Substring(30);
 
-                            char[] delimiterChars = { '{', '}' };
-                            string[] words = message.Split(delimiterChars);
-                            foreach (string s in words)
-                            {
-                                if (s != "," && s != "")
-                                {
-                                    char[] delimiterChars2 = { ',' };
-                                    string[] words2 = s.Split(delimiterChars2);
+        //                    char[] delimiterChars = { '{', '}' };
+        //                    string[] words = message.Split(delimiterChars);
+        //                    foreach (string s in words)
+        //                    {
+        //                        if (s != "," && s != "")
+        //                        {
+        //                            char[] delimiterChars2 = { ',' };
+        //                            string[] words2 = s.Split(delimiterChars2);
 
-                                    foreach (string s2 in words2)
-                                    {
-                                        char[] delimiterChars3 = { ':' };
-                                        string[] words3 = s2.Split(delimiterChars3);
-                                        for (int i = 0; i < words3.Length; i++)
-                                        {
-                                            if (words3[i] == "\"RequestID\"")
-                                                RequestID = words3[i + 1];
-                                            i++;
-                                        }
-                                    }
-                                }
-                            }
+        //                            foreach (string s2 in words2)
+        //                            {
+        //                                char[] delimiterChars3 = { ':' };
+        //                                string[] words3 = s2.Split(delimiterChars3);
+        //                                for (int i = 0; i < words3.Length; i++)
+        //                                {
+        //                                    if (words3[i] == "\"RequestID\"")
+        //                                        RequestID = words3[i + 1];
+        //                                    i++;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
 
                             
-                            entry.Number = MSISDN;
-                            //entry.RequestId = RequestID;
-                            entry.StatusId = 1;
-                            LstEntries.Add(entry);
-                        }
-                        else
-                        {
-                            int len = soapResult.Length;
-                            msg = soapResult.Substring(31);
-                            msg = msg.Substring(0, msg.Length - 3);
-                            //((Master)this.Master).WriteError(msg);
-                            //break;
-                        }
-                        WriteToEventLog("montycall2: " + montycall.Id);
-                        MontyCall m = MontyCallRepository.Load(montycall.Id);
-                        m.RequestId = RequestID;
-                        m.ReturnMessage = msg;
-                        WriteToEventLog("m: " + m.Id);
-                        WriteToEventLog("RequestID: " + RequestID);
-                        WriteToEventLog("msg: " + msg);
-                        bool tr = MontyCallRepository.Save(m);
-                        WriteToEventLog("Monty save: " + tr.ToString());
-                    }
-                }
-                WriteToEventLog("Call session start");
-                CallEntry en = new CallEntry();
-                en.Number = "101";
-                //entry.RequestId = RequestID;
-                en.StatusId = 1;
-                LstEntries.Add(entry);
+        //                    entry.Number = MSISDN;
+        //                    //entry.RequestId = RequestID;
+        //                    entry.StatusId = 1;
+        //                    LstEntries.Add(entry);
+        //                }
+        //                else
+        //                {
+        //                    int len = soapResult.Length;
+        //                    msg = soapResult.Substring(31);
+        //                    msg = msg.Substring(0, msg.Length - 3);
+        //                    //((Master)this.Master).WriteError(msg);
+        //                    //break;
+        //                }
+        //                WriteToEventLog("montycall2: " + montycall.Id);
+        //                MontyCall m = MontyCallRepository.Load(montycall.Id);
+        //                m.RequestId = RequestID;
+        //                m.ReturnMessage = msg;
+        //                WriteToEventLog("m: " + m.Id);
+        //                WriteToEventLog("RequestID: " + RequestID);
+        //                WriteToEventLog("msg: " + msg);
+        //                bool tr = MontyCallRepository.Save(m);
+        //                WriteToEventLog("Monty save: " + tr.ToString());
+        //            }
+        //        }
+        //        WriteToEventLog("Call session start");
+        //        CallEntry en = new CallEntry();
+        //        en.Number = "101";
+        //        //entry.RequestId = RequestID;
+        //        en.StatusId = 1;
+        //        LstEntries.Add(entry);
 
-                string sessionId = CallSessionRepository.AddNumbers(LstEntries, "CallerIDD0");
-                WriteToEventLog("sessionId " + sessionId);
-                bool h = false;
+        //        string sessionId = CallSessionRepository.AddNumbers(LstEntries, "CallerIDD0");
+        //        WriteToEventLog("sessionId " + sessionId);
+        //        bool h = false;
 
-                //Wait the call generator service to do the call
-                while (h == false && msg != "")
-                {
-                    //Check the call entries
-                    if(CallSessionRepository.GetCallSession(sessionId).EndDate != null)
-                    {
-                        h = true;
-                    }
-                }
-            }
-        }
+        //        //Wait the call generator service to do the call
+        //        while (h == false && msg != "")
+        //        {
+        //            //Check the call entries
+        //            if(CallSessionRepository.GetCallSession(sessionId).EndDate != null)
+        //            {
+        //                h = true;
+        //            }
+        //        }
+        //    }
+        //}
     }
       
     
