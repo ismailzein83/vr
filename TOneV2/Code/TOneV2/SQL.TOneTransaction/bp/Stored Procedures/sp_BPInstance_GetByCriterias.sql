@@ -23,8 +23,8 @@ BEGIN
       ,[CreatedTime]
       ,[StatusUpdatedTime]
 	FROM bp.[BPInstance] as bps WITH(NOLOCK)
-	WHERE (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM [bp].[ParseStringList](@ArrStatus) ) ) and 
-	(@ArrDefinitionID is NULL or  bps.DefinitionID in (SELECT ParsedString FROM [bp].[ParseStringList](@ArrDefinitionID) ) ) and 
+	WHERE (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 
+	(@ArrDefinitionID is NULL or  bps.DefinitionID in (SELECT ParsedString FROM ParseStringList(@ArrDefinitionID) ) ) and 
 	bps.CreatedTime BETWEEN  @DateFrom and @DateTo
 	ORDER BY CreatedTime
 END

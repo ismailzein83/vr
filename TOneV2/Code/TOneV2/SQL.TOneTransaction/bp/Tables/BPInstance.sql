@@ -11,9 +11,12 @@
     [RetryCount]         INT              NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
+    [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID])
+    CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID]) ON DELETE CASCADE
 );
+
+
 
 
 

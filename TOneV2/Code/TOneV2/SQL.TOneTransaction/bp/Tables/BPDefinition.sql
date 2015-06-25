@@ -5,8 +5,11 @@
     [FQTN]        VARCHAR (1000) NOT NULL,
     [Config]      NVARCHAR (MAX) NOT NULL,
     [CreatedTime] DATETIME       CONSTRAINT [DF_BPDefinition_CreatedTime] DEFAULT (getdate()) NULL,
+    [timestamp]   ROWVERSION     NULL,
     CONSTRAINT [PK_BPDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
