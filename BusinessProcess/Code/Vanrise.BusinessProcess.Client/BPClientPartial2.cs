@@ -36,7 +36,7 @@ namespace Vanrise.BusinessProcess.Client
             Task t = new Task(() =>
             {
                 BPClient bpClient3 = new BPClient();
-                bpClient3.CreateNewProcess(new CreateProcessInput { ProcessName = processName, InputArguments = inputArguments });
+                bpClient3.CreateNewProcess(new CreateProcessInput { InputArguments = inputArguments as BaseProcessInputArgument });
             });
             t.ContinueWith((tt) =>
             {
