@@ -152,13 +152,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         angular.forEach(response, function (value, key,itm) {
             value.color = $scope.colors[key % $scope.colors.length];
             value.keyclass = key % 16;
-           
         });
-        for (var i = 0; i < response.length; i++) {
-            if (response[i].Type == MenuItemTypeEnum.Dynamic)
-                response[i].Location += "/{viewId=" + response[i].Id + "}";
-           // console.log(response[i]);
-        }
         $scope.menuItems = response;
     })
 
