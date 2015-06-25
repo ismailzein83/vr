@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
     <Compile Include="IRunningProcessDataManager.cs" />
+    <Compile Include="ISchedulerTaskActionTypeDataManager.cs" />
     <Compile Include="ISchedulerTaskDataManager.cs" />
     <Compile Include="ISchedulerTaskTriggerTypeDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

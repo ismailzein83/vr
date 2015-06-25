@@ -18,5 +18,9 @@ namespace Vanrise.Runtime.Entities
 
         public SchedulerTaskTrigger TaskTrigger { get; set; }
 
+        public int ActionTypeId { get; set; }
+
+        public SchedulerTaskAction TaskAction { get; set; }
+
     }
 }

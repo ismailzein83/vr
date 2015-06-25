@@ -32,7 +32,8 @@ namespace Vanrise.Runtime.Data.SQL
             object taskId;
 
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Insert", out taskId, taskObject.Name, 
-                taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger));
+                taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
+                taskObject.ActionTypeId, Common.Serializer.Serialize(taskObject.TaskAction));
             insertedId = (int)taskId;
             return (recordesEffected > 0);
         }
@@ -40,7 +41,8 @@ namespace Vanrise.Runtime.Data.SQL
         public bool UpdateTask(Entities.SchedulerTask taskObject)
         {
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Update", taskObject.TaskId, taskObject.Name,
-                taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger));
+                taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
+                taskObject.ActionTypeId, Common.Serializer.Serialize(taskObject.TaskAction));
             return (recordesEffected > 0);
         }
         
@@ -53,7 +55,9 @@ namespace Vanrise.Runtime.Data.SQL
                 Name = reader["Name"] as string,
                 IsEnabled = bool.Parse(reader["IsEnabled"].ToString()),
                 TriggerTypeId = (int)reader["TriggerTypeId"],
-                TaskTrigger = Common.Serializer.Deserialize<SchedulerTaskTrigger>(reader["TaskTrigger"] as string)
+                TaskTrigger = Common.Serializer.Deserialize<SchedulerTaskTrigger>(reader["TaskTrigger"] as string),
+                ActionTypeId = (int)reader["ActionTypeId"],
+                TaskAction = Common.Serializer.Deserialize<SchedulerTaskAction>(reader["TaskAction"] as string)
             };
             return task;
         }

@@ -8,6 +8,8 @@ namespace Vanrise.Runtime.Entities
 {
     public class TimeSchedulerTaskTrigger : SchedulerTaskTrigger
     {
+        public DateTime DateToRun { get; set; }
+
         public string TimeToRun { get; set; }
 
         public override bool CheckIfTimeToRun()

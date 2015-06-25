@@ -33,6 +33,13 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.GetSchedulerTaskTriggerTypes();
         }
 
+        [HttpGet]
+        public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.GetSchedulerTaskActionTypes();
+        }
+
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
         {

@@ -1,5 +1,9 @@
 ﻿<div ng-controller="Runtime_TimeTriggerTemplateController">
     <vr-row>
-        <vr-textbox value="timeToRun" label="Run Daily at: "></vr-textbox>
+        <vr-datetimepicker type="date" value="dateToRun" label="Run at:"></vr-datetimepicker>
     </vr-row>
+    <vr-row>
+        <vr-textbox value="timeToRun"></vr-textbox>
+    </vr-row>
+
 </div>

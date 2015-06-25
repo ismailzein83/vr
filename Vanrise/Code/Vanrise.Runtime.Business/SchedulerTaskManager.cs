@@ -29,6 +29,12 @@ namespace Vanrise.Runtime.Business
             return datamanager.GetAll();
         }
 
+        public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
+        {
+            ISchedulerTaskActionTypeDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskActionTypeDataManager>();
+            return datamanager.GetAll();
+        }
+
         public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
         {
             InsertOperationOutput<SchedulerTask> insertOperationOutput = new InsertOperationOutput<SchedulerTask>();

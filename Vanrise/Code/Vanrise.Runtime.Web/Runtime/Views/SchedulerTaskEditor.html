@@ -1,11 +1,11 @@
 ﻿<div vr-modalcontent ng-controller="Runtime_SchedulerTaskEditorController">
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formSchedulerTaskEditor">
-                <vr-choices selectedindex="0">
-                    <vr-choice isselected="taskDefintionSelected">Task Definition</vr-choice>
-                    <vr-choice isselected="triggerSettignsSelected">Trigger</vr-choice>
-                    <vr-choice isselected="actionSettingsSelected">Action</vr-choice>
-                </vr-choices>
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="taskDefintionSelected">Task Definition</vr-choice>
+                <vr-choice isselected="triggerSettignsSelected">Trigger</vr-choice>
+                <vr-choice isselected="actionSettingsSelected">Action</vr-choice>
+            </vr-choices>
             <div ng-show="taskDefintionSelected">
                 <vr-row>
                     <vr-columns width="1/2row">
@@ -29,7 +29,15 @@
 
             </div>
             <div ng-show="actionSettingsSelected">
-                <p>Action</p>
+                <vr-row>
+                    <vr-column colmun="6">
+                        <vr-select datatextfield="Name" datavaluefield="ActionTypeId"
+                                   datasource="actionTypes" selectedvalues="selectedActionType"></vr-select>
+                    </vr-column>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="selectedActionType.Info.URL"></div>
+                </vr-row>
             </div>
         </vr-form>
     </vr-modalbody>

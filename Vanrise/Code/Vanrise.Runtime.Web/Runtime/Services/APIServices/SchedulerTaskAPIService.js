@@ -4,6 +4,7 @@
         GetFilteredTasks: GetFilteredTasks,
         GetTask: GetTask,
         GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
+        GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
         AddTask: AddTask,
         UpdateTask: UpdateTask
     });
@@ -28,6 +29,10 @@
 
     function GetSchedulerTaskTriggerTypes() {
         return BaseAPIService.get("/api/SchedulerTask/GetSchedulerTaskTriggerTypes");
+    }
+
+    function GetSchedulerTaskActionTypes() {
+        return BaseAPIService.get("/api/SchedulerTask/GetSchedulerTaskActionTypes");
     }
 
     function AddTask(task) {

@@ -35,6 +35,9 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
 
         $scope.triggerTypes = [];
         $scope.schedulerTaskTrigger = {};
+
+        $scope.actionTypes = [];
+        $scope.schedulerTaskAction = {};
     }
 
     function load() {
@@ -75,10 +78,12 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
     }
 
     function loadActions() {
-
+        return SchedulerTaskAPIService.GetSchedulerTaskActionTypes().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.actionTypes.push(item);
+            });
+        });
     }
-
-    
 
     function buildTaskObjFromScope() {
 
@@ -87,7 +92,9 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
             Name: $scope.name,
             IsEnabled: $scope.isEnabled,
             TriggerTypeId: $scope.selectedTriggerType.TriggerTypeId,
-            TaskTrigger: $scope.schedulerTaskTrigger.getData()
+            TaskTrigger: $scope.schedulerTaskTrigger.getData(),
+            ActionTypeId: $scope.selectedActionType.ActionTypeId,
+            TaskAction: $scope.schedulerTaskAction.getData()
         };
         return taskObject;
     }
@@ -96,7 +103,9 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
         $scope.name = taskObject.Name;
         $scope.isEnabled = taskObject.IsEnabled;
         $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
+        $scope.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
         $scope.schedulerTaskTrigger.data = taskObject.TaskTrigger;
+        $scope.schedulerTaskAction.data = taskObject.TaskAction;
     }
 
     function insertTask() {
