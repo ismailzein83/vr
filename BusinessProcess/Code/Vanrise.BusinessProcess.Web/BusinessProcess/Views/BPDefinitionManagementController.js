@@ -2,9 +2,8 @@
 
 function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRModalService) {
 
-  
     "use strict";
-
+    setInterval(function () { $scope.searchClicked() }, 10000);
     var mainGridAPI;
     
 
@@ -33,9 +32,7 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
 
 
     function getData() {
-
         var pageInfo = mainGridAPI.getPageInfo();
-
         
         var title = $scope.title != undefined ? $scope.title : '';
       
@@ -62,7 +59,6 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
                 });
             });
         });
-        //console.log($scope.filteredDefinitions)
     }
 
     function defineGrid() {
