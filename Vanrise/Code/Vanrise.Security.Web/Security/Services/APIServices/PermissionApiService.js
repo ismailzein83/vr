@@ -24,11 +24,8 @@
             });
     }
 
-    function GetEffectivePermissions(token) {
-        return BaseAPIService.get("/api/Permission/GetEffectivePermissions",
-            {
-                token: token
-            });
+    function GetEffectivePermissions() {
+        return BaseAPIService.get("/api/Permission/GetEffectivePermissions");
     }
 
     function DeletePermission(holderType, holderId, entityType, entityId) {

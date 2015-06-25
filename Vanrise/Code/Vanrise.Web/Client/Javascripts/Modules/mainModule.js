@@ -11,7 +11,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         window.location.href = '/Security/Login';
     }
 
-    PermissionAPIService.GetEffectivePermissions(cookieUserToken).then(function (response) {
+    PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
     }
     );

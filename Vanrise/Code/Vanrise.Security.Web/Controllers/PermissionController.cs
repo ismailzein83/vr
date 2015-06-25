@@ -25,10 +25,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        public PermissionResultWrapper GetEffectivePermissions(string token)
+        public PermissionResultWrapper GetEffectivePermissions()
         {
             PermissionManager manager = new PermissionManager();
-            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(token);
+            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(SecurityContext.GetSecurityToken());
 
             List<PermissionResult> permissionResults = new List<PermissionResult>();
 

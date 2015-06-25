@@ -16,7 +16,7 @@ namespace Vanrise.Security.Business
             User user = dataManager.GetUserbyEmail(email);
 
             AuthenticationToken result = new AuthenticationToken();
-            result.TokenName = "Auth-Token";
+            result.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
             result.Token = null;
             result.UserDisplayName = email;
 

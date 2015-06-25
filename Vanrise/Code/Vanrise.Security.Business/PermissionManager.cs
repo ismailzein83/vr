@@ -103,9 +103,8 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public EffectivePermissionsWrapper GetEffectivePermissions(string token)
+        public EffectivePermissionsWrapper GetEffectivePermissions(SecurityToken secToken)
         {
-            SecurityToken secToken = Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
             RoleManager roleManager = new RoleManager();
             List<int> groups = roleManager.GetUserRoles(secToken.UserId);
 
