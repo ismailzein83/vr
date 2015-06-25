@@ -1193,10 +1193,9 @@ input.ui-grid-filter-input[type="text"] {
     color: #959595;
     padding:5px;
 }
-.collapsed {    
+.collapsed-clock {    
     bottom: 80px;
     left: -80px;
-
     /* Safari */
     -webkit-transform: rotate(-90deg);
     /* Firefox */
