@@ -47,11 +47,11 @@ namespace Vanrise.Security.Business
             for (int i = 0; i < views.Count; i++)
             {
                 if (views[i].Type == ViewType.Dynamic)
-                    views[i].Url =string.Format(@"{0}/{1}viewId={2}{3}",views[i].Url,"{",views[i].ViewId,"}");
+                    views[i].Url =string.Format("{0}/{{\"viewId\":\"{1}\"}}",views[i].Url,views[i].ViewId);
             }
             return views;
 
-        }
+        } 
 
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
