@@ -1,6 +1,6 @@
-﻿SchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿SchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, VRModalService, VRNotificationService, VRNavigationService) {
+function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
 
     var editMode;
     loadParameters();
@@ -33,24 +33,26 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, VRModalS
             $scope.modalContext.closeModal()
         };
 
-        //$scope.optionsUsers = {
-        //    selectedvalues: [],
-        //    datasource: []
-        //};
+        $scope.triggerTypes = [];
+        $scope.schedulerTaskTrigger = {};
     }
 
     function load() {
-        //UsersAPIService.GetUsers().then(function (response) {
-        //    $scope.optionsUsers.datasource = response;
 
-        //});
+        $scope.isGettingData = true;
+        UtilsService.waitMultipleAsyncOperations([loadTriggers, loadActions]).finally(function () {
 
-        if (editMode) {
-            $scope.isGettingData = true;
-            getTask().finally(function () {
-                $scope.isGettingData = false;
-            })
-        }
+            if (editMode) {
+                getTask();
+            }
+
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function () {
+            $scope.isGettingData = false;
+        });
+
+        
     }
 
     function getTask() {
@@ -63,13 +65,29 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, VRModalS
             });
     }
 
+    function loadTriggers()
+    {
+        return SchedulerTaskAPIService.GetSchedulerTaskTriggerTypes().then(function (response) {
+            angular.forEach(response, function (item) {
+                $scope.triggerTypes.push(item);
+            });
+        });
+    }
 
+    function loadActions() {
+
+    }
+
+    
 
     function buildTaskObjFromScope() {
+
         var taskObject = {
-            taskId: ($scope.taskId != null) ? $scope.taskId : 0,
-            name: $scope.name,
-            isEnabled: $scope.isEnabled
+            TaskId: ($scope.taskId != null) ? $scope.taskId : 0,
+            Name: $scope.name,
+            IsEnabled: $scope.isEnabled,
+            TriggerTypeId: $scope.selectedTriggerType.TriggerTypeId,
+            TaskTrigger: $scope.schedulerTaskTrigger.getData()
         };
         return taskObject;
     }
@@ -77,6 +95,8 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, VRModalS
     function fillScopeFromTaskObj(taskObject) {
         $scope.name = taskObject.Name;
         $scope.isEnabled = taskObject.IsEnabled;
+        $scope.selectedTriggerType = UtilsService.getItemByVal($scope.triggerTypes, taskObject.TriggerTypeId, "TriggerTypeId");
+        $scope.schedulerTaskTrigger.data = taskObject.TaskTrigger;
     }
 
     function insertTask() {

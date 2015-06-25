@@ -46,6 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunningProcessInfo.cs" />
     <Compile Include="SchedulerTask.cs" />
+    <Compile Include="SchedulerTaskTrigger.cs" />
+    <Compile Include="SchedulerTaskTriggerType.cs" />
+    <Compile Include="TimeSchedulerTaskTrigger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

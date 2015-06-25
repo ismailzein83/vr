@@ -2,22 +2,31 @@
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formSchedulerTaskEditor">
                 <vr-choices selectedindex="0">
-                    <vr-choice isselected="taskDefintionSelected">Setting</vr-choice>
-                    <vr-choice isselected="triggerSettignsSelected">Designing</vr-choice>
-                    <vr-choice isselected="actionSettingsSelected">Preview</vr-choice>
+                    <vr-choice isselected="taskDefintionSelected">Task Definition</vr-choice>
+                    <vr-choice isselected="triggerSettignsSelected">Trigger</vr-choice>
+                    <vr-choice isselected="actionSettingsSelected">Action</vr-choice>
                 </vr-choices>
             <div ng-show="taskDefintionSelected">
                 <vr-row>
-                    <vr-columns>
+                    <vr-columns width="1/2row">
                         <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns>
+                    <vr-columns width="1/2row">
                         <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
                     </vr-columns>
                 </vr-row>
             </div>
             <div ng-show="triggerSettignsSelected">
-                <p>Trigger</p>
+                <vr-row>
+                    <vr-column colmun="6">
+                        <vr-select datatextfield="Name" datavaluefield="TriggerTypeId"
+                                   datasource="triggerTypes" selectedvalues="selectedTriggerType"></vr-select>
+                    </vr-column>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="selectedTriggerType.Info.URL"></div>
+                </vr-row>
+
             </div>
             <div ng-show="actionSettingsSelected">
                 <p>Action</p>

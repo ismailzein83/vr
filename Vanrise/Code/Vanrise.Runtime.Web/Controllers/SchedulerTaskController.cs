@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
+using Vanrise.Web.Base;
 
 namespace Vanrise.Runtime.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     public class SchedulerTaskController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
@@ -22,6 +24,13 @@ namespace Vanrise.Runtime.Web.Controllers
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.GetTask(taskId);
+        }
+
+        [HttpGet]
+        public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.GetSchedulerTaskTriggerTypes();
         }
 
         [HttpPost]

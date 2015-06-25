@@ -3,6 +3,7 @@
     return ({
         GetFilteredTasks: GetFilteredTasks,
         GetTask: GetTask,
+        GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
         AddTask: AddTask,
         UpdateTask: UpdateTask
     });
@@ -23,6 +24,10 @@
                 taskId: taskId
             }
            );
+    }
+
+    function GetSchedulerTaskTriggerTypes() {
+        return BaseAPIService.get("/api/SchedulerTask/GetSchedulerTaskTriggerTypes");
     }
 
     function AddTask(task) {
