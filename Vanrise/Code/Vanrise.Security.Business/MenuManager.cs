@@ -10,9 +10,8 @@ namespace Vanrise.Security.Business
 {
     public class MenuManager
     {
-        public List<MenuItem> GetMenuItems(string token)
+        public List<MenuItem> GetMenuItems(SecurityToken secToken)
         {
-            SecurityToken secToken = Common.Serializer.Deserialize<SecurityToken>(Common.TempEncryptionHelper.Decrypt(token));
             RoleManager roleManager = new RoleManager();
             List<int> groups = roleManager.GetUserRoles(secToken.UserId);
 
