@@ -52,6 +52,7 @@
     <Compile Include="IBusinessEntityInfoManager.cs" />
     <Compile Include="IFlaggedServiceEntity.cs" />
     <Compile Include="IZoneSupplied.cs" />
+    <Compile Include="PriceList.cs" />
     <Compile Include="SupplierCodes.cs" />
     <Compile Include="Commission.cs" />
     <Compile Include="Enumerations.cs" />
