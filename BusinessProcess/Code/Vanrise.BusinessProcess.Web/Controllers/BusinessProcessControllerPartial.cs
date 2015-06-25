@@ -15,9 +15,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     public partial class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public void StartInstance(string processName, object inputArguments)
+        public void StartInstance(string processName)
         {
             BPClient manager = new BPClient();
+            object inputArguments = new object();
             manager.StartInstance(processName, inputArguments);
         }
     }

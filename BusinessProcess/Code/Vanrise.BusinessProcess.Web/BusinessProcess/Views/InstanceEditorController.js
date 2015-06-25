@@ -13,8 +13,8 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
             $scope.issaving = true;
             var instanceObject = buildInstanceObjFromScope();
-
-            return BusinessProcessAPIService.StartInstance(BPDefinitionObj.Title, instanceObject).then(function (response) {
+            console.log(instanceObject)
+            BusinessProcessAPIService.StartInstance($scope.BPDefinitionObj.Title).then(function (response) {
                 $scope.modalContext.closeModal();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error);

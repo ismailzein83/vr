@@ -15,10 +15,9 @@
     }
 
 
-    function StartInstance(processName, inputArguments) {
+    function StartInstance(processName) {
         return BaseAPIService.post("/api/BusinessProcess/StartInstance", {
-            processName: processName,
-            inputArguments: inputArguments
+            processName: processName
         });
     }
 
@@ -65,7 +64,8 @@
         GetFilteredBProcess: GetFilteredBProcess,
         GetTrackingsByInstanceId: GetTrackingsByInstanceId,
         GetTrackingSeverity: GetTrackingSeverity,
-        GetOpenedInstances: GetOpenedInstances
+        GetOpenedInstances: GetOpenedInstances,
+        StartInstance: StartInstance
     });
 
 };
