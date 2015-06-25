@@ -26,7 +26,7 @@ namespace CLINumberLibrary.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=CLINumber;User ID=sa;Password=P@ssw0rd!;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=CLINumber;User ID=sa;Password=vanrise@cce$$;")]
         public string CLINumberConnectionString {
             get {
                 return ((string)(this["CLINumberConnectionString"]));
