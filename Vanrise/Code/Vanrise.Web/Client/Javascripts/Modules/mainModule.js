@@ -148,7 +148,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         "#272264",
         "#0074d9"
     ]
-
+    $scope.level = -1;
+    $scope.getlastlevel = function () {       
+        return  $scope.level++;
+    }
     $scope.clock = ""; // initialise the time variable
     $scope.tickInterval = 1000 //ms
 

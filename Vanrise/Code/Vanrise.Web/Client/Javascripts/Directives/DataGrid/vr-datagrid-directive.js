@@ -14,11 +14,10 @@
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var isSubGrid = $attrs.issubgrid != undefined;
             var loadMoreDataFunction;
             if ($attrs.loadmoredata != undefined)
                 loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
-
+           
             ctrl.clientSideFilterFunction;
             if ($attrs.clientsidefilter != undefined)
                 ctrl.clientSideFilterFunction = $scope.$parent.$eval($attrs.clientsidefilter);
@@ -27,7 +26,7 @@
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
 
             var dataGridObj = new DataGrid(ctrl, $scope);
-            dataGridObj.initializeController(isSubGrid);
+            dataGridObj.initializeController();
             dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
             dataGridObj.defineExpandableRow();
             dataGridObj.defineMenuColumn(hasActionMenu, actionsAttribute);
@@ -197,7 +196,7 @@
             ctrl.dataColumnsSectionWidth = width + '%';
         }
 
-        function initializeController(isSubgrid) {
+        function initializeController() {
             ctrl.updateItems = [];
             ctrl.columnDefs = [];
 
@@ -207,10 +206,6 @@
             }
 
             ctrl.headerStyle = {};
-            if (isSubgrid) {
-                ctrl.headerStyle['background-color'] = '#93C572';
-            }
-
             ctrl.isMainItemsShown = true;
             ctrl.viewVisibilityChanged = function () {
                 if (!ctrl.isMainItemsShown) {

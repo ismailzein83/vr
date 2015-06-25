@@ -26,10 +26,7 @@
                
                 
 
-            </div>
-            <div id="navbar">
-
-            </div><!--/.nav-collapse -->
+            </div>            
         </div>
     </nav>
     <div  class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
@@ -94,16 +91,15 @@
                 </div>
 
                 <div class="clock" >
-                   @*// Wed 13 May,2105 15:15*@
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
-                    <span class="clockspace"></span>
+
                     <span style="color: #6a6a6a;font-weight:bold" ng-bind="clock  | date:'hh:mm'"> </span>
                 </div>
             </div>
 
             <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:40px;position:fixed;z-index:10" ng-show="toogled==false">
                 <div class="dropdown dropdown-custom-serf leftdiv" >
-                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" ng-click="toggledpanel()" >
+                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" style="height: 43px; top: 10px;" ng-click="toggledpanel()" >
 
                     </div>
                 </div>
@@ -133,9 +129,8 @@
                     </ul>
                 </div>
                 <div class="clock collapsed-clock">
-                    @*// Wed 13 May,2105 15:15*@
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
-                    <span class="clockspace"></span>
+                   
                     <span style="color: #6a6a6a; font-weight: bold" ng-bind="clock  | date:'hh:mm'"> </span>
                 </div>
             </div>

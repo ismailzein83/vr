@@ -3,7 +3,7 @@
         <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>
     </vr-choices>
-    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle">
+    <div class="vr-datagrid-header" ng-hide="ctrl.hideheader" ng-style="ctrl.headerStyle" ng-class="ctrl.ngClassLevel">
         <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="ctrl.expandableColumnWidth != undefined">
 
         </div>

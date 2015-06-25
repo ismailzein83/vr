@@ -151,10 +151,10 @@ label{
     }
 }
 .dropdown-item{
-    height: 41px;
+    height: 47px;
     font-size: 20px;
     margin: 0px 9px;
-    top: 8px;
+    top: 14px;
 }
 .dropdown .dropdown-toggle > span{    
 font-size:12px !important;
@@ -1183,7 +1183,7 @@ input.ui-grid-filter-input[type="text"] {
 
 .clockspace{
     display:inline-block;
-    width:10px;
+    width:5px;
 }
 .clock {
     position: fixed;
@@ -1195,7 +1195,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .collapsed-clock {    
     bottom: 80px;
-    left: -80px;
+    left: -73px;
     /* Safari */
     -webkit-transform: rotate(-90deg);
     /* Firefox */
