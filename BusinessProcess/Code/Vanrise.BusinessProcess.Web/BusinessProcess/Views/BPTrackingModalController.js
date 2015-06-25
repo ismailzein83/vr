@@ -85,14 +85,14 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
             if (isNullOrEmpty($scope.message) && isNullOrEmpty(severity)) return true;
 
-            if (item['Message'].includes($scope.message))
+            if (item['Message'].indexOf($scope.message) > -1)
                 isMatch = true;
 
             if (isNullOrEmpty(severity)) return isMatch;
 
             var severityMatch = false;
             for (var i = 0, len = severity.length; i < len; i++) {
-                if (String(item['Severity']).includes(severity[i])) {
+                if (String(item['Severity']).indexOf(severity[i]) > -1) {
                     severityMatch = true;
                     break;
                 }
