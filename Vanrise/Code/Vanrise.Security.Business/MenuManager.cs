@@ -21,9 +21,9 @@ namespace Vanrise.Security.Business
 
             IModuleDataManager moduleDataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
             List<Module> modules = moduleDataManager.GetModules();
-            
-            IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
-            List<View> views = viewDataManager.GetViews();
+
+
+            List<View> views = GetViews();
 
             views = this.FilterViewsPerAudience(views, secToken, groups);
 
@@ -41,6 +41,19 @@ namespace Vanrise.Security.Business
 
             return retVal;
         }
+        private List<View> GetViews()
+        {
+            IViewDataManager viewDataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            List<View> views = viewDataManager.GetViews();
+            for (int i = 0; i < views.Count; i++)
+            {
+                if (views[i].Type == ViewType.Dynamic)
+                    views[i].Url =string.Format(@"{0}/{1}viewId={2}{3}",views[i].Url,"{",views[i].ViewId,"}");
+            }
+            return views;
+
+        }
+
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
         {
@@ -57,7 +70,7 @@ namespace Vanrise.Security.Business
                 {
                     if(viewItem.RequiredPermissions == null || isAllowed(viewItem.RequiredPermissions, effectivePermissions, breakInheritanceEntities))
                     {
-                        MenuItem viewMenu = new MenuItem() { Name = viewItem.Name, Location = viewItem.Url, Type = viewItem.Type };
+                        MenuItem viewMenu = new MenuItem() { Id=viewItem.ViewId,Name = viewItem.Name, Location = viewItem.Url, Type = viewItem.Type };
                         menu.Childs.Add(viewMenu);
                     }
                 }
