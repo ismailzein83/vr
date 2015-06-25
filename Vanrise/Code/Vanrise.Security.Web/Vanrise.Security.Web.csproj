@@ -117,7 +117,7 @@
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Security\Services\APIServices\DynamicPagesManagementAPIService.js" />
+    <Content Include="Security\Services\APIServices\DynamicPagesAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
@@ -152,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessEntitiesController.cs" />
-    <Compile Include="Controllers\DynamicPagesManagementController.cs" />
+    <Compile Include="Controllers\DynamicViewsManagementController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />

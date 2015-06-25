@@ -1,8 +1,8 @@
 ﻿'use strict'
 /// <reference path="ZoneMonitorSettings.html" />
 /// <reference path="ZoneMonitor.html" />
-DynamicPagesManagementController.$inject = ['$scope', 'UtilsService', 'DynamicPagesManagementAPIService', 'AnalyticsAPIService', 'VRModalService', 'VRNotificationService'];
-function DynamicPagesManagementController($scope, UtilsService, DynamicPagesManagementAPIService, AnalyticsAPIService, VRModalService, VRNotificationService) {
+DynamicPagesManagementController.$inject = ['$scope', 'UtilsService', 'DynamicPagesAPIService', 'AnalyticsAPIService', 'VRModalService', 'VRNotificationService'];
+function DynamicPagesManagementController($scope, UtilsService, DynamicPagesAPIService, AnalyticsAPIService, VRModalService, VRNotificationService) {
     var filter = {};
     var mainGridAPI;
     var sortColumn;
@@ -77,7 +77,7 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesMana
     }
 
     function loadData() {
-        return DynamicPagesManagementAPIService.GetDynamicPages().then(function (response) { 
+        return DynamicPagesAPIService.GetDynamicPages().then(function (response) {
             angular.forEach(response, function (itm) {   
                 $scope.data.push(itm);
                 });

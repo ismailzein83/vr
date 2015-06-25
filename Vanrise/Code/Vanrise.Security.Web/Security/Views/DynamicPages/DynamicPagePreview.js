@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams','DynamicPagesManagementAPIService', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams', 'DynamicPagesAPIService', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPagePreviewController($scope, $routeParams,DynamicPagesManagementAPIService, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
@@ -18,7 +18,7 @@ function DynamicPagePreviewController($scope, $routeParams,DynamicPagesManagemen
         console.log(viewId);
         if (viewId != undefined) {
             console.log(viewId);
-            return DynamicPagesManagementAPIService.GetView(viewId).then(function (response) {
+            return DynamicPagesAPIService.GetView(viewId).then(function (response) {
                 $scope.visualElements = response.Content;
                 addTimeToVisualElements();
             });

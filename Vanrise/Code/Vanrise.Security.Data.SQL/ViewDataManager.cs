@@ -63,6 +63,55 @@ namespace Vanrise.Security.Data.SQL
 
             return requiredPermissions;
         }
+
+
+        public List<DynamicPage> GetDynamicPages()
+        {
+
+            return GetItemsSP("sec.sp_View_GetByType", DynamicPageMapper, ViewType.Dynamic);
+        }
+        private DynamicPage DynamicPageMapper(IDataReader reader)
+        {
+            DynamicPage instance = new DynamicPage
+            {
+                // ID = (int)reader["ID"],
+                PageName = reader["PageName"] as string,
+                ModuleName = reader["ModuleName"] as string
+            };
+            return instance;
+        }
+
+        public bool SaveView(View view, out int insertedId)
+        {
+            string serialziedContent = null;
+            if (view.Content != null)
+                serialziedContent = Common.Serializer.Serialize(view.Content);
+            string serialziedAudience = null;
+            if (view.Audience != null)
+                serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            object viewId;
+            string URL = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_InsertView", out viewId, view.Name, URL, view.ModuleId, null,
+               serialziedAudience, serialziedContent, ViewType.Dynamic);
+            insertedId = (int)viewId;
+            return (recordesEffected > 0);
+            //  return false;
+        }
+
+        public View GetView(int viewId)
+        {
+            return GetItemSP("sec.sp_View_GetById ", GetPageMapper, viewId);
+        }
+        private View GetPageMapper(IDataReader reader)
+        {
+
+            View instance = new View();
+            instance.Content = Common.Serializer.Deserialize<List<VisualElement>>(reader["Content"] as string);
+
+            return instance;
+        }
+
+
     }
 
 

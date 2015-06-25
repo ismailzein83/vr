@@ -9,18 +9,14 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class DynamicPagesManager
+    public class DynamicViewsManager
     {
         public List<DynamicPage> GetDynamicPages()
         {
-            IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetDynamicPages();
         }
-        public List<WidgetDefinition> GetWidgets()
-        {
-            IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
-            return dataManager.GetWidgets();
-        }
+  
         public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
         {
             InsertOperationOutput<View> insertOperationOutput = new InsertOperationOutput<View>();
@@ -28,7 +24,7 @@ namespace Vanrise.Security.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int viewId = -1;
-              IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
               bool insertActionSucc = dataManager.SaveView(view, out viewId);
 
              if (insertActionSucc)
@@ -44,7 +40,7 @@ namespace Vanrise.Security.Business
 
         public View GetView(int viewId)
         {
-            IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetView(viewId);
         }
     }

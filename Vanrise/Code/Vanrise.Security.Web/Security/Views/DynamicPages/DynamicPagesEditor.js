@@ -1,6 +1,6 @@
-﻿DynamicPagesEditorController.$inject = ['$scope', 'MenuAPIService', 'RoleAPIService', 'UsersAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesManagementAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagesEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPagesEditorController($scope, MenuAPIService, RoleAPIService, UsersAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesManagementAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();
@@ -51,7 +51,7 @@ function DynamicPagesEditorController($scope, MenuAPIService, RoleAPIService, Us
 
 
 
-            return DynamicPagesManagementAPIService.SaveView($scope.View).then(function (response) {
+            return DynamicPagesAPIService.SaveView($scope.View).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Page", response)) {
                     if ($scope.onPageAdded != undefined)
                         $scope.onPageAdded(response.InsertedObject);
@@ -124,7 +124,7 @@ function DynamicPagesEditorController($scope, MenuAPIService, RoleAPIService, Us
     }
 
     function loadWidgets() {
-        return DynamicPagesManagementAPIService.GetWidgets().then(function (response) {
+        return WidgetAPIService.GetAllWidgets().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.widgets.push(itm);
             });

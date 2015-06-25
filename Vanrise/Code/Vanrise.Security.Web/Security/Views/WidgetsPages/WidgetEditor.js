@@ -1,6 +1,6 @@
-﻿WidgetsEditorController.$inject = ['$scope','WidgetAPIService', 'MenuAPIService','BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesManagementAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿WidgetsEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function WidgetsEditorController($scope,WidgetAPIService, MenuAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesManagementAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();
@@ -79,7 +79,7 @@ function WidgetsEditorController($scope,WidgetAPIService, MenuAPIService, BIVisu
    
 
     function loadWidgets() {
-        return DynamicPagesManagementAPIService.GetWidgets().then(function (response) {
+        return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.widgets.push(itm);
             });
