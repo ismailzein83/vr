@@ -69,7 +69,10 @@ namespace TOne.LCR.Web.ModelMappers
                         ServicesFlag = option.Info.ServicesFlag,
                         IsBlocked = option.Setting.IsBlocked,
                         Percentage = option.Setting.Percentage.HasValue ? option.Setting.Percentage.Value : (short)0,
-                        Priority = option.Setting.Priority
+                        Priority = option.Setting.Priority,
+                        SupplierId = option.Info.SupplierId,
+                        ZoneId = option.Info.SupplierZoneId,
+                        ZoneName = infoManager.GetZoneName(option.Info.SupplierZoneId)
                     });
             }
             return optionsModel;

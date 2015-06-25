@@ -1,12 +1,12 @@
-﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum'];
+﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum', 'RoutingRulesEnum'];
 
-function RoutingManagementController($scope, RoutingAPIService, CarrierAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum) {
+function RoutingManagementController($scope, RoutingAPIService, CarrierAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum, RoutingRulesEnum) {
     var mainGridAPI;
     var sortColumn;
     var sortDescending = true;
     load();
     defineScope();
-
+    defineMenuActions();
 
     function load() {
         loadCustomers();
@@ -51,9 +51,7 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
 
     function getData() {
         var filter = buildFilter();
-        console.log(mainGridAPI);
         var pageInfo = mainGridAPI.getPageInfo();
-
 
         var getRoutingInput = {
             Filter: filter,
@@ -64,8 +62,21 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
         };
 
         return RoutingAPIService.GetRoutes(getRoutingInput).then(function (response) {
-            mainGridAPI.addItemsToSource(response);
+            var routeData = [];
+            angular.forEach(response, function (itm) {
+                itm.suppliers = itm.Options != null ? GetSupplierNames(itm.Options) : '';
+                routeData.push(itm);
+            });
+            mainGridAPI.addItemsToSource(routeData);
         });
+    }
+
+    function GetSupplierNames(array) {
+        var names = '';
+        for (var i = 0; i < array.length; i++) {
+            names += array[i].Supplier + '   ';
+        }
+        return names;
     }
 
     function buildFilter() {
@@ -98,6 +109,47 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
     function resetSorting() {
         sortColumn = RouteDetailFilterOrderEnum.Code;
         sortDescending = true;
+    }
+
+
+    function defineMenuActions() {
+        $scope.gridMenuActions = [{
+            name: "Override",
+            clicked: function (dataItem) {
+                AddRule(dataItem, RoutingRulesEnum.Override);
+            }
+        },
+        {
+            name: "Priority",
+            clicked: function (dataItem) {
+                AddRule(dataItem, RoutingRulesEnum.Priority);
+            }
+        },
+        {
+            name: "Block",
+            clicked: function (dataItem) {
+                AddRule(dataItem, RoutingRulesEnum.Block);
+            }
+        }
+        ];
+    }
+
+    function AddRule(route, ruleType) {
+        console.log(route);
+        switch (ruleType.value) {
+            case 0:
+                console.log(0);
+                break;
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            default:
+                break;
+
+        }
     }
 }
 
