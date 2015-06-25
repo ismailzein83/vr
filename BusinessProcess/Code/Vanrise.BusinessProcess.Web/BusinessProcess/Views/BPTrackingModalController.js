@@ -92,8 +92,10 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
             var severityMatch = false;
             for (var i = 0, len = severity.length; i < len; i++) {
-                if (String(item['Severity']).includes(severity[i]))
+                if (String(item['Severity']).includes(severity[i])) {
                     severityMatch = true;
+                    break;
+                }
             }
 
             if (severityMatch && isMatch) return true;
