@@ -1,14 +1,41 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'BIVisualElementService1', 'BITimeDimensionTypeEnum','BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams','DynamicPagesManagementAPIService', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPagePreviewController($scope, BIVisualElementService1,BITimeDimensionTypeEnum , BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
-    //loadParameters();
+function DynamicPagePreviewController($scope, $routeParams,DynamicPagesManagementAPIService, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+    loadParameters();
     defineScope();
     load();
-    //function loadParameters() {
-    //    $scope.visualElements = $scope.$parent.visualElements;
-    //    console.log("test");
-    //    console.log($scope.visualElements);
-    //}
+    var viewId;
+    function loadParameters() {
+        if ($routeParams.params!=undefined)
+            viewId = JSON.parse($routeParams.params).viewId;//.viewId;
+          //  VRNavigationService.getParameters($scope);
+      //  $scope.visualElements = 
+        
+      // console.log($scope.visualElements);
+    }
+    function getVisualElements() {
+        console.log("out");
+        console.log(viewId);
+        if (viewId != undefined) {
+            console.log(viewId);
+            return DynamicPagesManagementAPIService.GetView(viewId).then(function (response) {
+                $scope.visualElements = response.Content;
+                addTimeToVisualElements();
+            });
+        }
+        else {
+            $scope.visualElements = $scope.$parent.visualElements;
+            addTimeToVisualElements();
+        }
+    }
+    function addTimeToVisualElements(){
+        for (var i = 0; i < $scope.visualElements.length; i++) {
+            $scope.visualElements[i].settings.fromdate = $scope.fromDate;
+            $scope.visualElements[i].settings.todate = $scope.toDate;
+            $scope.visualElements[i].settings.timedimensiontype = $scope.selectedTimeDimensionType;
+
+        }
+    }
     function defineScope() {
         $scope.visualElements = [];
         $scope.fromDate = "2015-04-01";
@@ -26,16 +53,15 @@ function DynamicPagePreviewController($scope, BIVisualElementService1,BITimeDime
         };
    
         $scope.Search = function () {
-            if ($scope.visualElements != null && $scope.visualElements != undefined) {
+            if ($scope.visualElements != null && $scope.visualElements != undefined && $scope.visualElements.length>0) {
+                console.log("update");
                 updateDashboard();
             }
-            $scope.visualElements = $scope.$parent.visualElements;
-            for (var i = 0; i < $scope.visualElements.length; i++)
-            {
-                $scope.visualElements[i].settings.fromdate = $scope.fromDate;
-                $scope.visualElements[i].settings.todate = $scope.toDate;
-                $scope.visualElements[i].settings.timedimensiontype = $scope.selectedTimeDimensionType;
-              
+            else {
+                
+            getVisualElements();
+           
+
             }
 
             

@@ -4,6 +4,7 @@
 DynamicPagesManagementController.$inject = ['$scope', 'UtilsService', 'DynamicPagesManagementAPIService', 'AnalyticsAPIService', 'VRModalService', 'VRNotificationService'];
 function DynamicPagesManagementController($scope, UtilsService, DynamicPagesManagementAPIService, AnalyticsAPIService, VRModalService, VRNotificationService) {
     var filter = {};
+    var mainGridAPI;
     var sortColumn;
     var sortDescending = true;
     var currentData;
@@ -14,6 +15,9 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesMana
     
     function defineScopeObjects() {
         $scope.data = [];
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+        };
         $scope.menuActions = [{
             name: "Edit",
             clicked: function (dataItem) {

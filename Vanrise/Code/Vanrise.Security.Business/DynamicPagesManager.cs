@@ -16,36 +16,36 @@ namespace Vanrise.Security.Business
             IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
             return dataManager.GetDynamicPages();
         }
-        public List<Widget> GetWidgets()
+        public List<WidgetDefinition> GetWidgets()
         {
             IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
             return dataManager.GetWidgets();
         }
-        public Vanrise.Entities.InsertOperationOutput<PageSettings> SavePage(PageSettings PageSettings)
+        public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
         {
-            InsertOperationOutput<PageSettings> insertOperationOutput = new InsertOperationOutput<PageSettings>();
+            InsertOperationOutput<View> insertOperationOutput = new InsertOperationOutput<View>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int pageId = -1;
+            int viewId = -1;
               IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
-              bool insertActionSucc = dataManager.SavePage(PageSettings, out pageId);
+              bool insertActionSucc = dataManager.SaveView(view, out viewId);
 
              if (insertActionSucc)
              {
                  
                  insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                 PageSettings.PageID = pageId;
-                 insertOperationOutput.InsertedObject = PageSettings;
+                 view.ViewId = viewId;
+                 insertOperationOutput.InsertedObject = view;
              }
 
              return insertOperationOutput; 
         }
-     
-        public List<VisualElement> GetPage(int PageId)
+
+        public View GetView(int viewId)
         {
             IDynamicPagesDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IDynamicPagesDataManager>();
-            return dataManager.GetPage(PageId);
+            return dataManager.GetView(viewId);
         }
     }
 }                               

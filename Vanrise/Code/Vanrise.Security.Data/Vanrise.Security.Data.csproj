@@ -52,6 +52,7 @@
     <Compile Include="IRoleDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />
+    <Compile Include="IWidgetsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityDataManagerFactory.cs" />
   </ItemGroup>

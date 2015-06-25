@@ -14,7 +14,7 @@ namespace Vanrise.Security.Data.SQL
        public List<DynamicPage> GetDynamicPages()
         {
 
-            return GetItemsSP("sec.sp_View_getByType", DynamicPageMapper, ViewType.System);
+            return GetItemsSP("sec.sp_View_GetByType", DynamicPageMapper, ViewType.Dynamic);
         }
        private DynamicPage DynamicPageMapper(IDataReader reader)
         {
@@ -26,43 +26,47 @@ namespace Vanrise.Security.Data.SQL
             };
             return instance;
         }
-        public List<Widget> GetWidgets()
+        public List<WidgetDefinition> GetWidgets()
         {
 
-            return GetItemsSP("sec.sp_View_getWidgets", WidgetMapper);
+            return GetItemsSP("sec.sp_WidgetDefinition_GetWidgets", WidgetMapper);
         }
-        private Widget WidgetMapper(IDataReader reader)
+        private WidgetDefinition WidgetMapper(IDataReader reader)
         {
-            Widget instance = new Widget
+            WidgetDefinition instance = new WidgetDefinition
             {
                 ID = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 directiveName = reader["DirectiveName"] as string,
-                Setting=Vanrise.Common.Serializer.Deserialize<WidgetSetting>(reader["Setting"] as string)
+                Setting=Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["Setting"] as string)
         };
             return instance;
         }
-        public bool SavePage(PageSettings PageSettings, out int insertedId)
-        {
-            string serialziedContent = Common.Serializer.Serialize(PageSettings.visualElements);
-            string serialziedAudience = Common.Serializer.Serialize(PageSettings.AudianceIds);
-            object pageID;
+        public bool SaveView(View view, out int insertedId)
+        {string serialziedContent=null;
+        if (view.Content != null)
+            serialziedContent = Common.Serializer.Serialize(view.Content);
+            string serialziedAudience =null;
+            if (view.Audience != null)
+                serialziedAudience = Common.Serializer.Serialize(view.Audience,true);
+            object viewId;
             string URL = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_insertView", out pageID, PageSettings.PageName, URL,PageSettings.ModuleId,null,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_InsertView", out viewId, view.Name, URL, view.ModuleId, null,
                serialziedAudience, serialziedContent, ViewType.Dynamic);
-            insertedId = (int)pageID;
+            insertedId = (int)viewId;
             return (recordesEffected > 0);
           //  return false;
         }
       
-        public List<VisualElement> GetPage(int PageId)
+        public View GetView(int viewId)
         {
-            return GetItemsSP("", GetPageMapper); 
+            return GetItemSP("sec.sp_View_GetById ", GetPageMapper, viewId); 
         }
-        private VisualElement GetPageMapper(IDataReader reader)
+        private View GetPageMapper(IDataReader reader)
         {
 
-            VisualElement instance = Common.Serializer.Deserialize<VisualElement>(reader["Setting"] as string);
+            View instance=new View();
+            instance.Content= Common.Serializer.Deserialize<List<VisualElement>>(reader["Content"] as string);
            
             return instance;
         }

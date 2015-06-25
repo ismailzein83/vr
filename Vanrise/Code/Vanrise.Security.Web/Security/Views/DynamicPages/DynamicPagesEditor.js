@@ -37,21 +37,21 @@ function DynamicPagesEditorController($scope, MenuAPIService, RoleAPIService, Us
             var selectedRolesIDs = [];
             for (var i = 0; i < $scope.selectedRoles.length; i++)
                 selectedRolesIDs.push($scope.selectedRoles[i].RoleId);
-            var AudianceIds={
+            var Audiences = {
                 Users: selectedUsersIDs,
                 Groups: selectedRolesIDs
             };
 
-            $scope.PageSettings = {
-                PageName: $scope.PageName,
-                ModuleId:$scope.ModuleId,
-                AudianceIds: AudianceIds,
-                visualElements: $scope.visualElements
+            $scope.View = {
+                Name: $scope.PageName,
+                ModuleId: $scope.ModuleId,
+                Audience: Audiences,
+                Content: $scope.visualElements
             };
 
 
 
-            return DynamicPagesManagementAPIService.SavePage($scope.PageSettings).then(function (response) {
+            return DynamicPagesManagementAPIService.SaveView($scope.View).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Page", response)) {
                     if ($scope.onPageAdded != undefined)
                         $scope.onPageAdded(response.InsertedObject);

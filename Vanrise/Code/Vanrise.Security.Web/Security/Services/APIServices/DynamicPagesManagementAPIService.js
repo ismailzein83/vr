@@ -3,7 +3,8 @@
     return ({
         GetDynamicPages: GetDynamicPages,
         GetWidgets: GetWidgets,
-        SavePage:SavePage
+        SaveView: SaveView,
+        GetView: GetView
     });
 
     function GetDynamicPages() {
@@ -12,13 +13,13 @@
     function GetWidgets() {
         return BaseAPIService.get("/api/DynamicPagesManagement/GetWidgets");
     }
-    function SavePage(PageSettings) {
-        return BaseAPIService.post("/api/DynamicPagesManagement/SavePage", PageSettings);
+    function SaveView(view) {
+        return BaseAPIService.post("/api/DynamicPagesManagement/SaveView", view);
     }
-    function GetPage(PageId) {
-        return BaseAPIService.get("/api/DynamicPagesManagement/GetPage",
+    function GetView(ViewId) {
+        return BaseAPIService.get("/api/DynamicPagesManagement/GetView",
             {
-                PageId: PageId
+                ViewId: ViewId
             });
        
     }

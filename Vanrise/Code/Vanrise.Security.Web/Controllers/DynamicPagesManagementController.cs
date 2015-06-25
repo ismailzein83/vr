@@ -18,22 +18,22 @@ namespace Vanrise.Security.Web.Controllers
             return manager.GetDynamicPages();
         }
         [HttpGet]
-        public List<Widget> GetWidgets()
+        public List<WidgetDefinition> GetWidgets()
         {
             DynamicPagesManager manager = new DynamicPagesManager();
             return manager.GetWidgets(); 
         }
         [HttpPost]
-        public Vanrise.Entities.InsertOperationOutput<PageSettings> SavePage(PageSettings PageSettings)
+        public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
         {
              DynamicPagesManager manager = new DynamicPagesManager();
-             return manager.SavePage(PageSettings);
+             return manager.SaveView(view);
           }
         [HttpGet]
-        public List<VisualElement> GetPage(int PageId)
+        public View GetView(int viewId)
         {
             DynamicPagesManager manager = new DynamicPagesManager();
-            return manager.GetPage(PageId);
+            return manager.GetView(viewId);
         }
 
     }

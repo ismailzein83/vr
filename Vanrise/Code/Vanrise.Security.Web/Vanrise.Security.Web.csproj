@@ -123,6 +123,7 @@
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
     <Content Include="Security\Services\APIServices\RoleAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Views\BusinessEntityEditor.html" />
     <Content Include="Security\Views\BusinessEntityEditorController.js" />
@@ -157,6 +158,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +180,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Security\Views\WidgetsPages\WidgetPreview.html" />
+    <Content Include="Security\Views\WidgetsPages\WidgetPreview.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />
+    <Content Include="Security\Views\WidgetsPages\WidgetEditor.js" />
+    <Content Include="Security\Views\WidgetsManagmentPage.html" />
+    <Content Include="Security\Views\WidgetsManagmentPage.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

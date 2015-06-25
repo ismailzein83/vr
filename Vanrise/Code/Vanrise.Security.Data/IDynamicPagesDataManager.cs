@@ -10,8 +10,8 @@ namespace Vanrise.Security.Data
     public interface IDynamicPagesDataManager : IDataManager
     {
         List<DynamicPage> GetDynamicPages();
-        List<Widget> GetWidgets();
-        Boolean SavePage(PageSettings PageSettings, out int insertedId);
-        List<VisualElement> GetPage(int PageId);
+        List<WidgetDefinition> GetWidgets();
+        bool SaveView(View view, out int insertedId);
+        View GetView(int viewId);
     }
 }

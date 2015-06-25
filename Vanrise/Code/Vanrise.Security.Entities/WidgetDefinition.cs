@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class Widget
+    public class WidgetDefinition
     {
-        public int Id { get; set;}
-        public int WidgetDefinitionId { get; set; }
-        public string WidgetDefinitionName { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
-        public WidgetSetting Setting { get; set; }
+        public string directiveName { get; set; }
+        public WidgetDefinitionSetting Setting { get; set; }
     }
 }

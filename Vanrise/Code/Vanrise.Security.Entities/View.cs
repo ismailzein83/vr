@@ -22,6 +22,7 @@ namespace Vanrise.Security.Entities
 
         public AudienceWrapper Audience { get; set; }
         public ViewType Type { get; set; }
+        public List<VisualElement> Content { get; set; }
     }
 
     public class AudienceWrapper

@@ -1,0 +1,60 @@
+﻿<div vr-modalcontent ng-controller="Security_WidgetsEditorController" width="'80%'">
+    <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
+        <vr-form name="formDynamicPagesEditor">
+            <vr-choices selectedindex="selectedGroupKeyIndex">
+                <vr-choice isselected="settingSelected">Setting</vr-choice>
+                <vr-choice isselected="previewSelected">Preview</vr-choice>
+            </vr-choices>
+            <div ng-show="settingSelected">
+                <vr-form name="formDesigningSelectionModel">
+                    <vr-row>
+                        <vr-columns width="large">
+                            <vr-section title="Widget Name">
+                                <vr-textbox value="WidgetName" label="Widget Name" isrequired></vr-textbox>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="large">
+                            <vr-section title="Widget Type">
+                                <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
+                                           datasource="widgets" selectedvalues="selectedWidget"></vr-select>
+                            </vr-section>
+                        </vr-columns>
+
+                    </vr-row>
+                    <vr-row>
+                        <vr-section title="Widget Setting" ng-if="selectedWidget!=null">
+                            <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
+                        </vr-section>
+                    </vr-row>
+                </vr-form>
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                    <div transclude-to="buttons">
+                        <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addVisualElement"></vr-button>
+                    </div>
+                </vr-actionbar>
+                <vr-row>
+                    <vr-columns ng-if="visualElement!=undefined" width="fullrow">
+                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
+                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visual)"></i>
+                        <!--<vr-textbox value="visualElement.Name" label="{visualElement.Name}"></vr-textbox>-->
+                    </vr-columns>
+                </vr-row>
+            </div>
+
+
+
+            <div ng-show="previewSelected">
+                <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>
+            </div>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDynamicPagesEditor" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

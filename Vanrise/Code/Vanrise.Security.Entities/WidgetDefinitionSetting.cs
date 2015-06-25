@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class WidgetSetting
+    public class WidgetDefinitionSetting
     {
-        public Object settings { get; set; }
-        public string directive { get; set; }
+        public string DirectiveTemplateURL { get; set; }
     }
 }
