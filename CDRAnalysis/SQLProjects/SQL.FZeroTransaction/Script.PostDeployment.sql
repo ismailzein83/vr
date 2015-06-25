@@ -36,9 +36,9 @@ DELETE;
 
 MERGE INTO bp.[BPDefinition] AS Target 
 USING (VALUES 
-	(N'CDRImportProcess', N'CDR Import Process', N'Vanrise.Fzero.CDRImport.BP.CDRImportProcess, Vanrise.Fzero.CDRImport.BP', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
-	(N'SaveCDRToDBProcess', N'Save CDR To DB Process', N'Vanrise.Fzero.CDRImport.BP.SaveCDRToDBProcess, Vanrise.Fzero.CDRImport.BP', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
-	(N'ExecuteStrategyProcess', N'Execute Strategy Process', N'	', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}')
+	(N'Vanrise.Fzero.CDRImport.BP.Arguments.CDRImportProcessInput', N'CDR Import Process', N'Vanrise.Fzero.CDRImport.BP.CDRImportProcess, Vanrise.Fzero.CDRImport.BP', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
+	(N'Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput', N'Save CDR To DB Process', N'Vanrise.Fzero.CDRImport.BP.SaveCDRToDBProcess, Vanrise.Fzero.CDRImport.BP', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
+	(N'Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput', N'Execute Strategy Process', N'	', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}')
 
 ) 
 AS Source ([Name], [Title], [FQTN], [Config])

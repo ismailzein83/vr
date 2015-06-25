@@ -74,6 +74,9 @@
     <Folder Include="queue\User Defined Types\" />
     <Folder Include="Security\" />
     <Folder Include="bp\User Defined Types\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="bp\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -120,6 +123,10 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriteria.sql" />
     <Build Include="bp\User Defined Types\IDIntType.sql" />
     <Build Include="bp\User Defined Types\IDBigIntType.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriterias.sql" />
+    <Build Include="bp\Functions\ParseStringList.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetOpened.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPDefinition_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

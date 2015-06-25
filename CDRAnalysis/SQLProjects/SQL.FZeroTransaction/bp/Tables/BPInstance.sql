@@ -1,4 +1,4 @@
-CREATE TABLE [bp].[BPInstance] (
+﻿CREATE TABLE [bp].[BPInstance] (
     [ID]                 BIGINT           IDENTITY (1, 1) NOT NULL,
     [Title]              NVARCHAR (1000)  NULL,
     [ParentID]           BIGINT           NULL,
@@ -11,9 +11,12 @@ CREATE TABLE [bp].[BPInstance] (
     [RetryCount]         INT              NULL,
     [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]  DATETIME         NULL,
+    [timestamp]          ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID])
+    CONSTRAINT [FK_BPInstance_BPDefinition] FOREIGN KEY ([DefinitionID]) REFERENCES [bp].[BPDefinition] ([ID]) ON DELETE CASCADE
 );
+
+
 
 
 

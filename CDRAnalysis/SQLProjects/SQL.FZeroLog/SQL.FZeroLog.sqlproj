@@ -69,6 +69,7 @@
     <Folder Include="logging\Stored Procedures\" />
     <Folder Include="bp\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="bp\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="logging\Tables\LogAttribute.sql" />
@@ -81,6 +82,7 @@
     <Build Include="bp\Stored Procedures\sp_BPTrackings_GetByInstanceId.sql" />
     <Build Include="Security\logging.sql" />
     <Build Include="Security\bp.sql" />
+    <Build Include="bp\Functions\ParseStringList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
