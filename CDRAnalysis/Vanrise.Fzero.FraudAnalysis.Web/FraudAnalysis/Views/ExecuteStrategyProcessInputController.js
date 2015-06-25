@@ -24,6 +24,7 @@
         $scope.strategies = [];
         loadStrategies();
         $scope.selectedStrategies = [];
+        $scope.selectedStrategyIds = [];
 
 
         $scope.periods = [];
@@ -32,9 +33,18 @@
 
 
         $scope.subViewExecuteStrategyProcessInput.getData = function () {
+
+            angular.forEach($scope.selectedStrategies, function (itm) {
+                $scope.selectedStrategyIds.push(itm.id);
+            });
+         
+
+          
+
+
             return {
                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                StrategyIds: [3,4],
+                StrategyIds: $scope.selectedStrategyIds,
                 FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
                 ToDate: $scope.toDate != undefined ? $scope.toDate : '',
                 PeriodId: $scope.selectedPeriod.Id
