@@ -3,7 +3,7 @@
 function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRModalService) {
 
     "use strict";
-    setInterval(function () { $scope.searchClicked() }, 10000);
+    setInterval(function () { $scope.searchClicked() }, 60000); //every minute
     var mainGridAPI;
     
 
@@ -14,6 +14,9 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
         {
             onScopeReady: function (modalScope) {
                 modalScope.title = "Start New Instance";
+                modalScope.onProcessInputCreated = function (instance) {
+                    $scope.searchClicked();
+                };
             }
         });
     }
