@@ -37,7 +37,7 @@
                 StrategyIds: [3,4],
                 FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
                 ToDate: $scope.toDate != undefined ? $scope.toDate : '',
-                PeriodId: $scope.selectedPeriod.id
+                PeriodId: $scope.selectedPeriod.Id
             };
         };
 
