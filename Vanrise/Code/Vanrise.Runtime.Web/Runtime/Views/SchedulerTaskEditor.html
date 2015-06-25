@@ -1,14 +1,27 @@
 ﻿<div vr-modalcontent ng-controller="Runtime_SchedulerTaskEditorController">
     <vr-modalbody width="'50%'" vr-loader="isGettingData">
         <vr-form name="formSchedulerTaskEditor">
-            <vr-row>
-                <vr-columns colnum="6">
-                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
-                </vr-columns>
-                <vr-columns colnum="6">
-                    <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
-                </vr-columns>
-            </vr-row>
+                <vr-choices selectedindex="0">
+                    <vr-choice isselected="taskDefintionSelected">Setting</vr-choice>
+                    <vr-choice isselected="triggerSettignsSelected">Designing</vr-choice>
+                    <vr-choice isselected="actionSettingsSelected">Preview</vr-choice>
+                </vr-choices>
+            <div ng-show="taskDefintionSelected">
+                <vr-row>
+                    <vr-columns>
+                        <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                    </vr-columns>
+                    <vr-columns>
+                        <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <div ng-show="triggerSettignsSelected">
+                <p>Trigger</p>
+            </div>
+            <div ng-show="actionSettingsSelected">
+                <p>Action</p>
+            </div>
         </vr-form>
     </vr-modalbody>
     <div>
