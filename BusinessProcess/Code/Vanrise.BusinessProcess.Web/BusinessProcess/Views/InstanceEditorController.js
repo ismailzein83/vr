@@ -13,10 +13,12 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
             $scope.issaving = true;
             var createProcessInput = buildInstanceObjFromScope();
-            console.log('createProcessInput')
-            console.log(createProcessInput)
             BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
-                $scope.modalContext.closeModal();
+                if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
+                    if ($scope.onProcessInputCreated != undefined)
+                        $scope.onProcessInputCreated(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error);
             });
@@ -24,6 +26,13 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
         };
     }
+
+
+
+
+
+
+
 
 
     function buildInstanceObjFromScope() {
@@ -44,7 +53,7 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         if (parameters != undefined && parameters != null)
             $scope.BPDefinitionObj = parameters.BPDefinitionObj;
 
-      
+
     }
 
 }

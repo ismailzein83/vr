@@ -16,10 +16,10 @@ function BusinessProcessAPIService(BaseAPIService) {
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
-    function CreateNewProcess(createProcessInput) {
-        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", {
-            createProcessInput: createProcessInput
-        });
+   function CreateNewProcess(createProcessInput) {
+        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess",
+            createProcessInput
+           );
     }
 
     function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {

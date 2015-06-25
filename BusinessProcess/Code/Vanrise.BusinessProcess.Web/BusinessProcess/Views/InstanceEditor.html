@@ -1,19 +1,17 @@
 ﻿<div vr-modalcontent width="'50%'" ng-controller="FraudAnalysis_InstanceEditorController">
-    <vr-modalbody vr-loader="isGettingData">
-
-        <!--<div ng-include src="/Client/Modules/FraudAnalysis/Views/test.html">
-        </div>-->
-        {{BPDefinitionObj.Configuration.Url}}
-        <vr-row>
-            <div ng-include src="'/Client/Modules/FraudAnalysis/Views/ExecuteStrategyProcessInput.html'">
-            </div>
-        </vr-row>
+    <vr-modalbody  vr-loader="isGettingData">
+        <vr-form name="formCreateProcessInput">
+            {{BPDefinitionObj.Configuration.Url}}
+            <vr-row>
+                <div ng-include src="'/Client/Modules/FraudAnalysis/Views/ExecuteStrategyProcessInput.html'">
+                </div>
+            </vr-row>
+        </vr-form>
     </vr-modalbody>
-
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="startInstance" formname="formExecuteStrategyProcessInput"></vr-button>
+                <vr-button type="Save" data-onclick="startInstance" formname="formCreateProcessInput"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

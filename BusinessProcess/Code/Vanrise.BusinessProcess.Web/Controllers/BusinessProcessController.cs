@@ -12,7 +12,7 @@ using Vanrise.BusinessProcess.Web.Models;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
-
+    [Vanrise.Web.Base.JSONWithType]
     public partial  class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
 
@@ -22,6 +22,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPClient manager = new BPClient();
             return manager.CreateNewProcess(createProcessInput);
         }
+
 
         [HttpGet]
         public IEnumerable<BPInstanceModel> GetOpenedInstances()
