@@ -16,16 +16,19 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     public partial  class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
 
+        [HttpPost]
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        {
+            BPClient manager = new BPClient();
+            return manager.CreateNewProcess(createProcessInput);
+        }
+
         [HttpGet]
         public IEnumerable<BPInstanceModel> GetOpenedInstances()
         {
             BPClient manager = new BPClient();
             return BPMappers.MapTMapInstances(manager.GetOpenedInstances());
         }
-
-
-
-
 
         [HttpGet]
         public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title)
@@ -74,8 +77,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return lst;
         }
 
-        
-        
         [HttpPost]
         public IEnumerable<BPInstanceModel> GetFilteredBProcess(GetFilteredBProcessInput param)
         {
