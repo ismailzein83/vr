@@ -99,6 +99,10 @@ namespace TOne.Analytics.Business
                 {
                     if (weekDayItem.ProfitWeek2 == null)
                         weekDayItem.ProfitWeek2 = dailyRecord.Profit;
+                    else if (weekDayItem.ProfitWeek3 == null)
+                        weekDayItem.ProfitWeek3 = dailyRecord.Profit;
+                    else if (weekDayItem.ProfitWeek4 == null)
+                        weekDayItem.ProfitWeek4 = dailyRecord.Profit;
                 }
             }
             return result;

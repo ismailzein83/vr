@@ -19,5 +19,7 @@ namespace TOne.Analytics.Entities
         public int DayNumber { get; set; }
         public decimal? ProfitWeek1 { get; set; }
         public decimal? ProfitWeek2 { get; set; }
+        public decimal? ProfitWeek3 { get; set; }
+        public decimal? ProfitWeek4 { get; set; }
     }
 }
