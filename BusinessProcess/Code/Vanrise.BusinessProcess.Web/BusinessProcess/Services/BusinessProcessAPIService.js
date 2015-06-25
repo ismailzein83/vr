@@ -1,4 +1,6 @@
-﻿var BusinessProcessAPIService = function (BaseAPIService) {
+﻿BusinessProcessAPIService.$inject = ['BaseAPIService'];
+
+function BusinessProcessAPIService(BaseAPIService) {
 
     "use strict";
 
@@ -14,15 +16,11 @@
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
-
     function StartInstance(processName) {
         return BaseAPIService.post("/api/BusinessProcess/StartInstance", {
             processName: processName
         });
     }
-
-
-
 
     function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {
         return BaseAPIService.post("/api/BusinessProcess/GetFilteredBProcess", {
@@ -68,6 +66,5 @@
         StartInstance: StartInstance
     });
 
-};
-BusinessProcessAPIService.$inject = ['BaseAPIService'];
+}
 appControllers.service('BusinessProcessAPIService', BusinessProcessAPIService);
