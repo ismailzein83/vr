@@ -78,6 +78,28 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
         };
+
+        $scope.filterGrid = function (item) {
+            var isMatch = false;
+            var severity = UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value");
+
+            if (isNullOrEmpty($scope.message) && isNullOrEmpty(severity)) return true;
+
+            if (item['Message'].includes($scope.message))
+                isMatch = true;
+
+            if (isNullOrEmpty(severity)) return isMatch;
+
+            var severityMatch = false;
+            for (var i = 0, len = severity.length; i < len; i++) {
+                if (String(item['Severity']).includes(severity[i]))
+                    severityMatch = true;
+            }
+
+            if (severityMatch && isMatch) return true;
+            return false;
+        };
+
     }
 
     function defineScope() {
@@ -89,30 +111,16 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
             stopGetData();
             $scope.modalContext.closeModal();
         };
-        $scope.searchClicked = function () {
-            mainGridAPI.clearDataAndContinuePaging();
-            return getData();
-        };
+
         $scope.$on('$destroy', function () {
             stopGetData();
         });
 
-        $scope.onMessageChange = function () {
-            search();
-        };
-
-        $scope.onSelectionChange = function (selectedvalues, datasource) {
-            console.log("change");
-            search();
-        };
     }
 
-    function search() {
-        $scope.searchGrid = {
-            Message: $scope.message,
-            Severity: UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value"),
-        };
-        console.log($scope.searchGrid);
+    function isNullOrEmpty(value) {
+        if (value) return false;
+        return true;
     }
 
     function startGetData() {
