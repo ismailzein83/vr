@@ -12,14 +12,14 @@ using Vanrise.BusinessProcess.Web.Models;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
+    [Vanrise.Web.Base.JSONWithType]
     public partial class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        public void StartInstance(string processName)
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             BPClient manager = new BPClient();
-            object inputArguments = new object();
-            manager.StartInstance(processName, inputArguments);
+            return manager.CreateNewProcess(createProcessInput);
         }
     }
 }

@@ -17,35 +17,6 @@ namespace Vanrise.BusinessProcess.Client
 {
     public  partial class  BPClient
     {
-        #region Process Workflow Methods
-
-
-        public void StartInstance(string processName, object inputArguments)
-        {
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-
-            var runtimeServices = new List<RuntimeService>();
-            runtimeServices.Add(queueActivationService);
-
-            runtimeServices.Add(bpService);
-
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
-
-            Task t = new Task(() =>
-            {
-                BPClient bpClient3 = new BPClient();
-                bpClient3.CreateNewProcess(new CreateProcessInput { InputArguments = inputArguments as BaseProcessInputArgument });
-            });
-            t.ContinueWith((tt) =>
-            {
-            });
-            t.Start();
-        }
-
-
-
-        #endregion
+       
     }
 }

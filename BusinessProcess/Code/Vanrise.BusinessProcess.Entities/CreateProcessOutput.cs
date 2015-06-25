@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public enum CreateProcessResult {  Succeeded }
+    public enum CreateProcessResult {  Succeeded = 0, Failed = 1 }
     public class CreateProcessOutput
     {
         public CreateProcessResult Result { get; set; }
