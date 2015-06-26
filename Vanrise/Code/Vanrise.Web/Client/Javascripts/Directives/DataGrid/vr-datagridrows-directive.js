@@ -34,7 +34,7 @@ app.directive('vrDatagridrows', [function () {
                         drillDownLevel++;
                     }
                     scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel;
-                    console.log('drillDownLevel' + drillDownLevel);
+                    //console.log('drillDownLevel' + drillDownLevel);
 
                     var lastScrollTop;
                     var gridBodyElement = elem.find("#gridBody");
