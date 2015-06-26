@@ -75,7 +75,7 @@ namespace TestRuntime
             {
                 InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
                 {
-                    RepricingDay = DateTime.Parse("2014-07-07")//,
+                    RepricingDay = DateTime.Parse("2013-03-29")//,
                    // DivideProcessIntoSubProcesses = true
                 }
             });
