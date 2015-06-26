@@ -48,11 +48,11 @@
 
                     </div>
                 </div>
-                <div ng-repeat="item in menuItems track by $index" class="panel panel-default menu-item-list">
+                <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
                     <div ng-class="getParentItemClass(item) ? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 4px;"></span>
-                            <span>{{::item.Name}} </span>
+                            <span>{{::item.Name}} @*{{getParentItemClass(item)}}*@</span>
                             <span class=" hand-cursor  toggel">
 
                                 <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
@@ -62,7 +62,9 @@
 
                         <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
                             <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
-                                <a class="menulink  " ng-href="{{::item.Location}}">{{::item.Name}}</a>
+                                <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
+                                @*{{getParentIsSelected(item)}}*@
+
                             </li>
                         </ul>
 
@@ -74,14 +76,15 @@
                         <div class="panel-body ">
                             <ul class="nav">
                                 <li ng-if="c.Childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.Childs">
-                                    <a class=" menulink" ng-click="setIndexSub($index,$event)" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
+                                    <a class=" menulink" ng-click="setIndexSub($index,$event);logfunc(item)" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
+                                    @*{{getLeafItemClass(c)}}*@
                                 </li>
 
                                 <li ng-if="c.Childs != undefined" ng-repeat="c in item.Childs" class="dll-menu menu-item-list-ligth ">
                                     <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" ng-href="">{{::c.Name}}</div>
                                     <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
                                         <li ng-repeat="a in c.Childs" class="waves-effect waves-classic ">
-                                            <a class=" menulink" style="color:#333;" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                            <a class=" menulink" style="color:#333;" ng-href="{{::a.Location}}" ng-click="setActiveLeaf(a)">{{::a.Name}}</a>
                                         </li>
                                     </ul>
                                 </li>

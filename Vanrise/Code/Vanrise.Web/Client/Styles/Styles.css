@@ -965,7 +965,7 @@ input.ui-grid-filter-input[type="text"] {
     font-weight:bold ;
     font-size:12px;
     border-radius:0px ;
-    padding: 5px 15px ;
+    padding: 2px 15px ;
 }
 
 .panel-vr > .panel-body {   
@@ -1206,4 +1206,9 @@ input.ui-grid-filter-input[type="text"] {
     -o-transform: rotate(-90deg);
     /* Internet Explorer */
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+vr-button .btn {
+    height: 25px !important;
+    padding: 2px 12px !important;
 }

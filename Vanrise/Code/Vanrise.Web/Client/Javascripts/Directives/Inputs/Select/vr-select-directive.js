@@ -3,16 +3,18 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
     var openedDropDownIds = [];
     var rootScope;
     vrSelectSharedObject = {
-        onOpenDropDown: function (idAttribute) {
-            openedDropDownIds.push(idAttribute);
-            rootScope.$apply(function () { });
+        onOpenDropDown: function (idAttribute) {            
+            rootScope.$apply(function () {
+			  openedDropDownIds.push(idAttribute);
+			});
         },
         onCloseDropDown: function (idAttribute) {
             var index = openedDropDownIds.indexOf(idAttribute);
             if (index >= 0) {
                 openedDropDownIds.splice(index, 1);
                 setTimeout(function () {
-                    rootScope.$apply(function () { });
+                    rootScope.$apply(function () {
+					});
                 }, 300);                
             }
         },

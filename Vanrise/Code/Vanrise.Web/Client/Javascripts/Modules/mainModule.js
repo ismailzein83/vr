@@ -71,14 +71,6 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else {
             $scope.menuItemsCurrent = i;
             var $this = angular.element(e.currentTarget);
-            $scope.menuItems[i].itemstyle = " ";
-            $scope.menuItems[i].color = "#f0f0f0";
-         //   value.itemstyle = "'background-color':'#f0f0f0; !important'";
-          //  $scope.menuItems[i].itemstyle = "{'background-image':'-webkit-gradient(linear, left bottom, right bottom, color-stop(0%," + $scope.menuItems[i].color + "), color-stop(100%,blue))'}";
-            
-            //-webkit - linear - gradient(bottom, value.color, );
-         //   value.itemstyle = "{'background-color':'#" + value.color + "; !important'}";
-            //$this.addClass('active-menu-parent');
         }
 
     }
@@ -159,14 +151,48 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.clock = Date.now() // get the current time
         $timeout(tick, $scope.tickInterval); // reset the timer
     }
+    $scope.menuItemsSearch = [];
     $timeout(tick, $scope.tickInterval);
     MenuAPIService.GetMenuItems().then(function (response) {
-        angular.forEach(response, function (value, key,itm) {
+        angular.forEach(response, function (value, key, itm) {
             value.color = $scope.colors[key % $scope.colors.length];
             value.keyclass = key % 16;
-        });
+            value.isSelected = false;
+            matchParentNode(value);
+            $scope.menuItemsSearch[$scope.menuItemsSearch.length] = value;
+        });    
+       
         $scope.menuItems = response;
     })
+    function matchParentNode(obj) {
+        if (obj.Childs != null) {
+
+            angular.forEach(obj.Childs, function (value, key, itm) {               
+                value.parent = obj;
+                value.isSelected = false;
+                matchParentNode(value);
+                $scope.menuItemsSearch[$scope.menuItemsSearch.length] = value;
+            });
+          
+
+        }       
+
+    }
+    $scope.getLeafItemClass = function (item) {
+        var current = decodeURIComponent(location.href);
+        item.isSelected = current.indexOf(item.Location) > -1;
+        $scope.menuItemsSearch[$scope.menuItemsSearch.indexOf(item.parent)].isSelected = item.isSelected;
+        return item.isSelected;
+    };
+    $scope.getParentItemClass = function (item) {
+       
+        return $scope.menuItemsSearch[$scope.menuItemsSearch.indexOf(item)].isSelected;
+    }
+   
+    $scope.logfunc = function (item) {
+        //[$scope.menuItemsSearch.indexOf(item)]
+        console.log($scope.menuItemsSearch);
+    }
 
     $scope.getParentItemClass = function (item) {
         var match = (item.Name == "NOC") ? "Analytics" : item.Name.replace(/\s/g, '');
