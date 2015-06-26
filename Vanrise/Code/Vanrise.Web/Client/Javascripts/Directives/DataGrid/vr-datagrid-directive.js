@@ -268,7 +268,7 @@
                     lastSortColumnDef.sortDirection = undefined;
                     lastSortColumnDef = undefined;
                 }
-            }
+            };
 
             gridApi.itemAdded = function (item) {
                 itemChanged(item, "Added");
@@ -295,6 +295,34 @@
                     itemsToAdd.push(itm);
                 })
                 addBatchItemsToSource(itemsToAdd);
+            };
+
+            gridApi.addItemsToBegin = function (items) {
+                var itemsToAdd = [];//create a new array to avoid changing the original items
+                angular.forEach(items, function (itm) {
+                    itemsToAdd.unshift(itm);
+                })
+                addBatchItemsToBeginSource(itemsToAdd);
+            };
+
+            function addBatchItemsToBeginSource(items) {
+                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
+                for (var i = 0; i < numberOfItems; i++) {
+                    if (items.length > 0) {
+                        ctrl.datasource.unshift(items[0]);
+                        items.splice(0, 1);
+                    }
+                }
+
+                if (items.length > 0) {
+                    setTimeout(function () {
+                        addBatchItemsToBeginSource(items);
+                        scope.$apply(function () {
+
+                        });
+
+                    }, 10);
+                }
             }
 
             function addBatchItemsToSource(items) {
