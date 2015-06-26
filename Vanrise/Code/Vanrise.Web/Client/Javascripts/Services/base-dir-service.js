@@ -69,7 +69,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
 
     function generateHTMLElementName() {
         return 'ElmntId_' + replaceAll(guid(), '-', '');
-    };
+    }
 
     function getValidationMessageTemplate(requiredValue, requiredArray, invalidFormat, customValidation) {
         var template = '<div  class="disable-animations tooltip-error" ng-style="ctrl.isVisibleTooltip() ? {\'display\':\'block\'} : {\'display\':\'none\'} " ng-messages="ctrl.getErrorObject()">';
