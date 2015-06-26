@@ -101,13 +101,20 @@ namespace TOne.Analytics.Business
 
             }
             int totalCount;
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow, out totalCount);
-            var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount);
+            List<decimal> totalValues,totals;
+            List<DateTime> datetotalValues;
+            decimal totalAverage,totalPercentage,totalPreviousPercentage;
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow, out totalCount, out totalValues, out datetotalValues, out totalAverage);
+            var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount, totalValues, datetotalValues, totalAverage, out totals,out totalPercentage,out totalPreviousPercentage);
             result.TotalCount = totalCount;
+            result.TotalValues = totals;
+            result.TotalAverage = totalAverage;
+            result.TotalPercentage = totalPercentage;
+            result.TotalPreviousPercentage = totalPreviousPercentage;
             return result;
         }
 
-        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount)
+        public VariationReportResult GetVariationReportsData(List<VariationReports> variationReports, List<TimeRange> timeRanges, DateTime selectedDate, int periodCount, List<decimal> totalValues, List<DateTime> datetotalValues, decimal totalAverage, out List<decimal> totals, out decimal totalPercentage, out decimal totalPreviousPercentage)
         {
             List<VariationReportsData> variationReportsData = new List<VariationReportsData>();
             VariationReportsData current = null;
@@ -142,6 +149,36 @@ namespace TOne.Analytics.Business
             foreach (var item in variationReportsData)
             {
                 decimal average = 0;
+                double CurrentValue = double.Parse(item.Values.First().ToString());
+                double PrevValue = double.Parse(item.Values[1].ToString());
+                foreach (var totalDurations in item.Values)
+                    average += totalDurations;
+                average = average / periodCount;
+                item.PeriodTypeValueAverage = average;
+                item.PeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - Convert.ToDouble(average)) / (average == 0 ? double.MaxValue : Convert.ToDouble(average))) * 100;
+                item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentValue - PrevValue) / (PrevValue == 0 ? double.MaxValue : PrevValue)) * 100;
+
+            }
+
+            totals = new List<decimal>();
+            int i = 0;
+
+            foreach (var timeRange in timeRanges)
+            {
+                if (datetotalValues.Contains(timeRange.FromDate))
+                {
+                    totals.Add(totalValues[i]);
+                    i++;
+                }
+                else
+                    totals.Add(0);
+
+            }
+
+            ////Calcule of Total AVG, Total %, Total Previouss %: 
+             foreach (var item in variationReportsData)
+            {
+                decimal average = 0;
                 double CurrentDayValue = double.Parse(item.Values.First().ToString());
                 double PrevDayValue = double.Parse(item.Values[1].ToString());
                 foreach (var totalDurations in item.Values)
@@ -152,6 +189,10 @@ namespace TOne.Analytics.Business
                 item.PreviousPeriodTypeValuePercentage = Convert.ToDecimal((CurrentDayValue - PrevDayValue) / (PrevDayValue == 0 ? double.MaxValue : PrevDayValue)) * 100;
 
             }
+             double currentValue = double.Parse(totals.FirstOrDefault().ToString());
+             double prevValue = double.Parse(totals[1].ToString());
+            totalPercentage = Convert.ToDecimal((currentValue - Convert.ToDouble(totalAverage)) / (totalAverage == 0 ? double.MaxValue : Convert.ToDouble(totalAverage))) * 100;
+            totalPreviousPercentage = Convert.ToDecimal((currentValue - prevValue) / (prevValue == 0 ? double.MaxValue : prevValue)) * 100;
 
             return new VariationReportResult() { VariationReportsData = variationReportsData.OrderBy(itm => itm.RowNumber), TimeRange = timeRanges };
 

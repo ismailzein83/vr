@@ -161,7 +161,7 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, out int totalCount)
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
         {
             List<VariationReports> variationReportList = new List<VariationReports>();
             DataTable timeRangeDataTable = new DataTable();
@@ -170,6 +170,9 @@ namespace TOne.Analytics.Data.SQL
             DateTime endTime = (from d in timeRange select d.ToDate).Max();
             string selectedReportQuery = GetVariationReportQuery(timeRange,variationReportOptions);
             int totalCount_Internal = 0;
+            List<decimal> totalValues_Internal= new List<decimal>() ;
+            List<DateTime> datetotalValues_Internal = new List<DateTime>();
+            decimal TotalAverage_Internal=0; 
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 ExecuteReaderText(selectedReportQuery,
                 (reader) =>
@@ -179,6 +182,16 @@ namespace TOne.Analytics.Data.SQL
                     reader.NextResult();
                     reader.Read();
                     totalCount_Internal = (int)reader["TotalCount"];
+                    reader.NextResult();
+                    while (reader.Read())
+                    {
+                        totalValues_Internal.Add(Convert.ToDecimal(reader["TotalValues"]));
+                        datetotalValues_Internal.Add(GetReaderValue<DateTime>(reader, "FromDate"));
+                    }
+                    reader.NextResult();
+                    reader.Read();
+                    TotalAverage_Internal = Convert.ToDecimal(reader["TotalAverage"]);
+                    
                 },
                 (cmd) =>
                 {
@@ -192,6 +205,9 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
             totalCount = totalCount_Internal;
+            totalValues = totalValues_Internal;
+            datetotalValues = datetotalValues_Internal;
+            TotalAverage = TotalAverage_Internal;
             return variationReportList ;
 
 
@@ -567,7 +583,7 @@ namespace TOne.Analytics.Data.SQL
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             #JoinStatement#           
             WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# 
-            GROUP BY #IDColumn#, #NameColumn#;
+            GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             
             WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
 
@@ -575,25 +591,70 @@ namespace TOne.Analytics.Data.SQL
             0.0 as [AVG],
             0.0 as [%], 
             0.0 as [Prev %],
-            tr.FromDate,
-            tr.ToDate,
+            tr.FromDate as FromDate,
+            tr.ToDate as ToDate,
             (#ValueColumn#) as Total,
             Ent.ID as ID
+            INTO #Results
             From @timeRange tr
             LEFT JOIN Billing_Stats BS ON BS.CallDate >= tr.FromDate AND BS.CallDate < tr.ToDate
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             JOIN FilteredEntities Ent ON Ent.ID = #BSIDColumn#
-            GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate            
+            GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate, ERC.Rate,ERS.Rate          
             ORDER BY Ent.RowNumber, tr.FromDate, tr.ToDate;
+
+            SELECT * FROM #Results
+
+            DECLARE @TotalCount int
+            SELECT @TotalCount= (SELECT COUNT(*) as TotalCount FROM #OrderedEntities)
+            select @TotalCount as TotalCount
+
+             DECLARE @TotalsTables table(TotalValues numeric(10,2),FromDate Datetime )
+INSERT INTO @TotalsTables SELECT SUM(Total) as TotalValues ,FromDate From #Results GROUP BY FromDate Order By FromDate desc
+SELECT TotalValues,FromDate FROM @TotalsTables
+
+             SELECT SUM(TotalValues)/@TotalCount as TotalAverage fROM @TotalsTables
+
+           -- DECLARE @AVG_Table table(EntityID varchar(5), [Average] numeric(10,2))
+          --  INSERT INTO @AVG_Table  SELECT ID as EntityID, AVG(Total) as [Average]  From #Results GROUP BY ID
             
-            SELECT COUNT(*) as TotalCount FROM #OrderedEntities
+           -- SELECT Average as TotalAverage FROM @AVG_Table
+
+         --   SELECT rslt.FromDate, rslt.ToDate, (rslt.Total - avg_table.Average) / avg_table.Average as [Average]
+        --    FROM #Results rslt
+       --     JOIN @AVG_Table avg_table ON rslt.ID = avg_table.EntityID
+            
+           
+          --  DECLARE @currentDayValues_Table table(currentdayvalue numeric(10,2))
+          --  DECLARE @previousDayValues_Table table(previousdayvalue numeric(10,2))
+           
+        
+         --   INSERT INTO @currentDayValues_Table (SELECT (Total-Average/Average) AS currentdayvalue FROM #Results,@AVG_Table  WHERE FromDate = @EndTime)
+         --   INSERT INTO @previousDayValues_Table (SELECT (currentdayvalue- Total) AS previousdayvalue FROM #Results,@currentDayValues_Table WHERE FromDate = DateADD(Day,-1,@EndTime))
+
+          --  SELECT SUM(Average) AS TotalAverage ,     
+          --         SUM(PercentageValue ) from(SeLECT currentdayvalue as PercentageValue from @currentDayValues_Table ) t  AS TotalPeriodTypeValuePercentage,
+        --           SUM(PreviousPercentageValue )  AS PreviousPeriodTypeValuePercentage               
+        --    From #Results,@AVG_Table
+
+             --GROUP BY FromDate Order By FromDate desc
+                         
+                            -- SUM( (@currentDayValue - TotalAverage)/TotalAverage *100 ) AS TotalPeriodTypeValuePercentage,
+                         --SUM( (@currentDayValue- @previousDayValue)/previousDayValue ) AS PreviousPeriodTypeValuePercentage
+
+                        -- SUM(  ( (currentDayValue from (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime)) - TotalAverage)/(TotalAverage) * 100)     AS TotalPeriodTypeValuePercentage, 
+                        -- SUM( (  (currentDayValue from (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime)) - (previousDayValue  from (SELECT Total as previousDayValue FROM #Results WHERE CallDate = DateADD(Day,-1,@EndTime))) )  /   (previousDayValue  from (SELECT Total as previousDayValue FROM #Results WHERE CallDate = DateADD(Day,-1,@EndTime)))  )  as PreviousPeriodTypeValuePercentage 
+                        
+                        -- SELECT sum(val)  from  (SeLECT total as val from @T_variable ) t
+                        -- SUM(VAL) FROM(  (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime) - TotalAverage/(TotalAverage) * 100) t
+
             ");
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#", " SUM(SaleDuration)/60 ");
+                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
@@ -617,7 +678,7 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.TopDestinationMinutes:
                     query.Replace("#NameColumn#", " Z.Name ");
-                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
+                    query.Replace("#ValueColumn#", " SUM(SaleDuration)/60 ");
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
@@ -627,16 +688,17 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.InBoundAmount:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#", " SUM(Sale_Nets) ");
+                    query.Replace("#ValueColumn#", " SUM(Sale_Nets)/ ISNULL(ERS.Rate,1) ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#BSIDColumn#", "BS.CustomerID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                     query.Replace("#WhereStatement#", @" ");
                     break;
+              
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
-                    query.Replace("#ValueColumn#", " SUM(Cost_Nets) ");
+                    query.Replace("#ValueColumn#", " SUM(Cost_Nets)/ISNULL(ERC.Rate,1) ");
                     query.Replace("#IDColumn#", " cas.CarrierAccountID ");
                     query.Replace("#BSIDColumn#", " BS.CustomerID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
@@ -646,18 +708,19 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.InOutBoundAmount:
                     break;
+         
                 case VariationReportOptions.TopDestinationAmount:
                     query.Replace("#NameColumn#", " Z.Name ");
-                    query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets) ");
+                    query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
                     query.Replace("#WhereStatement#", @" ");
-
                     break;
+     
                 case VariationReportOptions.Profit:
                     query.Replace("#NameColumn#", " cpc.Name ");
-                    query.Replace("#ValueColumn#", " SUM(Sale_Nets - Cost_Nets) ");
+                    query.Replace("#ValueColumn#", " SUM( (Sale_Nets/ISNULL(ERS.Rate,1)) - (Cost_Nets/ISNULL(ERC.Rate,1)) ) ");
                     query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                     query.Replace("#BSIDColumn#", " BS.CustomerID ");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID

@@ -12,5 +12,11 @@ namespace TOne.Analytics.Entities
         public IEnumerable<VariationReportsData> VariationReportsData { get; set; }
         public List<TimeRange> TimeRange { get; set; }
         public int TotalCount { get; set; }
+        public List<decimal> TotalValues { get; set; }
+        public decimal TotalAverage { get; set; }
+
+        public decimal TotalPercentage { get; set; }
+        public decimal TotalPreviousPercentage { get; set; }
+  
     }
 }

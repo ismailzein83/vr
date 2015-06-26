@@ -4,12 +4,14 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
 
     var chartAPI;
     defineScope();
+    load();
 
 
     function defineScope() {
         $scope.fromDate = '2013/07/31';
         $scope.periodCount = 7;
         $scope.data = [];
+        $scope.totalData = [];
         $scope.timeRanges = [];
         $scope.chartData = [];
 
@@ -21,7 +23,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             currentPage: 1,
             totalDataCount: 0,
             pageChanged: function () {
-                return getVariationReportsData();
+               return getVariationReportsData();
             }
         };
         $scope.onSearch = function () {
@@ -32,6 +34,8 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             chartAPI = api;
         };
     }
+
+    function load() { }
 
     function loadTimePeriods() {
         $scope.timePeriods = [];
@@ -55,6 +59,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
+            $scope.totalData.length = 0;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
 
             angular.forEach(response.TimeRange, function (item) {
@@ -68,13 +73,15 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             setTimeout(function () {
                 $scope.$apply(function () {
                     angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
+                    $scope.summarydata = response;
+                   
+                    
                 });
             }, 1);
             updateChart($scope.timeRanges, response.VariationReportsData);
 
         }).finally(function () {
             $scope.isLoading = false;
-
         });
     }
 
