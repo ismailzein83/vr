@@ -22,7 +22,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ID = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                directiveName = reader["DirectiveName"] as string,
+                DirectiveName = reader["DirectiveName"] as string,
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["Setting"] as string)
             };
             return instance;
@@ -44,13 +44,18 @@ namespace Vanrise.Security.Data.SQL
             return GetItemsSP("sec.sp_WidgetManagement_GetAllWidgets", WidgetMapper);
         }
         private Widget WidgetMapper(IDataReader reader)
-        {
+        {  
             Widget instance = new Widget
             {
                 Id = (int)reader["Id"],
                 Name = reader["WidgetName"] as string,
                 WidgetDefinitionId = GetReaderValue<int>(reader, "WidgetDefinitionId"),
-                WidgetDefinitionName=reader["WidgetDefinitionName"]as string,
+                WidgetDefinition = new WidgetDefinition
+                {
+                    ID = GetReaderValue<int>(reader, "WidgetDefinitionId"),
+                    Name = reader["WidgetDefinitionName"] as string,
+                    DirectiveName = reader["DirectiveName"] as string,
+                },
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetSetting>(reader["Setting"] as string)
             };
             return instance;

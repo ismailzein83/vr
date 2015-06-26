@@ -17,10 +17,10 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.MeasureTypes[0], visualElementSettings.fromdate, visualElementSettings.todate, 10, visualElementSettings.MeasureTypes);
+                return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.MeasureTypes[0], visualElementController.filter.fromDate, visualElementController.filter.toDate, 10, visualElementSettings.MeasureTypes);
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;
-                return BIDataAPIService.GetMeasureValues(visualElementSettings.timedimensiontype.value, visualElementSettings.fromdate, visualElementSettings.todate, visualElementSettings.MeasureTypes);
+                return BIDataAPIService.GetMeasureValues(visualElementController.filter.timeDimensiontype.value, visualElementController.gilter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
                 break;
         }
     }

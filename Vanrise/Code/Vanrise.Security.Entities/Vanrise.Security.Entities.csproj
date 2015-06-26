@@ -51,10 +51,8 @@
     <Compile Include="BusinessEntity.cs" />
     <Compile Include="BusinessEntityNode.cs" />
     <Compile Include="BusinessEntityModule.cs" />
-    <Compile Include="DynamicPage.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Module.cs" />
-    <Compile Include="PageSettings.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomPasswordHelper.cs" />
@@ -62,8 +60,7 @@
     <Compile Include="SecurityContext.cs" />
     <Compile Include="User.cs" />
     <Compile Include="View.cs" />
-    <Compile Include="VisualElement.cs" />
-    <Compile Include="VisualElementSettings.cs" />
+    <Compile Include="Content.cs" />
     <Compile Include="Widget.cs" />
     <Compile Include="WidgetDefinition.cs" />
     <Compile Include="WidgetDefinitionSetting.cs" />

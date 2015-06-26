@@ -8,9 +8,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         scope: {
             onReady: '=',
             settings: '=',
-            timedimensiontype: '=',
-            fromdate: '=',
-            todate: '='
+            filter:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -64,7 +62,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 .then(function (response) {
                             console.log(response);
                             if (ctrl.isDateTimeGroupedData) {
-                                BIUtilitiesService.fillDateTimeProperties(response, settings.timedimensiontype.value, settings.fromdate, settings.todate, false);
+                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, false);
                                 refreshChart(response);
                             }
                             else

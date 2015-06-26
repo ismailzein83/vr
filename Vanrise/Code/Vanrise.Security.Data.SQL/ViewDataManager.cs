@@ -65,17 +65,17 @@ namespace Vanrise.Security.Data.SQL
         }
 
 
-        public List<DynamicPage> GetDynamicPages()
+        public List<View> GetDynamicPages()
         {
 
             return GetItemsSP("sec.sp_View_GetByType", DynamicPageMapper, ViewType.Dynamic);
         }
-        private DynamicPage DynamicPageMapper(IDataReader reader)
+        private View DynamicPageMapper(IDataReader reader)
         {
-            DynamicPage instance = new DynamicPage
+            View instance = new View
             {
                 // ID = (int)reader["ID"],
-                PageName = reader["PageName"] as string,
+                Name = reader["PageName"] as string,
                 ModuleName = reader["ModuleName"] as string
             };
             return instance;
@@ -85,7 +85,7 @@ namespace Vanrise.Security.Data.SQL
         {
             string serialziedContent = null;
             if (view.Content != null)
-                serialziedContent = Common.Serializer.Serialize(view.Content);
+                serialziedContent = Common.Serializer.Serialize(view.Content,true);
             string serialziedAudience = null;
             if (view.Audience != null)
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
@@ -100,13 +100,25 @@ namespace Vanrise.Security.Data.SQL
 
         public View GetView(int viewId)
         {
-            return GetItemSP("sec.sp_View_GetById ", GetPageMapper, viewId);
+            return GetItemSP("sec.sp_View_GetById ", GetViewMapper, viewId);
         }
-        private View GetPageMapper(IDataReader reader)
+        private View GetViewMapper(IDataReader reader)
         {
 
-            View instance = new View();
-            instance.Content = Common.Serializer.Deserialize<List<VisualElement>>(reader["Content"] as string);
+            View instance = new View
+            {
+                ViewId = (int)reader["Id"],
+                Name = reader["Name"] as string,
+                Url = reader["Url"] as string,
+                ModuleId = (int) reader["Module"],
+                RequiredPermissions = this.ParseRequiredPermissionsString(GetReaderValue<string>(reader, "RequiredPermissions")),
+                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
+                Content = Common.Serializer.Deserialize<List<Content>>(reader["Content"] as string),
+                Type=(ViewType) reader["Type"],
+                
+
+            };
+        
 
             return instance;
         }

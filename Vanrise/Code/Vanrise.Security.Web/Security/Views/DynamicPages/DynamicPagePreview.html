@@ -24,9 +24,9 @@
         <div vr-loader="isGettingData">
             <vr-row>
                 <div class="list-group" ng-sortable="itemsSortable">
-                    <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}"> 
-                        <vr-directivewrapper directive="visualElement.directive" on-ready="visualElement.onElementReady" settings="visualElement.settings"
-                                             retrievedataonload="true" fromdate="fromDate" todate="toDate" timedimensiontype="selectedTimeDimensionType"></vr-directivewrapper>
+                    <vr-columns ng-repeat="widget in widgets" colnum="{{widget.NumberOfColumns}}">
+                        <vr-directivewrapper directive="widget.Setting.Directive" on-ready="widget.onElementReady" settings="widget.Setting.Settings"
+                                             retrievedataonload="true" filter="filter"></vr-directivewrapper>
                     </vr-columns>
                 </div>
 

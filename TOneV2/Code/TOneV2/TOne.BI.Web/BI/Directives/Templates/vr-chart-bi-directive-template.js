@@ -1,6 +1,6 @@
-﻿VrChartDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesManagementAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿VrChartDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesManagementAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();

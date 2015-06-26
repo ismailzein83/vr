@@ -1,67 +1,44 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams', 'DynamicPagesAPIService', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams', 'DynamicPagesAPIService','WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService'];
 
-function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService,WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService) {
+    var viewId;
     loadParameters();
     defineScope();
     load();
-    var viewId;
+    
     function loadParameters() {
-        if ($routeParams.params!=undefined)
-            viewId = JSON.parse($routeParams.params).viewId;//.viewId;
-          //  VRNavigationService.getParameters($scope);
-      //  $scope.visualElements = 
-        
-      // console.log($scope.visualElements);
-    }
-    function getVisualElements() {
-        console.log("out");
-        console.log(viewId);
-        if (viewId != undefined) {
-            console.log(viewId);
-            return DynamicPagesAPIService.GetView(viewId).then(function (response) {
-                $scope.visualElements = response.Content;
-                addTimeToVisualElements();
-            });
-        }
-        else {
-            $scope.visualElements = $scope.$parent.visualElements;
-            addTimeToVisualElements();
-        }
-    }
-    function addTimeToVisualElements(){
-        for (var i = 0; i < $scope.visualElements.length; i++) {
-            $scope.visualElements[i].settings.fromdate = $scope.fromDate;
-            $scope.visualElements[i].settings.todate = $scope.toDate;
-            $scope.visualElements[i].settings.timedimensiontype = $scope.selectedTimeDimensionType;
+        if ($routeParams.params != undefined) {
+            viewId = JSON.parse($routeParams.params).viewId;
 
         }
     }
     function defineScope() {
-        $scope.visualElements = [];
+        $scope.allWidgets = [];
+        $scope.content = [];
+        $scope.widgets = [];
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
         defineTimeDimensionTypes();
         $scope.subViewValue = {};
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate:$scope.fromDate,
+            toDate:$scope.toDate 
+        }
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.save = function () {
-        };
         $scope.chartReady = function (api) {
             $scope.chartAPI = api;
-
         };
    
         $scope.Search = function () {
-            if ($scope.visualElements != null && $scope.visualElements != undefined && $scope.visualElements.length>0) {
+            if ($scope.widgets != null && $scope.widgets != undefined && $scope.widgets.length > 0) {
                 console.log("update");
                 updateDashboard();
             }
             else {
-                
-            getVisualElements();
-           
-
+                getData();
             }
 
             
@@ -71,25 +48,6 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             chartTopAPI = api;
             // updateChart();
         };
-        //$scope.addVisualElement = function () {
-        //    $scope.subViewValue = $scope.subViewValue.getValue();
-        //    var visualElement = {
-        //        settings: $scope.subViewValue,
-        //        directive: $scope.selectedWidget.directiveName,
-        //        numberOfColumns: $scope.selectedNumberOfColumns.value
-        //    };
-
-        //    visualElement.onElementReady = function (api) {
-        //        visualElement.API = api;
-        //    };
-        //    $scope.visualElements.push(visualElement);
-        //    console.log(visualElement.settings.timedimensiontype);
-        //    $scope.selectedWidget = null;
-
-        //};
-        //$scope.removeVisualElement = function (visualElement) {
-        //    $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
-        //};
 
     }
     function defineTimeDimensionTypes() {
@@ -103,11 +61,17 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
     }
     function load() {
         $scope.isGettingData = false;
+
     }
     function updateDashboard() {
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
+        }
         var refreshDataOperations = [];
-        angular.forEach($scope.visualElements, function (visualElement) {
-            refreshDataOperations.push(visualElement.API.retrieveData);
+        angular.forEach($scope.widgets, function (widget) {
+            refreshDataOperations.push(widget.API.retrieveData);
         });
         $scope.isGettingData = true;
         return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
@@ -115,10 +79,47 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
                 $scope.isGettingData = false;
             });
     }
+    function getData() {
+        if (viewId != undefined) {
+            UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
+                 .finally(function () {
+                     getWidgets($scope.allWidgets, $scope.content);
+                     $scope.isGettingData = false;
+                 });
+        }
+        else {
+            UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
+                .finally(function () {
+                    getWidgets($scope.allWidgets, $scope.$parent.Contents);
+                    $scope.isGettingData = false;
+                });
 
+        }
+       
+            
+    }
+    function getWidgets(allWidgets,content){
+        for (var i = 0; i < allWidgets.length; i++) {
+            for (var j = 0; j < content.length; j++) {
+                if (allWidgets[i].Id == content[j].WidgetId) {
+                    $scope.widgets.push(allWidgets[i]);
+                    $scope.widgets[j].NumberOfColumns = content[j].NumberOfColumns;
+                 
+                }
+            }
+        }
+    }
+    function loadAllWidgets() {
+        return WidgetAPIService.GetAllWidgets().then(function (response) {
+            $scope.allWidgets = response;
+        });
 
-
-
+    }
+    function loadViewByID() {
+        return DynamicPagesAPIService.GetView(viewId).then(function (response) {
+            $scope.content = response.Content;
+        });
+    }
 
 }
 appControllers.controller('Security_DynamicPagePreviewController', DynamicPagePreviewController);

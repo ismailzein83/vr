@@ -11,7 +11,7 @@ namespace Vanrise.Security.Business
 {
     public class DynamicViewsManager
     {
-        public List<DynamicPage> GetDynamicPages()
+        public List<View> GetDynamicPages()
         {
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetDynamicPages();

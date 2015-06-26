@@ -8,7 +8,7 @@ namespace Vanrise.Security.Entities
 {
     public class WidgetSetting
     {
-        public Object settings { get; set; }
-        public string directive { get; set; }
+        public Object Settings { get; set; }
+        public string Directive { get; set; }
     }
 }

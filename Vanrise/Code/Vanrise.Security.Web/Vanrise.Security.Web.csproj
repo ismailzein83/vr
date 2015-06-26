@@ -133,8 +133,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPagePreview.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.js" />
-    <Content Include="Security\Views\DynamicPagesManagement.html" />
-    <Content Include="Security\Views\DymanicPagesManagement.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPagesManagement.html" />
+    <Content Include="Security\Views\DynamicPages\DymanicPagesManagement.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
     <Content Include="Security\Views\PermissionEditor.html" />
@@ -184,8 +184,8 @@
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.js" />
-    <Content Include="Security\Views\WidgetsManagmentPage.html" />
-    <Content Include="Security\Views\WidgetsManagmentPage.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetsManagement.html" />
+    <Content Include="Security\Views\WidgetsPages\WidgetsManagement.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

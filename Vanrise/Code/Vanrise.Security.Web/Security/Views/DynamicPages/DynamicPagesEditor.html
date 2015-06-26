@@ -10,7 +10,7 @@
                 <vr-row>
                     <vr-columns colnum="4">
                         <vr-section title="Page Name">
-                            <vr-textbox value="PageName" label="Page Name" isrequired></vr-textbox>
+                            <vr-textbox value="pageName" label="Page Name" isrequired></vr-textbox>
                         </vr-section>
                     </vr-columns>
                     <vr-columns colnum="3">
@@ -28,12 +28,12 @@
                         <vr-section title="Audiences">
                             <vr-columns colnum="12">
 
-                                <vr-select ismultipleselection label="Users:" datasource="Users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
+                                <vr-select ismultipleselection label="Users:" datasource="users" selectedvalues="selectedUsers" datatextfield="Name" datavaluefield="UserId"
                                            entityname="Users">
                                 </vr-select>
                             </vr-columns>
                             <vr-columns colnum="12">
-                                <vr-select ismultipleselection label="Groups:" datasource="Roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
+                                <vr-select ismultipleselection label="Groups:" datasource="roles" selectedvalues="selectedRoles" datatextfield="Name" datavaluefield="RoleId"
                                            entityname="Roles">
                                 </vr-select>
                             </vr-columns>
@@ -49,7 +49,7 @@
                     <vr-row>
                         <vr-columns colnum="3">
                             <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
-                                       datasource="widgets" selectedvalues="selectedWidget" ></vr-select>
+                                       datasource="widgets" selectedvalues="selectedWidget" isRequired></vr-select>
                         </vr-columns>
                         <vr-columns colnum="3">
                             <vr-select datasource="numberOfColumns" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedNumberOfColumns" isrequired hidefilterbox></vr-select>
@@ -63,21 +63,21 @@
                 </vr-form>
                 <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
                     <div transclude-to="buttons">
-                        <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addVisualElement"></vr-button>
+                        <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addContent"></vr-button>
                     </div>
                 </vr-actionbar>
                 <div>
                     <vr-row>
-                        <vr-columns ng-repeat="visualElement in visualElements" colnum="{{visualElement.numberOfColumns}}">
+                        <vr-columns ng-repeat="Content in Contents" colnum="{{Content.NumberOfColumns}}">
                             <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visualElement)"></i>
+                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeContent(Content)"></i>
                             <!--<vr-textbox value="visualElement.Name" label="{visualElement.Name}"></vr-textbox>-->
                         </vr-columns>
                     </vr-row>
                 </div>
 
             </div>
-            <div ng-show="previewSelected" ng-if="visualElements.length>0">
+            <div ng-show="previewSelected" ng-if="Contents.length>0">
                 <div ng-include="'Client/Modules/Security/Views/DynamicPages/DynamicPagePreview.html'"></div>
 
                 <!--<div vr-loader="isGettingData">

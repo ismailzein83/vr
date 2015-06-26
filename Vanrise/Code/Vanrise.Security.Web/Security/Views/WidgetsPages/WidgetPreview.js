@@ -19,6 +19,11 @@ function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensio
         $scope.toDate = "2015-04-30";
         defineTimeDimensionTypes();
         $scope.subViewValue = {};
+        $scope.filter = {
+            timeDimensionType: $scope.selectedTimeDimensionType,
+            fromDate: $scope.fromDate,
+            toDate: $scope.toDate
+        }
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };

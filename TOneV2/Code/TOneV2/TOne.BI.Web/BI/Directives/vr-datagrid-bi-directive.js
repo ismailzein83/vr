@@ -8,9 +8,7 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
         scope: {
             onReady: '=',
             settings: '=',
-            timedimensiontype: '=',
-            fromdate: '=',
-            todate: '='
+            filter:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -73,7 +71,7 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
-                                BIUtilitiesService.fillDateTimeProperties(response, settings.timedimensiontype.value, settings.fromdate, settings.todate, true);
+                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, true);
                             refreshDataGrid(response);
                         });
         }

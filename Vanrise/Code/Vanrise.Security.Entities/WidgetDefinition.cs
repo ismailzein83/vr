@@ -10,7 +10,7 @@ namespace Vanrise.Security.Entities
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string directiveName { get; set; }
+        public string DirectiveName { get; set; }
         public WidgetDefinitionSetting Setting { get; set; }
     }
 }

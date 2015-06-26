@@ -17,12 +17,13 @@ namespace Vanrise.Security.Entities
         public string Url { get; set; }
 
         public int ModuleId { get; set; }
+        public string ModuleName { get; set; }
 
         public Dictionary<string, List<string>> RequiredPermissions { get; set; }
 
         public AudienceWrapper Audience { get; set; }
         public ViewType Type { get; set; }
-        public List<VisualElement> Content { get; set; }
+        public List<Content> Content { get; set; }
     }
 
     public class AudienceWrapper

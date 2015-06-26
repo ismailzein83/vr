@@ -51,7 +51,7 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
             $scope.visualElement = visualElement;
        
             $scope.filter = {
-                WidgetDefinitionId: $scope.selectedWidget.ID,
+                WidgetDefinitionId: $scope.selectedWidget.Id,
                 WidgetName: $scope.WidgetName,
                 visualElement: $scope.visualElement,
             }

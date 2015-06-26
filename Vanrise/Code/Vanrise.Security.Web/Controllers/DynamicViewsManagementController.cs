@@ -12,7 +12,7 @@ namespace Vanrise.Security.Web.Controllers
     public class DynamicViewsManagementController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        public List<DynamicPage> GetDynamicPages()
+        public List<View> GetDynamicPages()
         {
             DynamicViewsManager manager = new DynamicViewsManager();
             return manager.GetDynamicPages();

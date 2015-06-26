@@ -11,26 +11,20 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
     function defineScope() {
         $scope.widgets = [];
         $scope.selectedWidget;
-        $scope.Measures = [];
-        $scope.Entities = [];
-        $scope.Users = [];
+        $scope.users = [];
         $scope.menuList = [];
         $scope.selectedUsers = [];
-        $scope.Roles = [];
-        $scope.PageName;
+        $scope.roles = [];
+        $scope.pageName;
         $scope.selectedRoles = [];
-        $scope.selectedEntityType;
-        $scope.selectedMeasureTypes=[];
-        $scope.visualElements = [];
         $scope.subViewValue = {};
-        $scope.ModuleId;
+        $scope.moduleId;
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+        $scope.Contents=[];
         $scope.selectedNumberOfColumns=3;
         $scope.save = function () {
-            console.log($scope.selectedUsers);
-            console.log($scope.selectedRoles);
             var selectedUsersIDs = [];
             for (var i = 0; i < $scope.selectedUsers.length; i++)
                 selectedUsersIDs.push($scope.selectedUsers[i].UserId);
@@ -41,15 +35,12 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
                 Users: selectedUsersIDs,
                 Groups: selectedRolesIDs
             };
-
             $scope.View = {
-                Name: $scope.PageName,
-                ModuleId: $scope.ModuleId,
+                Name: $scope.pageName,
+                ModuleId: $scope.moduleId,
                 Audience: Audiences,
-                Content: $scope.visualElements
+                Content: $scope.Contents
             };
-
-
 
             return DynamicPagesAPIService.SaveView($scope.View).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Page", response)) {
@@ -62,49 +53,28 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
             });
 
         };
-        //$scope.chartReady = function (api) {
-        //    $scope.chartAPI = api;
-
-        //};
-
-        //$scope.chartTopReady = function (api) {
-        //    chartTopAPI = api;
-        //    // updateChart();
-        //};
-        $scope.addVisualElement = function () {
-            $scope.subViewValue = $scope.subViewValue.getValue();
-            var visualElement = {
-                settings: $scope.subViewValue,
-                directive: $scope.selectedWidget.directiveName,
-                numberOfColumns: $scope.selectedNumberOfColumns.value
-            };
-
-            visualElement.onElementReady = function (api) {
-                visualElement.API = api;
-            };
-            $scope.visualElements.push(visualElement);
-           // console.log(visualElement.settings.timedimensiontype);
+        $scope.addContent = function () {
+            var Content = {
+                WidgetId: $scope.selectedWidget.Id,
+                NumberOfColumns: $scope.selectedNumberOfColumns.value
+            }
+            $scope.Contents.push(Content);
             $scope.selectedWidget = null;
-           
         };
-        $scope.removeVisualElement = function (visualElement) {
-            $scope.visualElements.splice($scope.visualElements.indexOf(visualElement), 1);
+        $scope.removeContent = function (Content) {
+            $scope.Contents.splice($scope.Contents.indexOf(Content), 1);
         };
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
             if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
-                $scope.ModuleId = $scope.beTree.currentNode.Id;
-                //$scope.showBreakInheritance = !$scope.beTree.currentNode.BreakInheritance;
-                //refreshGrid();
+                $scope.moduleId = $scope.beTree.currentNode.Id;
             }
         }, false);
         }
-
     function load() {
         defineNumberOfColumns();
-     
         defineChartSeriesTypes();
         $scope.isGettingData = true;
-        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadMeasures, loadEntities, loadUsers, loadRoles, loadTree]).finally(function () {
+        UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {
@@ -112,17 +82,13 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
         });
         
     }
-
     function loadTree() {
-        console.log("test");
         return MenuAPIService.GetAllMenuItems()
            .then(function (response) {
-               console.log(response);
                $scope.menuList = response;
               
            });
     }
-
     function loadWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
             angular.forEach(response, function (itm) {
@@ -131,7 +97,6 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
         });
 
     } 
-
     function defineNumberOfColumns() {
         $scope.numberOfColumns = [
             {
@@ -146,46 +111,26 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
 
         $scope.selectedNumberOfColumns = $scope.numberOfColumns[0];
     }
-
     function defineChartSeriesTypes() {
         $scope.chartSeriesTypes = [];
         for (var m in ChartSeriesTypeEnum) {
             $scope.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
         }
     }
-
-    function loadMeasures() {
-        return BIConfigurationAPIService.GetMeasures().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.Measures.push(itm);
-                console.log(itm);
-            });
-        });
-    }
-    function loadEntities() {
-        return BIConfigurationAPIService.GetEntities().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.Entities.push(itm);
-                console.log($scope.Entities[0].Id);
-            });
-        });
-    }
     function loadUsers() {
         UsersAPIService.GetUsers().then(function (response) {
             angular.forEach(response, function (users) {
-                $scope.Users.push(users);
+                $scope.users.push(users);
                 }) 
             });
       
     }
     function loadRoles() {
         RoleAPIService.GetRoles().then(function (response) {
-            //Remove existing roles
             angular.forEach(response, function (role) {
-                $scope.Roles.push(role);
+                $scope.roles.push(role);
                 }
 )});
     }
-
 }
 appControllers.controller('Security_DynamicPagesEditorController', DynamicPagesEditorController);
