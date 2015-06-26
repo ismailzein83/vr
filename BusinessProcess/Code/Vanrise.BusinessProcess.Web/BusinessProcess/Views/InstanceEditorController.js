@@ -10,7 +10,7 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.startInstance = function () {
+        $scope.createNewProcess = function () {
 
             $scope.issaving = true;
             var createProcessInput = buildInstanceObjFromScope();
