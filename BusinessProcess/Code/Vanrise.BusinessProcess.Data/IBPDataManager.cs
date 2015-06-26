@@ -7,6 +7,8 @@ namespace Vanrise.BusinessProcess.Data
     {
         int DeleteEvent(long eventId);
 
+        BPDefinition GetDefinition(int ID);
+
         List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title);
 
         System.Collections.Generic.List<BPDefinition> GetDefinitions();

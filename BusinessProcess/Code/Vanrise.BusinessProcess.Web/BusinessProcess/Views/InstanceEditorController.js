@@ -48,10 +48,14 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        $scope.BPDefinitionObj = undefined;
+        $scope.BPDefinitionID = undefined;
 
         if (parameters != undefined && parameters != null)
-            $scope.BPDefinitionObj = parameters.BPDefinitionObj;
+            $scope.BPDefinitionID = parameters.BPDefinitionID;
+
+        $scope.BPDefinitionObj = BusinessProcessAPIService.GetDefinition($scope.BPDefinitionID);
+        console.log('$scope.BPDefinitionObj');
+        console.log($scope.BPDefinitionObj);
 
 
     }

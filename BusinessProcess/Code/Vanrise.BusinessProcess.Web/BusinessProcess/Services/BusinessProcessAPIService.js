@@ -42,6 +42,13 @@ function BusinessProcessAPIService(BaseAPIService) {
             });
     }
 
+    function GetDefinition(id) {
+        return BaseAPIService.get("/api/BusinessProcess/GetDefinition",
+            {
+                id: id
+            });
+    }
+
     function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, trackingSeverity, message, lastTrackingId) {
         return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId", {
             ProcessInstanceID: processInstanceID,
@@ -70,7 +77,8 @@ function BusinessProcessAPIService(BaseAPIService) {
         GetTrackingSeverity: GetTrackingSeverity,
         GetOpenedInstances: GetOpenedInstances,
         CreateNewProcess: CreateNewProcess,
-        GetBPInstance: GetBPInstance
+        GetBPInstance: GetBPInstance,
+        GetDefinition: GetDefinition
     });
 
 }
