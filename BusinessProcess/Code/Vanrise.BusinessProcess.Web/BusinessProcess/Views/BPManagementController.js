@@ -67,15 +67,16 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
     function loadFilters() {
 
         BusinessProcessAPIService.GetDefinitions().then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.definitions.push(item);
-            });
+
+            for (var i = 0, len = response.length; i < len; i++) {
+                $scope.definitions.push(response[i]);
+            }
         });
 
         BusinessProcessAPIService.GetStatusList().then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.instanceStatus.push(item);
-            });
+            for (var i = 0, len = response.length; i < len; i++) {
+                $scope.instanceStatus.push(response[i]);
+            }
         });
     }
 
