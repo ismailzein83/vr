@@ -21,9 +21,12 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-section title="Widget Setting" ng-if="selectedWidget!=null">
-                            <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
-                        </vr-section>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Widget Setting" ng-if="selectedWidget!=null">
+                                <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
+                            </vr-section>
+                        </vr-columns>
+
                     </vr-row>
                 </vr-form>
                 <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
