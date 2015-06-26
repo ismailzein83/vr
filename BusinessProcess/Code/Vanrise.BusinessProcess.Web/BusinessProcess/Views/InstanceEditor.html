@@ -1,9 +1,8 @@
 ﻿<div vr-modalcontent width="'50%'" ng-controller="FraudAnalysis_InstanceEditorController">
-    <vr-modalbody  vr-loader="isGettingData">
+    <vr-modalbody vr-loader="isGettingData">
         <vr-form name="formCreateProcessInput">
-           
-            <vr-row> {{BPDefinitionObj.Configuration.Url}}
-                <div ng-include src="BPDefinitionObj.Configuration.Url">
+            <vr-row>
+                <div ng-include src="bpDefinitionObj.configuration.url">
                 </div>
             </vr-row>
         </vr-form>

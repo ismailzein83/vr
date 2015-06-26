@@ -3,6 +3,7 @@
 function InstanceEditorController($scope, BusinessProcessAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     defineScope();
     loadParameters();
+    load();
 
     function defineScope() {
         $scope.subViewExecuteStrategyProcessInput = {};
@@ -52,13 +53,36 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
         if (parameters != undefined && parameters != null)
             $scope.BPDefinitionID = parameters.BPDefinitionID;
+    }
 
-        $scope.BPDefinitionObj = BusinessProcessAPIService.GetDefinition($scope.BPDefinitionID);
-        console.log('$scope.BPDefinitionObj');
-        console.log($scope.BPDefinitionObj);
+    function load()
+    {
+        getBPDefinition().finally(function () {
+            $scope.isGettingData = false;
+        });
+    }
 
+
+
+    function getBPDefinition() {
+
+        return BusinessProcessAPIService.GetDefinition($scope.BPDefinitionID)
+           .then(function (response) {
+               fillScopeFromBPDefinitionObj(response);
+           })
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
+    }
+
+    function fillScopeFromBPDefinitionObj(bpDefinitionObject) {
+        $scope.bpDefinitionObj = bpDefinitionObject
+        $scope.bpDefinitionObj.configuration = bpDefinitionObject.Configuration;
+        $scope.bpDefinitionObj.configuration.url = bpDefinitionObject.Configuration.Url;
 
     }
+
+
 
 }
 appControllers.controller('FraudAnalysis_InstanceEditorController', InstanceEditorController);
