@@ -102,6 +102,20 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             };
         }
 
+        [HttpGet]
+        public BPInstanceModel GetBPInstance(int id)
+        {
+            
+            BPClient manager = new BPClient();
+            return BPMappers.MapInstance(manager.GetInstance(id));
+        }
+
+        [HttpGet]
+        public IEnumerable<BPInstanceStatus> GetNonClosedStatuses()
+        {
+            return BPInstanceStatusAttribute.GetNonClosedStatuses();
+        }
+
     }
 
     #region Argument Classes

@@ -4,7 +4,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
     "use strict";
 
-    var mainGridAPI, interval, lockGetData = false;
+    var mainGridAPI, interval, nonClosedStatuses, lockGetData = false;
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
@@ -20,29 +20,28 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         {
             lockGetData = true;
 
-            var pageInfo = {
-                fromRow: 1,
-                toRow: 10
-            };
-
-            if (mainGridAPI !== undefined) {
-                pageInfo = mainGridAPI.getPageInfo();
-            }
+            var pageInfo = mainGridAPI.getPageInfo();
 
             return BusinessProcessAPIService.GetTrackingsByInstanceId(
                 $scope.BPInstanceID,
                 pageInfo.fromRow,
                 pageInfo.toRow,
-                UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "Value"),
-                $scope.message,
                 $scope.lastTrackingId)
             .then(function (response) {
 
                 $scope.lastTrackingId = UtilsService.getPropMaxValueFromArray(response.Tracking, "TrackingId");
-                mainGridAPI.addItemsToSource(response.Tracking);
-                
-                if (response.InstanceStatus === BPInstanceStatusEnum.Running.value) startGetData();
+                mainGridAPI.addItemsToBegin(response.Tracking);
+                var isNonClosed = false;
 
+                for (var i = 0, len = nonClosedStatuses.length; i < len; i++) {
+
+                    if (response.InstanceStatus === nonClosedStatuses[i]) {
+                        isNonClosed = true;
+                        break;
+                    }
+                }
+                if (isNonClosed) startGetData();
+                
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -51,21 +50,43 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         }
     }
 
+    function loadSummary() {
+
+        BusinessProcessAPIService.GetBPInstance($scope.BPInstanceID).then(function (response) {
+
+            $scope.process = {
+                Title: response.Title,
+                Date: response.CreatedTime,
+                Status: response.StatusDescription
+            };
+        });
+    }
+
     function loadFilters() {
 
         BusinessProcessAPIService.GetTrackingSeverity().then(function (response) {
-            angular.forEach(response, function (item) {
-                $scope.trackingSeverity.push(item);
-            });
+            for (var i = 0 ; i < response.length ; i++) {
+                $scope.trackingSeverity.push(response[i]);
+            }
+        });
+    }
+
+    function loadNonClosedStatuses() {
+        nonClosedStatuses = [];
+        BusinessProcessAPIService.GetNonClosedStatuses().then(function (response) {
+            for (var i = 0 ; i < response.length ; i++) {
+                nonClosedStatuses.push(response[i]);
+            }
         });
     }
 
     function load() {
-        $scope.isGettingData = true;
-        getData().finally(function () {
-            $scope.isGettingData = false;
-            lockGetData = false;
-        });
+        defineScope();
+        loadParameters();
+        defineGrid();
+        loadFilters();
+        loadSummary();
+        loadNonClosedStatuses();
     }
 
     function defineGrid() {
@@ -77,6 +98,11 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
+            $scope.isGettingData = true;
+            getData().finally(function () {
+                $scope.isGettingData = false;
+                lockGetData = false;
+            });
         };
 
         $scope.filterGrid = function (item) {
@@ -118,6 +144,8 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
             stopGetData();
         });
 
+        
+
     }
 
     function isNullOrEmpty(value) {
@@ -139,10 +167,7 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
         }
     }
 
-    defineScope();
-    loadParameters();
     load();
-    defineGrid();
-    loadFilters();
+    
 }
 appControllers.controller('BusinessProcess_BPTrackingModalController', BPTrackingModalController);

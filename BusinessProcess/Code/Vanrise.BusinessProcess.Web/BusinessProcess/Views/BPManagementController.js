@@ -49,7 +49,7 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
     }
 
     function defineScope() {
-        $scope.toDate = getCurrentDate(0);
+        $scope.toDate = getCurrentDate(+1);
         $scope.fromDate = getCurrentDate(-1);
         $scope.definitions = [];
         $scope.selectedDefinition = [];

@@ -16,10 +16,8 @@ function BusinessProcessAPIService(BaseAPIService) {
         return BaseAPIService.get("/api/BusinessProcess/GetStatusList");
     }
 
-   function CreateNewProcess(createProcessInput) {
-        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess",
-            createProcessInput
-           );
+    function CreateNewProcess(createProcessInput) {
+        return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", createProcessInput);
     }
 
     function GetFilteredBProcess(DefinitionsId, InstanceStatus, FromRow, ToRow, DateFrom, DateTo) {
@@ -49,7 +47,7 @@ function BusinessProcessAPIService(BaseAPIService) {
             });
     }
 
-    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, trackingSeverity, message, lastTrackingId) {
+    function GetTrackingsByInstanceId(processInstanceID, fromRow, toRow, lastTrackingId) {
         return BaseAPIService.post("/api/BusinessProcess/GetTrackingsByInstanceId", {
             ProcessInstanceID: processInstanceID,
             FromRow: fromRow,
@@ -68,6 +66,10 @@ function BusinessProcessAPIService(BaseAPIService) {
         });
     }
 
+    function GetNonClosedStatuses() {
+        return BaseAPIService.get("/api/BusinessProcess/GetNonClosedStatuses");
+    }
+
     return ({
         GetDefinitions: GetDefinitions,
         GetFilteredDefinitions: GetFilteredDefinitions,
@@ -78,7 +80,8 @@ function BusinessProcessAPIService(BaseAPIService) {
         GetOpenedInstances: GetOpenedInstances,
         CreateNewProcess: CreateNewProcess,
         GetBPInstance: GetBPInstance,
-        GetDefinition: GetDefinition
+        GetDefinition: GetDefinition,
+        GetNonClosedStatuses: GetNonClosedStatuses
     });
 
 }
