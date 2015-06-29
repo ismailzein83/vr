@@ -328,6 +328,7 @@ Use this for keyframe animations
 }
 .action-bar{
     background-color: #e22337;
+    margin-top:10px;
 }
 .action-bar-left{   
     width:49%;
@@ -754,7 +755,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .menulink{
     text-decoration:none !important;
-    padding: 5px 0px 5px 37px !important;
+    padding: 3px 0px 3px 37px !important;
     color: #000;
     text-align:left !important;
 
@@ -1208,7 +1209,7 @@ input.ui-grid-filter-input[type="text"] {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-vr-button .btn {
+.action-bar .btn {
     height: 25px !important;
     padding: 2px 12px !important;
 }
