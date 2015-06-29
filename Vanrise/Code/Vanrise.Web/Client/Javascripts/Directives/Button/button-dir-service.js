@@ -36,6 +36,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
     function getButtonAttributes(type) {
         switch (type) {
+            case "Start":
+                return {
+                    text: "Start",
+                    class: "glyphicon  glyphicons-person-running"
+                };
+
             case "Reset":
                 return {
                     text: "Reset",

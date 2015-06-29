@@ -32,7 +32,7 @@
         $scope.selectedPeriod = "";
 
 
-        $scope.subViewExecuteStrategyProcessInput.getData = function () {
+        $scope.createProcessInput.getData = function () {
 
             angular.forEach($scope.selectedStrategies, function (itm) {
                 $scope.selectedStrategyIds.push(itm.id);
@@ -51,9 +51,6 @@
             };
         };
 
-
-
-        console.log($scope.subViewExecuteStrategyProcessInput.getData());
 
     }
 
