@@ -51,6 +51,7 @@
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />
+    <Compile Include="QueueItemType.cs" />
     <Compile Include="QueueSettings.cs" />
     <Compile Include="QueueSubscription.cs" />
   </ItemGroup>
