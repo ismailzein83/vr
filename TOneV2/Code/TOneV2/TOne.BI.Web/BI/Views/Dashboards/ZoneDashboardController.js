@@ -202,6 +202,6 @@
             })
             .finally(function () {
                 $scope.isGettingZoneData = false;
-            });;
+            });
         }
     });
