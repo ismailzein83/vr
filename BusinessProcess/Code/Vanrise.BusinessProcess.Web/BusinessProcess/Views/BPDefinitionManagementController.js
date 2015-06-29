@@ -35,7 +35,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
     function startGetData() {
         if (angular.isDefined(interval)) return;
         interval = $interval(function callAtInterval() {
-            $scope.searchClicked();
+            getData();
         }, 60000);
     }
 
