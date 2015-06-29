@@ -19,23 +19,26 @@ namespace TestRuntime.Tasks
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
 
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);
 
             runtimeServices.Add(bpService);
 
+            runtimeServices.Add(schedulerService);
+
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
-                {
-                    RepricingDay = DateTime.Parse("2013-03-29")
-                }
-            });
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new CreateProcessInput
+            //{
+            //    InputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput
+            //    {
+            //        RepricingDay = DateTime.Parse("2013-03-29")
+            //    }
+            //});
 
 
         }
