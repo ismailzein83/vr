@@ -135,8 +135,9 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetFiltered.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Get.sql" />
-    <Build Include="runtime\Stored Procedures\sp_Scheduler_Update.sql" />
-    <Build Include="runtime\Stored Procedures\sp_Scheduler_Insert.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateStatus.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Update.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

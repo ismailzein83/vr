@@ -14,6 +14,7 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[IsEnabled]
+      ,[Status]
       ,[TriggerTypeId]
       ,[TaskTrigger]
       ,[ActionTypeId]
