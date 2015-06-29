@@ -179,7 +179,7 @@ namespace Vanrise.Fzero.Services.Report
 
 
 
-            string exeFolder = Path.GetDirectoryName(@"C:\FMS\ReportLibrary\");
+            string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.Report\");
             string reportPath =string.Empty;
 
 
