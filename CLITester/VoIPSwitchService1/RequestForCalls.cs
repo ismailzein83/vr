@@ -49,7 +49,7 @@ namespace VoIPSwitchService
                                 //Check if the number is free or busy
 
                                 PhoneNumberService pp = new PhoneNumberService();
-                                PhoneNumberReturn ret = pp.RequestForCall("sama", "sama", testOperator.Operator.mcc, testOperator.Operator.mnc);
+                                PhoneNumberReturn ret = pp.RequestForCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], testOperator.Operator.mcc, testOperator.Operator.mnc);
                                 System.Threading.Thread.Sleep(1000);
                                 //PhoneNumber phoneNumber = PhoneNumberRepository.GetFreePhoneNumber(testOperator.OperatorId.Value);
 

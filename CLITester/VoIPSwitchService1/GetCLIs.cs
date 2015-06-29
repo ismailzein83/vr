@@ -87,7 +87,7 @@ namespace VoIPSwitchService
                                                 lstTestOperators[i].EndDate = DateTime.Now;
                                                 TestOperatorRepository.Save(lstTestOperators[i]);
 
-                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                                 System.Threading.Thread.Sleep(1000);
 
                                                 //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
@@ -129,7 +129,7 @@ namespace VoIPSwitchService
                                                 lstTestOperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Failed;
                                                 TestOperatorRepository.Save(lstTestOperators[i]);
 
-                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                                 System.Threading.Thread.Sleep(1000);
 
                                                 //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
@@ -138,7 +138,7 @@ namespace VoIPSwitchService
                                             else
                                             {
 
-                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                                 System.Threading.Thread.Sleep(1000);
 
                                                 //new DataManager().GetData(lstTestOperators[i].CarrierPrefix.Length, generatedCall, (reader) =>
@@ -155,7 +155,7 @@ namespace VoIPSwitchService
                                                         {
                                                             lstTestOperators[i].EndDate = DateTime.Now;
                                                             string testcli = generatedCall.SipAccount.User.CallerId;
-                                                            WriteToEventLog("gg" + generatedCall.SipAccount.User.CallerId);
+
                                                             ///Remove the character '+' from the Cli received, if exist
                                                             if (testcli.Substring(0, 1) == "+")
                                                             {
@@ -164,13 +164,7 @@ namespace VoIPSwitchService
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId.Substring(1, len2);
                                                             }
                                                             else
-                                                            {
-                                                                WriteToEventLog("ee " + generatedCall.SipAccount.User.CallerId);
-                                                                WriteToEventLog("Count " + lstTestOperators.Count() + " i:" + i);
-                                                                WriteToEventLog("lstTestOperators[i].TestCli " + lstTestOperators[i].TestCli);
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
-                                                                //WriteToEventLog("lstTestOperators[i].TestCli2 " + lstTestOperators[i].TestCli);
-                                                            }
                                                                 
                                                             //string RecCLi = reader[3].ToString();
                                                             string RecCLi = ret.ReceivedCLI;
@@ -261,7 +255,6 @@ namespace VoIPSwitchService
                                                                 lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
                                                             }
 
-
                                                             TestOperatorRepository.Save(lstTestOperators[i]);
 
                                                             //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
@@ -336,7 +329,7 @@ namespace VoIPSwitchService
                                             int ReqCallId = 0;
                                             int.TryParse(montyCall2.RequestId, out ReqCallId);
                                             PhoneNumberService pp = new PhoneNumberService();
-                                            CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                            CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                             System.Threading.Thread.Sleep(1000);
 
                                             GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall2.CallEntryId.Value);
@@ -383,7 +376,7 @@ namespace VoIPSwitchService
                                     int ReqCallId = 0;
                                     int.TryParse(montyCall3.RequestId, out ReqCallId);
                                     PhoneNumberService pp = new PhoneNumberService();
-                                    CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                    CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                     System.Threading.Thread.Sleep(1000);
 
                                     GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall3.CallEntryId.Value);
