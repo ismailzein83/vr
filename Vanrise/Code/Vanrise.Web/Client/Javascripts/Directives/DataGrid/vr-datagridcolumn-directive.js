@@ -17,6 +17,7 @@
                     var tag = iAttrs.tag != undefined ? $scope.$eval(iAttrs.tag) : undefined;
                     var onSortChanged = iAttrs.onsortchanged != undefined ? $scope.$eval(iAttrs.onsortchanged) : undefined;
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
+                    var getcolor = iAttrs.getcolor != undefined ? $scope.$eval(iAttrs.getcolor) : undefined;
                     var col = {
                         headerText: headerText,
                         field: field,
@@ -27,7 +28,8 @@
                         type: type,
                         tag: tag,
                         onSortChanged: onSortChanged,
-                        cellTemplate: cellTemplate
+                        cellTemplate: cellTemplate,
+                        getcolor: getcolor
                     };
 
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;

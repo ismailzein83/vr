@@ -24,7 +24,6 @@
 
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
-
             var dataGridObj = new DataGrid(ctrl, $scope);
             dataGridObj.initializeController();
             dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
@@ -54,8 +53,8 @@
 
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
         + ''
-      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)" class="span-summary" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</a>'
-      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" class="span-summary"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</span>'
+      + '<a ng-if="$parent.ctrl.isColumnClickable(colDef, dataItem)"  ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</a>'
+      + '<span ng-if="(!$parent.ctrl.isColumnClickable(colDef, dataItem))" ng-class="::$parent.ctrl.getCellClass(colDef, dataItem)"> {{::$parent.ctrl.getColumnValue(colDef, dataItem) #CELLFILTER#}}</span>'
       + ''
    + '</div>';
 
@@ -102,7 +101,8 @@
                             });
                     }
                 },
-                tag: col.tag
+                tag: col.tag,
+                getcolor: col.getcolor
             };
 
             colDef.getValue = function (dataItem) {
@@ -239,9 +239,16 @@
                         return colDef.isClickableAttr;
                 }
             };
+
             ctrl.onColumnClicked = function (colDef, dataItem) {
                 if (colDef.onClickedAttr != undefined)
                     colDef.onClickedAttr(dataItem, colDef);
+            };
+
+            ctrl.getCellClass = function (colDef, dataItem) {
+                if (colDef.getcolor != undefined)
+                    return colDef.getcolor(dataItem, colDef);
+                return 'span-summary';
             };
             
         }
