@@ -50,6 +50,10 @@
     <Compile Include="WFSchedulerTaskAction.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj">
+      <Project>{f5064a23-6e52-43da-affa-71425942ebf8}</Project>
+      <Name>Vanrise.BusinessProcess.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
