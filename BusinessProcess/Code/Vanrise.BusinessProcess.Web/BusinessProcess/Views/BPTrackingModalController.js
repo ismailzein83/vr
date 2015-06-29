@@ -1,6 +1,6 @@
-﻿BPTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval'];
+﻿BPTrackingModalController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'BusinessProcessAPIService', 'BPInstanceStatusEnum', '$interval', 'LabelColorsEnum', 'BPTrackingSeverityEnum'];
 
-function BPTrackingModalController($scope, UtilsService, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval) {
+function BPTrackingModalController($scope, UtilsService, VRNotificationService, VRNavigationService, BusinessProcessAPIService, BPInstanceStatusEnum, $interval, LabelColorsEnum, BPTrackingSeverityEnum) {
 
     "use strict";
 
@@ -111,14 +111,14 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
 
             if (isNullOrEmpty($scope.message) && isNullOrEmpty(severity)) return true;
 
-            if (item['Message'].indexOf($scope.message) > -1)
+            if (item['Message'].toUpperCase().indexOf($scope.message.toUpperCase()) > -1)
                 isMatch = true;
 
             if (isNullOrEmpty(severity)) return isMatch;
 
             var severityMatch = false;
             for (var i = 0, len = severity.length; i < len; i++) {
-                if (String(item['Severity']).indexOf(severity[i]) > -1) {
+                if (String(item['Severity']).toUpperCase().indexOf(severity[i].toUpperCase()) > -1) {
                     severityMatch = true;
                     break;
                 }
@@ -144,7 +144,15 @@ function BPTrackingModalController($scope, UtilsService, VRNotificationService, 
             stopGetData();
         });
 
-        
+        $scope.getSeverityColor = function (dataItem, colDef) {
+
+            if (dataItem.Severity === BPTrackingSeverityEnum.Information.value) return LabelColorsEnum.Info.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Warning.value) return LabelColorsEnum.Warning.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Error.value) return LabelColorsEnum.Error.Color;
+            if (dataItem.Severity === BPTrackingSeverityEnum.Verbose.value) return LabelColorsEnum.Primary.Color;
+
+            return LabelColorsEnum.Info.Color;
+        };
 
     }
 

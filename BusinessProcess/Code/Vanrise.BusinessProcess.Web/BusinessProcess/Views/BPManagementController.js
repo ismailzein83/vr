@@ -1,6 +1,6 @@
-﻿BPManagementController.$inject = ['$scope','UtilsService', 'BusinessProcessAPIService', 'VRModalService'];
+﻿BPManagementController.$inject = ['$scope', 'UtilsService', 'BusinessProcessAPIService', 'VRModalService', 'LabelColorsEnum','BPInstanceStatusEnum'];
 
-function BPManagementController($scope,UtilsService, BusinessProcessAPIService, VRModalService) {
+function BPManagementController($scope, UtilsService, BusinessProcessAPIService, VRModalService, LabelColorsEnum,BPInstanceStatusEnum) {
 
     "use strict";
 
@@ -62,6 +62,20 @@ function BPManagementController($scope,UtilsService, BusinessProcessAPIService, 
         $scope.onTitleClicked = function (dataItem) {
             showBPTrackingModal(dataItem);
         };
+
+        $scope.getStatusColor = function (dataItem, colDef) {
+
+            if (dataItem.Status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.Primary.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Info.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Error.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Warning.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Warning.Color;
+            if (dataItem.Status === BPInstanceStatusEnum.Terminated.value) return LabelColorsEnum.Error.Color;
+
+            return LabelColorsEnum.Info.Color;
+        };
+
     }
 
     function loadFilters() {

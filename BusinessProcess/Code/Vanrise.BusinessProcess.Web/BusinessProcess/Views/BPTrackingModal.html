@@ -24,8 +24,8 @@
                 <vr-columns width="fullrow">
                     <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady" clientsidefilter="filterGrid">
                         <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="20"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Event Time'" widthfactor="30">{{dataItem.EventTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="20"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Event Time'" field="'EventTime'" widthfactor="30" type="'Datetime'"></vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
