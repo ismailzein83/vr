@@ -107,6 +107,8 @@
     <Content Include="Runtime\Views\SchedulerTaskManagementController.js" />
     <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplate.html" />
     <Content Include="Runtime\Views\TriggerTemplates\TimerTriggerTemplateController.js" />
+    <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplate.html" />
+    <Content Include="Runtime\Views\WFScheduleTemplates\ScheduleDailyRepricingProcessTemplateController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">

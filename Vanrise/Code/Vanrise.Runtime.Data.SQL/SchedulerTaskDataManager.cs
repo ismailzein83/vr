@@ -27,6 +27,11 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemSP("runtime.sp_SchedulerTask_Get", TaskMapper, taskId);
         }
 
+        public List<Entities.SchedulerTask> GetAllTasks()
+        {
+            return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper);
+        }
+
         public bool AddTask(Entities.SchedulerTask taskObject, out int insertedId)
         {
             object taskId;

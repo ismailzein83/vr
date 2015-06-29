@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Entities
 {
-    class WFSchedulerTaskAction : SchedulerTaskAction
+    public class WFSchedulerTaskAction : SchedulerTaskAction
     {
-        public string WorkflowName { get; set; }
+        public int BPDefinitionID { get; set; }
 
         public override void Execute()
         {
-            
+            Console.WriteLine("WFSchedulerTaskAction is running...");
         }
     }
 }

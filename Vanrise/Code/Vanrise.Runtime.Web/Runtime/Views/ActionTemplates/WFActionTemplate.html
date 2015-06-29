@@ -1,5 +1,8 @@
 ﻿<div ng-controller="Runtime_WFActionTemplateController">
     <vr-row>
-        <vr-textbox value="workflowName" label="Workflow Name"></vr-textbox>
+        <vr-select datatextfield="Name" datavaluefield="BPDefinitionID"
+                   datasource="bpDefinitions" selectedvalues="selectedBPDefintion"></vr-select>
+
+        <div ng-include="selectedBPDefintion.Configuration.ScheduleTemplateURL" />
     </vr-row>
 </div>

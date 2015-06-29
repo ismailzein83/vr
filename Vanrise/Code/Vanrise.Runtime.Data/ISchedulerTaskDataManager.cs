@@ -12,6 +12,8 @@ namespace Vanrise.Runtime.Data
 
         Entities.SchedulerTask GetTask(int taskId);
 
+        List<Entities.SchedulerTask> GetAllTasks();
+
         bool AddTask(Entities.SchedulerTask taskObject, out int insertedId);
 
         bool UpdateTask(Entities.SchedulerTask taskObject);
