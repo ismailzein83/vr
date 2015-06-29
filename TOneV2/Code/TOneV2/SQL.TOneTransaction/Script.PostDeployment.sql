@@ -36,7 +36,7 @@ DELETE;
 
 MERGE INTO bp.[BPDefinition] AS Target 
 USING (VALUES 
-	(N'TOne.CDRProcess.Arguments.DailyRepricingProcessInput', N'Daily Repricing Process', N'TOne.CDRProcess.DailyRepricingProcess, TOne.CDRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":2,"RetryOnProcessFailed":false}'),
+	(N'TOne.CDRProcess.Arguments.DailyRepricingProcessInput', N'Daily Repricing Process', N'TOne.CDRProcess.DailyRepricingProcess, TOne.CDRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":2,"RetryOnProcessFailed":false, "ScheduleTemplateURL":"/Client/Modules/Runtime/Views/WFScheduleTemplates/ScheduleDailyRepricingProcessTemplate.html"}'),
 	(N'TOne.CDRProcess.Arguments.TimeRangeRepricingProcessInput', N'Time Range Repricing Process', N'TOne.CDRProcess.DailyRepricingProcess, TOne.CDRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":2,"RetryOnProcessFailed":false}'),
 	(N'TOne.LCRProcess.Arguments.RoutingProcessInput', N'Routing Process', N'TOne.LCRProcess.RoutingProcess, TOne.LCRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}'),
 		(N'TOne.LCRProcess.Arguments.DifferentialRoutingProcessInput', N'Differential Routing Process', N'TOne.LCRProcess.DifferentialRoutingProcess, TOne.LCRProcess', N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
