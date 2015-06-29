@@ -85,6 +85,7 @@ namespace PhoneNumbersService
         {
             CallInfo callInfo = new CallInfo();
             Client client = ClientRepository.Load(clientName, password);
+            callInfo.ErrorStatus = "-1";
             if (client != null)
             {
                 RequestCall requestCall = RequestCallRepository.Load(requestId);
@@ -106,15 +107,13 @@ namespace PhoneNumbersService
                             if (reader.Read())
                             {
                                 callInfo.ReceivedCLI = reader[3].ToString();
+                                callInfo.ErrorStatus = "1";
                             }
                         }
                     });
                 }
-                callInfo.ErrorStatus = "1";
             }
-            else
-                callInfo.ErrorStatus = "-1";
-            
+
             return callInfo;
         }
     }
