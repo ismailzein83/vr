@@ -6,7 +6,6 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
     load();
     
     function loadParameters() {
-        console.log(parameters);
         var parameters = VRNavigationService.getParameters($scope);
         if (parameters != null) {
             $scope.filter = {
@@ -36,7 +35,7 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
             saveWidget();
         };
         $scope.previewSelectionChanged = function () {
-            console.log("test");
+        
             var visualElement = {
                 settings: $scope.subViewValue.getValue(),
                 directive: $scope.selectedWidget.DirectiveName,
@@ -96,7 +95,6 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
         };
         return WidgetAPIService.UpdateWidget($scope.Widget).then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Widget", response)) {
-                console.log(response);
                 if ($scope.onWidgetUpdated != undefined)
                     $scope.onWidgetUpdated(response.UpdatedObject);
                 $scope.modalContext.closeModal();

@@ -7,6 +7,19 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
     load();
 
     function loadParameters() {
+        var parameters = VRNavigationService.getParameters($scope);
+        if (parameters != null) {
+            $scope.filter = {
+                Name: parameters.Name,
+                ModuleId: parameters.ModuleId,
+                Audience: parameters.Audience,
+                ViewId: parameters.ViewId,
+                Content: parameters.Content
+            }
+            $scope.isEditMode = true;
+        }
+        else
+            $scope.isEditMode = false;
     }
     function defineScope() {
         $scope.widgets = [];
@@ -75,6 +88,19 @@ function DynamicPagesEditorController($scope, MenuAPIService, WidgetAPIService, 
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
+            if ($scope.isEditMode) {
+                $scope.pageName= $scope.filter.Name;
+                for (var i = 0; i < $scope.users.length; i++)
+                    for (var j = 0; j < $scope.filter.Audience.Users.length; j++)
+                        if ($scope.filter.Audience.Users[j] == $scope.users[i].UserId)
+                            $scope.selectedUsers.push($scope.users[i]);
+                for (var i = 0; i < $scope.roles.length; i++)
+                    for (var j = 0; j < $scope.filter.Audience.Groups.length; j++)
+                        if ($scope.filter.Audience.Groups[j] == $scope.roles[i].RoleId)
+                            $scope.selectedRoles.push($scope.roles[i]);
+                
+
+            }
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {

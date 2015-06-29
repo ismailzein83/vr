@@ -34,7 +34,7 @@ namespace Vanrise.Security.Data.SQL
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 Type=(ViewType) reader["Type"]
 
-            };
+            }; 
             return view;
         }
 
@@ -75,8 +75,14 @@ namespace Vanrise.Security.Data.SQL
             View instance = new View
             {
                 // ID = (int)reader["ID"],
+                ViewId= (int)reader["Id"],
                 Name = reader["PageName"] as string,
-                ModuleName = reader["ModuleName"] as string
+                Url = reader["Url"] as string,
+                ModuleName = reader["ModuleName"] as string,
+                ModuleId = (int)reader["ModuleId"],
+                Audience = Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string),
+                Type = (ViewType)reader["Type"],
+                Content = Common.Serializer.Deserialize<List<Content>>(reader["Content"] as string),
             };
             return instance;
         }

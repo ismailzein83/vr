@@ -21,16 +21,9 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesAPIS
         $scope.menuActions = [{
             name: "Edit",
             clicked: function (dataItem) {
-                AddPage();
-                //var modalSettings = {
-                //    useModalTemplate: false,
-                //    width: "80%",
-                //    maxHeight: "800px"
-                //};
-                //VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
+                updatePage(dataItem);
             }
         }];
-
         $scope.mainGridPagerSettings = {
             currentPage: 1,
             totalDataCount: 0,
@@ -38,22 +31,11 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesAPIS
                 return getData();
             }
         };
-
         $scope.Add = function () {
-
-            AddPage()
-
-            //var modalSettings = {
-            //    useModalTemplate: false,
-            //    width: "80%",
-            //    maxHeight: "800px"
-            //};
-            //VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, modalSettings);
+            addPage()
         };
-
-
     }
-    function AddPage() {
+    function addPage() {
 
         var settings = {};
 
@@ -66,7 +48,19 @@ function DynamicPagesManagementController($scope, UtilsService, DynamicPagesAPIS
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', null, settings);
 
     }
+    function updatePage(dataItem) {
+        console.log(dataItem);
+        var settings = {};
 
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
+            modalScope.onPageAdded = function (page) {
+                mainGridAPI.itemAdded(page);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPagesEditor.html', dataItem, settings);
+
+    }
     function load() {
         $scope.isInitializing = true;
         UtilsService.waitMultipleAsyncOperations([loadData]).finally(function () {

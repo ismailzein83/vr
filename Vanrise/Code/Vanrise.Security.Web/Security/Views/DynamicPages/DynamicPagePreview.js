@@ -2,7 +2,6 @@
 
 function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService,WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService) {
     var viewId;
-    var mainAPI;
     loadParameters();
     defineScope();
     load();
@@ -92,18 +91,19 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             for (var j = 0; j < allWidgets.length; j++) {
                 if (allWidgets[j].Id == content[i].WidgetId) {
                     allWidgets[j].NumberOfColumns = content[i].NumberOfColumns;
-                    var widgetElement=allWidgets[j];
-                    widgetElement.onElementReady = function (api) {
-                        widgetElement.API = api;
-                        console.log(api);
-                        console.log(widgetElement);  
-                    };
-                    $scope.widgets.push(widgetElement);
-                    console.log($scope.widgets);
+                    AddElementReady(allWidgets[j]);
+                   
                    
                 }
             }
         }
+    }
+    function AddElementReady(widget ) {
+        var widgetElement = widget;
+        widgetElement.onElementReady = function (api) {
+            widgetElement.API = api;
+        };
+        $scope.widgets.push(widgetElement);
     }
  
     function loadAllWidgets() {
