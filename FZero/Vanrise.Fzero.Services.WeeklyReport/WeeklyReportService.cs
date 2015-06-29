@@ -98,7 +98,7 @@ namespace Vanrise.Fzero.Services.WeeklyReport
         {
             ReportViewer rptWeeklyReport = new ReportViewer();
 
-            string exeFolder = Path.GetDirectoryName(@"C:\FMS\WeeklyReportLibrary\");
+            string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.WeeklyReport\");
             string reportPath = Path.Combine(exeFolder, @"Reports\rptWeeklyReport.rdlc");
 
             rptWeeklyReport.LocalReport.ReportPath = reportPath;

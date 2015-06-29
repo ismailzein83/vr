@@ -169,7 +169,7 @@ namespace Vanrise.Fzero.Services.RepeatedReport
 
             parameters[2] = new ReportParameter("MobileOperator", MobileOperatorName);
 
-            string exeFolder = Path.GetDirectoryName(@"C:\FMS\RepeatedReportLibrary\");
+            string exeFolder = Path.GetDirectoryName(@"C:\FMS\Vanrise.Fzero.Services.RepeatedReport\");
             string reportPath = string.Empty;
 
 
