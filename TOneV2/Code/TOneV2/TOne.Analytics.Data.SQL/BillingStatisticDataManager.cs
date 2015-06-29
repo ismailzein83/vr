@@ -161,14 +161,14 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
         {
             List<VariationReports> variationReportList = new List<VariationReports>();
             DataTable timeRangeDataTable = new DataTable();
             timeRangeDataTable = ToDataTable(timeRange);
             DateTime beginTime = (from d in timeRange select d.FromDate).Min();
             DateTime endTime = (from d in timeRange select d.ToDate).Max();
-            string selectedReportQuery = GetVariationReportQuery(timeRange,variationReportOptions);
+            string selectedReportQuery = GetVariationReportQuery(timeRange, variationReportOptions, entityType,entityID);
             int totalCount_Internal = 0;
             List<decimal> totalValues_Internal= new List<decimal>() ;
             List<DateTime> datetotalValues_Internal = new List<DateTime>();
@@ -564,7 +564,7 @@ namespace TOne.Analytics.Data.SQL
 
             };
         }
-        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions)
+        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, EntityType entityType, string entityID)
         {
 
             StringBuilder query = new StringBuilder(@"DECLARE @ExchangeRates TABLE(
@@ -625,7 +625,17 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                    query.Replace("#WhereStatement#", " ");
+                 //   query.Replace("#WhereStatement#", " ");
+                    switch (entityType)
+                    {
+                        case EntityType.Zone:
+                            query.Replace("#WhereStatement#", @" AND BS.CustomerID='"+entityID+"' ");
+                            break;
+                        default:
+                            query.Replace("#WhereStatement#", " ");
+                            break;
+
+                    }
                     break;
 
                 case VariationReportOptions.OutBoundMinutes:
@@ -694,7 +704,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#WhereStatement#", @" ");
                     break;
 
-            }
+            }         
             return query.ToString();
         }
         private static DataTable ToDataTable<T>(List<T> items)

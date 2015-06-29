@@ -124,6 +124,7 @@
   <ItemGroup>
     <Content Include="Analytics\Constants\BillingCDRMeasureEnum.js" />
     <Content Include="Analytics\Constants\BillingCDROptionMeasureEnum.js" />
+    <Content Include="Analytics\Constants\EntityTypeEnum.js" />
     <Content Include="Analytics\Constants\TimePeriodEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticGroupKeysEnum.js" />
     <Content Include="Analytics\Constants\TrafficStatisticsMeasureEnum.js" />
@@ -133,8 +134,8 @@
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportController.js" />
-    <Content Include="Analytics\Views\Billing Statistics\VariationReportDetails.html" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReportsDestinationsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReportsDestinations.html" />
     <Content Include="Analytics\Views\Billing Statistics\VariationReports.html" />
     <Content Include="Analytics\Views\Billing Statistics\VariationReportsController.js" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />

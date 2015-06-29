@@ -26,6 +26,13 @@ namespace TOne.Analytics.Entities
         Profit = 8
     }
 
+    public enum EntityType 
+    {
+        none=0,
+        Zone=1
+    
+    }
+
     public enum AccountType : byte
     {
         Client = 0,     // Client only
