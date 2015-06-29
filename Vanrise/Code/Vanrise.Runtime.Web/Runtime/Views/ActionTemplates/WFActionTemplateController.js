@@ -9,13 +9,13 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
 
         $scope.bpDefinitions = [];
 
-        $scope.schedulerTaskAction.baseProcessInputArgument = {};
+        $scope.schedulerTaskAction.processInputArguments = {};
 
         $scope.schedulerTaskAction.getData = function () {
             return {
                 $type: "Vanrise.BusinessProcess.Extensions.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions",
                 BPDefinitionID: $scope.selectedBPDefintion.BPDefinitionID,
-                BaseProcessInputArgument: $scope.schedulerTaskAction.baseProcessInputArgument.getData()
+                ProcessInputArguments: $scope.schedulerTaskAction.processInputArguments.getData()
             };
         };
     }
@@ -38,17 +38,18 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
         var data = $scope.schedulerTaskAction.data;
         if (data != null) {
             $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, data.BPDefinitionID, "BPDefinitionID");
-            $scope.schedulerTaskAction.baseProcessInputArgument.data = data.BaseProcessInputArgument;
+            $scope.schedulerTaskAction.processInputArguments.data = data.ProcessInputArguments;
         }
         else {
             $scope.selectedBPDefintion = undefined;
-            $scope.schedulerTaskAction.baseProcessInputArgument.data = undefined;
+            $scope.schedulerTaskAction.processInputArguments.data = undefined;
         }
     }
 
     function loadDefinitions()
     {
         return BusinessProcessAPIService.GetDefinitions().then(function (response) {
+            console.log(response);
             angular.forEach(response, function (item) {
                 $scope.bpDefinitions.push(item);
             });

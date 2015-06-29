@@ -9,7 +9,7 @@ function ScheduleDailyRepricingProcessTemplateController($scope) {
 
         $scope.bpDefinitions = [];
 
-        $scope.schedulerTaskAction.baseProcessInputArgument.getData = function () {
+        $scope.schedulerTaskAction.processInputArguments.getData = function () {
             return {
                 $type: "TOne.CDRProcess.Arguments.DailyRepricingProcessInput, TOne.CDRProcess.Arguments",
                 RepricingDay: $scope.repricingDay,
@@ -22,9 +22,9 @@ function ScheduleDailyRepricingProcessTemplateController($scope) {
 
     function loadForm() {
 
-        if ($scope.schedulerTaskAction.baseProcessInputArgument.data == undefined)
+        if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
             return;
-        var data = $scope.schedulerTaskAction.baseProcessInputArgument.data;
+        var data = $scope.schedulerTaskAction.processInputArguments.data;
         if (data != null) {
             $scope.repricingDay = data.RepricingDay;
             $scope.divideProcessIntoSubProcesses = data.DivideProcessIntoSubProcesses;

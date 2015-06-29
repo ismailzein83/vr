@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime.Data
 {
@@ -17,5 +18,7 @@ namespace Vanrise.Runtime.Data
         bool AddTask(Entities.SchedulerTask taskObject, out int insertedId);
 
         bool UpdateTask(Entities.SchedulerTask taskObject);
+
+        bool UpdateTaskStatus(int taskId, SchedulerTaskStatus status);
     }
 }

@@ -36,8 +36,8 @@ namespace Vanrise.Runtime.Data.SQL
         {
             object taskId;
 
-            int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Insert", out taskId, taskObject.Name, 
-                taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", out taskId, taskObject.Name, 
+                taskObject.IsEnabled, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
                 taskObject.ActionTypeId, Common.Serializer.Serialize(taskObject.TaskAction));
             insertedId = (int)taskId;
             return (recordesEffected > 0);
@@ -45,12 +45,17 @@ namespace Vanrise.Runtime.Data.SQL
 
         public bool UpdateTask(Entities.SchedulerTask taskObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("runtime.sp_Scheduler_Update", taskObject.TaskId, taskObject.Name,
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Update", taskObject.TaskId, taskObject.Name,
                 taskObject.IsEnabled, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
                 taskObject.ActionTypeId, Common.Serializer.Serialize(taskObject.TaskAction));
             return (recordesEffected > 0);
         }
-        
+
+        public bool UpdateTaskStatus(int taskId, SchedulerTaskStatus status)
+        {
+            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_UpdateStatus", taskId, status);
+            return (recordesEffected > 0);
+        }
 
         SchedulerTask TaskMapper(IDataReader reader)
         {
@@ -59,6 +64,7 @@ namespace Vanrise.Runtime.Data.SQL
                 TaskId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 IsEnabled = bool.Parse(reader["IsEnabled"].ToString()),
+                Status = (SchedulerTaskStatus) int.Parse(reader["Status"].ToString()),
                 TriggerTypeId = (int)reader["TriggerTypeId"],
                 TaskTrigger = Common.Serializer.Deserialize<SchedulerTaskTrigger>(reader["TaskTrigger"] as string),
                 ActionTypeId = (int)reader["ActionTypeId"],

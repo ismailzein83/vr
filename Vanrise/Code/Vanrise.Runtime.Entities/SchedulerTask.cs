@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Entities
 {
+    public enum SchedulerTaskStatus { NotStarted = 0, Started = 1, Stopped = 2 } 
+
     public class SchedulerTask
     {
         public int TaskId { get; set; }
@@ -13,6 +15,8 @@ namespace Vanrise.Runtime.Entities
         public string Name { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public SchedulerTaskStatus Status { get; set; }
 
         public int TriggerTypeId { get; set; }
 
