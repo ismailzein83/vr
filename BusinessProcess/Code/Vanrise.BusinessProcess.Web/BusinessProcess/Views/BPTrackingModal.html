@@ -3,17 +3,17 @@
         <vr-form name="formBPTrackingModal">
 
             <vr-row removeline>
-                <vr-columns colnum="12">
+                <vr-columns width="fullrow">
                     <h4><strong>{{process.Title}}</strong></h4>
                     <small> {{process.Date | date:'yyyy-MM-dd hh:mm:ss' }}  {{process.Status}}</small>
                 </vr-columns>
             </vr-row>
 
             <vr-row removeline>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-textbox label="Message:" value="message"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="6">
+                <vr-columns width="1/2row">
                     <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
                                datasource="::trackingSeverity" selectedvalues="selectedTrackingSeverity"></vr-select>
                 </vr-columns>
@@ -21,7 +21,7 @@
             <vr-row>
             </vr-row>
             <vr-row>
-                <vr-columns colnum="12">
+                <vr-columns width="fullrow">
                     <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady" clientsidefilter="filterGrid">
                         <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="50"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="20"></vr-datagridcolumn>

@@ -3,21 +3,21 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Definitions" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="BPDefinitionID"
                                datasource="::definitions" selectedvalues="selectedDefinition" entityname="Definitions"></vr-select>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-select label="Status" ismultipleselection hideselectedvaluessection="true" datatextfield="Description" datavaluefield="Value"
                                datasource="::instanceStatus" selectedvalues="selectedInstanceStatus"></vr-select>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="date" value="fromDate" label="From:"></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-datetimepicker type="date" value="toDate" label="To:"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
@@ -35,7 +35,7 @@
 
         <div>
             <vr-row>
-                <vr-columns colnum="12">
+                <vr-columns width="fullrow">
                     <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
                         <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20" isclickable="'true'" onclicked="onTitleClicked"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
