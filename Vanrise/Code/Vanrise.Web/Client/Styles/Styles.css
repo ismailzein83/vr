@@ -45,7 +45,7 @@
     margin-top: 20px;
 }
 .sub-header-open {
-    margin-left: 250px;
+    margin-left: 225px;
 }
 .sub-header-closed {
     margin-left: 40px;
@@ -722,6 +722,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .panel-heading-vr{
      border-radius : 0px !important ;
+     padding: 8px 5px !important ;
 }
 .dll-menu:hover {
     background-color: #f0f0f0 !important;
@@ -755,7 +756,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .menulink{
     text-decoration:none !important;
-    padding: 3px 0px 3px 37px !important;
+    padding: 3px 0px 3px 25px !important;
     color: #000;
     text-align:left !important;
 
@@ -1144,8 +1145,8 @@ input.ui-grid-filter-input[type="text"] {
     white-space: nowrap;
     text-overflow: ellipsis;
     /*overflow: hidden;*/
-    padding-top:5px ;
-    padding-left:5px ;
+    padding: 3px 0px 0px 5px;
+    /*line-height: 1;*/
     position:relative;
     max-width:100%;
 }
@@ -1153,11 +1154,13 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid-celltext {
     display: inline-block;
     width: 100%;
-    overflow: hidden;
+    overflow: unset;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
+.vr-datagrid-celltext div{
+    min-height:17px;
+}
 
 .divLoading {
         pointer-events: none;

@@ -37,7 +37,7 @@
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'225px'}:{'padding-left':'5px'}">
         <!-- Sidebar -->
-        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'250px'}:{'width':'2px'}">
+        <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'225px'}:{'width':'2px'}">
 
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true">
                 <div class="panel panel-default toggle-panel ">
@@ -49,10 +49,10 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div ng-class="getParentItemClass(item) ? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
+                    <div ng-class="getParentItemClass(item)? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
                         <span ng-if="item.Childs.length > 0">
-                            <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 4px;"></span>
-                            <span>{{::item.Name}} @*{{getParentItemClass(item)}}*@</span>
+                            <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 1px;"></span>
+                            <span style="position: relative; top: -3px;">{{::item.Name}} @*{{getParentItemClass(item)}}*@</span>
                             <span class=" hand-cursor  toggel">
 
                                 <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
@@ -62,21 +62,21 @@
 
                         <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
                             <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
-                                <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
+                                <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()" >{{::item.Name}}</a>
                                 @*{{getParentIsSelected(item)}}*@
 
                             </li>
                         </ul>
 
 
-
+                       
                     </div>
 
                     <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
                         <div class="panel-body ">
                             <ul class="nav">
                                 <li ng-if="c.Childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.Childs">
-                                    <a class=" menulink" ng-click="setIndexSub($index,$event);logfunc(item)" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
+                                    <a class=" menulink" ng-click="setIndexSub($index,$event);logfunc(item)" ng-class="getLeafItemClass(c)?'itemselcted':'notselcted'" ng-href=" {{::c.Location}}">{{::c.Name}}</a>
                                     @*{{getLeafItemClass(c)}}*@
                                 </li>
 
@@ -92,7 +92,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="clock" >
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
