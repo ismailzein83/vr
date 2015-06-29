@@ -246,6 +246,7 @@
             };
 
             ctrl.getCellClass = function (colDef, dataItem) {
+                if (colDef == undefined) return 'span-summary';
                 if (colDef.getcolor != undefined)
                     return colDef.getcolor(dataItem, colDef);
                 return 'span-summary';
