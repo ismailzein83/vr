@@ -1,11 +1,10 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval'];
 
-function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRModalService) {
+function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval) {
 
     "use strict";
-    setInterval(function () { $scope.searchClicked() }, 60000); //every minute
-    var mainGridAPI;
-    
+    var interval, mainGridAPI;
+
 
     function showStartNewInstance(BPDefinitionObj) {
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/InstanceEditor.html', {
@@ -33,12 +32,25 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
         });
     }
 
+    function startGetData() {
+        if (angular.isDefined(interval)) return;
+        interval = $interval(function callAtInterval() {
+            $scope.searchClicked();
+        }, 60000);
+    }
+
+    function stopGetData() {
+        if (angular.isDefined(interval)) {
+            $interval.cancel(interval);
+            interval = undefined;
+        }
+    }
 
     function getData() {
         var pageInfo = mainGridAPI.getPageInfo();
-        
+
         var title = $scope.title != undefined ? $scope.title : '';
-      
+
         $scope.openedInstances = [];
 
         BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
@@ -50,12 +62,11 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
                     def.OpenedInstances = [];
                     var countRunningInstances = 0;
                     angular.forEach($scope.openedInstances, function (inst) {
-                        if (inst.DefinitionID == def.BPDefinitionID)
-                        {
+                        if (inst.DefinitionID == def.BPDefinitionID) {
                             countRunningInstances++;
                             def.OpenedInstances.push(inst);
                         }
-                            
+
                     });
                     def.RunningInstances = countRunningInstances;
                     $scope.filteredDefinitions.push(def);
@@ -78,7 +89,11 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
             name: "Start New Instance",
             clicked: showStartNewInstance
         }];
-       
+
+        $scope.$on('$destroy', function () {
+            stopGetData();
+        });
+
     }
 
     $scope.searchClicked = function () {
@@ -94,7 +109,7 @@ function BPDefinitionManagementController($scope,BusinessProcessAPIService, VRMo
 
 
     defineGrid();
-
+    startGetData();
 };
 
 appControllers.controller('BusinessProcess_BPDefinitionManagementController', BPDefinitionManagementController);
