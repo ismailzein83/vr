@@ -14,6 +14,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         $scope.totalData = [];
         $scope.timeRanges = [];
         $scope.chartData = [];
+        $scope.TotalValues = [];
 
         loadTimePeriods();
         loadVariationReportOptions();
@@ -60,6 +61,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.totalData.length = 0;
+            $scope.TotalValues.length = 0;
             $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
 
             angular.forEach(response.TimeRange, function (item) {
@@ -74,6 +76,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                 $scope.$apply(function () {
                     angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
                     $scope.summarydata = response;
+                    $scope.TotalValues = response.TotalValues;
                    
                     
                 });

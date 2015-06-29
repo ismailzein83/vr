@@ -133,6 +133,8 @@
     <Content Include="Analytics\Services\APIServices\CDRAPIService.js" />
     <Content Include="Analytics\Views\Billing Reports\BillingReports.html" />
     <Content Include="Analytics\Views\Billing Reports\BillingReportsController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReportController.js" />
+    <Content Include="Analytics\Views\Billing Statistics\VariationReportDetails.html" />
     <Content Include="Analytics\Views\Billing Statistics\VariationReports.html" />
     <Content Include="Analytics\Views\Billing Statistics\VariationReportsController.js" />
     <Content Include="Analytics\Views\CDR\CDRLog.html" />
