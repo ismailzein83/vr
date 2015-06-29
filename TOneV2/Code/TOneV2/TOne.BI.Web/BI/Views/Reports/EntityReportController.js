@@ -21,7 +21,7 @@ function EntityReportController($scope, UtilsService, BITimeDimensionTypeEnum, B
             }
             $scope.search = function () {
 
-                return resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);;
+                return resultAPI.loadData($scope.fromDate, $scope.toDate, $scope.selectedTimeDimensionType.value);
 
             }
 
