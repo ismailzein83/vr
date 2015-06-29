@@ -56,81 +56,81 @@ namespace Vanrise.Fzero.DevRuntime
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            List<int> StrategyIds = new List<int>();
-            StrategyIds.Add(int.Parse(ddlStrategy.SelectedValue.ToString()));
+            ////////List<int> StrategyIds = new List<int>();
+            ////////StrategyIds.Add(int.Parse(ddlStrategy.SelectedValue.ToString()));
 
-            List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput> inputArgs = new List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput>();
-
-
-
-
-
-            //var Start = DateTime.Parse(dateTimePicker1.Text);
-            //var End = DateTime.Parse(dateTimePicker2.Text);
-
-            var Start = DateTime.Parse("2015-03-13 23:01:12.000");
-            var End = DateTime.Parse("2015-03-14 06:11:42.000");
-
-
-            if (ddlPeriods.SelectedIndex == 0)
-            {
-                var runningDate = Start;
-                while (runningDate < End)
-                {
-                    inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
-                    {
-                        StrategyIds = StrategyIds,
-                        FromDate = runningDate.Date,
-                        ToDate = runningDate.Date.AddDays(1).AddSeconds(-1),
-                        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
-                    });
-                    runningDate = runningDate.Date.AddDays(1);
-                }
-            }
-            else if (ddlPeriods.SelectedIndex == 1)
-            {
-                var runningDate = Start;
-                while (runningDate < End)
-                {
-                    inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
-                    {
-                        StrategyIds = StrategyIds,
-                        FromDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0),
-                        ToDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 59, 59),
-                        PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
-                    });
-                    runningDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0).AddHours(1);
-                }
-            }
+            ////////List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput> inputArgs = new List<Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput>();
 
 
 
 
 
+            //////////var Start = DateTime.Parse(dateTimePicker1.Text);
+            //////////var End = DateTime.Parse(dateTimePicker2.Text);
 
-            Task t = new Task(() =>
-            {
-                BPClient bpClient3 = new BPClient();
-
-
-
-                foreach (var inputArg in inputArgs)
-                {
-                    bpClient3.CreateNewProcess(new CreateProcessInput { InputArguments = inputArg });
-                }
+            ////////var Start = DateTime.Parse("2015-03-13 23:01:12.000");
+            ////////var End = DateTime.Parse("2015-03-14 06:11:42.000");
 
 
+            ////////if (ddlPeriods.SelectedIndex == 0)
+            ////////{
+            ////////    var runningDate = Start;
+            ////////    while (runningDate < End)
+            ////////    {
+            ////////        inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            ////////        {
+            ////////            StrategyIds = StrategyIds,
+            ////////            FromDate = runningDate.Date,
+            ////////            ToDate = runningDate.Date.AddDays(1).AddSeconds(-1),
+            ////////            PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Day
+            ////////        });
+            ////////        runningDate = runningDate.Date.AddDays(1);
+            ////////    }
+            ////////}
+            ////////else if (ddlPeriods.SelectedIndex == 1)
+            ////////{
+            ////////    var runningDate = Start;
+            ////////    while (runningDate < End)
+            ////////    {
+            ////////        inputArgs.Add(new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
+            ////////        {
+            ////////            StrategyIds = StrategyIds,
+            ////////            FromDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0),
+            ////////            ToDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 59, 59),
+            ////////            PeriodId = (int)Vanrise.Fzero.FraudAnalysis.Entities.Enums.Period.Hour
+            ////////        });
+            ////////        runningDate = new DateTime(runningDate.Year, runningDate.Month, runningDate.Day, runningDate.Hour, 0, 0).AddHours(1);
+            ////////    }
+            ////////}
 
 
 
-                Console.WriteLine("END");
-            });
-            t.ContinueWith((tt) =>
-            {
-                this.CloseFormAsync();
-            });
-            t.Start();
-            this.WindowState = FormWindowState.Minimized;
+
+
+
+            //////////Task t = new Task(() =>
+            //////////{
+            //////////    BPClient bpClient3 = new BPClient();
+
+
+
+            //////////    foreach (var inputArg in inputArgs)
+            //////////    {
+            //////////        bpClient3.CreateNewProcess(new CreateProcessInput { InputArguments = inputArg });
+            //////////    }
+
+
+
+
+
+            //////////    Console.WriteLine("END");
+            //////////});
+            //////////t.ContinueWith((tt) =>
+            //////////{
+            //////////    this.CloseFormAsync();
+            //////////});
+            //////////t.Start();
+            //////////this.WindowState = FormWindowState.Minimized;
 
 
             //Console.ReadKey();
