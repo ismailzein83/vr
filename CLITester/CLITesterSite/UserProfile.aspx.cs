@@ -23,7 +23,7 @@ public partial class UserProfile : BasePage
 
         if (!Page.IsPostBack)
         {
-            if (Current.User.User.ParentId == null)
+            if (Current.User.User.ParentId == null && Current.User.User.IsSuperAdmin == false)
                 liSettings.Visible = true;
             else
                 liSettings.Visible = false;

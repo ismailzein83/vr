@@ -224,7 +224,7 @@
 
             var dl1 = $('select[name=selectOperator]').val();
             var res = dl1.split("~");
-            console.log("CountryPic: " + msg.CountryPic);
+
             var imgSrc = $('#<%=imgSRC.ClientID %>').val() + '';
             imgSrc = imgSrc + msg.CountryPic + '.png';
 
@@ -245,8 +245,8 @@
                                 '<td>' + msg.ErrorMessage + '</td>' +
                                 '<td>' + progressImg + '</td>' +
                                 '<td class="hideTd">' + msg.Id + '</td>' +
-                                '<td><a class="btn blue icn-only testCall"><i class="icon-repeat icon-white"></i></a></td>' +
-                                '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
+                                //'<td><a id="btnRepeat" class="btn blue icn-only testCall"><i class="icon-repeat icon-white"></i></a></td>' +
+                                '<td><a id="btnRemove" class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
         }
 
         var Clicked = false;
@@ -305,8 +305,8 @@
                               '<td></td>' +
                               '<td></td>' +
                               '<td class="hideTd">0</td>' +
-                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
-                              '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
+                              //'<td><a id="btnRepeat" class="btn blue icn-only testCall"><i class="icon-repeat icon-white"></i></a></td>' +
+                              '<td><a id="btnRemove" class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
 
         }
 
@@ -349,6 +349,14 @@
 
                 }
                 else {
+
+                    // $('#btnRepeat').addClass('disabled');
+                    //$('#btnRemove').addClass('disabled');
+
+                    //$("#myTable").undelegate("a.testCall", 'click', null);
+                    $("#myTable").undelegate("a.clearCall", 'click', null);
+
+
                     msg.idOp = idOperator;
                     arrayRow.push(msg.Id);
                     //addTable(msg);
@@ -371,8 +379,6 @@
                             });
 
                             request1.fail(function (xhr, ajaxOptions, thrownError) {
-                                //$('#divSuccess').css('visibility', 'hidden');
-                                //$('#divError').css('visibility', 'visible');
                                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                                 $('#<%=lblSuccess.ClientID %>').html('');
                                 resetTimer();
@@ -400,6 +406,13 @@
                                     }
                                 });
 
+                                //$('#btnRepeat').addClass('disabled');
+                                //$('#btnRemove').addClass('disabled');
+
+                               // $("#myTable").undelegate("a.testCall", 'click', null);
+                                $("#myTable").undelegate("a.clearCall", 'click', null);
+
+
                                 //if (arrayRow.length == 0) {
                                 if (IsFinished == "true") {
                                     resetTimer();
@@ -409,27 +422,30 @@
                                     $('#LinkTestCall').removeClass('disabled');
                                     $('#LinkTestCall1').removeClass('disabled');
                                     $('#LnkAdd').removeClass('disabled');
+
+
+                                  //  $('#btnRepeat').removeClass('disabled');
+                                    //$('#btnRemove').removeClass('disabled');
+
+                                  //  $("#myTable").delegate("a.testCall", 'click', repeatTestCall);
+                                    $("#myTable").delegate("a.clearCall", 'click', clearTestCall);
+
                                     arrayRow = [];
                                 }
                             });
                         }, 3000);
                     }
-
                 }
             });
 
             request.fail(function (xhr, ajaxOptions, thrownError) {
-                //$('#divSuccess').css('visibility', 'hidden');
-                //$('#divError').css('visibility', 'visible');
                 $('#<%=lblError.ClientID %>').html(xhr.status + ' - ' + thrownError);
                 $('#<%=lblSuccess.ClientID %>').html('');
 
                 //$('select[name=selectOperator]').removeAttr('disabled');
                 //$('select[name=selectPrefix]').removeAttr('disabled');
                 //$('#LinkTestCall').removeClass('disabled');
-
                 //isClick = true;
-
             });
         }
 
@@ -439,16 +455,14 @@
             $('#LinkTestCall1').addClass('disabled');
             $('#LnkAdd').addClass('disabled');
 
+
             $('#myTable > tbody  > tr').each(function () {
 
                 //var op = $('td:first-child', $(this).parents('tr')).html();
-
                 var op = $('td:nth-child(2)', $(this)).html();
                 var prefix = $('td:nth-child(6)', $(this)).html();
-                console.log("OP: " + op + " PRE: " + prefix);
 
                 if (typeof op === "undefined") {
-                    console.log("undefined");
                 }
                 else {
                     if(op != null && op != "null")
@@ -458,15 +472,13 @@
             });
         }
 
-
-        $('#myTable').delegate('a.testCall', 'click', function (e) {
+        function repeatTestCall(e) {
 
             var opId = $('td:first-child', $(this).parents('tr')).html();
             var route = $('td:nth-child(6)', $(this).parents('tr')).html();
             var opCode = $('td:nth-child(3)', $(this).parents('tr')).html();
             var opName = $('td:nth-child(4)', $(this).parents('tr')).html();
             var country = $('td:nth-child(2)', $(this).parents('tr')).html();
-
 
             var dl2 = $('select[name=selectPrefix]').val();
            
@@ -481,7 +493,7 @@
                               '<td class="hideTd">' + opId + '</td>' +
                               '<td class="hideTd">' + country + '</td>' +
                               '<td class="hideTd">' + opCode + '</td>' +
-                              '<td><img src=' + imgSrc + ' alt="" /> ' + opName + '</td>' +
+                              '<td>' + opName + '</td>' +
                               '<td></td>' +
                               '<td>' + route + '</td>' +
                               '<td></td>' +
@@ -494,17 +506,19 @@
                               '<td></td>' +
                               '<td></td>' +
                               '<td class="hideTd">0</td>' +
-                              '<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
+                              //'<td><a  class="btn blue icn-only testCall" ><i class="icon-repeat icon-white"></i></a></td>' +
                               '<td><a class="btn red icn-only clearCall"><i class="icon-remove icon-white"></i></a></td></tr>');
 
-        });
+        }
 
-        $('#myTable').delegate('a.clearCall', 'click', function (e) {
-
-            var id = $('td:nth-child(16)', $(this).parents('tr')).html();
+        function clearTestCall(e) {
+            var id = $('td:nth-child(15)', $(this).parents('tr')).html();
             $(this).parents('tr').remove();
             rmvArrayElement(arrayRow, id);
-        });
+        }
+     //   $('#myTable').delegate('a.testCall', 'click', repeatTestCall);
+
+        $('#myTable').delegate('a.clearCall', 'click', clearTestCall);
 
         var handleSelect2Modal = function () {
 

@@ -186,7 +186,7 @@ public partial class ManageSchedules : BasePage
     }
     #endregion
 
-    private static List<RolePermission> pagePermission;
+    //private static List<RolePermission> pagePermission;
 
     protected void btnSave_Click(object sender, EventArgs e)
     {

@@ -145,6 +145,5 @@ public partial class Default : BasePage
         List<ActionLogFeed> lstUsers = AuditRepository.GetActionLogs(Current.User.User.Id, "User").ToList();
         rptUsers.DataSource = lstUsers;
         rptUsers.DataBind();
-        
     }
 }

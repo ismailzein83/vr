@@ -22,7 +22,7 @@ namespace CallGeneratorLibrary
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FraudTest3")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="CLITester")]
 	public partial class CallGeneratorModelDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -33,24 +33,6 @@ namespace CallGeneratorLibrary
     partial void InsertException(Exception instance);
     partial void UpdateException(Exception instance);
     partial void DeleteException(Exception instance);
-    partial void InsertPage(Page instance);
-    partial void UpdatePage(Page instance);
-    partial void DeletePage(Page instance);
-    partial void InsertPagesPermission(PagesPermission instance);
-    partial void UpdatePagesPermission(PagesPermission instance);
-    partial void DeletePagesPermission(PagesPermission instance);
-    partial void InsertPermission(Permission instance);
-    partial void UpdatePermission(Permission instance);
-    partial void DeletePermission(Permission instance);
-    partial void InsertRolePermission(RolePermission instance);
-    partial void UpdateRolePermission(RolePermission instance);
-    partial void DeleteRolePermission(RolePermission instance);
-    partial void InsertRole(Role instance);
-    partial void UpdateRole(Role instance);
-    partial void DeleteRole(Role instance);
-    partial void InsertUserRole(UserRole instance);
-    partial void UpdateUserRole(UserRole instance);
-    partial void DeleteUserRole(UserRole instance);
     partial void InsertCarrier(Carrier instance);
     partial void UpdateCarrier(Carrier instance);
     partial void DeleteCarrier(Carrier instance);
@@ -84,9 +66,6 @@ namespace CallGeneratorLibrary
     partial void InsertUserBalance(UserBalance instance);
     partial void UpdateUserBalance(UserBalance instance);
     partial void DeleteUserBalance(UserBalance instance);
-    partial void InsertPhoneNumber(PhoneNumber instance);
-    partial void UpdatePhoneNumber(PhoneNumber instance);
-    partial void DeletePhoneNumber(PhoneNumber instance);
     partial void InsertGeneratedCall(GeneratedCall instance);
     partial void UpdateGeneratedCall(GeneratedCall instance);
     partial void DeleteGeneratedCall(GeneratedCall instance);
@@ -133,67 +112,11 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<Page> Pages
-		{
-			get
-			{
-				return this.GetTable<Page>();
-			}
-		}
-		
-		public System.Data.Linq.Table<PagesPermission> PagesPermissions
-		{
-			get
-			{
-				return this.GetTable<PagesPermission>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Permission> Permissions
-		{
-			get
-			{
-				return this.GetTable<Permission>();
-			}
-		}
-		
-		public System.Data.Linq.Table<RolePermission> RolePermissions
-		{
-			get
-			{
-				return this.GetTable<RolePermission>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Role> Roles
-		{
-			get
-			{
-				return this.GetTable<Role>();
-			}
-		}
-		
-		public System.Data.Linq.Table<UserRole> UserRoles
-		{
-			get
-			{
-				return this.GetTable<UserRole>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Carrier> Carriers
 		{
 			get
 			{
 				return this.GetTable<Carrier>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Log> Logs
-		{
-			get
-			{
-				return this.GetTable<Log>();
 			}
 		}
 		
@@ -269,14 +192,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<ActionLogFeed> ActionLogFeeds
-		{
-			get
-			{
-				return this.GetTable<ActionLogFeed>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ScheduleOperator> ScheduleOperators
 		{
 			get
@@ -309,14 +224,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		public System.Data.Linq.Table<PhoneNumber> PhoneNumbers
-		{
-			get
-			{
-				return this.GetTable<PhoneNumber>();
-			}
-		}
-		
 		public System.Data.Linq.Table<GeneratedCall> GeneratedCalls
 		{
 			get
@@ -333,39 +240,12 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRolePages")]
-		public ISingleResult<Page> GetRolePages([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleId", DbType="NVarChar(255)")] string roleId)
+		public System.Data.Linq.Table<ActionLogFeed> ActionLogFeeds
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), roleId);
-			return ((ISingleResult<Page>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRolePermissionActions")]
-		public ISingleResult<RolePermission> GetRolePermissionActions([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleIds", DbType="NVarChar(255)")] string roleIds, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PageName", DbType="NVarChar(255)")] string pageName)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), roleIds, pageName);
-			return ((ISingleResult<RolePermission>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRolePermissions")]
-		public ISingleResult<Permission> GetRolePermissions([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleId", DbType="Int")] System.Nullable<int> roleId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), roleId);
-			return ((ISingleResult<Permission>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetRoleUsers")]
-		public ISingleResult<User> GetRoleUsers([global::System.Data.Linq.Mapping.ParameterAttribute(Name="RoleId", DbType="Int")] System.Nullable<int> roleId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), roleId);
-			return ((ISingleResult<User>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetUserRoles")]
-		public ISingleResult<Role> GetUserRoles([global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), userId);
-			return ((ISingleResult<Role>)(result.ReturnValue));
+			get
+			{
+				return this.GetTable<ActionLogFeed>();
+			}
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetData")]
@@ -373,13 +253,6 @@ namespace CallGeneratorLibrary
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
 			return ((ISingleResult<GetDataResult>)(result.ReturnValue));
-		}
-		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetActionLogs")]
-		public ISingleResult<GetActionLogsResult> GetActionLogs([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectType", DbType="NVarChar(200)")] string objectType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectType, userId);
-			return ((ISingleResult<GetActionLogsResult>)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetChartTotals")]
@@ -394,6 +267,13 @@ namespace CallGeneratorLibrary
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), startDate, endDate, operatorId, displayStart, displayLength);
 			return ((ISingleResult<TestOperatorHistory>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetActionLogs")]
+		public ISingleResult<GetActionLogsResult> GetActionLogs([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ObjectType", DbType="NVarChar(200)")] string objectType, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="UserId", DbType="Int")] System.Nullable<int> userId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), objectType, userId);
+			return ((ISingleResult<GetActionLogsResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -506,1124 +386,6 @@ namespace CallGeneratorLibrary
 					this._ExceptionDate = value;
 					this.SendPropertyChanged("ExceptionDate");
 					this.OnExceptionDateChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Pages")]
-	public partial class Page : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private EntitySet<PagesPermission> _PagesPermissions;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    #endregion
-		
-		public Page()
-		{
-			this._PagesPermissions = new EntitySet<PagesPermission>(new Action<PagesPermission>(this.attach_PagesPermissions), new Action<PagesPermission>(this.detach_PagesPermissions));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Page_PagesPermission", Storage="_PagesPermissions", ThisKey="Id", OtherKey="PageId")]
-		public EntitySet<PagesPermission> PagesPermissions
-		{
-			get
-			{
-				return this._PagesPermissions;
-			}
-			set
-			{
-				this._PagesPermissions.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_PagesPermissions(PagesPermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Page = this;
-		}
-		
-		private void detach_PagesPermissions(PagesPermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Page = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PagesPermissions")]
-	public partial class PagesPermission : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.Nullable<int> _PermissionId;
-		
-		private System.Nullable<int> _PageId;
-		
-		private EntityRef<Page> _Page;
-		
-		private EntityRef<Permission> _Permission;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnPermissionIdChanging(System.Nullable<int> value);
-    partial void OnPermissionIdChanged();
-    partial void OnPageIdChanging(System.Nullable<int> value);
-    partial void OnPageIdChanged();
-    #endregion
-		
-		public PagesPermission()
-		{
-			this._Page = default(EntityRef<Page>);
-			this._Permission = default(EntityRef<Permission>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermissionId", DbType="Int")]
-		public System.Nullable<int> PermissionId
-		{
-			get
-			{
-				return this._PermissionId;
-			}
-			set
-			{
-				if ((this._PermissionId != value))
-				{
-					if (this._Permission.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnPermissionIdChanging(value);
-					this.SendPropertyChanging();
-					this._PermissionId = value;
-					this.SendPropertyChanged("PermissionId");
-					this.OnPermissionIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PageId", DbType="Int")]
-		public System.Nullable<int> PageId
-		{
-			get
-			{
-				return this._PageId;
-			}
-			set
-			{
-				if ((this._PageId != value))
-				{
-					if (this._Page.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnPageIdChanging(value);
-					this.SendPropertyChanging();
-					this._PageId = value;
-					this.SendPropertyChanged("PageId");
-					this.OnPageIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Page_PagesPermission", Storage="_Page", ThisKey="PageId", OtherKey="Id", IsForeignKey=true)]
-		public Page Page
-		{
-			get
-			{
-				return this._Page.Entity;
-			}
-			set
-			{
-				Page previousValue = this._Page.Entity;
-				if (((previousValue != value) 
-							|| (this._Page.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Page.Entity = null;
-						previousValue.PagesPermissions.Remove(this);
-					}
-					this._Page.Entity = value;
-					if ((value != null))
-					{
-						value.PagesPermissions.Add(this);
-						this._PageId = value.Id;
-					}
-					else
-					{
-						this._PageId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Page");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_PagesPermission", Storage="_Permission", ThisKey="PermissionId", OtherKey="Id", IsForeignKey=true)]
-		public Permission Permission
-		{
-			get
-			{
-				return this._Permission.Entity;
-			}
-			set
-			{
-				Permission previousValue = this._Permission.Entity;
-				if (((previousValue != value) 
-							|| (this._Permission.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Permission.Entity = null;
-						previousValue.PagesPermissions.Remove(this);
-					}
-					this._Permission.Entity = value;
-					if ((value != null))
-					{
-						value.PagesPermissions.Add(this);
-						this._PermissionId = value.Id;
-					}
-					else
-					{
-						this._PermissionId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Permission");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Permissions")]
-	public partial class Permission : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private string _Description;
-		
-		private System.Nullable<int> _ApplicationId;
-		
-		private EntitySet<PagesPermission> _PagesPermissions;
-		
-		private EntitySet<RolePermission> _RolePermissions;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnApplicationIdChanging(System.Nullable<int> value);
-    partial void OnApplicationIdChanged();
-    #endregion
-		
-		public Permission()
-		{
-			this._PagesPermissions = new EntitySet<PagesPermission>(new Action<PagesPermission>(this.attach_PagesPermissions), new Action<PagesPermission>(this.detach_PagesPermissions));
-			this._RolePermissions = new EntitySet<RolePermission>(new Action<RolePermission>(this.attach_RolePermissions), new Action<RolePermission>(this.detach_RolePermissions));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApplicationId", DbType="Int")]
-		public System.Nullable<int> ApplicationId
-		{
-			get
-			{
-				return this._ApplicationId;
-			}
-			set
-			{
-				if ((this._ApplicationId != value))
-				{
-					this.OnApplicationIdChanging(value);
-					this.SendPropertyChanging();
-					this._ApplicationId = value;
-					this.SendPropertyChanged("ApplicationId");
-					this.OnApplicationIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_PagesPermission", Storage="_PagesPermissions", ThisKey="Id", OtherKey="PermissionId")]
-		public EntitySet<PagesPermission> PagesPermissions
-		{
-			get
-			{
-				return this._PagesPermissions;
-			}
-			set
-			{
-				this._PagesPermissions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_RolePermission", Storage="_RolePermissions", ThisKey="Id", OtherKey="PermissionId")]
-		public EntitySet<RolePermission> RolePermissions
-		{
-			get
-			{
-				return this._RolePermissions;
-			}
-			set
-			{
-				this._RolePermissions.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_PagesPermissions(PagesPermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Permission = this;
-		}
-		
-		private void detach_PagesPermissions(PagesPermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Permission = null;
-		}
-		
-		private void attach_RolePermissions(RolePermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Permission = this;
-		}
-		
-		private void detach_RolePermissions(RolePermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Permission = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RolePermissions")]
-	public partial class RolePermission : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.Nullable<int> _RoleId;
-		
-		private System.Nullable<int> _PermissionId;
-		
-		private System.Nullable<bool> _CanAdd;
-		
-		private System.Nullable<bool> _CanEdit;
-		
-		private System.Nullable<bool> _CanDelete;
-		
-		private EntityRef<Permission> _Permission;
-		
-		private EntityRef<Role> _Role;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnRoleIdChanging(System.Nullable<int> value);
-    partial void OnRoleIdChanged();
-    partial void OnPermissionIdChanging(System.Nullable<int> value);
-    partial void OnPermissionIdChanged();
-    partial void OnCanAddChanging(System.Nullable<bool> value);
-    partial void OnCanAddChanged();
-    partial void OnCanEditChanging(System.Nullable<bool> value);
-    partial void OnCanEditChanged();
-    partial void OnCanDeleteChanging(System.Nullable<bool> value);
-    partial void OnCanDeleteChanged();
-    #endregion
-		
-		public RolePermission()
-		{
-			this._Permission = default(EntityRef<Permission>);
-			this._Role = default(EntityRef<Role>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int")]
-		public System.Nullable<int> RoleId
-		{
-			get
-			{
-				return this._RoleId;
-			}
-			set
-			{
-				if ((this._RoleId != value))
-				{
-					if (this._Role.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleIdChanging(value);
-					this.SendPropertyChanging();
-					this._RoleId = value;
-					this.SendPropertyChanged("RoleId");
-					this.OnRoleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermissionId", DbType="Int")]
-		public System.Nullable<int> PermissionId
-		{
-			get
-			{
-				return this._PermissionId;
-			}
-			set
-			{
-				if ((this._PermissionId != value))
-				{
-					if (this._Permission.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnPermissionIdChanging(value);
-					this.SendPropertyChanging();
-					this._PermissionId = value;
-					this.SendPropertyChanged("PermissionId");
-					this.OnPermissionIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CanAdd", DbType="Bit")]
-		public System.Nullable<bool> CanAdd
-		{
-			get
-			{
-				return this._CanAdd;
-			}
-			set
-			{
-				if ((this._CanAdd != value))
-				{
-					this.OnCanAddChanging(value);
-					this.SendPropertyChanging();
-					this._CanAdd = value;
-					this.SendPropertyChanged("CanAdd");
-					this.OnCanAddChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CanEdit", DbType="Bit")]
-		public System.Nullable<bool> CanEdit
-		{
-			get
-			{
-				return this._CanEdit;
-			}
-			set
-			{
-				if ((this._CanEdit != value))
-				{
-					this.OnCanEditChanging(value);
-					this.SendPropertyChanging();
-					this._CanEdit = value;
-					this.SendPropertyChanged("CanEdit");
-					this.OnCanEditChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CanDelete", DbType="Bit")]
-		public System.Nullable<bool> CanDelete
-		{
-			get
-			{
-				return this._CanDelete;
-			}
-			set
-			{
-				if ((this._CanDelete != value))
-				{
-					this.OnCanDeleteChanging(value);
-					this.SendPropertyChanging();
-					this._CanDelete = value;
-					this.SendPropertyChanged("CanDelete");
-					this.OnCanDeleteChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_RolePermission", Storage="_Permission", ThisKey="PermissionId", OtherKey="Id", IsForeignKey=true)]
-		public Permission Permission
-		{
-			get
-			{
-				return this._Permission.Entity;
-			}
-			set
-			{
-				Permission previousValue = this._Permission.Entity;
-				if (((previousValue != value) 
-							|| (this._Permission.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Permission.Entity = null;
-						previousValue.RolePermissions.Remove(this);
-					}
-					this._Permission.Entity = value;
-					if ((value != null))
-					{
-						value.RolePermissions.Add(this);
-						this._PermissionId = value.Id;
-					}
-					else
-					{
-						this._PermissionId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Permission");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_RolePermission", Storage="_Role", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
-		public Role Role
-		{
-			get
-			{
-				return this._Role.Entity;
-			}
-			set
-			{
-				Role previousValue = this._Role.Entity;
-				if (((previousValue != value) 
-							|| (this._Role.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Role.Entity = null;
-						previousValue.RolePermissions.Remove(this);
-					}
-					this._Role.Entity = value;
-					if ((value != null))
-					{
-						value.RolePermissions.Add(this);
-						this._RoleId = value.Id;
-					}
-					else
-					{
-						this._RoleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Role");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Roles")]
-	public partial class Role : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private string _Description;
-		
-		private EntitySet<RolePermission> _RolePermissions;
-		
-		private EntitySet<UserRole> _UserRoles;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    #endregion
-		
-		public Role()
-		{
-			this._RolePermissions = new EntitySet<RolePermission>(new Action<RolePermission>(this.attach_RolePermissions), new Action<RolePermission>(this.detach_RolePermissions));
-			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(255)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_RolePermission", Storage="_RolePermissions", ThisKey="Id", OtherKey="RoleId")]
-		public EntitySet<RolePermission> RolePermissions
-		{
-			get
-			{
-				return this._RolePermissions;
-			}
-			set
-			{
-				this._RolePermissions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_UserRole", Storage="_UserRoles", ThisKey="Id", OtherKey="RoleId")]
-		public EntitySet<UserRole> UserRoles
-		{
-			get
-			{
-				return this._UserRoles;
-			}
-			set
-			{
-				this._UserRoles.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_RolePermissions(RolePermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Role = this;
-		}
-		
-		private void detach_RolePermissions(RolePermission entity)
-		{
-			this.SendPropertyChanging();
-			entity.Role = null;
-		}
-		
-		private void attach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.Role = this;
-		}
-		
-		private void detach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.Role = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRoles")]
-	public partial class UserRole : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private System.Nullable<int> _UserId;
-		
-		private System.Nullable<int> _RoleId;
-		
-		private EntityRef<Role> _Role;
-		
-		private EntityRef<User> _User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnUserIdChanging(System.Nullable<int> value);
-    partial void OnUserIdChanged();
-    partial void OnRoleIdChanging(System.Nullable<int> value);
-    partial void OnRoleIdChanged();
-    #endregion
-		
-		public UserRole()
-		{
-			this._Role = default(EntityRef<Role>);
-			this._User = default(EntityRef<User>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int")]
-		public System.Nullable<int> UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int")]
-		public System.Nullable<int> RoleId
-		{
-			get
-			{
-				return this._RoleId;
-			}
-			set
-			{
-				if ((this._RoleId != value))
-				{
-					if (this._Role.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleIdChanging(value);
-					this.SendPropertyChanging();
-					this._RoleId = value;
-					this.SendPropertyChanged("RoleId");
-					this.OnRoleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_UserRole", Storage="_Role", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true)]
-		public Role Role
-		{
-			get
-			{
-				return this._Role.Entity;
-			}
-			set
-			{
-				Role previousValue = this._Role.Entity;
-				if (((previousValue != value) 
-							|| (this._Role.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Role.Entity = null;
-						previousValue.UserRoles.Remove(this);
-					}
-					this._Role.Entity = value;
-					if ((value != null))
-					{
-						value.UserRoles.Add(this);
-						this._RoleId = value.Id;
-					}
-					else
-					{
-						this._RoleId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Role");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserRole", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteRule="CASCADE")]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.UserRoles.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.UserRoles.Add(this);
-						this._UserId = value.Id;
-					}
-					else
-					{
-						this._UserId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("User");
 				}
 			}
 		}
@@ -1873,159 +635,6 @@ namespace CallGeneratorLibrary
 		{
 			this.SendPropertyChanging();
 			entity.Carrier = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Log]")]
-	public partial class Log
-	{
-		
-		private int _Id;
-		
-		private System.DateTime _Date;
-		
-		private int _Thread;
-		
-		private string _Context;
-		
-		private string _Level;
-		
-		private string _Logger;
-		
-		private string _Message;
-		
-		private string _Exception;
-		
-		public Log()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.Always, DbType="Int NOT NULL IDENTITY", IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this._Id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="DateTime NOT NULL")]
-		public System.DateTime Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this._Date = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thread", DbType="Int NOT NULL")]
-		public int Thread
-		{
-			get
-			{
-				return this._Thread;
-			}
-			set
-			{
-				if ((this._Thread != value))
-				{
-					this._Thread = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Context", DbType="VarChar(20) NOT NULL", CanBeNull=false)]
-		public string Context
-		{
-			get
-			{
-				return this._Context;
-			}
-			set
-			{
-				if ((this._Context != value))
-				{
-					this._Context = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Level]", Storage="_Level", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
-		public string Level
-		{
-			get
-			{
-				return this._Level;
-			}
-			set
-			{
-				if ((this._Level != value))
-				{
-					this._Level = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Logger", DbType="VarChar(255)")]
-		public string Logger
-		{
-			get
-			{
-				return this._Logger;
-			}
-			set
-			{
-				if ((this._Logger != value))
-				{
-					this._Logger = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="VarChar(MAX)")]
-		public string Message
-		{
-			get
-			{
-				return this._Message;
-			}
-			set
-			{
-				if ((this._Message != value))
-				{
-					this._Message = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Exception", DbType="VarChar(MAX)")]
-		public string Exception
-		{
-			get
-			{
-				return this._Exception;
-			}
-			set
-			{
-				if ((this._Exception != value))
-				{
-					this._Exception = value;
-				}
-			}
 		}
 	}
 	
@@ -3311,8 +1920,6 @@ namespace CallGeneratorLibrary
 		
 		private System.Nullable<int> _Balance;
 		
-		private EntitySet<UserRole> _UserRoles;
-		
 		private EntitySet<Carrier> _Carriers;
 		
 		private EntitySet<SipAccount> _SipAccounts;
@@ -3369,7 +1976,6 @@ namespace CallGeneratorLibrary
 		
 		public User()
 		{
-			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
 			this._Carriers = new EntitySet<Carrier>(new Action<Carrier>(this.attach_Carriers), new Action<Carrier>(this.detach_Carriers));
 			this._SipAccounts = new EntitySet<SipAccount>(new Action<SipAccount>(this.attach_SipAccounts), new Action<SipAccount>(this.detach_SipAccounts));
 			this._ActionLogs = new EntitySet<ActionLog>(new Action<ActionLog>(this.attach_ActionLogs), new Action<ActionLog>(this.detach_ActionLogs));
@@ -3739,19 +2345,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserRole", Storage="_UserRoles", ThisKey="Id", OtherKey="UserId")]
-		public EntitySet<UserRole> UserRoles
-		{
-			get
-			{
-				return this._UserRoles;
-			}
-			set
-			{
-				this._UserRoles.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Carrier", Storage="_Carriers", ThisKey="Id", OtherKey="CustomerId")]
 		public EntitySet<Carrier> Carriers
 		{
@@ -3848,18 +2441,6 @@ namespace CallGeneratorLibrary
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
 		}
 		
 		private void attach_Carriers(Carrier entity)
@@ -4184,8 +2765,6 @@ namespace CallGeneratorLibrary
 		
 		private EntitySet<ScheduleOperator> _ScheduleOperators;
 		
-		private EntitySet<PhoneNumber> _PhoneNumbers;
-		
 		private EntitySet<TestOperator> _TestOperators;
 		
     #region Extensibility Method Definitions
@@ -4213,7 +2792,6 @@ namespace CallGeneratorLibrary
 		public Operator()
 		{
 			this._ScheduleOperators = new EntitySet<ScheduleOperator>(new Action<ScheduleOperator>(this.attach_ScheduleOperators), new Action<ScheduleOperator>(this.detach_ScheduleOperators));
-			this._PhoneNumbers = new EntitySet<PhoneNumber>(new Action<PhoneNumber>(this.attach_PhoneNumbers), new Action<PhoneNumber>(this.detach_PhoneNumbers));
 			this._TestOperators = new EntitySet<TestOperator>(new Action<TestOperator>(this.attach_TestOperators), new Action<TestOperator>(this.detach_TestOperators));
 			OnCreated();
 		}
@@ -4391,19 +2969,6 @@ namespace CallGeneratorLibrary
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_PhoneNumber", Storage="_PhoneNumbers", ThisKey="Id", OtherKey="OperatorId")]
-		public EntitySet<PhoneNumber> PhoneNumbers
-		{
-			get
-			{
-				return this._PhoneNumbers;
-			}
-			set
-			{
-				this._PhoneNumbers.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_TestOperator", Storage="_TestOperators", ThisKey="Id", OtherKey="OperatorId")]
 		public EntitySet<TestOperator> TestOperators
 		{
@@ -4444,18 +3009,6 @@ namespace CallGeneratorLibrary
 		}
 		
 		private void detach_ScheduleOperators(ScheduleOperator entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = null;
-		}
-		
-		private void attach_PhoneNumbers(PhoneNumber entity)
-		{
-			this.SendPropertyChanging();
-			entity.Operator = this;
-		}
-		
-		private void detach_PhoneNumbers(PhoneNumber entity)
 		{
 			this.SendPropertyChanging();
 			entity.Operator = null;
@@ -5149,159 +3702,6 @@ namespace CallGeneratorLibrary
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="")]
-	public partial class ActionLogFeed
-	{
-		
-		private System.Nullable<int> _Id;
-		
-		private System.Nullable<int> _ActionType;
-		
-		private System.Nullable<System.DateTime> _LogDate;
-		
-		private string _ObjectType;
-		
-		private System.Nullable<int> _ObjectId;
-		
-		private string _IPAddress;
-		
-		private System.Nullable<int> _UserId;
-		
-		private string _Name;
-		
-		public ActionLogFeed()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id")]
-		public System.Nullable<int> Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this._Id = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActionType")]
-		public System.Nullable<int> ActionType
-		{
-			get
-			{
-				return this._ActionType;
-			}
-			set
-			{
-				if ((this._ActionType != value))
-				{
-					this._ActionType = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogDate")]
-		public System.Nullable<System.DateTime> LogDate
-		{
-			get
-			{
-				return this._LogDate;
-			}
-			set
-			{
-				if ((this._LogDate != value))
-				{
-					this._LogDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ObjectType", CanBeNull=false)]
-		public string ObjectType
-		{
-			get
-			{
-				return this._ObjectType;
-			}
-			set
-			{
-				if ((this._ObjectType != value))
-				{
-					this._ObjectType = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ObjectId")]
-		public System.Nullable<int> ObjectId
-		{
-			get
-			{
-				return this._ObjectId;
-			}
-			set
-			{
-				if ((this._ObjectId != value))
-				{
-					this._ObjectId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IPAddress", CanBeNull=false)]
-		public string IPAddress
-		{
-			get
-			{
-				return this._IPAddress;
-			}
-			set
-			{
-				if ((this._IPAddress != value))
-				{
-					this._IPAddress = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId")]
-		public System.Nullable<int> UserId
-		{
-			get
-			{
-				return this._UserId;
-			}
-			set
-			{
-				if ((this._UserId != value))
-				{
-					this._UserId = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this._Name = value;
-				}
 			}
 		}
 	}
@@ -6580,253 +4980,6 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PhoneNumbers")]
-	public partial class PhoneNumber : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Number;
-		
-		private System.Nullable<int> _OperatorId;
-		
-		private System.Nullable<System.DateTime> _CreationDate;
-		
-		private System.Nullable<int> _Status;
-		
-		private System.Nullable<System.DateTime> _LastCallDate;
-		
-		private string _Prefix;
-		
-		private EntityRef<Operator> _Operator;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNumberChanging(string value);
-    partial void OnNumberChanged();
-    partial void OnOperatorIdChanging(System.Nullable<int> value);
-    partial void OnOperatorIdChanged();
-    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreationDateChanged();
-    partial void OnStatusChanging(System.Nullable<int> value);
-    partial void OnStatusChanged();
-    partial void OnLastCallDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnLastCallDateChanged();
-    partial void OnPrefixChanging(string value);
-    partial void OnPrefixChanged();
-    #endregion
-		
-		public PhoneNumber()
-		{
-			this._Operator = default(EntityRef<Operator>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Number", DbType="NVarChar(200)")]
-		public string Number
-		{
-			get
-			{
-				return this._Number;
-			}
-			set
-			{
-				if ((this._Number != value))
-				{
-					this.OnNumberChanging(value);
-					this.SendPropertyChanging();
-					this._Number = value;
-					this.SendPropertyChanged("Number");
-					this.OnNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OperatorId", DbType="Int")]
-		public System.Nullable<int> OperatorId
-		{
-			get
-			{
-				return this._OperatorId;
-			}
-			set
-			{
-				if ((this._OperatorId != value))
-				{
-					if (this._Operator.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnOperatorIdChanging(value);
-					this.SendPropertyChanging();
-					this._OperatorId = value;
-					this.SendPropertyChanged("OperatorId");
-					this.OnOperatorIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CreationDate
-		{
-			get
-			{
-				return this._CreationDate;
-			}
-			set
-			{
-				if ((this._CreationDate != value))
-				{
-					this.OnCreationDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreationDate = value;
-					this.SendPropertyChanged("CreationDate");
-					this.OnCreationDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
-		public System.Nullable<int> Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastCallDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> LastCallDate
-		{
-			get
-			{
-				return this._LastCallDate;
-			}
-			set
-			{
-				if ((this._LastCallDate != value))
-				{
-					this.OnLastCallDateChanging(value);
-					this.SendPropertyChanging();
-					this._LastCallDate = value;
-					this.SendPropertyChanged("LastCallDate");
-					this.OnLastCallDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Prefix", DbType="NVarChar(50)")]
-		public string Prefix
-		{
-			get
-			{
-				return this._Prefix;
-			}
-			set
-			{
-				if ((this._Prefix != value))
-				{
-					this.OnPrefixChanging(value);
-					this.SendPropertyChanging();
-					this._Prefix = value;
-					this.SendPropertyChanged("Prefix");
-					this.OnPrefixChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Operator_PhoneNumber", Storage="_Operator", ThisKey="OperatorId", OtherKey="Id", IsForeignKey=true)]
-		public Operator Operator
-		{
-			get
-			{
-				return this._Operator.Entity;
-			}
-			set
-			{
-				Operator previousValue = this._Operator.Entity;
-				if (((previousValue != value) 
-							|| (this._Operator.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Operator.Entity = null;
-						previousValue.PhoneNumbers.Remove(this);
-					}
-					this._Operator.Entity = value;
-					if ((value != null))
-					{
-						value.PhoneNumbers.Add(this);
-						this._OperatorId = value.Id;
-					}
-					else
-					{
-						this._OperatorId = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Operator");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GeneratedCalls")]
 	public partial class GeneratedCall : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -7843,6 +5996,159 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="")]
+	public partial class ActionLogFeed
+	{
+		
+		private System.Nullable<int> _Id;
+		
+		private System.Nullable<int> _ActionType;
+		
+		private System.Nullable<System.DateTime> _LogDate;
+		
+		private string _ObjectType;
+		
+		private System.Nullable<int> _ObjectId;
+		
+		private string _IPAddress;
+		
+		private System.Nullable<int> _UserId;
+		
+		private string _Name;
+		
+		public ActionLogFeed()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id")]
+		public System.Nullable<int> Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this._Id = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActionType")]
+		public System.Nullable<int> ActionType
+		{
+			get
+			{
+				return this._ActionType;
+			}
+			set
+			{
+				if ((this._ActionType != value))
+				{
+					this._ActionType = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogDate")]
+		public System.Nullable<System.DateTime> LogDate
+		{
+			get
+			{
+				return this._LogDate;
+			}
+			set
+			{
+				if ((this._LogDate != value))
+				{
+					this._LogDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ObjectType", CanBeNull=false)]
+		public string ObjectType
+		{
+			get
+			{
+				return this._ObjectType;
+			}
+			set
+			{
+				if ((this._ObjectType != value))
+				{
+					this._ObjectType = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ObjectId")]
+		public System.Nullable<int> ObjectId
+		{
+			get
+			{
+				return this._ObjectId;
+			}
+			set
+			{
+				if ((this._ObjectId != value))
+				{
+					this._ObjectId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IPAddress", CanBeNull=false)]
+		public string IPAddress
+		{
+			get
+			{
+				return this._IPAddress;
+			}
+			set
+			{
+				if ((this._IPAddress != value))
+				{
+					this._IPAddress = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId")]
+		public System.Nullable<int> UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this._UserId = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this._Name = value;
+				}
+			}
+		}
+	}
+	
 	public partial class GetDataResult
 	{
 		
@@ -8175,6 +6481,50 @@ namespace CallGeneratorLibrary
 		}
 	}
 	
+	public partial class GetChartTotalsResult
+	{
+		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<int> _TotalCalls;
+		
+		public GetChartTotalsResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this._CreationDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCalls", DbType="Int")]
+		public System.Nullable<int> TotalCalls
+		{
+			get
+			{
+				return this._TotalCalls;
+			}
+			set
+			{
+				if ((this._TotalCalls != value))
+				{
+					this._TotalCalls = value;
+				}
+			}
+		}
+	}
+	
 	public partial class GetActionLogsResult
 	{
 		
@@ -8322,50 +6672,6 @@ namespace CallGeneratorLibrary
 				if ((this._Name != value))
 				{
 					this._Name = value;
-				}
-			}
-		}
-	}
-	
-	public partial class GetChartTotalsResult
-	{
-		
-		private System.Nullable<System.DateTime> _CreationDate;
-		
-		private System.Nullable<int> _TotalCalls;
-		
-		public GetChartTotalsResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> CreationDate
-		{
-			get
-			{
-				return this._CreationDate;
-			}
-			set
-			{
-				if ((this._CreationDate != value))
-				{
-					this._CreationDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCalls", DbType="Int")]
-		public System.Nullable<int> TotalCalls
-		{
-			get
-			{
-				return this._TotalCalls;
-			}
-			set
-			{
-				if ((this._TotalCalls != value))
-				{
-					this._TotalCalls = value;
 				}
 			}
 		}

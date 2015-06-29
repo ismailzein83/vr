@@ -92,8 +92,6 @@
     <Compile Include="Repositories\GeneratedCallRepository.cs" />
     <Compile Include="Repositories\MontyCallRepository.cs" />
     <Compile Include="Repositories\OperatorRepository.cs" />
-    <Compile Include="Repositories\PhoneNumberRepository.cs" />
-    <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\ScheduleLogRepository.cs" />
     <Compile Include="Repositories\ScheduleOperatorRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />

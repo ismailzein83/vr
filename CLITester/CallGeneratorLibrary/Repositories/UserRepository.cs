@@ -120,24 +120,24 @@ namespace CallGeneratorLibrary.Repositories
             return users;
         }
 
-        public static List<Page> GetPages()
-        {
-            List<Page> pages = new List<Page>();
+        //public static List<Page> GetPages()
+        //{
+        //    List<Page> pages = new List<Page>();
 
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    return pages = context.Pages.ToList<Page>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-            }
+        //    try
+        //    {
+        //        using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+        //        {
+        //            return pages = context.Pages.ToList<Page>();
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        Logger.LogException(ex);
+        //    }
 
-            return pages;
-        }
+        //    return pages;
+        //}
         public static User GetUser(string username)
         {
             User user = new User();
@@ -294,10 +294,10 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    DataLoadOptions options = new DataLoadOptions();
-                    options.LoadWith<User>(e => e.UserRoles);
+                    //DataLoadOptions options = new DataLoadOptions();
+                    //options.LoadWith<User>(e => e.UserRoles);
                     
-                    context.LoadOptions = options;
+                    //context.LoadOptions = options;
 
                     user = context.Users.Where(u => u.Id == userId).FirstOrDefault<User>();
                 }

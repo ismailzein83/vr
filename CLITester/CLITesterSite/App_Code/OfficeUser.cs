@@ -13,13 +13,13 @@ using System.Text;
 public class OfficeUser : System.Security.Principal.IIdentity
 {
     #region Members
-    protected List<Page> pages;
+    //protected List<Page> pages;
     //protected List<Menus> menus;
-    private static List<Role> roles;
+    //private static List<Role> roles;
     protected User _User = new User();
     protected bool isAutheticated = false;
     protected StringCollection accessiblePages;
-    protected List<Permission> permissions;
+    //protected List<Permission> permissions;
     //protected List<ProjectsLibrary.ProjectNotification> projectNotifications;
     #endregion
 
@@ -27,29 +27,29 @@ public class OfficeUser : System.Security.Principal.IIdentity
     /// <summary>
     /// Get User Accessible Pages
     /// </summary>
-    public List<Page> Pages
-    {
-        get
-        {
-            if (pages == null)
-            {
-                if (_User.IsSuperAdmin.HasValue)
-                {
-                    if (_User.IsSuperAdmin.Value)
-                    {
+    //public List<Page> Pages
+    //{
+    //    get
+    //    {
+    //        if (pages == null)
+    //        {
+    //            if (_User.IsSuperAdmin.HasValue)
+    //            {
+    //                if (_User.IsSuperAdmin.Value)
+    //                {
 
-                        return pages = CallGeneratorLibrary.Repositories.UserRepository.GetPages();
-                    }
-                    else
-                        return pages = RoleRepository.GetPages(roles);
-                }
-                else
-                    return pages = RoleRepository.GetPages(roles);
-            }
-            else
-                return pages;
-        }
-    }
+    //                    return pages = CallGeneratorLibrary.Repositories.UserRepository.GetPages();
+    //                }
+    //                else
+    //                    return pages = RoleRepository.GetPages(roles);
+    //            }
+    //            else
+    //                return pages = RoleRepository.GetPages(roles);
+    //        }
+    //        else
+    //            return pages;
+    //    }
+    //}
     ///// <summary>
     ///// Get User Permissions
     ///// </summary>
@@ -91,18 +91,18 @@ public class OfficeUser : System.Security.Principal.IIdentity
     /// <summary>
     /// 
     /// </summary>
-    public StringCollection AccessiblePages
-    {
-        get
-        {
-            if (Pages != null)
-            {
-                foreach (Page p in Pages)
-                    accessiblePages.Add(p.Name);
-            }
-            return accessiblePages;
-        }
-    }
+    //public StringCollection AccessiblePages
+    //{
+    //    get
+    //    {
+    //        if (Pages != null)
+    //        {
+    //            foreach (Page p in Pages)
+    //                accessiblePages.Add(p.Name);
+    //        }
+    //        return accessiblePages;
+    //    }
+    //}
     /// <summary>
     /// Project Notifications
     /// </summary>
@@ -168,19 +168,19 @@ public class OfficeUser : System.Security.Principal.IIdentity
     /// </summary>
     /// <param name="pageName">The Page Name (ASPX)</param>
     /// <returns>Boolean true or false</returns>
-    public bool CanAccessPage(Page page)
-    {
-        return Pages.Contains(page);
-    }
+    //public bool CanAccessPage(Page page)
+    //{
+    //    return Pages.Contains(page);
+    //}
     /// <summary>
     /// Returns true if the user permissions allow him to access the page (ASPX).
     /// </summary>
     /// <param name="pageName">The Page Name (ASPX)</param>
     /// <returns>Boolean true or false</returns>
-    public bool CanAccessPage(string page)
-    {
-        return AccessiblePages.Contains(page);
-    }
+    //public bool CanAccessPage(string page)
+    //{
+    //    return AccessiblePages.Contains(page);
+    //}
     public string Name
     {
         get
@@ -228,8 +228,8 @@ public class OfficeUser : System.Security.Principal.IIdentity
         isAutheticated = false;
         HttpContext.Current.Session.RemoveAll();
 
-        roles = null;
-        this.pages = null;
+        //roles = null;
+        //this.pages = null;
         //this.menus = null;
         //this.permissions = null;
         this.accessiblePages = null;
@@ -325,54 +325,54 @@ public class OfficeUser : System.Security.Principal.IIdentity
     /// <summary>
     /// Get User Roles
     /// </summary>
-    public void ManipulateRoles()
-    {
-        if (roles == null && _User.Id > 0)
-            roles = RoleRepository.GetUserRoles(_User.Id);
-    }
+    //public void ManipulateRoles()
+    //{
+    //    if (roles == null && _User.Id > 0)
+    //        roles = RoleRepository.GetUserRoles(_User.Id);
+    //}
     /// <summary>
     /// 
     /// </summary>
     /// <param name="pageName"></param>
     /// <returns></returns>
-    public List<RolePermission> GetRolePermissions(string pageName)
-    {
-        if (roles != null)
-        {
-            var ids = from r in roles
-                      select r.Id;
+    //public List<RolePermission> GetRolePermissions(string pageName)
+    //{
+    //    if (roles != null)
+    //    {
+    //        var ids = from r in roles
+    //                  select r.Id;
 
-            List<int> roleIds = ids.ToList<int>();
+    //        List<int> roleIds = ids.ToList<int>();
 
-            string rolesIds = string.Empty;
-            foreach (int role in roleIds)
-                rolesIds += role.ToString() + ",";
-            rolesIds = rolesIds.TrimEnd(',');
+    //        string rolesIds = string.Empty;
+    //        foreach (int role in roleIds)
+    //            rolesIds += role.ToString() + ",";
+    //        rolesIds = rolesIds.TrimEnd(',');
 
-            return RoleRepository.GetRolePermissions(pageName, rolesIds);
-        }
+    //        return RoleRepository.GetRolePermissions(pageName, rolesIds);
+    //    }
 
-        return null;
-    }
-    public RolePermission GetRolePermission(string pageName)
-    {
-        if (roles != null)
-        {
-            var ids = from r in roles
-                      select r.Id;
+    //    return null;
+    //}
+    //public RolePermission GetRolePermission(string pageName)
+    //{
+    //    if (roles != null)
+    //    {
+    //        var ids = from r in roles
+    //                  select r.Id;
 
-            List<int> roleIds = ids.ToList<int>();
+    //        List<int> roleIds = ids.ToList<int>();
 
-            string rolesIds = string.Empty;
-            foreach (int role in roleIds)
-                rolesIds += role.ToString() + ",";
-            rolesIds = rolesIds.TrimEnd(',');
+    //        string rolesIds = string.Empty;
+    //        foreach (int role in roleIds)
+    //            rolesIds += role.ToString() + ",";
+    //        rolesIds = rolesIds.TrimEnd(',');
 
-            return null;//RoleRepository.GetRolePermissions(pageName, rolesIds);
-        }
+    //        return null;//RoleRepository.GetRolePermissions(pageName, rolesIds);
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
     #endregion
 
 }

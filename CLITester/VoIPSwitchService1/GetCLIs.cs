@@ -62,6 +62,10 @@ namespace VoIPSwitchService
                                     GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall.CallEntryId.Value);
                                     if (generatedCall != null)
                                     {
+                                        int ReqCallId = 0;
+                                        int.TryParse(montyCall.RequestId, out ReqCallId);
+                                        PhoneNumberService pp = new PhoneNumberService();
+
                                         if (generatedCall.StartDate.HasValue)
                                         {
                                             if (expTime != 0 && (DateTime.Now.Second - generatedCall.StartDate.Value.Second) > expTime)
@@ -82,7 +86,11 @@ namespace VoIPSwitchService
                                                 lstTestOperators[i].ErrorMessage = Err;
                                                 lstTestOperators[i].EndDate = DateTime.Now;
                                                 TestOperatorRepository.Save(lstTestOperators[i]);
-                                                PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
+
+                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                System.Threading.Thread.Sleep(1000);
+
+                                                //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                             }
                                         }
 
@@ -117,15 +125,16 @@ namespace VoIPSwitchService
                                                 lstTestOperators[i].EndDate = DateTime.Now;
                                                 lstTestOperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Failed;
                                                 TestOperatorRepository.Save(lstTestOperators[i]);
-                                                PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
+
+                                                CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                                System.Threading.Thread.Sleep(1000);
+
+                                                //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                 //h = true;
                                             }
                                             else
                                             {
-                                                int ReqCallId = 0;
-                                                int.TryParse(montyCall.RequestId, out ReqCallId);
 
-                                                PhoneNumberService pp = new PhoneNumberService();
                                                 CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
                                                 System.Threading.Thread.Sleep(1000);
 
@@ -143,7 +152,7 @@ namespace VoIPSwitchService
                                                         {
                                                             lstTestOperators[i].EndDate = DateTime.Now;
                                                             string testcli = generatedCall.SipAccount.User.CallerId;
-
+                                                            WriteToEventLog("gg" + generatedCall.SipAccount.User.CallerId);
                                                             ///Remove the character '+' from the Cli received, if exist
                                                             if (testcli.Substring(0, 1) == "+")
                                                             {
@@ -152,27 +161,41 @@ namespace VoIPSwitchService
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId.Substring(1, len2);
                                                             }
                                                             else
+                                                            {
+                                                                WriteToEventLog("ee " + generatedCall.SipAccount.User.CallerId);
+                                                                WriteToEventLog("Count " + lstTestOperators.Count() + " i:" + i);
+                                                                WriteToEventLog("lstTestOperators[i].TestCli " + lstTestOperators[i].TestCli);
                                                                 lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
+                                                                //WriteToEventLog("lstTestOperators[i].TestCli2 " + lstTestOperators[i].TestCli);
+                                                            }
+                                                                
                                                             //string RecCLi = reader[3].ToString();
                                                             string RecCLi = ret.ReceivedCLI;
 
-                                                            ///Remove the 4 zeroes from the Cli received, if exist
-                                                            if (ret.ReceivedCLI.ToString().Length > 4)
+                                                            if (String.IsNullOrEmpty(ret.ReceivedCLI))
                                                             {
-                                                                if (RecCLi.Substring(0, 4) == "0000")
-                                                                {
-                                                                    int lenn = ret.ReceivedCLI.ToString().Length;
-                                                                    lenn = lenn - 2;
-                                                                    lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString().Substring(2, lenn);
-                                                                }
-                                                                else
-                                                                    lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
+                                                                lstTestOperators[i].ReceivedCli = "";
                                                             }
                                                             else
                                                             {
-                                                                lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
+                                                                ///Remove the 4 zeroes from the Cli received, if exist
+                                                                if (ret.ReceivedCLI.ToString().Length > 4)
+                                                                {
+                                                                    if (RecCLi.Substring(0, 4) == "0000")
+                                                                    {
+                                                                        int lenn = ret.ReceivedCLI.ToString().Length;
+                                                                        lenn = lenn - 2;
+                                                                        lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString().Substring(2, lenn);
+                                                                    }
+                                                                    else
+                                                                        lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
+                                                                }
+                                                                else
+                                                                {
+                                                                    lstTestOperators[i].ReceivedCli = ret.ReceivedCLI.ToString();
+                                                                }
                                                             }
-
+ 
                                                             //Check without zeroes
                                                             string TestCli1 = lstTestOperators[i].TestCli.Substring(0, 2);
                                                             string RecCli1 = "";
@@ -237,7 +260,8 @@ namespace VoIPSwitchService
 
 
                                                             TestOperatorRepository.Save(lstTestOperators[i]);
-                                                            PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
+
+                                                            //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                             //h = true;
                                                         }
                                                     }
@@ -290,7 +314,7 @@ namespace VoIPSwitchService
                                                         }
 
                                                         TestOperatorRepository.Save(lstTestOperators[i]);
-                                                        PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
+                                                        //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                                         //h = true;
                                                     }
                                                 //});
@@ -306,6 +330,12 @@ namespace VoIPSwitchService
                                         MontyCall montyCall2 = MontyCallRepository.LoadbyTestOperatorId(lstTestOperators[i].Id);
                                         if (montyCall2 != null)
                                         {
+                                            int ReqCallId = 0;
+                                            int.TryParse(montyCall2.RequestId, out ReqCallId);
+                                            PhoneNumberService pp = new PhoneNumberService();
+                                            CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                            System.Threading.Thread.Sleep(1000);
+
                                             GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall2.CallEntryId.Value);
                                             if (generatedCall != null)
                                             {
@@ -328,13 +358,14 @@ namespace VoIPSwitchService
                                         lstTestOperators[i].ErrorMessage = Err;
                                         lstTestOperators[i].EndDate = DateTime.Now;
                                         TestOperatorRepository.Save(lstTestOperators[i]);
-                                        PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
+
+                                        //PhoneNumberRepository.FreeThisPhoneNumber(lstTestOperators[i]);
                                     }
                                 }
                             }
 
-                            lstTestOperators.TrimExcess();
-                            lstTestOperators.Clear();
+                            //lstTestOperators.TrimExcess();
+                            //lstTestOperators.Clear();
                         }
                         catch (System.Exception ex)
                         {
@@ -346,6 +377,12 @@ namespace VoIPSwitchService
                                 MontyCall montyCall3 = MontyCallRepository.LoadbyTestOperatorId(testOperator.Id);
                                 if (montyCall3 != null)
                                 {
+                                    int ReqCallId = 0;
+                                    int.TryParse(montyCall3.RequestId, out ReqCallId);
+                                    PhoneNumberService pp = new PhoneNumberService();
+                                    CallInfo ret = pp.ReleaseCall("sama", "sama", ReqCallId);
+                                    System.Threading.Thread.Sleep(1000);
+
                                     GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall3.CallEntryId.Value);
                                     if (generatedCall != null)
                                     {
@@ -364,7 +401,7 @@ namespace VoIPSwitchService
                                 testOperator.ErrorMessage = "Failed while Processing";
                                 testOperator.EndDate = DateTime.Now;
                                 TestOperatorRepository.Save(testOperator);
-                                PhoneNumberRepository.FreeThisPhoneNumber(testOperator);
+                                //PhoneNumberRepository.FreeThisPhoneNumber(testOperator);
                             }
                         }
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////

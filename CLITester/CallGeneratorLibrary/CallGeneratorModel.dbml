@@ -1,67 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FraudTest3" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=FraudTest3;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest3ConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CLITester" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CLITester;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Exceptions" Member="Exceptions">
     <Type Name="Exception">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Subject" Type="System.String" DbType="VarChar(4000)" CanBeNull="true" />
       <Column Name="Details" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="ExceptionDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Pages" Member="Pages">
-    <Type Name="Page" Id="ID1">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="Page_PagesPermission" Member="PagesPermissions" ThisKey="Id" OtherKey="PageId" Type="PagesPermission" />
-    </Type>
-  </Table>
-  <Table Name="dbo.PagesPermissions" Member="PagesPermissions">
-    <Type Name="PagesPermission">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="PermissionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PageId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Page_PagesPermission" Member="Page" ThisKey="PageId" OtherKey="Id" Type="Page" IsForeignKey="true" />
-      <Association Name="Permission_PagesPermission" Member="Permission" ThisKey="PermissionId" OtherKey="Id" Type="Permission" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Permissions" Member="Permissions">
-    <Type Name="Permission" Id="ID3">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="ApplicationId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Permission_PagesPermission" Member="PagesPermissions" ThisKey="Id" OtherKey="PermissionId" Type="PagesPermission" />
-      <Association Name="Permission_RolePermission" Member="RolePermissions" ThisKey="Id" OtherKey="PermissionId" Type="RolePermission" />
-    </Type>
-  </Table>
-  <Table Name="dbo.RolePermissions" Member="RolePermissions">
-    <Type Name="RolePermission" Id="ID2">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="RoleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PermissionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CanAdd" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="CanEdit" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="CanDelete" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="Permission_RolePermission" Member="Permission" ThisKey="PermissionId" OtherKey="Id" Type="Permission" IsForeignKey="true" />
-      <Association Name="Role_RolePermission" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Roles" Member="Roles">
-    <Type Name="Role" Id="ID5">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="Role_RolePermission" Member="RolePermissions" ThisKey="Id" OtherKey="RoleId" Type="RolePermission" />
-      <Association Name="Role_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="RoleId" Type="UserRole" />
-    </Type>
-  </Table>
-  <Table Name="dbo.UserRoles" Member="UserRoles">
-    <Type Name="UserRole">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RoleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Role_UserRole" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
-      <Association Name="User_UserRole" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.Carriers" Member="Carriers">
@@ -73,18 +17,6 @@
       <Column Name="ShortName" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Association Name="Carrier_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="CarrierId" Type="ScheduleOperator" />
       <Association Name="User_Carrier" Member="User" ThisKey="CustomerId" OtherKey="Id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.[Log]" Member="Logs">
-    <Type Name="Log">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="Thread" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Context" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
-      <Column Name="[Level]" Member="Level" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="Logger" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="Message" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Column Name="Exception" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.SipAccounts" Member="SipAccounts">
@@ -155,7 +87,7 @@
     </Type>
   </Table>
   <Table Name="dbo.Users" Member="Users">
-    <Type Name="User" Id="ID4">
+    <Type Name="User">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="UserName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
@@ -174,7 +106,6 @@
       <Column Name="IsChangedCallerId" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="ParentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Balance" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="User_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="UserId" Type="UserRole" />
       <Association Name="User_Carrier" Member="Carriers" ThisKey="Id" OtherKey="CustomerId" Type="Carrier" />
       <Association Name="User_SipAccount" Member="SipAccounts" ThisKey="Id" OtherKey="UserId" Type="SipAccount" />
       <Association Name="User_ActionLog" Member="ActionLogs" ThisKey="Id" OtherKey="UserId" Type="ActionLog" />
@@ -184,7 +115,7 @@
     </Type>
   </Table>
   <Table Name="" Member="TestOperatorHistories">
-    <Type Name="TestOperatorHistory" Id="ID6">
+    <Type Name="TestOperatorHistory" Id="ID1">
       <Column Name="Name" Type="System.String" CanBeNull="true" />
       <Column Name="CreationDate" Type="System.DateTime" CanBeNull="true" />
       <Column Name="EndDate" Type="System.DateTime" CanBeNull="true" />
@@ -210,7 +141,6 @@
       <Column Name="ServiceAndroid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="ServiceMonty" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="Operator_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="OperatorId" Type="ScheduleOperator" />
-      <Association Name="Operator_PhoneNumber" Member="PhoneNumbers" ThisKey="Id" OtherKey="OperatorId" Type="PhoneNumber" />
       <Association Name="Operator_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="OperatorId" Type="TestOperator" />
     </Type>
   </Table>
@@ -243,18 +173,6 @@
       <Column Name="ComputerName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="User_ActionLog" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="" Member="ActionLogFeeds">
-    <Type Name="ActionLogFeed">
-      <Column Name="Id" Type="System.Int32" CanBeNull="true" />
-      <Column Name="ActionType" Type="System.Int32" CanBeNull="true" />
-      <Column Name="LogDate" Type="System.DateTime" CanBeNull="true" />
-      <Column Name="ObjectType" Type="System.String" CanBeNull="false" />
-      <Column Name="ObjectId" Type="System.Int32" CanBeNull="true" />
-      <Column Name="IPAddress" Type="System.String" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" CanBeNull="true" />
-      <Column Name="Name" Type="System.String" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.ScheduleOperators" Member="ScheduleOperators">
@@ -315,18 +233,6 @@
       <Association Name="User_UserBalance" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.PhoneNumbers" Member="PhoneNumbers">
-    <Type Name="PhoneNumber">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Number" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LastCallDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Prefix" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="Operator_PhoneNumber" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.GeneratedCalls" Member="GeneratedCalls">
     <Type Name="GeneratedCall">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -371,27 +277,18 @@
       <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Function Name="dbo.GetRolePages" Method="GetRolePages">
-    <Parameter Name="RoleId" Parameter="roleId" Type="System.String" DbType="NVarChar(255)" />
-    <ElementType IdRef="ID1" />
-  </Function>
-  <Function Name="dbo.GetRolePermissionActions" Method="GetRolePermissionActions">
-    <Parameter Name="RoleIds" Parameter="roleIds" Type="System.String" DbType="NVarChar(255)" />
-    <Parameter Name="PageName" Parameter="pageName" Type="System.String" DbType="NVarChar(255)" />
-    <ElementType IdRef="ID2" />
-  </Function>
-  <Function Name="dbo.GetRolePermissions" Method="GetRolePermissions">
-    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
-    <ElementType IdRef="ID3" />
-  </Function>
-  <Function Name="dbo.GetRoleUsers" Method="GetRoleUsers">
-    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
-    <ElementType IdRef="ID4" />
-  </Function>
-  <Function Name="dbo.GetUserRoles" Method="GetUserRoles">
-    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
-    <ElementType IdRef="ID5" />
-  </Function>
+  <Table Name="" Member="ActionLogFeeds">
+    <Type Name="ActionLogFeed">
+      <Column Name="Id" Type="System.Int32" CanBeNull="true" />
+      <Column Name="ActionType" Type="System.Int32" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" CanBeNull="true" />
+      <Column Name="ObjectType" Type="System.String" CanBeNull="false" />
+      <Column Name="ObjectId" Type="System.Int32" CanBeNull="true" />
+      <Column Name="IPAddress" Type="System.String" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" CanBeNull="false" />
+    </Type>
+  </Table>
   <Function Name="dbo.GetData" Method="GetData">
     <ElementType Name="GetDataResult">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -414,20 +311,6 @@
       <Column Name="mnc" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.GetActionLogs" Method="GetActionLogs">
-    <Parameter Name="ObjectType" Parameter="objectType" Type="System.String" DbType="NVarChar(200)" />
-    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
-    <ElementType Name="GetActionLogsResult">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ObjectType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="ObjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.GetChartTotals" Method="GetChartTotals">
     <Parameter Name="Status" Parameter="status" Type="System.Int32" DbType="Int" />
     <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
@@ -442,6 +325,20 @@
     <Parameter Name="OperatorId" Parameter="operatorId" Type="System.Int32" DbType="Int" />
     <Parameter Name="DisplayStart" Parameter="displayStart" Type="System.Int32" DbType="Int" />
     <Parameter Name="DisplayLength" Parameter="displayLength" Type="System.Int32" DbType="Int" />
-    <ElementType IdRef="ID6" />
+    <ElementType IdRef="ID1" />
+  </Function>
+  <Function Name="dbo.GetActionLogs" Method="GetActionLogs">
+    <Parameter Name="ObjectType" Parameter="objectType" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GetActionLogsResult">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ObjectType" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ObjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </ElementType>
   </Function>
 </Database>
