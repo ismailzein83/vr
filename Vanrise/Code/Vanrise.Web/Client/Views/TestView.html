@@ -1,165 +1,45 @@
-﻿
-<div class="container-fluid " ng-controller="TestViewController">
+﻿<input type="text" ng-model="testModel" />
+    {{testModel}}
+ff
+<vr-row>
+    <vr-columns width="normal"><div style="width:100%;background-color:red">normal</div></vr-columns>
+    <vr-columns width="small"><div style="width:100%;background-color:red">small</div></vr-columns>
+    <vr-columns width="large"><div style="width:100%;background-color:red">large</div></vr-columns>
+    <vr-columns width="1/4row"><div style="width:100%;background-color:red">1/4</div></vr-columns>
+    <vr-columns width="1/3row"><div style="width:100%;background-color:red">1/3</div></vr-columns>
+    <vr-columns width="1/2row"><div style="width:100%;background-color:red">1/2</div></vr-columns>
+    <vr-columns width="fullrow"><div style="width:100%;background-color:red">full</div></vr-columns>
+</vr-row>
+<input type="button" ng-click="postMsg()" value="Post" />
 
-    <div class="row">
-        <h1>Test View</h1>
-    </div>
-    <form name="myForm" novalidate>
+<vr-datagridcell htmltemplate='html'>
 
-        <div class="row">
-            <div class="col-lg-2">
-                Entity Name , datatextfield,datavaluefield
-            </div>
+</vr-datagridcell>
+<input type="button" ng-click="addItem()" value="Add Item" />
+<vr-datagrid datasource="gridData" maxheight="400px" loadmoredata="loadMoreData" on-ready="gridReady">
+    <vr-datagridcolumn headertext="'Column 3'" field="'col3'">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Column 4'">
+        <input type="text" ng-model="dataItem.col3" />
+    </vr-datagridcolumn>
+</vr-datagrid>
 
-            <div class="col-lg-2">
-                simple
-            </div>
-
-            <div class="col-lg-2">
-                Multiple
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-2">
-                <!--<vr-select datasource="testviewCtrl.optionsZone.datasource" selectedvalues="testviewCtrl.optionsZone.selectedvalues"
-                           datatextfield="name" datavaluefield="value" entityname="Zone"></vr-select>-->
-            </div>
-
-            <div class="col-lg-2">
-                <vr-select datasource="testviewCtrl.optionsFilter.datasource"
-                           selectedvalues="testviewCtrl.optionsFilter.selectedvalues"></vr-select>
-            </div>
-
-            <div class="col-lg-2">
-                <vr-select label="Zoneee" datasource="testviewCtrl.optionsZone.datasource"
-                           selectedvalues="testviewCtrl.optionsZone.selectedvalues" onselectionchanged="testviewCtrl.optionsZone.onselectionchanged" hideselectedvaluessection datatextfield="Name" customvalidate="testviewCtrl.customvalidate1" datavaluefield="ZoneId" entityname="Zone" isrequired></vr-select>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-2">
-                <span ng-repeat="c in testviewCtrl.optionsZone2.selectedvalues">{{c.name}}</span>
-            </div>
-
-            <div class="col-lg-2">
-                <span ng-repeat="c in testviewCtrl.optionsFilter.selectedvalues">{{c}}</span>
-            </div>
-
-        </div>
-        <div class="grid-vr-custom" id="gridtest">
-            <div class="grid-header" ng-sortable="itemsSortable" style="height: auto; white-space: nowrap; overflow: hidden;">
-                <div style="display:inline-block;width:50px;"> first</div>
-                <div style="display:inline">
-                    <div ng-repeat="c in columns" class="grid-cell handeldrag" ng-init="c.colwidth = getwidth() " ng-style="{'width':getwidth()+'%'}">
-                        {{columns[$index].displayname}}
-                    </div>
-                </div>
-                <div style="display:inline-block;width:50px;"> last</div>
-            </div>
-            <div class="grid-body-container">
-                <div id="grid-canvas">
-                    <div class="grid-body" ng-repeat="d in tabdata">
-                        <div ng-repeat="c in columns" class="grid-cell" ng-style="{'width':c.colwidth+'%'}">
-                            <span ng-if="$index==0">
-                                <a ng-click="d.open=!d.open" href="">
-                                    <span class="caret-rigth" ng-if="!d.open"></span>
-                                    <span class="caret-down" ng-if="d.open"></span>
-                                </a>
-                            </span>
-                            {{d[c.name]}}
-                        </div>
-                        <div ng-if="d.open" class="grid-cell" ng-style="{'width':('100%'}">
-                            {{d}}
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
+<vr-choices selectedindex="choiceIndex" onselectionchanged="choiceSelectionChanged" on-ready="choicesReady">
+    <vr-choice isselected="testObj.isTab1Selected" onselectionchanged="choiceSelectionChanged">test1</vr-choice>
+    <vr-choice isselected="testObj.isTab2Selected" onselectionchanged="choiceSelectionChanged">test2</vr-choice>
+    <vr-choice isselected="isTab3Selected">test3</vr-choice>
+    <vr-choice>test4</vr-choice>
+    <vr-choice>test5</vr-choice>
+</vr-choices>
+<div>
 
 </div>
-
-<!--<div id="gridtest" ui-grid="gridOptionsRouteRule" ui-grid-expandable ui-grid-auto-resize >-->
-<!--<div class="row">-->
-<!--<div class="col-md-2">
-    <vr-textbox label="Input" type="standard" placeholder="Username" value="testviewCtrl.Input1"></vr-textbox>
-</div>
-<div class="col-md-2">
-    <vr-textbox label="Input" type="standard" placeholder="Username" value="testviewCtrl.Input2"></vr-textbox>
-</div>-->
-<!--<div class="col-md-2">
-    <vr-textbox type="icon" placeholder="Search .." icon="circular search" value="testviewCtrl.Input"></vr-textbox>
-    <vr-textbox type="icon" placeholder="Search .." icon="search" value="testviewCtrl.Input"></vr-textbox>
-</div>
-<div class="col-md-2">
-    <vr-textbox type="search" value="testviewCtrl.Input"></vr-textbox>
-    <vr-textbox type="search" placeholder="Custom Place Holder" value="testviewCtrl.Input"></vr-textbox>
-    <vr-textbox type="mail" value="testviewCtrl.Input"></vr-textbox>
-</div>
-<div class="col-md-2">
-    <vr-textbox type="button" value="testviewCtrl.Input" placeholder="Alert .. " buttontext="Alert" btn-click="testviewCtrl.alertMsg()"></vr-textbox>
-</div>-->
-<!--<div class="col-md-2">
-        {{testviewCtrl.Input1}}
-    </div>
-    <div class="col-md-2">
-        {{testviewCtrl.Input2}}
-    </div>
-    <div class="col-md-2">
-        Invalid : {{myForm.$invalid}}
-    </div>
-</div>-->
-<!--<div class="row">
-    <div class="col-md-2">
-       Invalid : {{myForm2.$invalid}}
-    </div>
-</div>-->
-<!--<vr-dropdown  type="ondemand" options="testviewCtrl.optionsZone2" datatextfield="Name" datavaluefield="ZoneId"
-onsearch="testviewCtrl.onsearch" entityname="Zone" isrequired on-ready="testviewCtrl.onready" customvalidate="testviewCtrl.customvalidate1"></vr-dropdown>-->
-<!--<div class="col-lg-2">
-    <vr-dropdown  options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"
-                 entityname="Supplier" isrequired customvalidate="testviewCtrl.customvalidate2"></vr-dropdown>
-</div>
-
-<div class="col-lg-2">
-    <vr-dropdown  type="menu" options="testviewCtrl.routesOptions" datatextfield="name" datavaluefield="value"
-                 entityname="Route"  onselectionchange="testviewCtrl.selectedRoutes"></vr-dropdown>
-</div>-->
-    </form>
-
-<!--<div class="row">
-
-    <div class="col-lg-2">
-        <span>Selected Values : </span>
-        <span ng-repeat="c in testviewCtrl.optionsZone.selectedvalues">{{c.Name}}</span>
-    </div>
-    <div class="col-lg-2">
-        <span>Last Customer Selected Value : </span>
-        <span>{{testviewCtrl.options.lastselectedvalue.Name}}</span>
-    </div>
-
-    <div class="col-lg-2">
-        <vr-dropdown options="testviewCtrl.options" datatextfield="Name" datavaluefield="CarrierAccountID"
-                     entityname="Supplier" customvalidate="testviewCtrl.customvalidate" ></vr-dropdown>
-    </div>
-    <div class="col-lg-2">
-        <span> Selected Customer Value : </span>
-        <span ng-repeat="c in testviewCtrl.options.selectedvalues">{{c.Name}}</span>
-    </div>
-
-</div>-->
-<!--<div class="row">-->
-<!--<div class="col-lg-2">
-    <button ng-disabled="myForm.$invalid" type="button" class="btn btn-default" >Save</button>
-</div>-->
-<!--<div class="col-lg-2">
-    <button ng-disabled="testviewCtrl.validateForm()" type="button" class="btn btn-default" ng-click="testviewCtrl.save()">Save</button>
-</div>-->
-<!--</div>-->
-</div>
-
-
+{{testObj}}
+choiceIndex
+<input type="text" ng-model="choiceIndex" ng-change="selectChoice()">
+testObj.isTab1Selected
+<input type="text" ng-model="testObj.isTab1Selected">
+testObj.isTab1Selected
+<input type="text" ng-model="testObj.isTab2Selected">
+isTab3Selected
+<input type="text" ng-model="isTab3Selected">
