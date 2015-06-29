@@ -5,5 +5,5 @@ app.constant('LabelColorsEnum', {
     Error: { Color: "label label-danger" },
     Info: { Color: "label label-info" },
     Primary: { Color: "label label-primary" },
-    Default: { Color: "label label-default" },
+    Default: { Color: "label label-default" }
 });
