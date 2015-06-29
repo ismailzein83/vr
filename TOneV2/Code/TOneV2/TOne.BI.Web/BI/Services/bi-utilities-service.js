@@ -161,7 +161,7 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
         var shortMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
          var monthIndex = date.getMonth();
          return shortMonthNames[monthIndex];
-    };
+    }
 
 
 });
