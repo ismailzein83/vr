@@ -607,49 +607,15 @@ namespace TOne.Analytics.Data.SQL
             SELECT * FROM #Results
 
             DECLARE @TotalCount int
-            SELECT @TotalCount= (SELECT COUNT(*) as TotalCount FROM #OrderedEntities)
-            select @TotalCount as TotalCount
+            SELECT  @TotalCount= (SELECT COUNT(*) as TotalCount FROM #OrderedEntities)
+            SELECT  @TotalCount as TotalCount
 
              DECLARE @TotalsTables table(TotalValues numeric(10,2),FromDate Datetime )
-INSERT INTO @TotalsTables SELECT SUM(Total) as TotalValues ,FromDate From #Results GROUP BY FromDate Order By FromDate desc
-SELECT TotalValues,FromDate FROM @TotalsTables
+             INSERT INTO @TotalsTables SELECT SUM(Total) as TotalValues ,FromDate From #Results GROUP BY FromDate Order By FromDate desc
+             SELECT TotalValues,FromDate FROM @TotalsTables
 
              SELECT SUM(TotalValues)/@TotalCount as TotalAverage fROM @TotalsTables
-
-           -- DECLARE @AVG_Table table(EntityID varchar(5), [Average] numeric(10,2))
-          --  INSERT INTO @AVG_Table  SELECT ID as EntityID, AVG(Total) as [Average]  From #Results GROUP BY ID
-            
-           -- SELECT Average as TotalAverage FROM @AVG_Table
-
-         --   SELECT rslt.FromDate, rslt.ToDate, (rslt.Total - avg_table.Average) / avg_table.Average as [Average]
-        --    FROM #Results rslt
-       --     JOIN @AVG_Table avg_table ON rslt.ID = avg_table.EntityID
-            
-           
-          --  DECLARE @currentDayValues_Table table(currentdayvalue numeric(10,2))
-          --  DECLARE @previousDayValues_Table table(previousdayvalue numeric(10,2))
-           
-        
-         --   INSERT INTO @currentDayValues_Table (SELECT (Total-Average/Average) AS currentdayvalue FROM #Results,@AVG_Table  WHERE FromDate = @EndTime)
-         --   INSERT INTO @previousDayValues_Table (SELECT (currentdayvalue- Total) AS previousdayvalue FROM #Results,@currentDayValues_Table WHERE FromDate = DateADD(Day,-1,@EndTime))
-
-          --  SELECT SUM(Average) AS TotalAverage ,     
-          --         SUM(PercentageValue ) from(SeLECT currentdayvalue as PercentageValue from @currentDayValues_Table ) t  AS TotalPeriodTypeValuePercentage,
-        --           SUM(PreviousPercentageValue )  AS PreviousPeriodTypeValuePercentage               
-        --    From #Results,@AVG_Table
-
-             --GROUP BY FromDate Order By FromDate desc
-                         
-                            -- SUM( (@currentDayValue - TotalAverage)/TotalAverage *100 ) AS TotalPeriodTypeValuePercentage,
-                         --SUM( (@currentDayValue- @previousDayValue)/previousDayValue ) AS PreviousPeriodTypeValuePercentage
-
-                        -- SUM(  ( (currentDayValue from (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime)) - TotalAverage)/(TotalAverage) * 100)     AS TotalPeriodTypeValuePercentage, 
-                        -- SUM( (  (currentDayValue from (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime)) - (previousDayValue  from (SELECT Total as previousDayValue FROM #Results WHERE CallDate = DateADD(Day,-1,@EndTime))) )  /   (previousDayValue  from (SELECT Total as previousDayValue FROM #Results WHERE CallDate = DateADD(Day,-1,@EndTime)))  )  as PreviousPeriodTypeValuePercentage 
-                        
-                        -- SELECT sum(val)  from  (SeLECT total as val from @T_variable ) t
-                        -- SUM(VAL) FROM(  (SELECT Total as currentDayValue FROM #Results WHERE CallDate = @EndTime) - TotalAverage/(TotalAverage) * 100) t
-
-            ");
+             ");
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
