@@ -16,28 +16,52 @@ namespace Vanrise.Security.Business
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
             return dataManager.GetWidgetsDefinition();
         }
-        public Vanrise.Entities.InsertOperationOutput<Widget> SaveWidget(Widget widget)
+        public Vanrise.Entities.InsertOperationOutput<WidgetDetails> SaveWidget(Widget widget)
         {
-            InsertOperationOutput<Widget> insertOperationOutput = new InsertOperationOutput<Widget>();
+            InsertOperationOutput<WidgetDetails> insertOperationOutput = new InsertOperationOutput<WidgetDetails>();
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int widgetId = -1;
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+
             bool insertActionSucc = dataManager.SaveWidget(widget, out widgetId);
 
+
+           
+          
             if (insertActionSucc)
             {
 
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 widget.Id = widgetId;
-                insertOperationOutput.InsertedObject = widget;
+                WidgetDetails widgetDetail = dataManager.GetWidgetById(widgetId);
+                insertOperationOutput.InsertedObject = widgetDetail;
             }
 
             return insertOperationOutput;
 
         }
-        public List<Widget> GetAllWidgets()
+        public Vanrise.Entities.UpdateOperationOutput<WidgetDetails> UpdateWidget(Widget widget)
+        {
+            UpdateOperationOutput<WidgetDetails> updateOperationOutput = new UpdateOperationOutput<WidgetDetails>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
+            bool insertActionSucc = dataManager.UpdateWidget(widget);
+
+            if (insertActionSucc)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                WidgetDetails widgetDetail = dataManager.GetWidgetById(widget.Id);
+                updateOperationOutput.UpdatedObject = widgetDetail;
+            }
+
+            return updateOperationOutput;
+
+        }
+        public List<WidgetDetails> GetAllWidgets()
         {
             IWidgetsDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IWidgetsDataManager>();
             return dataManager.GetAllWidgets();

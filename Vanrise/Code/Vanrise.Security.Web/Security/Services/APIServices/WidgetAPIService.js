@@ -3,7 +3,8 @@
     return ({ 
         GetWidgetsDefinition: GetWidgetsDefinition,
         SaveWidget: SaveWidget,
-        GetAllWidgets: GetAllWidgets
+        GetAllWidgets: GetAllWidgets,
+        UpdateWidget: UpdateWidget
     });
 
     function GetWidgetsDefinition() {
@@ -11,6 +12,9 @@
     }
     function SaveWidget(widget) {
         return BaseAPIService.post("/api/Widgets/SaveWidget", widget);
+    }
+    function UpdateWidget(widget) {
+        return BaseAPIService.post("/api/Widgets/UpdateWidget", widget);
     }
     function GetAllWidgets() {
         return BaseAPIService.get("/api/Widgets/GetAllWidgets");

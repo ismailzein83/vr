@@ -1,8 +1,8 @@
 ﻿<div vr-modalcontent ng-controller="Security_WidgetsEditorController" width="'80%'">
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-            <vr-choices selectedindex="selectedGroupKeyIndex">
-                <vr-choice isselected="settingSelected">Setting</vr-choice>
+            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="previewSelectionChanged();">
+                <vr-choice isselected="settingSelected" >Setting</vr-choice>
                 <vr-choice isselected="previewSelected">Preview</vr-choice>
             </vr-choices>
             <div ng-show="settingSelected">
@@ -29,18 +29,12 @@
 
                     </vr-row>
                 </vr-form>
-                <vr-row>
-                    <vr-columns ng-if="visualElement!=undefined" width="fullrow">
-                        <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                        <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeVisualElement(visual)"></i>
-                        <!--<vr-textbox value="visualElement.Name" label="{visualElement.Name}"></vr-textbox>-->
-                    </vr-columns>
-                </vr-row>
+             
             </div>
 
 
 
-            <div ng-show="previewSelected">
+            <div ng-if="previewSelected">
                 <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>
             </div>
 

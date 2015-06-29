@@ -1,18 +1,9 @@
 ﻿WidgetPreviewController.$inject = ['$scope', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+    var widgetAPI;
     defineScope();
     load();
-    function getVisualElement() {
-        $scope.visualElement = $scope.$parent.visualElement;
-        console.log($scope.visualElement);
-        addTimeToVisualElement();
-    }
-    function addTimeToVisualElement() {
-            $scope.visualElement.settings.fromdate = $scope.fromDate;
-            $scope.visualElement.settings.todate = $scope.toDate;
-            $scope.visualElement.settings.timedimensiontype = $scope.selectedTimeDimensionType;
-    }
     function defineScope() {
         $scope.visualElement;
         $scope.fromDate = "2015-04-01";
@@ -27,23 +18,12 @@ function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensio
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.chartReady = function (api) {
-            $scope.chartAPI = api;
-
+        $scope.visualElement = $scope.$parent.visualElement;
+        $scope.onElementReady = function (api) {
+            widgetAPI = api;
         };
         $scope.Search = function () {
-            if ($scope.visualElement != null && $scope.visualElement != undefined && $scope.visualElement.length > 0) {
-                console.log("update");
                 updateDashboard();
-            }
-            else {
-                getVisualElement();
-               
-            }
-        };
-
-        $scope.chartTopReady = function (api) {
-            chartTopAPI = api;
         };
     }
     function defineTimeDimensionTypes() {
@@ -56,20 +36,17 @@ function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensio
         })[0];
     }
     function load() {
+
         $scope.isGettingData = false;
     }
     function updateDashboard() {
-        visualElement.API.retrieveData;
+
         $scope.isGettingData = true;
-        return UtilsService.waitMultipleAsyncOperations(visualElement.API.retrieveData)
+        return widgetAPI.retrieveData()
             .finally(function () {
                 $scope.isGettingData = false;
             });
     }
-
-
-
-
 
 }
 appControllers.controller('Security_WidgetPreviewController', WidgetPreviewController);

@@ -38,6 +38,30 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
             MeasureTypes: measureTypes,
         };
     }
+
+    function setSubViewValue(settings) {
+
+        for (i = 0; i < $scope.Entities.length; i++) {
+
+            if ($scope.Entities[i].Name == settings.EntityType) {
+                $scope.selectedEntityType = $scope.Entities[i];
+
+            }
+        }
+        for (var i = 0; i < settings.MeasureTypes.length; i++) {
+
+            for (j = 0; j < $scope.Measures.length; j++) {
+
+                if (settings.MeasureTypes[i] == $scope.Measures[j].Name)
+                    $scope.selectedMeasureTypes.push($scope.Measures[j]);
+            }
+        }
+        for (var i = 0; i < $scope.operationTypes.length; i++) {
+
+            if ($scope.operationTypes[i].value == settings.OperationType)
+                $scope.selectedOperationType = $scope.operationTypes[i];
+        }
+    }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in BITimeDimensionTypeEnum)
@@ -53,6 +77,9 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).finally(function () {
+            if ($scope.subViewValue.value != null && $scope.subViewValue.value != undefined) {
+                setSubViewValue($scope.subViewValue.value);
+            }
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {

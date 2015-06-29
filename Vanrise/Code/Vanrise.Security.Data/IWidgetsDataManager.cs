@@ -12,7 +12,9 @@ namespace Vanrise.Security.Data
         {
             List<WidgetDefinition> GetWidgetsDefinition();
             bool SaveWidget(Widget widget, out int insertedId);
-            List<Widget> GetAllWidgets();
+            bool UpdateWidget(Widget widget);
+            List<WidgetDetails> GetAllWidgets();
+            WidgetDetails GetWidgetById(int widgetId);
         }
     
 }

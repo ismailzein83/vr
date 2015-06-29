@@ -1,12 +1,24 @@
 ﻿WidgetsEditorController.$inject = ['$scope', 'WidgetAPIService', 'MenuAPIService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'DynamicPagesAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
 function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVisualElementService1, BIConfigurationAPIService, ChartSeriesTypeEnum, DynamicPagesAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
-    //var mainGridAPI;
     loadParameters();
     defineScope();
     load();
-
+    
     function loadParameters() {
+        console.log(parameters);
+        var parameters = VRNavigationService.getParameters($scope);
+        if (parameters != null) {
+            $scope.filter = {
+                WidgetID: parameters.Id,
+                WidgetName: parameters.Name,
+                selectedWidget: parameters.WidgetDefinitionId,
+                Setting: parameters.Setting
+            }
+            $scope.isEditMode = true;
+        }
+        else
+        $scope.isEditMode = false;
     }
     function defineScope() {
         $scope.widgets = [];
@@ -17,57 +29,90 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        //$scope.filter = {};
         $scope.save = function () {
-
-            $scope.Widget = {
-                WidgetDefinitionId: $scope.filter.WidgetDefinitionId,
-                Name: $scope.filter.WidgetName,
-                Setting: $scope.filter.visualElement,
-            };
-            console.log( $scope.filter.WidgetName);
-            return WidgetAPIService.SaveWidget($scope.Widget).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Widget", response)) {
-                    console.log(response);
-                    if ($scope.onWidgetAdded != undefined)
-                        $scope.onWidgetAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            });
-
+            if ($scope.isEditMode)
+                updateWidget();
+             else
+            saveWidget();
         };
-        $scope.addVisualElement = function () {
-            
-            $scope.subViewValue = $scope.subViewValue.getValue();
+        $scope.previewSelectionChanged = function () {
+            console.log("test");
             var visualElement = {
-                settings: $scope.subViewValue,
-                directive: $scope.selectedWidget.directiveName,
+                settings: $scope.subViewValue.getValue(),
+                directive: $scope.selectedWidget.DirectiveName,
             };
-            visualElement.onElementReady = function (api) {
-                visualElement.API = api;
+
+            var Widget = {
+                WidgetDefinitionId: $scope.selectedWidget.ID,
+                Name: $scope.WidgetName,
+                Setting: visualElement,
             };
-            $scope.visualElement = visualElement;
-       
-            $scope.filter = {
-                WidgetDefinitionId: $scope.selectedWidget.Id,
-                WidgetName: $scope.WidgetName,
-                visualElement: $scope.visualElement,
+            $scope.visualElement = Widget;
+        }
+ 
+    }
+   
+    function saveWidget() {
+        var visualElement = {
+            settings: $scope.subViewValue.getValue(),
+            directive: $scope.selectedWidget.DirectiveName,
+        };
+      
+        $scope.Widget = {
+            WidgetDefinitionId: $scope.selectedWidget.ID,
+            Name: $scope.WidgetName,
+            Setting: visualElement,
+        };
+
+        $scope.Widget.onElementReady = function (api) {
+            $scope.Widget.API = api;
+        };
+        return WidgetAPIService.SaveWidget($scope.Widget).then(function (response) {
+            if (VRNotificationService.notifyOnItemAdded("Widget", response)) {
+                if ($scope.onWidgetAdded != undefined)
+                    $scope.onWidgetAdded(response.InsertedObject);
+                $scope.modalContext.closeModal();
             }
-            $scope.selectedWidget = null;
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+        });
+    }
+    function updateWidget() {
 
+        var visualElement = {
+            settings: $scope.subViewValue.getValue(),
+            directive: $scope.selectedWidget.DirectiveName,
+        };
+      
+        $scope.Widget = {
+            WidgetDefinitionId: $scope.selectedWidget.ID,
+            Name: $scope.WidgetName,
+            Setting: visualElement,
+        };
+        $scope.Widget.Id = $scope.filter.WidgetID;
 
+        $scope.Widget.onElementReady = function (api) {
+            $scope.Widget.API = api;
         };
-        $scope.removeVisualElement = function (visualElement) {
-            $scope.visualElement = null;
-        };
+        return WidgetAPIService.UpdateWidget($scope.Widget).then(function (response) {
+            if (VRNotificationService.notifyOnItemUpdated("Widget", response)) {
+                console.log(response);
+                if ($scope.onWidgetUpdated != undefined)
+                    $scope.onWidgetUpdated(response.UpdatedObject);
+                $scope.modalContext.closeModal();
+            }
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error, $scope);
+        });
     }
 
     function load() {
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets]).finally(function () {
+            if ($scope.isEditMode == true) {
+                loadEditModeData();
+            }
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {
@@ -75,9 +120,15 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
         });
 
     }
-
-   
-
+    function loadEditModeData() {
+        $scope.WidgetName = $scope.filter.WidgetName;
+        for (var i = 0; i < $scope.widgets.length; i++) {
+            if ($scope.widgets[i].ID == $scope.filter.selectedWidget) {
+                $scope.selectedWidget = $scope.widgets[i];
+                $scope.subViewValue.value = $scope.filter.Setting.Settings;
+            }
+        }
+    }
     function loadWidgets() {
         return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
             angular.forEach(response, function (itm) {
@@ -92,8 +143,5 @@ function WidgetsEditorController($scope, WidgetAPIService, MenuAPIService, BIVis
             $scope.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
         }
     }
-
-  
-
 }
 appControllers.controller('Security_WidgetsEditorController', WidgetsEditorController);

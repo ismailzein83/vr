@@ -2,6 +2,7 @@
 
 function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService,WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService) {
     var viewId;
+    var mainAPI;
     loadParameters();
     defineScope();
     load();
@@ -9,7 +10,6 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
     function loadParameters() {
         if ($routeParams.params != undefined) {
             viewId = JSON.parse($routeParams.params).viewId;
-
         }
     }
     function defineScope() {
@@ -25,29 +25,19 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             fromDate:$scope.fromDate,
             toDate:$scope.toDate 
         }
+        
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.chartReady = function (api) {
-            $scope.chartAPI = api;
-        };
-   
         $scope.Search = function () {
             if ($scope.widgets != null && $scope.widgets != undefined && $scope.widgets.length > 0) {
-                console.log("update");
                 updateDashboard();
             }
             else {
                 getData();
-            }
-
-            
-            
+            }    
         };
-        $scope.chartTopReady = function (api) {
-            chartTopAPI = api;
-            // updateChart();
-        };
+        getData();
 
     }
     function defineTimeDimensionTypes() {
@@ -61,7 +51,7 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
     }
     function load() {
         $scope.isGettingData = false;
-
+       
     }
     function updateDashboard() {
         $scope.filter = {
@@ -78,6 +68,7 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             .finally(function () {
                 $scope.isGettingData = false;
             });
+        
     }
     function getData() {
         if (viewId != undefined) {
@@ -94,21 +85,27 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
                     $scope.isGettingData = false;
                 });
 
-        }
-       
-            
+        }   
     }
-    function getWidgets(allWidgets,content){
-        for (var i = 0; i < allWidgets.length; i++) {
-            for (var j = 0; j < content.length; j++) {
-                if (allWidgets[i].Id == content[j].WidgetId) {
-                    $scope.widgets.push(allWidgets[i]);
-                    $scope.widgets[j].NumberOfColumns = content[j].NumberOfColumns;
-                 
+    function getWidgets(allWidgets, content) {
+        for (var i = 0; i < content.length; i++) {
+            for (var j = 0; j < allWidgets.length; j++) {
+                if (allWidgets[j].Id == content[i].WidgetId) {
+                    allWidgets[j].NumberOfColumns = content[i].NumberOfColumns;
+                    var widgetElement=allWidgets[j];
+                    widgetElement.onElementReady = function (api) {
+                        widgetElement.API = api;
+                        console.log(api);
+                        console.log(widgetElement);  
+                    };
+                    $scope.widgets.push(widgetElement);
+                    console.log($scope.widgets);
+                   
                 }
             }
         }
     }
+ 
     function loadAllWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
             $scope.allWidgets = response;

@@ -38,27 +38,35 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
             //  return false;
         }
-        public List<Widget> GetAllWidgets()
+        public bool UpdateWidget(Widget widget)
+        {
+            string serialziedSetting = null;
+            if (widget.Setting != null)
+                serialziedSetting = Common.Serializer.Serialize(widget.Setting);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_WidgetManagement_UpdateWidget", widget.Id, widget.WidgetDefinitionId, widget.Name, serialziedSetting);
+            return (recordesEffected > 0);
+        }
+        public List<WidgetDetails> GetAllWidgets()
         {
 
             return GetItemsSP("sec.sp_WidgetManagement_GetAllWidgets", WidgetMapper);
         }
-        private Widget WidgetMapper(IDataReader reader)
-        {  
-            Widget instance = new Widget
+        private WidgetDetails WidgetMapper(IDataReader reader)
+        {
+            WidgetDetails instance = new WidgetDetails
             {
                 Id = (int)reader["Id"],
                 Name = reader["WidgetName"] as string,
                 WidgetDefinitionId = GetReaderValue<int>(reader, "WidgetDefinitionId"),
-                WidgetDefinition = new WidgetDefinition
-                {
-                    ID = GetReaderValue<int>(reader, "WidgetDefinitionId"),
-                    Name = reader["WidgetDefinitionName"] as string,
-                    DirectiveName = reader["DirectiveName"] as string,
-                },
+                WidgetDefinitionName = reader["WidgetDefinitionName"] as string,
+                DirectiveName = reader["DirectiveName"] as string,
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetSetting>(reader["Setting"] as string)
             };
             return instance;
+        }
+        public WidgetDetails GetWidgetById(int widgetId)
+        {
+            return GetItemSP("sec.sp_WidgetManagement_GetWidgetById", WidgetMapper, widgetId);
         }
 
       

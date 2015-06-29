@@ -58,10 +58,12 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         }
 
         function retrieveData() {
+
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                 .then(function (response) {
-                            console.log(response);
-                            if (ctrl.isDateTimeGroupedData) {
+                           // console.log(response);
+                    if (ctrl.isDateTimeGroupedData) {
+
                                 BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, false);
                                 refreshChart(response);
                             }

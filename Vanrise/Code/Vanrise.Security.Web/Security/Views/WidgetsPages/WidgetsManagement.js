@@ -21,7 +21,7 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
         $scope.menuActions = [{
             name: "Edit",
             clicked: function (dataItem) {
-                AddPage();
+                updateWidget(dataItem);
             }
         }];
 
@@ -46,6 +46,7 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Widget";
             modalScope.onWidgetAdded = function (widget) {
+                console.log(widget);
                 mainGridAPI.itemAdded(widget);
             };
         };
@@ -69,6 +70,18 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
             });
         });
 
+    }
+    function updateWidget(dataItem) {
+        var settings = {};
+        console.log(dataItem);
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Update Widget:" + dataItem.Name;
+            modalScope.onWidgetUpdated = function (widget) {
+                mainGridAPI.itemUpdated(widget);
+            };
+        };
+
+        VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', dataItem, settings);
     }
 };
 
