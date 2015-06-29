@@ -97,9 +97,10 @@ namespace VoIPSwitchService
                                         //Check the call entries
                                         if (generatedCall.EndDate != null)
                                         {
-                                            // Check if the Call is failed // don't check the result from Android Service //480 - 487 removed
+                                            // Check if the Call is failed // don't check the result from Android Service //487 removed
                                             if ((generatedCall.ResponseCode == "408" && generatedCall.Status != "4" && generatedCall.Status != "6") ||
                                                 (generatedCall.ResponseCode == "404" && generatedCall.Status != "4" && generatedCall.Status != "6") ||
+                                                (generatedCall.ResponseCode == "480" && generatedCall.Status != "4" && generatedCall.Status != "6") ||
                                                 (generatedCall.ResponseCode == "503" && generatedCall.Status != "4" && generatedCall.Status != "6"))
                                             //(generatedCall.ResponseCode == "487" && generatedCall.Status != "4" && generatedCall.Status != "6"))
                                             {
@@ -118,6 +119,8 @@ namespace VoIPSwitchService
                                                     lstTestOperators[i].ErrorMessage = "408 - Request Timeout";
                                                 if (generatedCall.ResponseCode == "404")
                                                     lstTestOperators[i].ErrorMessage = "404 - Not Found";
+                                                if (generatedCall.ResponseCode == "480")
+                                                    lstTestOperators[i].ErrorMessage = "480 - Temporarily Unavailable";
                                                 if (generatedCall.ResponseCode == "503")
                                                     lstTestOperators[i].ErrorMessage = "503 - Service Unavailable";
                                                 //if (generatedCall.ResponseCode == "487")
