@@ -1154,7 +1154,7 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid-celltext {
     display: inline-block;
     width: 100%;
-    overflow: unset;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
