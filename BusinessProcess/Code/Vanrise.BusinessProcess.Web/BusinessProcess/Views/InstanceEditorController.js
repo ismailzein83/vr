@@ -30,19 +30,11 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
 
 
 
-
-
-
-
-
-
     function buildInstanceObjFromScope() {
         var inputArguments = $scope.createProcessInput.getData();
         var createProcessInputObject = {
             InputArguments: inputArguments
         };
-        console.log('createProcessInputObject')
-        console.log(createProcessInputObject)
         return createProcessInputObject;
     }
 
