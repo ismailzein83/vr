@@ -103,6 +103,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
     </Reference>
@@ -123,6 +129,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Extensions\Vanrise.BusinessProcess.Extensions.csproj">
+      <Project>{0c2dd4b6-e3be-48d6-93cf-4d135c60004e}</Project>
+      <Name>Vanrise.BusinessProcess.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

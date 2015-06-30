@@ -7,8 +7,11 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.Extensions;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
+using Vanrise.Runtime.Business;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
@@ -82,6 +85,23 @@ namespace Vanrise.BusinessProcess.Web.Controllers
                 lst.Add(item);
             }
             return lst;
+        }
+
+        [HttpGet]
+        public List<SchedulerTask> GetWorkflowTasksByDefinitionId(int bpDefinitionId)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(1);
+
+            List<SchedulerTask> filteredList = new List<SchedulerTask>();
+
+            foreach (SchedulerTask task in workflowTasks)
+            {
+                if (((WFSchedulerTaskAction)task.TaskAction).BPDefinitionID == bpDefinitionId)
+                    filteredList.Add(task);
+            }
+
+            return filteredList;
         }
 
         [HttpPost]
