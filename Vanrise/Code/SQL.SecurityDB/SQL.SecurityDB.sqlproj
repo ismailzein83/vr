@@ -105,5 +105,13 @@
     <Build Include="sec\User Defined Types\IntIDType.sql" />
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
+    <Build Include="sec\Tables\WidgetManagement.sql" />
+    <Build Include="sec\Tables\WidgetDefinition.sql" />
+    <Build Include="sec\Stored Procedures\sp_WidgetManagement_InsertWidget.sql" />
+    <Build Include="sec\Stored Procedures\sp_WidgetManagement_GetAllWidgets.sql" />
+    <Build Include="sec\Stored Procedures\sp_WidgetDefinition_GetWidgets.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_InsertView.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
+    <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
   </ItemGroup>
 </Project>

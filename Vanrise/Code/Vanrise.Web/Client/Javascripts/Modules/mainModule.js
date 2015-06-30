@@ -152,16 +152,20 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $timeout(tick, $scope.tickInterval); // reset the timer
     }
     $scope.menuItemsSearch = [];
+    var allMenuItems = [];
     $timeout(tick, $scope.tickInterval);
     MenuAPIService.GetMenuItems().then(function (response) {
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;
             value.isSelected = false;
             value.parent = null;
+            allMenuItems.push(value);
             matchParentNode(value);
           
         });    
         $scope.menuItems = response;
+        if (currentURL != undefined)
+            setSelectedMenuFromURL();
     })
     function matchParentNode(obj) {
        
@@ -169,6 +173,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             angular.forEach(obj.Childs, function (value, key, itm) {               
                 value.parent = obj ;
                 value.isSelected = false;
+                allMenuItems.push(value);
                 matchParentNode(value);               
             });
           
@@ -176,6 +181,33 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }       
 
     }
+
+    var selectedMenuItem;
+    var currentURL;
+    $rootScope.$on('$locationChangeSuccess', function (evnt, newURL) {
+        var decodedURL = decodeURIComponent(newURL);
+        currentURL = decodedURL.substring(decodedURL.indexOf('#'), decodedURL.length);
+        setSelectedMenuFromURL();
+    });
+
+    function setSelectedMenuFromURL() {
+        if (currentURL == undefined || allMenuItems.length == 0)
+            return;
+        var matchMenuItem = UtilsService.getItemByVal(allMenuItems, currentURL, "Location");
+        if (selectedMenuItem != undefined)
+            setMenuItemSelectedFlag(selectedMenuItem, false);
+        if (matchMenuItem != null) {
+            selectedMenuItem = matchMenuItem;
+            setMenuItemSelectedFlag(selectedMenuItem, true);
+        }
+    }
+
+    function setMenuItemSelectedFlag(menuItem, isSelected) {
+        menuItem.isSelected = isSelected;
+        if (menuItem.parent != null)
+            setMenuItemSelectedFlag(menuItem.parent, isSelected);
+    }
+
     $scope.getLeafItemClass = function (item) {       
             var current = decodeURIComponent(location.href);
            return current.indexOf(item.Location) > -1;       

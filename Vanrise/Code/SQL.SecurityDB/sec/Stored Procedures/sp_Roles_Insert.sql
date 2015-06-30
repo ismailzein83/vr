@@ -9,8 +9,11 @@ CREATE PROCEDURE [sec].[sp_Roles_Insert]
 	@Id int out
 AS
 BEGIN
-	Insert into [sec].[Role] ([Name], [Description])
-	values(@Name, @Description)
-	
-	SET @Id = @@IDENTITY
+IF NOT EXISTS(select 1 from sec.[Role] where Name = @Name)
+	BEGIN
+		Insert into [sec].[Role] ([Name], [Description])
+		values(@Name, @Description)
+		
+		SET @Id = @@IDENTITY
+	END
 END
