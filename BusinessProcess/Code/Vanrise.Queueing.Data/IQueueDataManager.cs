@@ -30,5 +30,7 @@ namespace Vanrise.Queueing.Data
         QueueInstance GetQueueInstance(string queueName);
 
         List<QueueInstance> GetQueueInstances(IEnumerable<int> queueIds);
+
+        List<QueueItemType> GetQueueItemTypes();
     }
 }

@@ -119,6 +119,11 @@ namespace Vanrise.Queueing.Data.SQL
             //return Convert.ToBoolean(ExecuteScalarSP("queue.sp_QueueSubscription_HasNewTimestamp", timestampToCompare));
         }
 
+        public List<QueueItemType> GetQueueItemTypes()
+        {
+            return GetItemsSP("queue.sp_QueueItemTypes_GetAll", QueueItemTypeMapper);
+        }
+
         #region Private Methods
 
         private QueueInstance QueueInstanceReader(IDataReader reader)
@@ -142,6 +147,18 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 QueueID = (int)reader["QueueID"],
                 SubsribedQueueID = (int)reader["SubscribedQueueID"]
+            };
+        }
+
+        private QueueItemType QueueItemTypeMapper(IDataReader reader)
+        {
+            return new QueueItemType
+            {
+                Id = (long)reader["Id"],
+                ItemFQTN = reader["ItemFQTN"] as string,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                DefaultQueueSettings = reader["DefaultQueueSettings"] as string,
+                Title = reader["Title"] as string,
             };
         }
 

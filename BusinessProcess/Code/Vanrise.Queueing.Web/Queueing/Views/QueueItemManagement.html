@@ -1,1 +1,36 @@
-﻿
+﻿<vr-panel ng-controller="Queueing_QueueItemManagementController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select label="Queue Item Types" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="Id"
+                               datasource="::queueItemTypes" selectedvalues="selectedQueueItemTypes" entityname="Types"></vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+
+        <!--<div>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid datasource="::datasource" loadmoredata="loadMoreData" on-ready="onGridReady">
+                        <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="20" isclickable="'true'" onclicked="onTitleClicked"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Last Message'" field="'LastMessage'" widthfactor="60"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Retry'" field="'RetryCount'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'" widthfactor="10"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </div>-->
+
+    </vr-form>
+</vr-panel>
