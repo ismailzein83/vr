@@ -14,7 +14,10 @@ function CarrierAccountManagementController($scope, CarrierAPIService, VRModalSe
         defineMenuActions();
         $scope.gridReady = function (api) {
             gridApi = api;
-            getData();
+            $scope.isLoading = true;
+            getData().finally(function () {
+                $scope.isLoading = false;
+            });
         };
         $scope.loadMoreData = function () {
             return getData();

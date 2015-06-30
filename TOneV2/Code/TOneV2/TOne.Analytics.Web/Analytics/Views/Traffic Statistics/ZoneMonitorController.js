@@ -67,7 +67,6 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
             $scope.showResult = false;
             $scope.measures = measures;
             $scope.data = [];
-            $scope.overallData = [];
 
             $scope.mainGridPagerSettings = {
                 currentPage: 1,
@@ -379,13 +378,13 @@ function ZoneMonitorController($scope, UtilsService, AnalyticsAPIService, uiGrid
                 $scope.mainGridPagerSettings.totalDataCount = response.TotalCount;
                 if (withSummary) {
                     $scope.trafficStatisticSummary = response.Summary;
-                    $scope.overallData[0] = response.Summary;
                 }
                 //angular.forEach(response.Data, function (itm) {
                 //    $scope.data.push(itm);
                 //});
                 mainGridAPI.addItemsToSource(response.Data);
-
+                response.Summary.summaryCaption = "OVERALL";
+                mainGridAPI.setSummary(response.Summary);
                 renderOverallChart();
                 isSucceeded = true;
             })

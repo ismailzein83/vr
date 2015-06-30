@@ -10,7 +10,6 @@
                     <vr-textbox label="Company Name:" value="companyName"></vr-textbox>
                 </vr-columns>
             </vr-row>
-            <vr-row></vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
@@ -19,7 +18,7 @@
                 </div>
             </vr-actionbar>
         </vr-row>
-        <div>
+        <div vr-loader="isLoading">
             <vr-row>
                 <vr-columns colnum="12" simplecol>
                     <vr-datagrid datasource="CarrierAccountsDataSource" loadmoredata="loadMoreData" on-ready="gridReady" menuactions="gridMenuActions">
