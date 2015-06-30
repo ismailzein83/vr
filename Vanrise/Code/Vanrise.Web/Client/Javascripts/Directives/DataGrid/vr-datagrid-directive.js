@@ -58,6 +58,13 @@
       + ''
    + '</div>';
 
+    var summaryCellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
+        + ''
+      + '<a ng-if="ctrl.isColumnClickable(colDef, ctrl.summaryDataItem)"  ng-class="::ctrl.getCellClass(colDef, ctrl.summaryDataItem)" style="font-size:13px" ng-click="ctrl.onColumnClicked(colDef, ctrl.summaryDataItem)" style="cursor:pointer;"> {{ctrl.getColumnSummaryValue(colDef, ctrl.summaryDataItem) #CELLFILTER#}}</a>'
+      + '<span ng-if="(!ctrl.isColumnClickable(colDef, ctrl.summaryDataItem))" ng-class="::ctrl.getCellClass(colDef, ctrl.summaryDataItem)" style="font-size:13px"> {{ctrl.getColumnSummaryValue(colDef, ctrl.summaryDataItem) #CELLFILTER#}}</span>'
+      + ''
+   + '</div>';
+
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
@@ -87,6 +94,7 @@
                 name: col.headerText != undefined ? col.headerText : col.field,
                 headerCellTemplate: headerTemplate,//'/Client/Templates/Grid/HeaderTemplate.html',//template,
                 field: col.field,
+                summaryField: col.summaryField,
                 enableSorting: col.enableSorting != undefined ? col.enableSorting : false,
                 onSort: function () {
                     if (col.onSortChanged != undefined) {
@@ -105,31 +113,16 @@
                 getcolor: col.getcolor
             };
 
-            colDef.getValue = function (dataItem) {
-                return eval('dataItem.' + colDef.field);
-            };
-
             var columnCellTemplate;
             if (col.cellTemplate != undefined && col.cellTemplate != null && col.cellTemplate != "") {
                 columnCellTemplate = col.cellTemplate;
             }
             else {
-                columnCellTemplate = cellTemplate;
-                if (col.type == "Number") {
-                    columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "right;padding-right:2px");
-                    columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| number:2");
-                }
-                else {
-                    columnCellTemplate = columnCellTemplate.replace("#TEXTALIGN#", "left");
-                    if (col.type == "Datetime")
-                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
-                    if (col.type == "Date")
-                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
-                    else
-                        columnCellTemplate = UtilsService.replaceAll(columnCellTemplate, "#CELLFILTER#", "");
-                }
+                columnCellTemplate = getCellTemplateWithFilter(cellTemplate, col);
             }
             colDef.cellTemplate = columnCellTemplate;
+            colDef.summaryCellTemplate = getCellTemplateWithFilter(summaryCellTemplate, col);
+
             if (col.isClickable != undefined) {
                 colDef.isClickableAttr = col.isClickable;
                 colDef.onClickedAttr = col.onClicked;                
@@ -151,6 +144,23 @@
             calculateColumnsWidth();
             buildRowHtml();
             return colDef;
+        }
+
+        function getCellTemplateWithFilter(template, col) {
+            if (col.type == "Number") {
+                template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
+                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| number:2");
+            }
+            else {
+                template = template.replace("#TEXTALIGN#", "left");
+                if (col.type == "Datetime")
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd HH:mm'");
+                if (col.type == "Date")
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "| date:'yyyy-MM-dd'");
+                else
+                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
+            }
+            return template;
         }
 
         function removeColumn(colDef) {
@@ -223,10 +233,17 @@
             ctrl.showColumn = showColumn;
 
             ctrl.getColumnValue = function (colDef, dataItem) {
-                if (colDef == undefined)
+                if (colDef == undefined || colDef.field == undefined)
                     return null;
                 else
                     return eval('dataItem.' + colDef.field);
+            };
+
+            ctrl.getColumnSummaryValue = function (colDef, dataItem) {
+                if (colDef == undefined || colDef.summaryField == undefined)
+                    return null;
+                else
+                    return eval('dataItem.' + colDef.summaryField);
             };
 
             ctrl.isColumnClickable = function (colDef, dataItem) {
@@ -267,6 +284,25 @@
                 +'</div>'
 
             +'</div>'
+            }
+            buildSummaryRowHtml();
+        }
+
+        function buildSummaryRowHtml() {           
+            if (ctrl.summaryDataItem != undefined) {
+                ctrl.summaryRowHtml = '';
+                for (var i = 0; i < ctrl.columnDefs.length; i++) {
+                    var currentColumn = ctrl.columnDefs[i];
+                    var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
+                    ctrl.summaryRowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
+                    + '<div class="vr-datagrid-cell">'
+                    + '    <div class="vr-datagrid-celltext">'
+                      + UtilsService.replaceAll(ctrl.columnDefs[i].summaryCellTemplate, "colDef", currentColumnHtml)
+                        + '</div>'
+                    + '</div>'
+
+                + '</div>'
+                }
             }
         }
         
@@ -353,6 +389,16 @@
                     }, 10);
                 }
             }
+
+            gridApi.setSummary = function (dataItem) {
+                ctrl.summaryDataItem = dataItem;
+                buildSummaryRowHtml();
+            };
+
+            gridApi.clearSummary = function (dataItem) {
+                ctrl.summaryDataItem = undefined;
+                buildSummaryRowHtml();
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(gridApi);

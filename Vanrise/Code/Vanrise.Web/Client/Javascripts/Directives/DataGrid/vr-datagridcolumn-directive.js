@@ -7,8 +7,9 @@
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined;
+                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined; 
                     var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
+                    var summaryField = iAttrs.summaryfield != undefined ? $scope.$eval(iAttrs.summaryfield) : undefined;
                     var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
                     var enableHiding = iAttrs.enablehiding != undefined ? $scope.$eval(iAttrs.enablehiding) : undefined;
                     var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
@@ -21,6 +22,7 @@
                     var col = {
                         headerText: headerText,
                         field: field,
+                        summaryField: summaryField,
                         widthFactor: widthFactor,
                         enableHiding: enableHiding,
                         isClickable: isClickable,
