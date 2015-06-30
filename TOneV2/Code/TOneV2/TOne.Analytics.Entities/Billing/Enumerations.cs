@@ -29,7 +29,9 @@ namespace TOne.Analytics.Entities
     public enum EntityType 
     {
         none=0,
-        Zone=1
+        Customer=1,
+        Supplier=2,
+        Zone=3
     
     }
 

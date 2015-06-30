@@ -38,7 +38,7 @@
                     <vr-datagridcolumn headertext="'_%'" field="'PeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Previous_%'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
+                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
                     <vr-datagridexpandablerow>
                         <div ng-if="!show" ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsDestinations.html' "></div>
                         <div ng-if="show"  ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>

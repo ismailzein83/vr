@@ -1,4 +1,6 @@
 ﻿app.constant('EntityTypeEnum', {
     none: { value: 0, description: "none" },
-    Zone: { value: 1, description: "Zone" }
+    Customer: { value: 1, description: "Customer" },
+    Supplier: { value: 2, description: "Supplier" },
+    Zone: { value: 3, description: "Zone" }
 });

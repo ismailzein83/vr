@@ -42,32 +42,52 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
        // console.log($scope.dataItem);
         // console.log($scope.dataItem.ID);   
         var selectedReportOption = $scope.viewScope.selectedReportOption;
+   //     console.log(selectedReportOption);
+        var entityType;
         switch (selectedReportOption) {
             case VariationReportOptionsEnum.InBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
+                entityType = EntityTypeEnum.Customer;
                 break;
             case VariationReportOptionsEnum.OutBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
+                entityType = EntityTypeEnum.Supplier;
                 break;
             case VariationReportOptionsEnum.InOutBoundMinutes:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
-                break;  
+              //  entityType = EntityTypeEnum.Customers;
+                break;
+            case VariationReportOptionsEnum.TopDestinationMinutes:
+                selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
+                entityType = EntityTypeEnum.Zone;
+                break;
             case VariationReportOptionsEnum.InBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                entityType = EntityTypeEnum.Customer;
                 break;
             case VariationReportOptionsEnum.OutBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                entityType = EntityTypeEnum.Supplier;
                 break;
             case VariationReportOptionsEnum.InOutBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
+                //  entityType = EntityTypeEnum.Customers;
                 break;
+            case VariationReportOptionsEnum.TopDestinationAmount:
+                selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
+                entityType = EntityTypeEnum.Zone;
+                break;
+
             case VariationReportOptionsEnum.Profit:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
-                break;               
+                entityType = EntityTypeEnum.Customer;
+                break;           
         }
         $scope.selectedReportOption = selectedReportOption;
-
-        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
+        $scope.entityType = entityType;
+      //  console.log(selectedReportOption);
+       // console.log(entityType);
+        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, entityType.value, $scope.dataItem.ID).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.totalData.length = 0;

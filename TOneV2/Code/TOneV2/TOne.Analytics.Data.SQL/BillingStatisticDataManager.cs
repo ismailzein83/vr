@@ -185,12 +185,12 @@ namespace TOne.Analytics.Data.SQL
                     reader.NextResult();
                     while (reader.Read())
                     {
-                        totalValues_Internal.Add(Convert.ToDecimal(reader["TotalValues"]));
+                        totalValues_Internal.Add(reader["TotalValues"] != DBNull.Value ? Convert.ToDecimal(reader["TotalValues"]) : 0 );
                         datetotalValues_Internal.Add(GetReaderValue<DateTime>(reader, "FromDate"));
                     }
                     reader.NextResult();
                     reader.Read();
-                    TotalAverage_Internal = Convert.ToDecimal(reader["TotalAverage"]);
+                    TotalAverage_Internal = reader["TotalAverage"] != DBNull.Value ? Convert.ToDecimal(reader["TotalAverage"]) : 0;
                     
                 },
                 (cmd) =>
@@ -582,7 +582,7 @@ namespace TOne.Analytics.Data.SQL
             LEFT JOIN @ExchangeRates ERC ON ERC.Currency = BS.Cost_Currency AND ERC.Date = BS.CallDate			
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             #JoinStatement#           
-            WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement# 
+            WHERE BS.CallDate >= @BeginTime AND BS.CallDate < @EndTime  #WhereStatement#  #SecondWhereStatement#
             GROUP BY #IDColumn#, #NameColumn#,ERC.Rate,ERS.Rate;
             
             WITH FilteredEntities AS (SELECT * FROM #OrderedEntities WHERE RowNumber BETWEEN @FromRow AND @ToRow)
@@ -625,17 +625,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#BSIDColumn#", "BS.CustomerID");
                     query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
-                 //   query.Replace("#WhereStatement#", " ");
-                    switch (entityType)
-                    {
-                        case EntityType.Zone:
-                            query.Replace("#WhereStatement#", @" AND BS.CustomerID='"+entityID+"' ");
-                            break;
-                        default:
-                            query.Replace("#WhereStatement#", " ");
-                            break;
-
-                    }
+                    query.Replace("#WhereStatement#", " ");                  
                     break;
 
                 case VariationReportOptions.OutBoundMinutes:
@@ -658,7 +648,6 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
-
                     query.Replace("#WhereStatement#", @" ");
                     break;
 
@@ -691,7 +680,7 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
-                    query.Replace("#WhereStatement#", @" ");
+                    query.Replace("#WhereStatement#", @" ");                  
                     break;
      
                 case VariationReportOptions.Profit:
@@ -704,7 +693,23 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#WhereStatement#", @" ");
                     break;
 
-            }         
+            }
+            switch (entityType)
+            {
+                case EntityType.Zone:
+                    query.Replace("#SecondWhereStatement#", " AND BS.SaleZoneID='" + entityID + "' ");
+                    break;
+                case EntityType.Customer:
+                    query.Replace("#SecondWhereStatement#", " AND BS.CustomerID='" + entityID + "' ");
+                    break;
+                case EntityType.Supplier:
+                    query.Replace("#SecondWhereStatement#", " AND BS.SupplierID='" + entityID + "' ");
+                    break;
+                default:
+                    query.Replace("#SecondWhereStatement#", " ");
+                    break;
+
+            }
             return query.ToString();
         }
         private static DataTable ToDataTable<T>(List<T> items)
