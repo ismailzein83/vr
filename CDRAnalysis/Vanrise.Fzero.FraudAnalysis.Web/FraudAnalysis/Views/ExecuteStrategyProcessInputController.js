@@ -21,6 +21,8 @@
                 return null;
         }
 
+        $scope.createProcessInputObjects = [];
+
         $scope.strategies = [];
         loadStrategies();
         $scope.selectedStrategies = [];
@@ -38,52 +40,52 @@
                 $scope.selectedStrategyIds.push(itm.id);
             });
          
+            var runningDate = new Date($scope.fromDate);
 
-            //$scope.inputArguments = [{
-            //    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-            //    StrategyIds: $scope.selectedStrategyIds,
-            //    FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
-            //    ToDate: $scope.toDate != undefined ? $scope.toDate : '',
-            //    PeriodId: $scope.selectedPeriod.Id
-            //}];
-
-
-
-
-            //$scope.inputArguments = {
-            //    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-            //    StrategyIds: $scope.selectedStrategyIds,
-            //    FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
-            //    ToDate: $scope.toDate != undefined ? $scope.toDate : '',
-            //    PeriodId: $scope.selectedPeriod.Id
-            //};
-
-
-
-            //return $scope.inputArguments;
-
-
-
-            
-
-
-            var createProcessInputObject = {
-                InputArguments: {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    StrategyIds: $scope.selectedStrategyIds,
-                    FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
-                    ToDate: $scope.toDate != undefined ? $scope.toDate : '',
-                    PeriodId: $scope.selectedPeriod.Id
+            $scope.createProcessInputObjects.length = 0;
+            if ($scope.selectedPeriod.Id == 1)//Hourly
+            {
+                var runningDate = new Date($scope.fromDate);
+                while (runningDate < $scope.toDate)
+                {
+                    $scope.createProcessInputObjects.push({
+                        InputArguments: {
+                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                            StrategyIds: $scope.selectedStrategyIds,
+                            FromDate: new Date(runningDate.getYear(), runningDate.getMonth(), runningDate.getDay(), runningDate.getHours(), 0, 0),
+                            ToDate: new Date(runningDate.getYear(), runningDate.getMonth(), runningDate.getDay(), runningDate.getHours(), 59, 59),
+                            PeriodId: $scope.selectedPeriod.Id
+                        }
+                    });
+                    runningDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
                 }
-            };
+
+            }
+            else if ($scope.selectedPeriod.Id == 2) //Daily
+            {
+                var runningDate = new Date($scope.fromDate);
+                while (runningDate < $scope.toDate) {
+                    $scope.createProcessInputObjects.push({
+                        InputArguments: {
+                            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                            StrategyIds: $scope.selectedStrategyIds,
+                            FromDate: new Date(runningDate.setHours(0, 0, 0, 0)),
+                            ToDate: new Date(runningDate.setHours(23, 59, 59, 999)),
+                            PeriodId: $scope.selectedPeriod.Id
+                        }
+                    });
+
+                    runningDate.setHours(0, 0, 0, 0)
+                    runningDate = new Date(runningDate.setDate(runningDate.getDate() + 1));
+                }
 
 
-            $scope.createProcessInputObjects = [createProcessInputObject, createProcessInputObject];
+            }
+            
+           
+            console.log($scope.createProcessInputObjects)
 
             return $scope.createProcessInputObjects;
-
-
-
 
 
         };
