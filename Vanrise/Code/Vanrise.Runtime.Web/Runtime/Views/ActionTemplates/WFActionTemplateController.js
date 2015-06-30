@@ -35,8 +35,14 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
 
     function loadForm() {
 
+        if ($scope.schedulerTaskAction.additionalParameter != undefined)
+        {
+            $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, $scope.schedulerTaskAction.additionalParameter.bpDefinitionID, "BPDefinitionID");
+        }
+
         if ($scope.schedulerTaskAction.data == undefined)
             return;
+
         var data = $scope.schedulerTaskAction.data;
         if (data != null) {
             $scope.selectedBPDefintion = UtilsService.getItemByVal($scope.bpDefinitions, data.BPDefinitionID, "BPDefinitionID");
@@ -44,16 +50,15 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
             $scope.schedulerTaskAction.rawExpressions.data = data.RawExpressions;
         }
         else {
-            $scope.selectedBPDefintion = undefined;
             $scope.schedulerTaskAction.processInputArguments.data = undefined;
             $scope.schedulerTaskAction.rawExpressions.data = undefined;
+            $scope.selectedBPDefintion = undefined;
         }
     }
 
     function loadDefinitions()
     {
         return BusinessProcessAPIService.GetDefinitions().then(function (response) {
-            console.log(response);
             angular.forEach(response, function (item) {
                 $scope.bpDefinitions.push(item);
             });

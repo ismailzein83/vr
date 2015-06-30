@@ -32,7 +32,6 @@ function ScheduleDailyRepricingProcessTemplateController($scope, UtilsService) {
 
         $scope.dateOptionSelected = function ()
         {
-            console.log($scope.selectedDateOption.Value);
             if($scope.selectedDateOption.Value == 0)
             {
                 $scope.specificDateOptionSelected = false;
