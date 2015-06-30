@@ -15,6 +15,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     [Vanrise.Web.Base.JSONWithType]
     public partial  class BusinessProcessController : Vanrise.Web.Base.BaseAPIController
     {
+        [HttpGet]
+        public BPDefinition GetDefinition(int ID)
+        {
+            BPClient manager = new BPClient();
+            return manager.GetDefinition(ID);
+        }
 
         [HttpPost]
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
