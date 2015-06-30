@@ -272,19 +272,23 @@
         }
         
         function buildRowHtml() {
-            ctrl.rowHtml = '';
+            ctrl.rowHtml = '<table style="border:0px;width:100%;table-layout:fixed"><tr>';
             for (var i = 0; i < ctrl.columnDefs.length; i++) {
                 var currentColumn = ctrl.columnDefs[i];
                 var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
-                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-block\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
-                +'<div class="vr-datagrid-cell">'
-                +'    <div class="vr-datagrid-celltext">'
-                  + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
-                    +'</div>'
-                +'</div>'
+                ctrl.rowHtml +=
+                    '<td ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'overflow\': \'hidden\' ' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}" >'
+              +  '<div style="overflow:hidden">'
+            + '<div class="vr-datagrid-cell">'
+            + '    <div class="vr-datagrid-celltext">'
+              + UtilsService.replaceAll(ctrl.columnDefs[i].cellTemplate, "colDef", currentColumnHtml)
+                + '</div>'
+            + '</div>'
 
-            +'</div>'
+        + '</div>'
+            + '</td>';
             }
+            ctrl.rowHtml += '</tr></table>';
             buildSummaryRowHtml();
         }
 

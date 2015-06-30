@@ -43,35 +43,41 @@
 
 <div id="rowTemplate">
     <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
-        <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-show="$parent.ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
-            <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
-                <span class="glyphicon glyphicon-plus" style="top: -4px; left: 2px"></span>
-            </label>
-            <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
-                <span class="glyphicon glyphicon-minus" style="top: -4px; left: 2px"></span>
-            </label>
-        </div>
-        <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}">
-            <div vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
-        </div>
-        <div ng-style="{'width': $parent.ctrl.actionsColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
-            <div class="vr-datagrid-cell">
-                <div class="vr-datagrid-celltext">
-                    <div ng-mouseleave="show = false">
-                        <label style="height:9px" class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;$parent.ctrl.adjustPosition($event)">
-                            <span class="glyphicon glyphicon-list-alt"></span>
+        <table style="width:100%;border:0px;">
+            <tr>
+                <td ng-style="{'width': $parent.ctrl.expandableColumnWidth}" ng-show="$parent.ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
+                    <div style="margin:-2px">
+                        <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
+                            <span class="glyphicon glyphicon-plus" style="top: -4px; left: 2px"></span>
                         </label>
-                        <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
-                            <li role="presentation" ng-if="show==true">
-                                <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
-                                    <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
-                                </div>
-                            </li>
-                        </ul>
+                        <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
+                            <span class="glyphicon glyphicon-minus" style="top: -4px; left: 2px"></span>
+                        </label>
                     </div>
-                </div>
-            </div>
-        </div>
+                </td>
+                <td ng-style="{'width': $parent.ctrl.dataColumnsSectionWidth}">
+                        <div vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
+                </td>
+                <td ng-style="{'width': $parent.ctrl.actionsColumnWidth}" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
+                    <div class="vr-datagrid-cell">
+                        <div class="vr-datagrid-celltext">
+                            <div ng-mouseleave="show = false">
+                                <label style="height:9px" class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;$parent.ctrl.adjustPosition($event)">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                </label>
+                                <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
+                                    <li role="presentation" ng-if="show==true">
+                                        <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
+                                            <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
     <div id="divExpandableRowContent_{{$index}}" ng-show="isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
         <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
