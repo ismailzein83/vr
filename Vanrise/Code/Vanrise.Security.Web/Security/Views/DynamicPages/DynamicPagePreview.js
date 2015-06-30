@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'DynamicPageAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService','VRNavigationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPagePreviewController($scope, DynamicPageAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService) {
     var viewId;
     loadParameters();
     defineScope();
@@ -120,7 +120,7 @@ function DynamicPagePreviewController($scope, DynamicPageAPIService, WidgetAPISe
     }
 
     function loadViewByID() {
-        return DynamicPageAPIService.GetView(viewId).then(function (response) {
+        return ViewAPIService.GetView(viewId).then(function (response) {
             $scope.viewContent = response.Content;
         });
     }

@@ -1,9 +1,10 @@
-﻿app.service('DynamicPageAPIService', function (BaseAPIService) {
+﻿app.service('ViewAPIService', function (BaseAPIService) {
 
     return ({
         GetDynamicPages: GetDynamicPages,
         UpdateView:UpdateView,
         SaveView: SaveView,
+        DeleteView:DeleteView,
         GetView: GetView
     });
 
@@ -17,7 +18,9 @@
         return BaseAPIService.post("/api/View/UpdateView", view);
     }
     function DeleteView(viewId) {
-        return BaseAPIService.post("/api/View/DeleteView", viewId);
+        return BaseAPIService.get("/api/View/DeleteView", {
+            viewId: viewId
+            });
     }
     function GetView(ViewId) {
         return BaseAPIService.get("/api/View/GetView",
