@@ -1,28 +1,20 @@
 ﻿'use strict'
-/// <reference path="ZoneMonitorSettings.html" />
-/// <reference path="ZoneMonitor.html" />
-WidgetsManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'AnalyticsAPIService', 'VRModalService', 'VRNotificationService'];
-function WidgetsManagementController($scope, UtilsService, WidgetAPIService, AnalyticsAPIService, VRModalService, VRNotificationService) {
-    var filter = {};
+WidgetManagementController.$inject = ['$scope', 'UtilsService', 'WidgetAPIService', 'VRModalService', 'VRNotificationService'];
+function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRModalService, VRNotificationService) {
     var mainGridAPI;
-    var sortColumn;
-    var sortDescending = true;
-    var currentData;
-    var currentSortedColDef;
-    defineScopeObjects();
+    defineScope();
     load();
-    //  defineScopeMethods();
 
-    function defineScopeObjects() {
+    function defineScope() {
         $scope.widgets = [];
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
         $scope.menuActions = [{
-            name: "Edit",
-            clicked: function (dataItem) {
-                updateWidget(dataItem);
-            }
+                name: "Edit",
+                clicked: function (dataItem) {
+                 updateWidget(dataItem);
+                }
         }];
 
         $scope.mainGridPagerSettings = {
@@ -34,15 +26,14 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
         };
 
         $scope.Add = function () {
-            AddWidget();
+            addNewWidget();
         };
 
 
     }
-    function AddWidget() {
 
+    function addNewWidget() {
         var settings = {};
-
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "New Widget";
             modalScope.onWidgetAdded = function (widget) {
@@ -54,23 +45,6 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
 
     }
 
-    function load() {
-        $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadData]).finally(function () {
-            $scope.isInitializing = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
-    }
-
-    function loadData() {
-        return WidgetAPIService.GetAllWidgets().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.widgets.push(itm);
-            });
-        });
-
-    }
     function updateWidget(dataItem) {
         var settings = {};
         console.log(dataItem);
@@ -83,6 +57,28 @@ function WidgetsManagementController($scope, UtilsService, WidgetAPIService, Ana
 
         VRModalService.showModal('/Client/Modules/Security/Views/WidgetsPages/WidgetEditor.html', dataItem, settings);
     }
+
+    function load() {
+        $scope.isInitializing = true;
+        UtilsService.waitMultipleAsyncOperations([loadData]).finally(function () {
+            $scope.isInitializing = false;
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
+    }
+
+    function loadData() {
+        $scope.isGettingData = true;
+        return WidgetAPIService.GetAllWidgets().then(function (response) {
+            angular.forEach(response, function (itm) {
+                $scope.widgets.push(itm);
+            });
+        }).finally(function () {
+            $scope.isGettingData = false;
+        });
+
+    }
+    
 };
 
-appControllers.controller('Security_WidgetsManagementController', WidgetsManagementController);
+appControllers.controller('Security_WidgetManagementController', WidgetManagementController);

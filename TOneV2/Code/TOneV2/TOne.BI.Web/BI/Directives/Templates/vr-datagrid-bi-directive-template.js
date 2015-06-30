@@ -14,7 +14,7 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         $scope.selectedEntityType;
         $scope.selectedMeasureTypes = [];
         defineTimeDimensionTypes();
-        $scope.subViewValue.getValue = function () {
+        $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
 
@@ -77,8 +77,8 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).finally(function () {
-            if ($scope.subViewValue.value != null && $scope.subViewValue.value != undefined) {
-                setSubViewValue($scope.subViewValue.value);
+            if ($scope.subViewConnector.value != null && $scope.subViewConnector.value != undefined) {
+                setSubViewValue($scope.subViewConnector.value);
             }
             $scope.isInitializing = false;
             $scope.isGettingData = false;

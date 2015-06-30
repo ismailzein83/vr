@@ -117,7 +117,7 @@
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Security\Services\APIServices\DynamicPagesAPIService.js" />
+    <Content Include="Security\Services\APIServices\DynamicPageAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
@@ -131,10 +131,10 @@
     <Content Include="Security\Views\BusinessEntityManagementController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPagePreview.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPagePreview.js" />
-    <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.html" />
-    <Content Include="Security\Views\DynamicPages\DynamicPagesEditor.js" />
-    <Content Include="Security\Views\DynamicPages\DynamicPagesManagement.html" />
-    <Content Include="Security\Views\DynamicPages\DymanicPagesManagement.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageEditor.html" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageEditor.js" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageManagement.html" />
+    <Content Include="Security\Views\DynamicPages\DynamicPageManagement.js" />
     <Content Include="Security\Views\Login.html" />
     <Content Include="Security\Views\LoginController.js" />
     <Content Include="Security\Views\PermissionEditor.html" />
@@ -152,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BusinessEntitiesController.cs" />
-    <Compile Include="Controllers\DynamicViewsManagementController.cs" />
+    <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
@@ -184,8 +184,8 @@
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.js" />
-    <Content Include="Security\Views\WidgetsPages\WidgetsManagement.html" />
-    <Content Include="Security\Views\WidgetsPages\WidgetsManagement.js" />
+    <Content Include="Security\Views\WidgetsPages\WidgetManagement.html" />
+    <Content Include="Security\Views\WidgetsPages\WidgetManagement.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,13 +1,12 @@
-﻿<vr-panel ng-controller="Security_DynamicPagesManagementController">
+﻿<vr-panel ng-controller="Security_WidgetManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns colnum="2">
+                <vr-columns width="normal">
                     <vr-textbox value="name" label="Name"></vr-textbox>
-                   
                 </vr-columns>
             </vr-row>
-        </div> 
+        </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
@@ -22,10 +21,9 @@
 
         <vr-row>
             <vr-columns colnum="12">
-                <vr-datagrid datasource="data" menuactions="menuActions" on-ready="onMainGridReady">
-                    <!--<vr-datagridcolumn headertext="ID" field="'data.ID'" widthfactor="20" isclickable="'true'" onclicked="onEntityClicked"></vr-datagridcolumn>-->
-                    <vr-datagridcolumn headertext="'Page Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Module Name'" field="'ModuleName'"></vr-datagridcolumn>
+                <vr-datagrid datasource="widgets" menuactions="menuActions" on-ready="onMainGridReady">
+                    <vr-datagridcolumn headertext="'Widget Name'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Widget Type'" field="'WidgetDefinitionName'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

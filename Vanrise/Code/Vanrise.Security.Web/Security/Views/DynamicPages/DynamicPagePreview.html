@@ -1,14 +1,13 @@
-﻿<div ng-controller="Security_DynamicPagePreviewController" width="'80%'">
+﻿<div ng-controller="Security_DynamicPagePreviewController">
     <vr-form name="formDynamicPagePreview">
         <vr-row>
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
             </vr-columns>
-
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
             </vr-columns>
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
                            selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
             </vr-columns>
@@ -24,8 +23,8 @@
         <div vr-loader="isGettingData">
             <vr-row>
                 <div class="list-group" ng-sortable="itemsSortable">
-                    <vr-columns ng-repeat="widget in widgets" colnum="{{widget.NumberOfColumns}}">
-                        <vr-directivewrapper directive="widget.Setting.Directive" on-ready="widget.onElementReady" settings="widget.Setting.Settings"
+                    <vr-columns ng-repeat="viewWidget in viewWidgets" colnum="{{viewWidget.NumberOfColumns}}">
+                        <vr-directivewrapper directive="viewWidget.Setting.Directive" on-ready="viewWidget.onElementReady" settings="viewWidget.Setting.Settings"
                                              retrievedataonload="true" filter="filter"></vr-directivewrapper>
                     </vr-columns>
                 </div>

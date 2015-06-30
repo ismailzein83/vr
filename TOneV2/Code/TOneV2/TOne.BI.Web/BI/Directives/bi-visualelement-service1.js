@@ -1,6 +1,4 @@
 ﻿
-
-
 app.service('BIVisualElementService1', function (BIDataAPIService) {
 
     return ({
@@ -8,12 +6,6 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
     });
 
     function retrieveData1(visualElementController, visualElementSettings) {
-        //var measureTypeValues = [];
-        
-        //angular.forEach(visualElementSettings.measureTypes, function (measureType) {
-        //    measureTypeValues.push(measureType.Name);
-        //});
-        //console.log(measureTypeValues);
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;

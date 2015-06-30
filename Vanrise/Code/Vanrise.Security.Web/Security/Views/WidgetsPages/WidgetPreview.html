@@ -1,14 +1,14 @@
-﻿<div ng-controller="Security_WidgetPreviewController" width="'80%'">
+﻿<div ng-controller="Security_WidgetPreviewController">
     <vr-form name="formWidgetPreview">
         <vr-row>
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
             </vr-columns>
 
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
             </vr-columns>
-            <vr-columns colnum="2">
+            <vr-columns width="normal">
                 <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
                            selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
             </vr-columns>
@@ -25,7 +25,7 @@
         <vr-row>
             <div>
                 <vr-columns width="fullrow">
-                    <vr-directivewrapper directive="visualElement.Setting.directive" on-ready="onElementReady" settings="visualElement.Setting.settings"
+                    <vr-directivewrapper directive="widget.Setting.directive" on-ready="onElementReady" settings="widget.Setting.settings"
                                          retrievedataonload="false" filter="filter"></vr-directivewrapper>
                 </vr-columns>
             </div>

@@ -1,15 +1,14 @@
-﻿WidgetPreviewController.$inject = ['$scope', 'BIVisualElementService1', 'BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿WidgetPreviewController.$inject = ['$scope', 'BITimeDimensionTypeEnum'];
 
-function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensionTypeEnum, BIConfigurationAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function WidgetPreviewController($scope, BITimeDimensionTypeEnum) {
     var widgetAPI;
     defineScope();
     load();
+
     function defineScope() {
-        $scope.visualElement;
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
         defineTimeDimensionTypes();
-        $scope.subViewValue = {};
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,
             fromDate: $scope.fromDate,
@@ -18,14 +17,18 @@ function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensio
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.visualElement = $scope.$parent.visualElement;
+       
         $scope.onElementReady = function (api) {
             widgetAPI = api;
+            updateDashboard();
         };
+        $scope.widget = $scope.$parent.widget;
         $scope.Search = function () {
                 updateDashboard();
         };
+     
     }
+
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in BITimeDimensionTypeEnum)
@@ -35,10 +38,12 @@ function WidgetPreviewController($scope, BIVisualElementService1, BITimeDimensio
             return t == BITimeDimensionTypeEnum.Daily;
         })[0];
     }
-    function load() {
 
+    function load() {
         $scope.isGettingData = false;
+        
     }
+
     function updateDashboard() {
 
         $scope.isGettingData = true;

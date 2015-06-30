@@ -9,25 +9,31 @@ using Vanrise.Web.Base;
 namespace Vanrise.Security.Web.Controllers
 {
      [JSONWithTypeAttribute]
-    public class DynamicViewsManagementController : Vanrise.Web.Base.BaseAPIController
+    public class ViewController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
         public List<View> GetDynamicPages()
         {
-            DynamicViewsManager manager = new DynamicViewsManager();
+            ViewManager manager = new ViewManager();
             return manager.GetDynamicPages();
         }
       
         [HttpPost]
         public Vanrise.Entities.InsertOperationOutput<View> SaveView(View view)
         {
-             DynamicViewsManager manager = new DynamicViewsManager();
+             ViewManager manager = new ViewManager();
              return manager.SaveView(view);
           }
+        [HttpPost]
+        public Vanrise.Entities.UpdateOperationOutput<View> UpdateView(View view)
+        {
+            ViewManager manager = new ViewManager();
+            return manager.UpdateView(view);
+        }
         [HttpGet]
         public View GetView(int viewId)
         {
-            DynamicViewsManager manager = new DynamicViewsManager();
+            ViewManager manager = new ViewManager();
             return manager.GetView(viewId);
         }
 

@@ -1,24 +1,24 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', '$routeParams', 'DynamicPagesAPIService','WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'DynamicPageAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService','VRNavigationService'];
 
-function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIService,WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService) {
+function DynamicPagePreviewController($scope, DynamicPageAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService) {
     var viewId;
     loadParameters();
     defineScope();
     load();
-    
     function loadParameters() {
-        if ($routeParams.params != undefined) {
-            viewId = JSON.parse($routeParams.params).viewId;
+        var parameters = VRNavigationService.getParameters($scope);
+        if (parameters!=null && parameters.viewId != undefined) {
+            viewId = parameters.viewId;
         }
     }
+
     function defineScope() {
         $scope.allWidgets = [];
-        $scope.content = [];
-        $scope.widgets = [];
+        $scope.viewContent = [];
+        $scope.viewWidgets = [];
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
         defineTimeDimensionTypes();
-        $scope.subViewValue = {};
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,
             fromDate:$scope.fromDate,
@@ -29,7 +29,7 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             $scope.modalContext.closeModal()
         };
         $scope.Search = function () {
-            if ($scope.widgets != null && $scope.widgets != undefined && $scope.widgets.length > 0) {
+            if ($scope.viewWidgets != null && $scope.viewWidgets != undefined && $scope.viewWidgets.length > 0) {
                 updateDashboard();
             }
             else {
@@ -39,6 +39,7 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
         getData();
 
     }
+
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
         for (var td in BITimeDimensionTypeEnum)
@@ -48,10 +49,11 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             return t == BITimeDimensionTypeEnum.Daily;
         })[0];
     }
+
     function load() {
         $scope.isGettingData = false;
-       
     }
+
     function updateDashboard() {
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,
@@ -59,8 +61,8 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             toDate: $scope.toDate
         }
         var refreshDataOperations = [];
-        angular.forEach($scope.widgets, function (widget) {
-            refreshDataOperations.push(widget.API.retrieveData);
+        angular.forEach($scope.viewWidgets, function (viewWidget) {
+            refreshDataOperations.push(viewWidget.API.retrieveData);
         });
         $scope.isGettingData = true;
         return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
@@ -69,52 +71,57 @@ function DynamicPagePreviewController($scope, $routeParams, DynamicPagesAPIServi
             });
         
     }
+
     function getData() {
         if (viewId != undefined) {
+            $scope.isGettingData = true;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
-                     getWidgets($scope.allWidgets, $scope.content);
+                     loadViewWidgets($scope.allWidgets, $scope.viewContent);
                      $scope.isGettingData = false;
                  });
         }
         else {
+            $scope.isGettingData = true;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
-                    getWidgets($scope.allWidgets, $scope.$parent.Contents);
+                    loadViewWidgets($scope.allWidgets, $scope.$parent.viewContents);
                     $scope.isGettingData = false;
                 });
 
         }   
     }
-    function getWidgets(allWidgets, content) {
-        for (var i = 0; i < content.length; i++) {
-            for (var j = 0; j < allWidgets.length; j++) {
-                if (allWidgets[j].Id == content[i].WidgetId) {
-                    allWidgets[j].NumberOfColumns = content[i].NumberOfColumns;
-                    AddElementReady(allWidgets[j]);
-                   
-                   
-                }
+
+    function loadViewWidgets(allWidgets, viewContents) {
+        for (var i = 0; i < viewContents.length; i++) {
+            var viewContent = viewContents[i];
+            var value = UtilsService.getItemByVal(allWidgets, viewContent.WidgetId, 'Id');
+            if (value != null)
+            {
+                value.NumberOfColumns = viewContent.NumberOfColumns;
+                addElementReady(value);
             }
+
         }
     }
-    function AddElementReady(widget ) {
-        var widgetElement = widget;
-        widgetElement.onElementReady = function (api) {
-            widgetElement.API = api;
+
+    function addElementReady(viewWidget) {
+        viewWidget.onElementReady = function (api) {
+            viewWidget.API = api;
         };
-        $scope.widgets.push(widgetElement);
+        $scope.viewWidgets.push(viewWidget);
     }
- 
+
     function loadAllWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
             $scope.allWidgets = response;
         });
 
     }
+
     function loadViewByID() {
-        return DynamicPagesAPIService.GetView(viewId).then(function (response) {
-            $scope.content = response.Content;
+        return DynamicPageAPIService.GetView(viewId).then(function (response) {
+            $scope.viewContent = response.Content;
         });
     }
 

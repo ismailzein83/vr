@@ -12,6 +12,7 @@ namespace Vanrise.Security.Data
         List<View> GetViews();
         List<View> GetDynamicPages();
         bool SaveView(View view, out int insertedId);
+        bool UpdateView(View view);
         View GetView(int viewId);
     }
 }

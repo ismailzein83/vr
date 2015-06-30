@@ -16,12 +16,12 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         $scope.selectedEntityType;
         $scope.selectedMeasureTypes = [];
         defineTimeDimensionTypes();
-        $scope.subViewValue.getValue = function () {
+        $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
-        $scope.subViewValue.setValue = function (value) {
+        $scope.subViewConnector.setValue = function (value) {
             console.log(value);
-            $scope.subViewValue.value = value;
+            $scope.subViewConnector.value = value;
            // return setSubViewValue(settings);
         }
 
@@ -81,8 +81,8 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         defineChartSeriesTypes();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]).finally(function () {
-            if ($scope.subViewValue.value != null && $scope.subViewValue.value != undefined) {
-                setSubViewValue($scope.subViewValue.value);
+            if ($scope.subViewConnector.value != null && $scope.subViewConnector.value != undefined) {
+                setSubViewValue($scope.subViewConnector.value);
             }
             $scope.isInitializing = false;
             $scope.isGettingData = false;

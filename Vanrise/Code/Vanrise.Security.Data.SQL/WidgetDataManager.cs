@@ -9,12 +9,12 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data.SQL
 {
-    public class WidgetsDataManager : BaseSQLDataManager, IWidgetsDataManager
+    public class WidgetDataManager : BaseSQLDataManager, IWidgetsDataManager
     {
        public List<WidgetDefinition> GetWidgetsDefinition()
         {
 
-            return GetItemsSP("sec.sp_WidgetDefinition_GetWidgets", WidgetDefinitionMapper);
+            return GetItemsSP("sec.sp_WidgetDefinition_Get", WidgetDefinitionMapper);
         }
         private WidgetDefinition WidgetDefinitionMapper(IDataReader reader)
         {
@@ -33,7 +33,7 @@ namespace Vanrise.Security.Data.SQL
             if (widget.Setting != null)
                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
             object widgetId;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_WidgetManagement_InsertWidget", out widgetId,widget.WidgetDefinitionId, widget.Name, serialziedSetting);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Insert", out widgetId,widget.WidgetDefinitionId, widget.Name, serialziedSetting);
             insertedId = (int)widgetId;
             return (recordesEffected > 0);
             //  return false;
@@ -43,13 +43,13 @@ namespace Vanrise.Security.Data.SQL
             string serialziedSetting = null;
             if (widget.Setting != null)
                 serialziedSetting = Common.Serializer.Serialize(widget.Setting);
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_WidgetManagement_UpdateWidget", widget.Id, widget.WidgetDefinitionId, widget.Name, serialziedSetting);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Widget_Update", widget.Id, widget.WidgetDefinitionId, widget.Name, serialziedSetting);
             return (recordesEffected > 0);
         }
         public List<WidgetDetails> GetAllWidgets()
         {
 
-            return GetItemsSP("sec.sp_WidgetManagement_GetAllWidgets", WidgetMapper);
+            return GetItemsSP("sec.sp_Widget_GetAll", WidgetMapper);
         }
         private WidgetDetails WidgetMapper(IDataReader reader)
         {
@@ -66,7 +66,7 @@ namespace Vanrise.Security.Data.SQL
         }
         public WidgetDetails GetWidgetById(int widgetId)
         {
-            return GetItemSP("sec.sp_WidgetManagement_GetWidgetById", WidgetMapper, widgetId);
+            return GetItemSP("sec.sp_Widget_GetById", WidgetMapper, widgetId);
         }
 
       

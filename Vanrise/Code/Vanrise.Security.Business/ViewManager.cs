@@ -9,7 +9,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class DynamicViewsManager
+    public class ViewManager
     {
         public List<View> GetDynamicPages()
         {
@@ -36,6 +36,26 @@ namespace Vanrise.Security.Business
              }
 
              return insertOperationOutput; 
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<View> UpdateView(View view)
+        {
+            UpdateOperationOutput<View> updateOperationOutput = new UpdateOperationOutput<View>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            bool updateActionSucc = dataManager.UpdateView(view);
+
+            if (updateActionSucc)
+            {
+
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                View updatedView = dataManager.GetView(view.ViewId);
+                updateOperationOutput.UpdatedObject = updatedView;
+            }
+
+            return updateOperationOutput;
         }
 
         public View GetView(int viewId)
