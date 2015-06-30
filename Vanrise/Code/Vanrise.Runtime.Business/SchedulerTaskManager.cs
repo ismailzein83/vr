@@ -23,18 +23,10 @@ namespace Vanrise.Runtime.Business
             return datamanager.GetTask(taskId);
         }
 
-        public List<SchedulerTask> GetWorkflowTasks(int bpDefinitionId)
+        public List<SchedulerTask> GetTasksbyActionType(int actionType)
         {
             ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            List<SchedulerTask> workflowTasks = datamanager.GetTasksbyActionType(1);
-
-            List<SchedulerTask> filteredList = new List<SchedulerTask>();
-            foreach (SchedulerTask task in workflowTasks)
-            {
-                //WFSchedulerTaskAction 
-            }
-
-            return filteredList;
+            return datamanager.GetTasksbyActionType(actionType);
         }
 
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()

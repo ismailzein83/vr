@@ -27,13 +27,6 @@ namespace Vanrise.Runtime.Web.Controllers
         }
 
         [HttpGet]
-        public List<SchedulerTask> GetWorkflowTasks(int bpDefinitionId)
-        {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetWorkflowTasks(bpDefinitionId);
-        }
-
-        [HttpGet]
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
