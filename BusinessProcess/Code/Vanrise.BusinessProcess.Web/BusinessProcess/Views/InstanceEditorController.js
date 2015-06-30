@@ -10,32 +10,45 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
+
+
         $scope.createNewProcess = function () {
 
             $scope.issaving = true;
-            var createProcessInput = buildInstanceObjFromScope();
-            BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
-                    if ($scope.onProcessInputCreated != undefined)
-                        $scope.onProcessInputCreated(response.ProcessInstanceId);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error);
-            });
+            var createProcessInputs = buildInstanceObjFromScope();
 
+            if (angular.isArray(createProcessInputs))
+            {
+                angular.forEach(createProcessInputs, function (itm) {
+                    BusinessProcessAPIService.CreateNewProcess(itm).then().catch(function (error) {
+                        VRNotificationService.notifyException(error);
+                    });
+                });
 
+                if ($scope.onProcessInputsCreated != undefined)
+                    $scope.onProcessInputsCreated();
+
+                $scope.modalContext.closeModal();
+            }
+            else {
+                BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+                    if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
+                        if ($scope.onProcessInputCreated != undefined)
+                            $scope.onProcessInputCreated(response.ProcessInstanceId);
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error);
+                });
+            }
         };
     }
 
 
 
     function buildInstanceObjFromScope() {
-        var inputArguments = $scope.createProcessInput.getData();
-        var createProcessInputObject = {
-            InputArguments: inputArguments
-        };
-        return createProcessInputObject;
+        var createProcessInputs = $scope.createProcessInput.getData();
+        return createProcessInputs;
     }
 
 

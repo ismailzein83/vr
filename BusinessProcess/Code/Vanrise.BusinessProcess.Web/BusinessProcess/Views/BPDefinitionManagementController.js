@@ -1,6 +1,6 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval','VRNotificationService'];
 
-function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval) {
+function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService) {
 
     "use strict";
     var interval, mainGridAPI;
@@ -16,6 +16,11 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
                 modalScope.onProcessInputCreated = function (processInstanceId) {
                     $scope.searchClicked();
                     showBPTrackingModal(processInstanceId);
+                };
+
+                modalScope.onProcessInputsCreated = function () {
+                    $scope.searchClicked();
+                    VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
                 };
             }
         });
