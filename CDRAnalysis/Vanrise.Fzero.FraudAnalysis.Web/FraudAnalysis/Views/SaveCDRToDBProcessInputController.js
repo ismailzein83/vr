@@ -3,13 +3,14 @@
    
     function defineScope() {
         $scope.createProcessInput.getData = function () {
-            return {
-                $type: "Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments"
-                //StrategyIds: $scope.selectedStrategyIds,
-                //FromDate: $scope.fromDate != undefined ? $scope.fromDate : '',
-                //ToDate: $scope.toDate != undefined ? $scope.toDate : '',
-                //PeriodId: $scope.selectedPeriod.Id
+
+            var createProcessInputObject = {
+                InputArguments: {
+                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.SaveCDRToDBProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments"
+                }
             };
+
+            return createProcessInputObject;
         };
     }
 
