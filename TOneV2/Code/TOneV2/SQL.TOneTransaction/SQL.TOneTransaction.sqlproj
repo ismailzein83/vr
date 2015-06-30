@@ -139,6 +139,7 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Update.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Get.sql" />
+    <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetWorkflowTasks.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
