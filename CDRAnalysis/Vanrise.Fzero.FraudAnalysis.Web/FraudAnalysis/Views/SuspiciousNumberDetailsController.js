@@ -36,7 +36,6 @@ function SuspiciousNumberDetailsController($scope, StrategyAPIService, Suspicion
         return SuspicionAnalysisAPIService.GetNormalCDRs(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, $scope.subscriberNumber).then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.normalCDRs.push(itm);
-                console.log(itm)
             });
         });
     }

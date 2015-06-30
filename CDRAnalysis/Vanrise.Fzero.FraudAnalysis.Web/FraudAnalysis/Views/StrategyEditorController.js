@@ -213,10 +213,7 @@ function StrategyEditorController($scope, StrategyAPIService, $routeParams, noti
 
 
         });
-
        
-        console.log(strategyObject)
-
         return strategyObject;
     }
 

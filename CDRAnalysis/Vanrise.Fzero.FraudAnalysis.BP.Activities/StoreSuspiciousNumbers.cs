@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetStoreSuspiciousNumbersInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start StoreSuspiciousNumbers.DoWork.Start {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Storing Suspicious Numbers to Database");
             ISuspiciousNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<ISuspiciousNumberDataManager>();
             
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -52,22 +52,18 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItemSuspiciousNumbers = inputArgument.InputQueue.TryDequeue(
                         (x) =>
                         {
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.DequeuedSaveSuspiciousNumbers {0}", DateTime.Now);
                             dataManager.SaveSuspiciousNumbers(x.suspiciousNumbers);
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDBSaveSuspiciousNumbers {0}", DateTime.Now);
                         });
 
                     hasNumberProfiles = inputArgument.InputQueue2.TryDequeue(
                        (y) =>
                        {
-                           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.DequeuedSaveNumberProfiles {0}", DateTime.Now);
                            dataManager.SaveNumberProfiles(y.numberProfiles);
-                           handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.SavedtoDBSaveNumberProfiles {0}", DateTime.Now);
                        });
                 }
                 while (!ShouldStop(handle) && hasItemSuspiciousNumbers && hasNumberProfiles);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End StoreSuspiciousNumbers.DoWork.End {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finished Storing Suspicious Numbers to Database");
         }
 
         protected override GetStoreSuspiciousNumbersInput GetInputArgument2(AsyncCodeActivityContext context)

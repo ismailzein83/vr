@@ -54,7 +54,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(GetSuspiciousNumberInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Started ");
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Collecting Suspicious Numbers ");
 
             List<FraudManager> managers= new List<FraudManager>();
 
@@ -86,7 +86,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                                 numbers.Add(number);
                                             }
 
-
                                     //numbers.Add(number);
                                 }
                                 if (sNumbers.Count > 0)
@@ -95,7 +94,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                         suspiciousNumbers = sNumbers
                                     });
                                    
-                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Suspicious Count Items: {0} ", sNumbers.Count);
                                 }
 
                                 if (numbers.Count > 0)
@@ -105,21 +103,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                     {
                                         numberProfiles = numbers
                                     });
-                                    handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Enqueued Profiles Count Items: {0} ", sNumbers.Count);
                                 }
 
-                                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Dequeued Count Items: {0} ", item.numberProfiles.Count);
 
                             });
                     }
                     while (!ShouldStop(handle) && hasItem);
                 });
-            
-            
 
 
 
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "GetSuspiciousNumber.DoWork.Ended ");
+
+
+                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finshed Collecting Suspicious Numbers ");
         }
 
         protected override GetSuspiciousNumberInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)

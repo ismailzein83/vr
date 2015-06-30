@@ -35,19 +35,16 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             string sFTPDir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Start {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Started Importing CDRs to Transit Database");
             var sftp = new Rebex.Net.Sftp();
             sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Connect {0}", DateTime.Now);
             sftp.Login(System.Configuration.ConfigurationManager.AppSettings["Server_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["Server_Pasword"].ToString());
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Login {0}", DateTime.Now);
             if (sftp.GetConnectionState().Connected)
             {
                 // set current directory
                 sftp.ChangeDirectory(sFTPDir);
                 // get items within the current directory
                 SftpItemCollection currentItems = sftp.GetList();
-                handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.GetList {0}", DateTime.Now);
                 if (currentItems.Count > 0)
                 {
                     foreach (var fileObj in currentItems)
@@ -59,9 +56,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
                             var stream = new MemoryStream();
                             sftp.GetFile(filePath, stream);
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.FileStreamedtoMemory {0}", DateTime.Now);
                             byte[] data = stream.ToArray();
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.StreamConvertedtoByte {0}", DateTime.Now);
                             List<CDR> CDRs = new List<CDR>();
                             using (var ms = stream)
                             {
@@ -123,50 +118,22 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
                                     CDRs.Add(cdr);
                                 }
                             }
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.ArrayToList {0}", DateTime.Now);
 
                             inputArgument.OutputQueue.Enqueue(new ImportedCDRBatch()
                             {
                                 cdrs = CDRs
                             });
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Enqueued {0}", DateTime.Now);
                             sftp.Rename(filePath, newFilePath);
-                            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Start ImportCDRs.DoWork.Renamed {0}", DateTime.Now);
 
                         }
                     }
                 }
                 sftp.Disconnect();
             }
-            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "End ImportCDRs.DoWork {0}", DateTime.Now);
+            handle.SharedInstanceData.WriteTrackingMessage(BusinessProcess.Entities.BPTrackingSeverity.Information, "Finshed Importing CDRs to Transit Database");
         }
 
-        //protected override void DoWork(ImportCDRsInput inputArgument, AsyncActivityHandle handle)
-        //{
-        //    string SFTP_Dir = System.Configuration.ConfigurationManager.AppSettings["SFTP_Dir"].ToString();
-        //    var sftp = new Rebex.Net.Sftp();
-        //    sftp.Connect(System.Configuration.ConfigurationManager.AppSettings["SERVER"].ToString());
-        //    sftp.Login(System.Configuration.ConfigurationManager.AppSettings["Server_Username"].ToString(), System.Configuration.ConfigurationManager.AppSettings["Server_Pasword"].ToString());
-        //    if (sftp.GetConnectionState().Connected)
-        //    {
-        //        sftp.ChangeDirectory(SFTP_Dir);
-        //        SftpItemCollection currentItems = sftp.GetList();
-        //        if (currentItems.Count > 0)
-        //        {
-        //            foreach (var fileObj in currentItems)
-        //            {
-
-        //                String filePath = SFTP_Dir + "/" + fileObj.Name;
-        //                String newFilePath = SFTP_Dir + "/" + fileObj.Name.Replace(".old", ".DAT");
-        //                try { sftp.Rename(filePath, newFilePath); }
-        //                catch { }
-
-        //            }
-        //        }
-        //        sftp.Disconnect();
-        //    }
-        //}
-
+        
         protected override ImportCDRsInput GetInputArgument(System.Activities.AsyncCodeActivityContext context)
         {
             return new ImportCDRsInput
