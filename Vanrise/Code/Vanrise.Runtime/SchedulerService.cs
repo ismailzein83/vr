@@ -18,9 +18,11 @@ namespace Vanrise.Runtime
             {
                 if (item.IsEnabled && item.Status != Entities.SchedulerTaskStatus.Started && item.TaskTrigger.CheckIfTimeToRun())
                 {
+                    Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item.TaskAction.RawExpressions);
+
                     //TODO: change this to asynchronous
                     dataManager.UpdateTaskStatus(item.TaskId, Entities.SchedulerTaskStatus.Started);
-                    item.TaskAction.Execute();
+                    item.TaskAction.Execute(evaluatedExpressions);
                     dataManager.UpdateTaskStatus(item.TaskId, Entities.SchedulerTaskStatus.Stopped);
                 }
                     

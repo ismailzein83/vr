@@ -51,7 +51,6 @@
     <Compile Include="SchedulerTaskTrigger.cs" />
     <Compile Include="SchedulerTaskTriggerType.cs" />
     <Compile Include="TimeSchedulerTaskTrigger.cs" />
-    <Compile Include="WFSchedulerTaskAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

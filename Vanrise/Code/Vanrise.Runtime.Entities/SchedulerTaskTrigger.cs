@@ -8,6 +8,9 @@ namespace Vanrise.Runtime.Entities
 {
     public abstract class SchedulerTaskTrigger
     {
+
         public abstract bool CheckIfTimeToRun();
+
+        public abstract Dictionary<string, string> EvaluateExpressions(Dictionary<string, string> rawExpressions);
     }
 }

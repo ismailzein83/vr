@@ -27,11 +27,7 @@ namespace Vanrise.Runtime.Entities
         {
             string[] timeParts = TimeToRun.Split(':');
 
-            Console.WriteLine("Original Date to run {0}", DateToRun);
-
             DateToRun = DateToRun.Date;
-
-            Console.WriteLine("Original Date to run {0}", DateToRun);
 
             if (timeParts.Length > 0)
             {
@@ -48,26 +44,34 @@ namespace Vanrise.Runtime.Entities
                 }
             }
 
-            bool isTimeToRun = DateToRun.Date.Equals(DateTime.Now.Date)
+            return DateToRun.Date.Equals(DateTime.Now.Date)
                 && DateToRun.Hour.Equals(DateTime.Now.Hour)
                 && DateToRun.Minute.Equals(DateTime.Now.Minute);
-
-            Console.WriteLine("Hours to add are", timeParts[0]);
-
-            Console.WriteLine("DatetoRun is {0}", DateToRun);
-            
-            Console.WriteLine("DatetoRun Date is {0}", DateToRun.Date);
-            Console.WriteLine("DatetoRun Hour is {0}", DateToRun.Hour);
-            Console.WriteLine("DatetoRun Minute is {0}", DateToRun.Minute);
-
-            Console.WriteLine("Current Date is {0}", DateTime.Now.Date);
-            Console.WriteLine("Current Hour is {0}", DateTime.Now.Hour);
-            Console.WriteLine("Current Minute is {0}", DateTime.Now.Minute);
-            
-            Console.WriteLine("Is Time to run {0}: ", isTimeToRun);
-
-            return isTimeToRun;
         }
 
+
+        public override Dictionary<string, string> EvaluateExpressions(Dictionary<string, string> rawExpressions)
+        {
+            Dictionary<string, string> evaluatedExpressions = null;
+
+            if (rawExpressions != null)
+            {
+                evaluatedExpressions = new Dictionary<string, string>();
+
+                foreach (KeyValuePair<string, string> kvp in rawExpressions)
+                {
+                    string placeHolder = kvp.Value;
+                    if (placeHolder == "ScheduleTime")
+                    {
+                        Console.WriteLine("Original Time is {0}", DateToRun);
+                        placeHolder = DateToRun.ToString();
+                    }
+
+                    evaluatedExpressions.Add(kvp.Key, placeHolder);
+                }
+            }
+
+            return evaluatedExpressions;
+        }
     }
 }
