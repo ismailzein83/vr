@@ -15,15 +15,18 @@ namespace Vanrise.BusinessProcess.Extensions
 
         public BaseProcessInputArgument ProcessInputArguments { get; set; }
 
-        public override void Execute()
+        public override void Execute(Dictionary<string, string> evaluatedExpressions)
         {
             Console.WriteLine("WFSchedulerTaskAction started...");
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
-            {
-                InputArguments = this.ProcessInputArguments
-            });
+            if(evaluatedExpressions != null)
+                ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
+
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
+            //{
+            //    InputArguments = this.ProcessInputArguments
+            //});
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
         }
