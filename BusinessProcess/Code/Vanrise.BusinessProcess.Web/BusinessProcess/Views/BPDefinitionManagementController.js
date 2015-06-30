@@ -19,8 +19,8 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
                 };
 
                 modalScope.onProcessInputsCreated = function () {
-                    $scope.searchClicked();
                     VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
+                    $scope.searchClicked();
                 };
             }
         });
