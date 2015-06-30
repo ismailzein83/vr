@@ -128,6 +128,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BusinessProcessController - Copy.cs" />
     <Compile Include="Controllers\BusinessProcessController.cs" />
+    <Compile Include="Controllers\QueueController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\BPInstanceModel.cs" />
     <Compile Include="Models\BPTrackingMessageModel.cs" />
@@ -138,6 +139,7 @@
     <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\BPTrackingSeverityEnum.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
+    <Content Include="BusinessProcess\Services\QueueAPIService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPManagement.html" />
@@ -146,6 +148,8 @@
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />
     <Content Include="BusinessProcess\Views\InstanceEditorController.js" />
+    <Content Include="BusinessProcess\Views\QueueItemManagement.html" />
+    <Content Include="BusinessProcess\Views\QueueItemManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
