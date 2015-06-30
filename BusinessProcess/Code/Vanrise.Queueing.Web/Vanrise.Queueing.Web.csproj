@@ -60,8 +60,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Vanrise.Web.Base">
-      <HintPath>..\..\..\Vanrise\Code\Vanrise.Web.Base\bin\Vanrise.Web.Base.dll</HintPath>
+    <Reference Include="Vanrise.Web.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
