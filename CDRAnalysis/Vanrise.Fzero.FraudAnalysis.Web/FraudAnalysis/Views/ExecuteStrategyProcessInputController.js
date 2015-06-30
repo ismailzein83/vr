@@ -52,8 +52,8 @@
                         InputArguments: {
                             $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                             StrategyIds: $scope.selectedStrategyIds,
-                            FromDate: new Date(runningDate.getYear(), runningDate.getMonth(), runningDate.getDay(), runningDate.getHours(), 0, 0),
-                            ToDate: new Date(runningDate.getYear(), runningDate.getMonth(), runningDate.getDay(), runningDate.getHours(), 59, 59),
+                            FromDate:   new Date(runningDate.setHours(runningDate.getHours(), 0, 0, 0)) ,
+                            ToDate: new Date(runningDate.setHours(runningDate.getHours(), 59, 59, 999)),
                             PeriodId: $scope.selectedPeriod.Id
                         }
                     });
