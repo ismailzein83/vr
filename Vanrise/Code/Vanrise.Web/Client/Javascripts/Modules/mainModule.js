@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum) {
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, MenuAPIService, PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService) {
     
     var cookieUserToken = $cookies['TOne_LoginTokenCookie'];
 
@@ -115,7 +115,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
     }
     $rootScope.ishideView = function (val) {
-        var obj = $scope.findExsiteObj($rootScope.hisnav, val, 'name')
+        var obj = $scope.findExisteObj($rootScope.hisnav, val, 'name')
         if (obj != null) {
             return obj.show;
         }
@@ -155,58 +155,44 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     $timeout(tick, $scope.tickInterval);
     MenuAPIService.GetMenuItems().then(function (response) {
         angular.forEach(response, function (value, key, itm) {
-            value.color = $scope.colors[key % $scope.colors.length];
             value.keyclass = key % 16;
             value.isSelected = false;
+            value.parent = null;
             matchParentNode(value);
-            $scope.menuItemsSearch[$scope.menuItemsSearch.length] = value;
+          
         });    
-       
         $scope.menuItems = response;
     })
     function matchParentNode(obj) {
+       
         if (obj.Childs != null) {
-
             angular.forEach(obj.Childs, function (value, key, itm) {               
-                value.parent = obj;
+                value.parent = obj ;
                 value.isSelected = false;
-                matchParentNode(value);
-                $scope.menuItemsSearch[$scope.menuItemsSearch.length] = value;
+                matchParentNode(value);               
             });
           
 
         }       
 
     }
-    $scope.getLeafItemClass = function (item) {
-        var current = decodeURIComponent(location.href);
-        item.isSelected = current.indexOf(item.Location) > -1;
-        $scope.menuItemsSearch[$scope.menuItemsSearch.indexOf(item.parent)].isSelected = item.isSelected;
-        return item.isSelected;
+    $scope.getLeafItemClass = function (item) {       
+            var current = decodeURIComponent(location.href);
+           return current.indexOf(item.Location) > -1;       
+            
     };
-    $scope.getParentItemClass = function (item) {
-       
-        return $scope.menuItemsSearch[$scope.menuItemsSearch.indexOf(item)].isSelected;
-    }
-   
-    $scope.logfunc = function (item) {
-        //[$scope.menuItemsSearch.indexOf(item)]
-        console.log($scope.menuItemsSearch);
-    }
-
     $scope.getParentItemClass = function (item) {
         var match = (item.Name == "NOC") ? "Analytics" : item.Name.replace(/\s/g, '');
         if (location.href.indexOf(match) != -1)
-          return true;
+            return true;
     };
-   
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
     var host = pathArray[2];
     $scope.baseurl = protocol + '//' + host;
     $scope.carrierAccountSelectionOption = 1;
 
-    $scope.findExsite = function (arr, value, attname) {
+    $scope.findExiste = function (arr, value, attname) {
         var index = -1;
         for (var i = 0; i < arr.length; i++) {
             if (arr[i][attname] == value) {
@@ -215,7 +201,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         return index;
     }
-    $scope.findExsiteObj = function (arr, value, attname) {
+    $scope.findExisteObj = function (arr, value, attname) {
         var obj = null;
         for (var i = 0; i < arr.length; i++) {
             if (arr[i][attname] == value) {
