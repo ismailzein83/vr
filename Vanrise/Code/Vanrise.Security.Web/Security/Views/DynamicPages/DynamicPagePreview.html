@@ -25,7 +25,7 @@
                 <div class="list-group" ng-sortable="itemsSortable">
                     <vr-columns ng-repeat="viewWidget in viewWidgets" colnum="{{viewWidget.NumberOfColumns}}">
                         <vr-directivewrapper directive="viewWidget.Setting.Directive" on-ready="viewWidget.onElementReady" settings="viewWidget.Setting.Settings"
-                                             retrievedataonload="true" filter="filter"></vr-directivewrapper>
+                                             retrievedataonload="true" filter="filter" previewmode="false"></vr-directivewrapper>
                     </vr-columns>
                 </div>
 

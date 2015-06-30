@@ -11,15 +11,15 @@ function DynamicPageManagementController($scope, DynamicPageAPIService, VRModalS
         };
         $scope.menuActions = [
            {
-                 name: "Edit",
-                 clicked: function (dataItem) {
-                            updatePage(dataItem);
-                        }
+               name: "Edit",
+               clicked: function (dataItem) {
+                   updatePage(dataItem);
+               }
            },
            {
                name: "Delete",
                clicked: function (dataItem) {
-                   updatePage(dataItem);
+                   deletePage(dataItem);
                }
            }];
         $scope.mainGridPagerSettings = {
@@ -55,6 +55,17 @@ function DynamicPageManagementController($scope, DynamicPageAPIService, VRModalS
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', dataItem, settings);
+
+    }
+    function deletePage(dataItem) {
+        var message = "Do you want to delete " + dataItem.Name;
+        VRNotificationService.showConfirmation(message).then(function (response) {
+            if (response == true) {
+                console.log(dataItem.ViewId);
+            }
+
+        });
+      
 
     }
 

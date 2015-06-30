@@ -63,5 +63,21 @@ namespace Vanrise.Security.Business
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
             return dataManager.GetView(viewId);
         }
+        public Vanrise.Entities.UpdateOperationOutput<object> DeleteView(int viewId)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            bool updateActionSucc = dataManager.DeleteView(viewId);
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            }
+
+            return updateOperationOutput;
+        }
     }
 }                               

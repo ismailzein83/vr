@@ -1,20 +1,21 @@
 ﻿'use strict';
 
 
-app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
+app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'BIConfigurationAPIService', 'VRModalService', 'UtilsService', 'VRNotificationService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             onReady: '=',
             settings: '=',
-            filter:'='
+            filter: '=',
+            previewmode: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, VRModalService);
+            var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1,BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
             biChart.initializeController();
 
             biChart.defineAPI();
@@ -29,16 +30,28 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 }
             }
         },
-        template: function () {
-            return '<vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart>';
+        template: function (element, attrs) {          
+            return getBIChartTemplate(attrs.previewmode);
         }
 
     };
+    function getBIChartTemplate(previewmode) {
+        if (previewmode!=true) {
+            return '<vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart>';
+        }
+        else if (previewmode==true)
+            return '<vr-label>{{ctrl}}</vr-label>'
+          
 
-    function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, VRModalService) {
+
+    }
+    function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
 
         var chartAPI;
-
+        var Measures = [];
+        var Entities = [];
+        var directiveSettings = {};
+        loadSettings();
         function initializeController() {
             ctrl.onChartReady = function (api) {
                 chartAPI = api;
@@ -58,10 +71,10 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         }
 
         function retrieveData() {
-
             return BIVisualElementService1.retrieveData1(ctrl, settings)
+
                 .then(function (response) {
-                           // console.log(response);
+                           
                     if (ctrl.isDateTimeGroupedData) {
 
                                 BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, false);
@@ -69,19 +82,20 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                             }
                             else
                                 refreshPIEChart(response);
-                        });
+                });
+
         }
 
         function refreshPIEChart(response) {
 
             var chartDefinition = {
                 type: "pie",
-                title: settings.EntityType,
+                title: directiveSettings.EntityType.DisplayName,
                 yAxisTitle: "Value"
             };
 
             var seriesDefinitions = [{
-                title: settings.MeasureTypes[0],
+                title: directiveSettings.MeasureTypes[0].DisplayName,
                 titlePath: "EntityName",
                 valuePath: "Values[0]"
             }];
@@ -108,7 +122,39 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
             chartAPI.renderChart(response, chartDefinition, seriesDefinitions, xAxisDefinition);
         }
-
+        function loadSettings() {
+            UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
+             .then(function () {
+                 var MeasureTypes = [];
+                 for (var i = 0; i < settings.MeasureTypes.length; i++) {
+                     var value = UtilsService.getItemByVal(Measures, settings.MeasureTypes[i], 'Name');
+                     if (value != null)
+                         MeasureTypes.push(value);
+                 }
+                 directiveSettings = {
+                     EntityType: UtilsService.getItemByVal(Entities, settings.EntityType, 'Name'),
+                     MeasureTypes: MeasureTypes
+                 }
+             })
+             .finally(function () {
+             }).catch(function (error) {
+             });
+           
+        }
+        function loadMeasures() {
+            return BIConfigurationAPIService.GetMeasures().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    Measures.push(itm);
+                });
+            });
+        }
+        function loadEntities() {
+            return BIConfigurationAPIService.GetEntities().then(function (response) {
+                angular.forEach(response, function (itm) {
+                    Entities.push(itm);
+                });
+            });
+        }
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }

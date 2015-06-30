@@ -16,6 +16,9 @@
     function UpdateView(view) {
         return BaseAPIService.post("/api/View/UpdateView", view);
     }
+    function DeleteView(viewId) {
+        return BaseAPIService.post("/api/View/DeleteView", viewId);
+    }
     function GetView(ViewId) {
         return BaseAPIService.get("/api/View/GetView",
             {

@@ -117,6 +117,11 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
             //  return false;
         }
+        public bool DeleteView(int viewId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Delete", viewId);
+            return (recordesEffected > 0);
+        }
 
         public View GetView(int viewId)
         {

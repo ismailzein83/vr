@@ -34,7 +34,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-        $scope.viewContents=[];
+        $scope.viewContents = [];
+        $scope.addedwidgets = [];
         $scope.selectedNumberOfColumns;
         $scope.save = function () {
             buildViewObjFromScope();
@@ -49,6 +50,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 NumberOfColumns: $scope.selectedNumberOfColumns.value
             }
             $scope.viewContents.push(viewContent);
+            $scope.addedwidgets.push($scope.selectedWidget);
             $scope.selectedWidget = null;
         };
         $scope.removeViewContent = function (viewContent) {

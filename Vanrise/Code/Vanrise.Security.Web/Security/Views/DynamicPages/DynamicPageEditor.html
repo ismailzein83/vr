@@ -60,16 +60,18 @@
                 </vr-actionbar>
                 <div>
                     <vr-row>
-                        <vr-columns ng-repeat="viewContent in viewContents" colnum="{{viewContent.NumberOfColumns}}">
+                        <vr-columns ng-repeat="addedwidget in addedwidgets" colnum="{{addedwidget.NumberOfColumns}}">
                             <i class="glyphicon glyphicon-th-list handeldrag"></i>
-                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(viewContent)"></i>
+                            <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedwidget)"></i>
                             <!--<vr-textbox value="visualElement.Name" label="{visualElement.Name}"></vr-textbox>-->
+                            <vr-directivewrapper directive="addedwidget.Setting.Directive" on-ready="addedwidget.onElementReady" settings="addedwidget.Setting.Settings"
+                                                 retrievedataonload="false" previewmode="true"></vr-directivewrapper>
                         </vr-columns>
                     </vr-row>
                 </div>
 
             </div>
-            <div ng-show="previewSelected" ng-if="viewContents.length>0">
+            <div ng-if="previewSelected && viewContents.length>0">
                 <div ng-include="'Client/Modules/Security/Views/DynamicPages/DynamicPagePreview.html'"></div>
             </div>
         </vr-form>
