@@ -55,24 +55,26 @@
                                 <label>
                                     <input type="checkbox" checked data-column="3">End Date</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="4">MSISDN</label>
+                                    <input type="checkbox" checked data-column="4">Total Seconds</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="5">Received Cli</label>
+                                    <input type="checkbox" checked data-column="5">MSISDN</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="6">Request Id</label>
+                                    <input type="checkbox" checked data-column="6">Received Cli</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="7">Start Call</label>
+                                    <input type="checkbox" checked data-column="7">Request Id</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="8">End Call</label>
+                                    <input type="checkbox" checked data-column="8">Start Call</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="9">Response Code</label>
+                                    <input type="checkbox" checked data-column="9">End Call</label>
                                 <label>
-                                    <input type="checkbox" checked data-column="10">Error Message</label>
+                                    <input type="checkbox" checked data-column="10">Response Code</label>
+                                <label>
+                                    <input type="checkbox" checked data-column="11">Error Message</label>
                             </div>
                         </div>
                     </div>
                     <div class="tools">
-                        <a class="btn green " id="LnkRefresh">Refresh <i class=" icon-refresh "></i></a>
+                        <a class="btn green" id="LnkRefresh">Refresh <i class=" icon-refresh "></i></a>
                     </div>
                 </div>
                 <div class="portlet-body">

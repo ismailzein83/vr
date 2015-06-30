@@ -129,6 +129,7 @@
     <!-- END PAGE CONTENT-->
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ScriptContent" Runat="Server">
+<script src="assets/scripts/app.js"></script>
 <script>
     jQuery(document).ready(function () {
         App.init();
