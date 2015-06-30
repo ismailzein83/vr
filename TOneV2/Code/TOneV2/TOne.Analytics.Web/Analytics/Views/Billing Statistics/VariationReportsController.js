@@ -108,6 +108,10 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             $scope.isLoading = false;
             $scope.filterObject = buildFilter();
             //  console.log($scope.filterObject);
+            console.log($scope.selectedReportOption.value);
+            $scope.show = $scope.selectedReportOption.value == 3 || $scope.selectedReportOption.value == 7;
+            console.log($scope.show);
+
         });
     }
 
