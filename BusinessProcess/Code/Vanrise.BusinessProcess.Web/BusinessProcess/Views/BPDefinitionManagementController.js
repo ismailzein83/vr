@@ -13,18 +13,19 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         {
             onScopeReady: function (modalScope) {
                 modalScope.title = "Start New Instance";
-                modalScope.onProcessInputCreated = function (instance) {
+                modalScope.onProcessInputCreated = function (processInstanceId) {
                     $scope.searchClicked();
+                    showBPTrackingModal(processInstanceId);
                 };
             }
         });
     }
 
 
-    function showBPTrackingModal(BPInstanceObj) {
+    function showBPTrackingModal(processInstanceId) {
 
         VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
-            BPInstanceID: BPInstanceObj.ProcessInstanceID
+            BPInstanceID: processInstanceId
         }, {
             onScopeReady: function (modalScope) {
                 modalScope.title = "Tracking";
@@ -103,8 +104,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
 
     $scope.processInstanceClicked = function (dataItem) {
-        showBPTrackingModal(dataItem);
-
+        showBPTrackingModal(dataItem.ProcessInstanceID);
     }
 
 

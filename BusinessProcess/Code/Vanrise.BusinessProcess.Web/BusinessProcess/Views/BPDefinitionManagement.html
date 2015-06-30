@@ -3,12 +3,12 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-
                 <vr-columns colnum="2">
                     <vr-textbox label="Title:" value="title"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>
+
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
@@ -17,16 +17,15 @@
             </vr-actionbar>
         </vr-row>
 
-
         <div>
             <vr-row>
-                <vr-columns colnum="12">
+                <vr-columns width="fullrow">
                     <vr-datagrid datasource="filteredDefinitions" loadmoredata="loadMoreData" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Process'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Running Instances'" field="'RunningInstances'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridexpandablerow>
 
-                            <vr-choices >
+                            <vr-choices>
                                 <vr-choice isselected="dataItem.isRunningTabShown">Running Instances</vr-choice>
                                 <vr-choice isselected="dataItem.isScheduledTabShow">Scheduled Instances</vr-choice>
                             </vr-choices>
@@ -41,9 +40,9 @@
                                 Schedule will be here
                             </div>
 
-                               
 
-</vr-datagridexpandablerow>
+
+                        </vr-datagridexpandablerow>
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
