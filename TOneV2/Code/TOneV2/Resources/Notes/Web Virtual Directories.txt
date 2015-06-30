@@ -14,3 +14,5 @@
 	Security		C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 	BusinessProcess	C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 	Runtime			C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+	Queueing		C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
+					
