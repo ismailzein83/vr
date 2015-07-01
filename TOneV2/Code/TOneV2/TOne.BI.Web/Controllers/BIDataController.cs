@@ -29,5 +29,12 @@ namespace TOne.BI.Web.Controllers
             GenericEntityManager manager = new GenericEntityManager();
             return manager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
         }
+        [HttpGet]
+        public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, [FromUri] string[] measureTypesNames)
+        {
+            GenericEntityManager manager = new GenericEntityManager();
+            return manager.GetMeasureValues(fromDate, toDate, measureTypesNames);
+        }
+        
     }
 }

@@ -1,34 +1,45 @@
-﻿<div ng-controller="Security_DynamicPagePreviewController">
+﻿<vr-panel ng-controller="Security_DynamicPagePreviewController">
     <vr-form name="formDynamicPagePreview">
-        <vr-row>
-            <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
-            </vr-columns>
-            <vr-columns width="normal">
-                <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
-            </vr-columns>
-            <vr-columns width="normal">
-                <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
-                           selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
-            </vr-columns>
-        </vr-row>
-    </vr-form>
-    <vr-row>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="fromDate" label="From:" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" value="toDate" label="To:" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select datasource="timeDimensionTypes" datatextfield="description" datavaluefield="value" label="Grouped By"
+                               selectedvalues="selectedTimeDimensionType" isrequired hidefilterbox></vr-select>
+                </vr-columns>
+            </vr-row>
+           </div>
+</vr-form>
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
                 <vr-button type="Search" formname="formDynamicPagePreview" data-onclick="Search"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
-        <div vr-loader="isGettingData">
-            <vr-row>
-                <div class="list-group" ng-sortable="itemsSortable">
-                    <vr-columns ng-repeat="viewWidget in viewWidgets" colnum="{{viewWidget.NumberOfColumns}}">
-                        <vr-directivewrapper directive="viewWidget.Setting.Directive" on-ready="viewWidget.onElementReady" settings="viewWidget.Setting.Settings"
-                                             retrievedataonload="true" filter="filter" previewmode="false"></vr-directivewrapper>
+    <div vr-loader="isGettingData">
+            <vr-row ng-if="summaryWidgets.length>0">
+                <vr-section title="Module">
+                    <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                        <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
+                            <vr-directivewrapper directive="summaryWidget.Setting.Directive" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
+                                                 retrievedataonload="true" filter="filter"></vr-directivewrapper>
+                        </vr-columns>
+                    </div>
+                </vr-section>
+            </vr-row>
+            <vr-row ng-if="bodyWidgets.length>0">
+                <div class="list-group dragbelzone" ng-sortable="itemsSortable">
+                    <vr-columns ng-repeat="bodyWidget in bodyWidgets" colnum="{{bodyWidget.NumberOfColumns}}">
+                        <vr-directivewrapper directive="bodyWidget.Setting.Directive" on-ready="bodyWidget.onElementReady" settings="bodyWidget.Setting.Settings"
+                                             retrievedataonload="true" filter="filter"></vr-directivewrapper>
                     </vr-columns>
                 </div>
-
-            </vr-row>
-        </div>
-</div>
+        </vr-row>
+    </div>
+</vr-panel>

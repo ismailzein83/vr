@@ -38,7 +38,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
     function getBIChartTemplate(previewmode) {
         console.log(previewmode);
         if (previewmode!='true') {
-            return '<vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart>';
+            return '<vr-section title="{{ctrl.settings.EntityType}}/{{ctrl.settings.MeasureTypes}}"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></vr-section>';
         }
         else
             return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox>'

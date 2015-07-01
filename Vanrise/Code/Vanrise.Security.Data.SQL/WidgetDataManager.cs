@@ -60,6 +60,7 @@ namespace Vanrise.Security.Data.SQL
                 WidgetDefinitionId = GetReaderValue<int>(reader, "WidgetDefinitionId"),
                 WidgetDefinitionName = reader["WidgetDefinitionName"] as string,
                 DirectiveName = reader["DirectiveName"] as string,
+                WidgetDefinitionSetting = Vanrise.Common.Serializer.Deserialize<WidgetDefinitionSetting>(reader["WidgetDefinitionSetting"] as string),
                 Setting = Vanrise.Common.Serializer.Deserialize<WidgetSetting>(reader["Setting"] as string)
             };
             return instance;

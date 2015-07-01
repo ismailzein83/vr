@@ -116,6 +116,7 @@
     <Content Include="Security\Constants\ChartDefinitionTypeEnum.js" />
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
+    <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />

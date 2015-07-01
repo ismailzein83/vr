@@ -4,7 +4,8 @@ app.service('BIDataAPIService', function (BaseAPIService) {
     return ({
         GetMeasureValues: GetMeasureValues,
         GetEntityMeasuresValues: GetEntityMeasuresValues,
-        GetTopEntities: GetTopEntities
+        GetTopEntities: GetTopEntities,
+    
     });
 
 
@@ -44,5 +45,6 @@ app.service('BIDataAPIService', function (BaseAPIService) {
             });
     }
 
+    
 
 });

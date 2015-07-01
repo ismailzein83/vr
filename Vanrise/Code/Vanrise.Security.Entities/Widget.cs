@@ -20,6 +20,7 @@ namespace Vanrise.Security.Entities
         public string WidgetDefinitionName { get; set; }
         public string Name { get; set; }
         public string DirectiveName { get; set; }
+        public WidgetDefinitionSetting WidgetDefinitionSetting { get; set; }
         public WidgetSetting Setting { get; set; }
     }
 }

@@ -25,5 +25,8 @@ namespace TOne.BI.Data
         IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(string entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
 
         IEnumerable<EntityRecord> GetTopEntities(string entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, params string[] measureTypesNames);
+
+        Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames);
+        
     }
 }

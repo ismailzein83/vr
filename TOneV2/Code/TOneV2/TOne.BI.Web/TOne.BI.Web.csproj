@@ -135,6 +135,7 @@
     <Content Include="BI\Directives\bi-visualelement-service.js" />
     <Content Include="BI\Directives\bi-visualelement-service1.js" />
     <Content Include="BI\Directives\vr-datagrid-bi-directive.js" />
+    <Content Include="BI\Directives\vr-summary-bi-directive.js" />
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
     <Content Include="BI\Directives\vr-chart-bi-directive.js" />

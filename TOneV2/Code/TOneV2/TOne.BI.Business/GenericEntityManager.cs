@@ -55,5 +55,17 @@ namespace TOne.BI.Business
             dataManager.EntityDefinitions = configurations.GetEntities();
             return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames);
         }
+
+        public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
+        {
+
+            IBIConfigurationDataManager configurations = BIDataManagerFactory.GetDataManager<IBIConfigurationDataManager>();
+            IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
+            dataManager.MeasureDefinitions = configurations.GetMeasures();
+            dataManager.EntityDefinitions = configurations.GetEntities();
+            return dataManager.GetMeasureValues(fromDate, toDate, measureTypeNames);
+        }
+
+        
     }
 }

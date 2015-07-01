@@ -369,6 +369,44 @@ namespace TOne.BI.Data.SQL
             return null;
         }
 
+
+        public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
+        {
+            return GetTimeValuesRecord( fromDate, toDate, null, measureTypeNames);
+        }
+        private Decimal[] GetTimeValuesRecord(DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
+        {
+            Decimal[] rslt = new Decimal[measureTypesNames.Length]; ;
+            string[] measureColumns;
+            string expressionsPart;
+            GetMeasuresColumns(measureTypesNames, out measureColumns, out expressionsPart);
+            string columnsPart = BuildQueryColumnsPart(measureColumns);
+            string[] filters = new string[additionalFilters != null ? additionalFilters.Length + 1 : 1];
+            filters[0] = GetDateFilter(fromDate, toDate);
+            if (additionalFilters != null)
+            {
+                for (int i = 0; i < additionalFilters.Length; i++)
+                {
+                    filters[i + 1] = additionalFilters[i];
+                }
+            }
+            string filtersPart = BuildQueryFiltersPart(filters);
+            string query = BuildQuery(columnsPart, filtersPart, expressionsPart);
+
+            ExecuteReaderMDX(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+
+                    rslt = new Decimal[measureColumns.Length];
+                    for (int i = 0; i < measureColumns.Length; i++)
+                    {
+                        rslt[i] = Convert.ToDecimal(reader[measureColumns[i]]);
+                    }
+                }
+            });
+            return rslt;
+        }
         
         #endregion
 

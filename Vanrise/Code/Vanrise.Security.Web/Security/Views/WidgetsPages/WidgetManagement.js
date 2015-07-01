@@ -59,14 +59,8 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
     }
 
     function load() {
-        $scope.isInitializing = true;
-        UtilsService.waitMultipleAsyncOperations([loadData]).finally(function () {
-            $scope.isInitializing = false;
-        }).catch(function (error) {
-            VRNotificationService.notifyExceptionWithClose(error, $scope);
-        });
+        loadData();
     }
-
     function loadData() {
         $scope.isGettingData = true;
         return WidgetAPIService.GetAllWidgets().then(function (response) {
@@ -75,7 +69,8 @@ function WidgetManagementController($scope, UtilsService, WidgetAPIService, VRMo
             });
         }).finally(function () {
             $scope.isGettingData = false;
-        });
+        }).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope)});
 
     }
     

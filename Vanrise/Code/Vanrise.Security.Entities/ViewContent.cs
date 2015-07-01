@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class Content
+    public class ViewContent
     {
-        public int WidgetId { get; set; }
-        public string NumberOfColumns { get; set; }
-
+        public List<Content> SummaryContents { get; set; }
+        public List<Content> BodyContents { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum) {
     loadParameters();
     defineScope();
     load();
@@ -31,12 +31,14 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.selectedRoles = [];
         $scope.subViewConnector = {};
         $scope.moduleId;
-        $scope.close = function () {
-            $scope.modalContext.closeModal()
-        };
-        $scope.viewContents = [];
+        $scope.summaryContents = [];
+        $scope.bodyContents = [];
         $scope.addedwidgets = [];
-        $scope.selectedNumberOfColumns;
+        $scope.summaryWidgets = [];
+        $scope.bodyWidgets = [];
+        $scope.selectedColumnWidth;
+        $scope.addedSummaryWidgets = [];
+        $scope.addedBodyWidgets=[];
         $scope.save = function () {
             buildViewObjFromScope();
             if ($scope.isEditMode) 
@@ -44,17 +46,43 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             else
                 saveView();
         };
+        $scope.close = function () {
+            $scope.modalContext.closeModal()
+        };
+        $scope.onSectionChanged = function () {
+            switch ($scope.selectedSection.value) {
+                case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; break;
+                case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; break;
+            }
+            $scope.selectedWidget = null;
+        }
         $scope.addViewContent = function () {
             var viewContent = {
                 WidgetId: $scope.selectedWidget.Id,
-                NumberOfColumns: $scope.selectedNumberOfColumns.value
+                NumberOfColumns: $scope.selectedColumnWidth.value
             }
-            $scope.viewContents.push(viewContent);
-            $scope.addedwidgets.push($scope.selectedWidget);
+            var viewWidget = {
+                Widget: $scope.selectedWidget,
+                NumberOfColumns: $scope.selectedColumnWidth.value
+            }
+            switch($scope.selectedSection.value)
+            {
+                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.summaryContents.push(viewContent); break;
+                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget); $scope.bodyContents.push(viewContent); break;
+            }
             $scope.selectedWidget = null;
+            
         };
+        $scope.itemsSortable = { handle: '.handeldrag', animation: 150 };
         $scope.removeViewContent = function (viewContent) {
-            $scope.viewContents.splice($scope.viewContents.indexOf(viewContent), 1);
+            switch ($scope.selectedSection.value) {
+                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1);
+                    $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1); break;
+                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
+                    $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1); break;
+            }
+            
+
         };
         $scope.$watch('beTree.currentNode', function (newObj, oldObj) {
             if ($scope.beTree && angular.isObject($scope.beTree.currentNode)) {
@@ -99,23 +127,30 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             Users: selectedUsersIDs,
             Groups: selectedRolesIDs
         };
+        var ViewContent = {
+            SummaryContents: $scope.summaryContents,
+            BodyContents: $scope.bodyContents
+        }
         $scope.View = {
             Name: $scope.pageName,
             ModuleId: $scope.moduleId,
             Audience: Audiences,
-            Content: $scope.viewContents
+            ViewContent: ViewContent
         };
         if($scope.isEditMode )
             $scope.View.ViewId = $scope.filter.ViewId;
     }
 
     function load() {
-        defineNumberOfColumns();
+        defineColumnWidth();
+        defineWidgetSections();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
+
             if ($scope.isEditMode) {
                 fillEditModeData();
             }
+
             $scope.isInitializing = false;
             $scope.isGettingData = false;
         }).catch(function (error) {
@@ -167,26 +202,42 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
     function loadWidgets() {
         return WidgetAPIService.GetAllWidgets().then(function (response) {
+           
             angular.forEach(response, function (itm) {
-                $scope.widgets.push(itm);
+                for(var i=0;i<itm.WidgetDefinitionSetting.Sections.length;i++)
+                {
+                    var value=itm.WidgetDefinitionSetting.Sections[i];
+                    if(value==WidgetSectionEnum.Summary.value)
+                        $scope.summaryWidgets.push(itm);
+                    else if(value==WidgetSectionEnum.Body.value)
+                        $scope.bodyWidgets.push(itm);
+                }
             });
         });
 
     }
 
-    function defineNumberOfColumns() {
-        $scope.numberOfColumns = [
-            {
-                value: "6",
-                description: "Half Row"
-            },
+    function defineColumnWidth() {
+        $scope.columnWidth = [
             {
                 value: "12",
                 description: "Full Row"
+            },
+            {
+                value: "2",
+                description: "Half Row"
+            },
+            {
+                value: "3",
+                description: "1/3 Row"
+            },
+            {
+                value: "4",
+                description: "Quarter Row"
             }
         ];
 
-        $scope.selectedNumberOfColumns = $scope.numberOfColumns[0];
+        $scope.selectedColumnWidth = $scope.columnWidth[0];
     }
 
     function loadUsers() {
@@ -204,6 +255,16 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 $scope.roles.push(role);
                 }
 )});
+    }
+
+
+    function defineWidgetSections() {
+        $scope.sections = [];
+        for (var m in WidgetSectionEnum) {
+            $scope.sections.push(WidgetSectionEnum[m]);
+        }
+
+        $scope.selectedSection = $scope.sections[0];
     }
 
 }

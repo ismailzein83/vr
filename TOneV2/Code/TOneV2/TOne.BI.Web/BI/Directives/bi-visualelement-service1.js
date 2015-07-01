@@ -7,6 +7,7 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
 
     function retrieveData1(visualElementController, visualElementSettings) {
         console.log(visualElementController);
+        if(visualElementSettings.OperationType!=undefined)
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
@@ -15,7 +16,11 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
                 visualElementController.isDateTimeGroupedData = true;
                 return BIDataAPIService.GetMeasureValues(visualElementController.filter.timeDimensionType.value, visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
                 break;
+
         }
+        else
+            return BIDataAPIService.GetMeasureValues(visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
+
     }
 
 });

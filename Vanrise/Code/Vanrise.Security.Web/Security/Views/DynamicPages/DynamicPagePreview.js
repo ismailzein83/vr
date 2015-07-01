@@ -1,6 +1,6 @@
-﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPagePreviewController.$inject = ['$scope', 'ViewAPIService', 'WidgetAPIService', 'BITimeDimensionTypeEnum', 'UtilsService', 'VRNotificationService', 'VRNavigationService','WidgetSectionEnum'];
 
-function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService) {
+function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, BITimeDimensionTypeEnum, UtilsService, VRNotificationService, VRNavigationService, WidgetSectionEnum) {
     var viewId;
     loadParameters();
     defineScope();
@@ -15,6 +15,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     function defineScope() {
         $scope.allWidgets = [];
         $scope.viewContent = [];
+
+        $scope.summaryContents = [];
+        $scope.bodyContents = [];
+        $scope.summaryWidgets = [];
+        $scope.bodyWidgets = [];
         $scope.viewWidgets = [];
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
@@ -37,7 +42,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             }    
         };
         getData();
-
+        
     }
 
     function defineTimeDimensionTypes() {
@@ -73,11 +78,12 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
 
     function getData() {
+
         if (viewId != undefined) {
             $scope.isGettingData = true;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets, loadViewByID])
                  .finally(function () {
-                     loadViewWidgets($scope.allWidgets, $scope.viewContent);
+                     loadViewWidgets($scope.allWidgets, $scope.bodyContents, $scope.summaryContents);
                      $scope.isGettingData = false;
                  });
         }
@@ -85,31 +91,51 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.isGettingData = true;
             UtilsService.waitMultipleAsyncOperations([loadAllWidgets])
                 .finally(function () {
-                    loadViewWidgets($scope.allWidgets, $scope.$parent.viewContents);
+                    loadViewWidgets($scope.allWidgets, $scope.$parent.bodyContents, $scope.$parent.summaryContents);
                     $scope.isGettingData = false;
                 });
 
         }   
     }
 
-    function loadViewWidgets(allWidgets, viewContents) {
-        for (var i = 0; i < viewContents.length; i++) {
-            var viewContent = viewContents[i];
-            var value = UtilsService.getItemByVal(allWidgets, viewContent.WidgetId, 'Id');
+    function loadViewWidgets(allWidgets, BodyContents, SummaryContents) {
+        for (var i = 0; i < BodyContents.length; i++) {
+            var bodyContent = BodyContents[i];
+            var value = UtilsService.getItemByVal(allWidgets, bodyContent.WidgetId, 'Id');
             if (value != null)
             {
-                value.NumberOfColumns = viewContent.NumberOfColumns;
-                addElementReady(value);
+                value.NumberOfColumns = bodyContent.NumberOfColumns;
+                addBodyWidget(value);
             }
+            
 
         }
+    
+     for (var i = 0; i < SummaryContents.length; i++) {
+            var summaryContent = SummaryContents[i];
+            var value = UtilsService.getItemByVal(allWidgets, summaryContent.WidgetId, 'Id');
+            if (value != null) {
+                value.NumberOfColumns = summaryContent.NumberOfColumns;
+                addSummaryWidget(value);
+            }
+
+
+     }
     }
 
-    function addElementReady(viewWidget) {
-        viewWidget.onElementReady = function (api) {
-            viewWidget.API = api;
+    function addBodyWidget(bodyWidget) {
+        bodyWidget.onElementReady = function (api) {
+            bodyWidget.API = api;
         };
-        $scope.viewWidgets.push(viewWidget);
+        $scope.bodyWidgets.push(bodyWidget);
+        console.log($scope.bodyWidgets);
+    }
+    function addSummaryWidget(summaryWidget) {
+        summaryWidget.onElementReady = function (api) {
+            summaryWidget.API = api;
+        };
+        $scope.summaryWidgets.push(summaryWidget);
+      //  console.log($scope.summaryWidgets);
     }
 
     function loadAllWidgets() {
@@ -121,7 +147,12 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     function loadViewByID() {
         return ViewAPIService.GetView(viewId).then(function (response) {
-            $scope.viewContent = response.Content;
+         
+            $scope.summaryContents = response.ViewContent.SummaryContents;
+         
+            $scope.bodyContents = response.ViewContent.BodyContents;
+            
+           
         });
     }
 

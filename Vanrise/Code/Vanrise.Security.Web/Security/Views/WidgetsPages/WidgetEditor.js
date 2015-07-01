@@ -115,7 +115,8 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
     }
 
     function loadWidgets() {
-            return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
+        return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
+            console.log(response);
                 angular.forEach(response, function (itm) {
                     $scope.widgets.push(itm);
                 });

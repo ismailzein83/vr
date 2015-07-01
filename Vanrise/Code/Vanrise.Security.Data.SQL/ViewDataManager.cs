@@ -80,9 +80,9 @@ namespace Vanrise.Security.Data.SQL
                 Url = reader["Url"] as string,
                 ModuleName = reader["ModuleName"] as string,
                 ModuleId = (int)reader["ModuleId"],
-                Audience = Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string),
+                Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 Type = (ViewType)reader["Type"],
-                Content = Common.Serializer.Deserialize<List<Content>>(reader["Content"] as string),
+                ViewContent = Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string),
             };
             return instance;
         }
@@ -90,10 +90,10 @@ namespace Vanrise.Security.Data.SQL
         public bool SaveView(View view, out int insertedId)
         {
             string serialziedContent = null;
-            if (view.Content != null)
-                serialziedContent = Common.Serializer.Serialize(view.Content,true);
+            if (view.ViewContent.BodyContents.Count > 0 || view.ViewContent.SummaryContents.Count > 0)
+                serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
             string serialziedAudience = null;
-            if (view.Audience.Groups != null || view.Audience.Users != null)
+            if (view.Audience.Groups.Count > 0 || view.Audience.Users.Count > 0)
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             object viewId;
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
@@ -106,8 +106,8 @@ namespace Vanrise.Security.Data.SQL
         public bool UpdateView(View view)
         {
             string serialziedContent = null;
-            if (view.Content != null)
-                serialziedContent = Common.Serializer.Serialize(view.Content, true);
+            if (view.ViewContent != null)
+                serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
             string serialziedAudience = null;
             if (view.Audience.Groups != null || view.Audience.Users!=null)
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
@@ -138,7 +138,7 @@ namespace Vanrise.Security.Data.SQL
                 ModuleId = (int) reader["Module"],
                 RequiredPermissions = this.ParseRequiredPermissionsString(GetReaderValue<string>(reader, "RequiredPermissions")),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
-                Content = Common.Serializer.Deserialize<List<Content>>(reader["Content"] as string),
+                ViewContent = Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string),
                 Type=(ViewType) reader["Type"],
                 
 
