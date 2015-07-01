@@ -8,7 +8,8 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
         scope: {
             onReady: '=',
             settings: '=',
-            filter:'='
+            filter: '=',
+            previewmode: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -33,17 +34,28 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
                 }
             }
         },
-        template: function () {
+        template: function (element, attrs) {
+            return getDataGridTemplate(attrs.previewmode);
+            return 
+        }
+
+    };
+
+    function getDataGridTemplate(previewmode) {
+        console.log(previewmode);
+        if (previewmode != 'true') {
             return '<vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
                                         + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
                                     + '</vr-datagrid>';
         }
+        else
+            return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.entityType.description" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.measureTypes" vr-disabled="true"></vr-textbox>';
 
-    };
 
 
+    }
     function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1) {
 
         var gridAPI;

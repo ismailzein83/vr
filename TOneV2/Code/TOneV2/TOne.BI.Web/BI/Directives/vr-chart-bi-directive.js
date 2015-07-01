@@ -36,11 +36,12 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
     };
     function getBIChartTemplate(previewmode) {
-        if (previewmode!=true) {
+        console.log(previewmode);
+        if (previewmode!='true') {
             return '<vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart>';
         }
-        else if (previewmode==true)
-            return '<vr-label>{{ctrl}}</vr-label>'
+        else
+            return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox>'
           
 
 

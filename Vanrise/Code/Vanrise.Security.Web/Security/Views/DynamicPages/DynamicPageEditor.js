@@ -1,6 +1,6 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'DynamicPageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'MenuAPIService', 'WidgetAPIService', 'RoleAPIService', 'UsersAPIService', 'ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, DynamicPageAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, RoleAPIService, UsersAPIService, ViewAPIService, UtilsService, VRNotificationService, VRNavigationService) {
     loadParameters();
     defineScope();
     load();
@@ -64,7 +64,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function saveView() {
-        return DynamicPageAPIService.SaveView($scope.View).then(function (response) {
+        return ViewAPIService.SaveView($scope.View).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Page", response)) {
                 if ($scope.onPageAdded != undefined)
                     $scope.onPageAdded(response.InsertedObject);
@@ -77,7 +77,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
 
     function updateView() {
        
-        return DynamicPageAPIService.UpdateView($scope.View).then(function (response) {
+        return ViewAPIService.UpdateView($scope.View).then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Page", response)) {
                 if ($scope.onPageUpdated != undefined)
                     $scope.onPageUpdated(response.UpdatedObject);
