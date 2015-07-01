@@ -117,12 +117,12 @@
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
-    <Content Include="Security\Services\APIServices\DynamicPageAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityApiService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionApiService.js" />
     <Content Include="Security\Services\APIServices\RoleAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
+    <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Views\BusinessEntityEditor.html" />
