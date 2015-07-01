@@ -31,13 +31,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
     }
-
     $scope.logout = function () {
         window.location.href = '/Security/Login';
     }
 
     $scope.showMenu = function (e) {
-
         var $this = angular.element(e.currentTarget);
         clearTimeout(dropdownHidingTimeoutHandlerc);
         if (!$this.hasClass('open')) {
@@ -45,16 +43,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
         }
     }
-    $scope.hideMenu = function (e) {
-        var $this = angular.element(e.currentTarget);
-        dropdownHidingTimeoutHandlerc = setTimeout(function () {
-            if ($this.hasClass('open')) {
-                $('.dropdown-toggle', $this).dropdown('toggle');
-                $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
-            }
-        }, 200);
+    //$scope.hideMenu = function (e) {
+    //    var $this = angular.element(e.currentTarget);
+    //    dropdownHidingTimeoutHandlerc = setTimeout(function () {
+    //        if ($this.hasClass('open')) {
+    //            $('.dropdown-toggle', $this).dropdown('toggle');
+    //            $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
+    //        }
+    //    }, 200);
 
-    }
+    //}
     $(window).resize(function () {
         var w = window.innerWidth;
         if (w >= 1200)
@@ -62,29 +60,27 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         else
             $scope.toogled = false;
     });
-    $scope.menuItemsCurrent = -1;
-    $scope.setIndex = function (i, e) {
-        $('.panel-heading').removeClass('active-menu-parent');
-        if ($scope.menuItemsCurrent == i) {
-            $scope.menuItemsCurrent = -1;
+    $scope.menuItemsCurrent = null;
+    $scope.setIndex = function (item) {
+        if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
+            $scope.menuItemsCurrent = null;
+
         }
         else {
-            $scope.menuItemsCurrent = i;
-            var $this = angular.element(e.currentTarget);
+            $scope.menuItemsCurrent = item;
         }
 
     }
-    $scope.menusubItemsCurrent = -1;
-    $scope.setIndexSub = function (i, e) {
-        if ($scope.menusubItemsCurrent == i) {
-            $scope.menusubItemsCurrent = -1;
+    $scope.menusubItemsCurrent = null;
+    $scope.setIndexSub = function (o) {
+        if ($scope.menusubItemsCurrent != null && $scope.menusubItemsCurrent.Id == o.Id) {
+            $scope.menusubItemsCurrent = null;
         }
         else {
-            $scope.menusubItemsCurrent = i;
-
+            $scope.menusubItemsCurrent = o;
         }
-
     }
+   
     $scope.parent = null;
     $scope.child = null;
     $scope.setActiveClass = function (e, p, c) {
@@ -121,29 +117,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         }
         else return false;
 
-    }
-    $scope.colors= [
-        "#e22337",
-        "#20407d",
-        "#01a082",
-        "#f79624",
-        "#9e1f63",
-        "#01a4b5",
-        "#ef4136",        
-        "#ef4136",
-        "#3ab44b",
-        "#7e3f98",
-        "#00adef",
-        "#c3162a",
-        "#4f7ac8",
-        "#8cc540",
-        "#272264",
-        "#0074d9"
-    ]
-    $scope.level = -1;
-    $scope.getlastlevel = function () {       
-        return  $scope.level++;
-    }
+    }  
     $scope.clock = ""; // initialise the time variable
     $scope.tickInterval = 1000 //ms
 
@@ -151,9 +125,9 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         $scope.clock = Date.now() // get the current time
         $timeout(tick, $scope.tickInterval); // reset the timer
     }
-    $scope.menuItemsSearch = [];
-    var allMenuItems = [];
     $timeout(tick, $scope.tickInterval);
+
+    var allMenuItems = [];   
     MenuAPIService.GetMenuItems().then(function (response) {
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;
@@ -203,45 +177,22 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     }
 
     function setMenuItemSelectedFlag(menuItem, isSelected) {
+        $scope.menusubItemsCurrent = null;
         menuItem.isSelected = isSelected;
         if (menuItem.parent != null)
             setMenuItemSelectedFlag(menuItem.parent, isSelected);
+        if(menuItem.parent == null && isSelected == true)
+            $scope.menuItemsCurrent = menuItem;
+        if (menuItem.parent != null && menuItem.Childs != null && isSelected == true)
+            $scope.menusubItemsCurrent = menuItem;
+        
     }
-
-    $scope.getLeafItemClass = function (item) {       
-            var current = decodeURIComponent(location.href);
-           return current.indexOf(item.Location) > -1;       
-            
-    };
-    $scope.getParentItemClass = function (item) {
-        var match = (item.Name == "NOC") ? "Analytics" : item.Name.replace(/\s/g, '');
-        if (location.href.indexOf(match) != -1)
-            return true;
-    };
+   
     var pathArray = location.href.split('/');
     var protocol = pathArray[0];
     var host = pathArray[2];
     $scope.baseurl = protocol + '//' + host;
-    $scope.carrierAccountSelectionOption = 1;
-
-    $scope.findExiste = function (arr, value, attname) {
-        var index = -1;
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i][attname] == value) {
-                index = i
-            }
-        }
-        return index;
-    }
-    $scope.findExisteObj = function (arr, value, attname) {
-        var obj = null;
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i][attname] == value) {
-                obj = arr[i];
-            }
-        }
-        return obj;
-    }
+    $scope.carrierAccountSelectionOption = 1;   
     var numberReg = /^\d+$/;
     $scope.isNumber = function (s) {
         return String(s).search(numberReg) != -1
@@ -274,31 +225,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var res = String(d).search(dateReg) != -1;
         return res;
     }
-    $scope.testDate = function (s) {
-        var res;
-        var d = "";
-        if (s == '' || s == null) {
-            return 0
-        }
-        else if (s != '' || s == undefined) {
-            // alert(s)
-            if (s && (s instanceof Date)) {
-                var d = $scope.dateToString(s);
-            }
-            else d = s;
-            var test = String(d).search(dateReg) != -1;
-            if (test)
-                return 1;
-            else
-                return 2
-        }
-
-
-
-    }
-
-
-
+   
 });
 
 app.controller('loginCtrl', function loginCtrl($scope) {

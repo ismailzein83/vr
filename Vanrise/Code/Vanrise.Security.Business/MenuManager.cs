@@ -56,7 +56,7 @@ namespace Vanrise.Security.Business
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, Dictionary<string, Dictionary<string, Flag>> effectivePermissions, HashSet<string> breakInheritanceEntities)
         {
-            MenuItem menu = new MenuItem() { Name = module.Name, Location = module.Url, Icon = module.Icon };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon };
 
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 

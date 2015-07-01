@@ -738,7 +738,7 @@ input.ui-grid-filter-input[type="text"] {
     color: #666 !important;
 }
 .active-menu a:active {    
-     background-color: #E3DEDE  !important;
+    background-color: #E3DEDE  !important;
     color: #666 !important;
 }
 .active-menu-parent{
@@ -759,6 +759,11 @@ input.ui-grid-filter-input[type="text"] {
     padding: 3px 0px 3px 25px !important;
     color: #000;
     text-align:left !important;
+
+}
+.div-link{
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
 
 }
 /*.dll-menu a:before{
@@ -860,6 +865,19 @@ input.ui-grid-filter-input[type="text"] {
 }
 .innerlist a:before { 
     content: "";
+    border-style: solid;
+    display: inline-block;
+    height: 0px;
+    width: 0px;
+    left: -5px;
+    top: -3px;
+    position: relative;
+    border-width: 0.2em;
+    border-color:  #111;
+}
+ 
+.innerlist div:before { 
+    content: "";
     border-color: transparent #111;
     border-style: solid;
     border-width: 0.35em 0 0.35em 0.45em;
@@ -870,7 +888,7 @@ input.ui-grid-filter-input[type="text"] {
     top: -1px;
     position: relative;
 }
-.innerlist a.down:before { 
+.innerlist div.down:before { 
     content: "";
     border-right: 0.35em solid transparent;
     border-top: 0.45em solid ;
@@ -882,6 +900,16 @@ input.ui-grid-filter-input[type="text"] {
     left: -5px;
     top: -1px;
     position: relative;
+}
+
+.dropdown-menu .div-link{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857;
+    color: #333;
+    white-space: nowrap;
 }
 .menu-item-list-ligth{
      background-color: #E3DEDE  !important;

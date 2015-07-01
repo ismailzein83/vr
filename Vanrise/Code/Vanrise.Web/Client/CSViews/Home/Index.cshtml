@@ -23,17 +23,13 @@
                 <img src="Client/Images/logoonheader.png" class="minilogo" />
                 <img src="Client/Images/01.png" class="img1" />
                 <img src="Client/Images/02.png" class="img2" />
-               
-                
-
-            </div>            
+            </div>
         </div>
     </nav>
-    <div  class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
+    <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
         <div class="inner-sub ">
             Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
         </div>
-       
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
@@ -42,20 +38,16 @@
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-show="toogled==true">
                 <div class="panel panel-default toggle-panel ">
                     <div class="panel-heading dll-menu" style="height: 41px;">
-
                         <span style="font-size: 20px; margin: 6px 4px; position: absolute; right: 5px; top: 5px;" ng-click="toggledpanel()" class=" hand-cursor glyphicon glyphicon-chevron-left "></span>
-
-
                     </div>
                 </div>
-              
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div ng-class="getParentItemClass(item) ? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" aria-controls="collapse-{{$index}}" ng-click="setIndex($index,$event)">
+                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" ng-click="setIndex(item)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 1px;"></span>
                             <span style="position: relative; top: -3px;">{{::item.Name}}</span>
                             <span class=" hand-cursor  toggel">
-                                <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent == {{$index}} ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
+                                <span ng-if="item.Childs.length>0" class="glyphicon glyphicon" ng-class=" menuItemsCurrent.Id == item.Id ? 'glyphicon-minus':'glyphicon-plus'" style="font-size: 10px; top: 10px;"></span>
                             </span>
                         </span>
 
@@ -64,31 +56,29 @@
                                 <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
                             </li>
                         </ul>
-
-
-
                     </div>
-
-                    <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel-collapse collapse " role="tabpanel" aria-labelledby="collapse-{{$index}}">
+                    <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel panel-collapse" ng-show="menuItemsCurrent.Id == item.Id" >
                         <div class="panel-body ">
                             <ul class="nav">
-                                <li ng-if="c.Childs == undefined" class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-click="setActiveClass($event,item , c) ;  " ng-repeat="c in item.Childs">
-                                    <a class=" menulink" ng-click="setIndexSub($index,$event);logfunc(c)" ng-class="getLeafItemClass(c)?'itemselcted':'notselcted'" ng-href=" {{::c.Location}}">{{::c.Name}} </a>
+                                <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''" ng-repeat="c in item.Childs">
+                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href=" {{::c.Location}}">{{::c.Name}} </a>
                                 </li>
 
-                                <li ng-if="c.Childs != undefined" ng-repeat="c in item.Childs" class="dll-menu menu-item-list-ligth ">
-                                    <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="setIndexSub($index,$event)" >{{::c.Name}}</div>
-                                    <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent == $index">
-                                        <li ng-repeat="a in c.Childs" class="waves-effect waves-classic ">
-                                            <a class=" menulink" style="color:#333;" ng-class="getLeafItemClass(a)?'itemselcted':'notselcted'" ng-href="{{::a.Location}}" ng-click="setActiveLeaf(a)">{{::a.Name}}</a>
-                                        </li>
-                                    </ul>
-                                </li>
                             </ul>
+                            <div ng-if="c.Childs.length > 0" ng-repeat="c in item.Childs" class="dll-menu menu-item-list-ligth ">
+                                <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
+                                <ul style="padding-left:15px" class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
+                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic " ng-class="a.isSelected?'selected-node':''">
+                                        <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
-                <div class="clock" >
+                <div class="clock">
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
 
                     <span style="color: #6a6a6a;font-weight:bold" ng-bind="clock  | date:'hh:mm'"> </span>
@@ -96,31 +86,28 @@
             </div>
 
             <div id="collapsedmenu" style="background-color:#ddd;height:100%;width:40px;position:fixed;z-index:10" ng-show="toogled==false">
-                <div class="dropdown dropdown-custom-serf leftdiv" >
-                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" style="height: 43px; top: 10px;" ng-click="toggledpanel()" >
+                <div class="dropdown dropdown-custom-serf leftdiv">
+                    <div class="dropdown-toggle hand-cursor glyphicon glyphicon glyphicon-chevron-right dropdown-item" style="height: 43px; top: 10px;" ng-click="toggledpanel()">
 
                     </div>
                 </div>
 
-                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-style="{'background-color':'#{{item.color}}; !important'}" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                     <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" ng-class="item.Icon" id="dropdownMenuCu-{{$index}}" aria-expanded="true" data-toggle="dropdown">
 
                     </div>
                     <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{$index}}">
                         <li role="presentation">
-
-                            <label class="titel-groupe"> {{::item.name}}</label>
+                            <label class="titel-groupe"> {{::item.Name}}</label>
                         </li>
-                        <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs">
-
-                            <a ng-href="{{::c.Location}}" ng-click="setActiveClass(null,item , c);setIndexSub($index,$event)">{{::c.Name}}</a>
-
+                        <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs"  ng-class="c.isSelected?'selected-node':''">
+                            <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
                         </li>
                         <li ng-if="c.Childs != undefined" class="innerlist" ng-repeat="c in item.Childs">
-                            <a ng-class="menusubItemsCurrent == $index ? 'down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub($index,$event) ; setActiveClass(null,item , c);" href="">{{::c.name}}</a>
-                            <ul class="nav" ng-show="menusubItemsCurrent == $index">
-                                <li ng-repeat="a in c.Childs" class="innerlist">
-                                    <a class="menulink" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                            <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)" >{{::c.Name}}</div>
+                            <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
+                                <li ng-repeat="a in c.Childs" class="innerlist" >
+                                    <a class="menulink" ng-class="a.isSelected?'selected-url bold-item':''" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                 </li>
                             </ul>
                         </li>
@@ -128,17 +115,17 @@
                 </div>
                 <div class="clock collapsed-clock">
                     <span ng-bind="clock  | date:'EEE dd MMM , yyyy'"></span>
-                   
+
                     <span style="color: #6a6a6a; font-weight: bold" ng-bind="clock  | date:'hh:mm'"> </span>
                 </div>
             </div>
         </div>
-    
+
         <!-- /#sidebar-wrapper -->
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid vr-container">
-                <div class="row">                    
+                <div class="row">
 
                     <div class="panel-primary panel-vr his-nav" ng-if="hisnav.length > 0 ">
                         <div class="panel-heading">
