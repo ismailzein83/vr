@@ -303,10 +303,9 @@ public partial class ToBeReportedCases : BasePage
 
 
                 GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
-                ReportParameter[] parameters = new ReportParameter[2];
+                ReportParameter[] parameters = new ReportParameter[3];
                 parameters[0] = new ReportParameter("ReportID", report.ReportID);
                 parameters[1] = new ReportParameter("RecommendedAction", txtRecomnededAction.Text);
-                rvToOperator.LocalReport.SetParameters(parameters);
 
                 ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(CurrentUser.User.ID)).User.Signature);
                 rvToOperator.LocalReport.DataSources.Add(SignatureDataset);
@@ -344,32 +343,44 @@ public partial class ToBeReportedCases : BasePage
 
 
 
+                parameters[2] = new ReportParameter("HideSignature", "true");
+                rvToOperator.LocalReport.SetParameters(parameters);
+                rvToOperator.LocalReport.Refresh();
+                string filenameExcel = ExportReportToExcel(report.ReportID + ".xls");
+
+
+
+
+
+                parameters[2] = new ReportParameter("HideSignature", "false");
+                rvToOperator.LocalReport.SetParameters(parameters);
+                rvToOperator.LocalReport.Refresh();
+                string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf");
+
+
 
                 if (ddlReportFormat.SelectedValue == "PDF")
                 {
-
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(ExportReportToPDF(report.ReportID + ".pdf"), Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(ExportReportToPDF(report.ReportID + ".pdf"), Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 
                 }
                 else if (ddlReportFormat.SelectedValue == "Excel")
                 {
-                    ExportReportToPDF(report.ReportID + ".pdf");
-
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(ExportReportToExcel(report.ReportID + ".xls"), Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
-                        EmailManager.SendReporttoMobileOperator(ExportReportToExcel(report.ReportID + ".xls"), Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileOperator(filenameExcel, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
 
                     }
 

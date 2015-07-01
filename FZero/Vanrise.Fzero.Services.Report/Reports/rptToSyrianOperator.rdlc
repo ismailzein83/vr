@@ -107,7 +107,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Expected </Value>
+                              <Value>Mobile</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -119,7 +119,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Resolution</Value>
+                              <Value>Operator</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -145,14 +145,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox9">
+                    <Textbox Name="MobileOperatorName">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>N/A</Value>
+                              <Value>=Fields!MobileOperatorName.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -162,7 +162,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <rd:DefaultName>MobileOperatorName</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -931,6 +931,61 @@
                 </TablixCell>
               </TablixCells>
             </TablixRow>
+            <TablixRow>
+              <Height>0.3125in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Total: </Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value>=Count(Fields!AttemptDateTime.Value)</Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                                <TextDecoration>None</TextDecoration>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                    <ColSpan>7</ColSpan>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell />
+                <TablixCell />
+                <TablixCell />
+                <TablixCell />
+                <TablixCell />
+                <TablixCell />
+              </TablixCells>
+            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -952,12 +1007,15 @@
             <TablixMember>
               <Group Name="Details1" />
             </TablixMember>
+            <TablixMember>
+              <KeepWithGroup>Before</KeepWithGroup>
+            </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
         <Top>2.73833in</Top>
         <Left>0.3125in</Left>
-        <Height>0.94792in</Height>
+        <Height>1.26042in</Height>
         <Width>6.10432in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1133,7 +1191,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>3.80729in</Top>
+        <Top>4.05729in</Top>
         <Left>0.30729in</Left>
         <Height>0.59375in</Height>
         <Width>6.13021in</Width>
@@ -1314,7 +1372,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>4.55208in</Top>
+        <Top>4.80208in</Top>
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>6.125in</Width>
@@ -1384,7 +1442,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>4.77083in</Top>
+        <Top>5.02083in</Top>
         <Left>0.30729in</Left>
         <Height>0.42188in</Height>
         <Width>1.69358in</Width>
@@ -1400,7 +1458,7 @@
         <Value>signature</Value>
         <MIMEType>image/gif</MIMEType>
         <Sizing>FitProportional</Sizing>
-        <Top>4.77083in</Top>
+        <Top>5.02083in</Top>
         <Left>2.00087in</Left>
         <Height>0.42188in</Height>
         <Width>4.43664in</Width>
@@ -1533,7 +1591,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>5.53in</Top>
+        <Top>5.78in</Top>
         <Left>0.3125in</Left>
         <Height>0.25in</Height>
         <Width>6.13542in</Width>
@@ -1640,7 +1698,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>5.88021in</Top>
+        <Top>6.13021in</Top>
         <Left>0.30729in</Left>
         <Height>1.13542in</Height>
         <Width>6.13021in</Width>
@@ -1853,7 +1911,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>7.19271in</Top>
+        <Top>7.44271in</Top>
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
         <Width>4.11609in</Width>
@@ -2037,7 +2095,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>7.56771in</Top>
+        <Top>7.81771in</Top>
         <Left>0.30729in</Left>
         <Height>0.21875in</Height>
         <Width>6.13021in</Width>
@@ -2160,7 +2218,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsViewGeneratedCalls</DataSetName>
-        <Top>7.78906in</Top>
+        <Top>8.03906in</Top>
         <Left>0.3125in</Left>
         <Height>0.42188in</Height>
         <Width>6.125in</Width>
@@ -2830,7 +2888,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>8.21094in</Height>
+    <Height>8.46094in</Height>
     <Style />
   </Body>
   <Width>6.44792in</Width>

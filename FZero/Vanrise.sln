@@ -17,6 +17,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Vanrise.Fzero.Bypass.WebSit
 		SccProvider = "SAK"
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{1ca1b8a4-c6ac-499d-a763-8276a68c415e}|Vanrise.Fzero.Bypass.dll;{A0A85889-CED2-4DE6-BDA9-FEF2C10EB564}|Vanrise.CommonLibrary.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_2240"
 		Debug.AspNetCompiler.PhysicalPath = "Vanrise.Fzero.Bypass.WebSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2240\"
