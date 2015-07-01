@@ -31,32 +31,33 @@
     <div vr-loader="isLoading">
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings">
+                <vr-datagrid datasource="data" pagersettings="mainGridPagerSettings" data-on-ready="onMainGridReady">
                     <!--ng-grid="gridOptions"-->
                     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'_AVG'" field="'PeriodTypeValueAverage'" type="'Number'"></vr-datagridcolumn><!--periodTypeValue+-->
-                    <vr-datagridcolumn headertext="'_%'" field="'PeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Previous_%'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
+                    <vr-datagridcolumn headertext="'_AVG'" field="'PeriodTypeValueAverage'" type="'Number'" summaryfield="'TotalAverage'"></vr-datagridcolumn><!--periodTypeValue+-->
+                    <vr-datagridcolumn headertext="'_%'" field="'PeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Previous_%'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPreviousPercentage'"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'" summaryfield="'TotalValues[' + $index + ']'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn> <!--ng-if="selectedReportOption.value==3 || selectedReportOption.value==7  "-->
                     <vr-datagridexpandablerow>
-                        <div ng-if="!show" ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsDestinations.html' "></div>
-                        <div ng-if="show"  ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>
+                        <div ng-if="!viewScope.show " ng-include=" '/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsDestinations.html' "></div>
+                        <div ng-if="viewScope.show " ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>
+                        <!--<div>{{viewScope.selectedReportOption.value == 3 || viewScope.selectedReportOption.value == 7}}</div>-->
                     </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-columns>
-        </vr-row>
-        <vr-row>
+        </vr-row> 
+        <!--<vr-row>
             <vr-columns colnum="12">
                 <vr-datagrid>
                     <vr-datagridcolumn headertext="'Total_AVG'" field="'TotalAverage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Total_%'" field="'summarydata.TotalPercentage'" type="'Number'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'TotalPrevious_%'" field="'summarydata.TotalPreviousPercentage'" type="'Number'"></vr-datagridcolumn>
-                    <!--<vr-datagridcolumn ng-repeat="item in TotalValues" field="'Values[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>-->
+                    <!--<vr-datagridcolumn ng-repeat="item in TotalValues" field="'Values[' + $index + ']'" headertext="item" type="'Number'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
-        </vr-row>
-        <vr-row>
+        </vr-row> -->
+        <!--<vr-row>
             <vr-columns colnum="2">
                 {{summarydata.TotalAverage}}
             </vr-columns>
@@ -70,7 +71,7 @@
                 Total Values
                 {{summarydata.TotalValues}}
             </vr-columns>
-        </vr-row>
+        </vr-row>-->
     </div>
     <div vr-loader="isLoading">
         <vr-row>

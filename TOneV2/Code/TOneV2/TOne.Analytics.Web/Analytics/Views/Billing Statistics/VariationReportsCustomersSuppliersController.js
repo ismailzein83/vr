@@ -1,23 +1,27 @@
 ﻿VariationReportsCustomersSuppliersController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VariationReportOptionsEnum', 'EntityTypeEnum'];
 function VariationReportsCustomersSuppliersController($scope, BillingStatisticsAPIService, VariationReportOptionsEnum, EntityTypeEnum) {
+
     var fromDate;
     var periodCount;
     var timePeriod;
     var reportOption;
+    var mainGridAPI;
 
     defineScope();
     load();
 
     function defineScope() {
-        $scope.data = [];
+        $scope.customersData = [];
+        $scope.suppliersData = [];
         $scope.totalData = [];
         $scope.timeRanges = [];
         $scope.TotalValues = [];
         $scope.periodValuesArray = [];
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+        }
         loadFilters();
         getData();
-
-
     }
     function load() {
 
@@ -32,23 +36,58 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
     function getData() {
         console.log(reportOption);
         $scope.isGettingData = true;
-        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, reportOption, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
+        console.log($scope.dataItem.ID);
+        var selectedReportOption = $scope.viewScope.selectedReportOption;
+        console.log(selectedReportOption);
+        var entityType;
+        switch (selectedReportOption) {
+            case VariationReportOptionsEnum.TopDestinationMinutes:
+                selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
+                entityType = EntityTypeEnum.Zone;
+                break;
+            case VariationReportOptionsEnum.TopDestinationAmount:
+                selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
+                entityType = EntityTypeEnum.Zone;
+                break;
+        }
+        console.log(selectedReportOption);
+        $scope.ZoneName = $scope.dataItem.Name;
+        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
             $scope.timeRanges.length = 0;
-            $scope.data.length = 0;
+            $scope.customersData.length = 0;
             $scope.totalData.length = 0;
             $scope.TotalValues.length = 0;
             $scope.timeRanges = $scope.viewScope.timeRanges;
             setTimeout(function () {
                 $scope.$apply(function () {
-                    angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
+                    angular.forEach(response.VariationReportsData, function (item) { $scope.customersData.push(item); $scope.periodValuesArray.push(item.Values); });
                     $scope.summarydata = response;
                     $scope.TotalValues = response.TotalValues;
+                    mainGridAPI.setSummary($scope.summarydata);
                 });
             }, 1);
         }).finally(function () {
             $scope.isGettingData = false;
             //     console.log($scope.data);
         });
+        //return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
+        //    $scope.timeRanges.length = 0;
+        //    $scope.suppliersData.length = 0;
+        //    $scope.totalData.length = 0;
+        //    $scope.TotalValues.length = 0;
+        //    $scope.timeRanges = $scope.viewScope.timeRanges;
+        //    setTimeout(function () {
+        //        $scope.$apply(function () {
+        //            angular.forEach(response.VariationReportsData, function (item) { $scope.suppliersData.push(item); $scope.periodValuesArray.push(item.Values); });
+        //            $scope.summarydata = response;
+        //            $scope.TotalValues = response.TotalValues;
+        //            mainGridAPI.setSummary($scope.summarydata);
+        //        });
+        //    }, 1);
+        //}).finally(function () {
+        //    $scope.isGettingData = false;
+        //    //     console.log($scope.data);
+        //});
     }
 
 

@@ -5,6 +5,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
     var periodCount;
     var timePeriod;
     var reportOption;
+    var mainGridAPI;
 
     defineScope();
     load();
@@ -18,9 +19,12 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         $scope.timeRanges = [];
         $scope.TotalValues = [];
         $scope.periodValuesArray = [];
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+        }
         loadFilters();
         getData();
-
+      
 
     }
     function load() {
@@ -57,10 +61,10 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationMinutes;
               //  entityType = EntityTypeEnum.Customers;
                 break;
-            case VariationReportOptionsEnum.TopDestinationMinutes:
-                selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
-                entityType = EntityTypeEnum.Zone;
-                break;
+            //case VariationReportOptionsEnum.TopDestinationMinutes:
+            //    selectedReportOption = VariationReportOptionsEnum.InBoundMinutes;
+            //    entityType = EntityTypeEnum.Zone;
+            //    break;
             case VariationReportOptionsEnum.InBoundAmount:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 entityType = EntityTypeEnum.Customer;
@@ -73,10 +77,10 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
                 //  entityType = EntityTypeEnum.Customers;
                 break;
-            case VariationReportOptionsEnum.TopDestinationAmount:
-                selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
-                entityType = EntityTypeEnum.Zone;
-                break;
+            //case VariationReportOptionsEnum.TopDestinationAmount:
+            //    selectedReportOption = VariationReportOptionsEnum.InBoundAmount;
+            //    entityType = EntityTypeEnum.Zone;
+            //    break;
 
             case VariationReportOptionsEnum.Profit:
                 selectedReportOption = VariationReportOptionsEnum.TopDestinationAmount
@@ -99,6 +103,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
                     angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
                     $scope.summarydata = response;
                     $scope.TotalValues = response.TotalValues;
+                    mainGridAPI.setSummary($scope.summarydata);
                 });
             }, 1);  
         }).finally(function () {

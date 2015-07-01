@@ -3,6 +3,7 @@
 function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum,EntityTypeEnum) {
 
     var chartAPI;
+    var mainGridAPI;
     defineScope();
     load();
 
@@ -28,6 +29,9 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                return getVariationReportsData();
             }
         };
+        $scope.onMainGridReady = function (api) {
+            mainGridAPI = api;
+        }
         $scope.onSearch = function () {
             $scope.mainGridPagerSettings.currentPage = 1;
             return getVariationReportsData();
@@ -78,6 +82,8 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
     function getVariationReportsData() {
         $scope.isLoading = true;
         var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
+        $scope.show = $scope.selectedReportOption.value == 3 || $scope.selectedReportOption.value == 7;
+        console.log($scope.show);
         return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow,EntityTypeEnum.none.value,'').then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
@@ -98,10 +104,11 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
                     angular.forEach(response.VariationReportsData, function (item) { $scope.data.push(item); $scope.periodValuesArray.push(item.Values); });
                     $scope.summarydata = response;
                     $scope.TotalValues = response.TotalValues;
-                   
-                    
+                    console.log($scope.summarydata);
+                    mainGridAPI.setSummary($scope.summarydata); 
                 });
             }, 1);
+          
             updateChart($scope.timeRanges, response.VariationReportsData);
 
         }).finally(function () {
@@ -109,9 +116,6 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             $scope.filterObject = buildFilter();
             //  console.log($scope.filterObject);
             console.log($scope.selectedReportOption.value);
-            $scope.show = $scope.selectedReportOption.value == 3 || $scope.selectedReportOption.value == 7;
-            console.log($scope.show);
-
         });
     }
 
