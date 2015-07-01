@@ -7,7 +7,7 @@
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined; 
+                   // var headerText = iAttrs.headertext != undefined ? $scope.$eval(iAttrs.headertext) : undefined; 
                     var field = iAttrs.field != undefined ? $scope.$eval(iAttrs.field) : undefined;
                     var summaryField = iAttrs.summaryfield != undefined ? $scope.$eval(iAttrs.summaryfield) : undefined;
                     var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
@@ -20,7 +20,7 @@
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
                     var getcolor = iAttrs.getcolor != undefined ? $scope.$eval(iAttrs.getcolor) : undefined;
                     var col = {
-                        headerText: headerText,
+                       // headerText: headerText,
                         field: field,
                         summaryField: summaryField,
                         widthFactor: widthFactor,
@@ -37,6 +37,11 @@
                     var show = iAttrs.ngShow != undefined ? $scope.$eval(iAttrs.ngShow) : true;
 
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
+                    if (iAttrs.headertext != undefined)
+                        $scope.$watch(iAttrs.headertext, function (val) {
+                            if (colDef != undefined)
+                                dataGridCtrl.updateColumnHeader(colDef, val);
+                        });
                     if (!show)
                         dataGridCtrl.hideColumn(colDef);
 

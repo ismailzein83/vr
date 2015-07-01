@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDirService, VRModalService) {
+app.directive('vrChart', ['ChartDirService', 'VRModalService', 'UtilsService', function (ChartDirService, VRModalService, UtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -59,7 +59,9 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
         }
 
         function initializeChartSettings() {
-            if (currentChartSettings == undefined) {
+            clearSettingsIfDifferentSeries();
+
+            if (currentChartSettings == undefined) {                
                 currentChartSettings = {
                     isSingleDimension: currentChartSource.isSingleDimension,
                     showValuesWithLegends: true,
@@ -74,6 +76,22 @@ app.directive('vrChart', ['ChartDirService', 'VRModalService', function (ChartDi
                     };
                     currentChartSettings.series.push(serieSettings);
                 });
+            }
+        }
+
+        function clearSettingsIfDifferentSeries() {
+            if (currentChartSettings != undefined) {
+                if (currentChartSettings.series.length != currentChartSource.seriesDefinitions.length) {
+                    currentChartSettings = undefined;
+                    return;
+                }
+
+                for (var i = 0; i < currentChartSource.seriesDefinitions.length; i++) {
+                    if (UtilsService.getItemByVal(currentChartSettings.series, currentChartSource.seriesDefinitions[i].title, "title") == null) {
+                        currentChartSettings = undefined;
+                        return;
+                    }
+                }
             }
         }
 

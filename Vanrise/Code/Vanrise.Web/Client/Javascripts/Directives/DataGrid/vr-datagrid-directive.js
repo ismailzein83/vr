@@ -180,6 +180,10 @@
             calculateColumnsWidth();
         }
 
+        function updateColumnHeader(colDef, headerText){
+            colDef.name = headerText;
+        }
+
         function calculateColumnsWidth() {
             var totalWidthFactors = 0;
             angular.forEach(ctrl.columnDefs, function (col) {
@@ -231,6 +235,7 @@
             ctrl.removeColumn = removeColumn;
             ctrl.hideColumn = hideColumn;
             ctrl.showColumn = showColumn;
+            ctrl.updateColumnHeader = updateColumnHeader;
 
             ctrl.getColumnValue = function (colDef, dataItem) {
                 if (colDef == undefined || colDef.field == undefined)
@@ -310,7 +315,7 @@
             }
         }
         
-        function defineAPI() {
+        function defineAPI() {           
             gridApi.resetSorting = function () {
                 if (lastSortColumnDef != undefined) {
                     lastSortColumnDef.sortDirection = undefined;
