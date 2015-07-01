@@ -43,7 +43,7 @@
 }
 .selected-url{
      color: #6A7470 !important;
-     font-weight:bold ;
+     font-weight:bold !important;
 }
 
 .bold-item {   
