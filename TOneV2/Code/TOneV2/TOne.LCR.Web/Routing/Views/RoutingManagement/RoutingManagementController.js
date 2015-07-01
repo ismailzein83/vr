@@ -1,21 +1,23 @@
-﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum', 'RoutingRulesEnum'];
+﻿RoutingManagementController.$inject = ['$scope', 'RoutingAPIService', 'CarrierAPIService', 'CarrierTypeEnum', 'BusinessEntityAPIService_temp', 'RouteDetailFilterOrderEnum', 'RoutingRulesEnum', 'VRModalService', 'RoutingRulesTemplatesEnum', 'UtilsService', 'RoutingRulesAPIService', 'VRNotificationService'];
 
-function RoutingManagementController($scope, RoutingAPIService, CarrierAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum, RoutingRulesEnum) {
+function RoutingManagementController($scope, RoutingAPIService, CarrierAPIService, CarrierTypeEnum, BusinessEntityAPIService, RouteDetailFilterOrderEnum, RoutingRulesEnum, VRModalService, RoutingRulesTemplatesEnum, UtilsService, RoutingRulesAPIService, VRNotificationService) {
     var mainGridAPI;
     var sortColumn;
     var sortDescending = true;
-    load();
     defineScope();
+    load();
+
     defineMenuActions();
 
     function load() {
+        loadRuleTypes();
         loadCustomers();
         resetSorting();
     }
 
     function defineScope() {
         $scope.routingDataSource = [];
-
+        $scope.ruleTypes = [];
         $scope.customers = [];
         $scope.selectedCustomers = [];
 
@@ -47,6 +49,10 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
         $scope.loadMoreData = function () {
             return getData();
         }
+
+        $scope.onRuleClicked = function (dataItem, colDef) {
+            editRule(dataItem);
+        };
     }
 
     function getData() {
@@ -65,6 +71,7 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
             var routeData = [];
             angular.forEach(response, function (itm) {
                 itm.suppliers = itm.Options != null ? GetSupplierNames(itm.Options) : '';
+                itm.ruleTypeName = itm.ActionType != null && itm.ActionType != undefined ? UtilsService.getItemByVal($scope.ruleTypes, itm.ActionType, 'value').name : '';
                 routeData.push(itm);
             });
             mainGridAPI.addItemsToSource(routeData);
@@ -113,6 +120,7 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
 
 
     function defineMenuActions() {
+
         $scope.gridMenuActions = [{
             name: "Override",
             clicked: function (dataItem) {
@@ -132,23 +140,78 @@ function RoutingManagementController($scope, RoutingAPIService, CarrierAPIServic
             }
         }
         ];
+
+        $scope.gridRulesMenuActions = [
+            {
+                name: "Edit",
+                clicked: editRule
+            },
+            {
+                name: "End",
+                clicked: endRule
+            }
+        ];
+    }
+
+    function editRule(rule) {
+        var modalSettings = {
+            useModalTemplate: true,
+            width: "80%",
+            maxHeight: "800px"
+        };
+        var parameters = {
+            ruleId: rule.RouteRuleId
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Rule Info(" + rule.RouteRuleId + ")";
+            modalScope.onRouteRuleUpdated = function (ruleUpdated) {
+                mainGridAPI.itemUpdated(ruleUpdated);
+
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', parameters, modalSettings);
+    }
+
+    function endRule(routeRuleObject) {
+        routeRuleObject.EndEffectiveDate = Date.now();
+        return RoutingRulesAPIService.UpdateRouteRule(routeRuleObject).then(function (response) {
+            if (VRNotificationService.notifyOnItemUpdated("RouteRule", response)) {
+                if ($scope.onRouteRuleUpdated != undefined)
+                    $scope.onRouteRuleUpdated(response.UpdatedObject);
+                $scope.modalContext.closeModal();
+            }
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error);
+        });
+    }
+
+
+    function addRouteRule(ruleType) {
+        var modalSettings = {
+            useModalTemplate: true,
+            width: "80%",
+            maxHeight: "800px"
+        };
+        var parameters = {
+            ruleType: ruleType
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "New Route Rule";
+            modalScope.onRouteRuleAdded = function (routeRuleObj) {
+                mainGridAPI.itemAdded(routeRuleObj);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', parameters, modalSettings);
     }
 
     function AddRule(route, ruleType) {
-        console.log(route);
-        switch (ruleType.value) {
-            case 0:
-                console.log(0);
-                break;
-            case 1:
-                console.log(1);
-                break;
-            case 2:
-                console.log(2);
-                break;
-            default:
-                break;
 
+        addRouteRule(ruleType.value);
+    }
+
+    function loadRuleTypes() {
+        for (var prop in RoutingRulesTemplatesEnum) {
+            $scope.ruleTypes.push(RoutingRulesTemplatesEnum[prop]);
         }
     }
 }

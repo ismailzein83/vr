@@ -14,7 +14,7 @@ namespace TOne.LCR.Business
             return typeof(PriorityRouteActionData);
         }
 
-        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
             PriorityRouteActionData priorityActionData = actionData as PriorityRouteActionData;
 
@@ -31,12 +31,12 @@ namespace TOne.LCR.Business
                 route.Options.SupplierOptions = new List<RouteSupplierOption>();
             }
 
-            foreach(var priorityOption in priorityActionData.Options.OrderBy(itm => itm.Priority))
+            foreach (var priorityOption in priorityActionData.Options.OrderBy(itm => itm.Priority))
             {
                 RouteSupplierOption routeOption;
                 if (!TrySetOptionOrderFromRoute(context, priorityOption, out routeOption))
                     TryAddOptionFromLCR(context, priorityOption, out routeOption);
-                if(routeOption != null)
+                if (routeOption != null)
                 {
                     if (routeOption.Setting == null)
                         routeOption.Setting = new OptionSetting();
@@ -46,6 +46,11 @@ namespace TOne.LCR.Business
                     if (priorityOption.Percentage.HasValue)
                         routeOption.Setting.Percentage = priorityOption.Percentage;
                 }
+            }
+            if (rule != null)
+            {
+                context.Route.RuleId = rule.RouteRuleId;
+                context.Route.RuleActionType = RouteRuleActionType.Priority;
             }
 
             return null;
@@ -74,7 +79,7 @@ namespace TOne.LCR.Business
             routeOption = null;
             var routeOptions = context.Route.Options.SupplierOptions;
             RouteSupplierOption current = context.GetNextOptionInLCR();
-            while(current != null)
+            while (current != null)
             {
                 if (current.SupplierId == priorityOption.SupplierId)//match option found
                 {

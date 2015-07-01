@@ -14,9 +14,14 @@ namespace TOne.LCR.Business
             return typeof(BlockRouteActionData);
         }
 
-        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
             context.BlockRoute();
+            if (rule != null)
+            {
+                context.Route.RuleId = rule.RouteRuleId;
+                context.Route.RuleActionType = RouteRuleActionType.Block;
+            }
             return null;
         }
     }

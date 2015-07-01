@@ -136,13 +136,14 @@ CREATE TABLE [dbo].[ZoneInfo](
 	                                                    [PriceListID] [int] NULL
                                                     )
                                                     CREATE TABLE [dbo].[Route](
-	                                                   
 	                                                    [CustomerID] [varchar](5) NOT NULL,
 	                                                    [Code] [varchar](30) NULL,
 	                                                    [OurZoneID] [int] NULL,
 	                                                    [OurActiveRate] [decimal](18,5) NULL,
 	                                                    [OurServicesFlag] [smallint] NULL,
 	                                                    [Options] varchar(1000),
+                                                        [RuleId] int NULL,
+                                                        [RuleType] tinyint NULL,
                                                         [timestamp] timestamp
                                                     )
 

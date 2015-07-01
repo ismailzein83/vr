@@ -20,8 +20,12 @@ namespace TOne.LCR.Entities
         public short ServicesFlag { get; set; }
 
         public RouteOptions Options { get; set; }
-    }
 
+        public Nullable<RouteRuleActionType> RuleActionType { get; set; }
+
+        public Nullable<int> RuleId { get; set; }
+
+    }
     public class RouteDetailBatch
     {
         public List<RouteDetail> Routes { get; set; }

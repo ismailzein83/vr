@@ -20,6 +20,7 @@ namespace TOne.LCR.Data.SQL
         {
             return GetItemsSP("[LCR].[sp_RouteRuleDefinition_GetAll]", RouteRuleMapper);
         }
+
         public RouteRule GetRouteRuleDetails(int RouteRuleId)
         {
             return GetItemSP("[LCR].[sp_RouteRuleDefinition_GetByRouteRuleId]", RouteRuleMapper, RouteRuleId);

@@ -41,7 +41,7 @@ namespace TOne.LCR.Web.Controllers
         public IEnumerable<RouteRuleSummaryModel> GetFilteredRouteRules(GetFilteredRoutingRulesInput input)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            var rules = manager.GetFilteredRouteRules(input.Filter.RuleTypes, input.Filter.ZoneIds, input.Filter.Code, input.Filter.CustomerIds, input.FromRow, input.ToRow);
+            var rules = manager.GetFilteredRouteRules(input.Filter.RuleTypes, input.Filter.ZoneIds, input.Filter.Code, input.Filter.CustomerIds, input.FromRow, input.ToRow, true);
             if (rules != null)
                 return Mappers.MapRouteRules(rules);
             else

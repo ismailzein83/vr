@@ -14,9 +14,9 @@ namespace TOne.LCR.Business
             return null;
         }
 
-        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
-            context.ExecuteOptionsActions(true, 10);
+            context.ExecuteOptionsActions(true, 5);
             return null;
         }
     }

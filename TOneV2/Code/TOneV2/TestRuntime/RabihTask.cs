@@ -73,6 +73,7 @@ namespace TestRuntime
 
 
 
+            
             RunCompleteRouteBuild();
             //RunPartialRouteBuild();
         }
@@ -86,7 +87,7 @@ namespace TestRuntime
                 {
                     EffectiveTime = DateTime.Now,
                     IsFuture = false,
-                    IsLcrOnly = false
+                    IsLcrOnly = true
                 }
             });
         }

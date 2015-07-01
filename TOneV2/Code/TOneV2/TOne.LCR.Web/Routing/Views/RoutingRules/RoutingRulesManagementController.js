@@ -40,6 +40,10 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
             getData();
         };
 
+        $scope.ruleGridReady = function (api) {
+        
+        };
+
         $scope.loadMoreData = function () {
             return getData();
         }
@@ -77,8 +81,8 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "New Route Rule";
-            modalScope.onSwitchAdded = function (routeRuleObj) {
-                gridApi.itemAdded(routeRuleObj);
+            modalScope.onRouteRuleAdded = function (routeRuleObj) {
+                mainGridAPI.itemAdded(routeRuleObj);
             };
         };
         VRModalService.showModal('/Client/Modules/Routing/Views/RoutingRules/RouteRuleEditor.html', null, modalSettings);
@@ -95,8 +99,8 @@ function RoutingRulesManagementController($scope, RoutingRulesAPIService, Busine
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Rule Info(" + ruleObj.RouteRuleId + ")";
-            modalScope.onSwitchUpdated = function (ruleUpdated) {
-                gridApi.itemUpdated(ruleUpdated);
+            modalScope.onRouteRuleUpdated = function (ruleUpdated) {
+                mainGridAPI.itemUpdated(ruleUpdated);
 
             };
         };

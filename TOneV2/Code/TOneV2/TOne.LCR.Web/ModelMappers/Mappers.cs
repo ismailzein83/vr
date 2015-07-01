@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TOne.BusinessEntity.Business;
+using TOne.LCR.Business;
 using TOne.LCR.Entities;
 using TOne.LCR.Web.Models;
 
@@ -42,6 +43,9 @@ namespace TOne.LCR.Web.ModelMappers
         public static RouteDetailModel MapRouteDetail(RouteDetail routeDetail)
         {
             BusinessEntityInfoManager infoManager = new BusinessEntityInfoManager();
+            RouteRuleManager manager = new RouteRuleManager();
+            var rules = manager.GetFilteredRouteRules(null, new List<int>() { routeDetail.SaleZoneId }, routeDetail.Code, new List<string>() { routeDetail.CustomerID }, 0, 0, false);
+
             return new RouteDetailModel()
             {
                 Code = routeDetail.Code,
@@ -51,7 +55,10 @@ namespace TOne.LCR.Web.ModelMappers
                 ZoneName = infoManager.GetZoneName(routeDetail.SaleZoneId),
                 ServicesFlag = routeDetail.ServicesFlag,
                 CustomerName = infoManager.GetCarrirAccountName(routeDetail.CustomerID),
-                Options = routeDetail.Options == null ? null : MapOptions(routeDetail.Options)
+                Options = routeDetail.Options == null ? null : MapOptions(routeDetail.Options),
+                Rules = rules != null ? Mappers.MapRouteRules(rules) : null,
+                RouteRuleId = routeDetail.RuleId,
+                ActionType = routeDetail.RuleActionType
             };
         }
 

@@ -124,8 +124,14 @@ namespace TOne.LCR.Data.SQL
         public void WriteRouteToStream(RouteDetail routeDetail, object stream)
         {
             StreamForBulkInsert streamForBulkInsert = stream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}^", routeDetail.CustomerID, routeDetail.Code, routeDetail.SaleZoneId, routeDetail.Rate, routeDetail.ServicesFlag,
-                           routeDetail.Options != null ? Serialize2(routeDetail.Options) : null);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3: 0.00000}^{4}^{5}^{6}^{7}^", routeDetail.CustomerID,
+                                                                                         routeDetail.Code,
+                                                                                         routeDetail.SaleZoneId,
+                                                                                         routeDetail.Rate,
+                                                                                         routeDetail.ServicesFlag,
+                                                                                         routeDetail.Options != null ? Serialize2(routeDetail.Options) : null,
+                                                                                         routeDetail.RuleId.HasValue ? (int?)routeDetail.RuleId.Value : null,
+                                                                                         routeDetail.RuleActionType.HasValue ? (int?)routeDetail.RuleActionType.Value : null);
         }
 
         public object FinishDBApplyStream(object stream)
@@ -159,7 +165,10 @@ namespace TOne.LCR.Data.SQL
                    Rate = GetReaderValue<decimal>(reader, "OurActiveRate"),
                    SaleZoneId = GetReaderValue<int>(reader, "OurZoneId"),
                    ServicesFlag = GetReaderValue<short>(reader, "OurServicesFlag"),
-                   Options = reader["Options"] != null ? DeSerialize2(reader["Options"] as string) : null
+                   Options = reader["Options"] as string != null ? DeSerialize2(reader["Options"] as string) : null,
+                   RuleId = GetReaderValue<int>(reader, "RuleId") == 0 ? null : GetReaderValue<int?>(reader, "RuleId"),
+                   RuleActionType = GetReaderValue<int>(reader, "RuleId") == 0 ? null : (RouteRuleActionType?)Enum.Parse(typeof(RouteRuleActionType), GetReaderValue<byte>(reader, "RuleType").ToString())
+
                };
 
         }
@@ -217,7 +226,9 @@ namespace TOne.LCR.Data.SQL
                                                 r.OurZoneID,
                                                 r.OurActiveRate,
                                                 r.OurServicesFlag,
-                                                r.Options
+                                                r.Options,
+                                                r.RuleId,
+                                                r.RuleType
                                                 From [Route] r where 1 = 1  {0}";
 
         const string query_UpdateRoutes = @"

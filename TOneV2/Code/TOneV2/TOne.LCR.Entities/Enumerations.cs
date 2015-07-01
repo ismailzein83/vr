@@ -14,4 +14,11 @@ namespace TOne.LCR.Entities
         Rate = 3,
         ServiceFlag = 4
     }
+
+    public enum RouteRuleActionType
+    {
+        Priority = 0,
+        Override = 1,
+        Block = 2
+    }
 }

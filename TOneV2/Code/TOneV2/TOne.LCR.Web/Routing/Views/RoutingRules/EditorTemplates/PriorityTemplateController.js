@@ -65,11 +65,11 @@
             if ($scope.suppliers == undefined || $scope.suppliers.length == 0)
                 return;
             var data = $scope.subViewActionDataConnector.data;
-
+            var supplierOptopns = [];
             $.each(data.Options, function (i, value) {
                 var existobj = UtilsService.getItemByVal($scope.suppliers, value.SupplierId, 'CarrierAccountID')
                 if (existobj != null) {
-                    $scope.selectedSuppliers.push({
+                    supplierOptopns.push({
                         CarrierAccountID: value.SupplierId,
                         Name: existobj.Name,
                         Force: value.Force,
@@ -79,6 +79,7 @@
                 }
 
             });
+            $scope.selectedSuppliers = supplierOptopns;
         }
 
         function getActionData() {

@@ -57,7 +57,7 @@ namespace TOne.LCR.Business
                 {
                     var actionData = nextActionData;
                     nextActionData = null;
-                    RouteActionResult actionResult = currentStep.Action.Execute(this, actionData);
+                    RouteActionResult actionResult = currentStep.Action.Execute(this, actionData, null);
                     ActionExecutionStep<BaseRouteAction> nextStep;
                     if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                         currentStep = nextStep;
@@ -77,7 +77,7 @@ namespace TOne.LCR.Business
                         {
                             if (rule.CarrierAccountSet.IsAccountIdIncluded(_route.CustomerID))
                             {
-                                RouteActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData);
+                                RouteActionResult actionResult = currentStep.Action.Execute(this, rule.ActionData, rule);
                                 ActionExecutionStep<BaseRouteAction> nextStep;
                                 if (CheckActionResult(actionResult, executionPath, currentStep, out nextStep, out nextActionData))
                                 {

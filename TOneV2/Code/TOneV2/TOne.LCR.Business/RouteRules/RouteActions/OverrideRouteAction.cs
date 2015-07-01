@@ -14,10 +14,10 @@ namespace TOne.LCR.Business
             return typeof(OverrideRouteActionData);
         }
 
-        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
             OverrideRouteActionData overrideActionData = actionData as OverrideRouteActionData;
-            
+
             if (overrideActionData == null)
                 return InvalidActionData("actionData is null or it is not of type OverrideRouteActionData");
             if (overrideActionData.Options == null)
@@ -27,9 +27,9 @@ namespace TOne.LCR.Business
 
             BuildRouteFromOverrideOptions(context, overrideActionData.Options, false);
             context.ExecuteOptionsActions(false, null);
-            if(context.Route.Options.SupplierOptions.Count == 0)
+            if (context.Route.Options.SupplierOptions.Count == 0)
             {
-                switch(overrideActionData.NoOptionAction)
+                switch (overrideActionData.NoOptionAction)
                 {
                     case OverrideRouteNoOptionAction.None:
                         break;
@@ -45,6 +45,11 @@ namespace TOne.LCR.Business
                         break;
                 }
             }
+            if (rule != null)
+            {
+                context.Route.RuleId = rule.RouteRuleId;
+                context.Route.RuleActionType = RouteRuleActionType.Override;
+            }
             return rslt;
         }
 
@@ -58,7 +63,7 @@ namespace TOne.LCR.Business
                 RouteSupplierOption routeOption;
                 if (context.TryBuildSupplierOption(overrideOption.SupplierId, overrideOption.Percentage, out routeOption))
                 {
-                    if(ignoreRateCheck)
+                    if (ignoreRateCheck)
                     {
                         if (routeOption.Setting == null)
                             routeOption.Setting = new OptionSetting();

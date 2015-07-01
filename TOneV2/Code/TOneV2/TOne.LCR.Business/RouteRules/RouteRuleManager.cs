@@ -85,7 +85,7 @@ namespace TOne.LCR.Business
             return dataManager.GetAllRouteRule();
         }
 
-        public IEnumerable<RouteRule> GetFilteredRouteRules(List<string> ruleTypes, List<int> zoneIds, string code, List<string> customerIds, int fromRow, int toRow)
+        public IEnumerable<RouteRule> GetFilteredRouteRules(List<string> ruleTypes, List<int> zoneIds, string code, List<string> customerIds, int fromRow, int toRow, bool both)
         {
             IEnumerable<RouteRule> rules = GetAllRouteRule();
             if (rules != null)
@@ -95,6 +95,17 @@ namespace TOne.LCR.Business
                         if (ruleTypes != null && ruleTypes.Count > 0 && !ruleTypes.Contains(rule.ActionData.GetType().Name))
                             return false;
 
+                        if (customerIds != null && customerIds.Count > 0)
+                        {
+                            bool anyFound = false;
+                            foreach (var customerId in customerIds)
+                            {
+                                if (rule.CarrierAccountSet.IsAccountIdIncluded(customerId))
+                                    anyFound = true;
+                            }
+                            if (!anyFound)
+                                return false;
+                        }
 
                         var codeSetMatch = rule.CodeSet.GetMatch();
 
@@ -113,8 +124,10 @@ namespace TOne.LCR.Business
                                  )
                                 )
                                 isFound = true;
-                            if (!isFound || rule.CodeSet.IsCodeExcluded(code))
+                            if ((!isFound || rule.CodeSet.IsCodeExcluded(code)) && both)
                                 return false;
+                            if (!both && isFound)
+                                return true;
                         }
 
                         if (zoneIds != null && zoneIds.Count > 0)
@@ -134,23 +147,14 @@ namespace TOne.LCR.Business
                                 return false;
                         }
 
-
-                        if (customerIds != null && customerIds.Count > 0)
-                        {
-                            bool anyFound = false;
-                            foreach (var customerId in customerIds)
-                            {
-                                if (rule.CarrierAccountSet.IsAccountIdIncluded(customerId))
-                                    anyFound = true;
-                            }
-                            if (!anyFound)
-                                return false;
-                        }
-
                         return true;
                     };
+                if (fromRow != 0 && toRow != 0)
+                    rules = fromRow == 1 ? rules.Where(filter).Take(toRow) : rules.Where(filter).Skip(fromRow - 1).Take(toRow - fromRow + 1);
+                else
+                    rules = rules.Where(filter);
 
-                rules = fromRow == 1 ? rules.Where(filter).Take(toRow) : rules.Where(filter).Skip(fromRow - 1).Take(toRow - fromRow + 1);
+
             }
             return rules;
         }

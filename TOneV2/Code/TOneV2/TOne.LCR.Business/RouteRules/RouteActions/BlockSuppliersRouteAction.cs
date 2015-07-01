@@ -14,11 +14,11 @@ namespace TOne.LCR.Business
             return typeof(BlockSuppliersRouteActionData);
         }
 
-        public override RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public override RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
             BlockSuppliersRouteActionData blockSupplierActionData = actionData as BlockSuppliersRouteActionData;
             var route = context.Route;
-            
+
 
             if (blockSupplierActionData == null)
                 return InvalidActionData("actionData is null or it is not of type BlockSuppliersRouteActionData");

@@ -4,7 +4,7 @@
         defineScope();
         load();
         function defineScope() {
-      
+
             $scope.suppliers = [];
             $scope.selectedSuppliers = [];
 
@@ -41,7 +41,7 @@
         function load() {
             CarrierAPIService.GetCarriers(CarrierTypeEnum.Supplier.value).then(function (response) {
                 $scope.suppliers = response;
-                if ($scope.subViewActionDataConnector.data != undefined) {                    
+                if ($scope.subViewActionDataConnector.data != undefined) {
                     loadForm();
                 }
             })
@@ -54,11 +54,12 @@
             if ($scope.suppliers == undefined || $scope.suppliers.length == 0)
                 return;
             var data = $scope.subViewActionDataConnector.data;
+            var supplierOptions = [];
             $.each(data.Options, function (i, value) {
                 $scope.selectedSuppliers.length = 0;
                 var existobj = UtilsService.getItemByVal($scope.suppliers, value.SupplierId, 'CarrierAccountID')
                 if (existobj != null) {
-                    $scope.selectedSuppliers.push({
+                    supplierOptions.push({
                         CarrierAccountID: value.SupplierId,
                         Name: existobj.Name,
                         AllowLoss: data.Options[i].AllowLoss,
@@ -66,6 +67,7 @@
                     });
                 }
             });
+            $scope.selectedSuppliers = supplierOptions;
         }
 
         function getActionData() {

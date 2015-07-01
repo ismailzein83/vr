@@ -42,10 +42,21 @@
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="5">
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Suppliers'" field="'suppliers'" widthfactor="30">
+                    <vr-datagridcolumn headertext="'Suppliers'" widthfactor="30">
+                        <span ng-repeat="option in dataItem.Options" style="margin-right:8px;">
+                            <span style="font-weight:bold">     {{option.Supplier}}</span>
+                            <span style="font-weight:bold" ng-show="option.Percentage > 0">     {{option.Percentage}}</span>
+                        </span>
                     </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Affected Rule'" field="'ruleTypeName'" isclickable="'true'" onclicked="onRuleClicked"></vr-datagridcolumn>
                     <vr-datagridexpandablerow>
-                        <vr-datagrid drilldownlevel="2" datasource="dataItem.Options" issubgrid>
+
+                        <vr-choices>
+                            <vr-choice isselected="choiceSupplierOptionsnSelected">Suppliers</vr-choice>
+                            <vr-choice isselected="choiceRouteRulesSelected">Rules</vr-choice>
+                        </vr-choices>
+
+                        <vr-datagrid ng-show="choiceSupplierOptionsnSelected" drilldownlevel="2" datasource="dataItem.Options" issubgrid>
                             <vr-datagridcolumn headertext="'Supplier'" field="'Supplier'">
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Rate'" field="'Rate'" widthfactor="3">
@@ -57,6 +68,20 @@
                             <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" widthfactor="3">
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Priority'" field="'Priority'" widthfactor="3">
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+
+
+                        <vr-datagrid ng-show="choiceRouteRulesSelected" datasource="dataItem.Rules" on-ready="ruleGridReady" menuactions="viewScope.gridRulesMenuActions">
+                            <vr-datagridcolumn headertext="'Carriers'" field="'CarrierAccountDescription'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Rule Data Set'" field="'CodeSetDescription'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Rule Type'" field="'ActionDescription'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Start Date'" field="'BeginEffectiveDate'">
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'End date'" field="'EndEffectiveDate'">
                             </vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-datagridexpandablerow>

@@ -8,7 +8,7 @@ namespace TOne.LCR.Entities
 {
     public class BaseRouteAction
     {
-        public virtual RouteActionResult Execute(IRouteBuildContext context, object actionData)
+        public virtual RouteActionResult Execute(IRouteBuildContext context, object actionData, RouteRule rule)
         {
             return null;
         }

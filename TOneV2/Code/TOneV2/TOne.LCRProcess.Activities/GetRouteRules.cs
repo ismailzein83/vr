@@ -59,7 +59,7 @@ namespace TOne.LCRProcess.Activities
         protected override GetRouteRulesOutput DoWorkWithResult(GetRouteRulesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRouteRulesDataManager dataManager = LCRDataManagerFactory.GetDataManager<IRouteRulesDataManager>();
-            List<RouteRule> routeRules = dataManager.GetRouteRules(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.CodePrefix, inputArgument.CustomerZoneIds, inputArgument.SupplierZoneIds);
+            List<RouteRule> routeRules = dataManager.GetAllRouteRule(); //dataManager.GetRouteRules(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.CodePrefix, inputArgument.CustomerZoneIds, inputArgument.SupplierZoneIds);
             return new GetRouteRulesOutput()
             {
                 RouteRules = routeRules
