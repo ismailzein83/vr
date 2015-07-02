@@ -43,16 +43,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
         }
     }
-    //$scope.hideMenu = function (e) {
-    //    var $this = angular.element(e.currentTarget);
-    //    dropdownHidingTimeoutHandlerc = setTimeout(function () {
-    //        if ($this.hasClass('open')) {
-    //            $('.dropdown-toggle', $this).dropdown('toggle');
-    //            $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
-    //        }
-    //    }, 200);
+    $scope.hideMenu = function (e) {
+        var $this = angular.element(e.currentTarget);
+        dropdownHidingTimeoutHandlerc = setTimeout(function () {
+            if ($this.hasClass('open')) {
+                $('.dropdown-toggle', $this).dropdown('toggle');
+                $($this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            }
+        }, 200);
 
-    //}
+    }
     $(window).resize(function () {
         var w = window.innerWidth;
         if (w >= 1200)
