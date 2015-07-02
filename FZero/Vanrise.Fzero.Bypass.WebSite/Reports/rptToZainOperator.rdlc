@@ -837,7 +837,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -854,6 +854,7 @@
                       </Style>
                     </Textbox>
                     <ColSpan>7</ColSpan>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -894,7 +895,7 @@
         <Top>2.86333in</Top>
         <Left>0.3125in</Left>
         <Height>1.19792in</Height>
-        <Width>6.10432in</Width>
+        <Width>6.10429in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -1072,7 +1073,7 @@
         <Top>4.30729in</Top>
         <Left>0.3125in</Left>
         <Height>0.59375in</Height>
-        <Width>6.10432in</Width>
+        <Width>6.10433in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1585,7 +1586,7 @@
         <Top>6.38021in</Top>
         <Left>0.3125in</Left>
         <Height>1.13542in</Height>
-        <Width>6.10432in</Width>
+        <Width>6.10433in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -1982,7 +1983,7 @@
         <Top>8.06771in</Top>
         <Left>0.3125in</Left>
         <Height>0.21875in</Height>
-        <Width>6.10432in</Width>
+        <Width>6.10433in</Width>
         <ZIndex>11</ZIndex>
         <Style>
           <Border>
@@ -2870,7 +2871,7 @@
         <Top>1.99089in</Top>
         <Left>0.3125in</Left>
         <Height>0.47916in</Height>
-        <Width>6.10432in</Width>
+        <Width>6.10433in</Width>
         <ZIndex>15</ZIndex>
         <Style>
           <Border>
