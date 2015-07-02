@@ -5,7 +5,11 @@
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-select label="Queue Item Types" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="Id"
-                               datasource="::queueItemTypes" selectedvalues="selectedQueueItemTypes" entityname="Types"></vr-select>
+                               onselectionchanged="onchangeQueueItemTypes" datasource="::queueItemTypes" selectedvalues="selectedQueueItemTypes" entityname="Types"></vr-select>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Queue Instance" ismultipleselection hideselectedvaluessection="true" datatextfield="Title" datavaluefield="QueueInstanceId"
+                               datasource="queueInstances" selectedvalues="selectedQueueInstances" entityname="Instances"></vr-select>
                 </vr-columns>
             </vr-row>
         </div>

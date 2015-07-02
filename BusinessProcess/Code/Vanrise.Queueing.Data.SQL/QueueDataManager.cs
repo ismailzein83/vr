@@ -141,6 +141,20 @@ namespace Vanrise.Queueing.Data.SQL
             };
         }
 
+        private QueueInstance QueueInstanceMapper(IDataReader reader)
+        {
+            return new QueueInstance
+            {
+                QueueInstanceId = (int)reader["ID"],
+                Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
+                Status = (QueueInstanceStatus)reader["Status"],
+                ItemTypeId = (int)reader["ItemTypeID"],
+                Settings = Serializer.Deserialize<QueueSettings>(reader["Settings"] as string),
+                CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
+            };
+        }
+
         private QueueSubscription QueueSubscriptionMapper(IDataReader reader)
         {
             return new QueueSubscription
@@ -164,6 +178,9 @@ namespace Vanrise.Queueing.Data.SQL
 
         #endregion
 
-
+        public List<QueueInstance> GetQueueInstancesByTypes(IEnumerable<int> queueItemTypes)
+        {
+            return GetItemsSP("queue.sp_QueueInstance_GetByTypes", QueueInstanceMapper, queueItemTypes == null ? null : string.Join(",", queueItemTypes.Select(n => ((int)n).ToString()).ToArray()));
+        }
     }
 }
