@@ -5,18 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ae5acfff0c8a4d58a4072b177c7355c6" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.CallClass" Width="1.5" PointX="5.75" PointY="3.75" />
-        <EntityTypeShape EntityType="Model.CallType" Width="1.5" PointX="5.75" PointY="6.75" />
-        <EntityTypeShape EntityType="Model.NumberProfile" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.Period" Width="1.5" PointX="0.75" PointY="7.75" />
-        <EntityTypeShape EntityType="Model.Strategy" Width="1.5" PointX="2.75" PointY="7.75" />
-        <EntityTypeShape EntityType="Model.SubscriberThreshold" Width="1.5" PointX="3" PointY="1.125" />
-        <EntityTypeShape EntityType="Model.SubType" Width="1.5" PointX="9.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.Suspicion_Level" Width="1.5" PointX="0.75" PointY="3" />
-        <EntityTypeShape EntityType="Model.NormalCDR" Width="1.5" PointX="9.75" PointY="3.75" />
-        <AssociationConnector Association="Model.FK_SubscriberThreshold_Suspicion_Level" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

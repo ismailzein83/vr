@@ -5,181 +5,110 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="CallClass">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="NetType" Type="int" />
-        </EntityType>
-        <EntityType Name="CallType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="int" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CDRAnalysisMobile_WF.FraudAnalysis.NormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="NormalCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MSISDN" Type="varchar" MaxLength="30" />
-          <Property Name="IMSI" Type="varchar" MaxLength="20" />
-          <Property Name="ConnectDateTime" Type="datetime" />
-          <Property Name="Destination" Type="varchar" MaxLength="40" />
-          <Property Name="DurationInSeconds" Type="numeric" Precision="13" Scale="4" />
-          <Property Name="DisconnectDateTime" Type="datetime" />
-          <Property Name="Call_Class" Type="varchar" MaxLength="50" />
-          <Property Name="IsOnNet" Type="tinyint" />
-          <Property Name="Call_Type" Type="int" />
-          <Property Name="Sub_Type" Type="varchar" MaxLength="20" />
-          <Property Name="IMEI" Type="varchar" MaxLength="20" />
-          <Property Name="BTS_Id" Type="int" />
-          <Property Name="Cell_Id" Type="varchar" MaxLength="20" />
-          <Property Name="SwitchRecordId" Type="int" />
-          <Property Name="Up_Volume" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Down_Volume" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Cell_Latitude" Type="decimal" Precision="18" Scale="8" />
-          <Property Name="Cell_Longitude" Type="decimal" Precision="18" Scale="8" />
-          <Property Name="In_Trunk" Type="varchar" MaxLength="20" />
-          <Property Name="Out_Trunk" Type="varchar" MaxLength="20" />
-          <Property Name="Service_Type" Type="int" />
-          <Property Name="Service_VAS_Name" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="NumberProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="30" />
-          <Property Name="FromDate" Type="datetime" />
-          <Property Name="ToDate" Type="datetime" />
-          <Property Name="Count_Out_Calls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Inter" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Inter" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="InCalls_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="DiffDest_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="OutInter_Vs_OutCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Call_Out_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="OutOffNet_Vs_OutOnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Fail" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Input_Numbers" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_SMS" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_IMEI" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_BTS" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="IsOnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Data_Volume" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="PeriodId" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OnNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OffNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OffNet" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountFailConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountConsecutiveCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="CountInLowDurationCalls" Type="decimal" Precision="9" Scale="2" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="Period">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Strategy">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="UserId" Type="int" />
-          <Property Name="CreationDate" Type="datetime" />
-          <Property Name="Name" Type="varchar" MaxLength="20" />
-          <Property Name="IsDefault" Type="bit" />
-          <Property Name="StrategyContent" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="SubscriberThreshold">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DateDay" Type="datetime" />
-          <Property Name="SubscriberNumber" Type="varchar" MaxLength="50" />
-          <Property Name="Criteria1" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria2" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria3" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria4" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria5" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria6" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria7" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria8" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria9" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria10" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria11" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria12" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria13" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria14" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria15" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria16" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria17" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="SuspicionLevelId" Type="int" />
-          <Property Name="StrategyId" Type="int" />
-        </EntityType>
-        <EntityType Name="SubType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="20" />
-        </EntityType>
-        <Association Name="FK_SubscriberThreshold_Suspicion_Level">
-          <End Role="Suspicion_Level" Type="Self.Suspicion_Level" Multiplicity="0..1" />
-          <End Role="SubscriberThreshold" Type="Self.SubscriberThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Suspicion_Level">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubscriberThreshold">
-              <PropertyRef Name="SuspicionLevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.NormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwDashboard' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwReportedNumber' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwReportedNumberNormalCDR' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwReportVariables' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CDRAnalysisMobile.dbo.vwSuspectionAnalysis' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="Ol_prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Ol_prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Ol_prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Ol_prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prCollectNormalizedCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prDashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Database" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="prDeleteEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Ids" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="prFillDailyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillDailyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillDailySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillDailySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlyCellProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlyProfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillHourlySubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillHourlySubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prFillSubscriberThresholds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prFillSubscriberValues" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="StrategyId" Type="int" Mode="In" />
+        </Function>
         <Function Name="prfindSuspicionOccurrence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
           <Parameter Name="strategyId" Type="int" Mode="In" />
           <Parameter Name="SuspectionList" Type="varchar" Mode="In" />
           <Parameter Name="MinimumOccurance" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DestinationEmail" Type="varchar" Mode="In" />
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="prGetReportedNumberNormalCDR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReportID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetReportVariables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prGetUnNormalizedCDPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="SwitchID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetUnNormalizedCGPN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="SwitchID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prImportfromSwitch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SwitchID" Type="int" Mode="In" />
+          <Parameter Name="DBName" Type="varchar" Mode="In" />
+          <Parameter Name="Reference" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prImportfromSwitches" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prNormalization" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prNumberProfiling" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="prSendMail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="profile_name" Type="varchar" Mode="In" />
+          <Parameter Name="recipients" Type="varchar" Mode="In" />
+          <Parameter Name="subject" Type="nvarchar" Mode="In" />
+          <Parameter Name="copy_recipients" Type="nvarchar" Mode="In" />
+          <Parameter Name="body" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="blind_copy_recipients" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="prSendMailWithAttachment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="profile_name" Type="varchar" Mode="In" />
+          <Parameter Name="recipients" Type="varchar" Mode="In" />
+          <Parameter Name="subject" Type="nvarchar" Mode="In" />
+          <Parameter Name="copy_recipients" Type="nvarchar" Mode="In" />
+          <Parameter Name="body" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="file_attachments" Type="varchar" Mode="In" />
+          <Parameter Name="blind_copy_recipients" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Ranking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -211,11 +140,6 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.FraudAnalysis.NormalCDR' does
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="sp_CallClass_GetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis" />
-        <Function Name="sp_NormalCDR_Load" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis">
-          <Parameter Name="From" Type="datetime" Mode="In" />
-          <Parameter Name="To" Type="datetime" Mode="In" />
-        </Function>
         <Function Name="sp_Strategy_GetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis" />
         <Function Name="sp_Strategy_GetFilteredStrategies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FraudAnalysis">
           <Parameter Name="FromRow" Type="int" Mode="In" />
@@ -245,47 +169,7 @@ warning 6002: The table/view 'CDRAnalysisMobile_WF.FraudAnalysis.NormalCDR' does
           <Parameter Name="StrategyContent" Type="nvarchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="ModelStoreContainer">
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CallClass" EntityType="Self.CallClass" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="CallType" EntityType="Self.CallType" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="NumberProfile" EntityType="Self.NumberProfile" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="Period" EntityType="Self.Period" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="SubscriberThreshold" EntityType="Self.SubscriberThreshold" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="SubType" EntityType="Self.SubType" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="Suspicion_Level" EntityType="Self.Suspicion_Level" Schema="FraudAnalysis" store:Type="Tables" />
-          <EntitySet Name="NormalCDR" EntityType="Self.NormalCDR" store:Type="Tables" store:Schema="FraudAnalysis">
-            <DefiningQuery>SELECT 
-[NormalCDR].[Id] AS [Id], 
-[NormalCDR].[MSISDN] AS [MSISDN], 
-[NormalCDR].[IMSI] AS [IMSI], 
-[NormalCDR].[ConnectDateTime] AS [ConnectDateTime], 
-[NormalCDR].[Destination] AS [Destination], 
-[NormalCDR].[DurationInSeconds] AS [DurationInSeconds], 
-[NormalCDR].[DisconnectDateTime] AS [DisconnectDateTime], 
-[NormalCDR].[Call_Class] AS [Call_Class], 
-[NormalCDR].[IsOnNet] AS [IsOnNet], 
-[NormalCDR].[Call_Type] AS [Call_Type], 
-[NormalCDR].[Sub_Type] AS [Sub_Type], 
-[NormalCDR].[IMEI] AS [IMEI], 
-[NormalCDR].[BTS_Id] AS [BTS_Id], 
-[NormalCDR].[Cell_Id] AS [Cell_Id], 
-[NormalCDR].[SwitchRecordId] AS [SwitchRecordId], 
-[NormalCDR].[Up_Volume] AS [Up_Volume], 
-[NormalCDR].[Down_Volume] AS [Down_Volume], 
-[NormalCDR].[Cell_Latitude] AS [Cell_Latitude], 
-[NormalCDR].[Cell_Longitude] AS [Cell_Longitude], 
-[NormalCDR].[In_Trunk] AS [In_Trunk], 
-[NormalCDR].[Out_Trunk] AS [Out_Trunk], 
-[NormalCDR].[Service_Type] AS [Service_Type], 
-[NormalCDR].[Service_VAS_Name] AS [Service_VAS_Name]
-FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Self.FK_SubscriberThreshold_Suspicion_Level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThreshold" EntitySet="SubscriberThreshold" />
-          </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -455,25 +339,6 @@ FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
             <Parameter Name="IsDefault" Mode="In" Type="Boolean" />
             <Parameter Name="StrategyContent" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sp_CallClass_GetAll" ReturnType="Collection(Model.sp_CallClass_GetAll_Result)" />
-          <FunctionImport Name="sp_NormalCDR_Load" ReturnType="Collection(Model.sp_NormalCDR_Load_Result)">
-            <Parameter Name="From" Mode="In" Type="DateTime" />
-            <Parameter Name="To" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
-          <EntitySet Name="CallClasses" EntityType="Model.CallClass" />
-          <EntitySet Name="CallTypes" EntityType="Model.CallType" />
-          <EntitySet Name="NumberProfiles" EntityType="Model.NumberProfile" />
-          <EntitySet Name="Periods" EntityType="Model.Period" />
-          <EntitySet Name="Strategies" EntityType="Model.Strategy" />
-          <EntitySet Name="SubscriberThresholds" EntityType="Model.SubscriberThreshold" />
-          <EntitySet Name="SubTypes" EntityType="Model.SubType" />
-          <EntitySet Name="Suspicion_Level" EntityType="Model.Suspicion_Level" />
-          <EntitySet Name="NormalCDRs" EntityType="Model.NormalCDR" />
-          <AssociationSet Name="FK_SubscriberThreshold_Suspicion_Level" Association="Model.FK_SubscriberThreshold_Suspicion_Level">
-            <End Role="Suspicion_Level" EntitySet="Suspicion_Level" />
-            <End Role="SubscriberThreshold" EntitySet="SubscriberThresholds" />
-          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="prGetReportVariables_Result">
           <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="23" />
@@ -513,211 +378,38 @@ FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
           <Property Type="Boolean" Name="IsDefault" Nullable="true" />
           <Property Type="String" Name="StrategyContent" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="sp_CallClass_GetAll_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="NetType" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_NormalCDR_Load_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="MSISDN" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="IMSI" Nullable="true" MaxLength="20" />
-          <Property Type="DateTime" Name="ConnectDateTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Destination" Nullable="true" MaxLength="40" />
-          <Property Type="Decimal" Name="DurationInSeconds" Nullable="true" Precision="13" Scale="4" />
-          <Property Type="DateTime" Name="DisconnectDateTime" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Call_Class" Nullable="true" MaxLength="50" />
-          <Property Type="Byte" Name="IsOnNet" Nullable="true" />
-          <Property Type="Int32" Name="Call_Type" Nullable="true" />
-          <Property Type="String" Name="Sub_Type" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="BTS_Id" Nullable="true" />
-          <Property Type="String" Name="Cell_Id" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="SwitchRecordId" Nullable="true" />
-          <Property Type="Decimal" Name="Up_Volume" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Down_Volume" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Cell_Latitude" Nullable="true" Precision="18" Scale="8" />
-          <Property Type="Decimal" Name="Cell_Longitude" Nullable="true" Precision="18" Scale="8" />
-          <Property Type="String" Name="In_Trunk" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Out_Trunk" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="Service_Type" Nullable="true" />
-          <Property Type="String" Name="Service_VAS_Name" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="CallClass">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="NetType" Type="Int32" />
-        </EntityType>
-        <EntityType Name="CallType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="NumberProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="FromDate" Type="DateTime" Precision="3" />
-          <Property Name="ToDate" Type="DateTime" Precision="3" />
-          <Property Name="Count_Out_Calls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Output_Numb" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Inter" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Inter" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="InCalls_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="DiffDest_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="OutInter_Vs_OutCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Call_Out_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="AvrDurIn_Vs_AvrDurOut" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="OutOffNet_Vs_OutOnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_Fail" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Fail" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Out_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_In_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Diff_Input_Numbers" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_SMS" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_IMEI" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_BTS" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="IsOnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Total_Data_Volume" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="PeriodId" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_Calls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Call_In_Dur_Avg" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OnNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_Out_OffNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="Count_In_OffNet" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountFailConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountConsecutiveCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="CountInLowDurationCalls" Type="Decimal" Precision="9" Scale="2" />
-          <Property Name="StrategyId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Period">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Strategy">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IsDefault" Type="Boolean" />
-          <Property Name="StrategyContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="SubscriberThreshold">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateDay" Type="DateTime" Precision="3" />
-          <Property Name="SubscriberNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Criteria1" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria2" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria3" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria4" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria5" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria6" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria7" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria8" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria9" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria10" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria11" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria12" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria13" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria14" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria15" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria16" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Criteria17" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="SuspicionLevelId" Type="Int32" />
-          <Property Name="StrategyId" Type="Int32" />
-          <NavigationProperty Name="Suspicion_Level" Relationship="Model.FK_SubscriberThreshold_Suspicion_Level" FromRole="SubscriberThreshold" ToRole="Suspicion_Level" />
-        </EntityType>
-        <EntityType Name="SubType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Suspicion_Level">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SubscriberThresholds" Relationship="Model.FK_SubscriberThreshold_Suspicion_Level" FromRole="Suspicion_Level" ToRole="SubscriberThreshold" />
-        </EntityType>
-        <EntityType Name="NormalCDR">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MSISDN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="IMSI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ConnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Destination" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="DurationInSeconds" Type="Decimal" Precision="13" Scale="4" />
-          <Property Name="DisconnectDateTime" Type="DateTime" Precision="3" />
-          <Property Name="Call_Class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsOnNet" Type="Byte" />
-          <Property Name="Call_Type" Type="Int32" />
-          <Property Name="Sub_Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IMEI" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="BTS_Id" Type="Int32" />
-          <Property Name="Cell_Id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="SwitchRecordId" Type="Int32" />
-          <Property Name="Up_Volume" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Down_Volume" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Cell_Latitude" Type="Decimal" Precision="18" Scale="8" />
-          <Property Name="Cell_Longitude" Type="Decimal" Precision="18" Scale="8" />
-          <Property Name="In_Trunk" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Out_Trunk" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Service_Type" Type="Int32" />
-          <Property Name="Service_VAS_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <Association Name="FK_SubscriberThreshold_Suspicion_Level">
-          <End Type="Model.Suspicion_Level" Role="Suspicion_Level" Multiplicity="0..1" />
-          <End Type="Model.SubscriberThreshold" Role="SubscriberThreshold" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Suspicion_Level">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubscriberThreshold">
-              <PropertyRef Name="SuspicionLevelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <FunctionImportMapping FunctionImportName="prDashboard" FunctionName="Model.Store.prDashboard" />
+          <FunctionImportMapping FunctionImportName="prDeleteEmail" FunctionName="Model.Store.prDeleteEmail" />
+          <FunctionImportMapping FunctionImportName="prFillDailyCellProfile" FunctionName="Model.Store.prFillDailyCellProfile" />
+          <FunctionImportMapping FunctionImportName="prFillDailyProfile" FunctionName="Model.Store.prFillDailyProfile" />
+          <FunctionImportMapping FunctionImportName="prFillDailySubscriberThresholds" FunctionName="Model.Store.prFillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillHourlyCellProfile" FunctionName="Model.Store.prFillHourlyCellProfile" />
+          <FunctionImportMapping FunctionImportName="prFillHourlyProfile" FunctionName="Model.Store.prFillHourlyProfile" />
+          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberThresholds" FunctionName="Model.Store.prFillHourlySubscriberThresholds" />
           <FunctionImportMapping FunctionImportName="prfindSuspicionOccurrence" FunctionName="Model.Store.prfindSuspicionOccurrence" />
+          <FunctionImportMapping FunctionImportName="prGetEmails" FunctionName="Model.Store.prGetEmails" />
+          <FunctionImportMapping FunctionImportName="prGetReportedNumberNormalCDR" FunctionName="Model.Store.prGetReportedNumberNormalCDR" />
+          <FunctionImportMapping FunctionImportName="prGetReportVariables" FunctionName="Model.Store.prGetReportVariables">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.prGetReportVariables_Result">
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="ReportNumber" ColumnName="ReportNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCDPN" FunctionName="Model.Store.prGetUnNormalizedCDPN" />
+          <FunctionImportMapping FunctionImportName="prGetUnNormalizedCGPN" FunctionName="Model.Store.prGetUnNormalizedCGPN" />
+          <FunctionImportMapping FunctionImportName="prImportfromSwitch" FunctionName="Model.Store.prImportfromSwitch" />
+          <FunctionImportMapping FunctionImportName="prImportfromSwitches" FunctionName="Model.Store.prImportfromSwitches" />
+          <FunctionImportMapping FunctionImportName="prNormalization" FunctionName="Model.Store.prNormalization" />
+          <FunctionImportMapping FunctionImportName="prSendMail" FunctionName="Model.Store.prSendMail" />
+          <FunctionImportMapping FunctionImportName="prSendMailWithAttachment" FunctionName="Model.Store.prSendMailWithAttachment" />
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Model.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Model.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Model.Store.sp_dropdiagram" />
@@ -742,6 +434,17 @@ FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Model.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Model.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillDailyProfile" FunctionName="Model.Store.Ol_prFillDailyProfile" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillDailySubscriberThresholds" FunctionName="Model.Store.Ol_prFillDailySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillHourlyProfile" FunctionName="Model.Store.Ol_prFillHourlyProfile" />
+          <FunctionImportMapping FunctionImportName="Ol_prFillHourlySubscriberThresholds" FunctionName="Model.Store.Ol_prFillHourlySubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prCollectNormalizedCDR1" FunctionName="Model.Store.prCollectNormalizedCDR" />
+          <FunctionImportMapping FunctionImportName="prFillDailySubscriberValues1" FunctionName="Model.Store.prFillDailySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prFillHourlySubscriberValues1" FunctionName="Model.Store.prFillHourlySubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberThresholds1" FunctionName="Model.Store.prFillSubscriberThresholds" />
+          <FunctionImportMapping FunctionImportName="prFillSubscriberValues1" FunctionName="Model.Store.prFillSubscriberValues" />
+          <FunctionImportMapping FunctionImportName="prNumberProfiling1" FunctionName="Model.Store.prNumberProfiling" />
+          <FunctionImportMapping FunctionImportName="Ranking" FunctionName="Model.Store.Ranking" />
           <FunctionImportMapping FunctionImportName="sp_Strategy_GetAll" FunctionName="Model.Store.sp_Strategy_GetAll">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Model.sp_Strategy_GetAll_Result">
@@ -779,208 +482,6 @@ FROM [FraudAnalysis].[NormalCDR] AS [NormalCDR]</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_Strategy_Insert" FunctionName="Model.Store.sp_Strategy_Insert" />
           <FunctionImportMapping FunctionImportName="sp_Strategy_Update" FunctionName="Model.Store.sp_Strategy_Update" />
-          <FunctionImportMapping FunctionImportName="sp_CallClass_GetAll" FunctionName="Model.Store.sp_CallClass_GetAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_CallClass_GetAll_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="NetType" ColumnName="NetType" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_NormalCDR_Load" FunctionName="Model.Store.sp_NormalCDR_Load">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.sp_NormalCDR_Load_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
-                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
-                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
-                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
-                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
-                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
-                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
-                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
-                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
-                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
-                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
-                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
-                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
-                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="Model.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CallClasses">
-            <EntityTypeMapping TypeName="Model.CallClass">
-              <MappingFragment StoreEntitySet="CallClass">
-                <ScalarProperty Name="NetType" ColumnName="NetType" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CallTypes">
-            <EntityTypeMapping TypeName="Model.CallType">
-              <MappingFragment StoreEntitySet="CallType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NumberProfiles">
-            <EntityTypeMapping TypeName="Model.NumberProfile">
-              <MappingFragment StoreEntitySet="NumberProfile">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="CountInLowDurationCalls" ColumnName="CountInLowDurationCalls" />
-                <ScalarProperty Name="CountConsecutiveCalls" ColumnName="CountConsecutiveCalls" />
-                <ScalarProperty Name="CountFailConsecutiveCalls" ColumnName="CountFailConsecutiveCalls" />
-                <ScalarProperty Name="Count_In_OffNet" ColumnName="Count_In_OffNet" />
-                <ScalarProperty Name="Count_Out_OffNet" ColumnName="Count_Out_OffNet" />
-                <ScalarProperty Name="Count_In_OnNet" ColumnName="Count_In_OnNet" />
-                <ScalarProperty Name="Count_Out_OnNet" ColumnName="Count_Out_OnNet" />
-                <ScalarProperty Name="Call_In_Dur_Avg" ColumnName="Call_In_Dur_Avg" />
-                <ScalarProperty Name="Count_In_Calls" ColumnName="Count_In_Calls" />
-                <ScalarProperty Name="PeriodId" ColumnName="PeriodId" />
-                <ScalarProperty Name="Total_Data_Volume" ColumnName="Total_Data_Volume" />
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
-                <ScalarProperty Name="Total_BTS" ColumnName="Total_BTS" />
-                <ScalarProperty Name="Total_IMEI" ColumnName="Total_IMEI" />
-                <ScalarProperty Name="Count_Out_SMS" ColumnName="Count_Out_SMS" />
-                <ScalarProperty Name="Diff_Input_Numbers" ColumnName="Diff_Input_Numbers" />
-                <ScalarProperty Name="Total_In_Volume" ColumnName="Total_In_Volume" />
-                <ScalarProperty Name="Total_Out_Volume" ColumnName="Total_Out_Volume" />
-                <ScalarProperty Name="Count_In_Fail" ColumnName="Count_In_Fail" />
-                <ScalarProperty Name="Count_Out_Fail" ColumnName="Count_Out_Fail" />
-                <ScalarProperty Name="OutOffNet_Vs_OutOnNet" ColumnName="OutOffNet_Vs_OutOnNet" />
-                <ScalarProperty Name="AvrDurIn_Vs_AvrDurOut" ColumnName="AvrDurIn_Vs_AvrDurOut" />
-                <ScalarProperty Name="Call_Out_Dur_Avg" ColumnName="Call_Out_Dur_Avg" />
-                <ScalarProperty Name="OutInter_Vs_OutCalls" ColumnName="OutInter_Vs_OutCalls" />
-                <ScalarProperty Name="DiffDest_Vs_OutCalls" ColumnName="DiffDest_Vs_OutCalls" />
-                <ScalarProperty Name="InCalls_Vs_OutCalls" ColumnName="InCalls_Vs_OutCalls" />
-                <ScalarProperty Name="Count_In_Inter" ColumnName="Count_In_Inter" />
-                <ScalarProperty Name="Count_Out_Inter" ColumnName="Count_Out_Inter" />
-                <ScalarProperty Name="Diff_Output_Numb" ColumnName="Diff_Output_Numb" />
-                <ScalarProperty Name="Count_Out_Calls" ColumnName="Count_Out_Calls" />
-                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Periods">
-            <EntityTypeMapping TypeName="Model.Period">
-              <MappingFragment StoreEntitySet="Period">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Strategies">
-            <EntityTypeMapping TypeName="Model.Strategy">
-              <MappingFragment StoreEntitySet="Strategy">
-                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
-                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SubscriberThresholds">
-            <EntityTypeMapping TypeName="Model.SubscriberThreshold">
-              <MappingFragment StoreEntitySet="SubscriberThreshold">
-                <ScalarProperty Name="StrategyId" ColumnName="StrategyId" />
-                <ScalarProperty Name="SuspicionLevelId" ColumnName="SuspicionLevelId" />
-                <ScalarProperty Name="Criteria17" ColumnName="Criteria17" />
-                <ScalarProperty Name="Criteria16" ColumnName="Criteria16" />
-                <ScalarProperty Name="Criteria15" ColumnName="Criteria15" />
-                <ScalarProperty Name="Criteria14" ColumnName="Criteria14" />
-                <ScalarProperty Name="Criteria13" ColumnName="Criteria13" />
-                <ScalarProperty Name="Criteria12" ColumnName="Criteria12" />
-                <ScalarProperty Name="Criteria11" ColumnName="Criteria11" />
-                <ScalarProperty Name="Criteria10" ColumnName="Criteria10" />
-                <ScalarProperty Name="Criteria9" ColumnName="Criteria9" />
-                <ScalarProperty Name="Criteria8" ColumnName="Criteria8" />
-                <ScalarProperty Name="Criteria7" ColumnName="Criteria7" />
-                <ScalarProperty Name="Criteria6" ColumnName="Criteria6" />
-                <ScalarProperty Name="Criteria5" ColumnName="Criteria5" />
-                <ScalarProperty Name="Criteria4" ColumnName="Criteria4" />
-                <ScalarProperty Name="Criteria3" ColumnName="Criteria3" />
-                <ScalarProperty Name="Criteria2" ColumnName="Criteria2" />
-                <ScalarProperty Name="Criteria1" ColumnName="Criteria1" />
-                <ScalarProperty Name="SubscriberNumber" ColumnName="SubscriberNumber" />
-                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SubTypes">
-            <EntityTypeMapping TypeName="Model.SubType">
-              <MappingFragment StoreEntitySet="SubType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Suspicion_Level">
-            <EntityTypeMapping TypeName="Model.Suspicion_Level">
-              <MappingFragment StoreEntitySet="Suspicion_Level">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NormalCDRs">
-            <EntityTypeMapping TypeName="Model.NormalCDR">
-              <MappingFragment StoreEntitySet="NormalCDR">
-                <ScalarProperty Name="Service_VAS_Name" ColumnName="Service_VAS_Name" />
-                <ScalarProperty Name="Service_Type" ColumnName="Service_Type" />
-                <ScalarProperty Name="Out_Trunk" ColumnName="Out_Trunk" />
-                <ScalarProperty Name="In_Trunk" ColumnName="In_Trunk" />
-                <ScalarProperty Name="Cell_Longitude" ColumnName="Cell_Longitude" />
-                <ScalarProperty Name="Cell_Latitude" ColumnName="Cell_Latitude" />
-                <ScalarProperty Name="Down_Volume" ColumnName="Down_Volume" />
-                <ScalarProperty Name="Up_Volume" ColumnName="Up_Volume" />
-                <ScalarProperty Name="SwitchRecordId" ColumnName="SwitchRecordId" />
-                <ScalarProperty Name="Cell_Id" ColumnName="Cell_Id" />
-                <ScalarProperty Name="BTS_Id" ColumnName="BTS_Id" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-                <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
-                <ScalarProperty Name="Call_Type" ColumnName="Call_Type" />
-                <ScalarProperty Name="IsOnNet" ColumnName="IsOnNet" />
-                <ScalarProperty Name="Call_Class" ColumnName="Call_Class" />
-                <ScalarProperty Name="DisconnectDateTime" ColumnName="DisconnectDateTime" />
-                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="ConnectDateTime" ColumnName="ConnectDateTime" />
-                <ScalarProperty Name="IMSI" ColumnName="IMSI" />
-                <ScalarProperty Name="MSISDN" ColumnName="MSISDN" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

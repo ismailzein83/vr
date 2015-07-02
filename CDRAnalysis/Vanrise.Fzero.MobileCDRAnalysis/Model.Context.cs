@@ -28,16 +28,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<sysdiagram> sysdiagrams { get; set; }
-        public DbSet<CallClass> CallClasses { get; set; }
-        public DbSet<CallType> CallTypes { get; set; }
-        public DbSet<NumberProfile> NumberProfiles { get; set; }
-        public DbSet<Period> Periods { get; set; }
-        public DbSet<Strategy> Strategies { get; set; }
-        public DbSet<SubscriberThreshold> SubscriberThresholds { get; set; }
-        public DbSet<SubType> SubTypes { get; set; }
-        public DbSet<Suspicion_Level> Suspicion_Level { get; set; }
-        public DbSet<NormalCDR> NormalCDRs { get; set; }
     
         public virtual int prCollectNormalizedCDR()
         {
@@ -621,24 +611,6 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
                 new ObjectParameter("StrategyContent", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Strategy_Update", idParameter, userIdParameter, nameParameter, descriptionParameter, creationDateParameter, isDefaultParameter, strategyContentParameter);
-        }
-    
-        public virtual ObjectResult<sp_CallClass_GetAll_Result> sp_CallClass_GetAll()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_CallClass_GetAll_Result>("sp_CallClass_GetAll");
-        }
-    
-        public virtual ObjectResult<sp_NormalCDR_Load_Result> sp_NormalCDR_Load(Nullable<System.DateTime> from, Nullable<System.DateTime> to)
-        {
-            var fromParameter = from.HasValue ?
-                new ObjectParameter("From", from) :
-                new ObjectParameter("From", typeof(System.DateTime));
-    
-            var toParameter = to.HasValue ?
-                new ObjectParameter("To", to) :
-                new ObjectParameter("To", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_NormalCDR_Load_Result>("sp_NormalCDR_Load", fromParameter, toParameter);
         }
     }
 }
