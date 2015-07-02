@@ -37,8 +37,21 @@
                                 </vr-datagrid>
                             </div>
                             <div ng-show="dataItem.isScheduledTabShow">
-                                Schedule will be here
+                                <vr-datagrid datasource="dataItem.ScheduledTasks">
+                                    <vr-datagridcolumn headertext="'Name'" field="'Name'" isclickable="true" onclicked="viewScope.schedulerTaskClicked"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'ActionTypeId'" field="'ActionTypeId'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'IsEnabled'" field="'IsEnabled'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'TaskAction'" field="'TaskAction'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'TaskId'" field="'TaskId'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'TaskTrigger'" field="'TaskTrigger'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'TriggerTypeId'" field="'TriggerTypeId'"></vr-datagridcolumn>
+                                </vr-datagrid>
                             </div>
+
+
+
+                        
 
 
 
