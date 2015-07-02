@@ -34,7 +34,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             $scope.modalContext.closeModal()
         };
         $scope.Search = function () {
-            if ($scope.viewWidgets != null && $scope.viewWidgets != undefined && $scope.viewWidgets.length > 0) {
+            if (($scope.bodyWidgets != null && $scope.bodyWidgets != undefined) || ($scope.summaryWidgets != null && $scope.summaryWidgets != undefined)) {
                 updateDashboard();
             }
             else {
@@ -57,6 +57,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     function load() {
         $scope.isGettingData = false;
+        
     }
 
     function updateDashboard() {
@@ -66,8 +67,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             toDate: $scope.toDate
         }
         var refreshDataOperations = [];
-        angular.forEach($scope.viewWidgets, function (viewWidget) {
-            refreshDataOperations.push(viewWidget.API.retrieveData);
+        angular.forEach($scope.bodyWidgets, function (bodyWidget) {
+            refreshDataOperations.push(bodyWidget.API.retrieveData);
+        });
+        angular.forEach($scope.summaryWidgets, function (summaryWidget) {
+            refreshDataOperations.push(summaryWidget.API.retrieveData);
         });
         $scope.isGettingData = true;
         return UtilsService.waitMultipleAsyncOperations(refreshDataOperations)
@@ -121,6 +125,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
 
      }
+    
     }
 
     function addBodyWidget(bodyWidget) {
@@ -128,13 +133,15 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             bodyWidget.API = api;
         };
         $scope.bodyWidgets.push(bodyWidget);
-        console.log($scope.bodyWidgets);
+      //  console.log($scope.bodyWidgets);
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
             summaryWidget.API = api;
         };
+        
         $scope.summaryWidgets.push(summaryWidget);
+      
       //  console.log($scope.summaryWidgets);
     }
 

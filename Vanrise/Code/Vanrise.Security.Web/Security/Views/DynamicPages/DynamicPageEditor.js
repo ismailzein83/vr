@@ -6,13 +6,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     load();
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
+        
         if (parameters != null) {
             $scope.filter = {
                 Name: parameters.Name,
                 ModuleId: parameters.ModuleId,
                 Audience: parameters.Audience,
                 ViewId: parameters.ViewId,
-                Content: parameters.Content
+                BodyContents: parameters.ViewContent.BodyContents,
+                SummaryContents: parameters.ViewContent.SummaryContents
             }
             $scope.isEditMode = true;
         }
@@ -146,8 +148,9 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         defineWidgetSections();
         $scope.isGettingData = true;
         UtilsService.waitMultipleAsyncOperations([loadWidgets, loadUsers, loadRoles, loadTree]).finally(function () {
-
+            
             if ($scope.isEditMode) {
+               
                 fillEditModeData();
             }
 
@@ -160,24 +163,26 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
     }
 
     function fillEditModeData() {
-        $scope.pageName = $scope.filter.Name;
         
-        for (var i = 0; i < $scope.filter.Audience.Users.length; i++)
-        {
-            var value = UtilsService.getItemByVal($scope.users, $scope.filter.Audience.Users[i], 'UserId');
-            if(value!=null)
-                $scope.selectedUsers.push(value);
+        $scope.pageName = $scope.filter.Name;
+        if ($scope.filter.Audience != null || $scope.filter.Audience != undefined) {
+            for (var i = 0; i < $scope.filter.Audience.Users.length; i++) {
+                var value = UtilsService.getItemByVal($scope.users, $scope.filter.Audience.Users[i], 'UserId');
+                if (value != null)
+                    $scope.selectedUsers.push(value);
+            }
+
+            for (var i = 0; i < $scope.filter.Audience.Groups.length; i++) {
+                var value = UtilsService.getItemByVal($scope.roles, $scope.filter.Audience.Groups[i], 'RoleId');
+                if (value != null)
+                    $scope.selectedRoles.push(value);
+            }
         }
-        for (var i = 0; i < $scope.filter.Audience.Groups.length; i++)
+        for (var i = 0; i < $scope.filter.BodyContents.length; i++)
         {
-            var value = UtilsService.getItemByVal($scope.roles, $scope.filter.Audience.Groups[i], 'RoleId');
-            if (value != null)
-                $scope.selectedRoles.push(value);
-        }
-        for (var i = 0; i < $scope.filter.Content.length; i++)
-        {
-            var content = $scope.filter.Content[i];
-            var value = UtilsService.getItemByVal($scope.widgets, content.WidgetId, 'Id');
+            
+            var bodyContent = $scope.filter.BodyContents[i];
+            var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
             if (value != null)
             {
                 $scope.selectedWidget = value;
@@ -185,9 +190,23 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                     WidgetId: $scope.selectedWidget.Id,
                     NumberOfColumns: content.NumberOfColumns
                 }
-                $scope.viewContents.push(viewContent);
+                $scope.addedBodyWidgets.push(viewContent);
             }
                 
+        }
+        
+        for (var i = 0; i < $scope.filter.SummaryContents.length; i++) {
+            var summaryContent = $scope.filter.SummaryContents[i];
+            var value = UtilsService.getItemByVal($scope.summaryWidgets, summaryContent.WidgetId, 'Id');
+            if (value != null) {
+                $scope.selectedWidget = value;
+                var viewContent = {
+                    WidgetId: $scope.selectedWidget.Id,
+                    NumberOfColumns: content.NumberOfColumns
+                }
+                $scope.addedSummaryWidgets.push(viewContent);
+            }
+
         }
         $scope.beTree.currentNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');   
     }

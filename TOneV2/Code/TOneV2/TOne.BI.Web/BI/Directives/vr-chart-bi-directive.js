@@ -14,7 +14,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
-
+           
             var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1,BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
             biChart.initializeController();
 

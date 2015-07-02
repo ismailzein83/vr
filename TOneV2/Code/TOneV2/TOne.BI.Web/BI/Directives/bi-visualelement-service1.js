@@ -6,7 +6,6 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
     });
 
     function retrieveData1(visualElementController, visualElementSettings) {
-        console.log(visualElementController);
         if(visualElementSettings.OperationType!=undefined)
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
@@ -18,8 +17,7 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
                 break;
 
         }
-        else
-            return BIDataAPIService.GetMeasureValues1(visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
+
 
     }
 

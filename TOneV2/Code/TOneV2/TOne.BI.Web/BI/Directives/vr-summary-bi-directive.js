@@ -12,7 +12,7 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
-
+            
             var biSummary = new BISummary(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1);
             biSummary.initializeController();
 
@@ -39,12 +39,12 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
     };
 
     function getSummaryTemplate(previewmode) {
-        console.log(previewmode);
+     //   console.log(previewmode);
         if (previewmode != 'true') {
-            return '<vr-label ng-repeat="value in {{ctrl.data}}">Value: {{value}}</vr-label>';
+            return '<div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource"><td><vr-label isValue="{{value.description}}">{{value.description}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div>';
         }
         else
-            return '';
+            return '<div  ng-repeat="value in ctrl.dataSource"><vr-label isValue="{{value.description}}">{{value.description}}: {{value.value}}</vr-label></div>';
 
 
 
@@ -54,14 +54,16 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         var summaryAPI;
 
         function initializeController() {
-
-            ctrl.onGridReady = function (api) {
+            
+            ctrl.onSummaryReady = function (api) {
+                console.log(ctrl);
                 summaryAPI = api;
                 if (retrieveDataOnLoad)
                     retrieveData();
             }
             ctrl.measureTypes = settings.MeasureTypes;
-            ctrl.data = [];
+            ctrl.dataSource = [];
+            
         }
 
         function defineAPI() {
@@ -72,10 +74,16 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         }
 
         function retrieveData() {
-            ctrl.data = [];
-            return BIVisualElementService1.retrieveData1(ctrl, settings)
+            return BIDataAPIService.GetMeasureValues1(ctrl.filter.fromDate, ctrl.filter.toDate, settings.MeasureTypes)
                         .then(function (response) {
-                            ctrl.data.push(response);
+                          
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.dataSource[i] = {
+                                    value:response[i],
+                                    description: ctrl.measureTypes[i]
+                                }
+                            }
+                           
                            
                         });
         }

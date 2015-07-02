@@ -47,7 +47,7 @@ function DynamicPageManagementController($scope, ViewAPIService, VRModalService,
 
     function updatePage(dataItem) {
         var settings = {};
-
+        
         settings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit Dynamic Page: " + dataItem.Name;
             modalScope.onPageUpdated = function (page) {
