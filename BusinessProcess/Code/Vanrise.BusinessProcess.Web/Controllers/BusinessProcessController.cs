@@ -41,10 +41,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        public List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title)
+        public List<BPDefinition> GetFilteredDefinitions(string title)
         {
             BPClient manager = new BPClient();
-            return manager.GetFilteredDefinitions(fromRow, toRow, title);
+            return manager.GetFilteredDefinitions(title);
         }
 
         [HttpGet]

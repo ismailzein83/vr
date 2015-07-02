@@ -57,7 +57,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
         var title = $scope.title != undefined ? $scope.title : '';
 
-        BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
+        BusinessProcessAPIService.GetFilteredDefinitions(title).then(function (response) {
             angular.forEach(response, function (def) {
                 $scope.filteredDefinitions.push(def);
             });

@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.Data
 
         BPDefinition GetDefinition(int ID);
 
-        List<BPDefinition> GetFilteredDefinitions(int fromRow, int toRow, string title);
+        List<BPDefinition> GetFilteredDefinitions(string title);
 
         System.Collections.Generic.List<BPDefinition> GetDefinitions();
 

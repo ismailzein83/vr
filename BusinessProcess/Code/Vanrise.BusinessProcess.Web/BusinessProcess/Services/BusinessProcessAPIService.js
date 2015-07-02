@@ -40,11 +40,9 @@ function BusinessProcessAPIService(BaseAPIService) {
         });
     }
 
-    function GetFilteredDefinitions(fromRow, toRow, title) {
+    function GetFilteredDefinitions(title) {
         return BaseAPIService.get("/api/BusinessProcess/GetFilteredDefinitions",
             {
-                fromRow: fromRow,
-                toRow: toRow,
                 title: title
             });
     }
