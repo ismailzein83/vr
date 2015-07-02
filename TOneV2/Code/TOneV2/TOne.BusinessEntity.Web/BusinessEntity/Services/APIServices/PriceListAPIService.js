@@ -2,8 +2,7 @@
 PriceListAPIService.$inject = ['BaseAPIService'];
 function PriceListAPIService(BaseAPIService) {
     'use strict';
-    return
-    ({
+    return({
         GetPriceList: GetPriceList
     });
     function GetPriceList() {
