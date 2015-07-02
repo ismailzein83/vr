@@ -130,6 +130,8 @@
     <Content Include="BI\Directives\Templates\vr-chart-bi-directive-template.js" />
     <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.html" />
     <Content Include="BI\Directives\Templates\vr-datagrid-bi-directive-template.js" />
+    <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.html" />
+    <Content Include="BI\Directives\Templates\vr-summary-bi-directive-template.js" />
     <Content Include="BI\Directives\vr-bi-chart-directive.js" />
     <Content Include="BI\Directives\vr-bi-datagrid-directive.js" />
     <Content Include="BI\Directives\bi-visualelement-service.js" />

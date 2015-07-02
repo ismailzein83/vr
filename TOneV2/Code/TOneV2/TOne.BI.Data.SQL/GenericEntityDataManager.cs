@@ -372,9 +372,9 @@ namespace TOne.BI.Data.SQL
 
         public Decimal[] GetMeasureValues(DateTime fromDate, DateTime toDate, params string[] measureTypeNames)
         {
-            return GetTimeValuesRecord( fromDate, toDate, null, measureTypeNames);
+            return GetRecords( fromDate, toDate, null, measureTypeNames);
         }
-        private Decimal[] GetTimeValuesRecord(DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
+        private Decimal[] GetRecords(DateTime fromDate, DateTime toDate, string[] additionalFilters, string[] measureTypesNames)
         {
             Decimal[] rslt = new Decimal[measureTypesNames.Length]; ;
             string[] measureColumns;
@@ -391,7 +391,7 @@ namespace TOne.BI.Data.SQL
                 }
             }
             string filtersPart = BuildQueryFiltersPart(filters);
-            string query = BuildQuery(columnsPart, filtersPart, expressionsPart);
+            string query = BuildQuery1(columnsPart,null, filtersPart, expressionsPart);
 
             ExecuteReaderMDX(query, (reader) =>
             {
@@ -407,6 +407,27 @@ namespace TOne.BI.Data.SQL
             });
             return rslt;
         }
+        private string BuildQuery1(string columnsPart, string rowsPart, string filtersPart, string expressionsPart = null)
+        {
+           string rowPart1= BuildRowPart(rowsPart);
+            string query = string.Format(@"select {{{0}}} ON COLUMNS                                
+                                    {1}
+                                    FROM [{2}]
+                                    WHERE {3}", columnsPart, rowPart1, CubeName, filtersPart);
+
+            if (!String.IsNullOrEmpty(expressionsPart))
+                return String.Format(@"WITH {0}
+                                        {1}", expressionsPart, query);
+            else
+                return query;
+        }
+        private string BuildRowPart(string rowsPart){
+            if (rowsPart != null)
+                return string.Format(@",{0} ON ROWS", rowsPart);
+            else
+                return null;
+        }
+       
         
         #endregion
 

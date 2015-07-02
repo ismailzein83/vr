@@ -34,7 +34,6 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         },
         template: function (element, attrs) {
             return getSummaryTemplate(attrs.previewmode);
-            return
         }
 
     };
@@ -42,7 +41,7 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
     function getSummaryTemplate(previewmode) {
         console.log(previewmode);
         if (previewmode != 'true') {
-            return '<vr-label></vr-label>';
+            return '<vr-label ng-repeat="value in {{ctrl.data}}">Value: {{value}}</vr-label>';
         }
         else
             return '';
@@ -61,8 +60,6 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
                 if (retrieveDataOnLoad)
                     retrieveData();
             }
-
-            ctrl.entityType = settings.EntityType;
             ctrl.measureTypes = settings.MeasureTypes;
             ctrl.data = [];
         }
@@ -75,18 +72,14 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         }
 
         function retrieveData() {
+            ctrl.data = [];
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                         .then(function (response) {
-                            if (ctrl.isDateTimeGroupedData)
-                                BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.fromDate, ctrl.filter.toDate, true);
-                            refreshDataGrid(response);
+                            ctrl.data.push(response);
+                           
                         });
         }
 
-        function refreshDataGrid(response) {
-            ctrl.data.length = 0;
-            summaryAPI.addItemsToSource(response);
-        }
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }

@@ -19,7 +19,7 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
 
         }
         else
-            return BIDataAPIService.GetMeasureValues(visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
+            return BIDataAPIService.GetMeasureValues1(visualElementController.filter.fromDate, visualElementController.filter.toDate, visualElementSettings.MeasureTypes);
 
     }
 

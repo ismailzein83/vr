@@ -5,6 +5,7 @@ app.service('BIDataAPIService', function (BaseAPIService) {
         GetMeasureValues: GetMeasureValues,
         GetEntityMeasuresValues: GetEntityMeasuresValues,
         GetTopEntities: GetTopEntities,
+        GetMeasureValues1: GetMeasureValues1
     
     });
 
@@ -44,7 +45,14 @@ app.service('BIDataAPIService', function (BaseAPIService) {
                 measureTypesNames: measureTypesNames
             });
     }
-
+    function GetMeasureValues1(fromDate, toDate, measureTypesNames) {
+        return BaseAPIService.get("/api/BIData/GetMeasureValues",
+            {
+                fromDate: fromDate,
+                toDate: toDate,
+                measureTypesNames: measureTypesNames
+            });
+    }
     
 
 });
