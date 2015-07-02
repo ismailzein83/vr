@@ -85,7 +85,7 @@ app.directive('vrChoices', [function () {
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            element.html('<div class="btn-group btn-group-custom" role="group" >' + element.html() + '</div>');
+            element.html('<div class="btn-group btn-group-custom vr-tabs" role="group" >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
