@@ -41,7 +41,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
     function startGetData() {
         if (angular.isDefined(interval)) return;
         interval = $interval(function callAtInterval() {
-            $scope.searchClicked();
+            getOpenedInstancesData();
         }, 60000);
     }
 
@@ -65,8 +65,6 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         getOpenedInstancesData();
     }
 
-   
-
     function getOpenedInstancesData() {
 
         angular.forEach($scope.filteredDefinitions, function (def) {
@@ -80,6 +78,11 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
                         if (angular.isUndefined(def.openedInstances)) {
                             def.openedInstances = [];
                         }
+
+                        if (angular.isUndefined(def.runningInstances)) {
+                            def.runningInstances = 0;
+                        }
+                        def.runningInstances = parseInt(def.runningInstances)+1;
                         def.openedInstances.push(inst);
                     }
                 });
@@ -87,6 +90,33 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         });
 
     }
+
+    function getOpenedInstancesData() {
+
+        angular.forEach($scope.filteredDefinitions, function (def) {
+            def.openedInstances = [];
+        });
+
+        BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
+            angular.forEach(response, function (inst) {
+                angular.forEach($scope.filteredDefinitions, function (def) {
+                    if (def.BPDefinitionID == inst.DefinitionID) {
+                        if (angular.isUndefined(def.openedInstances)) {
+                            def.openedInstances = [];
+                        }
+
+                        if (angular.isUndefined(def.runningInstances)) {
+                            def.runningInstances = 0;
+                        }
+                        def.runningInstances = parseInt(def.runningInstances) + 1;
+                        def.openedInstances.push(inst);
+                    }
+                });
+            });
+        });
+
+    }
+
 
     function defineGrid() {
         $scope.filteredDefinitions = [];
