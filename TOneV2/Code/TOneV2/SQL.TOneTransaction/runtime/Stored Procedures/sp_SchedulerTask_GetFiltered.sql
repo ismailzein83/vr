@@ -13,9 +13,10 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-;WITH Tasks_CTE (Id, Name, IsEnabled, [Status], [TriggerTypeId], TaskTrigger, [ActionTypeId], [TaskAction], RowNumber) AS 
+;WITH Tasks_CTE (Id, Name, IsEnabled, [Status], [LastRunTime], [NextRunTime], [TriggerTypeId], TaskTrigger, [ActionTypeId], [TaskAction], RowNumber) AS 
 	(
-		SELECT runtime.[ScheduleTask].[ID], runtime.[ScheduleTask].[Name],runtime.[ScheduleTask].[IsEnabled], runtime.[ScheduleTask].[Status], 
+		SELECT runtime.[ScheduleTask].[ID], runtime.[ScheduleTask].[Name],runtime.[ScheduleTask].[IsEnabled], 
+		runtime.[ScheduleTask].[Status], runtime.[ScheduleTask].[LastRunTime], runtime.[ScheduleTask].[NextRunTime],
 		runtime.ScheduleTask.[TriggerTypeId], runtime.ScheduleTask.TaskTrigger,
 		runtime.ScheduleTask.[ActionTypeId], runtime.ScheduleTask.[TaskAction],  ROW_NUMBER()  
 		OVER ( ORDER BY  runtime.[ScheduleTask].[ID] ASC) AS RowNumber 
@@ -23,7 +24,7 @@ BEGIN
 
 				WHERE (@Name IS NULL OR runtime.[ScheduleTask].Name  LIKE '%' + @Name + '%' )
 	)
-	SELECT Id, Name, IsEnabled, [Status], [TriggerTypeId], TaskTrigger, [ActionTypeId], [TaskAction], RowNumber 
+	SELECT Id, Name, IsEnabled, [Status], [LastRunTime], [NextRunTime], [TriggerTypeId], TaskTrigger, [ActionTypeId], [TaskAction], RowNumber 
 	FROM Tasks_CTE WHERE RowNumber between @FromRow AND @ToRow                           
 
 SET NOCOUNT OFF

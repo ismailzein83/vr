@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [runtime].sp_SchedulerTask_GetTasksbyActionType
+CREATE PROCEDURE [runtime].[sp_SchedulerTask_GetTasksbyActionType]
 @ActionTypeId int
 AS
 BEGIN
@@ -16,6 +16,8 @@ BEGIN
       ,[Name]
       ,[IsEnabled]
       ,[Status]
+      ,[LastRunTime]
+      ,[NextRunTime]
       ,[TriggerTypeId]
       ,[TaskTrigger]
       ,[ActionTypeId]

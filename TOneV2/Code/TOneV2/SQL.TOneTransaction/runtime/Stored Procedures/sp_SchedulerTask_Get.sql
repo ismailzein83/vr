@@ -16,6 +16,8 @@ BEGIN
       ,[Name]
       ,[IsEnabled]
       ,[Status]
+      ,[LastRunTime]
+      ,[NextRunTime]
       ,[TriggerTypeId]
       ,[TaskTrigger]
       ,[ActionTypeId]
