@@ -57,20 +57,20 @@
                         <div ng-include="selectedWidget.Setting.DirectiveTemplateURL"></div>
                     </vr-row>
                 </vr-form>
-                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                <vr-actionbar showcollapsebutton="false" issectioncollapsed="false" ng-if="selectedWidget!=undefined || selectedWidget!=null">
                     <div transclude-to="buttons">
                         <vr-button type="Add" formname="formDesigningSelectionModel" data-onclick="addViewContent"></vr-button>
                     </div>
                 </vr-actionbar>
                 <div>
                     <vr-row ng-if="addedSummaryWidgets.length>0">
-                        <vr-section title="Module">
+                        <vr-section title="Summary">
                             <div class="list-group dragbelzone" ng-sortable="itemsSortable">
                                 <vr-columns ng-repeat="addedSummaryWidget in addedSummaryWidgets" colnum="{{addedSummaryWidget.NumberOfColumns}}">
                                     <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                     <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedSummaryWidget)"></i>
                                     <vr-directivewrapper directive="addedSummaryWidget.Widget.Setting.Directive" on-ready="addedSummaryWidget.Widget.onElementReady" settings="addedSummaryWidget.Widget.Setting.Settings"
-                                                         retrievedataonload="true" previewmode="true"></vr-directivewrapper>
+                                                         retrievedataonload="false" previewmode="true"></vr-directivewrapper>
                                 </vr-columns>
                             </div>
                         </vr-section>

@@ -40,9 +40,14 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             buildWidgetObjFromScope();
 
         }
-    }
 
+    }
+  
     function buildWidgetObjFromScope() {
+        if ($scope.selectedWidget == undefined)
+            return true;
+        if ($scope.subViewConnector.getValue() == undefined)
+            return true;
             var widgetSetting = {
                 settings: $scope.subViewConnector.getValue(),
                 directive: $scope.selectedWidget.DirectiveName,
@@ -58,6 +63,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             if ($scope.isEditMode) {
                 $scope.widget.Id = $scope.filter.WidgetID;
             }
+            return false;
             
 
     }

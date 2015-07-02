@@ -12,8 +12,8 @@
                             <vr-textbox value="widgetName" label="Widget Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="large">
-                                <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
-                                           datasource="widgets" selectedvalues="selectedWidget"></vr-select>
+                            <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
+                                       datasource="widgets" selectedvalues="selectedWidget" isrequired></vr-select>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
@@ -25,8 +25,8 @@
                     </vr-row>
                 </vr-form>
             </div>
-            <div ng-if="previewSelected">
-                <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'"></div>
+            <div ng-if="previewSelected" >
+                <div ng-include="'Client/Modules/Security/Views/WidgetsPages/WidgetPreview.html'" ></div>
             </div>
 
         </vr-form>

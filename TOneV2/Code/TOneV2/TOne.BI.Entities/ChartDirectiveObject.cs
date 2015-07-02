@@ -11,5 +11,6 @@ namespace TOne.BI.Entities
         public string OperationType { get; set; }
         public string EntityType { get; set; }
         public List<string> MeasureTypes { get; set; }
+        public string TopMeasure { get; set; }
     }
 }

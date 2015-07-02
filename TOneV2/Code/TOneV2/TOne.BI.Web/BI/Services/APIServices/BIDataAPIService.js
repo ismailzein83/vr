@@ -33,7 +33,7 @@ app.service('BIDataAPIService', function (BaseAPIService) {
     }
 
     function GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames) {
-
+        console.log(entityTypeName);
         //console.log(measureTypesIDs);
         return BaseAPIService.get("/api/BIData/GetTopEntities",
             {

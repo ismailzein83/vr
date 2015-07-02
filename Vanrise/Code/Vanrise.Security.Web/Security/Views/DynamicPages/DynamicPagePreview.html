@@ -24,15 +24,13 @@
 </vr-form>
 
     <div vr-loader="isGettingData">
-            <vr-row ng-if="summaryWidgets.length>0" removeLine>
-                <vr-section title="Summary">
+            <vr-row ng-if="summaryWidgets.length>0">
                     <div class="list-group dragbelzone" ng-sortable="itemsSortable">
                         <vr-columns ng-repeat="summaryWidget in summaryWidgets" colnum="{{summaryWidget.NumberOfColumns}}">
                             <vr-directivewrapper directive="summaryWidget.Setting.Directive" on-ready="summaryWidget.onElementReady" settings="summaryWidget.Setting.Settings"
                                                  retrievedataonload="true" filter="filter"></vr-directivewrapper>
                         </vr-columns>
                     </div>
-                </vr-section>
             </vr-row>
             <vr-row ng-if="bodyWidgets.length>0">
                 <div class="list-group dragbelzone" ng-sortable="itemsSortable">

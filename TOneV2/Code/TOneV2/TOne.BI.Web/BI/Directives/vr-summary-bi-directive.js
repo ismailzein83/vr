@@ -44,7 +44,7 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
             return '<div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource" ><td><vr-label isValue="{{value.description}}">{{value.description}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div>';
         }
         else
-            return '<div  ng-repeat="value in ctrl.dataSource"><vr-label isValue="{{value.description}}">{{value.description}}: {{value.value}}</vr-label></div>';
+            return '<div><table class="table  table-striped" ><tr ng-repeat="value in ctrl.measureTypes" ><td><vr-label isValue="{{value}}">{{value}}</vr-label></td></tr></table>';
 
 
 
@@ -79,7 +79,7 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
                           
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.dataSource[i] = {
-                                    value:response[i],
+                                    value: response[i].toFixed(2),
                                     description: ctrl.measureTypes[i]
                                 }
                             }

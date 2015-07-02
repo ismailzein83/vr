@@ -36,7 +36,6 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
     };
     function getBIChartTemplate(previewmode) {
-       // console.log(previewmode);
         if (previewmode!='true') {
             return '<vr-section title="{{ctrl.settings.EntityType}}/{{ctrl.settings.MeasureTypes}}"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></vr-section>';
         }
@@ -77,7 +76,6 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
                 .then(function (response) {
                            
                     if (ctrl.isDateTimeGroupedData) {
-
                                 BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, false);
                                 refreshChart(response);
                             }

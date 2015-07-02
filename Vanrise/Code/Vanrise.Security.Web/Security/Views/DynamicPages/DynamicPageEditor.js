@@ -69,8 +69,8 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             }
             switch($scope.selectedSection.value)
             {
-                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.summaryContents.push(viewContent); break;
-                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget); $scope.bodyContents.push(viewContent); break;
+                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.summaryContents.push(viewContent); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
+                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget); $scope.bodyContents.push(viewContent); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
             }
             $scope.selectedWidget = null;
             
@@ -79,9 +79,11 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.removeViewContent = function (viewContent) {
             switch ($scope.selectedSection.value) {
                 case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1);
-                    $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1); break;
+                    $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1);
+                    $scope.widgets.push(viewContent.Widget); break;
                 case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
-                    $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1); break;
+                    $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1);
+                    $scope.widgets.push(viewContent.Widget); break;
             }
             
 
@@ -188,9 +190,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 $scope.selectedWidget = value;
                 var viewContent = {
                     WidgetId: $scope.selectedWidget.Id,
-                    NumberOfColumns: content.NumberOfColumns
+                    NumberOfColumns: bodyContent.NumberOfColumns
                 }
-                $scope.addedBodyWidgets.push(viewContent);
+                $scope.bodyContents.push(viewContent);
+                $scope.addedBodyWidgets.push(bodyContent);
             }
                 
         }
@@ -202,9 +205,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 $scope.selectedWidget = value;
                 var viewContent = {
                     WidgetId: $scope.selectedWidget.Id,
-                    NumberOfColumns: content.NumberOfColumns
+                    NumberOfColumns: summaryContent.NumberOfColumns
                 }
-                $scope.addedSummaryWidgets.push(viewContent);
+                $scope.summaryContents.push(viewContent);
+                $scope.addedSummaryWidgets.push(summaryContent);
             }
 
         }
@@ -243,15 +247,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
                 description: "Full Row"
             },
             {
-                value: "2",
+                value: "6",
                 description: "Half Row"
             },
             {
-                value: "3",
+                value: "4",
                 description: "1/3 Row"
             },
             {
-                value: "4",
+                value: "2",
                 description: "Quarter Row"
             }
         ];

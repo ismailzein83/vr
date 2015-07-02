@@ -14,8 +14,12 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
         $scope.selectedEntityType;
+        $scope.selectedTopMeasure;
         $scope.selectedMeasureTypes = [];
         defineTimeDimensionTypes();
+        $scope.onSelectionChanged = function () {
+            $scope.selectedTopMeasure = $scope.selectedMeasureTypes[0];
+        }
         $scope.subViewConnector.getValue = function () {
             return getSubViewValue();
         }
@@ -28,6 +32,9 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
 
     }
     function getSubViewValue() {
+        var topMeasure = null;
+        if ($scope.selectedTopMeasure != undefined)
+            topMeasure = $scope.selectedTopMeasure.Name;
         var measureTypes = [];
         for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {
             measureTypes.push($scope.selectedMeasureTypes[i].Name);
@@ -40,10 +47,12 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
+            TopMeasure: topMeasure
         };
     }
     function setSubViewValue(settings) {
-
+        if (settings == undefined)
+            return;
         for (i = 0; i < $scope.Entities.length; i++) {
             
             if ($scope.Entities[i].Name == settings.EntityType) {
@@ -52,12 +61,14 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
             }
         }
         for (var i = 0; i < settings.MeasureTypes.length; i++) {
-
+            var measureType=settings.MeasureTypes[i];
             for (j = 0; j < $scope.Measures.length; j++)
             {
                
-            if(settings.MeasureTypes[i]==$scope.Measures[j].Name)
+                if (measureType == $scope.Measures[j].Name)
                 $scope.selectedMeasureTypes.push($scope.Measures[j]);
+                if ($scope.Measures[j].Name == settings.TopMeasure)
+                $scope.selectedTopMeasure = $scope.Measures[j];
         }
              }
         for (var i = 0; i < $scope.operationTypes.length; i++) {
