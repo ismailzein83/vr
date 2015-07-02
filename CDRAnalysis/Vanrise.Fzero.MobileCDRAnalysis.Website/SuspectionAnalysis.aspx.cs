@@ -392,16 +392,16 @@ public partial class SuspectionAnalysis : BasePage
     {
         Report report =new Report();
         report = Report.Load(int.Parse(ddlreports.SelectedItem.Value));
-        if (report !=null && report.Id != 0 )
-        {
-            List<ReportDetail> reportDetails = GetSelectedReportDetails(GetSelectedRecords(), report);
-            foreach (ReportDetail rd in reportDetails)
-            { 
-              rd.ReportId=report.Id;
-            }
-            ReportDetail.Save(reportDetails);
-            LoadData();
-        }
+        //if (report !=null && report.Id != 0 )
+        //{
+        //    List<ReportDetail> reportDetails = GetSelectedReportDetails(GetSelectedRecords(), report);
+        //    foreach (ReportDetail rd in reportDetails)
+        //    { 
+        //      rd.ReportId=report.Id;
+        //    }
+        //    ReportDetail.Save(reportDetails);
+        //    LoadData();
+        //}
         
     }
 
