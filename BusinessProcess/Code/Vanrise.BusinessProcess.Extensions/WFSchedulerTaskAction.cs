@@ -22,11 +22,11 @@ namespace Vanrise.BusinessProcess.Extensions
             if(evaluatedExpressions != null)
                 ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
 
-            BPClient bpClient = new BPClient();
-            bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
-            {
-                InputArguments = this.ProcessInputArguments
-            });
+            //BPClient bpClient = new BPClient();
+            //bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
+            //{
+            //    InputArguments = this.ProcessInputArguments
+            //});
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
         }
