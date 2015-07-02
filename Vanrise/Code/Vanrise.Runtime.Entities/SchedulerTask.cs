@@ -18,6 +18,10 @@ namespace Vanrise.Runtime.Entities
 
         public SchedulerTaskStatus Status { get; set; }
 
+        public DateTime? NextRunTime { get; set; }
+
+        public DateTime? LastRunTime { get; set; }
+
         public int TriggerTypeId { get; set; }
 
         public SchedulerTaskTrigger TaskTrigger { get; set; }

@@ -8,47 +8,22 @@ namespace Vanrise.Runtime.Entities
 {
     public class TimeSchedulerTaskTrigger : SchedulerTaskTrigger
     {
-        DateTime _dateToRun;
-        public DateTime DateToRun
-        {
-            get
-            {
-                return _dateToRun;
-            }
-            set
-            {
-                _dateToRun = value.ToLocalTime();
-            }
-        }
+        //DateTime _dateToRun;
+        //public DateTime DateToRun
+        //{
+        //    get
+        //    {
+        //        return _dateToRun;
+        //    }
+        //    set
+        //    {
+        //        _dateToRun = value.ToLocalTime();
+        //    }
+        //}
 
-        public string TimeToRun { get; set; }
+        public List<DayOfWeek> ScheduledDays { get; set; }
 
-        public override bool CheckIfTimeToRun()
-        {
-            string[] timeParts = TimeToRun.Split(':');
-
-            DateToRun = DateToRun.Date;
-
-            if (timeParts.Length > 0)
-            {
-                DateToRun = DateToRun.AddHours(double.Parse(timeParts[0]));
-
-                if (timeParts.Length > 1 && timeParts[1] != null)
-                {
-                    DateToRun = DateToRun.AddMinutes(double.Parse(timeParts[1]));
-                }
-
-                if (timeParts.Length > 2 && timeParts[2] != null)
-                {
-                    DateToRun = DateToRun.AddSeconds(double.Parse(timeParts[2]));
-                }
-            }
-
-            return DateToRun.Date.Equals(DateTime.Now.Date)
-                && DateToRun.Hour.Equals(DateTime.Now.Hour)
-                && DateToRun.Minute.Equals(DateTime.Now.Minute);
-        }
-
+        public List<string> ScheduledHours { get; set; }
 
         public override Dictionary<string, string> EvaluateExpressions(Dictionary<string, string> rawExpressions)
         {
@@ -63,8 +38,8 @@ namespace Vanrise.Runtime.Entities
                     string placeHolder = kvp.Value;
                     if (placeHolder == "ScheduleTime")
                     {
-                        Console.WriteLine("Original Time is {0}", DateToRun);
-                        placeHolder = DateToRun.ToString();
+                        Console.WriteLine("Original Time is {0}", CalculateNextTimeToRun());
+                        placeHolder = CalculateNextTimeToRun().ToString();
                     }
 
                     evaluatedExpressions.Add(kvp.Key, placeHolder);
@@ -72,6 +47,31 @@ namespace Vanrise.Runtime.Entities
             }
 
             return evaluatedExpressions;
+        }
+
+        public override DateTime CalculateNextTimeToRun()
+        {
+            List<DateTime> listofScheduledDateTimes = new List<DateTime>();
+
+            foreach (DayOfWeek day in ScheduledDays)
+            {
+                foreach (string hour in ScheduledHours)
+                {
+                    string[] timeParts = hour.Split(':');
+
+                    TimeSpan scheduledTime = new TimeSpan(int.Parse(timeParts[0]), int.Parse(timeParts[1]), 0);
+                    TimeSpan spanTillThen = scheduledTime - DateTime.Now.TimeOfDay;
+
+                    int daysTillThen = (int)day - (int)DateTime.Today.DayOfWeek;
+
+                    if ((daysTillThen < 0) || (daysTillThen == 0 && spanTillThen.Ticks < 0))
+                        daysTillThen += 7;
+
+                    listofScheduledDateTimes.Add(DateTime.Now.AddDays(daysTillThen).Add(spanTillThen));
+                }
+            }
+
+            return listofScheduledDateTimes.OrderBy(x => x.Ticks).ToList().FirstOrDefault();
         }
     }
 }

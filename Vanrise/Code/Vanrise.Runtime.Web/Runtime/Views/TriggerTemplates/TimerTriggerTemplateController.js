@@ -1,21 +1,37 @@
-﻿TimeTriggerTemplateController.$inject = ['$scope'];
+﻿TimeTriggerTemplateController.$inject = ['$scope', 'DaysOfWeekEnum', 'UtilsService'];
 
-function TimeTriggerTemplateController($scope) {
+function TimeTriggerTemplateController($scope, DaysOfWeekEnum, UtilsService) {
 
     defineScope();
     load();
 
     function defineScope() {
 
+        $scope.daysOfWeek = [];
+
+        $scope.selectedDays = [];
+        $scope.selectedHours = [];
+
+        $scope.addHour = function () {
+            $scope.selectedHours.push($scope.time);
+        }
+
+        $scope.removeHour = function (hourToRemove) {
+            $scope.selectedHours.splice($scope.selectedHours.indexOf(hourToRemove), 1);
+        }
+
         $scope.schedulerTaskTrigger.getData = function () {
+            var numbersOfSelectedDays = [];
+            angular.forEach($scope.selectedDays, function (item) {
+                numbersOfSelectedDays.push(item.value);
+            });
+
             return {
                 $type: "Vanrise.Runtime.Entities.TimeSchedulerTaskTrigger, Vanrise.Runtime.Entities",
-                DateToRun:  $scope.dateToRun,
-                TimeToRun: $scope.timeToRun
+                ScheduledDays: numbersOfSelectedDays,
+                ScheduledHours: $scope.selectedHours
             };
         };
-
-        loadForm();
     }
 
     function loadForm() {
@@ -24,17 +40,31 @@ function TimeTriggerTemplateController($scope) {
             return;
         var data = $scope.schedulerTaskTrigger.data;
         if (data != null) {
-            $scope.dateToRun = data.DateToRun;
-            $scope.timeToRun = data.TimeToRun;
+            angular.forEach(data.ScheduledDays, function (item) {
+                var selectedDay = UtilsService.getItemByVal($scope.daysOfWeek, item, "value");
+                $scope.selectedDays.push(selectedDay);
+            });
+
+            angular.forEach(data.ScheduledHours, function (item) {
+                $scope.selectedHours.push(item);
+            });
         }
         else {
-            $scope.timeToRun = '';
-            $scope.dateToRun = '';
+            $scope.selectedDays = [];
+            $scope.selectedHours = [];
         }
     }
 
     function load() {
+        loadDaysOfWeek();
+
+        loadForm();
     }
 
+    function loadDaysOfWeek() {
+        for (var prop in DaysOfWeekEnum) {
+            $scope.daysOfWeek.push(DaysOfWeekEnum[prop]);
+        }
+    }
 }
 appControllers.controller('Runtime_TimeTriggerTemplateController', TimeTriggerTemplateController);

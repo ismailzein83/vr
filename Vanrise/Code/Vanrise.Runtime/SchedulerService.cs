@@ -16,16 +16,29 @@ namespace Vanrise.Runtime
 
             foreach (Entities.SchedulerTask item in tasks)
             {
-                if (item.IsEnabled && item.Status != Entities.SchedulerTaskStatus.Started && item.TaskTrigger.CheckIfTimeToRun())
+                if (item.IsEnabled && item.Status != Entities.SchedulerTaskStatus.Started)
                 {
-                    Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item.TaskAction.RawExpressions);
-
-                    //TODO: change this to asynchronous
-                    dataManager.UpdateTaskStatus(item.TaskId, Entities.SchedulerTaskStatus.Started);
-                    item.TaskAction.Execute(evaluatedExpressions);
-                    dataManager.UpdateTaskStatus(item.TaskId, Entities.SchedulerTaskStatus.Stopped);
-                }
+                    if(item.NextRunTime == null)
+                    {
+                        item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
+                    }
                     
+                    if(item.NextRunTime <= DateTime.Now)
+                    {
+                        Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item.TaskAction.RawExpressions);
+
+                        item.Status = Entities.SchedulerTaskStatus.Started;
+                        dataManager.UpdateTask(item);
+
+                        item.TaskAction.Execute(evaluatedExpressions);
+                        
+                        item.Status = Entities.SchedulerTaskStatus.NotStarted;
+                        item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
+                        item.LastRunTime = DateTime.Now;
+                    }
+
+                    dataManager.UpdateTask(item);
+                }
             }
         }
     }

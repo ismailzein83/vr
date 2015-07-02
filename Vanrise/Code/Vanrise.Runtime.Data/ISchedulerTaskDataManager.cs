@@ -20,7 +20,5 @@ namespace Vanrise.Runtime.Data
         bool AddTask(Entities.SchedulerTask taskObject, out int insertedId);
 
         bool UpdateTask(Entities.SchedulerTask taskObject);
-
-        bool UpdateTaskStatus(int taskId, SchedulerTaskStatus status);
     }
 }
