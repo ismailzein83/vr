@@ -1,8 +1,7 @@
 ﻿
 app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', function (SelectService, BaseDirService, ValidationMessagesEnum, UtilsService) {
-    var openedDropDownIds = [];
-    var rootScope;
-    vrSelectSharedObject = {
+    var openedDropDownIds = [], rootScope;
+    var vrSelectSharedObject = {
         onOpenDropDown: function (idAttribute) {            
             rootScope.$apply(function () {
 			  openedDropDownIds.push(idAttribute);
@@ -163,7 +162,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 var selectedVal = [];
                 for (var i = 0; i < controller.selectedvalues.length; i++) {
                     selectedVal.push(controller.getObjectText(controller.selectedvalues[i]));
-                    if (i == 2) break;
+                    if (i === 2) break;
                 }
                 var s = SelectService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
                 return s;
@@ -172,7 +171,7 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
             
             this.getSelectedSectionClass = function () {
                 if (!controller.selectedSectionVisible()) return 'single-col-checklist';
-                return controller.selectedvalues.length == 0 ? 'single-col-checklist' : 'double-col-checklist';
+                return controller.selectedvalues.length === 0 ? 'single-col-checklist' : 'double-col-checklist';
             };
             
         },
@@ -257,51 +256,50 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                 if (attrs.openup !== undefined) {
                     ulDropdown.addClass('menu-to-top');
                 }
-             
-                setTimeout(function () {
-                    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function (e) {
+
+                setTimeout(function() {
+                    $('div[name=' + attrs.id + ']').on('show.bs.dropdown', function(e) {
                         vrSelectSharedObject.onOpenDropDown(attrs.id);
                         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                     });
 
-                    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function (e) {
+                    $('div[name=' + attrs.id + ']').attr('name', attrs.id).on('hide.bs.dropdown', function(e) {
                         vrSelectSharedObject.onCloseDropDown(attrs.id);
                         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                     });
-                }, 100)
-                setTimeout(function () {
+                }, 100);
+                setTimeout(function() {
                     if ($('div[name=' + attrs.id + ']').closest('.modal-body').length > 0) {
 
-                        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+                        $('div[name=' + attrs.id + ']').on('click', '.dropdown-toggle', function(event) {
 
                             var self = $(this);
                             var selfHeight = $(this).parent().height();
-                            var selfWidth = $(this).parent().width();
+                            //var selfWidth = $(this).parent().width();
                             var selfOffset = $(self).offset();
-                            var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
+                            //var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
                             var dropDown = self.parent().find('ul');
                             $(dropDown).css({ position: 'fixed', top: selfOffset.top + selfHeight, left: 'auto' });
                         });
 
-                    var fixDropdownPosition = function () {
-                        $('.drop-down-inside-modal').find('.dropdown-menu').hide();
-                        $('.drop-down-inside-modal').removeClass("open");
+                        var fixDropdownPosition = function() {
+                            $('.drop-down-inside-modal').find('.dropdown-menu').hide();
+                            $('.drop-down-inside-modal').removeClass("open");
 
-                    };
+                        };
 
-                    $(".modal-body").unbind("scroll");
-                    $(".modal-body").scroll(function () {
-                        fixDropdownPosition();
-                    });
-                    $(window).resize(function () {
-                        fixDropdownPosition();
-                    });
-                      }
-                }, 1000)
+                        $(".modal-body").unbind("scroll");
+                        $(".modal-body").scroll(function() {
+                            fixDropdownPosition();
+                        });
+                        $(window).resize(function() {
+                            fixDropdownPosition();
+                        });
+                    }
+                }, 1000);
 
 
-
-                //setTimeout(function () {
+//setTimeout(function () {
                 //    if (divDropdown.closest('.modal-body').length > 0) {
 
                 //        divDropdown.on('click', '.dropdown-toggle', function (event) {
@@ -373,7 +371,15 @@ app.directive('vrSelect', ['SelectService', 'BaseDirService', 'ValidationMessage
                         selectItem(e, item);                       
                     };
 
-                    $scope.$watch("ctrl.selectedvalues", function () {
+                    $scope.$watch(function() {
+
+                        if (ctrl.isMultiple()) {
+                            return ctrl.selectedvalues.length;
+                        }
+
+                        return ctrl.selectedvalues;
+
+                    }, function () {
                         if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                             var item = ctrl.onselectionchanged(ctrl.selectedvalues, ctrl.getdatasource());
                             if (item !== undefined) {
