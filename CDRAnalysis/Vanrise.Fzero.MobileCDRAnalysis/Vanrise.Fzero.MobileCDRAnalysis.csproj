@@ -71,33 +71,31 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\CallsStatistics.cs" />
-    <Compile Include="Classes\EmailReceiverType.cs" />
-    <Compile Include="Classes\Import.cs" />
-    <Compile Include="Classes\PredefinedColumn.cs" />
-    <Compile Include="Classes\prGetEmails_Result.cs" />
-    <Compile Include="Classes\EmailReceiver.cs" />
-    <Compile Include="Classes\EmailManager.cs" />
-    <Compile Include="Classes\EmailTemplate.cs" />
-    <Compile Include="Classes\EmailToken.cs" />
-    <Compile Include="Classes\ReportingStatus.cs" />
-    <Compile Include="Classes\Enums.cs" />
-    <Compile Include="Classes\Permission.cs" />
-    <Compile Include="Classes\SourceMapping.cs" />
-    <Compile Include="Classes\User.cs" />
-    <Compile Include="Classes\UserPermission.cs" />
     <Compile Include="Classes\Constants.cs" />
-    <Compile Include="Classes\vwReportedNumberNormalCDR.cs" />
-    <Compile Include="Classes\vwReportedNumber.cs" />
     <Compile Include="Classes\Criteria_profile.cs" />
     <Compile Include="Classes\DataStatistics.cs" />
+    <Compile Include="Classes\EmailManager.cs" />
+    <Compile Include="Classes\EmailReceiver.cs" />
+    <Compile Include="Classes\EmailReceiverType.cs" />
+    <Compile Include="Classes\EmailTemplate.cs" />
+    <Compile Include="Classes\EmailToken.cs" />
+    <Compile Include="Classes\Enums.cs" />
+    <Compile Include="Classes\Import.cs" />
     <Compile Include="Classes\NormalCDR.cs" />
+    <Compile Include="Classes\NormalizationCall.cs" />
     <Compile Include="Classes\NumberProfile.cs" />
     <Compile Include="Classes\Period.cs" />
+    <Compile Include="Classes\Permission.cs" />
+    <Compile Include="Classes\PredefinedColumn.cs" />
+    <Compile Include="Classes\prGetEmails_Result.cs" />
     <Compile Include="Classes\Related_Criteria.cs" />
     <Compile Include="Classes\Report.cs" />
     <Compile Include="Classes\ReportDetail.cs" />
+    <Compile Include="Classes\ReportingStatus.cs" />
+    <Compile Include="Classes\SourceMapping.cs" />
     <Compile Include="Classes\Strategy.cs" />
     <Compile Include="Classes\StrategyPeriod.cs" />
+    <Compile Include="Classes\StrategyProperty.cs" />
     <Compile Include="Classes\StrategyThreshold.cs" />
     <Compile Include="Classes\Strategy_Min_Values.cs" />
     <Compile Include="Classes\Strategy_Suspection_level.cs" />
@@ -105,10 +103,12 @@
     <Compile Include="Classes\Subscriber_Values.cs" />
     <Compile Include="Classes\SuspectionOccurance.cs" />
     <Compile Include="Classes\Suspection_Level.cs" />
-    <Compile Include="Classes\Switch_DatabaseConnection.cs" />
-    <Compile Include="Classes\NormalizationCall.cs" />
     <Compile Include="Classes\SwitchProfile.cs" />
-    <Compile Include="Classes\StrategyProperty.cs" />
+    <Compile Include="Classes\Switch_DatabaseConnection.cs" />
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\UserPermission.cs" />
+    <Compile Include="Classes\vwReportedNumber.cs" />
+    <Compile Include="Classes\vwReportedNumberNormalCDR.cs" />
     <Compile Include="ControlTable.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
