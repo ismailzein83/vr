@@ -2,7 +2,7 @@
     <vr-columns width="normal">
         <vr-select datasource="operationTypes" datatextfield="description" datavaluefield="value" label="Data Type" selectedvalues="selectedOperationType" hidefilterbox></vr-select>
     </vr-columns>
-    <vr-columns width="normal" ng-show=" selectedOperationType.value == 'TopEntities'">
+    <vr-columns width="normal" ng-if=" selectedOperationType.value == 'TopEntities'">
         <vr-select datasource="Entities" datatextfield="Name" datavaluefield="DisplayName" label="Entity" selectedvalues="selectedEntityType" hidefilterbox></vr-select>
     </vr-columns>
     <vr-columns width="normal">

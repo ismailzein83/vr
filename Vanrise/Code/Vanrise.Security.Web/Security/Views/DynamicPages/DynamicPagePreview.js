@@ -57,7 +57,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
 
     function load() {
         $scope.isGettingData = false;
-        
+
     }
 
     function updateDashboard() {
@@ -137,12 +137,11 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {
+            
             summaryWidget.API = api;
         };
-        
         $scope.summaryWidgets.push(summaryWidget);
-      
-      //  console.log($scope.summaryWidgets);
+        
     }
 
     function loadAllWidgets() {

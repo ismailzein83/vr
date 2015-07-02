@@ -41,7 +41,7 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
     function getSummaryTemplate(previewmode) {
      //   console.log(previewmode);
         if (previewmode != 'true') {
-            return '<div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource"><td><vr-label isValue="{{value.description}}">{{value.description}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div>';
+            return '<div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource" ><td><vr-label isValue="{{value.description}}">{{value.description}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div>';
         }
         else
             return '<div  ng-repeat="value in ctrl.dataSource"><vr-label isValue="{{value.description}}">{{value.description}}: {{value.value}}</vr-label></div>';
@@ -56,11 +56,11 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
         function initializeController() {
             
             ctrl.onSummaryReady = function (api) {
-                console.log(ctrl);
                 summaryAPI = api;
-                if (retrieveDataOnLoad)
-                    retrieveData();
+                
             }
+            if (retrieveDataOnLoad)
+                    retrieveData();
             ctrl.measureTypes = settings.MeasureTypes;
             ctrl.dataSource = [];
             
