@@ -31,7 +31,7 @@
                             </vr-choices>
 
                             <div ng-show="dataItem.isRunningTabShown">
-                                <vr-datagrid datasource="dataItem.OpenedInstances">
+                                <vr-datagrid datasource="dataItem.openedInstances">
                                     <vr-datagridcolumn headertext="'Title'" field="'Title'" isclickable="true" onclicked="viewScope.processInstanceClicked"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Execution Status'" field="'StatusDescription'"></vr-datagridcolumn>
                                 </vr-datagrid>
@@ -51,7 +51,6 @@
 
 
 
-                        
 
 
 
@@ -60,6 +59,7 @@
                 </vr-columns>
             </vr-row>
         </div>
+       
 
     </vr-form>
 

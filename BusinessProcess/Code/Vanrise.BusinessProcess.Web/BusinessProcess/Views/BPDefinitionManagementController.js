@@ -1,4 +1,4 @@
-﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval','VRNotificationService'];
+﻿BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcessAPIService', 'VRModalService', '$interval', 'VRNotificationService'];
 
 function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRModalService, $interval, VRNotificationService) {
 
@@ -52,44 +52,51 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         }
     }
 
-    function getData() {
+    function getMainData() {
         var pageInfo = mainGridAPI.getPageInfo();
 
         var title = $scope.title != undefined ? $scope.title : '';
 
-        $scope.openedInstances = [];
+        BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
+            angular.forEach(response, function (def) {
+                $scope.filteredDefinitions.push(def);
+            });
+        });
+        getOpenedInstancesData();
+    }
+
+   
+
+    function getOpenedInstancesData() {
+
+        angular.forEach($scope.filteredDefinitions, function (def) {
+                def.openedInstances = [];
+        });
 
         BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.openedInstances.push(itm);
-            });
-            BusinessProcessAPIService.GetFilteredDefinitions(pageInfo.fromRow, pageInfo.toRow, title).then(function (response) {
-                angular.forEach(response, function (def) {
-                    def.OpenedInstances = [];
-                    var countRunningInstances = 0;
-                    angular.forEach($scope.openedInstances, function (inst) {
-                        if (inst.DefinitionID == def.BPDefinitionID) {
-                            countRunningInstances++;
-                            def.OpenedInstances.push(inst);
+            angular.forEach(response, function (inst) {
+                angular.forEach($scope.filteredDefinitions, function (def) {
+                    if (def.BPDefinitionID == inst.DefinitionID) {
+                        if (angular.isUndefined(def.openedInstances)) {
+                            def.openedInstances = [];
                         }
-
-                    });
-                    def.RunningInstances = countRunningInstances;
-                    $scope.filteredDefinitions.push(def);
+                        def.openedInstances.push(inst);
+                    }
                 });
             });
         });
+
     }
 
     function defineGrid() {
         $scope.filteredDefinitions = [];
         $scope.gridMenuActions = [];
         $scope.loadMoreData = function () {
-            return getData();
+            return getMainData();
         };
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
-            return getData();
+            return getMainData();
         };
         $scope.gridMenuActions = [{
             name: "Start New Instance",
@@ -104,7 +111,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     $scope.searchClicked = function () {
         mainGridAPI.clearDataAndContinuePaging();
-        return getData();
+        return getMainData();
     };
 
 
