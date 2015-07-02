@@ -8,7 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueItemType
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string ItemFQTN { get; set; }
 

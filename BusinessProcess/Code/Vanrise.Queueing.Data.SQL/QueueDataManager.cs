@@ -154,7 +154,7 @@ namespace Vanrise.Queueing.Data.SQL
         {
             return new QueueItemType
             {
-                Id = (long)reader["Id"],
+                Id = (int)reader["Id"],
                 ItemFQTN = reader["ItemFQTN"] as string,
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 DefaultQueueSettings = reader["DefaultQueueSettings"] as string,
