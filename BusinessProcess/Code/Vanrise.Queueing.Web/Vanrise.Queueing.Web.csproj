@@ -84,11 +84,14 @@
   <ItemGroup>
     <Compile Include="Controllers\QueueingController.cs" />
     <Compile Include="ModelMappers\QueueingMappers.cs" />
+    <Compile Include="Models\EnumModel.cs" />
     <Compile Include="Models\QueueInstanceModel.cs" />
+    <Compile Include="Models\QueueItemHeaderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Queueing\Constants\QueueItemStatusEnum.js" />
     <Content Include="Queueing\Services\QueueingAPIService.js" />
     <Content Include="Queueing\Views\QueueItemManagement.html" />
     <Content Include="Queueing\Views\QueueItemManagementController.js" />

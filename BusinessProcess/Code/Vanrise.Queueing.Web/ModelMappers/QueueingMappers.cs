@@ -22,6 +22,35 @@ namespace Vanrise.Queueing.Web.ModelMappers
             };
         }
 
+        private static QueueItemHeaderModel MapQueueItemHeader(QueueItemHeader header)
+        {
+            return new QueueItemHeaderModel
+            {
+                ItemId = header.ItemId,
+                QueueId = header.QueueId,
+                SourceQueueId = header.SourceQueueId,
+                SourceItemId = header.SourceItemId,
+                Description = header.Description,
+                Status = header.Status,
+                StatusDescription = header.Status.ToString(),
+                RetryCount = header.RetryCount,
+                ErrorMessage = header.ErrorMessage,
+                CreatedTime = header.CreatedTime,
+                LastUpdatedTime = header.LastUpdatedTime,
+            };
+        }
+
+        public static List<QueueItemHeaderModel> MapQueueItemHeaders(List<QueueItemHeader> headers)
+        {
+            List<QueueItemHeaderModel> models = new List<QueueItemHeaderModel>();
+            if (headers != null)
+                foreach (var h in headers)
+                {
+                    models.Add(MapQueueItemHeader(h));
+                }
+            return models;
+        }
+
         public static List<QueueInstanceModel> MapQueueInstances(List<QueueInstance> instances)
         {
             List<QueueInstanceModel> models = new List<QueueInstanceModel>();

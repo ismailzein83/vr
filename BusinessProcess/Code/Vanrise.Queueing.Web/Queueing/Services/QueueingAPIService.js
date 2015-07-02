@@ -11,13 +11,28 @@
             return BaseAPIService.post("/api/Queueing/GetQueueInstances",queueItemTypes);
         }
 
+        function getHeaders(queueIds, fromRow, toRow, statuses) {
+            return BaseAPIService.post("/api/Queueing/GetHeaders", {
+                FromRow: fromRow,
+                ToRow: toRow,
+                QueueIds: queueIds,
+                Statuses: statuses
+            });
+        }
+
         function getQueueItemTypes() {
             return BaseAPIService.get("/api/Queueing/GetQueueItemTypes");
         }
 
+        function getItemStatusList() {
+            return BaseAPIService.get("/api/Queueing/GetItemStatusList");
+        }
+
         return ({
             GetQueueItemTypes: getQueueItemTypes,
-            GetQueueInstances: getQueueInstances
+            GetQueueInstances: getQueueInstances,
+            GetHeaders: getHeaders,
+            GetItemStatusList: getItemStatusList
         });
     }
     

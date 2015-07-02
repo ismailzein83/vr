@@ -10,11 +10,13 @@ namespace Vanrise.Queueing
 {
     public class QueueingManager
     {
-        private IQueueDataManager _dataManager;
+        private readonly IQueueDataManager _dataManager;
+        private readonly IQueueItemDataManager _itemDataManager;
 
         public QueueingManager()
         {
             _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+            _itemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         }
 
         public List<QueueItemType> GetQueueItemTypes()
@@ -25,6 +27,11 @@ namespace Vanrise.Queueing
         public List<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
         {
             return _dataManager.GetQueueInstancesByTypes(queueItemTypes);
+        }
+
+        public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses)
+        {
+            return _itemDataManager.GetHeaders(queueIds, statuses);
         }
 
     }

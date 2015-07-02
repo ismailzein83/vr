@@ -23,11 +23,49 @@ namespace Vanrise.Queueing.Web.Controllers
             return _queueingManager.GetQueueItemTypes();
         }
 
+        [HttpGet]
+        public List<EnumModel> GetItemStatusList()
+        {
+            var lst = new List<EnumModel>();
+            foreach (var val in Enum.GetValues(typeof(QueueItemStatus)))
+            {
+                EnumModel item = new EnumModel
+                {
+                    Value = (int)val,
+                    Description = ((QueueItemStatus)val).ToString()
+                };
+                lst.Add(item);
+            }
+            return lst;
+        }
+
         [HttpPost]
         public List<QueueInstanceModel> GetQueueInstances(IEnumerable<int> queueItemTypes)
         {
             return QueueingMappers.MapQueueInstances(_queueingManager.GetQueueInstances(queueItemTypes));
         }
 
+        [HttpPost]
+        public IEnumerable<QueueItemHeaderModel> GetHeaders(GetHeadersInput param)
+        {
+            param.FromRow = param.FromRow - 1;
+            IEnumerable<QueueItemHeaderModel> rows = QueueingMappers.MapQueueItemHeaders(_queueingManager.GetHeaders(param.QueueIds, param.Statuses));
+            return rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
+        }
     }
+
+    #region Argument Classes
+
+    public class GetHeadersInput
+    {
+        public int FromRow { get; set; }
+        public int ToRow { get; set; }
+        public IEnumerable<int> QueueIds { get; set; }
+
+        public IEnumerable<QueueItemStatus> Statuses { get; set; }
+
+    }
+    
+
+    #endregion
 }

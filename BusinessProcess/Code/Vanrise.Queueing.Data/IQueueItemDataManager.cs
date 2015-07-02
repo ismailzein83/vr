@@ -30,5 +30,7 @@ namespace Vanrise.Queueing.Data
         void UpdateHeader(long itemId, QueueItemStatus queueItemStatus, int retryCount, string errorMessage);
 
         Dictionary<int, long> GetQueueIDsHavingNewItems(long afterQueueActivationId);
+
+        List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses);
     }
 }
