@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
             {
                 using (Entities context = new Entities())
                 {
-                    list_ReportedNumbers = context.vwReportedNumbers.Where(x=>x.ReportID==ReportID).ToList();
+                    //list_ReportedNumbers = context.vwReportedNumbers.Where(x=>x.ReportID==ReportID).ToList();
                 }
             }
             catch (Exception err)
