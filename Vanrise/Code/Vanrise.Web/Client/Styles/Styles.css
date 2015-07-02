@@ -36,9 +36,8 @@
    right: 175px;
 }
 .sub-header {
-    height: 43px;
+    height: 46px;
     background-color: #FFF;
-    border-bottom: 2px solid #F0F0F0;
     position: fixed;
     z-index: 1001;
     width: 100%;    
@@ -50,11 +49,14 @@
 .sub-header-closed {
     margin-left: 40px;
 }
-
+.vr-breadcrumb{
+    background-color:#fff !important;
+}
 .inner-sub{
-   height: 41px;
-   position: relative;
-   padding: 5px;
+    height: 44px;
+    position: relative;
+    padding: 5px;
+    border-bottom: 2px solid #F0F0F0;
 }
 
 .fogetten-label{

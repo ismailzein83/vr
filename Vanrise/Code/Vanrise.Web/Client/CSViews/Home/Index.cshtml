@@ -30,6 +30,14 @@
         <div class="inner-sub ">
             Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
         </div>
+        <div>
+            <ol class="breadcrumb vr-breadcrumb">
+                <li><a href="#/default">Home</a></li>
+                <li><label >{{breadcrumb.parent.Name}}</label></li>
+                <li ng-if="menusubItemsCurrent!=null"><label>{{breadcrumb.subparent.Name}}</label></li>
+                <li class="active">{{breadcrumb.leaf.Name}}</li>
+            </ol>
+        </div>
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
@@ -57,7 +65,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel panel-collapse" ng-show="menuItemsCurrent.Id == item.Id" >
+                    <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel panel-collapse" ng-show="menuItemsCurrent.Id == item.Id">
                         <div class="panel-body ">
                             <ul class="nav">
                                 <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''" ng-repeat="c in item.Childs">
@@ -100,13 +108,13 @@
                         <li role="presentation">
                             <label class="titel-groupe"> {{::item.Name}}</label>
                         </li>
-                        <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs"  ng-class="c.isSelected?'selected-node':''">
+                        <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs" ng-class="c.isSelected?'selected-node':''">
                             <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
                         </li>
                         <li ng-if="c.Childs != undefined" class="innerlist" ng-repeat="c in item.Childs">
-                            <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)" >{{::c.Name}}</div>
+                            <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
                             <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
-                                <li ng-repeat="a in c.Childs" class="innerlist" >
+                                <li ng-repeat="a in c.Childs" class="innerlist">
                                     <a class="menulink" ng-class="a.isSelected?'selected-url bold-item':''" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                 </li>
                             </ul>

@@ -1,4 +1,7 @@
-﻿.login-container{
+﻿body{
+    font-family:"Open Sans" !important;
+}
+.login-container{
     background:url("../../Client/Images/login.png") center no-repeat;
     background-size: cover;
     width: 330px;
