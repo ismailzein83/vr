@@ -19,6 +19,26 @@ namespace CallGeneratorLibrary.Repositories
 
     public class CDRRepository
     {
+
+        public static CDR Load(double CDRID)
+        {
+            CDR log = new CDR();
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    log = context.CDRs.Where(l => l.CDRID == CDRID).FirstOrDefault<CDR>();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+
+            return log;
+        }
+
         public static List<ChartCall> GetChartCalls(int status)
         {
             List<ChartCall> LstChartCalls = new List<ChartCall>();

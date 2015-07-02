@@ -196,7 +196,11 @@ namespace CallGeneratorService
         {
             try
             {
-             //   WriteToEventLog(" \r\n" + ("phone_OnEstablishedConnection: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString() + " AddrFrom: " + AddrFrom.ToString() + " AddrTo: " + AddrTo));
+                WriteToEventLog(" \r\n" + ("phone_OnEstablishedConnection: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString() + " AddrFrom: " + AddrFrom.ToString() + " AddrTo: " + AddrTo));
+
+                ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                if (c != null)
+                    LstChanels[c.Id].ConnectDateTime = DateTime.Now;
             }
             catch (System.Exception ex)
             {
@@ -250,23 +254,29 @@ namespace CallGeneratorService
                 if (Service1.LstChanels[c.Id].AttemptDate == DateTime.MinValue)
                 {
                     cdr.AttemptDateTime = DateTime.Now;
-                    cdr.ConnectDateTime = DateTime.Now;
+                    //cdr.ConnectDateTime = DateTime.Now;
                 }
                 else
                 {
                     cdr.AttemptDateTime = Service1.LstChanels[c.Id].AttemptDate;
-                    cdr.ConnectDateTime = Service1.LstChanels[c.Id].AttemptDate;
+                    //cdr.ConnectDateTime = Service1.LstChanels[c.Id].AttemptDate;
                 }
 
-                //if (Service1.LstChanels[c.Id].ConnectDateTime == DateTime.MinValue)
-                //    cdr.ConnectDateTime = DateTime.Now;
-                //else
-                //    cdr.ConnectDateTime = Service1.LstChanels[c.Id].ConnectDateTime;
-
-                if (Service1.LstChanels[c.Id].EndDate == DateTime.MinValue)
-                    cdr.DisconnectDateTime = DateTime.Now;
+                if (Service1.LstChanels[c.Id].ConnectDateTime == DateTime.MinValue)
+                {
+                    cdr.ConnectDateTime = null;
+                    cdr.DisconnectDateTime = null;
+                }
                 else
-                    cdr.DisconnectDateTime = Service1.LstChanels[c.Id].EndDate;
+                {
+                    cdr.ConnectDateTime = Service1.LstChanels[c.Id].ConnectDateTime;
+                    cdr.DisconnectDateTime = DateTime.Now;
+                }
+
+                //if (Service1.LstChanels[c.Id].EndDate == DateTime.MinValue)
+                //    cdr.DisconnectDateTime = DateTime.Now;
+                //else
+                //    cdr.DisconnectDateTime = Service1.LstChanels[c.Id].EndDate;
                 if (GenCall != null)
                     cdr.ClientId = GenCall.ClientId;
                 else
@@ -342,13 +352,13 @@ namespace CallGeneratorService
             try
             {
 
-                ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                //ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
               //  if (c == null)
                  //   WriteToEventLog(" \r\n" + "c is null : ");
                // else
                 //    WriteToEventLog(" \r\n" + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
 
-                LstChanels[c.Id].ConnectDateTime = DateTime.Now;
+                //LstChanels[c.Id].ConnectDateTime = DateTime.Now;
 
                // WriteToEventLog(" \r\n" + ("phone_OnEstablishedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString()));
             }
