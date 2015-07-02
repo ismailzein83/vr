@@ -12,7 +12,7 @@ namespace Vanrise.Runtime
         protected override void Execute()
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            List<Entities.SchedulerTask> tasks = dataManager.GetAllTasks();
+            List<Entities.SchedulerTask> tasks = dataManager.GetReadyAndNewTasks();
 
             foreach (Entities.SchedulerTask item in tasks)
             {
@@ -22,16 +22,15 @@ namespace Vanrise.Runtime
                     {
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
                     }
-                    
-                    if(item.NextRunTime <= DateTime.Now)
+                    else
                     {
-                        Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item.TaskAction.RawExpressions);
+                        Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item);
 
                         item.Status = Entities.SchedulerTaskStatus.Started;
                         dataManager.UpdateTask(item);
 
                         item.TaskAction.Execute(evaluatedExpressions);
-                        
+
                         item.Status = Entities.SchedulerTaskStatus.NotStarted;
                         item.NextRunTime = item.TaskTrigger.CalculateNextTimeToRun();
                         item.LastRunTime = DateTime.Now;

@@ -25,21 +25,21 @@ namespace Vanrise.Runtime.Entities
 
         public List<string> ScheduledHours { get; set; }
 
-        public override Dictionary<string, string> EvaluateExpressions(Dictionary<string, string> rawExpressions)
+        public override Dictionary<string, string> EvaluateExpressions(SchedulerTask task)
         {
             Dictionary<string, string> evaluatedExpressions = null;
 
-            if (rawExpressions != null)
+            if (task.TaskAction.RawExpressions != null)
             {
                 evaluatedExpressions = new Dictionary<string, string>();
 
-                foreach (KeyValuePair<string, string> kvp in rawExpressions)
+                foreach (KeyValuePair<string, string> kvp in task.TaskAction.RawExpressions)
                 {
                     string placeHolder = kvp.Value;
                     if (placeHolder == "ScheduleTime")
                     {
-                        Console.WriteLine("Original Time is {0}", CalculateNextTimeToRun());
-                        placeHolder = CalculateNextTimeToRun().ToString();
+                        Console.WriteLine("Original Time is {0}", task.NextRunTime);
+                        placeHolder = task.NextRunTime.ToString();
                     }
 
                     evaluatedExpressions.Add(kvp.Key, placeHolder);

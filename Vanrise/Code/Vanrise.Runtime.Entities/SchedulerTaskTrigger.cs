@@ -10,6 +10,6 @@ namespace Vanrise.Runtime.Entities
     {
         public abstract DateTime CalculateNextTimeToRun();
 
-        public abstract Dictionary<string, string> EvaluateExpressions(Dictionary<string, string> rawExpressions);
+        public abstract Dictionary<string, string> EvaluateExpressions(SchedulerTask task);
     }
 }
