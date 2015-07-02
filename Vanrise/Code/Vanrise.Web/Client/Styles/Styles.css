@@ -1192,7 +1192,7 @@ input.ui-grid-filter-input[type="text"] {
      color: #616F77;
     
 }
-.vr-datagrid-body:hover{
+.vr-datagrid-body div:first-of-type:hover{
     background-color:#ddd !important;
      cursor: pointer !important;
 }
