@@ -16,12 +16,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     {
         public Suspicion_Level()
         {
+            this.Strategy_Suspicion_Level = new HashSet<Strategy_Suspicion_Level>();
             this.SubscriberThresholds = new HashSet<SubscriberThreshold>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
+        public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
         public virtual ICollection<SubscriberThreshold> SubscriberThresholds { get; set; }
     }
 }

@@ -260,9 +260,6 @@
     <Compile Include="vwDashboard.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="vwReportedNumber.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="vwReportedNumberNormalCDR.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

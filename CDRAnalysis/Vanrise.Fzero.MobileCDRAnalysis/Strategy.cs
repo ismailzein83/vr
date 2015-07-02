@@ -14,6 +14,18 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
     
     public partial class Strategy
     {
+        public Strategy()
+        {
+            this.Peak_Time = new HashSet<Peak_Time>();
+            this.Related_Criteria = new HashSet<Related_Criteria>();
+            this.ReportDetails = new HashSet<ReportDetail>();
+            this.Strategy_Min_Values = new HashSet<Strategy_Min_Values>();
+            this.Strategy_Suspicion_Level = new HashSet<Strategy_Suspicion_Level>();
+            this.StrategyPeriods = new HashSet<StrategyPeriod>();
+            this.StrategyThresholds = new HashSet<StrategyThreshold>();
+            this.Subscriber_Values = new HashSet<Subscriber_Values>();
+        }
+    
         public int Id { get; set; }
         public string Description { get; set; }
         public Nullable<int> UserId { get; set; }
@@ -21,5 +33,14 @@ namespace Vanrise.Fzero.MobileCDRAnalysis
         public string Name { get; set; }
         public Nullable<bool> IsDefault { get; set; }
         public string StrategyContent { get; set; }
+    
+        public virtual ICollection<Peak_Time> Peak_Time { get; set; }
+        public virtual ICollection<Related_Criteria> Related_Criteria { get; set; }
+        public virtual ICollection<ReportDetail> ReportDetails { get; set; }
+        public virtual ICollection<Strategy_Min_Values> Strategy_Min_Values { get; set; }
+        public virtual ICollection<Strategy_Suspicion_Level> Strategy_Suspicion_Level { get; set; }
+        public virtual ICollection<StrategyPeriod> StrategyPeriods { get; set; }
+        public virtual ICollection<StrategyThreshold> StrategyThresholds { get; set; }
+        public virtual ICollection<Subscriber_Values> Subscriber_Values { get; set; }
     }
 }
