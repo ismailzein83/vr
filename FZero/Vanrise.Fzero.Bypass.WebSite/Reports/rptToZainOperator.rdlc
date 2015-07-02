@@ -239,6 +239,9 @@
         <Left>0.3125in</Left>
         <Height>0.48958in</Height>
         <Width>6.10432in</Width>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -254,6 +257,9 @@
         <Height>0.5in</Height>
         <Width>1.76042in</Width>
         <ZIndex>1</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1074,6 +1080,9 @@
         <Height>0.59375in</Height>
         <Width>6.10433in</Width>
         <ZIndex>4</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1255,6 +1264,9 @@
         <Height>0.21875in</Height>
         <Width>6.10432in</Width>
         <ZIndex>5</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1480,6 +1492,9 @@
         <Height>0.25in</Height>
         <Width>6.10432in</Width>
         <ZIndex>8</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1587,6 +1602,9 @@
         <Height>1.13542in</Height>
         <Width>6.10433in</Width>
         <ZIndex>9</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1800,6 +1818,9 @@
         <Height>0.21875in</Height>
         <Width>4.11609in</Width>
         <ZIndex>10</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1984,6 +2005,9 @@
         <Height>0.21875in</Height>
         <Width>6.10433in</Width>
         <ZIndex>11</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2107,6 +2131,9 @@
         <Height>0.42188in</Height>
         <Width>6.10432in</Width>
         <ZIndex>12</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -2440,6 +2467,9 @@
         <Height>0.21875in</Height>
         <Width>6.10435in</Width>
         <ZIndex>13</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2753,6 +2783,9 @@
         <Height>0.21875in</Height>
         <Width>6.10435in</Width>
         <ZIndex>14</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2872,6 +2905,9 @@
         <Height>0.47916in</Height>
         <Width>6.10433in</Width>
         <ZIndex>15</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!HideSignature.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
