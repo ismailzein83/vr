@@ -91,9 +91,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
     function defineGrid() {
         $scope.filteredDefinitions = [];
         $scope.gridMenuActions = [];
-        $scope.loadMoreData = function () {
-            return getMainData();
-        };
+       
         $scope.onGridReady = function (api) {
             mainGridAPI = api;
             return getMainData();
