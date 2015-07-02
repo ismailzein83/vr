@@ -336,8 +336,6 @@ public partial class ToBeReportedCases : BasePage
                 }
 
 
-                rvToOperator.LocalReport.Refresh();
-
 
                 string CCs = EmailCC.GetEmailCCs(ddlSearchMobileOperator.SelectedValue.ToInt(), ddlSearchClient.SelectedValue.ToInt());
 
@@ -363,7 +361,7 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel +";"+filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
@@ -376,7 +374,7 @@ public partial class ToBeReportedCases : BasePage
                 {
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
-                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                        EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperator).User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
                     else
                     {
@@ -397,7 +395,6 @@ public partial class ToBeReportedCases : BasePage
                 LoggedAction.AddLoggedAction((int)Enums.ActionTypes.Reportcasestomobileoperator, CurrentUser.User.ID);
 
                 ShowAlert("Report sent Successfully");
-                //SelfRedirect();
             }
             Response.Redirect("Redirect.aspx");
         }

@@ -163,7 +163,7 @@ namespace Vanrise.Fzero.Services.Report
 
 
             GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
-            ReportParameter[] parameters = new ReportParameter[2];
+            ReportParameter[] parameters = new ReportParameter[3];
             parameters[0] = new ReportParameter("ReportID", report.ReportID);
 
 
@@ -203,10 +203,6 @@ namespace Vanrise.Fzero.Services.Report
 
             rvToOperator.LocalReport.ReportPath = reportPath;
             
-            rvToOperator.LocalReport.SetParameters(parameters);
-
-            
-
 
 
             ReportDataSource SignatureDataset = new ReportDataSource("SignatureDataset", (ApplicationUser.LoadbyUserId(1)).User.Signature);
@@ -218,20 +214,44 @@ namespace Vanrise.Fzero.Services.Report
 
             ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
             rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
+
+
+
+
+
+            parameters[2] = new ReportParameter("HideSignature", "true");
+            rvToOperator.LocalReport.SetParameters(parameters);
             rvToOperator.LocalReport.Refresh();
+            string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
+
+
+
+
+
+            parameters[2] = new ReportParameter("HideSignature", "false");
+            rvToOperator.LocalReport.SetParameters(parameters);
+            rvToOperator.LocalReport.Refresh();
+            string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+
+
+
+
+
+
+
+
 
             string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
           
 
             if (ClientID == 3)
             {
-                ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
-                EmailManager.SendReporttoMobileSyrianOperator(ExportReportToExcel(report.ReportID + ".xls", rvToOperator), EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
+                EmailManager.SendReporttoMobileSyrianOperator(filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
 
             }
             else
             {
-                EmailManager.SendReporttoMobileOperator(ExportReportToPDF(report.ReportID + ".pdf", rvToOperator), EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+                EmailManager.SendReporttoMobileOperator(filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
 
             }
 
