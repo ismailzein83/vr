@@ -91,7 +91,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     }
 
-    function getOpenedInstancesData() {
+    function getScheduledTasksData() {
 
         angular.forEach($scope.filteredDefinitions, function (def) {
             def.openedInstances = [];
