@@ -161,18 +161,18 @@ namespace TOne.Analytics.Data.SQL
                  (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId
              );
         }
-        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
+        public List<VariationReports> GetVariationReportsData(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy, out int totalCount, out  List<decimal> totalValues, out List<DateTime> datetotalValues, out decimal TotalAverage)
         {
             List<VariationReports> variationReportList = new List<VariationReports>();
             DataTable timeRangeDataTable = new DataTable();
             timeRangeDataTable = ToDataTable(timeRange);
             DateTime beginTime = (from d in timeRange select d.FromDate).Min();
             DateTime endTime = (from d in timeRange select d.ToDate).Max();
-            string selectedReportQuery = GetVariationReportQuery(timeRange, variationReportOptions, entityType);
+            string selectedReportQuery = GetVariationReportQuery(timeRange, variationReportOptions, entityType, groupingBy);
             int totalCount_Internal = 0;
-            List<decimal> totalValues_Internal= new List<decimal>() ;
+            List<decimal> totalValues_Internal = new List<decimal>();
             List<DateTime> datetotalValues_Internal = new List<DateTime>();
-            decimal TotalAverage_Internal=0; 
+            decimal TotalAverage_Internal = 0;
             if (!string.IsNullOrEmpty(selectedReportQuery))
                 ExecuteReaderText(selectedReportQuery,
                 (reader) =>
@@ -185,13 +185,13 @@ namespace TOne.Analytics.Data.SQL
                     reader.NextResult();
                     while (reader.Read())
                     {
-                        totalValues_Internal.Add(reader["TotalValues"] != DBNull.Value ? Convert.ToDecimal(reader["TotalValues"]) : 0 );
+                        totalValues_Internal.Add(reader["TotalValues"] != DBNull.Value ? Convert.ToDecimal(reader["TotalValues"]) : 0);
                         datetotalValues_Internal.Add(GetReaderValue<DateTime>(reader, "FromDate"));
                     }
                     reader.NextResult();
                     reader.Read();
                     TotalAverage_Internal = reader["TotalAverage"] != DBNull.Value ? Convert.ToDecimal(reader["TotalAverage"]) : 0;
-                    
+
                 },
                 (cmd) =>
                 {
@@ -203,15 +203,15 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@EndTime", endTime));
                     cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
-                    if(entityID!=null)
-                    cmd.Parameters.Add(new SqlParameter("@EntityID", entityID));
+                    if (entityID != null)
+                        cmd.Parameters.Add(new SqlParameter("@EntityID", entityID));
                     else cmd.Parameters.Add(new SqlParameter("@EntityID", string.Empty));
                 });
             totalCount = totalCount_Internal;
             totalValues = totalValues_Internal;
             datetotalValues = datetotalValues_Internal;
             TotalAverage = TotalAverage_Internal;
-            return variationReportList ;
+            return variationReportList;
 
 
         }
@@ -269,7 +269,8 @@ namespace TOne.Analytics.Data.SQL
               (customerAMUId == 0 || customerAMUId == null) ? (object)DBNull.Value : customerAMUId,
               (supplierAMUId == 0 || supplierAMUId == null) ? (object)DBNull.Value : supplierAMUId);
         }
-        public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId) {
+        public List<ExchangeCarriers> GetExchangeCarriers(DateTime fromDate, DateTime toDate, int? customerAMUId, int? supplierAMUId)
+        {
 
             return GetItemsSP("Analytics.SP_Billing_ExchangeCarriersSummary", ExchangeCarriersMapper,
            fromDate,
@@ -458,9 +459,9 @@ namespace TOne.Analytics.Data.SQL
                 Name = reader["Name"] as string,
                 PeriodTypeValueAverage = GetReaderValue<decimal>(reader, "AVG"),
                 PeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "%"),
-                FromDate  = GetReaderValue<DateTime>(reader, "FromDate"),
+                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
                 ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
-                TotalDuration = Convert.ToDecimal( reader["Total"]),
+                TotalDuration = Convert.ToDecimal(reader["Total"]),
                 PreviousPeriodTypeValuePercentage = GetReaderValue<decimal>(reader, "Prev %"),
                 ID = reader["ID"] != null ? reader["ID"].ToString() : string.Empty,
                 RowNumber = (long)reader["RowNumber"]
@@ -567,7 +568,7 @@ namespace TOne.Analytics.Data.SQL
 
             };
         }
-        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, EntityType entityType)
+        private string GetVariationReportQuery(List<TimeRange> timeRange, VariationReportOptions variationReportOptions, EntityType entityType, GroupingBy groupingBy)
         {
 
             StringBuilder query = new StringBuilder(@"DECLARE @ExchangeRates TABLE(
@@ -605,13 +606,13 @@ namespace TOne.Analytics.Data.SQL
             LEFT JOIN @ExchangeRates ERS ON ERS.Currency = BS.Sale_Currency AND ERS.Date = BS.CallDate        
             JOIN FilteredEntities Ent ON Ent.ID = #BSIDColumn#
             #BillingStatsFilter#
-            GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate, ERC.Rate,ERS.Rate           
+            GROUP BY Ent.ID, Ent.Name, Ent.rowNumber, tr.FromDate, tr.ToDate, ERC.Rate,ERS.Rate #additionalStatement#     
             ORDER BY Ent.RowNumber, tr.FromDate, tr.ToDate;
 
             SELECT * FROM #Results
 
             DECLARE @TotalCount int
-            SELECT  @TotalCount= (SELECT COUNT(*) as TotalCount FROM #OrderedEntities)
+            SELECT  @TotalCount= (SELECT COUNT(*) as TotalCount FROM @timeRange tr)
             SELECT  @TotalCount as TotalCount
 
              DECLARE @TotalsTables table(TotalValues numeric(10,2),FromDate Datetime )
@@ -623,15 +624,16 @@ namespace TOne.Analytics.Data.SQL
             switch (variationReportOptions)
             {
                 case VariationReportOptions.InBoundMinutes:
-                     query.Replace("#NameColumn#", " cpc.Name ");
-                     query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
+                    query.Replace("#NameColumn#", " cpc.Name ");
+                    query.Replace("#ValueColumn#", " SUM(BS.SaleDuration)/60 ");
                     if (entityType == EntityType.none)
-                   {
-                       
+                    {
+
                         query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                         query.Replace("#BSIDColumn#", "BS.CustomerID");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                        query.Replace("#additionalStatement#", "");
                     }
 
                     else
@@ -642,8 +644,8 @@ namespace TOne.Analytics.Data.SQL
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                     }
-                 
-                    query.Replace("#WhereStatement#", " ");                  
+
+                    query.Replace("#WhereStatement#", " ");
                     break;
 
                 case VariationReportOptions.OutBoundMinutes:
@@ -661,7 +663,7 @@ namespace TOne.Analytics.Data.SQL
                         query.Replace("#IDColumn#", " BS.SupplierID ");
                         query.Replace("#BSIDColumn#", " BS.SupplierID ");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
-                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");    
+                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
                     }
                     query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
@@ -677,6 +679,10 @@ namespace TOne.Analytics.Data.SQL
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
                     query.Replace("#WhereStatement#", @" ");
+                    if (entityType != EntityType.none)
+                    {
+                        query.Replace("#additionalStatement#", " , BS.SupplierID");
+                    }
                     break;
 
                 case VariationReportOptions.InBoundAmount:
@@ -689,7 +695,8 @@ namespace TOne.Analytics.Data.SQL
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
                                                         JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                     }
-                    else {
+                    else
+                    {
                         query.Replace("#IDColumn#", " BS.CustomerID ");
                         query.Replace("#BSIDColumn#", "BS.CustomerID ");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
@@ -697,7 +704,7 @@ namespace TOne.Analytics.Data.SQL
                     }
                     query.Replace("#WhereStatement#", @" ");
                     break;
-              
+
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(Cost_Nets)/ISNULL(ERC.Rate,1) ");
@@ -720,16 +727,16 @@ namespace TOne.Analytics.Data.SQL
 
                 case VariationReportOptions.InOutBoundAmount:
                     break;
-         
+
                 case VariationReportOptions.TopDestinationAmount:
                     query.Replace("#NameColumn#", " Z.Name ");
                     query.Replace("#ValueColumn#", " SUM(BS.Sale_Nets)/ISNULL(ERS.Rate,1) ");
                     query.Replace("#IDColumn#", " Z.ZoneID ");
                     query.Replace("#BSIDColumn#", "BS.SaleZoneID");
                     query.Replace("#JoinStatement#", @" JOIN Zone Z With(Nolock) ON Z.ZoneID=BS.SaleZoneID ");
-                    query.Replace("#WhereStatement#", @" ");                  
+                    query.Replace("#WhereStatement#", @" ");
                     break;
-     
+
                 case VariationReportOptions.Profit:
                     query.Replace("#NameColumn#", " cpc.Name ");
                     query.Replace("#ValueColumn#", " SUM( (Sale_Nets/ISNULL(ERS.Rate,1)) - (Cost_Nets/ISNULL(ERC.Rate,1)) ) ");
@@ -747,18 +754,45 @@ namespace TOne.Analytics.Data.SQL
                 case EntityType.Zone:
                     query.Replace("#SecondWhereStatement#", " AND BS.SaleZoneID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.SaleZoneID = @EntityID");
-                    query.Replace("#additionalStatement#", " ,BS.CustomerID ");
+                    switch (groupingBy)
+                    {
+                        case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
+                        case GroupingBy.Suppliers:
+                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
+                            break;
+                        default: query.Replace("#additionalStatement#", " ");
+                            break;
+                    }
                     break;
                 case EntityType.Customer:
                     query.Replace("#SecondWhereStatement#", " AND BS.CustomerID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.CustomerID = @EntityID");
-                    query.Replace("#additionalStatement#", " ,BS.CustomerID ");
+                    //query.Replace("#additionalStatement#", " ,BS.CustomerID ");
+                     switch (groupingBy)
+                    {
+                        case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
+                        case GroupingBy.Suppliers:
+                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
+                            break;
+                        default: query.Replace("#additionalStatement#", " ");
+                            break;
+                    }
+                   
                     break;
                 case EntityType.Supplier:
                     query.Replace("#SecondWhereStatement#", " AND BS.SupplierID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.SupplierID = @EntityID");
-                    query.Replace("#additionalStatement#", " ,BS.SupplierID ");
-                    break;
+                    //query.Replace("#additionalStatement#", " ,BS.SupplierID ");
+                     switch (groupingBy)
+                    {
+                        case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
+                        case GroupingBy.Suppliers:
+                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
+                            break;
+                        default: query.Replace("#additionalStatement#", " ");
+                            break;
+                    }
+                     break;
                 default:
                     query.Replace("#SecondWhereStatement#", " ");
                     query.Replace("#additionalStatement#", " ");
@@ -797,6 +831,6 @@ namespace TOne.Analytics.Data.SQL
         }
 
         #endregion
-     
+
     }
 }

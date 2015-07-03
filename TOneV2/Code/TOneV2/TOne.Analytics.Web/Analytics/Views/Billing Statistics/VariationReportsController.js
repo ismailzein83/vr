@@ -1,6 +1,6 @@
-﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'TimePeriodEnum', 'VariationReportOptionsEnum','EntityTypeEnum'];
+﻿VariationReportsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'TimePeriodEnum', 'VariationReportOptionsEnum', 'EntityTypeEnum', 'GroupingByEnum'];
 
-function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum,EntityTypeEnum) {
+function VariationReportsController($scope, BillingStatisticsAPIService, TimePeriodEnum, VariationReportOptionsEnum, EntityTypeEnum, GroupingByEnum) {
 
     var chartAPI;
     var mainGridAPI;
@@ -63,8 +63,8 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
             var filter = {};
             filter.SelectedDate = $scope.fromDate;
             filter.PeriodCount = $scope.periodCount;
-            filter.TimePeriod = $scope.selectedTimePeriod.value;
-            filter.ReportOption = $scope.selectedReportOption.value;
+            filter.TimePeriod = $scope.selectedTimePeriod;
+            filter.ReportOption = $scope.selectedReportOption;
             return filter;
     }
 
@@ -81,10 +81,10 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
 
     function getVariationReportsData() {
         $scope.isLoading = true;
-        var pageInfo = $scope.mainGridPagerSettings.getPageInfo();
+        var pageInfo = $scope.mainGridPagerSettings.getPageInfo();  
         $scope.show = $scope.selectedReportOption.value == 3 || $scope.selectedReportOption.value == 7;
         console.log($scope.show);
-        return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow,EntityTypeEnum.none.value,'').then(function (response) {
+        return BillingStatisticsAPIService.GetVariationReport($scope.fromDate, $scope.periodCount, $scope.selectedTimePeriod.value, $scope.selectedReportOption.value, pageInfo.fromRow, pageInfo.toRow,EntityTypeEnum.none.value,'',GroupingByEnum.none.value).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.totalData.length = 0;
@@ -114,6 +114,7 @@ function VariationReportsController($scope, BillingStatisticsAPIService, TimePer
         }).finally(function () {
             $scope.isLoading = false;
             $scope.filterObject = buildFilter();
+            console.log($scope.filterObject);
             //  console.log($scope.filterObject);
             console.log($scope.selectedReportOption.value);
         });

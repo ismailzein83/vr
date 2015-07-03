@@ -1,5 +1,5 @@
-﻿VariationReportsDestinationsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VariationReportOptionsEnum', 'EntityTypeEnum'];
-function VariationReportsDestinationsController($scope, BillingStatisticsAPIService, VariationReportOptionsEnum,EntityTypeEnum) {
+﻿VariationReportsDestinationsController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VariationReportOptionsEnum', 'EntityTypeEnum', 'GroupingByEnum'];
+function VariationReportsDestinationsController($scope, BillingStatisticsAPIService, VariationReportOptionsEnum,EntityTypeEnum,GroupingByEnum) {
    
     var fromDate;
     var periodCount;
@@ -44,8 +44,9 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
 
         $scope.isGettingData = true;
        // console.log($scope.dataItem);
-        // console.log($scope.dataItem.ID);   
-        var selectedReportOption = $scope.viewScope.selectedReportOption;
+        // console.log($scope.dataItem.ID);
+        console.log(reportOption);
+        var selectedReportOption = reportOption;//$scope.viewScope.selectedReportOption;
    //     console.log(selectedReportOption);
         var entityType;
         switch (selectedReportOption) {
@@ -91,7 +92,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
         $scope.entityType = entityType;
       //  console.log(selectedReportOption);
        // console.log(entityType);
-        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, entityType.value, $scope.dataItem.ID).then(function (response) {
+        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, selectedReportOption.value, 0, 10, entityType.value, $scope.dataItem.ID, GroupingByEnum.none.value).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.data.length = 0;
             $scope.totalData.length = 0;

@@ -69,7 +69,7 @@ namespace TOne.Analytics.Business
             return FormatCarrieresSummaryDaily(_datamanager.GetDailyCarrierSummary(fromDate, toDate, customerId, supplierId, isCost, isGroupedByDay, supplierAMUId, customerAMUId), isGroupedByDay);
         }
 
-        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID)
+        public VariationReportResult GetVariationReportsData(DateTime selectedDate, int periodCount, TimePeriod timePeriod, VariationReportOptions variationReportOptions, int fromRow, int toRow, EntityType entityType, string entityID, GroupingBy groupingBy)
         {
             List<TimeRange> timeRanges = new List<TimeRange>();
             DateTime currentDate = new DateTime();
@@ -104,7 +104,7 @@ namespace TOne.Analytics.Business
             List<decimal> totalValues,totals;
             List<DateTime> datetotalValues;
             decimal totalAverage,totalPercentage,totalPreviousPercentage;
-            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow,entityType,entityID, out totalCount, out totalValues, out datetotalValues, out totalAverage);
+            List<VariationReports> variationReports = _datamanager.GetVariationReportsData(timeRanges, variationReportOptions, fromRow, toRow,entityType,entityID,groupingBy, out totalCount, out totalValues, out datetotalValues, out totalAverage);
             var result = GetVariationReportsData(variationReports, timeRanges, selectedDate, periodCount, totalValues, datetotalValues, totalAverage, out totals,out totalPercentage,out totalPreviousPercentage);
             result.TotalCount = totalCount;
             result.TotalValues = totals;

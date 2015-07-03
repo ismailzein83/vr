@@ -6,7 +6,7 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
         GetVariationReport: GetVariationReport
     });
 
-    function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow,entityType,entityID) {
+    function GetVariationReport(selectedDate, periodCount, timePeriod, variationReportOption, fromRow, toRow,entityType,entityID,groupingBy) {
         return BaseAPIService.get("/api/BillingStatistics/GetVariationReport",
             {
                 selectedDate: selectedDate,
@@ -16,7 +16,8 @@ app.service('BillingStatisticsAPIService', function (BaseAPIService) {
                 fromRow: fromRow,
                 toRow: toRow,
                 entityType: entityType,
-                entityID: entityID
+                entityID: entityID,
+                groupingBy: groupingBy
 
             }
             );

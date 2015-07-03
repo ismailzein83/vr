@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace TOne.Analytics.Entities
 {
-    public enum TimePeriod 
+    public enum TimePeriod
     {
         Days = 0,
         Weeks = 1,
         Months = 2
     }
 
-    public enum VariationReportOptions 
+    public enum VariationReportOptions
     {
         InBoundMinutes = 0,
         OutBoundMinutes = 1,
@@ -26,13 +26,21 @@ namespace TOne.Analytics.Entities
         Profit = 8
     }
 
-    public enum EntityType 
+    public enum EntityType
     {
-        none=0,
-        Customer=1,
-        Supplier=2,
-        Zone=3
-    
+        none = 0,
+        Customer = 1,
+        Supplier = 2,
+        Zone = 3
+
+    }
+
+    public enum GroupingBy
+    {
+        none = 0,
+        Customers = 1,
+        Suppliers = 2
+
     }
 
     public enum AccountType : byte

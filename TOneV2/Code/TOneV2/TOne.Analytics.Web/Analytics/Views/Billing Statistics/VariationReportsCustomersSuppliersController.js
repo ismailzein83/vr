@@ -1,5 +1,5 @@
-﻿VariationReportsCustomersSuppliersController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VariationReportOptionsEnum', 'EntityTypeEnum'];
-function VariationReportsCustomersSuppliersController($scope, BillingStatisticsAPIService, VariationReportOptionsEnum, EntityTypeEnum) {
+﻿VariationReportsCustomersSuppliersController.$inject = ['$scope', 'BillingStatisticsAPIService', 'VariationReportOptionsEnum', 'EntityTypeEnum','GroupingByEnum'];
+function VariationReportsCustomersSuppliersController($scope, BillingStatisticsAPIService, VariationReportOptionsEnum, EntityTypeEnum, GroupingByEnum) {
 
     var fromDate;
     var periodCount;
@@ -37,7 +37,7 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
         console.log(reportOption);
         $scope.isGettingData = true;
         console.log($scope.dataItem.ID);
-        var selectedReportOption = $scope.viewScope.selectedReportOption;
+        var selectedReportOption = reportOption;
         console.log(selectedReportOption);
         var entityType;
         switch (selectedReportOption) {
@@ -52,7 +52,7 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
         }
         console.log(selectedReportOption);
         $scope.ZoneName = $scope.dataItem.Name;
-        return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
+        BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID, GroupingByEnum.Customers.value).then(function (response) {
             $scope.timeRanges.length = 0;
             $scope.customersData.length = 0;
             $scope.totalData.length = 0;
@@ -70,24 +70,24 @@ function VariationReportsCustomersSuppliersController($scope, BillingStatisticsA
             $scope.isGettingData = false;
             //     console.log($scope.data);
         });
-        //return BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID).then(function (response) {
-        //    $scope.timeRanges.length = 0;
-        //    $scope.suppliersData.length = 0;
-        //    $scope.totalData.length = 0;
-        //    $scope.TotalValues.length = 0;
-        //    $scope.timeRanges = $scope.viewScope.timeRanges;
-        //    setTimeout(function () {
-        //        $scope.$apply(function () {
-        //            angular.forEach(response.VariationReportsData, function (item) { $scope.suppliersData.push(item); $scope.periodValuesArray.push(item.Values); });
-        //            $scope.summarydata = response;
-        //            $scope.TotalValues = response.TotalValues;
-        //            mainGridAPI.setSummary($scope.summarydata);
-        //        });
-        //    }, 1);
-        //}).finally(function () {
-        //    $scope.isGettingData = false;
-        //    //     console.log($scope.data);
-        //});
+        BillingStatisticsAPIService.GetVariationReport(fromDate, periodCount, timePeriod.value, selectedReportOption.value, 0, 10, EntityTypeEnum.Zone.value, $scope.dataItem.ID, GroupingByEnum.Suppliers.value).then(function (secondresponse) {
+            $scope.timeRanges.length = 0;
+            $scope.suppliersData.length = 0;
+            $scope.totalData.length = 0;
+            $scope.TotalValues.length = 0;
+            $scope.timeRanges = $scope.viewScope.timeRanges;
+            setTimeout(function () {
+                $scope.$apply(function () {
+                    angular.forEach(secondresponse.VariationReportsData, function (item) { $scope.suppliersData.push(item); $scope.periodValuesArray.push(item.Values); });
+                    $scope.summarydata = secondresponse;
+                    $scope.TotalValues = secondresponse.TotalValues;
+                    mainGridAPI.setSummary($scope.summarydata);
+                });
+            }, 1);
+        }).finally(function () {
+            $scope.isGettingData = false;
+             console.log($scope.data);
+        });
     }
 
 
