@@ -6,6 +6,9 @@ function InstanceEditorController($scope, BusinessProcessAPIService, $routeParam
     load();
 
     function defineScope() {
+
+        console.log(555555)
+
         $scope.createProcessInput = {};
         $scope.close = function () {
             $scope.modalContext.closeModal()
