@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="Security_DynamicPageEditorController" width="'80%'">
     <vr-modalbody vr-loader="isGettingData" maxheight="'700px'">
         <vr-form name="formDynamicPagesEditor">
-            <vr-choices>
+            <vr-choices selectedindex="selectedGroupKeyIndex" onselectionchanged="onSelectionChanged()">
                 <vr-choice isselected="settingSelected">Setting</vr-choice>
                 <vr-choice isselected="designSelected">Design</vr-choice>
                 <vr-choice isselected="previewSelected">Preview</vr-choice>
@@ -47,7 +47,7 @@
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-select label="Widget:" datatextfield="Name" datavaluefield="ID"
-                                       datasource="widgets" selectedvalues="selectedWidget" isrequired></vr-select>
+                                       datasource="widgets" selectedvalues="selectedWidget" ></vr-select>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-select datasource="columnWidth" datatextfield="description" datavaluefield="value" label="Row Space" selectedvalues="selectedColumnWidth" isrequired hidefilterbox></vr-select>
@@ -75,13 +75,13 @@
                             </div>
                         </vr-section> 
                     </vr-row>
-                    <vr-row ng-if="addedBodyWidgets.length>0">
+                    <vr-row ng-if="addedBodyWidgets.length>0">                        
                         <div class="list-group dragbelzone" ng-sortable="itemsSortable">
                             <vr-columns ng-repeat="addedBodyWidget in addedBodyWidgets" colnum="{{addedBodyWidget.NumberOfColumns}}">
                                 <i class="glyphicon glyphicon-th-list handeldrag"></i>
                                 <i class="glyphicon glyphicon-remove hand-cursor" ng-click="removeViewContent(addedBodyWidget)"></i>
                                 <vr-directivewrapper directive="addedBodyWidget.Widget.Setting.Directive" on-ready="addedBodyWidget.Widget.onElementReady" settings="addedBodyWidget.Widget.Setting.Settings"
-                                                     retrievedataonload="false" previewmode="true"></vr-directivewrapper>
+                                                     retrievedataonload="false" previewmode="true" ></vr-directivewrapper>
                             </vr-columns>
                         </div>
                     </vr-row>

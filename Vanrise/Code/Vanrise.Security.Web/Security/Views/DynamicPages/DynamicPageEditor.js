@@ -40,18 +40,30 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.bodyWidgets = [];
         $scope.selectedColumnWidth;
         $scope.addedSummaryWidgets = [];
-        $scope.addedBodyWidgets=[];
+        $scope.addedBodyWidgets = [];
+        $scope.onSelectionChanged = function () {
+            buildContentsFromScope();
+        }
         $scope.save = function () {
+            if ($scope.summaryContents.length == 0 && $scope.bodyWidgets.length)
+            {
+                return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
+               
+            }
+                
+            buildContentsFromScope();
             buildViewObjFromScope();
+            
             if ($scope.isEditMode) 
-                updateView();
+                return updateView();
             else
-                saveView();
+               return  saveView();
         };
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
         $scope.onSectionChanged = function () {
+
             switch ($scope.selectedSection.value) {
                 case WidgetSectionEnum.Summary.value: $scope.widgets = $scope.summaryWidgets; break;
                 case WidgetSectionEnum.Body.value: $scope.widgets = $scope.bodyWidgets; break;
@@ -59,18 +71,19 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             $scope.selectedWidget = null;
         }
         $scope.addViewContent = function () {
-            var viewContent = {
-                WidgetId: $scope.selectedWidget.Id,
-                NumberOfColumns: $scope.selectedColumnWidth.value
-            }
+            //var viewContent = {
+            //    WidgetId: $scope.selectedWidget.Id,
+            //    NumberOfColumns: $scope.selectedColumnWidth.value
+            //}
+            
             var viewWidget = {
                 Widget: $scope.selectedWidget,
                 NumberOfColumns: $scope.selectedColumnWidth.value
             }
             switch($scope.selectedSection.value)
             {
-                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.summaryContents.push(viewContent); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
-                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget); $scope.bodyContents.push(viewContent); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
+                case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.push(viewWidget); $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
+                case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.push(viewWidget);  $scope.widgets.splice($scope.widgets.indexOf($scope.selectedWidget), 1); break;
             }
             $scope.selectedWidget = null;
             
@@ -79,10 +92,10 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
         $scope.removeViewContent = function (viewContent) {
             switch ($scope.selectedSection.value) {
                 case WidgetSectionEnum.Summary.value: $scope.addedSummaryWidgets.splice($scope.addedSummaryWidgets.indexOf(viewContent), 1);
-                    $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1);
+                  //  $scope.summaryContents.splice($scope.summaryContents.indexOf(viewContent), 1);
                     $scope.widgets.push(viewContent.Widget); break;
                 case WidgetSectionEnum.Body.value: $scope.addedBodyWidgets.splice($scope.addedBodyWidgets.indexOf(viewContent), 1);
-                    $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1);
+                   // $scope.bodyContents.splice($scope.bodyContents.indexOf(viewContent), 1);
                     $scope.widgets.push(viewContent.Widget); break;
             }
             
@@ -119,8 +132,29 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             VRNotificationService.notifyException(error, $scope);
         });
     }
+    function buildContentsFromScope() {
+        $scope.summaryContents = [];
+        $scope.bodyContents = [];
+        for (var i = 0; i < $scope.addedSummaryWidgets.length; i++) {
+            var Widget = $scope.addedSummaryWidgets[i];
+            var viewSummaryContent = {
+                WidgetId: Widget.Widget.Id,
+                NumberOfColumns: Widget.NumberOfColumns
+            }
+            $scope.summaryContents.push(viewSummaryContent);
+        }
+        for (var i = 0; i < $scope.addedBodyWidgets.length; i++) {
+            var Widget = $scope.addedBodyWidgets[i];
+            var viewBodyContent = {
+                WidgetId: Widget.Widget.Id,
+                NumberOfColumns: Widget.NumberOfColumns
+            }
+            $scope.bodyContents.push(viewBodyContent);
+        }
 
+    }
     function buildViewObjFromScope() {
+        
         var selectedUsersIDs = [];
         for (var i = 0; i < $scope.selectedUsers.length; i++)
             selectedUsersIDs.push($scope.selectedUsers[i].UserId);
@@ -131,6 +165,7 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             Users: selectedUsersIDs,
             Groups: selectedRolesIDs
         };
+        
         var ViewContent = {
             SummaryContents: $scope.summaryContents,
             BodyContents: $scope.bodyContents
@@ -185,15 +220,15 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             
             var bodyContent = $scope.filter.BodyContents[i];
             var value = UtilsService.getItemByVal($scope.bodyWidgets, bodyContent.WidgetId, 'Id');
+          
             if (value != null)
             {
-                $scope.selectedWidget = value;
-                var viewContent = {
-                    WidgetId: $scope.selectedWidget.Id,
+                var viewWidget = {
+                    Widget: value,
                     NumberOfColumns: bodyContent.NumberOfColumns
                 }
-                $scope.bodyContents.push(viewContent);
-                $scope.addedBodyWidgets.push(bodyContent);
+                $scope.addedBodyWidgets.push(viewWidget);
+                $scope.bodyWidgets.splice($scope.bodyWidgets.indexOf(value), 1);
             }
                 
         }
@@ -202,13 +237,12 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             var summaryContent = $scope.filter.SummaryContents[i];
             var value = UtilsService.getItemByVal($scope.summaryWidgets, summaryContent.WidgetId, 'Id');
             if (value != null) {
-                $scope.selectedWidget = value;
-                var viewContent = {
-                    WidgetId: $scope.selectedWidget.Id,
+                var viewWidget = {
+                    Widget: value,
                     NumberOfColumns: summaryContent.NumberOfColumns
                 }
-                $scope.summaryContents.push(viewContent);
-                $scope.addedSummaryWidgets.push(summaryContent);
+                $scope.addedSummaryWidgets.push(viewWidget);
+                $scope.summaryWidgets.splice($scope.summaryWidgets.indexOf(value), 1);
             }
 
         }

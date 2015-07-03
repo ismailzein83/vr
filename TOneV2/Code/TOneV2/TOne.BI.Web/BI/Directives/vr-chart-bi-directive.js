@@ -9,7 +9,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             onReady: '=',
             settings: '=',
             filter: '=',
-            previewmode: '@'
+            previewmode: '@',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -103,9 +103,9 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         }
 
         function refreshChart(response) {
-
+            console.log(settings.DefinitionType.value);
             var chartDefinition = {
-                type: "column",
+                type: settings.DefinitionType,
                 yAxisTitle: "Value"
             };
             var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };

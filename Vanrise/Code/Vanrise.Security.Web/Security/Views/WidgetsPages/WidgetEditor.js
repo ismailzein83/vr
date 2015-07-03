@@ -32,9 +32,9 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
         $scope.save = function () {
             buildWidgetObjFromScope();
             if ($scope.isEditMode)
-                updateWidget();
+               return updateWidget();
             else
-                saveWidget();
+              return saveWidget();
         };
         $scope.previewSelectionChanged = function () {
             buildWidgetObjFromScope();
@@ -52,10 +52,12 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             $scope.widget = null;
             return false;
         }
+      
             var widgetSetting = {
                 settings: $scope.subViewConnector.getValue(),
                 directive: $scope.selectedWidget.DirectiveName,
             };
+         
             $scope.widget = {
                 WidgetDefinitionId: $scope.selectedWidget.ID,
                 Name: $scope.widgetName,
@@ -63,7 +65,9 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
             };
             $scope.widget.onElementReady = function (api) {
                 $scope.widget.API = api;
+
             };
+        //    console.log($scope.widget.Setting.settings.DefinitionType.value);
             if ($scope.isEditMode) {
                 $scope.widget.Id = $scope.filter.WidgetID;
             }

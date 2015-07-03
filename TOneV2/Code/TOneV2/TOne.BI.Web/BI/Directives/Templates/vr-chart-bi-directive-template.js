@@ -1,6 +1,6 @@
-﻿VrChartDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+﻿VrChartDirectiveTemplateController.$inject = ['$scope','BITimeDimensionTypeEnum','BIChartDefinitionTypeEnum', 'BIConfigurationAPIService', 'ChartSeriesTypeEnum', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
 
-function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
+function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BIChartDefinitionTypeEnum, BIConfigurationAPIService, ChartSeriesTypeEnum, UtilsService, VRModalService, VRNotificationService, VRNavigationService) {
     //var mainGridAPI;
     loadParameters();
     defineScope();
@@ -15,6 +15,8 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         $scope.toDate = "2015-04-30";
         $scope.selectedEntityType ;
         $scope.selectedTopMeasure;
+        $scope.definitionTypes = [];
+        $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
         defineTimeDimensionTypes();
         $scope.onSelectionChanged = function () {
@@ -51,7 +53,8 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
-            TopMeasure: topMeasure
+            TopMeasure: topMeasure,
+            DefinitionType: $scope.selectedDefinitionType.value,
         };
     }
     function setSubViewValue(settings) {
@@ -91,6 +94,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         })[0];
     }
     function load() {
+        defineChartDefinitionTypes();
         defineNumberOfColumns();
         defineOperationTypes();
         defineChartSeriesTypes();
@@ -137,6 +141,12 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         $scope.chartSeriesTypes = [];
         for (var m in ChartSeriesTypeEnum) {
             $scope.chartSeriesTypes.push(ChartSeriesTypeEnum[m]);
+        }
+    }
+    function defineChartDefinitionTypes() {
+        $scope.definitionTypes = [];
+        for (var m in BIChartDefinitionTypeEnum) {
+            $scope.definitionTypes.push(BIChartDefinitionTypeEnum[m]);
         }
     }
 

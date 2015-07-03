@@ -123,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BI\Constants\BIChartDefinitionTypeEnum.js" />
     <Content Include="BI\Constants\BIEntityTypeEnum.js" />
     <Content Include="BI\Constants\BIMeasureTypeEnum.js" />
     <Content Include="BI\Constants\BITimeDimensionTypeEnum.js" />
