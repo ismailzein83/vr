@@ -5,7 +5,7 @@
 
     function defineScope() {
 
-        $scope.createProcessInputObjects = [];
+        $scope.processInputArguments = [];
 
         $scope.strategies = [];
         loadStrategies();
@@ -17,9 +17,9 @@
         loadPeriods();
         $scope.selectedPeriod = "";
 
+
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
-                return [{ "ScheduleTime": "ScheduleTime" }];
-          
+                return { "ScheduleTime": "ScheduleTime" };
         };
 
 
@@ -29,39 +29,13 @@
                 $scope.selectedStrategyIds.push(itm.id);
             });
 
-            $scope.createProcessInputObjects.push({
-                InputArguments: {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    StrategyIds: $scope.selectedStrategyIds,
-                    PeriodId: $scope.selectedPeriod.Id
-                }
-            });
-
-            return $scope.createProcessInputObjects;
-
-
+            return {
+                $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                StrategyIds: $scope.selectedStrategyIds,
+                PeriodId: $scope.selectedPeriod.Id
+            };
         };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $scope.schedulerTaskAction.rawExpressions.getData = function () {
-                return undefined;
-        };
 
         loadForm();
     }
@@ -84,11 +58,26 @@
         });
     }
 
-
     function loadForm() {
-
+        console.log($scope.schedulerTaskAction.processInputArguments.data)
         if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
             return;
+        var data = $scope.schedulerTaskAction.processInputArguments.data;
+      
+        if (data != null) {
+            $scope.repricingDay = data.RepricingDay;
+            $scope.divideProcessIntoSubProcesses = data.DivideProcessIntoSubProcesses;
+
+            var dateOptionSelection = ($scope.schedulerTaskAction.rawExpressions.data != null) ? 0 : 1;
+            $scope.selectedDateOption = UtilsService.getItemByVal($scope.dateOptions, dateOptionSelection, "Value");
+
+        }
+        else {
+            $scope.repricingDay = '';
+            $scope.selectedDateOption = undefined;
+            $scope.divideProcessIntoSubProcesses = '';
+        }
+        
     }
 
     function load() {
