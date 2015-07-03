@@ -14,5 +14,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
         {
             return "Execute Strategy Process";
         }
+
+        public override void MapExpressionValues(Dictionary<string, string> evaluatedExpressions)
+        {
+            if (evaluatedExpressions.ContainsKey("FromDate"))
+            {
+                FromDate = DateTime.Parse(evaluatedExpressions["FromDate"]);
+            }
+
+            if (evaluatedExpressions.ContainsKey("ToDate"))
+            {
+                ToDate = DateTime.Parse(evaluatedExpressions["ToDate"]);
+            }
+        }
+
     }
 }
