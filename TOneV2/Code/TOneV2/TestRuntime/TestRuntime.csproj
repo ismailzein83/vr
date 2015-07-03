@@ -271,6 +271,9 @@
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
     </Reference>
