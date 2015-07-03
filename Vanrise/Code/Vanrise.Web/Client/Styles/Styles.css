@@ -1192,9 +1192,12 @@ input.ui-grid-filter-input[type="text"] {
      color: #616F77;
     
 }
-.vr-datagrid-body div:first-of-type:hover{
+.vr-datagrid-datacells:hover{
     background-color:#ddd !important;
      cursor: pointer !important;
+}
+.vr-datagrid-datacells-click{
+    background-color:#ddd !important;     
 }
 .vr-datagrid-cell, .vr-datagrid-header-cell{
     /*display:inline-block;*/
