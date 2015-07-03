@@ -39,7 +39,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             case "Start":
                 return {
                     text: "Start",
-                    class: "glyphicon  glyphicons-person-running"
+                    class: "glyphicon  glyphicon-play"
                 };
 
             case "Reset":
