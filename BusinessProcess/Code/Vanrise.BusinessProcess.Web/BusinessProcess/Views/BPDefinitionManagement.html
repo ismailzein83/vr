@@ -20,7 +20,7 @@
         <div>
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datagrid datasource="filteredDefinitions"  on-ready="onGridReady" menuactions="gridMenuActions">
+                    <vr-datagrid datasource="filteredDefinitions" on-ready="onGridReady" menuactions="gridMenuActions">
                         <vr-datagridcolumn headertext="'Process'" field="'Title'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Running Instances'" field="'runningInstances'" widthfactor="20"></vr-datagridcolumn>
                         <vr-datagridexpandablerow>
@@ -39,13 +39,11 @@
                             <div ng-show="dataItem.isScheduledTabShow">
                                 <vr-datagrid datasource="dataItem.scheduledTasks">
                                     <vr-datagridcolumn headertext="'Name'" field="'Name'" isclickable="true" onclicked="viewScope.schedulerTaskClicked"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'ActionTypeId'" field="'ActionTypeId'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'IsEnabled'" widthfactor="3">       <vr-switch value="dataItem.IsEnabled" disabled></vr-switch>            </vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'TaskAction'" field="'TaskAction'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'TaskId'" field="'TaskId'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'TaskTrigger'" field="'TaskTrigger'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'TriggerTypeId'" field="'TriggerTypeId'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Last Run Time'" field="'LastRunTime'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Next Run Time'" field="'NextRunTime'"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Is Enabled'" field="'IsEnabledDescription'">     </vr-datagridcolumn>
+
                                 </vr-datagrid>
                             </div>
 
@@ -59,11 +57,11 @@
                 </vr-columns>
             </vr-row>
         </div>
-       
+
 
     </vr-form>
 
-  
+
 
 
 </vr-panel>

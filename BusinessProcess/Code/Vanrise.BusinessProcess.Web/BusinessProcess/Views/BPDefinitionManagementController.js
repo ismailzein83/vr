@@ -58,9 +58,10 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         var title = $scope.title != undefined ? $scope.title : '';
 
         BusinessProcessAPIService.GetFilteredDefinitions(title).then(function (response) {
-            angular.forEach(response, function (def) {
+            angular.forEach(response, function (def) {            
                 $scope.filteredDefinitions.push(def);
             });
+          
             getOpenedInstancesData();
             getScheduledTasksData();
         });
@@ -98,7 +99,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
         angular.forEach($scope.filteredDefinitions, function (def) {
             def.scheduledTasks = [];
         });
-        $scope.bpDefintionIDs = [1, 2, 3];
+        
         BusinessProcessAPIService.GetWorkflowTasksByDefinitionIds().then(function (response) {
             angular.forEach(response, function (task) {
                 angular.forEach($scope.filteredDefinitions, function (def) {
@@ -106,7 +107,7 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
                         if (angular.isUndefined(def.scheduledTasks)) {
                             def.scheduledTasks = [];
                         }
-
+                        task.IsEnabledDescription = (task.IsEnabled ? "yes" : "no");
                         def.scheduledTasks.push(task);
                     }
                 });
@@ -124,10 +125,9 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             mainGridAPI = api;
             return getMainData();
         };
-        $scope.gridMenuActions = [{
-            name: "Start New Instance",
-            clicked: showStartNewInstance
-        }];
+        $scope.gridMenuActions = [
+            { name: "Start New Instance", clicked: showStartNewInstance }, { name: "Schedule a Task", clicked: showAddTaskModal }
+        ];
 
         $scope.$on('$destroy', function () {
             stopGetData();
@@ -148,8 +148,50 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     $scope.schedulerTaskClicked = function (dataItem) {
         console.log(dataItem)
-        //showBPTrackingModal(dataItem.ProcessInstanceID);
+        showEditTaskModal(dataItem);
     }
+
+
+
+    
+
+    function showAddTaskModal(BPDefinitionObj) {
+        var settings = {
+        };
+        var parameters = {
+            additionalParameter: { bpDefinitionID: BPDefinitionObj.bpDefinitionID }
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Add Task";
+            modalScope.onTaskAdded = function (task) {
+                getScheduledTasksData();
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
+    }
+
+    function showEditTaskModal(taskObj) {
+        var settings = {
+        };
+        var parameters = {
+            taskId: taskObj.TaskId
+        };
+
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Task: " + taskObj.Name;
+            modalScope.onTaskUpdated = function (task) {
+                getScheduledTasksData();
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
+    }
+
+
+
+
+
+
 
 
     defineGrid();

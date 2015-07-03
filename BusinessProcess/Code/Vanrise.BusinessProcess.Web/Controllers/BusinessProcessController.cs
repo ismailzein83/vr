@@ -106,7 +106,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpGet]
-        public List<SchedulerTask> GetWorkflowTasksByDefinitionIds()
+        public List<SchedulerTaskModel> GetWorkflowTasksByDefinitionIds()
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
             List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(1);
@@ -118,7 +118,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
                     filteredList.Add(task);
             }
 
-            return filteredList;
+            return BPMappers.MapTMapSchedulerTasks(filteredList);
         }
 
 
@@ -150,7 +150,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         [HttpGet]
         public BPInstanceModel GetBPInstance(int id)
         {
-            
             BPClient manager = new BPClient();
             return BPMappers.MapInstance(manager.GetInstance(id));
         }

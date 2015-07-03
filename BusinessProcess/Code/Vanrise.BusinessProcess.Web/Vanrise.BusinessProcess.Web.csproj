@@ -138,6 +138,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BusinessProcessController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
+    <Compile Include="Models\SchedulerTaskModel.cs" />
     <Compile Include="Models\BPInstanceModel.cs" />
     <Compile Include="Models\BPTrackingMessageModel.cs" />
     <Compile Include="Models\EnumModel.cs" />

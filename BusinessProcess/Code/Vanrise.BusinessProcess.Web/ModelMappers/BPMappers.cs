@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Web.Models;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.BusinessProcess.Web.ModelMappers
 {
@@ -64,5 +65,36 @@ namespace Vanrise.BusinessProcess.Web.ModelMappers
                 }
             return models;
         }
+
+
+        public static SchedulerTaskModel MapSchedulerTask(SchedulerTask task)
+        {
+            return new SchedulerTaskModel
+            {
+                TaskId = task.TaskId,
+                Name = task.Name,
+                IsEnabled = task.IsEnabled,
+                Status = task.Status,
+                NextRunTime = task.NextRunTime,
+                LastRunTime = task.LastRunTime,
+                TaskTrigger = task.TaskTrigger,
+                ActionTypeId = task.ActionTypeId,
+                TaskAction = task.TaskAction,
+                StatusDescription = SchedulerTask.GetEnumDescription(task.Status)
+            };
+        }
+
+        public static List<SchedulerTaskModel> MapTMapSchedulerTasks(List<SchedulerTask> tasks)
+        {
+            List<SchedulerTaskModel> models = new List<SchedulerTaskModel>();
+            if (tasks != null)
+                foreach (var task in tasks)
+                {
+                    models.Add(MapSchedulerTask(task));
+                }
+            return models;
+        }
+
+
     }
 }

@@ -25,7 +25,8 @@ function BusinessProcessAPIService(BaseAPIService) {
     }
 
 
-    function GetWorkflowTasksByDefinitionIds(bpDefinitionIds) {
+    function GetWorkflowTasksByDefinitionIds() {
+        console.log(77777777777777)
         return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionIds");
     }
 
