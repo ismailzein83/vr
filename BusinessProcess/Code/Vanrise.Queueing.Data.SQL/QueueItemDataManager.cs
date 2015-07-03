@@ -210,10 +210,10 @@ namespace Vanrise.Queueing.Data.SQL
             return GetItemSP("queue.sp_QueueItemHeader_GetByID", QueueItemHeaderMapper, itemId, queueId);
         }
 
-        public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses)
+        public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
             return GetItemsSP("queue.sp_QueueItemHeader_GetFiltered", QueueItemHeaderMapper, queueIds == null ? null : string.Join(",", queueIds.Select(n => ((int)n).ToString()).ToArray())
-                , statuses == null ? null : string.Join(",", statuses.Select(n => ((int)n).ToString()).ToArray()));
+                , statuses == null ? null : string.Join(",", statuses.Select(n => ((int)n).ToString()).ToArray()),dateFrom,dateTo);
         }
 
         public void Insert(long itemId, int queueId, string description, QueueItemStatus queueItemStatus)

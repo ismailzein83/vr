@@ -29,9 +29,9 @@ namespace Vanrise.Queueing
             return _dataManager.GetQueueInstancesByTypes(queueItemTypes);
         }
 
-        public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses)
+        public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
-            return _itemDataManager.GetHeaders(queueIds, statuses);
+            return _itemDataManager.GetHeaders(queueIds, statuses, dateFrom, dateTo);
         }
 
     }

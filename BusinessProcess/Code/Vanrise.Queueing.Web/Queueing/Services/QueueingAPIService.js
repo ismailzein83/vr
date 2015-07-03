@@ -11,12 +11,14 @@
             return BaseAPIService.post("/api/Queueing/GetQueueInstances",queueItemTypes);
         }
 
-        function getHeaders(queueIds, fromRow, toRow, statuses) {
+        function getHeaders(queueIds, fromRow, toRow, statuses, fromDate,toDate) {
             return BaseAPIService.post("/api/Queueing/GetHeaders", {
                 FromRow: fromRow,
                 ToRow: toRow,
                 QueueIds: queueIds,
-                Statuses: statuses
+                Statuses: statuses,
+                DateFrom: fromDate,
+                DateTo: toDate
             });
         }
 

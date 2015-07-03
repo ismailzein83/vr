@@ -49,7 +49,7 @@ namespace Vanrise.Queueing.Web.Controllers
         public IEnumerable<QueueItemHeaderModel> GetHeaders(GetHeadersInput param)
         {
             param.FromRow = param.FromRow - 1;
-            IEnumerable<QueueItemHeaderModel> rows = QueueingMappers.MapQueueItemHeaders(_queueingManager.GetHeaders(param.QueueIds, param.Statuses));
+            IEnumerable<QueueItemHeaderModel> rows = QueueingMappers.MapQueueItemHeaders(_queueingManager.GetHeaders(param.QueueIds, param.Statuses, param.DateFrom.HasValue ? param.DateFrom.Value : DateTime.Now.AddHours(-1), param.DateTo.HasValue ? param.DateTo.Value : DateTime.Now));
             return rows.Skip(param.FromRow).Take(param.ToRow - param.FromRow);
         }
     }
@@ -61,9 +61,9 @@ namespace Vanrise.Queueing.Web.Controllers
         public int FromRow { get; set; }
         public int ToRow { get; set; }
         public IEnumerable<int> QueueIds { get; set; }
-
         public IEnumerable<QueueItemStatus> Statuses { get; set; }
-
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
     }
     
 

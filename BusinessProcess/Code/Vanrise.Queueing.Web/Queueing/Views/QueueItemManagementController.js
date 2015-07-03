@@ -10,19 +10,30 @@
 
         var mainGridApi;
         
+        function getCurrentDate(days) {
+            var d = new Date();
+            var curr_date = d.getDate() + days;
+            var curr_month = d.getMonth();
+            var curr_year = d.getFullYear();
+            return new Date(curr_year, curr_month, curr_date);
+        }
+
         function getData() {
 
             var pageInfo = mainGridApi.getPageInfo();
             return QueueingAPIService.GetHeaders(UtilsService.getPropValuesFromArray($scope.selectedQueueInstances, "QueueInstanceId"),
                 pageInfo.fromRow,
                 pageInfo.toRow,
-                UtilsService.getPropValuesFromArray($scope.selectedQueueItemStatus, "Value")
-                ).then(function (response) {
-                mainGridApi.addItemsToSource(response);
+                UtilsService.getPropValuesFromArray($scope.selectedQueueItemStatus, "Value"),
+                $scope.fromDate,
+                $scope.toDate).then(function (response) {
+                    mainGridApi.addItemsToSource(response);
             });
         }
 
         function defineScope() {
+            $scope.toDate = getCurrentDate(+1);
+            $scope.fromDate = getCurrentDate(-1);
             $scope.queueItemStatus = [];
             $scope.selectedQueueItemStatus = [];
             $scope.queueItemTypes = [];
