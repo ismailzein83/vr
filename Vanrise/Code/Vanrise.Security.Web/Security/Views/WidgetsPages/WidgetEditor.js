@@ -38,16 +38,15 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
         };
         $scope.previewSelectionChanged = function () {
             buildWidgetObjFromScope();
-
         }
 
     }
   
     function buildWidgetObjFromScope() {
         if ($scope.selectedWidget == undefined)
-            return true;
-        if ($scope.subViewConnector.getValue() == undefined)
-            return true;
+            return false;
+        if ($scope.subViewConnector.getValue() == false)
+            return false;
             var widgetSetting = {
                 settings: $scope.subViewConnector.getValue(),
                 directive: $scope.selectedWidget.DirectiveName,
@@ -58,12 +57,12 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
                 Setting: widgetSetting,
             };
             $scope.widget.onElementReady = function (api) {
-                $scope.widgett.API = api;
+                $scope.widget.API = api;
             };
             if ($scope.isEditMode) {
                 $scope.widget.Id = $scope.filter.WidgetID;
             }
-            return false;
+            return true;
             
 
     }
@@ -123,7 +122,6 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
 
     function loadWidgets() {
         return WidgetAPIService.GetWidgetsDefinition().then(function (response) {
-            console.log(response);
                 angular.forEach(response, function (itm) {
                     $scope.widgets.push(itm);
                 });

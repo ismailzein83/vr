@@ -42,7 +42,6 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
     };
 
     function getDataGridTemplate(previewmode) {
-        console.log(previewmode);
         if (previewmode != 'true') {
             return '<vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
                                         + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'

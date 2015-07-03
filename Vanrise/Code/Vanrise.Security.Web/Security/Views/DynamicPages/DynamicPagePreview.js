@@ -59,7 +59,7 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
         $scope.isGettingData = false;
 
     }
-
+    
     function updateDashboard() {
         $scope.filter = {
             timeDimensionType: $scope.selectedTimeDimensionType,

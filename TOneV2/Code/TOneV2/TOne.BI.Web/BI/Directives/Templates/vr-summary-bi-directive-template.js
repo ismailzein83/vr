@@ -15,6 +15,8 @@ function VrSummaryDirectiveTemplateController($scope, BIConfigurationAPIService,
         }
     }
     function getSubViewValue() {
+        if ($scope.selectedMeasureTypes.length == 0)
+            return false;
         var measureTypes = [];
 
         for (var i = 0; i < $scope.selectedMeasureTypes.length; i++) {

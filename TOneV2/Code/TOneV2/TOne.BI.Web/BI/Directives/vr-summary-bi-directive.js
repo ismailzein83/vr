@@ -39,7 +39,6 @@ app.directive('vrSummaryBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisua
     };
 
     function getSummaryTemplate(previewmode) {
-     //   console.log(previewmode);
         if (previewmode != 'true') {
             return '<div width="normal"><table class="table  table-striped" ><tr ng-repeat="value in ctrl.dataSource" ><td><vr-label isValue="{{value.description}}">{{value.description}}</vr-label></td><td><vr-label isValue="{{value.value}}">{{value.value}}</vr-label></td></tr></table></div>';
         }

@@ -25,6 +25,12 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
     }
 
     function getSubViewValue() {
+
+        switch ($scope.selectedOperationType.value) {
+            case "TopEntities": if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
+            case "MeasuresGroupedByTime": if ($scope.selectedMeasureTypes == undefined ||$scope.selectedMeasureTypes.length == 0) return false;
+        }
+        
         var topMeasure = null;
         if ($scope.selectedTopMeasure != undefined)
             topMeasure = $scope.selectedTopMeasure.Name;
@@ -145,6 +151,7 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
                 $scope.Entities.push(itm);
                // console.log($scope.Entities[0].Id);
             });
+            $scope.selectedEntityType = $scope.Entities[0];
         });
     }
 

@@ -13,7 +13,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         $scope.Entities = [];
         $scope.fromDate = "2015-04-01";
         $scope.toDate = "2015-04-30";
-        $scope.selectedEntityType;
+        $scope.selectedEntityType ;
         $scope.selectedTopMeasure;
         $scope.selectedMeasureTypes = [];
         defineTimeDimensionTypes();
@@ -24,7 +24,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
             return getSubViewValue();
         }
         $scope.subViewConnector.setValue = function (value) {
-            console.log(value);
+            //console.log(value);
             $scope.subViewConnector.value = value;
            // return setSubViewValue(settings);
         }
@@ -32,6 +32,10 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
 
     }
     function getSubViewValue() {
+        switch ($scope.selectedOperationType.value) {
+            case "TopEntities": if ($scope.selectedEntityType == undefined || $scope.selectedEntityType == null || $scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
+            case "MeasuresGroupedByTime": if ($scope.selectedMeasureTypes == undefined || $scope.selectedMeasureTypes.length == 0) return false;
+        }
         var topMeasure = null;
         if ($scope.selectedTopMeasure != undefined)
             topMeasure = $scope.selectedTopMeasure.Name;
@@ -140,7 +144,6 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         return BIConfigurationAPIService.GetMeasures().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Measures.push(itm);
-               // console.log(itm);
             });
         });
     }
@@ -148,8 +151,8 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum, BICo
         return BIConfigurationAPIService.GetEntities().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
-               // console.log($scope.Entities[0].Id);
             });
+            $scope.selectedEntityType = $scope.Entities[0];
         });
     }
 

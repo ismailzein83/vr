@@ -11,8 +11,6 @@ app.service('BIVisualElementService1', function (BIDataAPIService) {
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                console.log(visualElementController);
-                console.log(visualElementSettings);
                 return BIDataAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, visualElementController.filter.fromDate, visualElementController.filter.toDate, 10, visualElementSettings.MeasureTypes);
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;

@@ -45,7 +45,8 @@ function WidgetPreviewController($scope, BITimeDimensionTypeEnum) {
     }
 
     function updateDashboard() {
-
+        if (widgetAPI == undefined)
+            return;
         $scope.isGettingData = true;
         return widgetAPI.retrieveData()
             .finally(function () {
