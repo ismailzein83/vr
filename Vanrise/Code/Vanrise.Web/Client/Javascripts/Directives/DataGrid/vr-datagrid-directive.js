@@ -274,6 +274,18 @@
                 return 'span-summary';
             };
             
+            var lastSelectedRow;
+            ctrl.onRowClicked = function (evnt) {
+                if (lastSelectedRow != undefined)
+                    lastSelectedRow.removeClass('vr-datagrid-datacells-click');
+
+                lastSelectedRow = angular.element(evnt.currentTarget);
+                lastSelectedRow.addClass('vr-datagrid-datacells-click');
+                ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
+                ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
+                console.log(ctrl.menuLeft + ',' + ctrl.menuTop);
+                console.log(evnt);
+            };
         }
         
         function buildRowHtml() {
@@ -492,7 +504,7 @@
         }
 
         function defineMenuColumn(hasActionMenu, actionsAttribute) {
-            actionMenuWidth = hasActionMenu ? 3 : 0;
+            actionMenuWidth = 0;//hasActionMenu ? 3 : 0;
             ctrl.actionsColumnWidth = actionMenuWidth + '%';
 
             ctrl.isActionMenuVisible = function (dataItem) {

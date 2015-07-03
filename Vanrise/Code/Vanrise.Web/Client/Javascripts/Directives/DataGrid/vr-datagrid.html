@@ -41,7 +41,7 @@
     <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
 </div>
 
-<div id="rowTemplate">
+<div id="rowTemplate" >
     <div style="white-space:nowrap" ng-style="{'background-color': isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0'}">
         <table style="width:100%;border:0px;">
             <tr>
@@ -55,23 +55,25 @@
                         </label>
                     </div>
                 </td>
-                <td ng-style="{'width': $parent.ctrl.dataColumnsSectionWidth}">
-                        <div vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
+                <td ng-style="{'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
+                    <div ng-class="$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" vr-htmlcompiler="$parent.ctrl.rowHtml"></div>
+                    <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
+                        ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
+                        <li role="presentation" ng-if="showMenu==true">
+                            <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
+                                <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
+                            </div>
+                        </li>
+                    </ul>
                 </td>
-                <td ng-style="{'width': $parent.ctrl.actionsColumnWidth}" ng-if="$parent.ctrl.isActionMenuVisible(dataItem)">
+                <td ng-style="{'width': $parent.ctrl.actionsColumnWidth}" ng-if="false">
                     <div class="vr-datagrid-cell">
                         <div class="vr-datagrid-celltext">
                             <div ng-mouseleave="show = false">
                                 <label style="height:9px" class=" hand-cursor" ng-init="show=false" ng-click="show=!show ;$parent.ctrl.adjustPosition($event)">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                 </label>
-                                <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" show == true">
-                                    <li role="presentation" ng-if="show==true">
-                                        <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
-                                            <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
-                                        </div>
-                                    </li>
-                                </ul>
+
                             </div>
                         </div>
                     </div>

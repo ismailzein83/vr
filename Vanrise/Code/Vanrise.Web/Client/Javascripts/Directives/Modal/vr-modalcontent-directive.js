@@ -18,7 +18,7 @@ app.directive('vrModalcontent', [function () {
                                   + '  <div class="modal-content">'
                                     + '    <div class="modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
-                                        + '    <h4 class="modal-title" ng-bind="title"></h4>'
+                                        + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'                                       
                                 +  tElement.context.innerHTML   
                                     +'</div>'
