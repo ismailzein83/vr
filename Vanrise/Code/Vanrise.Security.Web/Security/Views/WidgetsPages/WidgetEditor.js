@@ -43,10 +43,15 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
     }
   
     function buildWidgetObjFromScope() {
-        if ($scope.selectedWidget == undefined)
+        if ($scope.selectedWidget == undefined) {
+            $scope.widget = null;
             return false;
-        if ($scope.subViewConnector.getValue() == false)
+        }
+          
+        if ($scope.subViewConnector.getValue() == false) {
+            $scope.widget = null;
             return false;
+        }
             var widgetSetting = {
                 settings: $scope.subViewConnector.getValue(),
                 directive: $scope.selectedWidget.DirectiveName,
