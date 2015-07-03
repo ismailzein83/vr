@@ -35,8 +35,7 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
             }
         },
         template: function (element, attrs) {
-            return getDataGridTemplate(attrs.previewmode);
-            return 
+            return getDataGridTemplate(attrs.previewmode); 
         }
 
     };
