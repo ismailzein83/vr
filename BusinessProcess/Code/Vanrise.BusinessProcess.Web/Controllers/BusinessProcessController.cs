@@ -104,6 +104,25 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return filteredList;
         }
 
+
+        [HttpGet]
+        public List<SchedulerTask> GetWorkflowTasksByDefinitionIds()
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            List<SchedulerTask> workflowTasks = manager.GetTasksbyActionType(1);
+
+            List<SchedulerTask> filteredList = new List<SchedulerTask>();
+
+            foreach (SchedulerTask task in workflowTasks)
+            {
+                    filteredList.Add(task);
+            }
+
+            return filteredList;
+        }
+
+
+
         [HttpPost]
         public IEnumerable<BPInstanceModel> GetFilteredBProcess(GetFilteredBProcessInput param)
         {

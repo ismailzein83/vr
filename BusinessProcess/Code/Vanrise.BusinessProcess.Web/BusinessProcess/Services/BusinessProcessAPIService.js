@@ -25,6 +25,11 @@ function BusinessProcessAPIService(BaseAPIService) {
     }
 
 
+    function GetWorkflowTasksByDefinitionIds(bpDefinitionIds) {
+        return BaseAPIService.get("/api/BusinessProcess/GetWorkflowTasksByDefinitionIds");
+    }
+
+
     function CreateNewProcess(createProcessInput) {
         return BaseAPIService.post("/api/BusinessProcess/CreateNewProcess", createProcessInput);
     }
@@ -82,6 +87,7 @@ function BusinessProcessAPIService(BaseAPIService) {
         GetFilteredDefinitions: GetFilteredDefinitions,
         GetStatusList: GetStatusList,
         GetWorkflowTasksByDefinitionId: GetWorkflowTasksByDefinitionId,
+        GetWorkflowTasksByDefinitionIds: GetWorkflowTasksByDefinitionIds,
         GetFilteredBProcess: GetFilteredBProcess,
         GetTrackingsByInstanceId: GetTrackingsByInstanceId,
         GetTrackingSeverity: GetTrackingSeverity,

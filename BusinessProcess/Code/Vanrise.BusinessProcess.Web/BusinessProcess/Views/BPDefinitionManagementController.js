@@ -61,8 +61,10 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
             angular.forEach(response, function (def) {
                 $scope.filteredDefinitions.push(def);
             });
+            getOpenedInstancesData();
+            getScheduledTasksData();
         });
-        getOpenedInstancesData();
+        
     }
 
     function getOpenedInstancesData() {
@@ -94,22 +96,18 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
     function getScheduledTasksData() {
 
         angular.forEach($scope.filteredDefinitions, function (def) {
-            def.openedInstances = [];
+            def.scheduledTasks = [];
         });
-
-        BusinessProcessAPIService.GetOpenedInstances().then(function (response) {
-            angular.forEach(response, function (inst) {
+        $scope.bpDefintionIDs = [1, 2, 3];
+        BusinessProcessAPIService.GetWorkflowTasksByDefinitionIds().then(function (response) {
+            angular.forEach(response, function (task) {
                 angular.forEach($scope.filteredDefinitions, function (def) {
-                    if (def.BPDefinitionID == inst.DefinitionID) {
-                        if (angular.isUndefined(def.openedInstances)) {
-                            def.openedInstances = [];
+                    if (def.BPDefinitionID == task.TaskAction.BPDefinitionID) {
+                        if (angular.isUndefined(def.scheduledTasks)) {
+                            def.scheduledTasks = [];
                         }
 
-                        if (angular.isUndefined(def.runningInstances)) {
-                            def.runningInstances = 0;
-                        }
-                        def.runningInstances = parseInt(def.runningInstances) + 1;
-                        def.openedInstances.push(inst);
+                        def.scheduledTasks.push(task);
                     }
                 });
             });
@@ -145,6 +143,12 @@ function BPDefinitionManagementController($scope, BusinessProcessAPIService, VRM
 
     $scope.processInstanceClicked = function (dataItem) {
         showBPTrackingModal(dataItem.ProcessInstanceID);
+    }
+
+
+    $scope.schedulerTaskClicked = function (dataItem) {
+        console.log(dataItem)
+        //showBPTrackingModal(dataItem.ProcessInstanceID);
     }
 
 
