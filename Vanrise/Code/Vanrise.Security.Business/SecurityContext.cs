@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Vanrise.Security.Entities;
 
-namespace Vanrise.Security.Entities
+namespace Vanrise.Security.Business
 {
     public class SecurityContext
     {
