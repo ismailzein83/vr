@@ -5,7 +5,7 @@
 
     function defineScope() {
 
-        $scope.bpDefinitions = [];
+        $scope.createProcessInputObjects = [];
 
         $scope.strategies = [];
         loadStrategies();
@@ -18,20 +18,8 @@
         $scope.selectedPeriod = "";
 
         $scope.schedulerTaskAction.rawExpressions.getData = function () {
-            if ($scope.selectedDateOption.Value == 0) {
-                $scope.repricingDay = '';
-
-                if ($scope.selectedPeriod.Id == 1)//Hourly
-                {
-                    return [{ "FromDate": "ScheduleTime" }, { "ToDate": "ScheduleTime + 1" }];
-                }
-                elseif($scope.selectedPeriod.Id == 2) //Daily
-                {
-                    return [{ "FromDate": "ScheduleTime" }, { "ToDate": "ScheduleTime + 24" }];
-                }
-            }
-            else
-                return undefined;
+                return [{ "ScheduleTime": "ScheduleTime" }];
+          
         };
 
 

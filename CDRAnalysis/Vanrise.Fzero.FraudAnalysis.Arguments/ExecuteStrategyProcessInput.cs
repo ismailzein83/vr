@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 {
@@ -17,15 +18,22 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override void MapExpressionValues(Dictionary<string, string> evaluatedExpressions)
         {
-            if (evaluatedExpressions.ContainsKey("FromDate"))
+            if (evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
-                FromDate = DateTime.Parse(evaluatedExpressions["FromDate"]);
+                if ( PeriodId == (int)Enums.Period.Hour)
+                {
+                    FromDate = DateTime.Parse(evaluatedExpressions["ScheduleTime"]).AddDays(-1);
+                    ToDate = DateTime.Parse(evaluatedExpressions["ScheduleTime"]);
+                }
+                else if (PeriodId == (int)Enums.Period.Day)
+                {
+                    FromDate = DateTime.Parse(evaluatedExpressions["ScheduleTime"]).AddHours(-1);
+                    ToDate = DateTime.Parse(evaluatedExpressions["ScheduleTime"]);
+                }
+               
             }
 
-            if (evaluatedExpressions.ContainsKey("ToDate"))
-            {
-                ToDate = DateTime.Parse(evaluatedExpressions["ToDate"]);
-            }
+           
         }
 
     }

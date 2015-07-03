@@ -119,31 +119,34 @@
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Data">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.Data.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Data.SQL">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.Data.SQL.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Entities">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.Entities.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Extensions">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.Extensions.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Runtime.dll</HintPath>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Data">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Runtime.Data.dll</HintPath>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Data.SQL">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Runtime.Data.SQL.dll</HintPath>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Runtime.Entities.dll</HintPath>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

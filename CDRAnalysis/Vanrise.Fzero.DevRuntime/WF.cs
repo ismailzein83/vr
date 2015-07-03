@@ -47,6 +47,9 @@ namespace Vanrise.Fzero.DevRuntime
             Console.WriteLine("Strategy started");
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 20) };
+
+
 
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);

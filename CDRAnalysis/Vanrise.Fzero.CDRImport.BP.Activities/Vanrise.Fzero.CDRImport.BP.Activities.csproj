@@ -89,7 +89,7 @@
     </Reference>
     <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\VanriseFramework\Vanrise.Queueing.dll</HintPath>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
