@@ -148,13 +148,16 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
         for (var m in BIChartDefinitionTypeEnum) {
             $scope.definitionTypes.push(BIChartDefinitionTypeEnum[m]);
         }
+        $scope.selectedDefinitionType = $scope.definitionTypes[0];
     }
 
     function loadMeasures() {
         return BIConfigurationAPIService.GetMeasures().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Measures.push(itm);
+              
             });
+            console.log(response);
         });
     }
     function loadEntities() {

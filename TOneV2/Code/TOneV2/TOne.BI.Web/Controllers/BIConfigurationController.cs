@@ -15,22 +15,22 @@ namespace TOne.BI.Web.Controllers
 
 
         [HttpGet]
-        public List<BIConfigurationModel> GetMeasures()
+        public List<BIMeasureModel> GetMeasures()
         {
             BIConfigurationManager manager = new BIConfigurationManager();
             List<BIConfiguration<BIConfigurationMeasure>> managerData = new List<BIConfiguration<BIConfigurationMeasure>>();
             managerData= manager.GetMeasures(); 
             Mappers mapper = new Mappers();
-            return mapper.getSchemaConfiguration<BIConfigurationMeasure>(managerData); ;
+            return mapper.MeasuresMapper(managerData); ;
         }
         [HttpGet]
-        public List<BIConfigurationModel> GetEntities()
+        public List<BIEntityModel> GetEntities()
         {
             BIConfigurationManager manager = new BIConfigurationManager();
             List<BIConfiguration<BIConfigurationEntity>> managerData = new List<BIConfiguration<BIConfigurationEntity>>();
             managerData = manager.GetEntities();
             Mappers mapper = new Mappers();
-            return mapper.getSchemaConfiguration<BIConfigurationEntity>(managerData); ;
+            return mapper.EntitiesMapper(managerData); ;
         }
     
        

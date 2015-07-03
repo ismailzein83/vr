@@ -1,12 +1,13 @@
 ﻿
 
 
-app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalService) {
+app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalService, SecurityService) {
 
     return ({
         openEntityReport:openEntityReport,
         fillDateTimeProperties: fillDateTimeProperties,
-        getNextDate: getNextDate
+        getNextDate: getNextDate,
+        checkPermissions: checkPermissions
     });
 
     function openEntityReport(entityType, entityId, entityName) {
@@ -23,7 +24,18 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
         };
         VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
     }
+    function checkPermissions(measures) {
 
+        for (var i = 0; i < measures.length; i++) 
+            //console.log(measures[i].RequiredPermissions);
+            if (measures[i].RequiredPermissions != "" && measures[i].RequiredPermissions != null && measures[i].RequiredPermissions != undefined)
+                if (!SecurityService.isAllowed(measures[i].RequiredPermissions))
+                        return false;
+            return true;
+        }
+        
+
+    
     function fillDateTimeProperties(data, timeDimensionType, fromDateString, toDateString, dontFillGroup) {
         var fromDate = new Date(fromDateString);
         var toDate = new Date(toDateString);

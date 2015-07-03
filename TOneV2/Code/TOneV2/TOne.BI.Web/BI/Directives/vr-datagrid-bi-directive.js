@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', function (BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService) {
+app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesService', 'BIVisualElementService1', 'VRModalService', 'BIConfigurationAPIService', function (UtilsService ,BIDataAPIService, BIUtilitiesService, BIVisualElementService1, VRModalService, BIConfigurationAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -15,10 +15,9 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
             var ctrl = this;
             var retrieveDataOnLoad = $scope.$parent.$eval($attrs.retrievedataonload);
 
-            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1);
+            var biDataGrid = new BIDataGrid(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService);
             biDataGrid.initializeController();
 
-            biDataGrid.defineAPI();
             $scope.openReportEntityModal = function (item) {
 
                 BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
@@ -35,18 +34,18 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
             }
         },
         template: function (element, attrs) {
-            return getDataGridTemplate(attrs.previewmode); 
+            return getDataGridTemplate(attrs.previewmode);
         }
 
     };
 
     function getDataGridTemplate(previewmode) {
         if (previewmode != 'true') {
-            return '<vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
+            return '<div ng-if="!ctrl.isAllowed"  class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div><div ng-if="ctrl.isAllowed"><vr-datagrid datasource="ctrl.data" on-ready="ctrl.onGridReady" maxheight="300px">'
                                         + '<vr-datagridcolumn ng-show="ctrl.isTopEntities" headertext="ctrl.entityType.description" field="\'EntityName\'" isclickable="\'true\'" \ onclicked="openReportEntityModal"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-show="ctrl.isDateTimeGroupedData" headertext="\'Time\'" field="\'dateTimeValue\'"></vr-datagridcolumn>'
                                         + '<vr-datagridcolumn ng-repeat="measureType in ctrl.measureTypes" headertext="measureType" field="\'Values[\' + $index + \']\'" type="\'Number\'"></vr-datagridcolumn>'
-                                    + '</vr-datagrid>';
+                                    + '</vr-datagrid></div>';
         }
         else
             return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.entityType.description" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.measureTypes" vr-disabled="true"></vr-textbox>';
@@ -54,21 +53,36 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
 
 
     }
-    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1) {
+    function BIDataGrid(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService) {
 
         var gridAPI;
-
+        var measures = [];
+        var entity;
         function initializeController() {
+            UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
+           .then(function () {
+               // console.log(BIUtilitiesService.checkPermissions(Measures));
+               if (!BIUtilitiesService.checkPermissions(measures)) {
+                   ctrl.isAllowed = false;
+                   return;
+               }
+               ctrl.isAllowed = true;
+               ctrl.onGridReady = function (api) {
+                   gridAPI = api;
+                   if (retrieveDataOnLoad)
+                       retrieveData();
+               }
+               ctrl.entityType = entity;
+               ctrl.measureTypes = measures;
 
-            ctrl.onGridReady = function (api) {
-                gridAPI = api;
-                if (retrieveDataOnLoad)
-                    retrieveData();
-            }
+               ctrl.data = [];
+               defineAPI();
 
-            ctrl.entityType = settings.EntityType;
-            ctrl.measureTypes = settings.MeasureTypes;
-            ctrl.data = [];
+           })
+           .finally(function () {
+           }).catch(function (error) {
+           });
+ 
         }
 
         function defineAPI() {
@@ -79,17 +93,34 @@ app.directive('vrDatagridBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisu
         }
 
         function retrieveData() {
+            if (!ctrl.isAllowed)
+                return;
             return BIVisualElementService1.retrieveData1(ctrl, settings)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
                                 BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, true);
                             refreshDataGrid(response);
+                          
                         });
         }
 
         function refreshDataGrid(response) {
             ctrl.data.length = 0;
             gridAPI.addItemsToSource(response);
+        }
+        function loadMeasures() {
+            return BIConfigurationAPIService.GetMeasures().then(function (response) {
+                for (var i = 0; i < settings.MeasureTypes.length; i++) {
+                    var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
+                    if (value != null)
+                        measures.push(value);
+                }
+            });
+        }
+        function loadEntities() {
+            return BIConfigurationAPIService.GetEntities().then(function (response) {
+                entity = UtilsService.getItemByVal(response, settings.EntityType, 'Name');
+            });
         }
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;

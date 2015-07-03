@@ -10,5 +10,6 @@ namespace TOne.BI.Entities
     {
         public string ColumnName { get; set; }
         public string Expression { get; set; }
+        public string RequiredPermissions { get; set; }
     }
 }

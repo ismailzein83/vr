@@ -5,7 +5,13 @@ using System.Web;
 
 namespace TOne.BI.Web.Models
 {
-    public class BIConfigurationModel
+    public class BIMeasureModel
+    {
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string RequiredPermissions { get; set; }
+    }
+    public class BIEntityModel
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

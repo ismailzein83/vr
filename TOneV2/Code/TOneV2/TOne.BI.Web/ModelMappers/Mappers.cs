@@ -9,15 +9,32 @@ namespace TOne.BI.Web.ModelMappers
 {
     public class Mappers
     {
-        public List<BIConfigurationModel> getSchemaConfiguration<T>(List<BIConfiguration<T>> managerData)
+        public List<BIMeasureModel> MeasuresMapper(List<BIConfiguration<BIConfigurationMeasure>> managerData)
         {
-            List<BIConfigurationModel> rslt = new List<BIConfigurationModel>();
-            foreach (BIConfiguration<T> val in managerData)
+            List<BIMeasureModel> rslt = new List<BIMeasureModel>();
+            foreach (BIConfiguration<BIConfigurationMeasure> val in managerData)
             {
-                rslt.Add(new BIConfigurationModel
+                rslt.Add(new BIMeasureModel
                 {
                     Name = val.Name,
-                    DisplayName = val.DisplayName
+                    DisplayName = val.DisplayName,
+                    RequiredPermissions = val.Configuration.RequiredPermissions
+                    
+                });
+            }
+
+            return rslt;
+        }
+        public List<BIEntityModel> EntitiesMapper(List<BIConfiguration<BIConfigurationEntity>> managerData)
+        {
+            List<BIEntityModel> rslt = new List<BIEntityModel>();
+            foreach (BIConfiguration<BIConfigurationEntity> val in managerData)
+            {
+                rslt.Add(new BIEntityModel
+                {
+                    Name = val.Name,
+                    DisplayName = val.DisplayName,
+
                 });
             }
 

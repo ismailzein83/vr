@@ -18,7 +18,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             var biChart = new BIChart(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1,BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService);
             biChart.initializeController();
 
-            biChart.defineAPI();
+          
 
         },
         controllerAs: 'ctrl',
@@ -37,7 +37,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
     };
     function getBIChartTemplate(previewmode) {
         if (previewmode!='true') {
-            return '<vr-section title="{{ctrl.settings.EntityType}}/{{ctrl.settings.MeasureTypes}}"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></vr-section>';
+            return '<div ng-if="!ctrl.isAllowed"  class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> You Don\'t Have Permission To See This Widget..!!</div><div ng-if="ctrl.isAllowed"><vr-section title="{{ctrl.settings.EntityType}}/{{ctrl.settings.MeasureTypes}}"><vr-chart on-ready="ctrl.onChartReady" menuactions="ctrl.chartMenuActions"></vr-chart></vr-section></div>';
         }
         else
             return '</br><vr-textbox value="ctrl.settings.OperationType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.EntityType" vr-disabled="true"></vr-textbox></br><vr-textbox value="ctrl.settings.MeasureTypes" vr-disabled="true"></vr-textbox>'
@@ -46,21 +46,42 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
     }
     function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
-
+        console.log(settings);
         var chartAPI;
-        var Measures = [];
-        var Entities = [];
+        var measures = [];
+        var entity;
         var directiveSettings = {};
-        loadSettings();
+
+        
         function initializeController() {
-            ctrl.onChartReady = function (api) {
-                chartAPI = api;
-                chartAPI.onDataItemClicked = function (item) {
-                    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+            UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
+            .then(function () {
+                // console.log(BIUtilitiesService.checkPermissions(Measures));
+                if (!BIUtilitiesService.checkPermissions(measures)) {
+                    ctrl.isAllowed = false;
+                    return;
+                }
+
+                directiveSettings = {
+                    EntityType: entity,
+                    MeasureTypes: measures
+                }
+                ctrl.isAllowed = true;
+                ctrl.onChartReady = function (api) {
+                    chartAPI = api;
+                    chartAPI.onDataItemClicked = function (item) {
+                        BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+                    };
+                    if (retrieveDataOnLoad)
+                        retrieveData();
                 };
-                if (retrieveDataOnLoad)
-                    retrieveData();
-            };
+               defineAPI();
+
+            })
+            .finally(function () {
+            }).catch(function (error) {
+            });
+           
         }
 
         function defineAPI() {
@@ -71,6 +92,8 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         }
 
         function retrieveData() {
+            if (!ctrl.isAllowed)
+                return;
             return BIVisualElementService1.retrieveData1(ctrl, settings)
 
                 .then(function (response) {
@@ -95,7 +118,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
             var seriesDefinitions = [{
                 title: directiveSettings.MeasureTypes[0].DisplayName,
-                titlePath: "EntityName",
+                titlePath: directiveSettings.EntityType.DisplayName,
                 valuePath: "Values[0]"
             }];
 
@@ -111,47 +134,29 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
             var xAxisDefinition = { titlePath: "dateTimeValue", groupNamePath: "dateTimeGroupValue" };
 
             var seriesDefinitions = [];
-            for (var i = 0; i < settings.MeasureTypes.length; i++) {
-                var measureType = settings.MeasureTypes[i];
+            for (var i = 0; i < directiveSettings.MeasureTypes.length; i++) {
+                var measureType = directiveSettings.MeasureTypes[i];
                 seriesDefinitions.push({
-                    title: measureType,
+                    title: measureType.DisplayName,
                     valuePath: "Values[" + i + "]"
                 });
             }
 
             chartAPI.renderChart(response, chartDefinition, seriesDefinitions, xAxisDefinition);
         }
-        function loadSettings() {
-            UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
-             .then(function () {
-                 var MeasureTypes = [];
-                 for (var i = 0; i < settings.MeasureTypes.length; i++) {
-                     var value = UtilsService.getItemByVal(Measures, settings.MeasureTypes[i], 'Name');
-                     if (value != null)
-                         MeasureTypes.push(value);
-                 }
-                 directiveSettings = {
-                     EntityType: UtilsService.getItemByVal(Entities, settings.EntityType, 'Name'),
-                     MeasureTypes: MeasureTypes
-                 }
-             })
-             .finally(function () {
-             }).catch(function (error) {
-             });
-           
-        }
+       
         function loadMeasures() {
             return BIConfigurationAPIService.GetMeasures().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    Measures.push(itm);
-                });
+                for (var i = 0; i < settings.MeasureTypes.length; i++) {
+                    var value = UtilsService.getItemByVal(response, settings.MeasureTypes[i], 'Name');
+                    if (value != null)
+                        measures.push(value);
+                }
             });
         }
         function loadEntities() {
             return BIConfigurationAPIService.GetEntities().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    Entities.push(itm);
-                });
+                    entity = UtilsService.getItemByVal(response, settings.EntityType, 'Name');
             });
         }
         this.initializeController = initializeController;
