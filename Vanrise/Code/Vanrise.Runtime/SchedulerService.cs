@@ -24,7 +24,7 @@ namespace Vanrise.Runtime
                     }
                     else
                     {
-                        Dictionary<string, string> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item);
+                        Dictionary<string, object> evaluatedExpressions = item.TaskTrigger.EvaluateExpressions(item);
 
                         item.Status = Entities.SchedulerTaskStatus.Started;
                         dataManager.UpdateTask(item);
