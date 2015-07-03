@@ -149,6 +149,8 @@
   <ItemGroup>
     <Content Include="FraudAnalysis\Services\APIServices\SuspicionAnalysisAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
+    <Content Include="FraudAnalysis\Views\CDRImportProcessInput_Scheduled.html" />
+    <Content Include="FraudAnalysis\Views\CDRImportProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInput.html" />
     <Content Include="FraudAnalysis\Views\CDRImportProcessInput.html" />
     <Content Include="FraudAnalysis\Views\SaveCDRToDBProcessInputController.js" />
