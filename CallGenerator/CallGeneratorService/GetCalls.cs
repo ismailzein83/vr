@@ -72,6 +72,7 @@ namespace CallGeneratorService
 
                             Service1.LstChanels[ClientId].startDate = DateTime.MinValue;
                             Service1.LstChanels[ClientId].StartDate = DateTime.MinValue;
+                            Service1.LstChanels[ClientId].ConnectDateTime = DateTime.MinValue;
                             Service1.LstChanels[ClientId].idle = false;
                             Service1.LstChanels[ClientId].Idle = false;
 

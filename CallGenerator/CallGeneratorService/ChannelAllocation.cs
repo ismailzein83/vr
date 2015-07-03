@@ -204,6 +204,7 @@ namespace CallGeneratorService
 
                         Service1.LstChanels[i].StartDate = DateTime.Now;
                         Service1.LstChanels[i].startLastCall = DateTime.Now;
+                        Service1.LstChanels[i].connectDateTime = DateTime.MinValue;
                         //int ii = Service1.LstChanels[i].sip.ConfigId;
 
                         //p.Config.ExSipAccount_SetDefaultIdx(ii);
@@ -225,6 +226,7 @@ namespace CallGeneratorService
 
                             int ConnectionId = Service1.LstChanels[i].sip.phone.StartCall2(Service1.LstChanels[i].DestinationNumber);
                             Service1.LstChanels[i].AttemptDate = DateTime.Now;
+
                             String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                             //Service1.displayList(f, "threadId: " + threadId + " StartCall " + ConnectionId + " Line :" + Service1.LstChanels[i].id + 1 + " SIPCONFIG: " + Service1.LstChanels[i].sip.ConfigId + " ii " + ii);
                         }
@@ -245,12 +247,11 @@ namespace CallGeneratorService
                         {
                             GeneratedCall CallGenEnd = GeneratedCallRepository.Load(Service1.LstChanels[i].GeneratedCallid);
 
-
-                          
                             //Reset the phone with this Id;
                             if (Service1.LstChanels[i].DestinationNumber == "")
                             {
                                 Service1.LstChanels[i].EndDate = DateTime.Now;
+                                Service1.LstChanels[i].connectDateTime = DateTime.MinValue;
                                 Service1.LstChanels[i].EndCall();
                             }
                             else
@@ -265,6 +266,7 @@ namespace CallGeneratorService
                                 //WriteToEventLog("CallCenter=> the entry is null");
 
                                 Service1.LstChanels[i].EndDate = DateTime.Now;
+                                Service1.LstChanels[i].connectDateTime = DateTime.MinValue;
                                 Service1.LstChanels[i].EndCall();
                             }
 
@@ -275,6 +277,7 @@ namespace CallGeneratorService
                             Service1.LstChanels[i].DestinationNumber = "";
                             Service1.LstChanels[i].sip = null;
                             Service1.LstChanels[i].startLastCall = DateTime.MinValue;
+                            Service1.LstChanels[i].connectDateTime = DateTime.MinValue;
                             Service1.LstChanels[i].generatedCallid = 0;
                             //Service1.displayList(f, "Clear TimeOut");
                         }
@@ -296,6 +299,7 @@ namespace CallGeneratorService
                 startDate = DateTime.MinValue;
                 endDate = DateTime.MinValue;
                 startLastCall = DateTime.MinValue;
+                connectDateTime = DateTime.MinValue;
                 idle = true;
                 DestinationNumber = "";
                 if (BecomeIdle != null)
@@ -309,6 +313,7 @@ namespace CallGeneratorService
                 startDate = DateTime.MinValue;
                 endDate = DateTime.MinValue;
                 startLastCall = DateTime.MinValue;
+                connectDateTime = DateTime.MinValue;
                 idle = true;
                 if (BecomeIdle != null)
                     BecomeIdle(this);
@@ -330,7 +335,6 @@ namespace CallGeneratorService
             }
         }
 
-
         private static void WriteToEventLog(string message)
         {
             string cs = "VanCallGen";
@@ -342,19 +346,6 @@ namespace CallGeneratorService
             elog.Source = cs;
             elog.EnableRaisingEvents = true;
             elog.WriteEntry(message);
-        }
-
-        //private static void WriteToEventLog2(string message)
-        //{
-        //    string cs = "VanCGShe";
-        //    EventLog elog = new EventLog();
-        //    if (!EventLog.SourceExists(cs))
-        //    {
-        //        EventLog.CreateEventSource(cs, cs);
-        //    }
-        //    elog.Source = cs;
-        //    elog.EnableRaisingEvents = true;
-        //    elog.WriteEntry(message);
-        //}
+        }     
     }
 }

@@ -135,6 +135,7 @@ namespace CallGeneratorService
                     Chanel.Idle = true;
                     Chanel.DestinationNumber = "";
                     Chanel.StartLastCall = DateTime.MinValue;
+                    Chanel.ConnectDateTime = DateTime.MinValue;
                     LstChanels.Add(Chanel);
                 }
                 thGetCalls.Start();
@@ -199,6 +200,7 @@ namespace CallGeneratorService
                 WriteToEventLog(" \r\n" + ("phone_OnEstablishedConnection: ConnectionId" + ConnectionId.ToString() + " LineId: " + LineId.ToString() + " AddrFrom: " + AddrFrom.ToString() + " AddrTo: " + AddrTo));
 
                 ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
+                WriteToEventLog("phone_OnEstablishedConnection:: " + c.DestinationNumber);
                 if (c != null)
                     LstChanels[c.Id].ConnectDateTime = DateTime.Now;
             }
@@ -243,7 +245,7 @@ namespace CallGeneratorService
             {
                 ChannelAllocation c = ChannelAllocation.GetCallService(LineId);
 
-               // WriteToEventLog(" phone_OnClearedCall " + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
+                WriteToEventLog(" phone_OnClearedCall " + "c GeneratedCallid : " + c.GeneratedCallid + " ID: " + c.Id);
 
 
                 GeneratedCall GenCall = GeneratedCallRepository.Load(c.GeneratedCallid);
@@ -337,13 +339,18 @@ namespace CallGeneratorService
                 LstChanels[c.Id].Idle = true;
                 LstChanels[c.Id].StartDate = DateTime.MinValue;
                 LstChanels[c.Id].StartLastCall = DateTime.MinValue;
+                LstChanels[c.Id].ConnectDateTime = DateTime.MinValue;
                 LstChanels[c.Id].GeneratedCallid = 0;
-                // displayList(this, "Ophone_OnClearedCall on Line " + LineId);
-               // WriteToEventLog(" \r\n" + ("phone_OnClearedCall: Msg" + Msg.ToString() + " LineId: " + LineId.ToString() + " Status: " + Status.ToString()));
             }
             catch (System.Exception ex)
             {
                 WriteToEventLog(" phone_OnClearedCall EXCEPTION \r\n" + (ex.ToString()));
+
+                LstChanels[c.Id].Idle = true;
+                LstChanels[c.Id].StartDate = DateTime.MinValue;
+                LstChanels[c.Id].StartLastCall = DateTime.MinValue;
+                LstChanels[c.Id].ConnectDateTime = DateTime.MinValue;
+                LstChanels[c.Id].GeneratedCallid = 0;
             }
         }
 
