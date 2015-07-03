@@ -47,14 +47,14 @@
     <Compile Include="BIConfiguration.cs" />
     <Compile Include="BIConfigurationEntity.cs" />
     <Compile Include="BIConfigurationMeasure.cs" />
-    <Compile Include="ChartDirectiveObject.cs" />
+    <Compile Include="ChartDirectiveSetting.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="DataGridDirectiveObject.cs" />
+    <Compile Include="DataGridDirectiveSetting.cs" />
     <Compile Include="EntityRecord.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GenericEntityRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SummaryDirectiveObject.cs" />
+    <Compile Include="SummaryDirectiveSetting.cs" />
     <Compile Include="TimeValuesRecord.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

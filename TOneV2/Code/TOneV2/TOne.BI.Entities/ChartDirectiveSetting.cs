@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.BI.Entities
 {
-   public class ChartDirectiveObject
+   public class ChartDirectiveSetting
     {
         public string OperationType { get; set; }
         public string EntityType { get; set; }

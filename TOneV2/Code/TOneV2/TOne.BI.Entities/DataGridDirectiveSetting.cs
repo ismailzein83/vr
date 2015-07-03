@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.BI.Entities
 {
-    public class SummaryDirectiveObject
+   public class DataGridDirectiveSetting
     {
+        public string OperationType { get; set; }
+        public string EntityType { get; set; }
         public List<string> MeasureTypes { get; set; }
+        public string TopMeasure { get; set; }
     }
 }

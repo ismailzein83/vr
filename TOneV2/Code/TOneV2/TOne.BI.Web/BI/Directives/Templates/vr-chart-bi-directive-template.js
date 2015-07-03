@@ -49,7 +49,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
         if ($scope.selectedEntityType != undefined)
             entityType = $scope.selectedEntityType.Name;
         return {
-            $type: "TOne.BI.Entities.ChartDirectiveObject, TOne.BI.Entities",
+            $type: "TOne.BI.Entities.ChartDirectiveSetting, TOne.BI.Entities",
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,

@@ -42,7 +42,7 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         if ($scope.selectedEntityType != undefined)
             entityType = $scope.selectedEntityType.Name;
         return {
-            $type: "TOne.BI.Entities.DataGridDirectiveObject, TOne.BI.Entities",
+            $type: "TOne.BI.Entities.DataGridDirectiveSetting, TOne.BI.Entities",
             OperationType: $scope.selectedOperationType.value,
             EntityType: entityType,
             MeasureTypes: measureTypes,
