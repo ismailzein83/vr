@@ -16,13 +16,13 @@ namespace TOne.CDRProcess.Arguments
             return String.Format("Daily Repricing Process for date {0:dd-MMM-yyyy}", this.RepricingDay);
         }
 
-        public override void MapExpressionValues(Dictionary<string, string> evaluatedExpressions)
+        public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
             if (evaluatedExpressions.ContainsKey("RepricingDay"))
             {
                 Console.WriteLine("RepricingDay old value {0}", RepricingDay);
                 Console.WriteLine("The new value {0}", evaluatedExpressions["RepricingDay"]);
-                RepricingDay = DateTime.Parse(evaluatedExpressions["RepricingDay"]);
+                RepricingDay = (DateTime) evaluatedExpressions["RepricingDay"];
                 Console.WriteLine("RepricingDay new value {0}", RepricingDay);
             }
         }
