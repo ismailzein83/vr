@@ -17,17 +17,15 @@ public class HandlerGetChartUserCalls : IHttpHandler, System.Web.SessionState.IR
         List<List<ChartCall>> LstChartCall = new List<List<ChartCall>>();
 
         User us = UserRepository.Load(Current.getCurrentUser(context).Id);
-        if (us.ParentId != null)
+        if (us.Role == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.User)
             LstChartCall.Add(TestOperatorRepository.GetChartCallsUser(Current.getCurrentUser(context).Id));
         else
         {
             LstChartCall.Add(TestOperatorRepository.GetChartCallsUser(Current.getCurrentUser(context).Id));
             
-            List<User> LstUs = UserRepository.GetSubUsers(Current.getCurrentUser(context).Id);
-            foreach(User u in LstUs)
-            {
+            List<User> LstUs = UserRepository.GetSubUsers();
+            foreach(User u in LstUs)            
                 LstChartCall.Add(TestOperatorRepository.GetChartCallsUser(u.Id));
-            }
         }
         
         context.Response.ContentType = "application/json";

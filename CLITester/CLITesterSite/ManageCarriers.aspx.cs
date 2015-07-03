@@ -29,7 +29,7 @@ public partial class ManageCarriers : BasePage
     #region Methods
     private void GetData()
     {
-        List<Carrier> Carriers = CarrierRepository.GetCarriers(Current.User.Id).OrderByDescending(l => l.Id).ToList();
+        List<Carrier> Carriers = CarrierRepository.GetCarriers().OrderByDescending(l => l.Id).ToList();
         Session["Carriers"] = Carriers;
         rptCarriers.DataSource = Carriers;
         rptCarriers.DataBind();
@@ -151,7 +151,6 @@ public partial class ManageCarriers : BasePage
             {
                 string[] ents = en.Split(',');
                 Carrier c = new Carrier();
-                c.CustomerId = Current.User.Id;
                 c.Name = ents[0];
                 c.Prefix = ents[1];
                 c.ShortName = ents[2];
@@ -193,10 +192,7 @@ public partial class ManageCarriers : BasePage
         action.ObjectType = "Carrier";
 
         if (String.IsNullOrEmpty(HdnId.Value))
-        {
-            newCarrier.CustomerId = Current.User.Id;
             action.ActionType = (int)Enums.ActionType.Add;
-        }
         else
         { 
             int id = 0;

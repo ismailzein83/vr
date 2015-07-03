@@ -197,11 +197,11 @@ namespace CallGeneratorLibrary.Utilities
 
                                     int balance = 0;
                                     int Requested = 0;
-                                    int ParentId = 0;
+                                    //int ParentId = 0;
 
-                                    ParentId = UserRepository.GetParentId(schedule.UserId.Value);
-                                    balance = UserRepository.Load(schedule.UserId.Value).Balance.Value;
-                                    Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId);
+                                    //ParentId = UserRepository.GetUser((int)Enums.UserRole.SuperUser).Id;
+                                    balance = UserRepository.GetUser((int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser).Balance.Value;
+                                    Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser();
 
                                     if (balance - Requested >= LstShcOp.Count)
                                     {
@@ -211,12 +211,12 @@ namespace CallGeneratorLibrary.Utilities
                                             {
                                                 TestOperator testOp = new TestOperator();
                                                 testOp.UserId = schedule.UserId;
-                                                testOp.ParentUserId = ParentId;
+                                                //testOp.ParentUserId = ParentId;
                                                 testOp.OperatorId = SchOp.OperatorId;
                                                 testOp.NumberOfCalls = 1;
                                                 testOp.CreationDate = DateTime.Now;
                                                 testOp.CarrierPrefix = SchOp.Carrier.Prefix;
-                                                testOp.CallerId = schedule.User.CallerId;
+                                                testOp.CallerId = schedule.SipAccount.DisplayName;
                                                 testOp.ScheduleId = schedule.Id;
                                                 bool saveB = TestOperatorRepository.Save(testOp);
                                             }

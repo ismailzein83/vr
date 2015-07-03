@@ -73,23 +73,10 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
             int OperatorId = 0;
             int.TryParse(resp.id1, out OperatorId);
 
-            int balance = 0;
-            int Requested = 0;
-            int? ParentId = null;
-            ParentId = UserRepository.GetParentId(Current.getCurrentUser(context).Id);
-            
-            if(ParentId == null)
-                balance = UserRepository.Load(Current.getCurrentUser(context).Id).Balance.Value;
-            else
-                balance = UserRepository.Load(ParentId.Value).Balance.Value;
-
-            Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser(ParentId.Value);
-
-            if (balance - Requested > 0)
+            if (CallGeneratorLibrary.Utilities.BalanceDetails.CheckUserBalance(Current.getCurrentUser(context).Id))
             {
                 TestOperator testOp = new TestOperator();
                 testOp.UserId = Current.getCurrentUser(context).Id;
-                testOp.ParentUserId = ParentId;
                 
                 if (OperatorId != 0)
                     testOp.OperatorId = OperatorId;
@@ -97,8 +84,7 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
                 testOp.NumberOfCalls = 1;
                 testOp.CreationDate = DateTime.Now;
                 testOp.CarrierPrefix = resp.id2;
-                //testOp.CarrierPrefix = "";
-                testOp.CallerId = Current.getCurrentUser(context).CallerId;
+                testOp.CallerId = SipAccountRepository.GetTop().DisplayName;
 
                 bool saveB = TestOperatorRepository.Save(testOp);
 

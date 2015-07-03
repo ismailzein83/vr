@@ -183,10 +183,8 @@ namespace CallGeneratorServiceCLI
                             {
                                 WriteToEventLogEx("SetCurrentLine: " + exx.ToString());
                                 Logger.LogException(exx);
-                                SipAccount sp = SipAccountRepository.Load(1);
-                                WriteToEventLogEx("CallerId: " + sp.User.CallerId);
 
-                                NewCallGenCLI.Reconfigure(i, sp.User.CallerId);
+                                NewCallGenCLI.Reconfigure(i);
 
                                 NewCallGenCLI.LstChanels[i].sip.phone.SetCurrentLine(NewCallGenCLI.LstChanels[i].id + 1);
                             }
@@ -202,10 +200,6 @@ namespace CallGeneratorServiceCLI
                             WriteToEventLogEx("GenCall: " + GenCall.Id.ToString());
                             GenCall.StartCall = DateTime.Now;
                             GeneratedCallRepository.Save(GenCall);
-
-                            //WriteToEventLogEx("ConnectionId: " + ConnectionId);
-                            //String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
-                            //NewCallGenCLI.displayList(f, "threadId: " + threadId + " StartCall " + ConnectionId + " Line :" + NewCallGenCLI.LstChanels[i].id + 1 + " SIPCONFIG: " + NewCallGenCLI.LstChanels[i].sip.ConfigId + " ii " + ii);
                         }
                     }
 
@@ -237,8 +231,6 @@ namespace CallGeneratorServiceCLI
                                     CallGenEnd.EndDate = DateTime.Now;
                                     bool tr = GeneratedCallRepository.Save(CallGenEnd);
                                 }
-                                //else
-                                //WriteToEventLog("CallCenter=> the entry is null");
 
                                 NewCallGenCLI.LstChanels[i].EndDate = DateTime.Now;
                                 NewCallGenCLI.LstChanels[i].EndCall();
@@ -253,7 +245,6 @@ namespace CallGeneratorServiceCLI
                             NewCallGenCLI.LstChanels[i].generatedCallid = 0;
                             NewCallGenCLI.LstChanels[i].GeneratedCallid = 0;
                             NewCallGenCLI.LstChanels[i].ConnectionId = 0;
-                            //NewCallGenCLI.displayList(f, "Clear TimeOut");
                         }
                     }
                 }

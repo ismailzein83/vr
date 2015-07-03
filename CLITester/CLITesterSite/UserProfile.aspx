@@ -85,14 +85,8 @@
                     </div>
                     <div id="tab_4-4" class="tab-pane">
                         <div style="height: auto;" id="accordion4-4" class="accordion collapse">
-                            
-                                <label class="control-label" style="visibility:hidden" >Switch IP</label>
-                                <%--<asp:HiddenField ID="hdnIP" runat="server" />--%>
-                                <%--<input class="span4 m-wrap" runat="server" id="input_ipv4" type="text" />--%>
-                                <asp:TextBox ID="txtSwitchIp" Visible="false" runat="server" CssClass="m-wrap span4" placeholder="Switch IP"></asp:TextBox>
                                 <label class="control-label">Caller ID</label>
                                 <asp:TextBox ID="txtCallerId" runat="server" CssClass="m-wrap span4" placeholder="Caller ID"></asp:TextBox>
-                           
                         </div>
                     </div>
                     <div id="tab_5-5" class="tab-pane">

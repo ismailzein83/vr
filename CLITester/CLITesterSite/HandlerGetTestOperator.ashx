@@ -125,7 +125,7 @@ public class HandlerGetTestOperator :  IHttpHandler, System.Web.SessionState.IRe
                     {
                         if (m != null)
                         {
-                            GeneratedCall generatedCall = GeneratedCallRepository.Load(m.CallEntryId.Value);
+                            GeneratedCall generatedCall = GeneratedCallRepository.Load(m.GeneratedCallId.Value);
                             if(generatedCall != null)
                             {
                                 if(generatedCall.AlertDate != null && generatedCall.StartCall != null)

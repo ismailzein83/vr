@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using System.Web.UI.HtmlControls;
 
@@ -23,20 +24,20 @@ public partial class UserProfile : BasePage
 
         if (!Page.IsPostBack)
         {
-            if (Current.User.User.ParentId == null && Current.User.User.IsSuperAdmin == false)
+            if (Current.User.User.Role ==  (int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser)
                 liSettings.Visible = true;
             else
                 liSettings.Visible = false;
 
             CallGeneratorLibrary.User current = UserRepository.Load(Current.User.Id);
+            SipAccount sipAccount = SipAccountRepository.GetTop();
 
             txtEmail.Text = current.Email;
             txtName.Text = current.Name;
             txtLastName.Text = current.LastName;
             txtMobileNumber.Text = current.MobileNumber;
             txtWebsiteUrl.Text = current.WebsiteURL;
-            txtCallerId.Text = current.CallerId;
-            txtSwitchIp.Text = current.IpSwitch;
+            txtCallerId.Text = sipAccount.DisplayName;
 
             lblDate.Text = Current.User.CreationDateF;
             lblLoginDate.Text = Current.User.LastLoginDateF;
@@ -45,6 +46,7 @@ public partial class UserProfile : BasePage
     protected void btnSave_Click(object sender, EventArgs e)
     {
         CallGeneratorLibrary.User current = UserRepository.Load(Current.User.Id);
+        SipAccount sipAccount = SipAccountRepository.GetTop();
 
         string pass = "";
         if (txtPassword.Text != "")
@@ -57,14 +59,15 @@ public partial class UserProfile : BasePage
         {
             if (txtNewPassword.Text == "" && txtRetypePassword.Text == "")
             {
-                if (current.CallerId != txtCallerId.Text)
-                    current.IsChangedCallerId = true;
+                if (sipAccount.DisplayName != txtCallerId.Text)
+                    sipAccount.IsChangedCallerId = true;
+                sipAccount.DisplayName = txtCallerId.Text;
+                SipAccountRepository.Save(sipAccount);
+
                 current.Name = txtName.Text;
                 current.LastName = txtLastName.Text;
                 current.MobileNumber = txtMobileNumber.Text;
                 current.WebsiteURL = txtWebsiteUrl.Text;
-                current.IpSwitch = txtSwitchIp.Text;
-                current.CallerId = txtCallerId.Text;
                 current.Email = txtEmail.Text;
                 UserRepository.Save(current);
 
@@ -76,14 +79,15 @@ public partial class UserProfile : BasePage
             }
             else
             {
-                if (current.CallerId != txtCallerId.Text)
-                    current.IsChangedCallerId = true;
+                if (sipAccount.DisplayName != txtCallerId.Text)
+                    sipAccount.IsChangedCallerId = true;
+                sipAccount.DisplayName = txtCallerId.Text;
+                SipAccountRepository.Save(sipAccount);
+
                 current.Name = txtName.Text;
                 current.LastName = txtLastName.Text;
                 current.MobileNumber = txtMobileNumber.Text;
                 current.WebsiteURL = txtWebsiteUrl.Text;
-                current.IpSwitch = txtSwitchIp.Text;
-                current.CallerId = txtCallerId.Text;
                 current.Email = txtEmail.Text;
                 current.Password = CommonWebComponents.SecureTextBox.GetHash(txtNewPassword.Text);
                 UserRepository.Save(current);

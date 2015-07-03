@@ -38,14 +38,11 @@ public partial class ManageUser : BasePage
 
         user.UserName = txtUserName.Text;
         user.Email = txtEmail.Text;
-        user.CallerId = Current.User.CallerId;
-        user.IpSwitch = Current.User.IpSwitch;
         user.MobileNumber = txtMobile.Text;
         user.IsActive = true;
-        user.IsSuperAdmin = false;
         user.Guid = Guid.NewGuid().ToString();
         user.CreationDate = user.Id == 0 ? DateTime.Now : user.CreationDate;
-        user.ParentId = Current.User.Id;
+        user.Role = (int)CallGeneratorLibrary.Utilities.Enums.UserRole.User;
 
         if (txtPassword.Text != "")
             user.Password = CommonWebComponents.SecureTextBox.GetHash(txtPassword.Text);

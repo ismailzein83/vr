@@ -46,7 +46,7 @@
                                 <td>
                                     <asp:Label ID="lblRemaining" runat="server" /></td>
                             </tr>
-                            <tr>
+                            <tr class="visibility: hidden">
                                 <td>Failed: </td>
                                 <td>
                                     <asp:Label ID="lblFailed" runat="server" /></td>

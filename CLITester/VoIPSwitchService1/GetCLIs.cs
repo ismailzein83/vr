@@ -59,7 +59,7 @@ namespace VoIPSwitchService
                                 MontyCall montyCall = MontyCallRepository.LoadbyTestOperatorId(lstTestOperators[i].Id);
                                 if (montyCall != null)
                                 {
-                                    GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall.CallEntryId.Value);
+                                    GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall.GeneratedCallId.Value);
                                     if (generatedCall != null)
                                     {
                                         int ReqCallId = 0;
@@ -80,7 +80,7 @@ namespace VoIPSwitchService
                                                     lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
                                                 }
 
-                                                Err = "Expired - No Line Availables";
+                                                Err = "Expired - Busy";
                                                 generatedCall.EndDate = DateTime.Now;
 
                                                 lstTestOperators[i].ErrorMessage = Err;
@@ -114,7 +114,7 @@ namespace VoIPSwitchService
                                                     lstTestOperators[i].Duration = ((generatedCall.DisconnectDate.Value - generatedCall.ConnectDate.Value).TotalSeconds).ToString();
                                                 }
 
-                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
+                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.DisplayName;
                                                 if (generatedCall.ResponseCode == "408")
                                                     lstTestOperators[i].ErrorMessage = "408 - Request Timeout";
                                                 if (generatedCall.ResponseCode == "404")
@@ -149,22 +149,23 @@ namespace VoIPSwitchService
                                                     {
                                                         /// Result done (Delivered or Not delivered) => decrease the balance
                                                         ///
-                                                        UserRepository.DecreaseBalance(lstTestOperators[i].User.Id);
+                                                        CallGeneratorLibrary.Utilities.BalanceDetails.DecreaseBalance(lstTestOperators[i].UserId.Value);
+                                                        //UserRepository.DecreaseBalance();
                                                         ///
                                                         //if (reader.Read())
                                                         {
                                                             lstTestOperators[i].EndDate = DateTime.Now;
-                                                            string testcli = generatedCall.SipAccount.User.CallerId;
+                                                            string testcli = generatedCall.SipAccount.DisplayName;
 
                                                             ///Remove the character '+' from the Cli received, if exist
                                                             if (testcli.Substring(0, 1) == "+")
                                                             {
-                                                                int len2 = generatedCall.SipAccount.User.CallerId.Length;
+                                                                int len2 = generatedCall.SipAccount.DisplayName.Length;
                                                                 len2 = len2 - 1;
-                                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId.Substring(1, len2);
+                                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.DisplayName.Substring(1, len2);
                                                             }
                                                             else
-                                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
+                                                                lstTestOperators[i].TestCli = generatedCall.SipAccount.DisplayName;
                                                                 
                                                             //string RecCLi = reader[3].ToString();
                                                             string RecCLi = ret.ReceivedCLI;
@@ -263,12 +264,12 @@ namespace VoIPSwitchService
                                                     }
                                                     else
                                                     {
-                                                        if (generatedCall.Status == "6")
-                                                        {
-                                                            lstTestOperators[i].ErrorMessage = "FAS";
-                                                            lstTestOperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Phase;
-                                                        }
-                                                        else
+                                                        //if (generatedCall.Status == "6")
+                                                        //{
+                                                        //    lstTestOperators[i].ErrorMessage = "FAS";
+                                                        //    lstTestOperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Phase;
+                                                        //}
+                                                        //else
                                                         {
                                                             if (
                                                                 //(generatedCall.ResponseCode == "408") ||
@@ -295,7 +296,7 @@ namespace VoIPSwitchService
                                                                 lstTestOperators[i].Status = (int)CallGeneratorLibrary.Utilities.Enums.CallStatus.Expired;
                                                             }
                                                         }
-                                                        lstTestOperators[i].TestCli = generatedCall.SipAccount.User.CallerId;
+                                                        lstTestOperators[i].TestCli = generatedCall.SipAccount.DisplayName;
                                                         lstTestOperators[i].EndDate = DateTime.Now;
 
 
@@ -332,7 +333,7 @@ namespace VoIPSwitchService
                                             CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                             System.Threading.Thread.Sleep(1000);
 
-                                            GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall2.CallEntryId.Value);
+                                            GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall2.GeneratedCallId.Value);
                                             if (generatedCall != null)
                                             {
                                                 if (generatedCall.AlertDate != null && generatedCall.StartCall != null)
@@ -379,7 +380,7 @@ namespace VoIPSwitchService
                                     CallInfo ret = pp.ReleaseCall(ConfigurationManager.AppSettings["ClientName"], ConfigurationManager.AppSettings["Password"], ReqCallId);
                                     System.Threading.Thread.Sleep(1000);
 
-                                    GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall3.CallEntryId.Value);
+                                    GeneratedCall generatedCall = GeneratedCallRepository.Load(montyCall3.GeneratedCallId.Value);
                                     if (generatedCall != null)
                                     {
                                         if (generatedCall.AlertDate != null && generatedCall.StartCall != null)

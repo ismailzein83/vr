@@ -126,10 +126,6 @@ public class OfficeUser : System.Security.Principal.IIdentity
     public DateTime LastLoginDate { get { return _User.LastLoginDate.Value; } }
     public string Email { get { return _User.Email; } set { _User.Email = value; } }
     public string Username { get { return _User.UserName; } set { _User.UserName = value; } }
-    public string IpSwitch { get { return _User.IpSwitch; } set { _User.IpSwitch = value; } }
-    public string CallerId { get { return _User.CallerId; } set { _User.CallerId = value; } }
-    //public int CompanyId { get { return _User.Company.Id; } set { _User.Company.Id = value; } }
-    //public string CompanyName { get { return _User.Company.Name; } set { _User.Company.Name = value; } }
 
     public string CreationDateF { get { return _User.CreationDate.HasValue ? _User.CreationDate.Value.ToString("dd/MM/yyyy HH:mm") : string.Empty; } }
     public string LastLoginDateF { get { return _User.LastLoginDate.HasValue ? _User.LastLoginDate.Value.ToString("dd/MM/yyyy HH:mm") : string.Empty; } }
@@ -199,8 +195,8 @@ public class OfficeUser : System.Security.Principal.IIdentity
     {
         get
         {
-            if (_User.IsSuperAdmin.HasValue)
-                if (_User.IsSuperAdmin.Value)
+            if (_User.Role.HasValue)
+                if (_User.Role.Value == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.Administrator)
                     return true;
             return false;
         }

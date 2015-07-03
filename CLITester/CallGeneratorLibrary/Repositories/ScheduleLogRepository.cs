@@ -100,20 +100,18 @@ namespace CallGeneratorLibrary.Repositories
         private static bool Update(ScheduleLog scheduleLog)
         {
             bool success = false;
-            ScheduleLog look = new ScheduleLog();
+            ScheduleLog scheduleLogObj = new ScheduleLog();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.ScheduleLogs.Single(l => l.Id == scheduleLog.Id);
+                    scheduleLogObj = context.ScheduleLogs.Single(l => l.Id == scheduleLog.Id);
 
-                    look.ScheduleId = scheduleLog.ScheduleId;
-                    look.StartDate = scheduleLog.StartDate;
-                    look.EndDate = scheduleLog.EndDate;
-                    look.IsSuccess = scheduleLog.IsSuccess;
-                    look.Notes = scheduleLog.Notes;
-                    look.Frequency = scheduleLog.Frequency;
+                    scheduleLogObj.ScheduleId = scheduleLog.ScheduleId;
+                    scheduleLogObj.StartDate = scheduleLog.StartDate;
+                    scheduleLogObj.EndDate = scheduleLog.EndDate;
+                    scheduleLogObj.Frequency = scheduleLog.Frequency;
                     context.SubmitChanges();
                     success = true;
                 }

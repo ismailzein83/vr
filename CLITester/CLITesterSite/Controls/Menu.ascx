@@ -23,6 +23,7 @@
                 <li runat="server" id="liUsers"><a href="ManageUsers.aspx">Users</a> </li>
                 <li><a href="ManageTestOperators.aspx">History Test Calls</a> </li>
                 <li runat="server" id="liSettings"><a href="ManageSettings.aspx">Settings</a> </li>
+                <li runat="server" id="liContracts"><a href="ManageContracts.aspx">Contracts</a> </li>
                 <li runat="server" id="liBalances"><a href="ManageBalances.aspx">Balances</a> </li>
                 <li runat="server" id="licalls" ><a href="ManageTestCalls.aspx">Data Calls</a> </li>
                 <%--<li runat="server" id="liLstOnline" ><a href="ListOnlineOperators.aspx">List Online Operators</a> </li>--%>

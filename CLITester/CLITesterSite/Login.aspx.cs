@@ -48,6 +48,7 @@ public partial class Login : BasePage
                     action.ObjectId = user.Id;
                     action.ObjectType = "User";
                     action.UserId = user.Id;
+                    //action.Description = Utilities.SerializeLINQtoXML<User>(user);
                     AuditRepository.Save(action);
 
                     if (backto.Value != "")

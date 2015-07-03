@@ -11,9 +11,31 @@ namespace CallGeneratorLibrary.Utilities
     {
         public enum Service : int
         {
-            Monty = 1,
-            AndroidDevice = 2
+            SIMServer = 1,
+            AndroidDevice = 2,
+            Monty = 3
         }
+        public enum PeriodRecharge : int
+        {
+            Daily = 1,
+            Monthly = 2,
+            yearly = 3
+        }
+
+
+        public enum ContractType : int
+        {
+            Regular = 1,
+            Bonus = 2
+        }
+
+        public enum UserRole : int
+        {
+            Administrator = 1,
+            SuperUser = 2,
+            User = 3
+        }
+
         public enum Lang : short
         {
             English = 1,
@@ -40,51 +62,6 @@ namespace CallGeneratorLibrary.Utilities
             Logout = 5,
             ScheduleDone = 6,
             ScheduleFailed = 7
-        }
-        public enum Datatype
-        {
-            Text = 1,
-            Decimal = 2,
-            Integer = 3,
-            Currency = 4,
-            LongText = 5,
-            ListOfDates = 6,
-            ListOfString = 7,
-            ListOfCurrency = 8,
-            DateTime = 9,
-            ListOfLookups = 10,
-            Label = 11
-        }
-
-        public enum FieldType
-        {
-            InsuranceOrFees = 1,
-            Rate = 3,
-            AmountBorrowed = 4,
-            FirstPaymentDate = 6,
-            Period = 7
-        }
-
-
-        public enum LookupIdValues
-        {
-            JobCategory = 1,
-            JobType = 2,
-            JobGender = 3,
-            JobDuration = 4,
-            Answer = 5,
-            Degree = 6,
-            Nationality = 7,
-            MaritalStatus = 8
-        }
-
-
-        public enum ActionModule
-        {
-            Lookup = 8,
-            LookupValue = 9,
-            Currency = 10,
-            Exception = 99
         }
 
         public enum CallStatus

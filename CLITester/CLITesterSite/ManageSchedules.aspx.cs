@@ -32,7 +32,7 @@ public partial class ManageSchedules : BasePage
             rptOperators.DataBind();
 
             List<Carrier> LstCarriersList = new List<Carrier>();
-            LstCarriersList = CarrierRepository.LoadbyUserID(Current.User.Id);
+            LstCarriersList = CarrierRepository.GetCarriers();
             rptCarriers.DataSource = LstCarriersList;
             rptCarriers.DataBind();
             GetData();
@@ -44,7 +44,7 @@ public partial class ManageSchedules : BasePage
     private void GetData()
     {
         List<Schedule> Schedules  = new List<Schedule>();
-        if (Current.User.User.ParentId == null)
+        if (Current.User.User.Role == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser)
         {
             List<Schedule> LstSchedules = new List<Schedule>();
             
@@ -52,7 +52,7 @@ public partial class ManageSchedules : BasePage
             foreach (Schedule s in LstSchedules)
                 Schedules.Add(s);
 
-            List<User> LstUsers = UserRepository.GetSubUsers(Current.User.Id);
+            List<User> LstUsers = UserRepository.GetSubUsers();
             foreach(User u in LstUsers)
             {
                 LstSchedules = new List<Schedule>();
@@ -185,8 +185,6 @@ public partial class ManageSchedules : BasePage
         catch { }
     }
     #endregion
-
-    //private static List<RolePermission> pagePermission;
 
     protected void btnSave_Click(object sender, EventArgs e)
     {

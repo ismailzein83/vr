@@ -21,180 +21,167 @@ namespace CallGeneratorServiceCLI
     {
         private static readonly object _syncRoot = new object();
 
-        public ChannelAllocation c = new ChannelAllocation();
+        public ChannelAllocation thChannelAllocation = new ChannelAllocation();
 
         public GetCalls thGetCalls = new GetCalls();
 
         public static List<ChannelAllocation> LstChanels = new List<ChannelAllocation>();
 
-        public static int NxtSipId = 0;
+        //public static int NxtSipId = 0;
 
-        public static List<SIP> LstSip = new List<SIP>();
+        public static SIP Sip = new SIP();
 
         public static CAbtoPhone generalPhone = new CAbtoPhone();
         private CConfig config;
         
         internal static ServiceHost myServiceHost = null;
 
-        public static void Reconfigure(int i, string CallerId)
+        public static void Reconfigure(int i)
         {
-            SipAccount spAccount = SipAccountRepository.Load(1);
             LstChanels[i].sip = new SIP();
             LstChanels[i].sip.phone = generalPhone;
         }
 
-        public void AddnewSIP(User user)
-        {
-            SipAccount spAccount = SipAccountRepository.Load(1);
-            SIP s = new SIP();
+        //public void AddnewSIP(User user)
+        //{
+        //    SipAccount spAccount = SipAccountRepository.Load(1);
+        //    SIP s = new SIP();
 
-            s.phone = new CAbtoPhone();
-            CConfig config;
+        //    s.phone = new CAbtoPhone();
+        //    CConfig config;
 
-            config = s.phone.Config;
+        //    config = s.phone.Config;
 
-            config.ActivePlaybackDevice = "";
-            config.ActiveNetworkInterface = "Ethernet-IPV4-192.168.22.12";
+        //    config.ActivePlaybackDevice = "";
+        //    config.ActiveNetworkInterface = "Ethernet-IPV4-192.168.22.12";
 
-            if (config.RecordDeviceCount > 0)
-                config.ActiveRecordDevice = config.get_RecordDevice(0);
+        //    if (config.RecordDeviceCount > 0)
+        //        config.ActiveRecordDevice = config.get_RecordDevice(0);
 
-            config.LicenseUserId = ConfigurationManager.AppSettings["LicenseUserId"];
-            config.LicenseKey = ConfigurationManager.AppSettings["LicenseKey"];
+        //    config.LicenseUserId = ConfigurationManager.AppSettings["LicenseUserId"];
+        //    config.LicenseKey = ConfigurationManager.AppSettings["LicenseKey"];
 
-            config.StunServer = "";
-            config.ListenPort = 5060;
-            config.EchoCancelationEnabled = 1;
-            config.NoiseReductionEnabled = 1;
-            config.VolumeUpdateSubscribed = 1;
-            config.DialToneEnabled = 1;
-            config.MP3RecordingEnabled = 0;
-            config.EncryptedCallEnabled = 0;
-            config.AutoAnswerEnabled = 0;
-            config.RingToneEnabled = 0;
-            config.LocalAudioEnabled = 0;
-            config.LocalTonesEnabled = 0;
-            config.MixerFilePlayerEnabled = 1;
-            config.SamplesPerSecond = 32000;
-            config.AutoGainControlEnabled = 1;
-            config.LogLevel = LogLevelType.eLogInfo;
-            config.CallInviteTimeout = 60;
-            config.UserAgent = "ABTO Video SIP SDK";
-            config.CallerId = user.CallerId;
-            config.RegDomain = user.CallerId;
-            config.RegUser = user.CallerId;
-            config.RegPass = spAccount.Password;
-            config.RegAuthId = user.CallerId;
-            config.RegExpire = 300;
+        //    config.StunServer = "";
+        //    config.ListenPort = 5060;
+        //    config.EchoCancelationEnabled = 1;
+        //    config.NoiseReductionEnabled = 1;
+        //    config.VolumeUpdateSubscribed = 1;
+        //    config.DialToneEnabled = 1;
+        //    config.MP3RecordingEnabled = 0;
+        //    config.EncryptedCallEnabled = 0;
+        //    config.AutoAnswerEnabled = 0;
+        //    config.RingToneEnabled = 0;
+        //    config.LocalAudioEnabled = 0;
+        //    config.LocalTonesEnabled = 0;
+        //    config.MixerFilePlayerEnabled = 1;
+        //    config.SamplesPerSecond = 32000;
+        //    config.AutoGainControlEnabled = 1;
+        //    config.LogLevel = LogLevelType.eLogInfo;
+        //    config.CallInviteTimeout = 60;
+        //    config.UserAgent = "ABTO Video SIP SDK";
+        //    config.CallerId = user.CallerId;
+        //    config.RegDomain = user.CallerId;
+        //    config.RegUser = user.CallerId;
+        //    config.RegPass = spAccount.Password;
+        //    config.RegAuthId = user.CallerId;
+        //    config.RegExpire = 300;
 
-            s.SipId = spAccount.Id;
-            s.ConfigId = CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId;
-            CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId++;
-            //config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 1);
-            //config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
+        //    s.SipId = spAccount.Id;
+        //    s.ConfigId = CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId;
+        //    CallGeneratorServiceCLI.NewCallGenCLI.NxtSipId++;
+        //    //config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 1);
+        //    //config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
 
-            s.phone.OnInitialized += new _IAbtoPhoneEvents_OnInitializedEventHandler(phone_OnInitialized);
-            s.phone.OnLineSwiched += new _IAbtoPhoneEvents_OnLineSwichedEventHandler(phone_OnLineSwiched);
-            s.phone.OnEstablishedCall += new _IAbtoPhoneEvents_OnEstablishedCallEventHandler(phone_OnEstablishedCall);
-            s.phone.OnClearedCall += new _IAbtoPhoneEvents_OnClearedCallEventHandler(phone_OnClearedCall);
-            s.phone.OnRegistered += new _IAbtoPhoneEvents_OnRegisteredEventHandler(phone_OnRegistered);
-            s.phone.OnUnRegistered += new _IAbtoPhoneEvents_OnUnRegisteredEventHandler(phone_OnUnRegistered);
-            s.phone.OnPlayFinished += new _IAbtoPhoneEvents_OnPlayFinishedEventHandler(phone_OnPlayFinished);
-            s.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
-            s.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
-            s.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
+        //    s.phone.OnInitialized += new _IAbtoPhoneEvents_OnInitializedEventHandler(phone_OnInitialized);
+        //    s.phone.OnLineSwiched += new _IAbtoPhoneEvents_OnLineSwichedEventHandler(phone_OnLineSwiched);
+        //    s.phone.OnEstablishedCall += new _IAbtoPhoneEvents_OnEstablishedCallEventHandler(phone_OnEstablishedCall);
+        //    s.phone.OnClearedCall += new _IAbtoPhoneEvents_OnClearedCallEventHandler(phone_OnClearedCall);
+        //    s.phone.OnRegistered += new _IAbtoPhoneEvents_OnRegisteredEventHandler(phone_OnRegistered);
+        //    s.phone.OnUnRegistered += new _IAbtoPhoneEvents_OnUnRegisteredEventHandler(phone_OnUnRegistered);
+        //    s.phone.OnPlayFinished += new _IAbtoPhoneEvents_OnPlayFinishedEventHandler(phone_OnPlayFinished);
+        //    s.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
+        //    s.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
+        //    s.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
 
-            s.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
-            s.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
-            s.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
+        //    s.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
+        //    s.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
+        //    s.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
 
-            s.phone.ApplyConfig();
-            s.phone.Initialize();
-            System.Threading.Thread.Sleep(1000);
+        //    s.phone.ApplyConfig();
+        //    s.phone.Initialize();
+        //    System.Threading.Thread.Sleep(1000);
 
-            LstSip.Add(s);
-        }
+        //    LstSip.Add(s);
+        //}
 
         public void Configure()
         {
             try
             {
-                SipAccount sp = SipAccountRepository.Load(1);
+                SipAccount sipAccount = SipAccountRepository.GetTop();
                
-                //List<SipAccount> LstSipAccounts = SipAccountRepository.GetSipAccounts();
-                int i = 0;
-                //foreach (SipAccount sp in LstSipAccounts)
-                {
-                    SIP s = new SIP();
+                Sip.phone = generalPhone;
+                config = Sip.phone.Config;
 
-                    s.phone = generalPhone;
-                    config = s.phone.Config;
+                config.ActivePlaybackDevice = "";
+                config.ActiveNetworkInterface = sipAccount.Server;
 
-                    config.ActivePlaybackDevice = "";
-                    config.ActiveNetworkInterface = "91.236.236.53";
+                if (config.RecordDeviceCount > 0)
+                    config.ActiveRecordDevice = config.get_RecordDevice(0);
 
-                    if (config.RecordDeviceCount > 0)
-                        config.ActiveRecordDevice = config.get_RecordDevice(0);
+                config.LicenseUserId = ConfigurationManager.AppSettings["LicenseUserId"];
+                config.LicenseKey = ConfigurationManager.AppSettings["LicenseKey"];
 
-                    config.LicenseUserId = ConfigurationManager.AppSettings["LicenseUserId"];
-                    config.LicenseKey = ConfigurationManager.AppSettings["LicenseKey"];
+                config.StunServer = "";
+                config.ListenPort = 5060;
+                config.EchoCancelationEnabled = 1;
+                config.NoiseReductionEnabled = 1;
+                config.VolumeUpdateSubscribed = 1;
+                config.DialToneEnabled = 1;
+                config.MP3RecordingEnabled = 0;
+                config.EncryptedCallEnabled = 0;
+                config.AutoAnswerEnabled = 0;
+                config.RingToneEnabled = 0;
+                config.LocalAudioEnabled = 0;
+                config.LocalTonesEnabled = 0;
+                config.MixerFilePlayerEnabled = 1;
+                config.SamplesPerSecond = 32000;
+                config.AutoGainControlEnabled = 1;
+                config.LogLevel = LogLevelType.eLogInfo;
+                config.CallInviteTimeout = 60;
+                config.UserAgent = "ABTO Video SIP SDK";
+                config.CallerId = sipAccount.DisplayName;
+                config.RegDomain = sipAccount.Server;
+                config.RegUser = sipAccount.DisplayName;
+                config.RegPass = sipAccount.DisplayName;
+                config.RegAuthId = sipAccount.DisplayName;
+                config.RegExpire = 3000;
 
-                    config.StunServer = "";
-                    config.ListenPort = 5060;
-                    config.EchoCancelationEnabled = 1;
-                    config.NoiseReductionEnabled = 1;
-                    config.VolumeUpdateSubscribed = 1;
-                    config.DialToneEnabled = 1;
-                    config.MP3RecordingEnabled = 0;
-                    config.EncryptedCallEnabled = 0;
-                    config.AutoAnswerEnabled = 0;
-                    config.RingToneEnabled = 0;
-                    config.LocalAudioEnabled = 0;
-                    config.LocalTonesEnabled = 0;
-                    config.MixerFilePlayerEnabled = 1;
-                    config.SamplesPerSecond = 32000;
-                    config.AutoGainControlEnabled = 1;
-                    config.LogLevel = LogLevelType.eLogInfo;
-                    config.CallInviteTimeout = 60;
-                    config.UserAgent = "ABTO Video SIP SDK";
-                    config.CallerId = sp.User.CallerId;
-                    config.RegDomain = "91.236.236.53";
-                    config.RegUser = sp.User.CallerId;
-                    config.RegPass = sp.User.CallerId;
-                    config.RegAuthId = sp.User.CallerId;
-                    config.RegExpire = 3000;
-
-                    //s.SipId = sp.Id;
-                    s.SipId = 1;
-                    s.ConfigId = i;
+                Sip.SipId = 1;
+                Sip.ConfigId = 1;
                     
-                    ///Testing Sip Accounts
-                    //config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 0);
-                    //config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
+                ///Testing Sip Accounts
+                //config.ExSipAccount_Add("sip.telbo.com", "myworld80", "hello2013", "myworld80", "00442074542000", 300, 1, 0);
+                //config.ExSipAccount_Add("149.7.44.141", "hadi", "had1", "hadi", "00442074542000", 300, 1, 1);
 
-                    s.phone.OnInitialized += new _IAbtoPhoneEvents_OnInitializedEventHandler(phone_OnInitialized);
-                    s.phone.OnLineSwiched += new _IAbtoPhoneEvents_OnLineSwichedEventHandler(phone_OnLineSwiched);
-                    s.phone.OnEstablishedCall += new _IAbtoPhoneEvents_OnEstablishedCallEventHandler(phone_OnEstablishedCall);
-                    s.phone.OnClearedCall += new _IAbtoPhoneEvents_OnClearedCallEventHandler(phone_OnClearedCall);
-                    s.phone.OnRegistered += new _IAbtoPhoneEvents_OnRegisteredEventHandler(phone_OnRegistered);
-                    s.phone.OnUnRegistered += new _IAbtoPhoneEvents_OnUnRegisteredEventHandler(phone_OnUnRegistered);
-                    s.phone.OnPlayFinished += new _IAbtoPhoneEvents_OnPlayFinishedEventHandler(phone_OnPlayFinished);
-                    s.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
-                    s.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
-                    s.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
+                Sip.phone.OnInitialized += new _IAbtoPhoneEvents_OnInitializedEventHandler(phone_OnInitialized);
+                Sip.phone.OnLineSwiched += new _IAbtoPhoneEvents_OnLineSwichedEventHandler(phone_OnLineSwiched);
+                Sip.phone.OnEstablishedCall += new _IAbtoPhoneEvents_OnEstablishedCallEventHandler(phone_OnEstablishedCall);
+                Sip.phone.OnClearedCall += new _IAbtoPhoneEvents_OnClearedCallEventHandler(phone_OnClearedCall);
+                Sip.phone.OnRegistered += new _IAbtoPhoneEvents_OnRegisteredEventHandler(phone_OnRegistered);
+                Sip.phone.OnUnRegistered += new _IAbtoPhoneEvents_OnUnRegisteredEventHandler(phone_OnUnRegistered);
+                Sip.phone.OnPlayFinished += new _IAbtoPhoneEvents_OnPlayFinishedEventHandler(phone_OnPlayFinished);
+                Sip.phone.OnEstablishedConnection += new _IAbtoPhoneEvents_OnEstablishedConnectionEventHandler(phone_OnEstablishedConnection);
+                Sip.phone.OnClearedConnection += new _IAbtoPhoneEvents_OnClearedConnectionEventHandler(phone_OnClearedConnection);
+                Sip.phone.OnPhoneNotify += new _IAbtoPhoneEvents_OnPhoneNotifyEventHandler(phone_OnPhoneNotify);
                     
-                    s.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
-                    s.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
-                    s.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
+                Sip.phone.OnRemoteAlerting2 += new _IAbtoPhoneEvents_OnRemoteAlerting2EventHandler(phone_OnRemoteAlerting2);
+                Sip.phone.OnTextMessageSentStatus += new _IAbtoPhoneEvents_OnTextMessageSentStatusEventHandler(phone_OnTextMessageSentStatus);
+                Sip.phone.OnTextMessageReceived += new _IAbtoPhoneEvents_OnTextMessageReceivedEventHandler(phone_OnTextMessageReceived);
 
-                    s.phone.ApplyConfig();
-                    s.phone.Initialize();
-                    System.Threading.Thread.Sleep(1000);
-
-                    LstSip.Add(s);
-                    i++;
-                    NxtSipId = i;
-                }
+                Sip.phone.ApplyConfig();
+                Sip.phone.Initialize();
+                System.Threading.Thread.Sleep(1000);
             }
             catch (System.Exception ex)
             {
@@ -224,12 +211,12 @@ namespace CallGeneratorServiceCLI
                     Chanel.sip = new SIP();
                     Chanel.sip.ConfigId = 1;
                     Chanel.sip.SipId = 1;
-                    Chanel.sip.phone = LstSip[0].phone;
+                    Chanel.sip.phone = Sip.phone;
 
                     LstChanels.Add(Chanel);
                 }
                 thGetCalls.Start();
-                c.Start();
+                thChannelAllocation.Start();
             }
             catch (System.Exception ex)
             {

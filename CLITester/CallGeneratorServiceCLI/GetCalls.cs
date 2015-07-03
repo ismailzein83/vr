@@ -34,10 +34,12 @@ namespace CallGeneratorServiceCLI
                     //End any generated call having duration more then 150 seconds
                     GeneratedCallRepository.EndExpiredGeneratedCall();
 
-                    List<User> lstUsers = UserRepository.GetUsers();
-                    foreach (User user in lstUsers)
-                    {
-                        if (user.IsChangedCallerId == true)
+                    SipAccount sipAccount = SipAccountRepository.GetTop();
+
+                    //List<User> lstUsers = UserRepository.GetUsers();
+                    //foreach (User user in lstUsers)
+                    //{
+                        if (sipAccount.IsChangedCallerId == true)
                         {
                             WriteToEventLogEx("IsChangedCallerId: ");
                             bool finish = false;
@@ -58,26 +60,23 @@ namespace CallGeneratorServiceCLI
                                 if (existCall == false)
                                 {
                                     // apply configuration, no call exists
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.CallerId = user.CallerId;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegDomain = "91.236.236.53";
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegUser = user.CallerId;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegPass = user.CallerId;
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.Config.RegAuthId = user.CallerId;
-
-                                    CallGeneratorServiceCLI.NewCallGenCLI.LstSip[0].phone.ApplyConfig();
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.CallerId = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegDomain = sipAccount.Server;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegUser = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegPass = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.Config.RegAuthId = sipAccount.DisplayName;
+                                    CallGeneratorServiceCLI.NewCallGenCLI.Sip.phone.ApplyConfig();
                                     System.Threading.Thread.Sleep(1000);
                                     finish = true;
                                     WriteToEventLogEx("finish: ");
                                 }
                             }
-                            user.IsChangedCallerId = false;
-                            UserRepository.Save(user);
+                            sipAccount.IsChangedCallerId = false;
+                            SipAccountRepository.Save(sipAccount);
                         }
-                    }
-                    string sipAccId = ConfigurationManager.AppSettings["SipAccId"];
-                    int sipAccountId = 0;
-                    int.TryParse(sipAccId, out sipAccountId);
-                    GeneratedCall generatedCall = GeneratedCallRepository.GetTopGeneratedCall(sipAccountId);
+                    //}
+
+                    GeneratedCall generatedCall = GeneratedCallRepository.GetTopGeneratedCall(sipAccount.Id);
                     if (generatedCall != null)
                     {
                         WriteToEventLogEx("generatedCallID: " + generatedCall.Id);
@@ -98,18 +97,6 @@ namespace CallGeneratorServiceCLI
 
                         if (clientFound == true)
                         {
-                            //foreach (SIP sip in NewCallGenCLI.LstSip)
-                            //{
-                            //    if (GenCall.SipAccount.Id == sip.SipId)
-                            //    {
-                            //        NewCallGenCLI.LstChanels[ClientId].sip = new SIP();
-                            //        NewCallGenCLI.LstChanels[ClientId].sip.ConfigId = sip.ConfigId;
-                            //        NewCallGenCLI.LstChanels[ClientId].sip.SipId = sip.SipId;
-                            //        NewCallGenCLI.LstChanels[ClientId].sip.phone = sip.phone;
-                            //        WriteToEventLogEx("SIP :: " + sip.SipId.ToString() + " CallerId :: " + sip.phone.Config.CallerId + " ClientId :: " + ClientId);
-                            //    }
-                            //}
-
                             NewCallGenCLI.LstChanels[clientId].GeneratedCallid = generatedCall.Id;
                             NewCallGenCLI.LstChanels[clientId].generatedCallid = generatedCall.Id;
                             NewCallGenCLI.LstChanels[clientId].destinationNumber = generatedCall.Number;

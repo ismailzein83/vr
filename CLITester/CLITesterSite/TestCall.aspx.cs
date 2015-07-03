@@ -22,11 +22,8 @@ public partial class TestCall : BasePage
         rptOperators.DataBind();
 
         List<Carrier> LstCarriersList = new List<Carrier>();
-        
-        if(Current.User.User.ParentId == null)
-            LstCarriersList = CarrierRepository.LoadbyUserID(Current.User.Id);
-        else
-            LstCarriersList = CarrierRepository.LoadbyUserID(Current.User.User.ParentId.Value);
+
+        LstCarriersList = CarrierRepository.GetCarriers();
         
         rptCarriers.DataSource = LstCarriersList;
         rptCarriers.DataBind();

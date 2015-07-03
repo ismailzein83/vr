@@ -18,7 +18,6 @@ namespace CallGeneratorLibrary.Repositories
                 {
                     DataLoadOptions options = new DataLoadOptions();
                     options.LoadWith<GeneratedCall>(c => c.SipAccount);
-                    options.LoadWith<SipAccount>(c => c.User);
                     context.LoadOptions = options;
 
                     log = context.GeneratedCalls.Where(l => l.Id == GeneratedCallId).FirstOrDefault<GeneratedCall>();

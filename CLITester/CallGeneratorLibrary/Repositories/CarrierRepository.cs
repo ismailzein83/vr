@@ -11,41 +11,21 @@ namespace CallGeneratorLibrary.Repositories
     {
         public static Carrier Load(int CarrierId)
         {
-            Carrier log = new Carrier();
+            Carrier carrier = new Carrier();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    log = context.Carriers.Where(l => l.Id == CarrierId).FirstOrDefault<Carrier>();
+                    carrier = context.Carriers.Where(l => l.Id == CarrierId).FirstOrDefault<Carrier>();
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
 
-            return log;
-        }
-        public static List<Carrier> LoadbyUserID(int UserId)
-        {
-            List<Carrier> log = new List<Carrier>();
-
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    log = context.Carriers.Where(l => l.CustomerId == UserId).ToList<Carrier>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                WriteToEventLogEx(ex.ToString());
-                Logger.LogException(ex);
-            }
-
-            return log;
+            return carrier;
         }
 
         public static bool ExistShortName(string ShortName, int id)
@@ -70,7 +50,6 @@ namespace CallGeneratorLibrary.Repositories
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
 
@@ -78,19 +57,18 @@ namespace CallGeneratorLibrary.Repositories
         }
 
 
-        public static List<Carrier> GetCarriers(int UserId)
+        public static List<Carrier> GetCarriers()
         {
             List<Carrier> LstCarriers = new List<Carrier>();
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    LstCarriers = context.Carriers.Where(x => x.CustomerId ==  UserId).ToList<Carrier>();
+                    LstCarriers = context.Carriers.ToList<Carrier>();
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return LstCarriers;
@@ -108,69 +86,65 @@ namespace CallGeneratorLibrary.Repositories
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return LstCarriers;
         }
 
-        public static bool Save(Carrier oper)
+        public static bool Save(Carrier carrier)
         {
             bool success = false;
-            if (oper.Id == default(int))
-                success = Insert(oper);
+            if (carrier.Id == default(int))
+                success = Insert(carrier);
             else
-                success = Update(oper);
+                success = Update(carrier);
             return success;
         }
 
-        private static bool Insert(Carrier oper)
+        private static bool Insert(Carrier carrier)
         {
             bool success = false;
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    context.Carriers.InsertOnSubmit(oper);
+                    context.Carriers.InsertOnSubmit(carrier);
                     context.SubmitChanges();
                     success = true;
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return success;
         }
 
-        private static bool Update(Carrier oper)
+        private static bool Update(Carrier carrier)
         {
             bool success = false;
-            Carrier look = new Carrier();
+            Carrier carrierObj = new Carrier();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.Carriers.Single(l => l.Id == oper.Id);
-                    look.CustomerId = oper.CustomerId;
-                    look.Name = oper.Name;
-                    look.Prefix = oper.Prefix;
-                    look.ShortName = oper.ShortName;
+                    carrierObj = context.Carriers.Single(l => l.Id == carrier.Id);
+                    carrierObj.Name = carrier.Name;
+                    carrierObj.Prefix = carrier.Prefix;
+                    carrierObj.ShortName = carrier.ShortName;
                     context.SubmitChanges();
                     success = true;
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return success;
         }
 
-        public static bool Delete(int userId)
+        public static bool Delete(int id)
         {
             bool success = false;
 
@@ -178,7 +152,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    Carrier carrier = context.Carriers.Where(u => u.Id == userId).Single<Carrier>();
+                    Carrier carrier = context.Carriers.Where(u => u.Id == id).Single<Carrier>();
                     context.Carriers.DeleteOnSubmit(carrier);
                     context.SubmitChanges();
                     success = true;
@@ -186,23 +160,9 @@ namespace CallGeneratorLibrary.Repositories
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return success;
-        }
-
-        private static void WriteToEventLogEx(string message)
-        {
-            string cs = "Call Generator Lib Excep";
-            EventLog elog = new EventLog();
-            if (!EventLog.SourceExists(cs))
-            {
-                EventLog.CreateEventSource(cs, cs);
-            }
-            elog.Source = cs;
-            elog.EnableRaisingEvents = true;
-            elog.WriteEntry(message);
         }
     }
 }

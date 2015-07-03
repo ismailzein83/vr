@@ -31,7 +31,7 @@ public partial class ManageUsers : BasePage
     #region Methods
     private void GetData()
     {
-        List<User> Users = UserRepository.GetSubUsers(Current.User.Id).OrderByDescending(l => l.Id).ToList();
+        List<User> Users = UserRepository.GetSubUsers().OrderByDescending(l => l.Id).ToList();
         Session["Users"] = Users;
         rptUsers.DataSource = Users;
         rptUsers.DataBind();

@@ -4,44 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Data.Linq;
 using System.Diagnostics;
+using CallGeneratorLibrary.Utilities;
 
 namespace CallGeneratorLibrary.Repositories
 {
     public class UserRepository
     {
-        public static void DecreaseBalance(int userId)
+        public static void DecreaseBalance()
         {
-            User u = Load(userId);
-            if (u.ParentId != null)
+            User user = UserRepository.GetUser((int)Enums.UserRole.SuperUser);
+
+            if (user.Balance > 0)
             {
-                User uparent = Load(u.ParentId.Value);
-                if (uparent.Balance > 0)
-                {
-                    uparent.Balance = uparent.Balance - 1;
-                    Save(uparent);
-                }
-            }
-            else
-            {
-                if (u.Balance > 0)
-                {
-                    u.Balance = u.Balance - 1;
-                    Save(u);
-                }
+                user.Balance = user.Balance - 1;
+                Save(user);
             }
         }
 
-        public static int GetParentId(int userId)
+        public static User GetUser(int RoleId)
         {
-            User u = Load(userId);
-            if (u.ParentId == null)
+            User user = new User();
+
+            try
             {
-                return u.Id;
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    user = context.Users.Where(l => l.Role == RoleId).FirstOrDefault();
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                return u.ParentId.Value;
+                Logger.LogException(ex);
             }
+
+            return user;
         }
 
         public static string GetName(int userId)
@@ -63,7 +59,7 @@ namespace CallGeneratorLibrary.Repositories
             return s;
         }
 
-        public static List<User> GetSubUsers(int userId)
+        public static List<User> GetSubUsers()
         {
             List<User> users = new List<User>();
 
@@ -71,7 +67,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    users = context.Users.Where(l => l.ParentId == userId).ToList();
+                    users = context.Users.Where(l => l.Role == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.User).ToList();
                 }
             }
             catch (System.Exception ex)
@@ -100,44 +96,7 @@ namespace CallGeneratorLibrary.Repositories
 
             return users;
         }
-
-        public static List<User> GetSipUsers()
-        {
-            List<User> users = new List<User>();
-
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    users = context.Users.Where(l => (l.IsSuperAdmin != true) && (l.ParentId == null)).ToList();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-
-            return users;
-        }
-
-        //public static List<Page> GetPages()
-        //{
-        //    List<Page> pages = new List<Page>();
-
-        //    try
-        //    {
-        //        using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-        //        {
-        //            return pages = context.Pages.ToList<Page>();
-        //        }
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        Logger.LogException(ex);
-        //    }
-
-        //    return pages;
-        //}
+ 
         public static User GetUser(string username)
         {
             User user = new User();
@@ -163,24 +122,6 @@ namespace CallGeneratorLibrary.Repositories
 
             return user;
         }
-
-        //public static List<User> SearchUsers(string name)
-        //{
-        //    List<User> users = new List<User>();
-        //    try
-        //    {
-        //        using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-        //        {
-        //            users = context.SearchUsers(name).ToList();
-        //        }
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        Logger.LogException(ex);
-        //    }
-
-        //    return users;
-        //}
 
         public static bool UserNameExists(string username)
         {
@@ -220,44 +161,6 @@ namespace CallGeneratorLibrary.Repositories
                             where u.UserName == username && u.Password == password && (u.IsActive.HasValue && u.IsActive.Value)
                             select u;
                     return q.FirstOrDefault<User>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-
-            return user;
-        }
-
-        public static User GetUserByEmail(string email)
-        {
-            User user = new User();
-
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    user = context.Users.Where(u => u.Email == email).FirstOrDefault<User>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-
-            return user;
-        }
-
-        public static User GetUser(int id, string email, string guid)
-        {
-            User user = new User();
-
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    user = context.Users.Where(u => u.Id == id && u.Email == email && u.Guid == guid).FirstOrDefault<User>();
                 }
             }
             catch (System.Exception ex)
@@ -370,17 +273,15 @@ namespace CallGeneratorLibrary.Repositories
                     _User.Email = user.Email;
                     _User.Guid = user.Guid;
                     _User.IsActive = user.IsActive;
-                    _User.IsSuperAdmin = user.IsSuperAdmin;
                     _User.LastLoginDate = user.LastLoginDate;
                     _User.CreationDate = user.CreationDate;
-                    _User.IpSwitch = user.IpSwitch;
-                    _User.CallerId = user.CallerId;
                     _User.LastName = user.LastName;
                     _User.MobileNumber = user.MobileNumber;
                     _User.WebsiteURL = user.WebsiteURL;
-                    _User.ParentId = user.ParentId;
                     _User.Balance = user.Balance;
-                    _User.IsChangedCallerId = user.IsChangedCallerId;
+                    _User.Role = user.Role;
+                    _User.RemainingBalance = user.RemainingBalance;
+                    _User.LastSetBalance = user.LastSetBalance;
                     context.SubmitChanges();
                 }
             }

@@ -79,24 +79,22 @@ namespace CallGeneratorLibrary.Repositories
             return success;
         }
 
-        private static bool Update(MontyCall montyCall)
+        private static bool Update(MontyCall montyCallObj)
         {
             bool success = false;
-            MontyCall look = new MontyCall();
+            MontyCall montyCall = new MontyCall();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.MontyCalls.Single(l => l.Id == montyCall.Id);
+                    montyCall = context.MontyCalls.Single(l => l.Id == montyCallObj.Id);
 
-                    look.TestOperatorId = montyCall.TestOperatorId;
-                    look.MSISDN = montyCall.MSISDN;
-                    look.CreationDate = montyCall.CreationDate;
-                    look.CallDate = montyCall.CallDate;
-                    look.ReturnMessage = montyCall.ReturnMessage;
-                    look.RequestId = montyCall.RequestId;
-                    look.CallEntryId = montyCall.CallEntryId;
+                    montyCall.TestOperatorId = montyCallObj.TestOperatorId;
+                    montyCall.MSISDN = montyCallObj.MSISDN;
+                    montyCall.CreationDate = montyCallObj.CreationDate;
+                    montyCall.RequestId = montyCallObj.RequestId;
+                    montyCall.GeneratedCallId = montyCallObj.GeneratedCallId;
                     context.SubmitChanges();
                     success = true;
                 }

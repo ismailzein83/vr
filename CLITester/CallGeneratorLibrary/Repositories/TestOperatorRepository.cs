@@ -415,7 +415,7 @@ namespace CallGeneratorLibrary.Repositories
             return LstOperators;
         }
 
-        public static int  GetRequestedTestOperatorsByUser(int ParentUserId)
+        public static int  GetRequestedTestOperatorsByUser()
         {
             //List<TestOperator> LstOperators = new List<TestOperator>();
             int count = 0;
@@ -423,7 +423,7 @@ namespace CallGeneratorLibrary.Repositories
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    count = context.TestOperators.Where(x => x.EndDate == null && x.ParentUserId == ParentUserId).ToList<TestOperator>().Count;
+                    count = context.TestOperators.Where(x => x.EndDate == null).ToList<TestOperator>().Count;
                 }
             }
             catch (System.Exception ex)
@@ -433,7 +433,24 @@ namespace CallGeneratorLibrary.Repositories
             }
             return count;
         }
-
+        public static int GetRequestedTestOperatorsByUser(int userId)
+        {
+            //List<TestOperator> LstOperators = new List<TestOperator>();
+            int count = 0;
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    count = context.TestOperators.Where(x => x.EndDate == null && x.UserId == userId).ToList<TestOperator>().Count;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                WriteToEventLogEx(ex.ToString());
+                Logger.LogException(ex);
+            }
+            return count;
+        }
 
         public static bool Save(TestOperator testOperator)
         {

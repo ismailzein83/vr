@@ -18,7 +18,7 @@ public partial class ManageSettings : BasePage
 
         if (!IsPostBack)
         {
-            GetUser();
+            GetSipAccount();
         }
     }
 
@@ -29,22 +29,22 @@ public partial class ManageSettings : BasePage
         if (ViewState["SipAccountId"] != null)
             int.TryParse(ViewState["SipAccountId"].ToString(), out id);
 
-        SipAccount user = new SipAccount { Id = id };
+        SipAccount sipAccount = new SipAccount { Id = id };
 
         if (id > 0)
-            user = SipAccountRepository.Load(3);
+            sipAccount = SipAccountRepository.GetTop();
 
-        user.Username = txtUserName.Text;
-        user.Login = txtLogin.Text;
-        user.Password = txtPassword.Text;
-        user.Server = txtServer.Text;
-        user.DisplayName = txtCallerId.Text;
+        sipAccount.Username = txtUserName.Text;
+        sipAccount.Login = txtLogin.Text;
+        sipAccount.Password = txtPassword.Text;
+        sipAccount.Server = txtServer.Text;
+        sipAccount.DisplayName = txtCallerId.Text;
 
-        SipAccountRepository.Save(user);
+        SipAccountRepository.Save(sipAccount);
         ActionLog action = new ActionLog();
-        action.ObjectId = user.Id;
-        action.ObjectType = "User";
-        action.Description = Utilities.SerializeLINQtoXML<SipAccount>(user);
+        action.ObjectId = sipAccount.Id;
+        action.ObjectType = "SipAccount";
+        action.Description = Utilities.SerializeLINQtoXML<SipAccount>(sipAccount);
         if (id == 0) // Add Operation - Action Log
             action.ActionType = (int)Enums.ActionType.Add;
         else // Edit Operation - Action Log
@@ -60,17 +60,15 @@ public partial class ManageSettings : BasePage
     #endregion
 
     #region Methods
-    private void GetUser()
+    private void GetSipAccount()
     {
-        ViewState["SipAccountId"] = 3;
-        SipAccount user = new SipAccount { Id = 3 };
-        user = SipAccountRepository.Load(user.Id);
-
-        txtUserName.Text = user.Username;
-        txtLogin.Text = user.Login;
-        txtPassword.Text = user.Password;
-        txtCallerId.Text = user.DisplayName;
-        txtServer.Text = user.Server;
+        SipAccount sipAccount = SipAccountRepository.GetTop();
+        txtUserName.Text = sipAccount.Username;
+        txtLogin.Text = sipAccount.Login;
+        txtPassword.Text = sipAccount.Password;
+        txtCallerId.Text = sipAccount.DisplayName;
+        txtServer.Text = sipAccount.Server;
+        ViewState["SipAccountId"] = sipAccount.Id;
     }
     #endregion
 }

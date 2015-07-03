@@ -10,70 +10,23 @@ namespace CallGeneratorLibrary.Repositories
 {
     public class SipAccountRepository
     {
-        public static SipAccount Load(int Id)
+        public static SipAccount GetTop()
         {
-            SipAccount log = new SipAccount();
+            SipAccount sipAccount = new SipAccount();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    DataLoadOptions options = new DataLoadOptions();
-                    options.LoadWith<SipAccount>(c => c.User);
-                    context.LoadOptions = options;
-
-                    log = context.SipAccounts.Where(l => l.Id == Id).FirstOrDefault<SipAccount>();
+                    sipAccount = context.SipAccounts.FirstOrDefault<SipAccount>();
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
 
-            return log;
-        }
-
-        public static SipAccount LoadbyUser(int UserId)
-        {
-            SipAccount log = new SipAccount();
-
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    log = context.SipAccounts.Where(l => l.UserId == UserId).FirstOrDefault<SipAccount>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                WriteToEventLogEx(ex.ToString());
-                Logger.LogException(ex);
-            }
-
-            return log;
-        }
-
-        public static List<SipAccount> GetSipAccounts()
-        {
-            List<SipAccount> LstSipAccounts = new List<SipAccount>();
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    DataLoadOptions options = new DataLoadOptions();
-                    options.LoadWith<SipAccount>(c => c.User);
-                    context.LoadOptions = options;
-
-                    LstSipAccounts = context.SipAccounts.ToList<SipAccount>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                WriteToEventLogEx(ex.ToString());
-                Logger.LogException(ex);
-            }
-            return LstSipAccounts;
+            return sipAccount;
         }
 
         public static bool Save(SipAccount sipAccount)
@@ -100,7 +53,6 @@ namespace CallGeneratorLibrary.Repositories
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return success;
@@ -109,55 +61,42 @@ namespace CallGeneratorLibrary.Repositories
         private static bool Update(SipAccount sipAccount)
         {
             bool success = false;
-            SipAccount look = new SipAccount();
+            SipAccount sipAccountObj = new SipAccount();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.SipAccounts.Single(l => l.Id == sipAccount.Id);
+                    sipAccountObj = context.SipAccounts.Single(l => l.Id == sipAccount.Id);
 
-                    look.Username = sipAccount.Username;
-                    look.Login = sipAccount.Login;
-                    look.Password = sipAccount.Password;
-                    look.Server = sipAccount.Server;
-                    look.UseProxy = sipAccount.UseProxy;
-                    look.ProxyServer = sipAccount.ProxyServer;
-                    look.ProxyUser = sipAccount.ProxyUser;
-                    look.ProxyPass = sipAccount.ProxyPass;
-                    look.DisplayName = sipAccount.DisplayName;
-                    look.TotalLines = sipAccount.TotalLines;
-                    look.UseAudio = sipAccount.UseAudio;
-                    look.DefaultAudioFileName = sipAccount.DefaultAudioFileName;
-                    look.DefaultAudioFile = sipAccount.DefaultAudioFile;
-                    look.CreatedBy = sipAccount.CreatedBy;
-                    look.CreationDate = sipAccount.CreationDate;
-                    look.PlaybackDevice = sipAccount.PlaybackDevice;
-                    look.NetworkInterface = sipAccount.NetworkInterface;
-                    look.Codecs = sipAccount.Codecs;
+                    sipAccountObj.Username = sipAccount.Username;
+                    sipAccountObj.Login = sipAccount.Login;
+                    sipAccountObj.Password = sipAccount.Password;
+                    sipAccountObj.Server = sipAccount.Server;
+                    sipAccountObj.UseProxy = sipAccount.UseProxy;
+                    sipAccountObj.ProxyServer = sipAccount.ProxyServer;
+                    sipAccountObj.ProxyUser = sipAccount.ProxyUser;
+                    sipAccountObj.ProxyPass = sipAccount.ProxyPass;
+                    sipAccountObj.DisplayName = sipAccount.DisplayName;
+                    sipAccountObj.TotalLines = sipAccount.TotalLines;
+                    sipAccountObj.UseAudio = sipAccount.UseAudio;
+                    sipAccountObj.DefaultAudioFileName = sipAccount.DefaultAudioFileName;
+                    sipAccountObj.DefaultAudioFile = sipAccount.DefaultAudioFile;
+                    sipAccountObj.CreatedBy = sipAccount.CreatedBy;
+                    sipAccountObj.CreationDate = sipAccount.CreationDate;
+                    sipAccountObj.PlaybackDevice = sipAccount.PlaybackDevice;
+                    sipAccountObj.NetworkInterface = sipAccount.NetworkInterface;
+                    sipAccountObj.Codecs = sipAccount.Codecs;
+                    sipAccountObj.IsChangedCallerId = sipAccount.IsChangedCallerId;
                     context.SubmitChanges();
                     success = true;
                 }
             }
             catch (System.Exception ex)
             {
-                WriteToEventLogEx(ex.ToString());
                 Logger.LogException(ex);
             }
             return success;
-        }
-
-        private static void WriteToEventLogEx(string message)
-        {
-            string cs = "Call Generator Service";
-            EventLog elog = new EventLog();
-            if (!EventLog.SourceExists(cs))
-            {
-                EventLog.CreateEventSource(cs, cs);
-            }
-            elog.Source = cs;
-            elog.EnableRaisingEvents = true;
-            elog.WriteEntry(message);
         }
     }
 }

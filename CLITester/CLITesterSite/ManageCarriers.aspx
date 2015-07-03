@@ -212,8 +212,6 @@
             return true;
         }
 
-       
-
         var initTable2 = function () {
             var oTable = $('#sample_2').dataTable({
                 "aoColumnDefs": [

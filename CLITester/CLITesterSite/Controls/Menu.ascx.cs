@@ -13,6 +13,7 @@ public partial class Controls_Menu : System.Web.UI.UserControl
         {
             liSettings.Visible = true;
             liBalances.Visible = true;
+            liContracts.Visible = true;
             licalls.Visible = true;
             liPhoneNumbers.Visible = true;
             liOperators.Visible = true;
@@ -30,8 +31,9 @@ public partial class Controls_Menu : System.Web.UI.UserControl
             liOperators.Visible = false;
             liSettings.Visible = false;
             liBalances.Visible = false;
+            liContracts.Visible = false;
             liRequestCalls.Visible = false;
-            if (Current.User.User.ParentId == null)
+            if (Current.User.User.Role == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser)
             {
                 liUsers.Visible = true;
                 liCarriers.Visible = true;

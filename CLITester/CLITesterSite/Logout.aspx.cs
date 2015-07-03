@@ -21,7 +21,7 @@ public partial class Logout : System.Web.UI.Page
         u.Password = Current.User.User.Password;
         u.Email = Current.User.User.Email;
         u.IsActive = Current.User.User.IsActive;
-        u.IsSuperAdmin = Current.User.User.IsSuperAdmin;
+        u.Role = Current.User.User.Role;
         u.Guid = Current.User.User.Guid;
         u.LastLoginDate = Current.User.User.LastLoginDate;
         u.CreationDate = Current.User.User.CreationDate;

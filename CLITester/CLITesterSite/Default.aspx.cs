@@ -11,11 +11,12 @@ using CallGeneratorLibrary.Utilities;
 public class CarrierStat
 {
     public string Prefix { get; set; }
+    public string Name { get; set; }
     public int Total { get; set; }
     public int Delivered { get; set; }
-    public int NotDelivered { get; set; }
+    //public int NotDelivered { get; set; }
     public decimal percentage { get; set; }
-    public decimal percentageW { get; set; }
+    //public decimal percentageW { get; set; }
 }
 
 public partial class Default : BasePage
@@ -32,10 +33,9 @@ public partial class Default : BasePage
             maxd = DateTime.MinValue;
             int i = 0;
             List<Schedule> LstShc = new List<Schedule>();
-            if(Current.User.User.ParentId == null)
-                LstShc = ScheduleRepository.GetSchedules(Current.User.Id);
-            else
-                LstShc = ScheduleRepository.GetSchedules(Current.User.User.ParentId.Value);
+
+            LstShc = ScheduleRepository.GetSchedules();
+
             foreach (Schedule s in LstShc)
             {
                 ScheduleLog sl = ScheduleLogRepository.GetLastLog(s.Id);
@@ -55,8 +55,8 @@ public partial class Default : BasePage
                 lblNxtSch.Text = "No Schedule is running";
             else
                 lblNxtSch.Text = maxd.ToString("dd MMM yyyy - HH:mm");
-            
-            if (Current.User.User.ParentId != null)
+
+            if (Current.User.User.Role == (int)CallGeneratorLibrary.Utilities.Enums.UserRole.User)
                 RegionalFeeds.Visible = false;
             else
                 RegionalFeeds.Visible = true;
@@ -83,11 +83,7 @@ public partial class Default : BasePage
             lblCLINonDel.Text = TestOperatorRepository.GetCLINonDeliv(Current.User.Id).ToString();
 
             User us = UserRepository.Load(Current.User.User.Id);
-            List<Carrier> LstCarriers = new List<Carrier>();
-            if(us.ParentId == null)
-                LstCarriers = CarrierRepository.LoadbyUserID(Current.User.User.Id);
-            else
-                LstCarriers = CarrierRepository.LoadbyUserID(us.ParentId.Value);
+            List<Carrier> LstCarriers = CarrierRepository.GetCarriers();
 
             List<CarrierStat> LstStat = new List<CarrierStat>();
             
@@ -97,9 +93,9 @@ public partial class Default : BasePage
                 {
                     CarrierStat cstat = new CarrierStat();
                     cstat.Prefix = c.Prefix;
-
+                    cstat.Name = c.Name;
                     cstat.Delivered = TestOperatorRepository.GetPercentage(c.Prefix, 1, Current.User.User.Id);
-                    cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
+                    //cstat.NotDelivered = TestOperatorRepository.GetPercentage(c.Prefix, 2, Current.User.User.Id);
 
                     cstat.Total = TestOperatorRepository.GetPercentage(c.Prefix, null, Current.User.User.Id);
                     if (cstat.Delivered != 0 && cstat.Delivered != null)
@@ -107,10 +103,10 @@ public partial class Default : BasePage
                     else
                         cstat.percentage = 0;
 
-                    if (cstat.NotDelivered != 0 && cstat.NotDelivered != null)
-                        cstat.percentageW = decimal.Round((((decimal)(cstat.NotDelivered) / (decimal)(cstat.Total)) * 100), 2);
-                    else
-                        cstat.percentageW = 0;
+                    //if (cstat.NotDelivered != 0 && cstat.NotDelivered != null)
+                    //    cstat.percentageW = decimal.Round((((decimal)(cstat.NotDelivered) / (decimal)(cstat.Total)) * 100), 2);
+                    //else
+                    //    cstat.percentageW = 0;
 
                     if(cstat.Total > 10)
                         LstStat.Add(cstat);
@@ -122,15 +118,15 @@ public partial class Default : BasePage
 
             List<CarrierStat> SortedList = LstStat.OrderByDescending(o => o.percentage).ToList();
             if (SortedList.Count >= 1)
-                lblBest1.Text = "[" + SortedList[0].Prefix + "]" + " " + SortedList[0].percentage.ToString("#00.00");
+                lblBest1.Text = "[" + SortedList[0].Name + "]" + " " + SortedList[0].percentage.ToString("#00.00");
             if (SortedList.Count > 1)
-                lblBest2.Text = "[" + SortedList[1].Prefix + "]" + " " + SortedList[1].percentage.ToString("#00.00");
+                lblBest2.Text = "[" + SortedList[1].Name + "]" + " " + SortedList[1].percentage.ToString("#00.00");
             
-            List<CarrierStat> SortedList2 = LstStat.OrderByDescending(o => o.percentageW).ToList();
+            List<CarrierStat> SortedList2 = LstStat.OrderBy(o => o.percentage).ToList();
             if (SortedList2.Count >= 1)
-                lblWorst1.Text = "[" + SortedList2[0].Prefix + "]" + " " + SortedList2[0].percentageW.ToString("#00.00");
+                lblWorst1.Text = "[" + SortedList2[0].Name + "]" + " " + SortedList2[0].percentage.ToString("#00.00");
             if (SortedList2.Count > 1)
-                lblWorst2.Text = "[" + SortedList2[1].Prefix + "]" + " " + SortedList2[1].percentageW.ToString("#00.00");
+                lblWorst2.Text = "[" + SortedList2[1].Name + "]" + " " + SortedList2[1].percentage.ToString("#00.00");
             
             /////////////////////////////////////////////////////////////////////////////////////////////////
         }
