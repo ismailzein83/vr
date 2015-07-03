@@ -172,10 +172,10 @@ inp
     }
 }
 .dropdown-item{
-    height: 47px;
+    height: 43px !important;
     font-size: 20px;
     margin: 0px 9px;
-    top: 14px;
+    top: 11px !important;
 }
 .dropdown .dropdown-toggle > span{    
 font-size:12px !important;
@@ -352,7 +352,10 @@ Use this for keyframe animations
     margin-top:10px;
 }
 vr-modalcontent .action-bar{
-     margin:10px -15px 0px -15px !important;
+    margin: 10px -15px 0px !important;
+    position: relative;
+    top: 5px;
+    border-radius: 0px 0px 6px 6px;
 }
 .action-bar-left{   
     width:49%;
@@ -708,7 +711,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 
 .dropdown-menu-custom-serf {
-    top: 23px;
+    top: -1px;
     left: 40px;
     border-radius: 0px;
     background-color:#f0f0f0 !important;
@@ -1283,10 +1286,11 @@ input.ui-grid-filter-input[type="text"] {
     font-size: 16px;
     color: #959595;
     padding:5px;
+    z-index:-10;
 }
 .collapsed-clock {    
     bottom: 80px;
-    left: -73px;
+    left: -65px;
     /* Safari */
     -webkit-transform: rotate(-90deg);
     /* Firefox */

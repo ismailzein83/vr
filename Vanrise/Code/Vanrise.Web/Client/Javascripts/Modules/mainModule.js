@@ -22,8 +22,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     var dropdownHidingTimeoutHandlerc;
 
     $animate.enabled($('#sidebar-wrapper'));
-    $animate.enabled(false, $('#sidebar-wrapper'));
-    $animate.enabled(false, $('#collapsedmenu'));
+    //$animate.enabled(false, $('#sidebar-wrapper'));
+    //$animate.enabled(true, $('#collapsedmenu'));
 
     $scope.toogled = true;
     $scope.toggledpanel = function () {

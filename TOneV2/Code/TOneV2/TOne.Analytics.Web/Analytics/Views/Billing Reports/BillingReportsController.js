@@ -1,6 +1,6 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarriersService', 'ZonesService'];
+﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'CarrierAPIService', 'ZonesService'];
 
-function BillingReportsController($scope, ReportAPIService, CarriersService, ZonesService) {
+function BillingReportsController($scope, ReportAPIService, CarrierAPIService, ZonesService) {
    
     defineScope();
     load();
@@ -77,12 +77,12 @@ function BillingReportsController($scope, ReportAPIService, CarriersService, Zon
         })
     }
     function loadCustomers() {
-        CarriersService.getCustomers().then(function (response) {
+        CarrierAPIService.GetCarriers(1).then(function (response) {
             $scope.optionsCustomers = response;
         })
     }
     function loadSuppliers() {
-        CarriersService.getSuppliers().then(function (response) {
+        CarrierAPIService.GetCarriers(2).then(function (response) {
             $scope.optionsSuppliers = response;
         })
     }

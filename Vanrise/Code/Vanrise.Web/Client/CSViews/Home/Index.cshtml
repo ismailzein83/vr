@@ -29,15 +29,38 @@
     <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
         <div class="inner-sub ">
             Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
+
+            @*<div class="dropdown " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                    drop down
+                </div>
+                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                    <li role="presentation">
+                        <label class="titel-groupe"> test 1</label>
+                    </li>
+                    <li role="presentation">
+                        <label class="titel-groupe"> test 2</label>
+                    </li>
+                    <li role="presentation">
+                        <label class="titel-groupe"> test 3</label>
+                    </li>
+                    <li role="presentation">
+                        <label class="titel-groupe"> test 4</label>
+                    </li>
+                    <li role="presentation">
+                        <label class="titel-groupe"> test 5</label>
+                    </li>
+                 </ul>
+            </div>*@
         </div>
-        <div>
+        @*<div>
             <ol class="breadcrumb vr-breadcrumb">
                 <li><a href="#/default">Home</a></li>
                 <li><label >{{breadcrumb.parent.Name}}</label></li>
                 <li ng-if="menusubItemsCurrent!=null"><label>{{breadcrumb.subparent.Name}}</label></li>
                 <li class="active"><label>{{breadcrumb.leaf.Name}}</label></li>
             </ol>
-        </div>
+        </div>*@
     </div>
     <div id="wrapper" ng-style="toogled==true?{'padding-left':'210px'}:{'padding-left':'25px'}">
         <!-- Sidebar -->
@@ -50,7 +73,7 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" data-target="#collapse-{{$index}}" aria-expanded="true" ng-click="setIndex(item)">
+                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" ng-click="setIndex(item)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 1px;"></span>
                             <span style="position: relative; top: -3px;">{{::item.Name}}</span>
@@ -65,8 +88,8 @@
                             </li>
                         </ul>
                     </div>
-                    <div id="collapse-{{$index}}" ng-if="item.Childs.length>0" class="panel panel-collapse" ng-show="menuItemsCurrent.Id == item.Id">
-                        <div class="panel-body ">
+                    <div id="collapse-{{$index}}" class="am-collapse panel " ng-show="menuItemsCurrent.Id == item.Id">
+                        <div class="panel-body">
                             <ul class="nav">
                                 <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''" ng-repeat="c in item.Childs">
                                     <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href=" {{::c.Location}}">{{::c.Name}} </a>
