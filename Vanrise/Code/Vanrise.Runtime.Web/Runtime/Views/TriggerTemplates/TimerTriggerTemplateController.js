@@ -27,7 +27,7 @@ function TimeTriggerTemplateController($scope, DaysOfWeekEnum, UtilsService) {
             });
 
             return {
-                $type: "Vanrise.Runtime.Entities.TimeSchedulerTaskTrigger, Vanrise.Runtime.Entities",
+                $type: "Vanrise.Runtime.Business.TimeSchedulerTaskTrigger, Vanrise.Runtime.Business",
                 ScheduledDays: numbersOfSelectedDays,
                 ScheduledHours: $scope.selectedHours
             };

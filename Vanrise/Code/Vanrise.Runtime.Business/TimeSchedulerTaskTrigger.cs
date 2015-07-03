@@ -3,24 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Runtime.Entities;
 
-namespace Vanrise.Runtime.Entities
+namespace Vanrise.Runtime.Business
 {
     public class TimeSchedulerTaskTrigger : SchedulerTaskTrigger
     {
-        //DateTime _dateToRun;
-        //public DateTime DateToRun
-        //{
-        //    get
-        //    {
-        //        return _dateToRun;
-        //    }
-        //    set
-        //    {
-        //        _dateToRun = value.ToLocalTime();
-        //    }
-        //}
-
         public List<DayOfWeek> ScheduledDays { get; set; }
 
         public List<string> ScheduledHours { get; set; }
