@@ -143,5 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
+    <None Include="CDRAnalysis.PostDeployment.sql" />
   </ItemGroup>
 </Project>
