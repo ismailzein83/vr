@@ -101,8 +101,6 @@
     <Build Include="sec\Tables\Permission.sql" />
     <Build Include="sec\Tables\Module.sql" />
     <Build Include="sec\Tables\User.sql" />
-    <Build Include="Security\walid.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetManagement_InsertWidget.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetManagement_GetAllWidgets.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetDefinition_GetWidgets.sql" />

@@ -90,8 +90,5 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
-    <Build Include="Security\zahraa.sql" />
-    <Build Include="Security\walid.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>

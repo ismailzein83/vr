@@ -154,7 +154,5 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_GetSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
-    <Build Include="Security\zahraa.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>

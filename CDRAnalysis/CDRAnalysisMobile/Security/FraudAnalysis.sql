@@ -1,5 +1,4 @@
-﻿CREATE SCHEMA [FraudAnalysis]
-    AUTHORIZATION [zahraa];
+﻿CREATE SCHEMA [FraudAnalysis];
 
 
 
