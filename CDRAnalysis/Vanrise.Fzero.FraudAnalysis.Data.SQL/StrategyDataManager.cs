@@ -43,7 +43,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
 
-        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int strategyId, string suspicionLevelsList)
+        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
         {
             return GetItemsSP("FraudAnalysis.sp_FraudResult_GetFilteredSuspiciousNumbers", FraudResultMapper, fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
         }
@@ -153,9 +153,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private FraudResult FraudResultMapper(IDataReader reader)
         {
             var fraudResult = new FraudResult();
-            fraudResult.DateDay = (DateTime)reader["DateDay"];
+            fraudResult.LastOccurance = (DateTime)reader["LastOccurance"];
             fraudResult.SubscriberNumber = reader["SubscriberNumber"] as string;
             fraudResult.SuspicionLevelName = reader["SuspicionLevelName"] as string;
+            fraudResult.StrategyName = reader["StrategyName"] as string;
+            fraudResult.NumberofOccurances = (int) reader["NumberofOccurances"];
             return fraudResult;
         }
 

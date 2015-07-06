@@ -4,10 +4,10 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" isrequired></vr-select>
+                    <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" ></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
-                    <vr-select datasource="suspicionLevels" datatextfield="name" datavaluefield="id" label="Suspicion Levels" isrequired selectedvalues="selectedSuspicionLevels" ismultipleselection></vr-select>
+                    <vr-select datasource="suspicionLevels" datatextfield="name" datavaluefield="id" label="Suspicion Levels"  selectedvalues="selectedSuspicionLevels" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-datetimepicker type="date" value="fromDate" label="From" isrequired customvalidate="customvalidateFrom"></vr-datetimepicker>
@@ -31,9 +31,11 @@
         <vr-row>
             <vr-columns colnum="12" simplecol>
                 <vr-datagrid datasource="fraudResults" menuactions="gridMenuActions" maxheight="400px" loadmoredata="loadMoreData" on-ready="onMainGridReady">
-                    <vr-datagridcolumn headertext="'Date'" widthfactor="25">{{dataItem.DateDay | date:'yyyy-MM-dd hh:mm' }}</vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Last Occurance'" widthfactor="25">{{dataItem.LastOccurance | date:'yyyy-MM-dd hh:mm' }}</vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Subscriber Number'" field="'SubscriberNumber'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Suspicion Level'" field="'SuspicionLevelName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Occurances'" field="'NumberofOccurances'"></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

@@ -5,12 +5,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class FraudResult
     {
-
-        public DateTime DateDay { get; set; }
+        public DateTime LastOccurance { get; set; }
 
         public string SubscriberNumber { get; set; }
 
         public string SuspicionLevelName { get; set; }
+
+        public string StrategyName { get; set; }
+
+        public int NumberofOccurances { get; set; }
 
     }
 

@@ -13,6 +13,16 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
     function defineScope() {
 
+        var Now = new Date();
+        Now.setDate(Now.getDate() + 1);
+
+        var Yesterday = new Date();
+        Yesterday.setDate(Yesterday.getDate() - 1);
+
+        $scope.fromDate = Yesterday;
+        $scope.toDate = Now;
+
+
         $scope.customvalidateFrom = function (fromDate) {
             return validateDates(fromDate, $scope.toDate);
         };
@@ -60,9 +70,17 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
             return getData();
         };
 
-        $scope.resetClicked = function () {            
-            $scope.fromDate = '';
-            $scope.toDate = '';
+        $scope.resetClicked = function () {
+
+            var Now = new Date();
+            Now.setDate(Now.getDate() + 1);
+
+            var Yesterday = new Date();
+            Yesterday.setDate(Yesterday.getDate() - 1);
+           
+
+            $scope.fromDate = Yesterday;
+            $scope.toDate = Now;
             $scope.selectedStrategies = [];
             $scope.selectedSuspicionLevels = [];
             mainGridAPI.clearDataAndContinuePaging();
@@ -128,12 +146,15 @@ function SuspicionAnalysisController($scope, StrategyAPIService, SuspicionAnalys
 
         var pageInfo = mainGridAPI.getPageInfo();
 
+        console.log('strategyId')
+        console.log(strategyId)
+        console.log('suspicionLevelsList.slice(0, -1)')
+        console.log(suspicionLevelsList.slice(0, -1))
 
-        return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
+        //return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, null, null).then(function (response) {
+
+            return SuspicionAnalysisAPIService.GetFilteredSuspiciousNumbers(pageInfo.fromRow, pageInfo.toRow, fromDate, toDate, strategyId, suspicionLevelsList.slice(0, -1)).then(function (response) {
             angular.forEach(response, function (itm) {
-                //var date = $filter('date')(new Date(), 'MMM dd, yyyy');
-                //itm.FormattedDate = date;
-
                 $scope.fraudResults.push(itm);
             });
         });
