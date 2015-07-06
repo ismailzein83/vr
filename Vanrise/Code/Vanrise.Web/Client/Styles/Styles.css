@@ -1157,7 +1157,7 @@ input.ui-grid-filter-input[type="text"] {
 }
 .vr-rotate-header{
     transform: rotate(270deg);
-    margin: 150px 0px 15px 0px;
+    margin: 135px 0px 20px 0px;
 }
 .btn-group-custom >button {
     height: 24px !important;
