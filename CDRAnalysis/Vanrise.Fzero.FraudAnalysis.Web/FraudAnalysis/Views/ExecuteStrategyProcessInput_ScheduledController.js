@@ -59,6 +59,9 @@
     }
 
     function loadForm() {
+        alert('Continue from Here: loadForm()')
+
+        console.log('$scope.schedulerTaskAction.processInputArguments.data')
         console.log($scope.schedulerTaskAction.processInputArguments.data)
         if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
             return;
@@ -69,7 +72,7 @@
             $scope.divideProcessIntoSubProcesses = data.DivideProcessIntoSubProcesses;
 
             var dateOptionSelection = ($scope.schedulerTaskAction.rawExpressions.data != null) ? 0 : 1;
-            $scope.selectedDateOption = UtilsService.getItemByVal($scope.dateOptions, dateOptionSelection, "Value");
+            $scope.selectedDateOption = UtilsService.getItemByVal($scope.periods, $scope.selectedPeriod, "PeriodId");
 
         }
         else {
