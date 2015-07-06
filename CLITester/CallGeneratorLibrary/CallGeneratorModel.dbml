@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CLITester" Class="CallGeneratorModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CLITester;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="FraudTest2ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CLITester;Persist Security Info=True;User ID=sa" SettingsObjectName="CallGeneratorLibrary.Properties.Settings" SettingsPropertyName="CLITesterConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Exceptions" Member="Exceptions">
     <Type Name="Exception">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -124,10 +124,10 @@
       <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SpecificTime1" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
       <Association Name="Schedule_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleOperator" />
-      <Association Name="Schedule_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="ScheduleId" Type="TestOperator" />
       <Association Name="Schedule_ScheduleLog" Member="ScheduleLogs" ThisKey="Id" OtherKey="ScheduleId" Type="ScheduleLog" />
-      <Association Name="SipAccount_Schedule" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Schedule_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="ScheduleId" Type="TestOperator" />
       <Association Name="User_Schedule" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="SipAccount_Schedule" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.UserBalances" Member="UserBalances">
@@ -154,32 +154,6 @@
       <Column Name="ConnectDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="DisconnectDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="SipAccount_GeneratedCall" Member="SipAccount" ThisKey="SipAccountId" OtherKey="Id" Type="SipAccount" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.TestOperators" Member="TestOperators">
-    <Type Name="TestOperator">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="NumberOfCalls" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TestCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ReceivedCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CarrierPrefix" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="CallerId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="ErrorMessage" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Requested" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="ParentUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PhonePrefix" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="PDD" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="Duration" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="TestOperator_MontyCall" Member="MontyCalls" ThisKey="Id" OtherKey="TestOperatorId" Type="MontyCall" />
-      <Association Name="Operator_TestOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
-      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
-      <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="" Member="ActionLogFeeds">
@@ -223,35 +197,6 @@
       <Column Name="Prefix" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="ShortName" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Association Name="Carrier_ScheduleOperator" Member="ScheduleOperators" ThisKey="Id" OtherKey="CarrierId" Type="ScheduleOperator" />
-    </Type>
-  </Table>
-  <Table Name="dbo.SipAccounts" Member="SipAccounts">
-    <Type Name="SipAccount">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Username" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Login" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Password" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="Server" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="UseProxy" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="ProxyServer" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="ProxyUser" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="ProxyPass" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="DisplayName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="TotalLines" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="UseAudio" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="DefaultAudioFileName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="DefaultAudioFile" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="PlaybackDevice" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="NetworkInterface" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Codecs" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="IsChangedCallerId" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="BeginRechargeDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="NumberOfMonths" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="BalanceValue" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="SipAccount_Schedule" Member="Schedules" ThisKey="Id" OtherKey="SipAccountId" Type="Schedule" />
-      <Association Name="SipAccount_GeneratedCall" Member="GeneratedCalls" ThisKey="Id" OtherKey="SipAccountId" Type="GeneratedCall" />
     </Type>
   </Table>
   <Table Name="dbo.BalanceDetails" Member="BalanceDetails">
@@ -315,6 +260,57 @@
       <Association Name="User_ActionLog" Member="ActionLogs" ThisKey="Id" OtherKey="UserId" Type="ActionLog" />
       <Association Name="User_Schedule" Member="Schedules" ThisKey="Id" OtherKey="UserId" Type="Schedule" />
       <Association Name="User_TestOperator" Member="TestOperators" ThisKey="Id" OtherKey="UserId" Type="TestOperator" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestOperators" Member="TestOperators">
+    <Type Name="TestOperator">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperatorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TestCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceivedCli" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CarrierPrefix" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CallerId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ErrorMessage" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Requested" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ParentUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PhonePrefix" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PDD" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Duration" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="TestOperator_MontyCall" Member="MontyCalls" ThisKey="Id" OtherKey="TestOperatorId" Type="MontyCall" />
+      <Association Name="Operator_TestOperator" Member="Operator" ThisKey="OperatorId" OtherKey="Id" Type="Operator" IsForeignKey="true" />
+      <Association Name="Schedule_TestOperator" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
+      <Association Name="User_TestOperator" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SipAccounts" Member="SipAccounts">
+    <Type Name="SipAccount">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Login" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Server" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="UseProxy" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ProxyServer" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ProxyUser" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ProxyPass" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="DisplayName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="TotalLines" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UseAudio" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DefaultAudioFileName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="DefaultAudioFile" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="CreatedBy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="PlaybackDevice" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="NetworkInterface" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Codecs" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="IsChangedCallerId" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="SipAccount_Schedule" Member="Schedules" ThisKey="Id" OtherKey="SipAccountId" Type="Schedule" />
+      <Association Name="SipAccount_GeneratedCall" Member="GeneratedCalls" ThisKey="Id" OtherKey="SipAccountId" Type="GeneratedCall" />
     </Type>
   </Table>
   <Function Name="dbo.GetData" Method="GetData">

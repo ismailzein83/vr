@@ -195,15 +195,16 @@ namespace CallGeneratorLibrary.Utilities
                                     ScheduleLogRepository.Save(NewLog);
                                     List<ScheduleOperator> LstShcOp = ScheduleOperatorRepository.GetScheduleOperatorsByScheduleId(schedule.Id);
 
-                                    int balance = 0;
-                                    int Requested = 0;
+                                    //int balance = 0;
+                                    //int Requested = 0;
                                     //int ParentId = 0;
 
                                     //ParentId = UserRepository.GetUser((int)Enums.UserRole.SuperUser).Id;
-                                    balance = UserRepository.GetUser((int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser).Balance.Value;
-                                    Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser();
+                                    //balance = UserRepository.GetUser((int)CallGeneratorLibrary.Utilities.Enums.UserRole.SuperUser).Balance.Value;
+                                    //Requested = TestOperatorRepository.GetRequestedTestOperatorsByUser();
 
-                                    if (balance - Requested >= LstShcOp.Count)
+                                    if (CallGeneratorLibrary.Utilities.BalanceDetails.CheckUserBalance(schedule.UserId.Value))
+                                    //if (balance - Requested >= LstShcOp.Count)
                                     {
                                         foreach (ScheduleOperator SchOp in LstShcOp)
                                         {
@@ -213,7 +214,6 @@ namespace CallGeneratorLibrary.Utilities
                                                 testOp.UserId = schedule.UserId;
                                                 //testOp.ParentUserId = ParentId;
                                                 testOp.OperatorId = SchOp.OperatorId;
-                                                testOp.NumberOfCalls = 1;
                                                 testOp.CreationDate = DateTime.Now;
                                                 testOp.CarrierPrefix = SchOp.Carrier.Prefix;
                                                 testOp.CallerId = schedule.SipAccount.DisplayName;

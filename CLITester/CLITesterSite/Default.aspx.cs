@@ -28,6 +28,7 @@ public partial class Default : BasePage
 
         if (!IsPostBack)
         {
+            lblMonth.Text = DateTime.Now.ToString("MMMM");
             DateTime d = new DateTime();
             DateTime maxd = new DateTime();
             maxd = DateTime.MinValue;

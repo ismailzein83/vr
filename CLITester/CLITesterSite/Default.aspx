@@ -19,7 +19,9 @@
                     <i class="icon-home"></i>
                     <a href="default.aspx">Home</a>
                 </li>
-                 <a href="ManageSchedules.aspx"><label class="pull-right">Next schedule: <asp:Label ID="lblNxtSch" runat="server" /> &nbsp;</label>
+                 <a href="ManageSchedules.aspx"><label class="pull-right"><b>&nbsp; Next schedule: </b><asp:Label ID="lblNxtSch" runat="server" /> &nbsp;</label>
+                </a>
+                <a><label class="pull-right">&nbsp;&nbsp;&nbsp;<b>Month of: </b><asp:Label ID="lblMonth" runat="server" /> &nbsp; -- </label>
                 </a>
             </ul>
             <!-- END PAGE TITLE & BREADCRUMB-->

@@ -21,7 +21,7 @@ namespace CallGeneratorLibrary.Repositories
                     lstBalanceDetails = GetBalanceDetails();
                     foreach(BalanceDetail balanceDet in lstBalanceDetails)
                     {
-                        if(balanceDet.BeginEffectiveDate >= DateTime.Now && balanceDet.EndEffectiveDate <= DateTime.Now && balanceDet.Remaining >= 0)
+                        if(balanceDet.BeginEffectiveDate <= DateTime.Now && balanceDet.EndEffectiveDate >= DateTime.Now && balanceDet.Remaining >= 0)
                         {
                             balanceDetail = balanceDet;
                             break;
@@ -49,27 +49,6 @@ namespace CallGeneratorLibrary.Repositories
                     context.LoadOptions = options;
 
                     lstBalanceDetails = context.BalanceDetails.OrderBy(l => l.Id).ToList<BalanceDetail>();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-            return lstBalanceDetails;
-        }
-
-        public static List<BalanceDetail> GetBalanceDetails(int ChargeType)
-        {
-            List<BalanceDetail> lstBalanceDetails = new List<BalanceDetail>();
-            try
-            {
-                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
-                {
-                    DataLoadOptions options = new DataLoadOptions();
-                    options.LoadWith<BalanceDetail>(c => c.Contract);
-                    context.LoadOptions = options;
-
-                    lstBalanceDetails = context.BalanceDetails.Where(u => u.Contract.ChargeType == ChargeType).OrderByDescending(l => l.Id).ToList<BalanceDetail>();
                 }
             }
             catch (System.Exception ex)

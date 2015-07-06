@@ -81,7 +81,6 @@ public class HandlerTestOperator : IHttpHandler, System.Web.SessionState.IRequir
                 if (OperatorId != 0)
                     testOp.OperatorId = OperatorId;
 
-                testOp.NumberOfCalls = 1;
                 testOp.CreationDate = DateTime.Now;
                 testOp.CarrierPrefix = resp.id2;
                 testOp.CallerId = SipAccountRepository.GetTop().DisplayName;

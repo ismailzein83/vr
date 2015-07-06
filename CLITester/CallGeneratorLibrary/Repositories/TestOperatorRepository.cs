@@ -485,30 +485,29 @@ namespace CallGeneratorLibrary.Repositories
         private static bool Update(TestOperator testOperator)
         {
             bool success = false;
-            TestOperator look = new TestOperator();
+            TestOperator testOperatorObj = new TestOperator();
 
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    look = context.TestOperators.Single(l => l.Id == testOperator.Id);
+                    testOperatorObj = context.TestOperators.Single(l => l.Id == testOperator.Id);
 
-                    look.UserId = testOperator.UserId;
-                    look.OperatorId = testOperator.OperatorId;
-                    look.NumberOfCalls = testOperator.NumberOfCalls;
-                    look.CreationDate = testOperator.CreationDate;
-                    look.EndDate = testOperator.EndDate;
-                    look.TestCli = testOperator.TestCli;
-                    look.ReceivedCli = testOperator.ReceivedCli;
-                    look.Status = testOperator.Status;
-                    look.CarrierPrefix = testOperator.CarrierPrefix;
-                    look.CallerId = testOperator.CallerId;
-                    look.ErrorMessage = testOperator.ErrorMessage;
-                    look.Requested = testOperator.Requested;
-                    look.ParentUserId = testOperator.ParentUserId;
-                    look.PhonePrefix = testOperator.PhonePrefix;
-                    look.PDD = testOperator.PDD;
-                    look.Duration = testOperator.Duration;
+                    testOperatorObj.UserId = testOperator.UserId;
+                    testOperatorObj.OperatorId = testOperator.OperatorId;
+                    testOperatorObj.CreationDate = testOperator.CreationDate;
+                    testOperatorObj.EndDate = testOperator.EndDate;
+                    testOperatorObj.TestCli = testOperator.TestCli;
+                    testOperatorObj.ReceivedCli = testOperator.ReceivedCli;
+                    testOperatorObj.Status = testOperator.Status;
+                    testOperatorObj.CarrierPrefix = testOperator.CarrierPrefix;
+                    testOperatorObj.CallerId = testOperator.CallerId;
+                    testOperatorObj.ErrorMessage = testOperator.ErrorMessage;
+                    testOperatorObj.Requested = testOperator.Requested;
+                    testOperatorObj.ParentUserId = testOperator.ParentUserId;
+                    testOperatorObj.PhonePrefix = testOperator.PhonePrefix;
+                    testOperatorObj.PDD = testOperator.PDD;
+                    testOperatorObj.Duration = testOperator.Duration;
                     context.SubmitChanges();
                     success = true;
                 }

@@ -11,19 +11,47 @@ namespace CallGeneratorLibrary.Repositories
 {
     public class ContractRepository
     {
+
         public static void Save(Contract contract)
         {
-            Contract contractObj = new Contract();
-            contractObj.Name = contract.Name;
-            contractObj.CreationDate = contract.CreationDate;
-            contractObj.ChargeType = contract.ChargeType;
-            contractObj.IsDone = contract.IsDone;
-            contractObj.Description = contract.Description;
+            if (contract.Id == default(int))
+                Insert(contract);
+            else
+                Update(contract);
+        }
+
+        private static void Insert(Contract contract)
+        {
             try
             {
                 using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
                 {
-                    context.Contracts.InsertOnSubmit(contractObj);
+                    context.Contracts.InsertOnSubmit(contract);
+                    context.SubmitChanges();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+        }
+
+        private static void Update(Contract contract)
+        {
+            Contract contractObj = new Contract();
+
+            try
+            {
+                using (CallGeneratorModelDataContext context = new CallGeneratorModelDataContext())
+                {
+                    contractObj = context.Contracts.Single(ul => ul.Id == contract.Id);
+
+                    contractObj.Name = contract.Name;
+                    contractObj.CreationDate = contract.CreationDate;
+                    contractObj.ChargeType = contract.ChargeType;
+                    contractObj.IsDone = contract.IsDone;
+                    contractObj.Description = contract.Description;
+
                     context.SubmitChanges();
                 }
             }
