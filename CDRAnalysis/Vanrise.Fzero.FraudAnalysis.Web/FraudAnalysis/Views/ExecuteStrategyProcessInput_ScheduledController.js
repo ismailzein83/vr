@@ -8,13 +8,11 @@
         $scope.processInputArguments = [];
 
         $scope.strategies = [];
-        loadStrategies();
         $scope.selectedStrategies = [];
         $scope.selectedStrategyIds = [];
 
 
         $scope.periods = [];
-        loadPeriods();
         $scope.selectedPeriod = "";
 
 
@@ -36,54 +34,53 @@
             };
         };
 
-
-        loadForm();
     }
 
-
-    function loadPeriods(id) {
+    function loadPeriods() {
         return StrategyAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
             });
-            if(id!=undefined)
-                $scope.selectedPeriod = $scope.periods[UtilsService.getItemIndexByVal($scope.periods, id, "Id")]
         });
     }
 
 
-    function loadStrategies(id) {
-
+    function loadStrategies() {
         return StrategyAPIService.GetAllStrategies().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name });
             });
-            if (id != undefined)
-                $scope.selectedStrategyIds = $scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, id, "Id")]
         });
 
     }
 
-    function loadForm() {
-       
-        if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
-            return;
-        var data = $scope.schedulerTaskAction.processInputArguments.data;
-
-        console.log('data')
-        console.log(data)
-
-        if (data != null) {
-            loadPeriods(data.PeriodId)
-            loadStrategies(data.StrategyIds)
-        }
-    }
+   
 
     function load() {
+        $scope.isGettingData = true;
+        UtilsService.waitMultipleAsyncOperations([loadStrategies, loadPeriods])
+        .then(function () {
+                if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
+                    return;
+                var data = $scope.schedulerTaskAction.processInputArguments.data;
 
+                if (data != null) {
+                    $scope.selectedPeriod = $scope.periods[UtilsService.getItemIndexByVal($scope.periods, data.PeriodId, "Id")]
+
+                    angular.forEach(data.StrategyIds, function (strategyId) {
+                        $scope.selectedStrategies.push($scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, strategyId, "id")]);
+                    });
+
+                   
+                }
+                $scope.isGettingData = false;
+
+        })
+        .catch(function (error) {
+            $scope.isGettingData = false;
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        });
     }
-
-
 
     
 
