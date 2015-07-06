@@ -3,51 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroLog", "SQL.FZeroLog\SQL.FZeroLog.sqlproj", "{AFA6B159-3301-4392-ABF3-F6B872549B78}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroQueue", "SQL.FZeroQueue\SQL.FZeroQueue.sqlproj", "{6DC8E267-E175-43DF-830D-97FDEA1B9120}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.FZeroTransaction", "SQL.FZeroTransaction\SQL.FZeroTransaction.sqlproj", "{E691E2E6-85AE-47E2-8163-D38A09349556}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 1
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
-		SccProjectUniqueName0 = SQL.FZeroLog\\SQL.FZeroLog.sqlproj
-		SccProjectName0 = SQL.FZeroLog
-		SccLocalPath0 = SQL.FZeroLog
-		SccProjectUniqueName1 = SQL.FZeroQueue\\SQL.FZeroQueue.sqlproj
-		SccProjectName1 = SQL.FZeroQueue
-		SccLocalPath1 = SQL.FZeroQueue
-		SccProjectUniqueName2 = SQL.FZeroTransaction\\SQL.FZeroTransaction.sqlproj
-		SccProjectName2 = SQL.FZeroTransaction
-		SccLocalPath2 = SQL.FZeroTransaction
-		SccLocalPath3 = .
-	EndGlobalSection
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFA6B159-3301-4392-ABF3-F6B872549B78}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DC8E267-E175-43DF-830D-97FDEA1B9120}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E691E2E6-85AE-47E2-8163-D38A09349556}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		SccLocalPath0 = .
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
