@@ -67,7 +67,6 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
                 $scope.widget.API = api;
 
             };
-        //    console.log($scope.widget.Setting.settings.DefinitionType.value);
             if ($scope.isEditMode) {
                 $scope.widget.Id = $scope.filter.WidgetID;
             }

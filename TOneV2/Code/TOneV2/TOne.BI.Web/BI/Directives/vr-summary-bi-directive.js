@@ -55,7 +55,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures])
            .then(function () {
-               // console.log(BIUtilitiesService.checkPermissions(Measures));
+               
                if (!BIUtilitiesService.checkPermissions(measures)) {
                    ctrl.isAllowed = false;
                    return;

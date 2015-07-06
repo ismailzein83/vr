@@ -46,7 +46,6 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
 
     }
     function BIChart(ctrl, settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, VRModalService, UtilsService, VRNotificationService) {
-        console.log(settings);
         var chartAPI;
         var measures = [];
         var entity;
@@ -56,7 +55,6 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
             .then(function () {
-                // console.log(BIUtilitiesService.checkPermissions(Measures));
                 if (!BIUtilitiesService.checkPermissions(measures)) {
                     ctrl.isAllowed = false;
                     return;
@@ -94,7 +92,7 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         function retrieveData() {
             if (!ctrl.isAllowed)
                 return;
-            return BIVisualElementService1.retrieveData1(ctrl, settings)
+            return BIVisualElementService1.retrieveWidgetData(ctrl, settings)
 
                 .then(function (response) {
                            
@@ -126,7 +124,6 @@ app.directive('vrChartBi', ['BIDataAPIService', 'BIUtilitiesService', 'BIVisualE
         }
 
         function refreshChart(response) {
-            console.log(settings.DefinitionType.value);
             var chartDefinition = {
                 type: settings.DefinitionType,
                 yAxisTitle: "Value"

@@ -2,10 +2,10 @@
 app.service('BIVisualElementService1', function (BIDataAPIService) {
 
     return ({
-        retrieveData1: retrieveData1
+        retrieveWidgetData: retrieveWidgetData
     });
 
-    function retrieveData1(visualElementController, visualElementSettings) {
+    function retrieveWidgetData(visualElementController, visualElementSettings) {
        
         if(visualElementSettings.OperationType!=undefined)
         switch (visualElementSettings.OperationType) {

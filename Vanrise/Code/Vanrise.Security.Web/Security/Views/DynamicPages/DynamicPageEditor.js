@@ -45,19 +45,29 @@ function DynamicPageEditorController($scope, MenuAPIService, WidgetAPIService, R
             buildContentsFromScope();
         }
         $scope.save = function () {
-            if ($scope.summaryWidgets.length == 0 && $scope.bodyWidgets.length)
-            {
-                return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
-               
-            }
+           
                 
             buildContentsFromScope();
             buildViewObjFromScope();
             
-            if ($scope.isEditMode) 
+            if ($scope.isEditMode)
+            {
+                if ($scope.summaryWidgets.length == 0 && $scope.bodyWidgets.length==0) {
+                    return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
+
+                }
                 return updateView();
+            }
+               
             else
-               return  saveView();
+            {
+                if ($scope.summaryContents.length == 0 && $scope.bodyContents.length) {
+                    return VRNotificationService.showError("You Should Add Widgets Before Saving!!");
+
+                }
+                return saveView();
+            }
+              
         };
         $scope.close = function () {
             $scope.modalContext.closeModal()

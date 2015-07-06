@@ -61,7 +61,6 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
         function initializeController() {
             UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
            .then(function () {
-               // console.log(BIUtilitiesService.checkPermissions(Measures));
                if (!BIUtilitiesService.checkPermissions(measures)) {
                    ctrl.isAllowed = false;
                    return;
@@ -95,7 +94,7 @@ app.directive('vrDatagridBi', ['UtilsService','BIDataAPIService', 'BIUtilitiesSe
         function retrieveData() {
             if (!ctrl.isAllowed)
                 return;
-            return BIVisualElementService1.retrieveData1(ctrl, settings)
+            return BIVisualElementService1.retrieveWidgetData(ctrl, settings)
                         .then(function (response) {
                             if (ctrl.isDateTimeGroupedData)
                                 BIUtilitiesService.fillDateTimeProperties(response, ctrl.filter.timeDimensionType.value, ctrl.filter.fromDate, ctrl.filter.toDate, true);

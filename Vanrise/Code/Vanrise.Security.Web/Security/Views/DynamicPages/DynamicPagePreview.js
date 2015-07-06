@@ -133,7 +133,6 @@ function DynamicPagePreviewController($scope, ViewAPIService, WidgetAPIService, 
             bodyWidget.API = api;
         };
         $scope.bodyWidgets.push(bodyWidget);
-      //  console.log($scope.bodyWidgets);
     }
     function addSummaryWidget(summaryWidget) {
         summaryWidget.onElementReady = function (api) {

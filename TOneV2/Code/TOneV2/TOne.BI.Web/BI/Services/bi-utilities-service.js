@@ -27,7 +27,6 @@ app.service('BIUtilitiesService', function (BITimeDimensionTypeEnum, VRModalServ
     function checkPermissions(measures) {
 
         for (var i = 0; i < measures.length; i++) 
-            //console.log(measures[i].RequiredPermissions);
             if (measures[i].RequiredPermissions != "" && measures[i].RequiredPermissions != null && measures[i].RequiredPermissions != undefined)
                 if (!SecurityService.isAllowed(measures[i].RequiredPermissions))
                         return false;
