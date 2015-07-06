@@ -16,7 +16,7 @@ app.directive('vrSummaryBi', ['UtilsService','BIConfigurationAPIService', 'BIDat
             var biSummary = new BISummary(ctrl, ctrl.settings, retrieveDataOnLoad, BIDataAPIService, BIVisualElementService1, BIConfigurationAPIService, UtilsService);
             biSummary.initializeController();
 
-            biSummary.defineAPI();
+          
             $scope.openReportEntityModal = function (item) {
 
                 BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
