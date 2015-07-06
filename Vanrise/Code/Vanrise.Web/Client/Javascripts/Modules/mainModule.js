@@ -69,7 +69,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $scope.menuItemsCurrent = null;
 
         }
-        else {            
+        else {           
             $($this).parent().find('.panel-body').first().stop(true, true).slideDown(500);
             $scope.menuItemsCurrent = item;
         }
