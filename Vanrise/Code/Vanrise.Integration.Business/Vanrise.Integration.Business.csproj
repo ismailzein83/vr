@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Data\Vanrise.Integration.Data.csproj">
       <Project>{88cd0723-c237-4632-8bbe-346a645b4c09}</Project>
       <Name>Vanrise.Integration.Data</Name>

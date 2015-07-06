@@ -49,31 +49,31 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
     }
 
     function addNewDataSource() {
-        //var settings = {};
+        var settings = {};
 
-        //settings.onScopeReady = function (modalScope) {
-        //    modalScope.title = "Add Task";
-        //    modalScope.onTaskAdded = function (task) {
-        //        mainGridAPI.itemAdded(task);
-        //    };
-        //};
-        //VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', null, settings);
+        settings.onScopeReady = function (modalScope) {
+            modalScope.title = "Add Data Source";
+            modalScope.onDataSourceAdded = function (dataSource) {
+                mainGridAPI.itemAdded(dataSource);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', null, settings);
     }
 
     function editDataSource(dataSourceObj) {
-        //var modalSettings = {
-        //};
-        //var parameters = {
-        //    taskId: taskObj.TaskId
-        //};
+        var modalSettings = {
+        };
+        var parameters = {
+            dataSourceId: dataSourceObj.DataSourceId
+        };
 
-        //modalSettings.onScopeReady = function (modalScope) {
-        //    modalScope.title = "Edit Task: " + taskObj.Name;
-        //    modalScope.onTaskUpdated = function (task) {
-        //        mainGridAPI.itemUpdated(task);
-        //    };
-        //};
-        //VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, modalSettings);
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit Data Source";
+            modalScope.onDataSourceUpdated = function (dataSource) {
+                mainGridAPI.itemUpdated(dataSource);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
     }
 
     function deleteDataSource(dataSourceObj) {

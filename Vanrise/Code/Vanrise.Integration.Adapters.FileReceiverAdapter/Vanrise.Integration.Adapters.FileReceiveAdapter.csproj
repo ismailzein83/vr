@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BC343C8C-A1BA-4D9E-B4DA-C59029594D50}</ProjectGuid>
+    <ProjectGuid>{A2BA285E-4F1B-4015-95DA-DBFE41701966}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Integration.Entities</RootNamespace>
-    <AssemblyName>Vanrise.Integration.Entities</AssemblyName>
+    <RootNamespace>Vanrise.Integration.Adapters.FileReceiveAdapter</RootNamespace>
+    <AssemblyName>Vanrise.Integration.Adapters.FileReceiveAdapter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -43,10 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseReceiveAdapter.cs" />
-    <Compile Include="DataSource.cs" />
-    <Compile Include="DataSourceAdapterType.cs" />
+    <Compile Include="FileReceiverAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
+      <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
+      <Name>Vanrise.Integration.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

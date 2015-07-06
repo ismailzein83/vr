@@ -10,7 +10,16 @@ namespace Vanrise.Integration.Entities
     {
         public int DataSourceId { get; set; }
 
+        public int AdapterTypeId { get; set; }
+
         public string AdapterName { get; set; }
 
+        public DataSourceSettings Settings { get; set; }
+
+    }
+
+    public class DataSourceSettings
+    {
+        public BaseReceiveAdapter Adapter { get; set; }
     }
 }

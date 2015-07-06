@@ -1,0 +1,33 @@
+﻿<div vr-modalcontent ng-controller="Integration_DataSourceEditorController">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="formDataSourceEditor">
+            <vr-choices selectedindex="0">
+                <vr-choice isselected="adapterSettignsSelected">Adapter</vr-choice>
+                <vr-choice isselected="mappperSettignsSelected">Mapper</vr-choice>
+            </vr-choices>
+            <div ng-show="adapterSettignsSelected">
+                <vr-row>
+                    <vr-column colmun="6">
+                        <vr-select datatextfield="Name" datavaluefield="AdapterTypeId"
+                                   datasource="adapterTypes" selectedvalues="selectedAdapterType"></vr-select>
+                    </vr-column>
+                </vr-row>
+                <vr-row>
+                    <div ng-include="selectedAdapterType.Info.AdapterTemplateURL"></div>
+                </vr-row>
+            </div>
+            <div ng-show="actionSettingsSelected">
+               <p> To be implemented</p>
+            </div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDataSourceEditor" data-onclick="SaveDataSource"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDataSourceAdapterTypeDataManager.cs" />
     <Compile Include="IDataSourceDataManager.cs" />
     <Compile Include="IntegrationDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
