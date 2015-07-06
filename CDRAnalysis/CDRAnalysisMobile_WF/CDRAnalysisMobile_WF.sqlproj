@@ -137,4 +137,7 @@
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
 </Project>
