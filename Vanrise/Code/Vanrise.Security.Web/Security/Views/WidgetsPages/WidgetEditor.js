@@ -14,6 +14,7 @@ function WidgetEditorController($scope, WidgetAPIService, MenuAPIService, BIVisu
                 selectedWidget: parameters.WidgetDefinitionId,
                 Setting: parameters.Setting
             }
+          
             $scope.isEditMode = true;
         }
         else

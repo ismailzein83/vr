@@ -106,10 +106,10 @@ namespace Vanrise.Security.Data.SQL
         public bool UpdateView(View view)
         {
             string serialziedContent = null;
-            if (view.ViewContent != null)
+            if (view.ViewContent.BodyContents.Count > 0 || view.ViewContent.SummaryContents.Count > 0)
                 serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
             string serialziedAudience = null;
-            if (view.Audience.Groups != null || view.Audience.Users!=null)
+            if (view.Audience.Groups.Count > 0 || view.Audience.Users.Count > 0)
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, url, view.ModuleId, null,

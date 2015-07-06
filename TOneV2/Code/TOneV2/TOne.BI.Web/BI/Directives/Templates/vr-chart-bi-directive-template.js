@@ -15,6 +15,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
         $scope.toDate = "2015-04-30";
         $scope.selectedEntityType ;
         $scope.selectedTopMeasure;
+        $scope.widgetTitle;
         $scope.definitionTypes = [];
         $scope.selectedDefinitionType;
         $scope.selectedMeasureTypes = [];
@@ -26,9 +27,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
             return getSubViewValue();
         }
         $scope.subViewConnector.setValue = function (value) {
-            //console.log(value);
             $scope.subViewConnector.value = value;
-           // return setSubViewValue(settings);
         }
 
 
@@ -55,6 +54,7 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
             MeasureTypes: measureTypes,
             TopMeasure: topMeasure,
             DefinitionType: $scope.selectedDefinitionType.value,
+            Title: $scope.widgetTitle
         };
     }
     function setSubViewValue(settings) {
@@ -82,7 +82,9 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
           
                 if($scope.operationTypes[i].value==settings.OperationType)
                     $scope.selectedOperationType=$scope.operationTypes[i];
-            }
+        }
+        $scope.widgetTitle = settings.Title;
+
     }
     function defineTimeDimensionTypes() {
         $scope.timeDimensionTypes = [];
@@ -157,7 +159,6 @@ function VrChartDirectiveTemplateController($scope,BITimeDimensionTypeEnum,BICha
                 $scope.Measures.push(itm);
               
             });
-            console.log(response);
         });
     }
     function loadEntities() {

@@ -13,5 +13,6 @@ namespace TOne.BI.Entities
         public List<string> MeasureTypes { get; set; }
         public string TopMeasure { get; set; }
         public string DefinitionType { get; set; }
+        public string Title { get; set; }
     }
 }

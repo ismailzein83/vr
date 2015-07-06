@@ -140,7 +140,6 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         return BIConfigurationAPIService.GetMeasures().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Measures.push(itm);
-              //  console.log(itm);
             });
         });
     }
@@ -149,7 +148,6 @@ function VrDatagridDirectiveTemplateController($scope, BITimeDimensionTypeEnum,B
         return BIConfigurationAPIService.GetEntities().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.Entities.push(itm);
-               // console.log($scope.Entities[0].Id);
             });
             $scope.selectedEntityType = $scope.Entities[0];
         });
