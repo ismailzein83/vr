@@ -113,9 +113,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WcfS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.WeeklyReport", "Vanrise.Fzero.Services.WeeklyReport\Vanrise.Fzero.Services.WeeklyReport.csproj", "{990E2C6C-70A1-47EE-AA39-6A6A875FA031}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{98EAF500-8DA4-44B9-897C-6F96B32C64AD}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FMS", "FMS\FMS.sqlproj", "{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CDRAnalysis", "CDRAnalysis\CDRAnalysis.sqlproj", "{5CE30F87-D590-429F-A3FE-2E5F030A360F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -182,6 +188,14 @@ Global
 		SccProjectName19 = Vanrise.Fzero.CDRAnalysis.Website
 		SccLocalPath19 = Vanrise.Fzero.CDRAnalysis.Website
 		SccProjectEnlistmentChoice19 = 2
+		SccProjectUniqueName20 = FMS\\FMS.sqlproj
+		SccProjectTopLevelParentUniqueName20 = Vanrise.sln
+		SccProjectName20 = FMS
+		SccLocalPath20 = FMS
+		SccProjectUniqueName21 = CDRAnalysis\\CDRAnalysis.sqlproj
+		SccProjectTopLevelParentUniqueName21 = Vanrise.sln
+		SccProjectName21 = CDRAnalysis
+		SccLocalPath21 = CDRAnalysis
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,8 +278,24 @@ Global
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{990E2C6C-70A1-47EE-AA39-6A6A875FA031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C} = {98EAF500-8DA4-44B9-897C-6F96B32C64AD}
+		{5CE30F87-D590-429F-A3FE-2E5F030A360F} = {98EAF500-8DA4-44B9-897C-6F96B32C64AD}
 	EndGlobalSection
 EndGlobal
