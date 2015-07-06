@@ -117,7 +117,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{98EAF500-8DA
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FMS", "FMS\FMS.sqlproj", "{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CDRAnalysis", "CDRAnalysis\CDRAnalysis.sqlproj", "{5CE30F87-D590-429F-A3FE-2E5F030A360F}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PSTNCDRAnalysis", "PSTNCDRAnalysis\PSTNCDRAnalysis.sqlproj", "{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -192,10 +192,10 @@ Global
 		SccProjectTopLevelParentUniqueName20 = Vanrise.sln
 		SccProjectName20 = FMS
 		SccLocalPath20 = FMS
-		SccProjectUniqueName21 = CDRAnalysis\\CDRAnalysis.sqlproj
+		SccProjectUniqueName21 = PSTNCDRAnalysis\\PSTNCDRAnalysis.sqlproj
 		SccProjectTopLevelParentUniqueName21 = Vanrise.sln
-		SccProjectName21 = CDRAnalysis
-		SccLocalPath21 = CDRAnalysis
+		SccProjectName21 = PSTNCDRAnalysis
+		SccLocalPath21 = PSTNCDRAnalysis
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -284,18 +284,18 @@ Global
 		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{266B8DF5-93CD-4EA4-A0AB-06FE3E2E006C} = {98EAF500-8DA4-44B9-897C-6F96B32C64AD}
-		{5CE30F87-D590-429F-A3FE-2E5F030A360F} = {98EAF500-8DA4-44B9-897C-6F96B32C64AD}
+		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189} = {98EAF500-8DA4-44B9-897C-6F96B32C64AD}
 	EndGlobalSection
 EndGlobal
