@@ -178,6 +178,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BusinessEntity\Views\TestPage.html" />
+    <Content Include="BusinessEntity\Views\TestPageController.js" />
     <Content Include="packages.config" />
     <Content Include="web.config" />
   </ItemGroup>
