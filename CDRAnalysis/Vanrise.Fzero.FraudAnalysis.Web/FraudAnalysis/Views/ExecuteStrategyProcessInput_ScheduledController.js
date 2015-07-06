@@ -41,46 +41,42 @@
     }
 
 
-    function loadPeriods() {
+    function loadPeriods(id) {
         return StrategyAPIService.GetPeriods().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.periods.push(itm);
             });
+            if(id!=undefined)
+                $scope.selectedPeriod = $scope.periods[UtilsService.getItemIndexByVal($scope.periods, id, "Id")]
         });
     }
 
 
-    function loadStrategies() {
+    function loadStrategies(id) {
+
         return StrategyAPIService.GetAllStrategies().then(function (response) {
             angular.forEach(response, function (itm) {
                 $scope.strategies.push({ id: itm.Id, name: itm.Name });
             });
+            if (id != undefined)
+                $scope.selectedStrategyIds = $scope.strategies[UtilsService.getItemIndexByVal($scope.strategies, id, "Id")]
         });
+
     }
 
     function loadForm() {
-        alert('Continue from Here: loadForm()')
-
-        console.log('$scope.schedulerTaskAction.processInputArguments.data')
-        console.log($scope.schedulerTaskAction.processInputArguments.data)
+       
         if ($scope.schedulerTaskAction.processInputArguments.data == undefined)
             return;
         var data = $scope.schedulerTaskAction.processInputArguments.data;
-      
+
+        console.log('data')
+        console.log(data)
+
         if (data != null) {
-            $scope.repricingDay = data.RepricingDay;
-            $scope.divideProcessIntoSubProcesses = data.DivideProcessIntoSubProcesses;
-
-            var dateOptionSelection = ($scope.schedulerTaskAction.rawExpressions.data != null) ? 0 : 1;
-            $scope.selectedDateOption = UtilsService.getItemByVal($scope.periods, $scope.selectedPeriod, "PeriodId");
-
+            loadPeriods(data.PeriodId)
+            loadStrategies(data.StrategyIds)
         }
-        else {
-            $scope.repricingDay = '';
-            $scope.selectedDateOption = undefined;
-            $scope.divideProcessIntoSubProcesses = '';
-        }
-        
     }
 
     function load() {
