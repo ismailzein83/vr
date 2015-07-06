@@ -143,6 +143,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetTasksbyActionType.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.PostDeployment.sql" />
+    <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
   </ItemGroup>
 </Project>
