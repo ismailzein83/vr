@@ -48,10 +48,10 @@
                 <td ng-style="{'width': $parent.ctrl.expandableColumnWidth}" ng-show="$parent.ctrl.expandableColumnWidth != undefined" ng-init="isRowExpanded = false">
                     <div style="margin:-2px">
                         <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.expandRow($index, dataItem);isRowExpanded = true" ng-show="!isRowExpanded">
-                            <span class="glyphicon glyphicon-plus" style="top: -4px; left: 2px"></span>
+                            <span class="glyphicon glyphicon-plus" style="top: 0px; left: 4px"></span>
                         </label>
                         <label style="height: 9px;" class=" hand-cursor" ng-click="$parent.ctrl.collapseRow($index, dataItem);isRowExpanded = false" ng-show="isRowExpanded">
-                            <span class="glyphicon glyphicon-minus" style="top: -4px; left: 2px"></span>
+                            <span class="glyphicon glyphicon-minus" style="top: 0px; left: 4px"></span>
                         </label>
                     </div>
                 </td>

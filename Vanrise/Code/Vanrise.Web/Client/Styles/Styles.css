@@ -471,6 +471,8 @@ label{
     height: 25px !important;
     display:inline-block !important;
     padding: 3px 6px !important;
+    position: relative;
+    top: -5px;
 }
 .list-inpute-float{
    
@@ -1319,6 +1321,7 @@ input.ui-grid-filter-input[type="text"] {
         border: 1px solid #DDD;
         border-bottom-color: transparent;
         background-color: #FFF;
+        border-radius: 5px 5px 0px 0px;
     }
     .remove-line{
         border-bottom: 0px solid #F0F0F0 !important;
