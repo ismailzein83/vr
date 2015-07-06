@@ -71,6 +71,26 @@
     <Folder Include="sec\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
+    <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
+    <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
+    <Build Include="FraudAnalysis\Tables\SubType.sql" />
+    <Build Include="FraudAnalysis\Tables\CallType.sql" />
+    <Build Include="FraudAnalysis\Tables\CallClass.sql" />
+    <Build Include="FraudAnalysis\Tables\Period.sql" />
+    <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
+    <Build Include="FraudAnalysis\Tables\Strategy.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNumberProfile.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNormalCDR.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetFilteredSuspiciousNumbers.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
+    <Build Include="Security\FraudAnalysis.sql" />
     <Build Include="sec\Tables\View.sql" />
     <Build Include="sec\Tables\WidgetManagement.sql" />
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -81,15 +101,6 @@
     <Build Include="sec\Tables\Permission.sql" />
     <Build Include="sec\Tables\Module.sql" />
     <Build Include="sec\Tables\User.sql" />
-    <Build Include="FraudAnalysis\Tables\Suspicion_Level.sql" />
-    <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
-    <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
-    <Build Include="FraudAnalysis\Tables\SubType.sql" />
-    <Build Include="FraudAnalysis\Tables\CallType.sql" />
-    <Build Include="FraudAnalysis\Tables\CallClass.sql" />
-    <Build Include="FraudAnalysis\Tables\Period.sql" />
-    <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
-    <Build Include="FraudAnalysis\Tables\Strategy.sql" />
     <Build Include="Security\walid.sql" />
     <Build Include="Security\RoleMemberships.sql" />
     <Build Include="sec\Stored Procedures\sp_WidgetManagement_InsertWidget.sql" />
@@ -124,19 +135,8 @@
     <Build Include="sec\Stored Procedures\sp_Roles_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Roles_Get.sql" />
     <Build Include="sec\Stored Procedures\sp_Roles_GetFiltered.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNumberProfile.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetAll.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetNormalCDR.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetStrategy.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_FraudResult_GetFilteredSuspiciousNumbers.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Insert.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetFilteredStrategies.sql" />
     <Build Include="sec\User Defined Types\IntIDType.sql" />
     <Build Include="sec\User Defined Types\RoleMembersType.sql" />
     <Build Include="Security\sec.sql" />
-    <Build Include="Security\FraudAnalysis.sql" />
   </ItemGroup>
 </Project>

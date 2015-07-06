@@ -113,10 +113,8 @@
     <Build Include="dbo\Views\vwReportVariables.sql" />
     <Build Include="dbo\Views\vwReportedNumberNormalCDR.sql" />
     <Build Include="dbo\Views\vwDashboard.sql" />
-    <Build Include="Security\zahraa.sql" />
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Functions\udf_Haversine.sql" />
     <Build Include="dbo\Functions\GetDistance.sql" />
     <Build Include="dbo\Stored Procedures\Ranking.sql" />
@@ -156,5 +154,7 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_GetSuspiciousNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_Update.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
+    <Build Include="Security\zahraa.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>

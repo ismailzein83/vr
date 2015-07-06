@@ -79,9 +79,6 @@
     <Build Include="FraudAnalysis\Tables\SubscriberThreshold.sql" />
     <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
-    <Build Include="Security\zahraa.sql" />
-    <Build Include="Security\walid.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Functions\udf_Haversine.sql" />
     <Build Include="dbo\Functions\GetDistance.sql" />
     <Build Include="dbo\Stored Procedures\prfindSuspicionOccurrence.sql" />
@@ -93,5 +90,8 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_CallClass_GetAll.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NormalCDR_Load.sql" />
     <Build Include="Security\FraudAnalysis.sql" />
+    <Build Include="Security\zahraa.sql" />
+    <Build Include="Security\walid.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>
