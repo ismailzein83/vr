@@ -24,13 +24,61 @@
     top: -28px;
     right: -35px;
 }
-.vr-nav-custom .img1 {
+.vr-nav-custom div {
+   display:inline-block;
+}
+
+.vr-nav-custom div .badge {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+}
+.bg-lightred {
+    background-color: #08A282 !important;
+    color: #FFF !important;
+}
+.badge {
+    padding: 3px 5px;
+}
+.badge, .label {
+    font-size: 10px;
+    font-weight: 400;
+}
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #FFF;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #777;
+    border-radius: 10px;
+}
+.badge2 {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 2;
+    color: #FFF;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #777;
+    border-radius: 13px;
+}
+.vr-nav-custom .div1 {
    position: absolute;
    top: 32px;
    right:140px;
 }
 
-.vr-nav-custom .img2 {
+.vr-nav-custom .div2 {
    position: absolute;
    top: 32px;
    right: 175px;
@@ -1107,6 +1155,10 @@ input.ui-grid-filter-input[type="text"] {
 .vr-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
   background-color: #F5F5F5;
 }
+.vr-rotate-header{
+    transform: rotate(270deg);
+    margin: 150px 0px 15px 0px;
+}
 .btn-group-custom >button {
     height: 24px !important;
     padding: 2px 12px !important;
@@ -1307,3 +1359,4 @@ input.ui-grid-filter-input[type="text"] {
     height: 25px !important;
     padding: 2px 12px !important;
 }
+

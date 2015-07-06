@@ -61,12 +61,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $scope.toogled = false;
     });
     $scope.menuItemsCurrent = null;
-    $scope.setIndex = function (item) {
+    $scope.setIndex = function (item, e) {
+        var $this = angular.element(e.currentTarget);
+         
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
+            $($this).parent().find('.panel-body').first().stop(true, true).slideUp(500);
             $scope.menuItemsCurrent = null;
 
         }
-        else {
+        else {            
+            $($this).parent().find('.panel-body').first().stop(true, true).slideDown(500);
             $scope.menuItemsCurrent = item;
         }
 

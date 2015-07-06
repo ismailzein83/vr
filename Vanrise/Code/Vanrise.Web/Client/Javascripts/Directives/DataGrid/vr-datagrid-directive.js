@@ -19,9 +19,16 @@
                 loadMoreDataFunction = $scope.$parent.$eval($attrs.loadmoredata);
            
             ctrl.clientSideFilterFunction;
+            ctrl.rotateHeader = true;
+
             if ($attrs.clientsidefilter != undefined)
                 ctrl.clientSideFilterFunction = $scope.$parent.$eval($attrs.clientsidefilter);
-
+            if ($attrs.rotate == undefined) {
+                ctrl.rotateHeader = false;
+            }
+            else
+                ctrl.rotateHeader = $attrs.rotate;
+            console.log(ctrl.rotateHeader);
             var hasActionMenu = $attrs.menuactions != undefined;
             var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             var dataGridObj = new DataGrid(ctrl, $scope);
@@ -69,9 +76,10 @@
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
      + '   <div class="vr-datagrid-celltext" >'
-       + '         <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
+       + '    <span ng-if="!colDef.rotateHeader">     <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
         + '        <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
-         + '{{colDef.name}}'
+         + '{{colDef.name}}</span>'
+           + '<p ng-if="colDef.rotateHeader" class="vr-rotate-header" >{{colDef.name}}</p>'
      + ' </div>'
 + '</div>'
 + '</div>';
@@ -110,7 +118,8 @@
                     }
                 },
                 tag: col.tag,
-                getcolor: col.getcolor
+                getcolor: col.getcolor,
+                rotateHeader: ctrl.rotateHeader
             };
 
             var columnCellTemplate;
@@ -213,7 +222,6 @@
         function initializeController() {
             ctrl.updateItems = [];
             ctrl.columnDefs = [];
-
             ctrl.gridStyle = {};
             if (ctrl.maxheight != undefined) {
                 setMaxHeight(ctrl.maxheight);

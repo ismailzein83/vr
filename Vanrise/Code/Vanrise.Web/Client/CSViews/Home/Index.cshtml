@@ -21,8 +21,16 @@
         <div class="container">
             <div class="navbar-header">
                 <img src="Client/Images/logoonheader.png" class="minilogo" />
-                <img src="Client/Images/01.png" class="img1" />
-                <img src="Client/Images/02.png" class="img2" />
+                <div class="div1">
+                    <img src="Client/Images/01.png" class="img1" />
+                    <span class="badge bg-lightred">10</span>
+                </div>
+                <div class="div2">
+                    <img src="Client/Images/02.png" class="img2" />
+                    <span class="badge bg-lightred">5</span>
+                </div>
+                
+                
             </div>
         </div>
     </nav>
@@ -73,7 +81,7 @@
                     </div>
                 </div>
                 <div ng-repeat="item in menuItems" class="panel panel-default menu-item-list">
-                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion"  aria-expanded="true" ng-click="setIndex(item)">
+                    <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{item.keyclass}}':'bgcolor-{{item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" ng-click="setIndex(item,$event)">
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " ng-class="item.Icon" style="font-size: 20px; top: 1px;"></span>
                             <span style="position: relative; top: -3px;">{{::item.Name}}</span>
@@ -88,7 +96,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div id="collapse-{{$index}}" class="am-collapse panel " ng-show="menuItemsCurrent.Id == item.Id">
+                    <div id="collapse-{{$index}}" class="panel-body " ng-show="menuItemsCurrent.Id == item.Id">
                         <div class="panel-body">
                             <ul class="nav">
                                 <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''" ng-repeat="c in item.Childs">

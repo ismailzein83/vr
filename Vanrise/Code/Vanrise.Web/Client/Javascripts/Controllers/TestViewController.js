@@ -50,9 +50,9 @@ var TestViewController = function ($scope, $http, ValuesAPIService) {
         return ValuesAPIService.Get().then(function (response) {
             for (current = pageInfo.fromRow; current <= pageInfo.toRow; current++) {
                 $scope.gridData.push({
-                    col1: "test " + current + "1",
-                    col2: "test " + current + "2",
-                    col3: "test " + current + "3",
+                    col1: "test " + current + "1 eeeeeeeeeeeeeeeee",
+                    col2: "test " + current + "2eeeeeeeeeeeeeeeeeeeeeeeeee",
+                    col3: "test " + current + "3eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 });
             }
 
