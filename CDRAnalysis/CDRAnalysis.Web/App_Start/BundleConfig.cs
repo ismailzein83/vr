@@ -14,6 +14,7 @@ namespace CDRAnalysis.Web
                 "~/Client/Modules/FraudAnalysis", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true));
         }
     }

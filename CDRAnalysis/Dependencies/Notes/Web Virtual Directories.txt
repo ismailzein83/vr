@@ -1,4 +1,4 @@
-﻿Expand the IIS web site of TOne.Web project:
+﻿Expand the IIS web site of CDRAnalysis.Web project:
  - Add the following virtual directory under the root site:
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
@@ -7,3 +7,4 @@ FraudAnalysis			C:\TFS\CDRAnalysis\Vanrise.Fzero.FraudAnalysis.Web\FraudAnalysis
 Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 Runtime                 C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+Integration						C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
