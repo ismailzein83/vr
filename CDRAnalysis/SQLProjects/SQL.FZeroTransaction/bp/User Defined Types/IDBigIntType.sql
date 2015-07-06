@@ -1,4 +1,0 @@
-﻿CREATE TYPE [bp].[IDBigIntType] AS TABLE (
-    [ID] BIGINT NOT NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC));
-

@@ -1,4 +1,0 @@
-﻿CREATE TYPE [bp].[IDIntType] AS TABLE (
-    [ID] INT NOT NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC));
-
