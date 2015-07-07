@@ -44,7 +44,7 @@ function VariationReportsDestinationsController($scope, BillingStatisticsAPIServ
 
     function getData() {
 
-        $scope.isGettingData = true;
+        $scope.isGettingData = true; 
        // console.log($scope.dataItem);
         // console.log($scope.dataItem.ID);
         

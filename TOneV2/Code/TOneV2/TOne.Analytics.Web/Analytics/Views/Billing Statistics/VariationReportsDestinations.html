@@ -7,12 +7,11 @@
         <vr-datagridcolumn headertext="'Previous {{timePeriod.description}} %'" field="'PreviousPeriodTypeValuePercentage'" type="'Number'" summaryfield="'TotalPreviousPercentage'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="item in timeRanges" field="'Values[' + $index + ']'" headertext="item" type="'Number'" summaryfield="'TotalValues[' + $index + ']'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'CarrierAccountID/ZoneID'" field="'ID'" ng-show="false"></vr-datagridcolumn>
-        <vr-datagridexpandablerow> 
-            <!--if reportOption=Out -- we should disable the expandable row ng-if="viewScope.showCustomersSuppliersSection" -->
-            <div ng-if="true" ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>
+        <vr-datagridexpandablerow ng-if="showCustomersSuppliersSection">
+             <div ng-include="'/Client/Modules/Analytics/Views/Billing Statistics/VariationReportsCustomersSuppliers.html'"></div>
         </vr-datagridexpandablerow>
     </vr-datagrid>
-    {{showCustomersSuppliersSection}}
+    <!--{{showCustomersSuppliersSection}}-->
     <!--<vr-row>  
         
         ng-if="viewScope.showCustomersSuppliersSection" 

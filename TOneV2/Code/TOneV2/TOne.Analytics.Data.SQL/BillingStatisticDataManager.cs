@@ -632,7 +632,7 @@ namespace TOne.Analytics.Data.SQL
                         query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                         query.Replace("#BSIDColumn#", "BS.CustomerID");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                            JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                         query.Replace("#additionalStatement#", "");
                     }
 
@@ -644,7 +644,7 @@ namespace TOne.Analytics.Data.SQL
                             query.Replace("#IDColumn#", " BS.CustomerID ");
                             query.Replace("#BSIDColumn#", " BS.CustomerID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                         }
                         if (groupingBy == GroupingBy.Suppliers)
                         {
@@ -652,7 +652,7 @@ namespace TOne.Analytics.Data.SQL
                             query.Replace("#IDColumn#", " BS.SupplierID ");
                             query.Replace("#BSIDColumn#", " BS.SupplierID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                         }
                     }
 
@@ -662,20 +662,10 @@ namespace TOne.Analytics.Data.SQL
                 case VariationReportOptions.OutBoundMinutes:
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(CostDuration)/60 ");
-                    if (entityType == EntityType.none)
-                    {
-                        query.Replace("#IDColumn#", " cas.CarrierAccountID ");
-                        query.Replace("#BSIDColumn#", "BS.SupplierID");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
-                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    }
-                    else
-                    {
-                        query.Replace("#IDColumn#", " BS.SupplierID ");
-                        query.Replace("#BSIDColumn#", " BS.SupplierID ");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
-                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    }
+                    query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", "BS.SupplierID");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
+                                                            JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
                     query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
 
@@ -708,7 +698,7 @@ namespace TOne.Analytics.Data.SQL
                         query.Replace("#IDColumn#", " cac.CarrierAccountID ");
                         query.Replace("#BSIDColumn#", "BS.CustomerID ");
                         query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                            JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                     }
                     else
                     {
@@ -717,7 +707,7 @@ namespace TOne.Analytics.Data.SQL
                             query.Replace("#IDColumn#", " BS.CustomerID ");
                             query.Replace("#BSIDColumn#", "BS.CustomerID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                         }
                         else if (groupingBy == GroupingBy.Suppliers)
                         {
@@ -725,7 +715,7 @@ namespace TOne.Analytics.Data.SQL
                             query.Replace("#IDColumn#", " BS.SupplierID ");
                             query.Replace("#BSIDColumn#", " BS.SupplierID ");
                             query.Replace("#JoinStatement#", @" JOIN CarrierAccount cac With(Nolock) ON cac.CarrierAccountID=BS.SupplierID
-                                                        JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
+                                                                JOIN CarrierProfile cpc With(Nolock) ON cpc.ProfileID = cac.ProfileID ");
                         }
                     }
                     query.Replace("#WhereStatement#", @" ");
@@ -734,20 +724,10 @@ namespace TOne.Analytics.Data.SQL
                 case VariationReportOptions.OutBoundAmount:
                     query.Replace("#NameColumn#", " cps.Name ");
                     query.Replace("#ValueColumn#", " SUM(Cost_Nets)/ISNULL(ERC.Rate,1) ");
-                    if (entityType == EntityType.none)
-                    {
-                        query.Replace("#IDColumn#", " cas.CarrierAccountID ");
-                        query.Replace("#BSIDColumn#", " BS.CustomerID ");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    }
-                    else
-                    {
-                        query.Replace("#IDColumn#", " BS.CustomerID ");
-                        query.Replace("#BSIDColumn#", "BS.CustomerID ");
-                        query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.CustomerID
-                                                        JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
-                    }
+                    query.Replace("#IDColumn#", " cas.CarrierAccountID ");
+                    query.Replace("#BSIDColumn#", " BS.SupplierID ");
+                    query.Replace("#JoinStatement#", @" JOIN CarrierAccount cas With(Nolock) ON cas.CarrierAccountID=BS.SupplierID
+                                                            JOIN CarrierProfile cps With(Nolock) ON cps.ProfileID = cas.ProfileID ");
                     query.Replace("#WhereStatement#", @" AND cas.RepresentsASwitch <> 'Y' ");
                     break;
 
@@ -795,6 +775,7 @@ namespace TOne.Analytics.Data.SQL
                         default: query.Replace("#additionalStatement#", " "); break;
                     }
                     break;
+
                 case EntityType.Customer:
                     query.Replace("#SecondWhereStatement#", " AND BS.CustomerID = @EntityID ");
                     billingStatsFilterBuilder.Append(" WHERE BS.CustomerID = @EntityID");
@@ -802,13 +783,9 @@ namespace TOne.Analytics.Data.SQL
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
-                        case GroupingBy.Suppliers:
-                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
-                            break;
-                        default: query.Replace("#additionalStatement#", " ");
-                            break;
+                        case GroupingBy.Suppliers: query.Replace("#additionalStatement#", " ,BS.SupplierID "); break;
+                        default: query.Replace("#additionalStatement#", " "); break;
                     }
-
                     break;
                 case EntityType.Supplier:
                     query.Replace("#SecondWhereStatement#", " AND BS.SupplierID = @EntityID ");
@@ -817,13 +794,11 @@ namespace TOne.Analytics.Data.SQL
                     switch (groupingBy)
                     {
                         case GroupingBy.Customers: query.Replace("#additionalStatement#", " ,BS.CustomerID "); break;
-                        case GroupingBy.Suppliers:
-                            query.Replace("#additionalStatement#", " ,BS.SupplierID ");
-                            break;
-                        default: query.Replace("#additionalStatement#", " ");
-                            break;
+                        case GroupingBy.Suppliers: query.Replace("#additionalStatement#", " ,BS.SupplierID "); break;
+                        default: query.Replace("#additionalStatement#", " "); break;
                     }
                     break;
+
                 default:
                     query.Replace("#SecondWhereStatement#", " ");
                     query.Replace("#additionalStatement#", " ");
