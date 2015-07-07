@@ -141,6 +141,10 @@ namespace TOne.BusinessEntity.Data.SQL
                 };
             });
         }
+        public string GetCodeGroupName(int codeGroupId)
+        {
+            return ExecuteScalarSP("[BEntity].[sp_CodeGroup_GetName]", codeGroupId) as string;
+        }
 
         public List<string> GetDistinctCodePrefixes(int codePrefixLength, DateTime effectiveOn, bool isFuture)
         {

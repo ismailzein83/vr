@@ -43,5 +43,10 @@ namespace TOne.BusinessEntity.Business
         {
             return _dataManager.GetCodeGroupsByCodePrefix(codePrefix);
         }
+
+        public string GetCodeGroupName(int codeGroupId)
+        {
+            return _dataManager.GetCodeGroupName(codeGroupId);
+        }
     }
 }

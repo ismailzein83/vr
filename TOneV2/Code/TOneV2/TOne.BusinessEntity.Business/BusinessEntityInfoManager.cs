@@ -46,7 +46,7 @@ namespace TOne.BusinessEntity.Business
         public string GetSwitchName(int switchId)
         {
             TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
-            ConcurrentDictionary<int, string> switcNames = cacheManager.GetOrCreateObject("SwitcNames",
+            ConcurrentDictionary<int, string> switcNames = cacheManager.GetOrCreateObject("SwitchNames",
                 TOne.Entities.CacheObjectType.Switch,
                 () => new ConcurrentDictionary<int, string>());
             string switchName;
@@ -57,6 +57,23 @@ namespace TOne.BusinessEntity.Business
                 switcNames.TryAdd(switchId, switchName);
             }
             return switchName;
+        }
+
+
+        public string GetCodeGroupName(int codeGroupId)
+        {
+            TOneCacheManager cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOneCacheManager>();
+            ConcurrentDictionary<int, string> codeGroupNames = cacheManager.GetOrCreateObject("CodeGroupNames",
+                TOne.Entities.CacheObjectType.CodeGroup,
+                () => new ConcurrentDictionary<int, string>());
+            string codeGroupName;
+            if (!codeGroupNames.TryGetValue(codeGroupId, out codeGroupName))
+            {
+                ICodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeDataManager>();
+                codeGroupName = dataManager.GetCodeGroupName(codeGroupId);
+                codeGroupNames.TryAdd(codeGroupId, codeGroupName);
+            }
+            return codeGroupName;
         }
     }
 }
