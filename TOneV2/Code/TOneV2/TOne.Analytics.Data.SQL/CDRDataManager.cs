@@ -9,6 +9,7 @@ using TOne.Analytics.Data;
 using System.Data;
 using System.Data.SqlClient;
 using TOne.Entities;
+using TOne.BusinessEntity.Business;
 namespace TOne.Analytics.Data.SQL
 {
     class CDRDataManager : BaseTOneDataManager, ICDRDataManager
@@ -30,6 +31,7 @@ namespace TOne.Analytics.Data.SQL
             int totalDataCount;
             rslt.Data = GetData(tempTableName.TableName, fromRow, toRow,orderBy,isDescending, out totalDataCount);
             rslt.TotalCount = totalDataCount;
+           
             return rslt;
             
         }
@@ -37,35 +39,22 @@ namespace TOne.Analytics.Data.SQL
         private void CreateTempTableIfNotExists(string tempTableName, CDRFilter filter, DateTime from, DateTime to, int nRecords, BillingCDROptionMeasures CDROption)
         {
             string queryData = "";
-            string CDROptionValue = getCDROptionValue(CDROption);
-            if (CDROptionValue.Equals("Successful"))
+            switch(CDROption)
             {
-                queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR");
-            }
-            else if (CDROptionValue.Equals("Failed"))
-            {
-                queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid");
-            }
-            else
-            {
-                queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR"), GetSingleQuery("Billing_CDR_Invalid", "Invalid"));
+                case BillingCDROptionMeasures.All: queryData = String.Format(@"{0} UNION ALL {1}", GetSingleQuery("Billing_CDR_Main", "MainCDR"), GetSingleQuery("Billing_CDR_Invalid", "Invalid"));
+                    break;
+                case BillingCDROptionMeasures.Invalid: queryData = GetSingleQuery("Billing_CDR_Invalid", "Invalid"); break;
+                case BillingCDROptionMeasures.Successful: queryData = GetSingleQuery("Billing_CDR_Main", "MainCDR"); break;
             }
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder queryBuilder = new StringBuilder(@"
                             IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
 	                            BEGIN
 
-                             WITH SwitchName AS (SELECT s.SwitchID, s.Name FROM Switch s WITH (NOLOCK)),
-                       
-                        OurZones AS (SELECT ZoneID, Name, CodeGroup FROM Zone z WITH (NOLOCK) WHERE SupplierID = 'SYS'),
-                        CarrierInfo AS
-                            (
-                                Select P.Name + ' (' + A.NameSuffix + ')' AS Name, A.CarrierAccountID AS CarrierAccountID from CarrierAccount A LEFT JOIN CarrierProfile P on P.ProfileID=A.ProfileID
-                            ),
-                            
+                             WITH 
 		                        AllResult AS
 		                        (
-			                        SELECT Top (@nRecords) newtable.*,SwitchName.Name As switchName,OurZones.Name As OurZoneName,CarrierInfo.Name AS CustomerInfo  FROM (#Query#)as newtable LEFT JOIN SwitchName ON newtable.SwitchID=SwitchName.SwitchID LEFT JOIN OurZones ON newtable.OurZoneID=OurZones.ZoneID LEFT JOIN CarrierInfo ON newtable.CustomerID=CarrierInfo.CarrierAccountID where (Attempt between @FromDate AND @ToDate) #FILTER#
+			                        SELECT Top (@nRecords) newtable.* FROM (#Query#)as newtable  where (Attempt between @FromDate AND @ToDate) #FILTER#
 		                        )
 		                        SELECT * INTO #TEMPTABLE# FROM AllResult
                             END");
@@ -73,7 +62,6 @@ namespace TOne.Analytics.Data.SQL
             queryBuilder.Replace("#Query#", queryData);
             AddFilterToQuery(filter, whereBuilder);
             queryBuilder.Replace("#FILTER#", whereBuilder.ToString());
-            //queryBuilder.Replace("#JOINPART#", groupKeysJoinPart.ToString());
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", from));
@@ -81,23 +69,13 @@ namespace TOne.Analytics.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@nRecords", nRecords));
             });
         }
-        private string getCDROptionValue(BillingCDROptionMeasures CDROption)
-        {
-            switch(CDROption)
-            {
-                case BillingCDROptionMeasures.All: return "All";
-                case BillingCDROptionMeasures.Invalid: return "Failed";
-                case BillingCDROptionMeasures.Successful: return "Successful";
-                default: return "All";
-            }
-        }
         private IEnumerable<BillingCDR> GetData(string tempTableName, int fromRow, int toRow, BillingCDRMeasures orderBy, bool isDescending, out int totalCount)
         {
             string query = String.Format(@"WITH OrderedResult AS (SELECT *, ROW_NUMBER()  OVER(ORDER BY {1} {2})  AS rowNumber FROM {0})
 	                                    SELECT * FROM OrderedResult WHERE rowNumber between @FromRow AND @ToRow", tempTableName,GetColumnName(orderBy), isDescending ? "DESC" : "ASC");
 
             totalCount = (int)ExecuteScalarText(String.Format("SELECT COUNT(*) FROM {0}", tempTableName), null);
-            return GetItemsText(query,
+            List<BillingCDR> cdrData=GetItemsText(query,
                 (reader) =>
                 {
                     var obj = new BillingCDR();
@@ -109,14 +87,33 @@ namespace TOne.Analytics.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@FromRow", fromRow));
                     cmd.Parameters.Add(new SqlParameter("@ToRow", toRow));
                 });
+            FillCDRList(cdrData);
+            return cdrData;
+        }
+        private void FillCDRList(List<BillingCDR> cdrData)
+        {
+            BusinessEntityInfoManager manager = new BusinessEntityInfoManager();
+            foreach(BillingCDR data in cdrData)
+            {
+                if (data.OurZoneID!=0)
+                data.OurZoneName = manager.GetZoneName(data.OurZoneID);
+                if (data.CustomerID != null)
+                data.CustomerInfo = manager.GetCarrirAccountName(data.CustomerID);
+                if (data.OriginatingZoneID != 0)
+                data.OriginatingZoneName = manager.GetZoneName(data.OriginatingZoneID);
+                if (data.SupplierID != null)
+                data.SupplierName = manager.GetCarrirAccountName(data.SupplierID);
+                if (data.SupplierZoneID != 0)
+                data.SupplierZoneName = manager.GetZoneName(data.SupplierZoneID);
+                if (data.SwitchID != 0)
+                data.SwitchName = manager.GetSwitchName(data.SwitchID);
+            }
         }
 
         private string GetColumnName(BillingCDRMeasures column)
         {
             switch (column)
             {
-                //case BillingCDRMeasures.DurationsInMinutes: return "DurationsInSeconds";
-                //case BillingCDRMeasures.MaxDurationInMinutes: return "MaxDurationsInSeconds";
                 default: return column.ToString();
             }
         }
@@ -125,31 +122,25 @@ namespace TOne.Analytics.Data.SQL
             return String.Format(@"
                         SELECT 
                         {1}.ID,
-                        {1}.Attempt,
+                        DATEADD(ms,-datepart(ms,Attempt),Attempt) AS Attempt,
                         {1}.Alert,
                         {1}.Connect,
-                        {1}.Disconnect ,
-                        {1}.DurationInSeconds,
-                        {1}.CustomerID,
-                        {1}.OurZoneID,
-                        {1}.OriginatingZoneID ,
-                        {1}.SupplierID,
-                        {1}.SupplierZoneID,
+                        DATEDIFF(s,{1}.Attempt, (CASE WHEN {1}.Alert IS NULL THEN ( CASE WHEN {1}.Connect IS NULL THEN (NULL) ELSE ({1}.Connect) END ) ELSE ({1}.Alert) END )) AS PDD,
                         {1}.CDPN,
+                        {1}.CDPNOut ,
                         {1}.CGPN,
                         {1}.ReleaseCode,
                         {1}.ReleaseSource,
+                        CONVERT(DECIMAL(10,2), {1}.DurationInSeconds) as DurationInSeconds,
+                        {1}.SupplierZoneID,
+                        {1}.SupplierID,
+                        {1}.OriginatingZoneID ,
+                        {1}.OurZoneID,
+                        {1}.CustomerID,   
                         {1}.SwitchID ,
                         {1}.SwitchCdrID,
                         {1}.Tag,
-                        {1}.Extra_Fields,
-                        {1}.Port_IN,
-                        {1}.Port_OUT,
-                        {1}.OurCode,
-                        {1}.SupplierCode,
-                        {1}.CDPNOut ,
-                        {1}.SubscriberID,
-                        {1}.SIP FROM {0} {1} 
+                        {1}.Extra_Fields FROM {0} {1} 
                             ", tableName, alias);
                         }
         
@@ -181,15 +172,11 @@ namespace TOne.Analytics.Data.SQL
 
         void FillCDRDataFromReader(BillingCDR cdr, IDataReader reader)
         {
-
-
-                cdr.SwitchName = reader["switchName"] as string;
-                cdr.CustomerInfo = reader["CustomerInfo"] as string;
-                cdr.OurZoneName = reader["OurZoneName"] as string;
+                
                 cdr.Attempt = GetReaderValue<DateTime>(reader,"Attempt");
+                cdr.PDD = GetReaderValue<int>(reader, "PDD");
                 cdr.Alert = GetReaderValue<DateTime>(reader, "Alert");
                 cdr.Connect = GetReaderValue<DateTime>(reader, "Connect");
-                cdr.Disconnect = GetReaderValue<DateTime>(reader, "Disconnect");
                 cdr.DurationInSeconds = GetReaderOfNumeric(reader, "DurationInSeconds");
                 cdr.CustomerID = reader["CustomerID"] as string;
                 cdr.OurZoneID = GetReaderValue<int>(reader, "OurZoneID");
@@ -204,13 +191,8 @@ namespace TOne.Analytics.Data.SQL
                 cdr.SwitchCdrID = GetReaderValue<Int64>(reader, "SwitchCdrID");
                 cdr.Tag = reader["Tag"] as string;
                 cdr.Extra_Fields = reader["Extra_Fields"] as string;
-                cdr.Port_IN = reader["Port_IN"] as string;
-                cdr.Port_OUT = reader["Port_OUT"] as string;
-                cdr.OurCode = reader["OurCode"] as string;
-                cdr.SupplierCode = reader["SupplierCode"] as string;
                 cdr.CDPNOut = reader["CDPNOut"] as string;
-                cdr.SubscriberID = GetReaderValue<Int64>(reader, "SubscriberID");
-                cdr.SIP = reader["SIP"] as string;
+
         }
         public int GetReaderOfNumeric(IDataReader reader, String value)
         {

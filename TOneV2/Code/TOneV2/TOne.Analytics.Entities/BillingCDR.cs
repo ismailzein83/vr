@@ -11,33 +11,31 @@ namespace TOne.Analytics.Entities
         
         public long ID { get; set; }
         public String SwitchName { get; set; }
-        public String CustomerInfo { get; set; }
+        public int SwitchID { get; set; }
         public String OurZoneName { get; set; }
-        public DateTime Attempt { get; set; }
-        public DateTime Alert { get; set; }
-        public DateTime Connect { get; set; }
-        public DateTime Disconnect { get; set; }
-        public int DurationInSeconds { get; set; }
-        public String CustomerID { get; set; }
         public int OurZoneID { get; set; }
+        public String OriginatingZoneName { get; set; }
         public int OriginatingZoneID { get; set; }
-        public String SupplierID { get; set; }
-        public int SupplierZoneID { get; set; }
-        public String CDPN { get; set; }
+        public DateTime Attempt { get; set; }
+        public String CustomerInfo { get; set; }
+        public String CustomerID { get; set; }
         public String CGPN { get; set; }
+        public int PDD { get; set; }
+        public String CDPN { get; set; }
+        public String CDPNOut { get; set; }
+        public int DurationInSeconds { get; set; }
         public String ReleaseCode { get; set; }
         public String ReleaseSource { get; set; }
-        public int SwitchID { get; set; }
+        public String SupplierID { get; set; }
+        public String SupplierName{ get; set; }
+        public string SupplierZoneName { get; set; }
+        public int SupplierZoneID { get; set; }
         public long SwitchCdrID { get; set; }
         public String Tag { get; set; }
         public String Extra_Fields { get; set; }
-        public String Port_IN { get; set; }
-        public String Port_OUT { get; set; }
-        public String OurCode { get; set; }
-        public String SupplierCode { get; set; }
-        public String CDPNOut { get; set; }
-        public long SubscriberID { get; set; }
-        public String SIP { get; set; }
+        public DateTime Alert { get; set; }
+        public DateTime Connect { get; set; }
+       
 
     }
 }
