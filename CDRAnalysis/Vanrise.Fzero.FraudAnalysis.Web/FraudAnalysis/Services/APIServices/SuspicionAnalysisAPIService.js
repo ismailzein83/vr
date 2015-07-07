@@ -32,16 +32,18 @@
        );
     }
 
-
     function GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList) {
+
+        alert('fix here GetFilteredSuspiciousNumbers (Service)')
+
         return BaseAPIService.get("/api/Strategy/GetFilteredSuspiciousNumbers",
             {
                 fromRow: fromRow,
                 toRow: toRow,
                 fromDate: fromDate,
                 toDate: toDate,
-                strategyId: strategyId,
-                suspicionLevelsList: suspicionLevelsList,
+                strategyId: 4,
+                suspicionLevelsList: '4,3,2',
             }
            );
     }

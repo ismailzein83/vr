@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -45,12 +46,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public IEnumerable<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
+        public BigResult<FraudResult> GetFilteredSuspiciousNumbers(string tempTableKey, int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
         {
-
             IStrategyDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
 
-            return ((IEnumerable<FraudResult>)(manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList)));
+            return manager.GetFilteredSuspiciousNumbers(fromRow, toRow, fromDate, toDate, strategyId, suspicionLevelsList);
 
         }
 

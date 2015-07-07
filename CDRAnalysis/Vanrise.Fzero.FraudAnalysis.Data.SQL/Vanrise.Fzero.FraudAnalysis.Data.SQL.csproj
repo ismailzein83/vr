@@ -51,6 +51,9 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\Dependencies\VanriseFramework\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NumberProfileDataManager.cs" />

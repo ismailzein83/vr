@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Data.MySQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
 {
@@ -100,19 +101,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.MySQL
             throw new NotImplementedException();
         }
 
-
-        public List<FraudResult> GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public List<CDR> GetNormalCDRs(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string msisdn)
         {
             throw new NotImplementedException();
         }
 
         public List<NumberProfile> GetNumberProfiles(int fromRow, int toRow, DateTime fromDate, DateTime toDate, string subscriberNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        BigResult<FraudResult> IStrategyDataManager.GetFilteredSuspiciousNumbers(int fromRow, int toRow, DateTime fromDate, DateTime toDate, int? strategyId, string suspicionLevelsList)
         {
             throw new NotImplementedException();
         }
