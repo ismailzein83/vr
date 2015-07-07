@@ -12,6 +12,9 @@ namespace TOne.BusinessEntity.Entities
 
         public string Name { get; set; }
         public string Symbol { get; set; }
+
+        public int NominalTrunkCapacityInE1s { get; set; }
+        public int NominalVoipCapacityInE1s { get; set; }
         public string SwitchManagerName { get; set; }
         public virtual string Description { get; set; }
         public bool EnableCDRImport { get; set; }
@@ -20,5 +23,7 @@ namespace TOne.BusinessEntity.Entities
         public DateTime? LastAttempt { get; set; }
         public DateTime? LastRouteUpdate { get; set; }
         public string LastCDRImportTag { get; set; }
+
+
     }
 }
