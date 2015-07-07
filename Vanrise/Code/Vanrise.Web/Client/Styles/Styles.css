@@ -31,7 +31,7 @@
 .vr-nav-custom div .badge {
     position: absolute;
     top: 10px;
-    left: 12px;
+    left: 8px;
 }
 .bg-lightred {
     background-color: #08A282 !important;
@@ -72,16 +72,22 @@
     background-color: #777;
     border-radius: 13px;
 }
-.vr-nav-custom .div1 {
+.vr-nav-custom .menu-icon {
    position: absolute;
    top: 32px;
    right:140px;
 }
 
-.vr-nav-custom .div2 {
+.vr-nav-custom .warning-icon {
    position: absolute;
    top: 32px;
    right: 175px;
+}
+
+.vr-logout-span{
+    position: absolute;
+    top: 32px;
+    right: 220px;
 }
 .sub-header {
     height: 46px;
@@ -1277,7 +1283,9 @@ input.ui-grid-filter-input[type="text"] {
 .vr-datagrid-celltext div{
     min-height:17px;
 }
-
+.vr-align-rigth{
+    text-align: right !important;   
+} 
 .divLoading {
         pointer-events: none;
         opacity: 0.5;

@@ -21,11 +21,14 @@
         <div class="container">
             <div class="navbar-header">
                 <img src="Client/Images/logoonheader.png" class="minilogo" />
-                <div class="div1">
+                <span class="vr-logout-span">
+                    Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
+                </span>
+                <div class="menu-icon">
                     <img src="Client/Images/01.png" class="img1" />
                     <span class="badge bg-lightred">10</span>
                 </div>
-                <div class="div2">
+                <div class="warning-icon">
                     <img src="Client/Images/02.png" class="img2" />
                     <span class="badge bg-lightred">5</span>
                 </div>
@@ -36,7 +39,9 @@
     </nav>
     <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
         <div class="inner-sub ">
-            Welcome {{::userDisplayName}} - <a href="#" ng-click="logout()">Logout</a>
+            <h4>
+                {{breadcrumb.leaf.Name}}
+            </h4>           
 
             @*<div class="dropdown " ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                 <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">

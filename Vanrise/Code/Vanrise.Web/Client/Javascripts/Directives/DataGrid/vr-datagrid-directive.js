@@ -75,13 +75,13 @@
 
     var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
    + ' <div col-index="renderIndex">'
-     + '   <div class="vr-datagrid-celltext" >'
-       + '    <span ng-if="!colDef.rotateHeader">     <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
-        + '        <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
-         + '{{colDef.name}}</span>'
-           + '<p ng-if="colDef.rotateHeader" class="vr-rotate-header" >{{colDef.name}}</p>'
-     + ' </div>'
-+ '</div>'
+     + '   <div class="vr-datagrid-celltext"  ng-class="colDef.getAlign()" >'
+       + '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
+        + '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
+              +'<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
+              +'<p ng-if="colDef.rotateHeader" class="vr-rotate-header" >{{colDef.name}}</p>'
+       + ' </div>'
+      + '</div>'
 + '</div>';
 
 
@@ -117,6 +117,13 @@
                             });
                     }
                 },
+                getAlign: function () {
+                    var align = '';
+                    if (col.type == "Number") 
+                        align = 'vr-align-rigth';                   
+                        return align;
+
+                },
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader
@@ -138,8 +145,8 @@
             }
             if (ctrl.noverticallines == "true")
                 colDef.borderRight = 'none';
-            else
-                colDef.borderRight = '1px solid #D0D0D0';
+            else            
+                colDef.borderRight = 'none';
 
             if (col.widthFactor == undefined)
                 colDef.widthFactor = 10;
