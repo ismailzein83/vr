@@ -105,7 +105,30 @@ namespace TOne.BusinessEntity.Data.SQL
 
         public Dictionary<int, Zone> GetAllZones()
         {
-            throw new NotImplementedException();
+            Dictionary<int, Zone> allZones = new Dictionary<int, Zone>();
+            ExecuteReaderSP("[BEntity].[sp_Zone_All]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    Zone zone = ZoneMapper(reader);
+                    allZones.Add(zone.ZoneId, zone);
+                }
+            });
+
+            return allZones;
+        }
+        private Zone ZoneMapper(IDataReader reader)
+        {
+            return new Zone
+            {
+                ZoneId = (int)reader["ZoneID"],
+                CodeGroupId = reader["CodeGroupId"] as string,
+                CodeGroupName = reader["CodeGroupName"] as string,
+                Name = reader["Name"] as string,
+                ServiceFlag = GetReaderValue<short>(reader, "ServicesFlag"),
+                BeginEffectiveDate = GetReaderValue<DateTime>(reader, "BeginEffectiveDate"),
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EndEffectiveDate")
+            };
         }
     }
 }
