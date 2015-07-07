@@ -43,6 +43,12 @@ namespace Vanrise.Integration.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool UpdateTaskId(int dataSourceId, int taskId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("integration.sp_DataSource_UpdateTaskId", dataSourceId, taskId);
+            return (recordesEffected > 0);
+        }
+
         Vanrise.Integration.Entities.DataSource DataSourceMapper(IDataReader reader)
         {
             Vanrise.Integration.Entities.DataSource dataSource = new Vanrise.Integration.Entities.DataSource

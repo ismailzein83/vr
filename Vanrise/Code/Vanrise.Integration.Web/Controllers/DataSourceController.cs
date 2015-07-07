@@ -46,5 +46,19 @@ namespace Vanrise.Integration.Web.Controllers
             DataSourceManager manager = new DataSourceManager();
             return manager.UpdateDataSource(dataSourceObject);
         }
+
+        [HttpPost]
+        public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(DataSourceTask dataSourceTaskObject)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.AddDataSourceTask(dataSourceTaskObject.DataSourceId, dataSourceTaskObject.Task);
+        }
+    }
+
+    public class DataSourceTask
+    {
+        public int DataSourceId { get; set; }
+
+        public Vanrise.Runtime.Entities.SchedulerTask Task { get; set; }
     }
 }

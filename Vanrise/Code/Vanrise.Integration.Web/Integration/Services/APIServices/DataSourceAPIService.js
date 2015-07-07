@@ -5,7 +5,8 @@
         GetDataSource: GetDataSource,
         GetDataSourceAdapterTypes: GetDataSourceAdapterTypes,
         AddDataSource: AddDataSource,
-        UpdateDataSource: UpdateDataSource
+        UpdateDataSource: UpdateDataSource,
+        AddDataSourceTask: AddDataSourceTask
     });
 
     function GetDataSources() {
@@ -31,5 +32,7 @@
         return BaseAPIService.post("/api/DataSource/UpdateDataSource", dataSource);
     }
 
-
+    function AddDataSourceTask(dataSourceTask) {
+        return BaseAPIService.post("/api/DataSource/AddDataSourceTask", dataSourceTask);
+    }
 });

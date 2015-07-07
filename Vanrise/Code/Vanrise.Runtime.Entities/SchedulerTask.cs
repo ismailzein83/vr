@@ -19,6 +19,12 @@ namespace Vanrise.Runtime.Entities
 
         [Description("Stopped")]
         Stopped = 2
+    }
+
+    public enum SchedulerTaskType
+    {
+        System = 0,
+        User = 1
     } 
 
     public class SchedulerTask
@@ -28,6 +34,8 @@ namespace Vanrise.Runtime.Entities
         public string Name { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public SchedulerTaskType TaskType { get; set; }
 
         public SchedulerTaskStatus Status { get; set; }
 

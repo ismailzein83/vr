@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         public override void ImportData(Action<object> receiveData)
         {
-            throw new NotImplementedException();
+            foreach (var fileObj in Directory.EnumerateFiles(this.FolderPath, "*.DAT"))
+            {
+                
+            }
         }
     }
 }

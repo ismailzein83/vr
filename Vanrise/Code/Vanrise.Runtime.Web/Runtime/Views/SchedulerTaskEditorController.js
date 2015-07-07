@@ -118,6 +118,7 @@ function SchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsSer
             TaskId: (taskId != null) ? taskId : 0,
             Name: $scope.name,
             IsEnabled: $scope.isEnabled,
+            TaskType: 1,
             TriggerTypeId: $scope.selectedTriggerType.TriggerTypeId,
             TaskTrigger: $scope.schedulerTaskTrigger.getData(),
             ActionTypeId: $scope.selectedActionType.ActionTypeId,

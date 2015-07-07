@@ -42,6 +42,10 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
             clicked: editDataSource
         },
         {
+            name: "Schedule a Task",
+            clicked: scheduleTask
+        },
+        {
             name: "Delete",
             clicked: deleteDataSource
         }
@@ -74,6 +78,23 @@ function DataSourceManagementController($scope, DataSourceAPIService, VRModalSer
             };
         };
         VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceEditor.html', parameters, modalSettings);
+    }
+
+    function scheduleTask(dataSourceObj) {
+        var modalSettings = {
+        };
+        var parameters = {
+            dataSourceId: dataSourceObj.DataSourceId,
+            taskId: dataSourceObj.taskId
+        };
+
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Schedule Task";
+            modalScope.onDataSourceUpdated = function (dataSource) {
+                mainGridAPI.itemUpdated(dataSource);
+            };
+        };
+        VRModalService.showModal('/Client/Modules/Integration/Views/DataSourceTaskEditor.html', parameters, modalSettings);
     }
 
     function deleteDataSource(dataSourceObj) {

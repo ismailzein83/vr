@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1F22483A-D3DB-48EE-AEA8-8988BDB3B9A1}</ProjectGuid>
+    <ProjectGuid>{E7916244-0EF5-4578-9DF6-C2FD29F72B9A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Integration.Business</RootNamespace>
-    <AssemblyName>Vanrise.Integration.Business</AssemblyName>
+    <RootNamespace>Vanrise.Integration.Extensions</RootNamespace>
+    <AssemblyName>Vanrise.Integration.Extensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -43,26 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSourceManager.cs" />
+    <Compile Include="DSSchedulerTaskAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
-      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
-      <Name>Vanrise.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Integration.Data\Vanrise.Integration.Data.csproj">
-      <Project>{88cd0723-c237-4632-8bbe-346a645b4c09}</Project>
-      <Name>Vanrise.Integration.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
-      <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
-      <Name>Vanrise.Integration.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj">
-      <Project>{2b79fccf-afbe-43f2-9ddc-3a91f5ff2489}</Project>
-      <Name>Vanrise.Runtime.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
       <Name>Vanrise.Runtime.Entities</Name>

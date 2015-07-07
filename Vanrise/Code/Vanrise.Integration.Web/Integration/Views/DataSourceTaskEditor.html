@@ -1,0 +1,21 @@
+﻿<div vr-modalcontent ng-controller="Integration_DataSourceTaskEditorController">
+    <vr-modalbody width="'50%'" vr-loader="isGettingData">
+        <vr-form name="formDataSourceTaskEditor">
+            <vr-row>
+                <vr-switch value="isEnabled" label="Is Enabled"></vr-switch>
+            </vr-row>
+            <vr-row>
+                <div ng-include="'/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html'"></div>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDataSourceTaskEditor" data-onclick="SaveDataSourceTask"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

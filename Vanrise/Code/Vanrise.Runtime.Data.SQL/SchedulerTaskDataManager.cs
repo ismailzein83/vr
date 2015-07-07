@@ -47,7 +47,7 @@ namespace Vanrise.Runtime.Data.SQL
             object taskId;
 
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", out taskId, taskObject.Name, 
-                taskObject.IsEnabled, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
+                taskObject.IsEnabled, taskObject.TaskType, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, Common.Serializer.Serialize(taskObject.TaskTrigger),
                 taskObject.ActionTypeId, Common.Serializer.Serialize(taskObject.TaskAction));
             insertedId = (int)taskId;
             return (recordesEffected > 0);

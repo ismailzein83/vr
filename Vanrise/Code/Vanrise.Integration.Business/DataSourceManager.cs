@@ -66,5 +66,30 @@ namespace Vanrise.Integration.Business
             }
             return updateOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> AddDataSourceTask(int dataSourceId, Vanrise.Runtime.Entities.SchedulerTask task)
+        {
+            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            int taskId;
+            Vanrise.Runtime.Data.ISchedulerTaskDataManager taskDataManager = Vanrise.Runtime.Data.RuntimeDataManagerFactory.GetDataManager<Vanrise.Runtime.Data.ISchedulerTaskDataManager>();
+            bool insertActionSucc = taskDataManager.AddTask(task, out taskId);
+
+            if (insertActionSucc)
+            {
+                IDataSourceDataManager dataSourceDataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+                bool updateActionSucc = dataSourceDataManager.UpdateTaskId(dataSourceId, taskId);
+                
+                if (updateActionSucc)
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                }
+            }
+            
+            return updateOperationOutput;
+        }
     }
 }

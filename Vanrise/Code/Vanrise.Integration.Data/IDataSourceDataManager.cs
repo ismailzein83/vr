@@ -15,5 +15,7 @@ namespace Vanrise.Integration.Data
         bool AddDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject, out int insertedId);
 
         bool UpdateDataSource(Vanrise.Integration.Entities.DataSource dataSourceObject);
+
+        bool UpdateTaskId(int dataSourceId, int taskId);
     }
 }
